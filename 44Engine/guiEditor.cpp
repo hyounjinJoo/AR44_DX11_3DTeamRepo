@@ -27,6 +27,11 @@ namespace gui
 {
 	void Editor::Initalize()
 	{
+		mEnable = false;
+
+		if (mEnable == false)
+			return;
+
 		// 충돌체의 종류 갯수만큼만 있으면 된다.
 		mDebugObjects.resize((UINT)eColliderType::End);
 
@@ -88,6 +93,10 @@ namespace gui
 
 	void Editor::Run()
 	{
+		if (mEnable == false)
+			return;
+
+
 		Update();
 		FixedUpdate();
 		Render();
@@ -127,6 +136,10 @@ namespace gui
 
 	void Editor::Release()
 	{
+		if (mEnable == false)
+			return;
+
+
 		ImGui_Release();
 
 		for (auto iter : mWidgets)

@@ -18,11 +18,11 @@ namespace ya
 
 	void PlayerScript::Initalize()
 	{
-		Animator* animator = GetOwner()->GetComponent<Animator>();
-		animator->GetStartEvent(L"MoveDown") = std::bind(&PlayerScript::Start, this);
-		animator->GetCompleteEvent(L"Idle") = std::bind(&PlayerScript::Action, this);
-		animator->GetEndEvent(L"Idle") = std::bind(&PlayerScript::End, this);
-		animator->GetEvent(L"Idle", 1) = std::bind(&PlayerScript::End, this);
+		//Animator* animator = GetOwner()->GetComponent<Animator>();
+		//animator->GetStartEvent(L"MoveDown") = std::bind(&PlayerScript::Start, this);
+		//animator->GetCompleteEvent(L"Idle") = std::bind(&PlayerScript::Action, this);
+		//animator->GetEndEvent(L"Idle") = std::bind(&PlayerScript::End, this);
+		//animator->GetEvent(L"Idle", 1) = std::bind(&PlayerScript::End, this);
 	}
 
 	void PlayerScript::Update()
@@ -32,38 +32,38 @@ namespace ya
 		//rot.z += 10.0f * Time::DeltaTime();
 		//tr->SetRotation(rot);
 
-		if (Input::GetKeyState(eKeyCode::R) == eKeyState::PRESSED)
-		{
-			Vector3 rot = tr->GetRotation();
-			rot.z += 10.0f * Time::DeltaTime();
-			tr->SetRotation(rot);
-		}
+		//if (Input::GetKeyState(eKeyCode::R) == eKeyState::PRESSED)
+		//{
+		//	Vector3 rot = tr->GetRotation();
+		//	rot.z += 10.0f * Time::DeltaTime();
+		//	tr->SetRotation(rot);
+		//}
 
 
 		if (Input::GetKey(eKeyCode::RIGHT))
 		{
-			Vector3 pos = tr->GetPosition();
-			pos.x += 6.0f * Time::DeltaTime();
-			tr->SetPosition(pos);
+			Vector3 pos = tr->GetRotation();
+			pos.x += 60.0f * Time::DeltaTime();
+			tr->SetRotation(pos);
 		}
 		if (Input::GetKey(eKeyCode::LEFT))
 		{
-			Vector3 pos = tr->GetPosition();
-			pos.x -= 6.0f * Time::DeltaTime();
-			tr->SetPosition(pos);
+			Vector3 pos = tr->GetRotation();
+			pos.x -= 60.0f * Time::DeltaTime();
+			tr->SetRotation(pos);
 		}
 
 		if (Input::GetKey(eKeyCode::DOWN))
 		{
-			Vector3 pos = tr->GetPosition();
-			pos.y += 6.0f * Time::DeltaTime();
-			tr->SetPosition(pos);
+			Vector3 pos = tr->GetRotation();
+			pos.y -= 60.0f * Time::DeltaTime();
+			tr->SetRotation(pos);
 		}
 		if (Input::GetKey(eKeyCode::UP))
 		{
-			Vector3 pos = tr->GetPosition();
-			pos.y -= 6.0f * Time::DeltaTime();
-			tr->SetPosition(pos);
+			Vector3 pos = tr->GetRotation();
+			pos.y += 60.0f * Time::DeltaTime();
+			tr->SetRotation(pos);
 		}
 
 		/*Transform* tr = GetOwner()->GetComponent<Transform>();

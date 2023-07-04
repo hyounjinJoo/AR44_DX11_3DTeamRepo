@@ -45,11 +45,14 @@ namespace ya
 
 		GameObject* player = object::Instantiate<GameObject>(eLayerType::Player);
 		player->GetComponent<Transform>()->SetPosition(Vector3(0.0f, 0.0f, 10.0f));
-		player->GetComponent<Transform>()->SetRotation(Vector3(45.0f, 45.0f, 0.0f));
+		//player->GetComponent<Transform>()->SetRotation(Vector3(15.0f, 45.0f, 0.0f));
 		player->SetName(L"Player");
 		MeshRenderer* mr = player->AddComponent<MeshRenderer>();
 		mr->SetMaterial(Resources::Find<Material>(L"BasicMaterial"));
-		mr->SetMesh(Resources::Find<Mesh>(L"CubeMesh"));
+		mr->SetMesh(Resources::Find<Mesh>(L"SphereMesh"));
+		player->AddComponent<PlayerScript>();
+		//mr->SetMesh(Resources::Find<Mesh>(L"SphereMesh"));
+
 
 		////paint shader
 		//std::shared_ptr<PaintShader> paintShader = Resources::Find<PaintShader>(L"PaintShader");
