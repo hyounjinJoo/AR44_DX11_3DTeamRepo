@@ -23,7 +23,6 @@ xcopy /d /s /y /i /r .\SHADER_SOURCE\*hlsli .\%Platform%\%Configuration%\SHADER_
 if not exist .\%Platform%\%Configuration%\Resources ( mkdir .\%Platform%\%Configuration%\Resources )
 xcopy /d /s /y /i /r .\Resources\* .\%Platform%\%Configuration%\Resources
 
-xcopy /d /s /y /i .\44Engine\imgui.ini .\%Platform%\%Configuration%
 
 :: 1번 Argument에 아무것도 들어오지 않았을 경우(== 직접 실행했을 경우) 일시 정지
 if "%2"=="" pause
