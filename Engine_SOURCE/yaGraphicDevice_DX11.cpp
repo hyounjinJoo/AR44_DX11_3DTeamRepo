@@ -446,6 +446,13 @@ namespace ya::graphics
 		mContext->OMSetRenderTargets(1, mRenderTargetTexture->GetRTV().GetAddressOf(), mDepthStencilBufferTexture->GetDSV().Get());
 	}
 
+	void GraphicDevice_DX11::OMSetRenderTarget()
+	{
+		mContext->OMSetRenderTargets(1
+			, mRenderTargetTexture->GetRTV().GetAddressOf()
+			, mDepthStencilBufferTexture->GetDSV().Get());
+	}
+
 	void GraphicDevice_DX11::Draw()
 	{
 		mContext->Draw(0, 0);
@@ -466,7 +473,7 @@ namespace ya::graphics
 
 	void GraphicDevice_DX11::Present()
 	{
-		mSwapChain->Present(1, 0);
+		mSwapChain->Present(0, 0);
 	}
 
 }

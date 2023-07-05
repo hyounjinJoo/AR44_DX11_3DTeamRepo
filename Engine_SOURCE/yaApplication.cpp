@@ -53,10 +53,11 @@ namespace ya
 
 	void Application::Render()
 	{
+		Time::Render(mHdc);
+
 		graphicDevice->Clear();
 		graphicDevice->AdjustViewPorts();
 		
-		Time::Render(mHdc);
 		renderer::Render();
 	}
 
