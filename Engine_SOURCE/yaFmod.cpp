@@ -73,9 +73,6 @@ namespace ya
 
 	void Fmod::Release()
 	{
-		mCoreSystem->release();
-		mCoreSystem = nullptr;
-
 		mSystem->release();
 		mSystem = nullptr;
 	}
