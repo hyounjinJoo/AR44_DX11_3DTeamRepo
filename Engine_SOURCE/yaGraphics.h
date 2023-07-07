@@ -168,6 +168,7 @@ namespace ya::graphics
 		Vector4 diffuse;
 		Vector4 specular;
 		Vector4 ambient;
+
 		Vector4 position;
 		Vector4 direction;
 

@@ -383,7 +383,7 @@ namespace ya::renderer
 		}
 
 		// ≥≤±ÿ¡°
-		UINT iBottomIdx = (UINT)indexes.size() - 1;
+		UINT iBottomIdx = (UINT)sphereVtx.size() - 1;
 		for (UINT i = 0; i < iSliceCount; ++i)
 		{
 			indexes.push_back(iBottomIdx);

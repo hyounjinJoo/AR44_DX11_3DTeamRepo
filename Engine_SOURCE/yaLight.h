@@ -19,6 +19,7 @@ namespace ya
 		graphics::LightAttribute GetLightAttribute() { return mAttribute; }
 
 		void SetDiffuse(Vector4 diffuse) { mAttribute.diffuse = diffuse; }
+		void SetSpecular(Vector4 spec) { mAttribute.specular = spec; }
 		void SetAmbient(Vector4 ambient) { mAttribute.ambient = ambient; }
 		void SetType(eLightType type) { mAttribute.type = type; }
 		void SetRadius(float radius) { mAttribute.radius = radius; }
