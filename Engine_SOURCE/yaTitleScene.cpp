@@ -45,6 +45,7 @@ namespace ya
 
 		GameObject* player = object::Instantiate<GameObject>(eLayerType::Player);
 		player->GetComponent<Transform>()->SetPosition(Vector3(0.0f, 0.0f, 10.0f));
+		player->GetComponent<Transform>()->SetScale(Vector3(5.0f, 5.0f, 5.0f));
 		//player->GetComponent<Transform>()->SetRotation(Vector3(15.0f, 45.0f, 0.0f));
 		player->SetName(L"Player");
 		MeshRenderer* mr = player->AddComponent<MeshRenderer>();
@@ -65,10 +66,16 @@ namespace ya
 			GameObject* directionalLight = object::Instantiate<GameObject>(eLayerType::Player);
 			directionalLight->SetName(L"directionalLight");
 
-			directionalLight->GetComponent<Transform>()->SetPosition(Vector3(0.0f, 0.0f, -100.0f));
+			directionalLight->GetComponent<Transform>()->SetPosition(Vector3(0.0f, 100.0f, 0.0f));
+			directionalLight->GetComponent<Transform>()->SetRotation(Vector3(45.0f, 0.0f, 0.0f));
+
 			Light* lightComp = directionalLight->AddComponent<Light>();
 			lightComp->SetType(eLightType::Directional);
+
+			//각 광원의 색상을 설정
 			lightComp->SetDiffuse(Vector4(1.0f, 1.0f, 1.0f, 1.0f));
+			lightComp->SetSpecular(Vector4(1.0f, 1.0f, 1.0f, 1.0f));
+			lightComp->SetAmbient(Vector4(0.15f, 0.15f, 0.15f, 1.0f));
 		}
 
 		//{
