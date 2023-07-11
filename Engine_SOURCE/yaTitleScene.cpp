@@ -50,10 +50,9 @@ namespace ya
 		player->SetName(L"Player");
 		MeshRenderer* mr = player->AddComponent<MeshRenderer>();
 		mr->SetMaterial(Resources::Find<Material>(L"BasicMaterial"));
-		mr->SetMesh(Resources::Find<Mesh>(L"SphereMesh"));
+		//mr->SetMesh(Resources::Find<Mesh>(L"CubeMesh"));
 		player->AddComponent<PlayerScript>();
-		//mr->SetMesh(Resources::Find<Mesh>(L"SphereMesh"));
-
+		mr->SetMesh(Resources::Find<Mesh>(L"SphereMesh"));
 
 		////paint shader
 		//std::shared_ptr<PaintShader> paintShader = Resources::Find<PaintShader>(L"PaintShader");
@@ -71,23 +70,32 @@ namespace ya
 
 			Light* lightComp = directionalLight->AddComponent<Light>();
 			lightComp->SetType(eLightType::Directional);
-
-			//각 광원의 색상을 설정
 			lightComp->SetDiffuse(Vector4(1.0f, 1.0f, 1.0f, 1.0f));
 			lightComp->SetSpecular(Vector4(1.0f, 1.0f, 1.0f, 1.0f));
 			lightComp->SetAmbient(Vector4(0.15f, 0.15f, 0.15f, 1.0f));
 		}
 
-		//{
-		//	GameObject* directionalLight = object::Instantiate<GameObject>(eLayerType::Player);
-		//	directionalLight->SetName(L"PointLight");
+		{
+			GameObject* directionalLight = object::Instantiate<GameObject>(eLayerType::Player);
+			directionalLight->SetName(L"PointLight");
 
-		//	directionalLight->GetComponent<Transform>()->SetPosition(Vector3(3.0f, 0.0f, 0.0f));
-		//	Light* lightComp = directionalLight->AddComponent<Light>();
-		//	lightComp->SetType(eLightType::Point);
-		//	lightComp->SetRadius(10.0f);
-		//	lightComp->SetDiffuse(Vector4(1.0f, 0.0f, 0.0f, 1.0f));
-		//}
+			directionalLight->GetComponent<Transform>()->SetPosition(Vector3(3.0f, 0.0f, 0.0f));
+			Light* lightComp = directionalLight->AddComponent<Light>();
+			lightComp->SetType(eLightType::Point);
+			lightComp->SetRadius(20.0f);
+			lightComp->SetDiffuse(Vector4(1.0f, 0.0f, 0.0f, 1.0f));
+		}
+
+		{
+			GameObject* directionalLight = object::Instantiate<GameObject>(eLayerType::Player);
+			directionalLight->SetName(L"PointLight");
+
+			directionalLight->GetComponent<Transform>()->SetPosition(Vector3(6.0f, 0.0f, 0.0f));
+			Light* lightComp = directionalLight->AddComponent<Light>();
+			lightComp->SetType(eLightType::Point);
+			lightComp->SetRadius(20.0f);
+			lightComp->SetDiffuse(Vector4(0.0f, 0.0f, 1.0f, 1.0f));
+		}
 
 
 		//// Main Camera Game Object
@@ -189,7 +197,7 @@ namespace ya
 		//	std::shared_ptr<Mesh> mesh = Resources::Find<Mesh>(L"RectMesh");
 		//	mr->SetMesh(mesh);
 		//}
-	
+
 		Scene::Initalize();
 	}
 	void TitleScene::Update()

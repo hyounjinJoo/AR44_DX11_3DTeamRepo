@@ -42,15 +42,15 @@ namespace ya
 
 		if (Input::GetKey(eKeyCode::RIGHT))
 		{
-			Vector3 pos = tr->GetRotation();
+			Vector3 pos = tr->GetPosition();
 			pos.x += 60.0f * Time::DeltaTime();
-			tr->SetRotation(pos);
+			tr->SetPosition(pos);
 		}
 		if (Input::GetKey(eKeyCode::LEFT))
 		{
-			Vector3 pos = tr->GetRotation();
+			Vector3 pos = tr->GetPosition();
 			pos.x -= 60.0f * Time::DeltaTime();
-			tr->SetRotation(pos);
+			tr->SetPosition(pos);
 		}
 
 		if (Input::GetKey(eKeyCode::DOWN))

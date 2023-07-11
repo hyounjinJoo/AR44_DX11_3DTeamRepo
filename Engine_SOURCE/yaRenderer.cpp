@@ -504,21 +504,21 @@ namespace ya::renderer
 		arrLayoutDesc[2].SemanticName = "TEXCOORD";
 		arrLayoutDesc[2].SemanticIndex = 0;
 
-		arrLayoutDesc[3].AlignedByteOffset = 44;
+		arrLayoutDesc[3].AlignedByteOffset = 40;
 		arrLayoutDesc[3].Format = DXGI_FORMAT_R32G32B32_FLOAT;
 		arrLayoutDesc[3].InputSlot = 0;
 		arrLayoutDesc[3].InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
 		arrLayoutDesc[3].SemanticName = "TANGENT";
 		arrLayoutDesc[3].SemanticIndex = 0;
 
-		arrLayoutDesc[4].AlignedByteOffset = 56;
+		arrLayoutDesc[4].AlignedByteOffset = 52;
 		arrLayoutDesc[4].Format = DXGI_FORMAT_R32G32B32_FLOAT;
 		arrLayoutDesc[4].InputSlot = 0;
 		arrLayoutDesc[4].InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
 		arrLayoutDesc[4].SemanticName = "BINORMAL";
 		arrLayoutDesc[4].SemanticIndex = 0;
 
-		arrLayoutDesc[5].AlignedByteOffset = 68;
+		arrLayoutDesc[5].AlignedByteOffset = 64;
 		arrLayoutDesc[5].Format = DXGI_FORMAT_R32G32B32_FLOAT;
 		arrLayoutDesc[5].InputSlot = 0;
 		arrLayoutDesc[5].InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
