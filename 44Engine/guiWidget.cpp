@@ -19,26 +19,33 @@ namespace gui
 	void Widget::FixedUpdate()
 	{
 		if (mState != eState::Active)
+		{
 			return;
+		}
 	}
 
 	void Widget::Update()
 	{
 		if (mState != eState::Active)
+		{
 			return;
+		}
 	}
 
 	void Widget::LateUpdate()
 	{
 		if (mState != eState::Active)
+		{
 			return;
+		}
 	}
 
 	void Widget::Render()
 	{
 		if (mState != eState::Active)
+		{
 			return;
-
+		}
 		if (mParent == nullptr) 
 		{
 			bool open = (bool)GetState();
@@ -80,8 +87,12 @@ namespace gui
 	void Widget::WindowFocus(bool bEnable)
 	{
 		if (bEnable == true)
+		{
 			ImGui::SetWindowFocus(GetName().c_str());
+		}
 		else
+		{
 			ImGui::SetWindowFocus(nullptr);
+		}
 	}
 }
