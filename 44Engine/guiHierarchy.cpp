@@ -68,7 +68,7 @@ namespace gui
 		ya::Scene* scene = ya::SceneManager::GetActiveScene();
 		std::string sceneName(scene->GetName().begin(), scene->GetName().end());
 
-		TreeWidget::Node* root = mTreeWidget->AddNode(nullptr, sceneName, 0, true);
+		TreeWidget::tNode* root = mTreeWidget->AddNode(nullptr, sceneName, 0, true);
 
 		for (size_t i = 0; i < (UINT)ya::enums::eLayerType::End; i++)
 		{
@@ -84,11 +84,11 @@ namespace gui
 
 	}
 
-	void Hierarchy::AddGameObject(TreeWidget::Node* parent, ya::GameObject* gameObject)
+	void Hierarchy::AddGameObject(TreeWidget::tNode* parent, ya::GameObject* gameObject)
 	{
 		std::string name(gameObject->GetName().begin(), gameObject->GetName().end());
 
-		TreeWidget::Node* node = mTreeWidget->AddNode(parent, name, gameObject);
+		TreeWidget::tNode* node = mTreeWidget->AddNode(parent, name, gameObject);
 	}
 
 }

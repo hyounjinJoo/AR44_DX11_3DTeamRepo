@@ -20,33 +20,18 @@ namespace gui
 	{
 		if (mState != eState::Active)
 			return;
-
-		//for (Widget* child : mChilds)
-		//{
-		//	child->FixedUpdate();
-		//}
 	}
 
 	void Widget::Update()
 	{
 		if (mState != eState::Active)
 			return;
-
-		//for ( Widget* child : mChilds )
-		//{
-		//	child->Update();
-		//}
 	}
 
 	void Widget::LateUpdate()
 	{
 		if (mState != eState::Active)
 			return;
-
-		//for (Widget* child : mChilds)
-		//{
-		//	child->LateUpdate();
-		//}
 	}
 
 	void Widget::Render()
@@ -54,7 +39,6 @@ namespace gui
 		if (mState != eState::Active)
 			return;
 
-		// 최상위부모 일때
 		if (mParent == nullptr) 
 		{
 			bool open = (bool)GetState();
@@ -73,14 +57,12 @@ namespace gui
 		{
 			FixedUpdate();
 			ImGui::BeginChild(GetName().c_str(), mSize);
-			//size 추가 해줘야한다.-
 			Update();
 			for (Widget* child : mChilds)
 			{
 				child->Render();
 			}
 			LateUpdate();
-			//std::string debug = GetName();
 			ImGui::EndChild();
 		}
 	}
@@ -95,9 +77,9 @@ namespace gui
 		widget->SetParent(this);
 	}
 
-	void Widget::WindowFocus(bool enable)
+	void Widget::WindowFocus(bool bEnable)
 	{
-		if (enable == true)
+		if (bEnable == true)
 			ImGui::SetWindowFocus(GetName().c_str());
 		else
 			ImGui::SetWindowFocus(nullptr);

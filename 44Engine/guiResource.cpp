@@ -1,6 +1,5 @@
 #include "guiResource.h"
 
-
 namespace gui
 {
 	Resource::Resource()
