@@ -1,9 +1,8 @@
 #include "guiTreeWidget.h"
 
-
 namespace gui
 {
-	TreeWidget::Node::Node()
+	TreeWidget::tNode::tNode()
 		: mTreeWidget(nullptr)
 		, mData(nullptr)
 		, mParent(nullptr)
@@ -11,16 +10,16 @@ namespace gui
 		, mbStem(false)
 	{
 	}
-	TreeWidget::Node::~Node()
+	TreeWidget::tNode::~tNode()
 	{
-		for (Node* child : mChilds)
+		for (tNode* child : mChilds)
 		{
 			delete child;
 			child = nullptr;
 		}
 	}
 	// Node
-	void TreeWidget::Node::Update()
+	void TreeWidget::tNode::Update()
 	{
 		//ImGuiTreeNodeFlags_::ImGuiTreeNodeFlags_Framed;
 
@@ -43,14 +42,14 @@ namespace gui
 				mTreeWidget->SetSelectedNode(this);
 			}
 
-			for (Node* node : mChilds)
+			for (tNode* node : mChilds)
 				node->Update();
 
 			ImGui::TreePop();
 		}
 	}
 
-	void TreeWidget::Node::AddNode(Node* node)
+	void TreeWidget::tNode::AddNode(tNode* node)
 	{
 		node->mParent = this;
 		mChilds.push_back(node);
@@ -86,8 +85,8 @@ namespace gui
 		}
 		else
 		{
-			const std::vector<Node*>& childs = mRoot->GetChilds();
-			for (Node* child : childs)
+			const std::vector<tNode*>& childs = mRoot->GetChilds();
+			for (tNode* child : childs)
 			{
 				child->Update();
 			}
@@ -102,9 +101,9 @@ namespace gui
 	{
 	}
 
-	TreeWidget::Node* TreeWidget::AddNode(Node* parent, const std::string& name, void* data, bool isFrame)
+	TreeWidget::tNode* TreeWidget::AddNode(tNode* parent, const std::string& name, void* data, bool isFrame)
 	{
-		Node* node = new Node;
+		tNode* node = new tNode;
 		node->SetName(name);
 		node->SetData(data);
 		node->SetStem(isFrame);
@@ -126,7 +125,7 @@ namespace gui
 			mRoot = nullptr;
 		}
 	}
-	void TreeWidget::SetSelectedNode(Node* node)
+	void TreeWidget::SetSelectedNode(tNode* node)
 	{
 		if (nullptr != mSelectedNode)
 		{

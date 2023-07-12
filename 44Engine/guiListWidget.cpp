@@ -1,6 +1,5 @@
 #include "guiListWidget.h"
 
-
 namespace gui
 {
 	ListWidget::ListWidget()
@@ -10,7 +9,6 @@ namespace gui
 		SetName("ListWidget");
 		SetState(eState::Paused);
 		SetSize(ImVec2(200.0f, 200.0f));
-
 	}
 
 	ListWidget::~ListWidget()
@@ -25,11 +23,11 @@ namespace gui
 			WindowFocus(true);
 			for (size_t i = 0; i < mResourceList.size(); i++)
 			{
-				bool selectable = (mListIndex == i);
-				if (ImGui::Selectable(mResourceList[i].c_str(), &selectable))
+				bool bselectable = (mListIndex == i);
+				if (ImGui::Selectable(mResourceList[i].c_str(), &bselectable))
 					mListIndex = i;
 
-				if (selectable)
+				if (bselectable)
 				{
 					ImGui::SetItemDefaultFocus();
 				}

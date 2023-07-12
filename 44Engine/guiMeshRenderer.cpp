@@ -74,13 +74,13 @@ namespace gui
 			std::vector<std::shared_ptr<ya::Mesh>> meshes 
 				= ya::Resources::Finds<ya::Mesh>();
 
-			std::vector<std::wstring> wName;
+			std::vector<std::wstring> name;
 			for (auto mesh : meshes)
 			{
-				wName.push_back(mesh->GetName());
+				name.push_back(mesh->GetName());
 			}
 
-			listUI->SetItemList(wName);
+			listUI->SetItemList(name);
 			listUI->SetEvent(this, std::bind(&MeshRenderer::SetMesh
 				, this, std::placeholders::_1));
 		}

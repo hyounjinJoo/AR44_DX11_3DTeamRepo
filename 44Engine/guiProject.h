@@ -3,6 +3,7 @@
 #include "guiTreeWidget.h"
 #include "yaResources.h"
 #include "yaResource.h"
+
 namespace gui
 {
 	class Project : public Widget
@@ -19,12 +20,12 @@ namespace gui
 
 	private:
 		template <typename T>
-		void AddResources(TreeWidget::Node* rootNode, const char* name)
+		void AddResources(TreeWidget::tNode* rootNode, const char* name)
 		{
 			const std::vector<std::shared_ptr<T>> resources
 				= ya::Resources::Finds<T>();
 
-			TreeWidget::Node* stemNode
+			TreeWidget::tNode* stemNode
 				= mTreeWidget->AddNode(rootNode, name, 0, true);
 
 			for (std::shared_ptr<T> resource : resources)
@@ -36,9 +37,6 @@ namespace gui
 
 		void toInspector(void* data);
 
-
-
-	private:
 		TreeWidget* mTreeWidget;
 	};
 }

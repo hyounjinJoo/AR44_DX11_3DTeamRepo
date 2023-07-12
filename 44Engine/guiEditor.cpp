@@ -27,9 +27,9 @@ namespace gui
 {
 	void Editor::Initalize()
 	{
-		mEnable = false;
+		mbEnable = false;
 
-		if (mEnable == false)
+		if (mbEnable == false)
 			return;
 
 		// 충돌체의 종류 갯수만큼만 있으면 된다.
@@ -65,8 +65,6 @@ namespace gui
 
 		//mEditorObjects.push_back(gridObject);
 
-		ImGui_Initialize();
-
 		mYamYamEditor = new YamYamEditor();
 		//mWidgets.push_back(mYamYamEditor);
 
@@ -93,7 +91,7 @@ namespace gui
 
 	void Editor::Run()
 	{
-		if (mEnable == false)
+		if (mbEnable == false)
 			return;
 
 
@@ -101,7 +99,7 @@ namespace gui
 		FixedUpdate();
 		Render();
 
-		ImGui_Run();
+		ImGuiRun();
 	}
 
 	void Editor::Update()
@@ -136,11 +134,11 @@ namespace gui
 
 	void Editor::Release()
 	{
-		if (mEnable == false)
+		if (mbEnable == false)
 			return;
 
 
-		ImGui_Release();
+		ImGuiRelease();
 
 		for (auto iter : mWidgets)
 		{
@@ -186,7 +184,7 @@ namespace gui
 		debugObj->Render();
 	}
 
-	void Editor::ImGui_Initialize()
+	void Editor::ImGuiInitialize()
 	{
 		// Setup Dear ImGui context
 		IMGUI_CHECKVERSION();
@@ -241,7 +239,7 @@ namespace gui
 
 	}
 
-	void Editor::ImGui_Run()
+	void Editor::ImGuiRun()
 	{
 		bool show_demo_window = true;
 		bool show_another_window = false;
@@ -316,7 +314,7 @@ namespace gui
 		}
 	}
 
-	void Editor::ImGui_Release()
+	void Editor::ImGuiRelease()
 	{
 		// Cleanup
 		ImGui_ImplDX11_Shutdown();
