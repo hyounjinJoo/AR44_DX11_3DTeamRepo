@@ -26,15 +26,21 @@ namespace gui
 		int flag = 0;
 
 		if (mbStem)
+		{
 			flag |= ImGuiTreeNodeFlags_Framed;
+		}
 		if (mbSelected)
+		{
 			flag |= ImGuiTreeNodeFlags_Selected;
+		}
 		if (mChilds.empty())
+		{
 			flag |= ImGuiTreeNodeFlags_Leaf;
-
+		}
 		if (mbStem && mChilds.empty())
+		{
 			SetName("\t" + GetName());
-
+		}
 		if (ImGui::TreeNodeEx(GetName().c_str(), flag))
 		{
 			if (!mbStem && ImGui::IsItemHovered(0) && ImGui::IsMouseClicked(0))
@@ -43,7 +49,9 @@ namespace gui
 			}
 
 			for (tNode* node : mChilds)
+			{
 				node->Update();
+			}
 
 			ImGui::TreePop();
 		}
@@ -75,7 +83,9 @@ namespace gui
 	void TreeWidget::Update()
 	{
 		if (mRoot == nullptr)
+		{
 			return;
+		}
 
 		//mRoot->Update();
 
@@ -110,9 +120,13 @@ namespace gui
 		node->mTreeWidget = this;
 
 		if (nullptr == parent)
+		{
 			mRoot = node;
+		}
 		else
+		{
 			parent->AddNode(node);
+		}
 
 		return node;
 	}
