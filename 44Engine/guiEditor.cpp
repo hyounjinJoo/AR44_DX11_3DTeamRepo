@@ -65,7 +65,7 @@ namespace gui
 
 		//mEditorObjects.push_back(gridObject);
 
-		ImGui_Initialize();
+		ImGuiInitialize();
 
 		mYamYamEditor = new YamYamEditor();
 		//mWidgets.push_back(mYamYamEditor);
