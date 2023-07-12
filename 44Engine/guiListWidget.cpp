@@ -25,14 +25,16 @@ namespace gui
 			{
 				bool bselectable = (mListIndex == i);
 				if (ImGui::Selectable(mResourceList[i].c_str(), &bselectable))
+				{
 					mListIndex = i;
+				}
 
 				if (bselectable)
 				{
 					ImGui::SetItemDefaultFocus();
 				}
 				
-				// ÇØ´ç ¾ÆÀÌÅÛÀÌ ´õºíÅ¬¸¯ µÇ¾ú´Ù¸é
+				// í•´ë‹¹ ì•„ì´í…œì´ ë”ë¸”í´ë¦­ ë˜ì—ˆë‹¤ë©´
 				if (ImGui::IsItemHovered() 
 					&& ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left))
 				{
