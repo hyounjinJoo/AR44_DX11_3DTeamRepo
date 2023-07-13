@@ -120,7 +120,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="yaApplication.cpp">
+    <ClCompile Include="Application.cpp">
       <Filter>High Level Interface</Filter>
     </ClCompile>
     <ClCompile Include="yaMath.cpp">
@@ -132,7 +132,7 @@
     <ClCompile Include="yaInput.cpp">
       <Filter>Input</Filter>
     </ClCompile>
-    <ClCompile Include="yaEntity.cpp">
+    <ClCompile Include="Entity.cpp">
       <Filter>Common</Filter>
     </ClCompile>
     <ClCompile Include="yaResource.cpp">
@@ -153,7 +153,7 @@
     <ClCompile Include="yaResources.cpp">
       <Filter>Resource\Manager</Filter>
     </ClCompile>
-    <ClCompile Include="yaComponent.cpp">
+    <ClCompile Include="Component.cpp">
       <Filter>Component</Filter>
     </ClCompile>
     <ClCompile Include="yaMaterial.cpp">
@@ -174,16 +174,16 @@
     <ClCompile Include="yaPlayerScript.cpp">
       <Filter>Component\Script\Contents</Filter>
     </ClCompile>
-    <ClCompile Include="yaCamera.cpp">
+    <ClCompile Include="Camera.cpp">
       <Filter>Component\Camera</Filter>
     </ClCompile>
-    <ClCompile Include="yaCameraScript.cpp">
+    <ClCompile Include="CameraScript.cpp">
       <Filter>Component\Script</Filter>
     </ClCompile>
     <ClCompile Include="yaSpriteRenderer.cpp">
       <Filter>Component\Renderer</Filter>
     </ClCompile>
-    <ClCompile Include="yaBaseRenderer.cpp">
+    <ClCompile Include="BaseRenderer.cpp">
       <Filter>Renderer</Filter>
     </ClCompile>
     <ClCompile Include="yaGridScript.cpp">
@@ -204,19 +204,19 @@
     <ClCompile Include="yaSceneManager.cpp">
       <Filter>Scene\Manager</Filter>
     </ClCompile>
-    <ClCompile Include="yaCollisionManager.cpp">
+    <ClCompile Include="CollisionManager.cpp">
       <Filter>Component\Collider\Manager</Filter>
     </ClCompile>
     <ClCompile Include="yaPrefab.cpp">
       <Filter>Resource\Prefab</Filter>
     </ClCompile>
-    <ClCompile Include="yaCollider2D.cpp">
+    <ClCompile Include="Collider2D.cpp">
       <Filter>Component\Collider\2D</Filter>
     </ClCompile>
-    <ClCompile Include="yaCollider3D.cpp">
+    <ClCompile Include="Collider3D.cpp">
       <Filter>Component\Collider\3D</Filter>
     </ClCompile>
-    <ClCompile Include="yaCollider.cpp">
+    <ClCompile Include="Collider.cpp">
       <Filter>Component\Collider</Filter>
     </ClCompile>
     <ClCompile Include="yaPlayer.cpp">
@@ -225,22 +225,22 @@
     <ClCompile Include="yaMonster.cpp">
       <Filter>Component\Script\Contents</Filter>
     </ClCompile>
-    <ClCompile Include="yaAnimation.cpp">
+    <ClCompile Include="Animation.cpp">
       <Filter>Component\Animator</Filter>
     </ClCompile>
-    <ClCompile Include="yaAnimator.cpp">
+    <ClCompile Include="Animator.cpp">
       <Filter>Component\Animator</Filter>
     </ClCompile>
     <ClCompile Include="yaPaintShader.cpp">
       <Filter>Resource\Shader\CS</Filter>
     </ClCompile>
-    <ClCompile Include="yaComputeShader.cpp">
+    <ClCompile Include="ComputeShader.cpp">
       <Filter>Resource\Shader\CS\Base</Filter>
     </ClCompile>
     <ClCompile Include="yaLight.cpp">
       <Filter>Component\Light</Filter>
     </ClCompile>
-    <ClCompile Include="yaConstantBuffer.cpp">
+    <ClCompile Include="ConstantBuffer.cpp">
       <Filter>Graphics\Buffer</Filter>
     </ClCompile>
     <ClCompile Include="yaStructedBuffer.cpp">
@@ -251,19 +251,19 @@
     </ClCompile>
     <ClCompile Include="yaParticleSystem.cpp" />
     <ClCompile Include="yaParticleShader.cpp" />
-    <ClCompile Include="yaEnums.cpp">
+    <ClCompile Include="Enums.cpp">
       <Filter>Common</Filter>
     </ClCompile>
-    <ClCompile Include="yaAudioListener.cpp">
+    <ClCompile Include="AudioListener.cpp">
       <Filter>Component\Audio</Filter>
     </ClCompile>
-    <ClCompile Include="yaAudioClip.cpp">
+    <ClCompile Include="AudioClip.cpp">
       <Filter>Component\Audio</Filter>
     </ClCompile>
     <ClCompile Include="yaFmod.cpp">
       <Filter>Component\Audio</Filter>
     </ClCompile>
-    <ClCompile Include="yaAudioSource.cpp">
+    <ClCompile Include="AudioSource.cpp">
       <Filter>Resource\Audio</Filter>
     </ClCompile>
     <ClCompile Include="yaFontWrapper.cpp">
@@ -274,7 +274,7 @@
     <ClInclude Include="CommonInclude.h">
       <Filter>Common</Filter>
     </ClInclude>
-    <ClInclude Include="yaApplication.h">
+    <ClInclude Include="Application.h">
       <Filter>High Level Interface</Filter>
     </ClInclude>
     <ClInclude Include="yaMath.h">
@@ -286,7 +286,7 @@
     <ClInclude Include="yaInput.h">
       <Filter>Input</Filter>
     </ClInclude>
-    <ClInclude Include="yaEntity.h">
+    <ClInclude Include="Entity.h">
       <Filter>Common</Filter>
     </ClInclude>
     <ClInclude Include="yaResource.h">
@@ -295,10 +295,10 @@
     <ClInclude Include="yaGraphics.h">
       <Filter>Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="yaEngine.h">
+    <ClInclude Include="Engine.h">
       <Filter>Common</Filter>
     </ClInclude>
-    <ClInclude Include="yaEnums.h">
+    <ClInclude Include="Enums.h">
       <Filter>Common</Filter>
     </ClInclude>
     <ClInclude Include="yaRenderer.h">
@@ -316,7 +316,7 @@
     <ClInclude Include="yaResources.h">
       <Filter>Resource\Manager</Filter>
     </ClInclude>
-    <ClInclude Include="yaComponent.h">
+    <ClInclude Include="Component.h">
       <Filter>Component</Filter>
     </ClInclude>
     <ClInclude Include="yaMaterial.h">
@@ -337,10 +337,10 @@
     <ClInclude Include="yaPlayerScript.h">
       <Filter>Component\Script\Contents</Filter>
     </ClInclude>
-    <ClInclude Include="yaCamera.h">
+    <ClInclude Include="Camera.h">
       <Filter>Component\Camera</Filter>
     </ClInclude>
-    <ClInclude Include="yaCameraScript.h">
+    <ClInclude Include="CameraScript.h">
       <Filter>Component\Script</Filter>
     </ClInclude>
     <ClInclude Include="yaSpriteRenderer.h">
@@ -349,7 +349,7 @@
     <ClInclude Include="yaObject.h">
       <Filter>GameObject</Filter>
     </ClInclude>
-    <ClInclude Include="yaBaseRenderer.h">
+    <ClInclude Include="BaseRenderer.h">
       <Filter>Renderer</Filter>
     </ClInclude>
     <ClInclude Include="yaGridScript.h">
@@ -370,19 +370,19 @@
     <ClInclude Include="yaSceneManager.h">
       <Filter>Scene\Manager</Filter>
     </ClInclude>
-    <ClInclude Include="yaCollisionManager.h">
+    <ClInclude Include="CollisionManager.h">
       <Filter>Component\Collider\Manager</Filter>
     </ClInclude>
     <ClInclude Include="yaPrefab.h">
       <Filter>Resource\Prefab</Filter>
     </ClInclude>
-    <ClInclude Include="yaCollider2D.h">
+    <ClInclude Include="Collider2D.h">
       <Filter>Component\Collider\2D</Filter>
     </ClInclude>
-    <ClInclude Include="yaCollider3D.h">
+    <ClInclude Include="Collider3D.h">
       <Filter>Component\Collider\3D</Filter>
     </ClInclude>
-    <ClInclude Include="yaCollider.h">
+    <ClInclude Include="Collider.h">
       <Filter>Component\Collider</Filter>
     </ClInclude>
     <ClInclude Include="yaPlayer.h">
@@ -391,22 +391,22 @@
     <ClInclude Include="yaMonster.h">
       <Filter>Component\Script\Contents</Filter>
     </ClInclude>
-    <ClInclude Include="yaAnimator.h">
+    <ClInclude Include="Animator.h">
       <Filter>Component\Animator</Filter>
     </ClInclude>
-    <ClInclude Include="yaAnimation.h">
+    <ClInclude Include="Animation.h">
       <Filter>Component\Animator</Filter>
     </ClInclude>
     <ClInclude Include="yaPaintShader.h">
       <Filter>Resource\Shader\CS</Filter>
     </ClInclude>
-    <ClInclude Include="yaComputeShader.h">
+    <ClInclude Include="ComputeShader.h">
       <Filter>Resource\Shader\CS\Base</Filter>
     </ClInclude>
     <ClInclude Include="yaLight.h">
       <Filter>Component\Light</Filter>
     </ClInclude>
-    <ClInclude Include="yaConstantBuffer.h">
+    <ClInclude Include="ConstantBuffer.h">
       <Filter>Graphics\Buffer</Filter>
     </ClInclude>
     <ClInclude Include="yaStructedBuffer.h">
@@ -417,16 +417,16 @@
     </ClInclude>
     <ClInclude Include="yaParticleSystem.h" />
     <ClInclude Include="yaParticleShader.h" />
-    <ClInclude Include="yaAudioListener.h">
+    <ClInclude Include="AudioListener.h">
       <Filter>Component\Audio</Filter>
     </ClInclude>
-    <ClInclude Include="yaAudioClip.h">
+    <ClInclude Include="AudioClip.h">
       <Filter>Component\Audio</Filter>
     </ClInclude>
     <ClInclude Include="yaFmod.h">
       <Filter>Component\Audio</Filter>
     </ClInclude>
-    <ClInclude Include="yaAudioSource.h">
+    <ClInclude Include="AudioSource.h">
       <Filter>Resource\Audio</Filter>
     </ClInclude>
     <ClInclude Include="yaFontWrapper.h">
