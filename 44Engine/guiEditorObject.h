@@ -1,7 +1,6 @@
 #pragma once
 #include "..\Engine_SOURCE\yaGameObject.h"
 
-
 namespace gui
 {
 	class EditorObject : public ya::GameObject
@@ -10,10 +9,10 @@ namespace gui
 		EditorObject();
 		virtual ~EditorObject();
 
-		virtual void Initalize();
-		virtual void Update();
-		virtual void FixedUpdate();
-		virtual void Render();
+		virtual void Initalize() override;
+		virtual void Update() override;
+		virtual void FixedUpdate() override;
+		virtual void Render() override;
 
 	private:
 		

@@ -16,9 +16,9 @@ namespace gui
 		virtual void Update() override;
 		virtual void LateUpdate() override;
 
-		ya::GameObject* GetTargetGameObject() { return mTargetGameObject; }
+		ya::GameObject* GetTargetGameObject() const { return mTargetGameObject; }
 		void SetTargetGameObject(ya::GameObject* target) { mTargetGameObject = target; }
-		ya::Resource* GetTargetResource() { return mTargetResource; }
+		ya::Resource* GetTargetResource() const { return mTargetResource; }
 		void SetTargetResource(ya::Resource* target) { mTargetResource = target; }
 
 		void ClearTarget();

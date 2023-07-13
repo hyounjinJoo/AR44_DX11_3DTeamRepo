@@ -10,8 +10,5 @@ namespace gui
 		~Texture();
 
 		virtual void Update() override;
-
-	private:
-
 	};
 }

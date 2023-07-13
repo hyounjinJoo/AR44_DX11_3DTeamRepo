@@ -1,6 +1,5 @@
 #include "guiEditorObject.h"
 
-
 namespace gui
 {
 	EditorObject::EditorObject()

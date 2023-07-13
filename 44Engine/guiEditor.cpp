@@ -27,12 +27,12 @@ namespace gui
 {
 	void Editor::Initalize()
 	{
-		mEnable = false;
+		mbEnable = false;
 
-		if (mEnable == false)
+		if (mbEnable == false)
 			return;
 
-		// Ãæµ¹Ã¼ÀÇ Á¾·ù °¹¼ö¸¸Å­¸¸ ÀÖÀ¸¸é µÈ´Ù.
+		// ì¶©ëŒì²´ì˜ ì¢…ë¥˜ ê°¯ìˆ˜ë§Œí¼ë§Œ ìˆìœ¼ë©´ ëœë‹¤.
 		mDebugObjects.resize((UINT)eColliderType::End);
 
 		std::shared_ptr<ya::Mesh> rectMesh = ya::Resources::Find<ya::Mesh>(L"DebugRectMesh");
@@ -54,7 +54,7 @@ namespace gui
 		renderer->SetMaterial(material);
 		renderer->SetMesh(circleMesh);
 
-		//±×¸®µå ÀÌÂÊÀ¸·Î ¿Å°ÜÁà¾ß ÇÑ´Ù.
+		//ê·¸ë¦¬ë“œ ì´ìª½ìœ¼ë¡œ ì˜®ê²¨ì¤˜ì•¼ í•œë‹¤.
 		// Grid Object
 		//EditorObject* gridObject = new EditorObject();
 		//ya::MeshRenderer* gridMr = gridObject->AddComponent<ya::MeshRenderer>();
@@ -65,7 +65,7 @@ namespace gui
 
 		//mEditorObjects.push_back(gridObject);
 
-		ImGui_Initialize();
+		ImGuiInitialize();
 
 		mYamYamEditor = new YamYamEditor();
 		//mWidgets.push_back(mYamYamEditor);
@@ -93,7 +93,7 @@ namespace gui
 
 	void Editor::Run()
 	{
-		if (mEnable == false)
+		if (mbEnable == false)
 			return;
 
 
@@ -101,7 +101,7 @@ namespace gui
 		FixedUpdate();
 		Render();
 
-		ImGui_Run();
+		ImGuiRun();
 	}
 
 	void Editor::Update()
@@ -136,11 +136,11 @@ namespace gui
 
 	void Editor::Release()
 	{
-		if (mEnable == false)
+		if (mbEnable == false)
 			return;
 
 
-		ImGui_Release();
+		ImGuiRelease();
 
 		for (auto iter : mWidgets)
 		{
@@ -186,7 +186,7 @@ namespace gui
 		debugObj->Render();
 	}
 
-	void Editor::ImGui_Initialize()
+	void Editor::ImGuiInitialize()
 	{
 		// Setup Dear ImGui context
 		IMGUI_CHECKVERSION();
@@ -241,7 +241,7 @@ namespace gui
 
 	}
 
-	void Editor::ImGui_Run()
+	void Editor::ImGuiRun()
 	{
 		bool show_demo_window = true;
 		bool show_another_window = false;
@@ -316,7 +316,7 @@ namespace gui
 		}
 	}
 
-	void Editor::ImGui_Release()
+	void Editor::ImGuiRelease()
 	{
 		// Cleanup
 		ImGui_ImplDX11_Shutdown();

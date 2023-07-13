@@ -14,7 +14,6 @@ extern gui::Editor editor;
 
 namespace gui
 {
-
 	Project::Project()
 		: mTreeWidget(nullptr)
 	{
@@ -65,7 +64,7 @@ namespace gui
 		//mTreeWidget->Close();
 		mTreeWidget->Clear();
 
-		TreeWidget::Node* pRootNode = mTreeWidget->AddNode(nullptr, "Resources", 0, true);
+		TreeWidget::tNode* pRootNode = mTreeWidget->AddNode(nullptr, "Resources", 0, true);
 
 		//enum class eResourceType
 		//{

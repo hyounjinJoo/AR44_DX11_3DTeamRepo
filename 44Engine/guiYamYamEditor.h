@@ -13,7 +13,6 @@ namespace gui
 		virtual void Update() override;
 		virtual void LateUpdate() override;
 
-
 	private:
 		bool mbPadding;
 		bool mbFullscreen;
