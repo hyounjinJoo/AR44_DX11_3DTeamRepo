@@ -34,7 +34,7 @@ namespace mh
 
 	private:
 		static UINT gColliderNumber;
-		UINT mID; //Id로 변경할지?
+		UINT mID; 
 		enums::eColliderType mType;
 		Transform* mTransform;
 
