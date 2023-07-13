@@ -66,13 +66,13 @@ namespace mh
 					continue;
 				if (right->GetComponent<Collider2D>() == nullptr)
 					continue;
-				if (left == right)
-					continue;
+				/*if (left == right) //ì§€ì›Œë„ ìƒê´€ì—†ì–´ì„œ ì£¼ì„ì²˜ë¦¬ (ì˜¤ë¥˜ë‚˜ë©´ ìˆ˜ì •)
+					continue;*/
 
 				ColliderCollision(left->GetComponent<Collider2D>(), right->GetComponent<Collider2D>());
 			}
 
-			/*if ((UINT)left == (UINT)right)  //Áö¿öµµ »ó°ü ¾ø´Âµí
+			/*if ((UINT)left == (UINT)right)  
 				break;*/
 		}
 
@@ -80,14 +80,14 @@ namespace mh
 
 	void CollisionManager::ColliderCollision(Collider2D* _left, Collider2D* _right)
 	{
-		// µÎ Ãæµ¹Ã¼ ·¹ÀÌ¾î·Î ±¸¼ºµÈ ID È®ÀÎ
+		// ë‘ ì¶©ëŒì²´ ë ˆì´ì–´ë¡œ êµ¬ì„±ëœ ID í™•ì¸
 		union_ColliderID colliderID;
 		colliderID.Left = (UINT)_left->GetID();
 		colliderID.Right = (UINT)_right->GetID();
 
-		// ÀÌÀü Ãæµ¹ Á¤º¸¸¦ °Ë»öÇÑ´Ù.
-		// ¸¸¾à¿¡ Ãæµ¹Á¤º¸°¡ ¾ø´Â »óÅÂ¶ó¸é
-		// Ãæµ¹Á¤º¸¸¦ »ý¼ºÇØÁØ´Ù.
+		// ì´ì „ ì¶©ëŒ ì •ë³´ë¥¼ ê²€ìƒ‰í•œë‹¤.
+		// ë§Œì•½ì— ì¶©ëŒì •ë³´ê°€ ì—†ëŠ” ìƒíƒœë¼ë©´
+		// ì¶©ëŒì •ë³´ë¥¼ ìƒì„±í•´ì¤€ë‹¤.
 		std::map<UINT64, bool>::iterator iter = mCollisionMap.find(colliderID.Id);
 		if (iter == mCollisionMap.end())
 		{
@@ -95,10 +95,10 @@ namespace mh
 			iter = mCollisionMap.find(colliderID.Id);
 		}
 
-		// Ãæµ¹Ã¼Å©¸¦ ÇØÁØ´Ù.
-		if (Intersect(_left, _right)) // Ãæµ¹À» ÇÑ »óÅÂ
+		// ì¶©ëŒì²´í¬ë¥¼ í•´ì¤€ë‹¤.
+		if (Intersect(_left, _right)) // ì¶©ëŒì„ í•œ ìƒíƒœ
 		{
-			// ÃÖÃÊ Ãæµ¹Áß Enter
+			// ìµœì´ˆ ì¶©ëŒì¤‘ Enter
 			if (iter->second == false)
 			{
 				if (_left->IsTriiger())
@@ -113,7 +113,7 @@ namespace mh
 
 				iter->second = true;
 			}
-			else // Ãæµ¹ ÁßÀÌÁö ¾ÊÀº »óÅÂ Enter
+			else // ì¶©ëŒ ì¤‘ì´ì§€ ì•Šì€ ìƒíƒœ Enter
 			{
 				if (_left->IsTriiger())
 					_left->OnTriggerStay(_right);
@@ -126,9 +126,9 @@ namespace mh
 					_right->OnCollisionStay(_left);
 			}
 		}
-		else // Ãæµ¹ÇÏÁö ¾ÊÀº»óÅÂ
+		else // ì¶©ëŒí•˜ì§€ ì•Šì€ìƒíƒœ
 		{
-			// Ãæµ¹ ÁßÀÎ»óÅÂ Exit
+			// ì¶©ëŒ ì¤‘ì¸ìƒíƒœ Exit
 			if (iter->second == true)
 			{
 				if (_left->IsTriiger())
@@ -168,7 +168,7 @@ namespace mh
 
 
 
-		// ºÐ¸®Ãà º¤ÅÍ 4°³ ±¸ÇÏ±â
+		// ë¶„ë¦¬ì¶• ë²¡í„° 4ê°œ êµ¬í•˜ê¸°
 		math::Vector3 Axis[4] = {};
 
 		math::Vector3 leftScale = math::Vector3(_left->GetSize().x, _left->GetSize().y, 1.0f);
