@@ -42,12 +42,13 @@ namespace mh
 			if (mbLoop)
 				mActiveAnimation->Reset();
 		}
-		else if (events) // events가 nullptr이 아닌 경우에만 역참조 //역참조 경고때문에 추가
+		
+		if (events) 
 		{
 			UINT spriteIndex = mActiveAnimation->Update();
-			if (spriteIndex != -1 &&
-				spriteIndex < events->Events.size() &&
-				events->Events[spriteIndex].Event)
+			if (spriteIndex != -1
+				&& spriteIndex < events->Events.size()
+				&& events->Events[spriteIndex].Event)
 			{
 				events->Events[spriteIndex].Event();
 			}
