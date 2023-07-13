@@ -42,7 +42,7 @@ namespace mh
 			if (mbLoop)
 				mActiveAnimation->Reset();
 		}
-		else if (events) // events°¡ nullptrÀÌ ¾Æ´Ñ °æ¿ì¿¡¸¸ ¿ªÂüÁ¶ //¿ªÂüÁ¶ °æ°í¶§¹®¿¡ Ãß°¡
+		else if (events) // eventsê°€ nullptrì´ ì•„ë‹Œ ê²½ìš°ì—ë§Œ ì—­ì°¸ì¡° //ì—­ì°¸ì¡° ê²½ê³ ë•Œë¬¸ì— ì¶”ê°€
 		{
 			UINT spriteIndex = mActiveAnimation->Update();
 			if (spriteIndex != -1 &&
@@ -84,9 +84,9 @@ namespace mh
 		return true;
 	}
 
-	Animation* Animator::FindAnimation(const std::wstring& _name)
+	Animation* Animator::FindAnimation(const std::wstring& _name) const
 	{
-		std::map<std::wstring, Animation*>::iterator iter
+		auto iter
 			= mAnimations.find(_name);
 
 		if (iter == mAnimations.end())
@@ -96,18 +96,7 @@ namespace mh
 
 		return iter->second;
 	}
-	Animator::tEvents* Animator::FindEvents(const std::wstring& _name)
-	{
-		std::map<std::wstring, tEvents*>::iterator iter
-			= mEvents.find(_name);
-
-		if (iter == mEvents.end())
-		{
-			return nullptr;
-		}
-
-		return iter->second;
-	}
+	
 	Animator::tEvents* Animator::FindEvents(const std::wstring& _name) const
 	{
 		std::map<std::wstring, tEvents*>::const_iterator iter
