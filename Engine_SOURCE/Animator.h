@@ -46,9 +46,8 @@ namespace mh
 			, UINT _spriteLength
 			, float _duration);
 
-		Animation* FindAnimation(const std::wstring& _name);
-		tEvents* FindEvents(const std::wstring& _name);
-		tEvents* FindEvents(const std::wstring& _name) const; //57번째 줄 때문에만듬
+		Animation* FindAnimation(const std::wstring& _name) const;
+		tEvents* FindEvents(const std::wstring& _name) const; 
 		void Play(const std::wstring& _name, bool _loop = true);
 
 		void Binds();
