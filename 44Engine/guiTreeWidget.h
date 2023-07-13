@@ -6,24 +6,24 @@ namespace gui
 	class TreeWidget : public Widget
 	{
 	public:
-		struct Node : public Entity
+		struct tNode : public Entity
 		{
-			Node();
-			~Node();
+			tNode();
+			~tNode();
 
 			void Update();
 
 			void SetData(void* data) { mData = data; }
-			void SetStem(bool enable) { mbStem = enable; }
+			void SetStem(bool bEnable) { mbStem = bEnable; }
 
-			void AddNode(Node* node);
-			const std::vector<Node*>& GetChilds() { return mChilds; }
+			void AddNode(tNode* node);
+			const std::vector<tNode*>& GetChilds() { return mChilds; }
 
 			TreeWidget* mTreeWidget;
 			void* mData;
 
-			Node* mParent;
-			std::vector<Node*> mChilds;
+			tNode* mParent;
+			std::vector<tNode*> mChilds;
 
 			bool mbStem;
 			bool mbSelected;
@@ -37,10 +37,10 @@ namespace gui
 		virtual void LateUpdate() override;
 		virtual void Close() override;
 
-		Node* AddNode(Node* parent, const std::string& name, void* data, bool stem = false);
+		tNode* AddNode(tNode* parent, const std::string& name, void* data, bool stem = false);
 		void Clear();
 		void SetDummyRoot(bool enable) { mbDummyRootUse = enable; }
-		void SetSelectedNode(Node* node);
+		void SetSelectedNode(tNode* node);
 
 		void SetEvent(Widget* widget, std::function<void(void* data)> func)
 		{
@@ -50,11 +50,10 @@ namespace gui
 
 
 	private:
-		Node* mRoot;
+		tNode* mRoot;
 
-		//
 		bool mbDummyRootUse;
-		Node* mSelectedNode;
+		tNode* mSelectedNode;
 
 		Widget* mEventWidget;
 		std::function<void(void* data)> mEvent;

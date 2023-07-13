@@ -17,7 +17,7 @@ namespace gui
 
 		void InitializeInspector(void* data);
 		void InitializeScene();
-		void AddGameObject(TreeWidget::Node* parent, ya::GameObject* gameObject);
+		void AddGameObject(TreeWidget::tNode* parent, ya::GameObject* gameObject);
 
 	private:
 		TreeWidget* mTreeWidget;
