@@ -1,13 +1,12 @@
 #pragma once
 #include <wrl.h>
-#include "yaMath.h"
-
 #include <d3d11.h>
 #include <d3dcompiler.h>
 
 #pragma comment (lib, "d3d11.lib")
 #pragma comment (lib, "d3dcompiler.lib")
 
+#include "Math.h"
 
 #define CB_GETBINDSLOT(name) __CBUFFERBINDSLOT__##name##__
 #define CBUFFER(name, slot) static const int CB_GETBINDSLOT(name) = slot; struct alignas(16) name
@@ -20,10 +19,10 @@
 #define CBSLOT_PARTICLESYSTEM	5
 #define CBSLOT_NOISE			6
 
-using namespace ya::math;
-namespace ya::graphics
+using namespace mh::math;
+namespace mh::graphics
 {
-	enum class ValidationMode
+	enum class eValidationMode
 	{
 		Disabled,
 		Enabled,
@@ -86,7 +85,7 @@ namespace ya::graphics
 	};
 
 
-	struct GpuBuffer
+	struct tGpuBuffer
 	{
 		enum class eType
 		{
@@ -98,8 +97,8 @@ namespace ya::graphics
 		D3D11_BUFFER_DESC desc;
 		Microsoft::WRL::ComPtr<ID3D11Buffer> buffer;
 
-		GpuBuffer() = default;
-		virtual ~GpuBuffer() = default;
+		tGpuBuffer() = default;
+		virtual ~tGpuBuffer() = default;
 	};
 
 	enum class eCBType
@@ -151,7 +150,7 @@ namespace ya::graphics
 		End,
 	};
 
-	struct DebugMesh
+	struct tDebugMesh
 	{
 		enums::eColliderType type;
 		math::Vector3 position;
@@ -163,7 +162,7 @@ namespace ya::graphics
 		float time;
 	};
 
-	struct LightAttribute
+	struct tLightAttribute
 	{
 		Vector4 diffuse;
 		Vector4 specular;
@@ -178,7 +177,7 @@ namespace ya::graphics
 		int padding;
 	};
 
-	struct Particle
+	struct tParticle
 	{
 		Vector4 position;
 		Vector4 direction;
@@ -189,7 +188,7 @@ namespace ya::graphics
 		UINT active;
 	};
 
-	struct ParticleShared
+	struct tParticleShared
 	{
 		UINT activeCount;
 	};

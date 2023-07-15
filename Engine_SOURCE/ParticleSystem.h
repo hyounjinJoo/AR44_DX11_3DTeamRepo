@@ -1,14 +1,16 @@
 #pragma once
-#include "yaBaseRenderer.h"
-#include "yaParticleShader.h"
+#include "BaseRenderer.h"
+#include "ParticleShader.h"
 
-namespace ya
+namespace mh
 {
 	enum class eSimulationSpace
 	{
 		Local,
 		World,
 	};
+
+	class StructedBuffer;
 
 	class ParticleSystem : public BaseRenderer
 	{
@@ -22,13 +24,15 @@ namespace ya
 		virtual void Render() override;
 
 	private:
-		class StructedBuffer* mBuffer;
-		class StructedBuffer* mSharedBuffer;
-
+#pragma region Buffer 선언
+		StructedBuffer* mBuffer;
+		StructedBuffer* mSharedBuffer;
+#pragma endregion
+#pragma region Particle Shader 관련 변수 선언
 		std::shared_ptr<graphics::ParticleShader> mCS;
 		renderer::ParticleSystemCB mCBData;
-
-
+#pragma endregion
+#pragma region Particle System 관련 변수 선언
 		Vector4 mStartSize;
 		Vector4 mStartColor;
 		
@@ -40,6 +44,9 @@ namespace ya
 
 		float mStartSpeed;
 		float mTime;
-		float mElapsedTime; //누적시간
+		
+		//누적시간
+		float mElapsedTime;
+#pragma endregion
 	};
 }

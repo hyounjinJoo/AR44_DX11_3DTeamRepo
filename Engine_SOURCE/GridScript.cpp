@@ -1,14 +1,14 @@
-#include "yaGridScript.h"
-#include "yaTransform.h"
-#include "yaGameObject.h"
-#include "yaApplication.h"
-#include "yaConstantBuffer.h"
-#include "yaRenderer.h"
-#include "yaSceneManager.h"
+#include "GridScript.h"
+#include "Transform.h"
+#include "GameObject.h"
+#include "Application.h"
+#include "ConstantBuffer.h"
+#include "Renderer.h"
+#include "SceneManager.h"
 
-extern ya::Application application;
+extern mh::Application application;
 
-namespace ya
+namespace mh
 {
 	GridScript::GridScript()
 		: Script()
@@ -30,21 +30,16 @@ namespace ya
 
 	void GridScript::Update()
 	{
-		//	CBUFFER(GridCB, CBSLOT_GRID)
-		//{
-		//	Vector4 cameraPosition;
-		//	Vector2 cameraScale;
-		//	Vector2 resolution;
-		//};
-
 		if (mCamera == nullptr)
+		{
 			return;
+		}
 
 		GameObject* gameObj = mCamera->GetOwner();
-		Transform* tr = gameObj->GetComponent<Transform>();
+		Transform* TR = gameObj->GetComponent<Transform>();
 		
-		Vector3 cameraPos = tr->GetPosition();
-		Vector4 position = Vector4(cameraPos.x, cameraPos.y, cameraPos.z, 1.0f);
+		Vector3 cameraPosition = tr->GetPosition();
+		Vector4 position = Vector4(cameraPosition.x, cameraPosition.y, cameraPosition.z, 1.0f);
 
 		float scale = mCamera->GetScale();
 
@@ -55,15 +50,15 @@ namespace ya
 		Vector2 resolution(width, height);
 
 		// Constant buffer
-		ConstantBuffer* cb = renderer::constantBuffers[(UINT)eCBType::Grid];
+		ConstantBuffer* CB = renderer::constantBuffers[(UINT)eCBType::Grid];
 		renderer::GridCB data;
 		data.cameraPosition = position;
 		data.cameraScale = Vector2(scale, scale);
 		data.resolution = resolution;
 
-		cb->SetData(&data);
-		cb->Bind(eShaderStage::VS);
-		cb->Bind(eShaderStage::PS);
+		CB->SetData(&data);
+		CB->Bind(eShaderStage::VS);
+		CB->Bind(eShaderStage::PS);
  	}
 
 	void GridScript::FixedUpdate()

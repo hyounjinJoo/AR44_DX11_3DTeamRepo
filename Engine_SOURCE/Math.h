@@ -1,5 +1,5 @@
 #pragma once
-#include "yaEngine.h"
+#include "Engine.h"
 #include <math.h>
 
 
@@ -18,7 +18,7 @@
 using namespace DirectX;
 using namespace DirectX::PackedVector;
 
-namespace ya::math
+namespace mh::math
 {
     struct Vector2;
     struct Vector4;
@@ -980,5 +980,5 @@ namespace ya::math
         static RECT __cdecl ComputeTitleSafeArea(UINT backBufferWidth, UINT backBufferHeight) noexcept;
     };
 
-#include "yaMath.inl"
+#include "Math.inl"
 }

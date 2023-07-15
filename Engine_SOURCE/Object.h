@@ -1,90 +1,90 @@
 #pragma once
-#include "yaScene.h"
-#include "yaLayer.h"
-#include "yaGameObject.h"
-#include "yaSceneManager.h"
-#include "yaTransform.h"
+#include "Scene.h"
+#include "Layer.h"
+#include "GameObject.h"
+#include "SceneManager.h"
+#include "Transform.h"
 
-namespace ya::object
+namespace mh::object
 {
 	template <typename T>
-	static T* Instantiate(enums::eLayerType type)
+	static T* Instantiate(enums::eLayerType _type)
 	{
-		T* gameObj = new T();
+		T* gameObject = new T();
 		Scene* scene = SceneManager::GetActiveScene();
-		Layer& layer = scene->GetLayer(type);
-		layer.AddGameObject(gameObj);
-		gameObj->Initalize();
+		Layer& layer = scene->GetLayer(_type);
+		layer.AddGameObject(gameObject);
+		gameObject->Initalize();
 
 
-		return gameObj;
+		return gameObject;
 	}
 
 	template <typename T>
-	static T* Instantiate(enums::eLayerType type, Scene* scene)
+	static T* Instantiate(enums::eLayerType _type, Scene* _scene)
 	{
-		T* gameObj = new T();
-		Layer& layer = scene->GetLayer(type);
-		layer.AddGameObject(gameObj);
+		T* gameObject = new T();
+		Layer& layer = _scene->GetLayer(_type);
+		layer.AddGameObject(gameObject);
 
-		return gameObj;
+		return gameObject;
 	}
 
 	template <typename T>
-	static T* Instantiate(enums::eLayerType type, Transform* parent)
+	static T* Instantiate(enums::eLayerType _type, Transform* _parent)
 	{
-		T* gameObj = new T();
+		T* gameObject = new T();
 		Scene* scene = SceneManager::GetActiveScene();
-		Layer& layer = scene->GetLayer(type);
-		layer.AddGameObject(gameObj);
+		Layer& layer = scene->GetLayer(_type);
+		layer.AddGameObject(gameObject);
 
-		Transform* tr = gameObj->GameObject::GetComponent<Transform>();
-		tr->SetParent(parent);
+		Transform* tr = gameObject->GameObject::GetComponent<Transform>();
+		tr->SetParent(_parent);
 
-		return gameObj;
+		return gameObject;
 	}
 
 	template <typename T>
-	static T* Instantiate(enums::eLayerType type, Vector3 position, Vector3 rotation)
+	static T* Instantiate(enums::eLayerType _type, Vector3 _position, Vector3 _rotation)
 	{
-		T* gameObj = new T();
+		T* gameObject = new T();
 		Scene* scene = SceneManager::GetActiveScene();
-		Layer& layer = scene->GetLayer(type);
-		layer.AddGameObject(gameObj);
+		Layer& layer = scene->GetLayer(_type);
+		layer.AddGameObject(gameObject);
 
-		Transform* tr = gameObj->GameObject::GetComponent<Transform>();
-		tr->SetPosition(position);
-		tr->SetRotation(rotation);
+		Transform* tr = gameObject->GameObject::GetComponent<Transform>();
+		tr->SetPosition(_position);
+		tr->SetRotation(_rotation);
 
-		return gameObj;
+		return gameObject;
 	}
 
 	template <typename T>
-	static T* Instantiate(enums::eLayerType type, Vector3 position, Vector3 rotation, Transform* parent)
+	static T* Instantiate(enums::eLayerType _type, Vector3 _position, Vector3 _rotation, Transform* _parent)
 	{
-		T* gameObj = new T();
+		T* gameObject = new T();
 		Scene* scene = SceneManager::GetActiveScene();
-		Layer& layer = scene->GetLayer(type);
-		layer.AddGameObject(gameObj);
+		Layer& layer = scene->GetLayer(_type);
+		layer.AddGameObject(gameObject);
 
-		Transform* tr = gameObj->GameObject::GetComponent<Transform>();
-		tr->SetPosition(position);
-		tr->SetRotation(rotation);
-		tr->SetParent(parent);
+		Transform* tr = gameObject->GameObject::GetComponent<Transform>();
+		tr->SetPosition(_position);
+		tr->SetRotation(_rotation);
+		tr->SetParent(_parent);
 
-		return gameObj;
+		return gameObject;
 	}
 
-	static void Destroy(GameObject* gameObject)
+	static void Destroy(GameObject* _gameObject)
 	{
-		gameObject->Death();
+		_gameObject->Death();
 	}
 
-	static void DontDestroyOnLoad(GameObject* gameObject)   //씬 이동시 이 오브젝트는 삭제하지 않는다
+	static void DontDestroyOnLoad(GameObject* _gameObject)   //씬 이동시 이 오브젝트는 삭제하지 않는다
 	{
-		if (gameObject == nullptr)
+		if (_gameObject == nullptr)
 			return;
 
-		gameObject->DontDestroy(true);
+		_gameObject->DontDestroy(true);
 	}
 }

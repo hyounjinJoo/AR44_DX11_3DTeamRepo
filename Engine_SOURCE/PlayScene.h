@@ -1,7 +1,7 @@
 #pragma once
-#include "yaScene.h"
+#include "Scene.h"
 
-namespace ya
+namespace mh
 {
 	class PlayScene : public Scene
 	{

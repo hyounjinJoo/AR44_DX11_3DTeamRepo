@@ -1,8 +1,8 @@
 #pragma once
-#include "yaGraphics.h"
-#include "yaResource.h"
+#include "Graphics.h"
+#include "Resource.h"
 
-namespace ya
+namespace mh
 {
 	class Mesh : public Resource 
 	{
@@ -10,13 +10,14 @@ namespace ya
 		Mesh();
 		virtual ~Mesh();
 
-		virtual HRESULT Load(const std::wstring& path) override;
+		virtual HRESULT Load(const std::wstring& _path) override;
 
-		bool CreateVertexBuffer(void* data, UINT count);
-		bool CreateIndexBuffer(void* data, UINT count);
-		void BindBuffer();
-		void Render();
-		void RenderInstanced(UINT count);
+		bool CreateVertexBuffer(void* _data, UINT _count);
+		bool CreateIndexBuffer(void* _data, UINT _count);
+
+		void BindBuffer() const;
+		void Render() const;
+		void RenderInstanced(UINT _count) const;
 
 	private:
 		Microsoft::WRL::ComPtr<ID3D11Buffer> mVertexBuffer;

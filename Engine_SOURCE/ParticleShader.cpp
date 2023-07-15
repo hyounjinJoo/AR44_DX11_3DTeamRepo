@@ -1,9 +1,9 @@
-#include "yaParticleShader.h"
-#include "yaRenderer.h"
-#include "yaConstantBuffer.h"
-#include "yaTime.h"
+#include "ParticleShader.h"
+#include "Renderer.h"
+#include "ConstantBuffer.h"
+#include "Time.h"
 
-namespace ya::graphics
+namespace mh::graphics
 {
 	ParticleShader::ParticleShader()
 		: ComputeShader(128, 1, 1)

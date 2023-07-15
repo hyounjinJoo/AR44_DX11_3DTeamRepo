@@ -1,12 +1,11 @@
 #pragma once
-#include "yaResource.h"
-#include "yaShader.h"
-#include "yaTexture.h"
-#include "yaRenderer.h"
-//#include "yaConstantBuffer.h"
+#include "Resource.h"
+#include "Shader.h"
+#include "Texture.h"
+#include "Renderer.h"
 
-using namespace ya::renderer;
-namespace ya::graphics
+using namespace mh::renderer;
+namespace mh::graphics
 {
 	class Material : public Resource
 	{
@@ -14,19 +13,20 @@ namespace ya::graphics
 		Material();
 		virtual ~Material();
 
-		virtual HRESULT Load(const std::wstring& path) override;
+		virtual HRESULT Load(const std::wstring& _path) override;
 
-		void SetData(eGPUParam param, void* data);
+		void SetData(eGPUParam _param, void* _data);
 		void Bind();
 		void Clear();
 
-		void SetShader(std::shared_ptr<Shader> shader) { mShader = shader; }
-		std::shared_ptr<Shader> GetShader() { return mShader; }
-		void SetTexture(eTextureSlot slot, std::shared_ptr<Texture> texture) { mTexture[(UINT)slot] = texture; }
-		std::shared_ptr<Texture> GetTexture(eTextureSlot slot) { return mTexture[(UINT)slot]; }
+		void SetShader(std::shared_ptr<Shader> _shader) { mShader = _shader; }
+		void SetTexture(eTextureSlot slot, std::shared_ptr<Texture> _texture) { mTexture[(UINT)slot] = _texture; }
 
-		eRenderingMode GetRenderingMode() { return mMode; }
-		void SetRenderingMode(eRenderingMode mode) { mMode = mode; }
+		std::shared_ptr<Shader> GetShader() const { return mShader; }
+		std::shared_ptr<Texture> GetTexture(eTextureSlot _slot) const { return mTexture[(UINT)_slot]; }
+
+		eRenderingMode GetRenderingMode() const { return mMode; }
+		void SetRenderingMode(eRenderingMode _mode) { mMode = _mode; }
 
 	private:
 		std::shared_ptr<Shader> mShader;

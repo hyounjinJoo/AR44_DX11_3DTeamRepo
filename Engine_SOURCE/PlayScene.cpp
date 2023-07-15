@@ -1,18 +1,18 @@
-#include "yaPlayScene.h"
-#include "yaTransform.h"
-#include "yaMeshRenderer.h"
-#include "yaRenderer.h"
-#include "yaResources.h"
-#include "yaTexture.h"
-#include "yaPlayerScript.h"
-#include "yaCamera.h"
-#include "yaCameraScript.h"
-#include "yaSpriteRenderer.h"
-#include "yaGridScript.h"
-#include "yaObject.h"
-#include "yaInput.h"
+#include "PlayScene.h"
+#include "Transform.h"
+#include "MeshRenderer.h"
+#include "Renderer.h"
+#include "Resources.h"
+#include "Texture.h"
+#include "PlayerScript.h"
+#include "Camera.h"
+#include "CameraScript.h"
+#include "SpriteRenderer.h"
+#include "GridScript.h"
+#include "Object.h"
+#include "Input.h"
 
-namespace ya
+namespace mh
 {
 	PlayScene::PlayScene()
 		: Scene(eSceneType::Play)
@@ -28,7 +28,6 @@ namespace ya
 	{
 		GameObject* cameraObj = object::Instantiate<GameObject>(eLayerType::Camera, this);
 		Camera* cameraComp = cameraObj->AddComponent<Camera>();
-		//cameraComp->RegisterCameraInRenderer();
 		cameraComp->TurnLayerMask(eLayerType::UI, false);
 		cameraObj->AddComponent<CameraScript>();
 
@@ -57,12 +56,9 @@ namespace ya
 
 	void PlayScene::OnEnter()
 	{
-
 	}
 
 	void PlayScene::OnExit()
 	{
-
 	}
-
 }

@@ -1,8 +1,8 @@
 #pragma once
-#include "yaScript.h"
-#include "yaCamera.h"
+#include "Script.h"
+#include "Camera.h"
 
-namespace ya
+namespace mh
 {
 	class GridScript : public Script
 	{

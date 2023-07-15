@@ -1,7 +1,7 @@
-#include "yaGameObject.h"
-#include "yaTransform.h"
+#include "GameObject.h"
+#include "Transform.h"
 
-namespace ya
+namespace mh
 {
 	GameObject::GameObject()
 		: mState(eState::Active)
@@ -14,22 +14,22 @@ namespace ya
 
 	GameObject::~GameObject()
 	{
-		for (Component* comp : mComponents)
+		for (IComponent* component : mComponents)
 		{
-			if (comp == nullptr)
+			if (component == nullptr)
 				continue;
-			
-			delete comp;
-			comp = nullptr;
+
+			delete component;
+			component = nullptr;
 		}
 
-		for (Component* scrComp : mScripts)
+		for (IComponent* script : mScripts)
 		{
-			if (scrComp == nullptr)
+			if (script == nullptr)
 				continue;
 
-			delete scrComp;
-			scrComp = nullptr;
+			delete script;
+			script = nullptr;
 		}
 	}
 
@@ -40,15 +40,15 @@ namespace ya
 
 	void GameObject::Update()
 	{
-		for (Component* comp : mComponents)
+		for (IComponent* component : mComponents)
 		{
-			if (comp == nullptr)
+			if (component == nullptr)
 				continue;
 
-			comp->Update();
+			component->Update();
 		}
 
-		for (Component* script : mScripts)
+		for (IComponent* script : mScripts)
 		{
 			if (script == nullptr)
 				continue;
@@ -59,15 +59,15 @@ namespace ya
 
 	void GameObject::FixedUpdate()
 	{
-		for (Component* comp : mComponents)
+		for (IComponent* component : mComponents)
 		{
-			if (comp == nullptr)
+			if (component == nullptr)
 				continue;
 
-			comp->FixedUpdate();
+			component->FixedUpdate();
 		}
 
-		for (Component* script : mScripts)
+		for (IComponent* script : mScripts)
 		{
 			if (script == nullptr)
 				continue;
@@ -78,15 +78,15 @@ namespace ya
 
 	void GameObject::Render()
 	{
-		for (Component* comp : mComponents)
+		for (IComponent* component : mComponents)
 		{
-			if (comp == nullptr)
+			if (component == nullptr)
 				continue;
 
-			comp->Render();
+			component->Render();
 		}
 
-		for (Component* script : mScripts)
+		for (IComponent* script : mScripts)
 		{
 			if (script == nullptr)
 				continue;
@@ -95,19 +95,74 @@ namespace ya
 		}
 	}
 
-	void GameObject::AddComponent(Component* comp)
+	template <typename T>
+	T* GameObject::AddComponent()
 	{
-		eComponentType order = comp->GetOrder();
+		T* _Comp = new T();
+		eComponentType order = _Comp->GetOrder();
 
 		if (order != eComponentType::Script)
 		{
-			mComponents[(UINT)order] = comp;
+			mComponents[(UINT)order] = _Comp;
 			mComponents[(UINT)order]->SetOwner(this);
 		}
 		else
 		{
-			mScripts.push_back(dynamic_cast<Script*>(comp));
-			comp->SetOwner(this);
+			mScripts.push_back(dynamic_cast<Script*>(_Comp));
+			_Comp->SetOwner(this);
 		}
+
+		_Comp->Initalize();
+
+		return _Comp;
+	}
+
+	void GameObject::AddComponent(IComponent* _Comp)
+	{
+		eComponentType order = _Comp->GetOrder();
+
+		if (order != eComponentType::Script)
+		{
+			mComponents[(UINT)order] = _Comp;
+			mComponents[(UINT)order]->SetOwner(this);
+		}
+		else
+		{
+			mScripts.push_back(dynamic_cast<Script*>(_Comp));
+			_Comp->SetOwner(this);
+		}
+	}
+
+
+	template <typename T>
+	T* GameObject::GetComponent()
+	{
+		T* castResult;
+		for (auto component : mComponents)
+		{
+			castResult = dynamic_cast<T*>(component);
+
+			if (castResult != nullptr)
+				return castResult;
+		}
+
+		return nullptr;
+	}
+
+	template <typename T>
+	std::vector<T*> GameObject::GetComponents()
+	{
+		std::vector<T*> components = {};
+
+		T* castResult;
+		for (auto component : mComponents)
+		{
+			castResult = dynamic_cast<T*>(component);
+
+			if (castResult != nullptr)
+				components.push_back(castResult);
+		}
+
+		return components;
 	}
 }

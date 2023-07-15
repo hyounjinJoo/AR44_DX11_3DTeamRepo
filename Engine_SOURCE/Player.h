@@ -1,7 +1,7 @@
 #pragma once
-#include "yaGameObject.h"
+#include "GameObject.h"
 
-namespace ya
+namespace mh
 {
 	class Player : public GameObject
 	{

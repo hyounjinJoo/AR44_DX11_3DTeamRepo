@@ -1,11 +1,12 @@
-#include "yaInput.h"
-#include "yaApplication.h"
+#include "Input.h"
+#include "Application.h"
 
 
-extern ya::Application application;
-namespace ya
+extern mh::Application application;
+
+namespace mh
 {
-	std::vector<Input::Key> Input::mKeys;
+	std::vector<Input::tKey> Input::mKeys;
 	math::Vector2 Input::mMousPosition;
 	int ASCII[(UINT)eKeyCode::END] =
 	{
@@ -35,7 +36,7 @@ namespace ya
 	{
 		for (UINT i = 0; i < (UINT)eKeyCode::END; i++)
 		{
-			Key key;
+			tKey key;
 			key.eType = (eKeyCode)i;
 			key.eState = eKeyState::NONE;
 			key.bPressed = false;
@@ -92,6 +93,5 @@ namespace ya
 				mKeys[i].bPressed = false;
 			}
 		}
-
 	}
 }
