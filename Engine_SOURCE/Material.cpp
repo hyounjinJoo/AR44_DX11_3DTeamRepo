@@ -1,6 +1,6 @@
-#include "yaMaterial.h"
+#include "Material.h"
 
-namespace ya::graphics
+namespace mh::graphics
 {
     Material::Material()
         : Resource(eResourceType::Material)
@@ -14,35 +14,32 @@ namespace ya::graphics
 
     }
 
-    HRESULT Material::Load(const std::wstring& path)
+    HRESULT Material::Load(const std::wstring& _path)
     {
-        
-        
-        
         return E_NOTIMPL;
     }
 
-    void Material::SetData(eGPUParam param, void* data)
+    void Material::SetData(eGPUParam _param, void* _data)
     {
-        switch (param)
+        switch (_param)
         {
-        case ya::graphics::eGPUParam::Int:
-            mCB.iData = *static_cast<int*>(data);
+        case mh::graphics::eGPUParam::Int:
+            mCB.iData = *static_cast<int*>(_data);
             break;
-        case ya::graphics::eGPUParam::Float:
-            mCB.fData = *static_cast<float*>(data);
+        case mh::graphics::eGPUParam::Float:
+            mCB.fData = *static_cast<float*>(_data);
             break;
-        case ya::graphics::eGPUParam::Vector2:
-            mCB.xy = *static_cast<Vector2*>(data);
+        case mh::graphics::eGPUParam::Vector2:
+            mCB.xy = *static_cast<Vector2*>(_data);
             break;
-        case ya::graphics::eGPUParam::Vector3:
-            mCB.xyz = *static_cast<Vector3*>(data);
+        case mh::graphics::eGPUParam::Vector3:
+            mCB.xyz = *static_cast<Vector3*>(_data);
             break;
-        case ya::graphics::eGPUParam::Vector4:
-            mCB.xyzw = *static_cast<Vector4*>(data);
+        case mh::graphics::eGPUParam::Vector4:
+            mCB.xyzw = *static_cast<Vector4*>(_data);
             break;
-        case ya::graphics::eGPUParam::Matrix:
-            mCB.matrix = *static_cast<Matrix*>(data);
+        case mh::graphics::eGPUParam::Matrix:
+            mCB.matrix = *static_cast<Matrix*>(_data);
             break;
         default:
             break;
@@ -52,36 +49,40 @@ namespace ya::graphics
 
     void Material::Bind()
     {
-        for (size_t i = 0; i < (UINT)eTextureSlot::End; i++)
+        for (size_t slotIndex = 0; slotIndex < (UINT)eTextureSlot::End; slotIndex++)
         {
-            if (mTexture[i] == nullptr)
-                continue;
+            if (mTexture[slotIndex] == nullptr)
+            {
+				continue;
+            }
 
-            mTexture[i]->BindShaderResource(eShaderStage::VS, i);
-            mTexture[i]->BindShaderResource(eShaderStage::HS, i);
-            mTexture[i]->BindShaderResource(eShaderStage::DS, i);
-            mTexture[i]->BindShaderResource(eShaderStage::GS, i);
-            mTexture[i]->BindShaderResource(eShaderStage::PS, i);
-            mTexture[i]->BindShaderResource(eShaderStage::CS, i);
+            mTexture[slotIndex]->BindShaderResource(eShaderStage::VS, slotIndex);
+            mTexture[slotIndex]->BindShaderResource(eShaderStage::HS, slotIndex);
+            mTexture[slotIndex]->BindShaderResource(eShaderStage::DS, slotIndex);
+            mTexture[slotIndex]->BindShaderResource(eShaderStage::GS, slotIndex);
+            mTexture[slotIndex]->BindShaderResource(eShaderStage::PS, slotIndex);
+            mTexture[slotIndex]->BindShaderResource(eShaderStage::CS, slotIndex);
         }
 
-        ConstantBuffer* pCB = renderer::constantBuffers[(UINT)eCBType::Material];
-        pCB->SetData(&mCB);
-        pCB->Bind(eShaderStage::VS);
-        pCB->Bind(eShaderStage::GS);
-        pCB->Bind(eShaderStage::PS);
+        ConstantBuffer* CB = renderer::constantBuffers[(UINT)eCBType::Material];
+        CB->SetData(&mCB);
+        CB->Bind(eShaderStage::VS);
+        CB->Bind(eShaderStage::GS);
+        CB->Bind(eShaderStage::PS);
 
         mShader->Binds();
     }
 
     void Material::Clear()
     {
-        for (size_t i = 0; i < (UINT)eTextureSlot::End; i++)
+        for (size_t slotIndex = 0; slotIndex < (UINT)eTextureSlot::End; slotIndex++)
         {
-            if (mTexture[i] == nullptr)
-                continue;
+            if (mTexture[slotIndex] == nullptr)
+			{
+				continue;
+			}
 
-            mTexture[i]->Clear();
+            mTexture[slotIndex]->Clear();
         }
     }
 }

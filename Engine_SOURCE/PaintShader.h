@@ -1,8 +1,8 @@
 #pragma once
-#include "yaComputeShader.h"
-#include "yaTexture.h"
+#include "ComputeShader.h"
+#include "Texture.h"
 
-namespace ya::graphics
+namespace mh::graphics
 {
 	class PaintShader : public ComputeShader
 	{
@@ -13,7 +13,7 @@ namespace ya::graphics
 		virtual void Binds() override;
 		virtual void Clear() override;
 		
-		void SetTarget(std::shared_ptr<Texture> texture) { mTarget = texture; }
+		void SetTarget(std::shared_ptr<Texture> _texture) { mTarget = _texture; }
 
 	private:
 		std::shared_ptr<Texture> mTarget;

@@ -1,9 +1,8 @@
 #pragma once
-#include "yaEngine.h"
+#include "Engine.h"
 
 #include "..\\External\\FW1FontWrapper\\Include\\FW1FontWrapper.h"
 #include "..\\External\\FW1FontWrapper\\Include\\FW1CompileSettings.h"
-//#include "..\\External\\Include\\Fmod\\common_platform.h"
 
 #ifdef _DEBUG
 #pragma comment(lib, "..\\External\\FW1FontWrapper\\Library\\Debug\\FW1FontWrapperL.lib")
@@ -11,18 +10,14 @@
 #pragma comment(lib, "..\\External\\FW1FontWrapper\\Library\\Debug\\FW1FontWrapper.lib")
 #endif
 
-//#include <SpriteFont.h>
-//#include <SpriteBatch.h>
-
-namespace ya
+namespace mh
 {
 	class FontWrapper
 	{
 	public:
 		static bool Initialize();
-		static void DrawFont(const wchar_t* str, float x, float y, float size, UINT rgb);
+		static void DrawFont(const wchar_t* _string, float _x, float _y, float _size, UINT _rgb);
 		static void Release();
-
 
 	private:
 		static IFW1Factory* mFW1Factory;

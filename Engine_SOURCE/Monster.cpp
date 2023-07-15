@@ -1,23 +1,27 @@
-#include "yaMonster.h"
+#include "Monster.h"
 
-
-namespace ya
+namespace mh
 {
 	Monster::Monster()
 	{
 	}
+
 	Monster::~Monster()
 	{
 	}
+	
 	void Monster::Initalize()
 	{
 	}
+	
 	void Monster::Update()
 	{
 	}
+	
 	void Monster::FixedUpdate()
 	{
 	}
+	
 	void Monster::Render()
 	{
 	}

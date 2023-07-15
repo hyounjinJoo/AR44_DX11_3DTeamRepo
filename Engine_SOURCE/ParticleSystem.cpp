@@ -1,14 +1,14 @@
-#include "yaParticleSystem.h"
-#include "yaMesh.h"
-#include "yaResources.h"
-#include "yaMaterial.h"
-#include "yaStructedBuffer.h"
-#include "yaTransform.h"
-#include "yaGameObject.h"
-#include "yaTexture.h"
-#include "yaTime.h"
+#include "ParticleSystem.h"
+#include "Mesh.h"
+#include "Resources.h"
+#include "Material.h"
+#include "StructedBuffer.h"
+#include "Transform.h"
+#include "GameObject.h"
+#include "Texture.h"
+#include "Time.h"
 
-namespace ya
+namespace 
 {
 	ParticleSystem::ParticleSystem()
 		: BaseRenderer(eComponentType::ParticleSystem)
@@ -79,6 +79,7 @@ namespace ya
 	{
 		//파티클 생성 시간
 		float aliveTime = 1.0f / mFrequency;
+
 		//누적시간
 		mTime += Time::DeltaTime();
 		if (aliveTime < mTime)

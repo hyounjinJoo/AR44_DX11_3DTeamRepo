@@ -1,6 +1,6 @@
 #pragma once
 #include "CommonInclude.h"
-#include "yaMath.h"
+#include "Math.h"
 
 
 namespace ya
@@ -38,16 +38,16 @@ namespace ya
 		NONE,
 	};
 
+	struct tKey
+	{
+		eKeyCode  eType;
+		eKeyState eState;
+		bool	  bPressed;
+	};
+
 	class Input
 	{
 	public:
-		struct Key
-		{
-			eKeyCode  eType;
-			eKeyState eState;
-			bool	  bPressed;
-		};
-
 		static void Initialize();
 		static void Update();
 
@@ -78,16 +78,14 @@ namespace ya
 		static __forceinline bool GetKeyUp(eKeyCode keyCode)
 		{
 			return mKeys[static_cast<UINT>(keyCode)].eState == eKeyState::UP;
-		}
-
-		
+		}		
 
 	private:
 		Input() = delete;
 		~Input() = delete;
 
 	private:
-		static std::vector<Key> mKeys;
+		static std::vector<tKey> mKeys;
 		static math::Vector2 mMousPosition;
 	};
 }

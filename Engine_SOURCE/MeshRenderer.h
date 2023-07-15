@@ -1,11 +1,11 @@
 #pragma once
-#include "yaComponent.h"
-#include "yaMesh.h"
-#include "yaMaterial.h"
-#include "yaBaseRenderer.h"
+#include "Component.h"
+#include "Mesh.h"
+#include "Material.h"
+#include "BaseRenderer.h"
 
-using namespace ya::graphics;
-namespace ya
+using namespace mh::graphics;
+namespace mh
 {
 	class MeshRenderer : public BaseRenderer
 	{

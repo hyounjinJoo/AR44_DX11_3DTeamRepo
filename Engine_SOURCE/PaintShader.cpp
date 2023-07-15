@@ -1,7 +1,6 @@
-#include "yaPaintShader.h"
+#include "PaintShader.h"
 
-
-namespace ya::graphics
+namespace mh::graphics
 {
 	PaintShader::PaintShader()
 		: ComputeShader()
@@ -26,5 +25,4 @@ namespace ya::graphics
 	{
 		mTarget->ClearUnorderedAccessView(0);
 	}
-
 }

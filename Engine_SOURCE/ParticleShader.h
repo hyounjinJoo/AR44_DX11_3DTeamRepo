@@ -1,8 +1,8 @@
 #pragma once
-#include "yaComputeShader.h"
-#include "yaStructedBuffer.h"
+#include "ComputeShader.h"
+#include "StructedBuffer.h"
 
-namespace ya::graphics
+namespace mh::graphics
 {
 	class ParticleShader : public ComputeShader
 	{
@@ -13,8 +13,8 @@ namespace ya::graphics
 		virtual void Binds() override;
 		virtual void Clear() override;
 
-		void SetStrcutedBuffer(StructedBuffer* buffer) { mBuffer = buffer; }
-		void SetSharedStrutedBuffer(StructedBuffer* buffer) { mSharedBuffer = buffer; }
+		void SetStrcutedBuffer(StructedBuffer* _buffer) { mBuffer = _buffer; }
+		void SetSharedStrutedBuffer(StructedBuffer* _buffer) { mSharedBuffer = _buffer; }
 
 	private:
 		StructedBuffer* mBuffer;

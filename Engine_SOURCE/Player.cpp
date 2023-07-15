@@ -1,7 +1,7 @@
-#include "yaPlayer.h"
+#include "Player.h"
 
 
-namespace ya
+namespace mh
 {
 	Player::Player()
 	{
@@ -32,5 +32,4 @@ namespace ya
 	{
 		GameObject::Render();
 	}
-
 }

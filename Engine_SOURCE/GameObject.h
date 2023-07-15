@@ -1,20 +1,20 @@
 #pragma once
-#include "yaComponent.h"
-#include "yaScript.h"
-#include "yaEntity.h"
+#include "IComponent.h"
+#include "Script.h"
+#include "Entity.h"
 
-namespace ya
+namespace mh
 {
+	enum eState
+	{
+		Active,
+		Paused,
+		Dead,
+	};
+
 	class GameObject : public Entity
 	{
 	public:
-		enum eState
-		{
-			Active,
-			Paused,
-			Dead,
-		};
-
 		GameObject();
 		virtual ~GameObject();
 
@@ -23,63 +23,22 @@ namespace ya
 		virtual void FixedUpdate();
 		virtual void Render();
 
+	public:
 		template <typename T>
-		T* AddComponent()
-		{
-			T* comp = new T();
-			eComponentType order = comp->GetOrder();
+		T* AddComponent();
+		
+		void AddComponent(IComponent* _component);
 
-			if (order != eComponentType::Script)
-			{
-				mComponents[(UINT)order] = comp;
-				mComponents[(UINT)order]->SetOwner(this);
-			}
-			else
-			{
-				mScripts.push_back(dynamic_cast<Script*>(comp));
-				comp->SetOwner(this);
-			}
-
-			comp->Initalize();
-
-			return comp;
-		}
-		void AddComponent(Component* comp);
 
 		template <typename T>
-		T* GetComponent()
-		{
-			T* comp;
-			for (auto c : mComponents)
-			{
-				comp = dynamic_cast<T*>(c);
+		T* GetComponent();
 
-				if (comp != nullptr)
-					return comp;
-			}
-
-			return nullptr;
-		}
 		template <typename T>
-		std::vector<T*> GetComponents()
-		{
-			std::vector<T*> components = {};
-			
-			T* comp;
-			for (auto c : mComponents)
-			{
-				comp = dynamic_cast<T*>(c);
-
-				if (comp != nullptr)
-					components.push_back(comp);
-			}
-
-			return components;
-		}
-
-
+		std::vector<T*> GetComponents();
+		
 		const std::vector<Script*>& GetScripts() { return mScripts; }
 
+	public:
 		bool IsDead()
 		{
 			if (mState == eState::Dead)
@@ -87,14 +46,16 @@ namespace ya
 			
 			return false;
 		}
-		void Pause() { mState = eState::Paused; }
-		void Death() { mState = eState::Dead; }
 		eState GetState() { return mState; }
 		
+		void Pause() { mState = eState::Paused; }
+		void Death() { mState = eState::Dead; }
+				
 		bool IsDontDestroy() { return mbDontDestroy; }
-		void DontDestroy(bool enable) { mbDontDestroy = enable; }
+		void DontDestroy(bool _enable) { mbDontDestroy = _enable; }
+		
 		eLayerType GetLayerType() { return mType; }
-		void SetLayerType(eLayerType type) { mType = type; }
+		void SetLayerType(eLayerType _type) { mType = _type; }
 
 	protected:
 		std::vector<Component*> mComponents;
@@ -104,7 +65,6 @@ namespace ya
 		eLayerType mType;
 		std::vector<Script*> mScripts;
 		bool mbDontDestroy;
-		//Scene* mScene;
 	};
 }
 

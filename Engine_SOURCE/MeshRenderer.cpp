@@ -1,9 +1,9 @@
-#include "yaMeshRenderer.h"
-#include "yaGameObject.h"
-#include "yaTransform.h"
-#include "yaAnimator.h"
+#include "MeshRenderer.h"
+#include "GameObject.h"
+#include "Transform.h"
+#include "Animator.h"
 
-namespace ya
+namespace mh
 {
 	MeshRenderer::MeshRenderer()
 		: BaseRenderer(eComponentType::MeshRenderer)
