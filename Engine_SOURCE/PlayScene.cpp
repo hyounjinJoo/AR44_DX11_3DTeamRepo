@@ -24,14 +24,14 @@ namespace mh
 	{
 	}
 
-	void PlayScene::Initalize()
+	void PlayScene::Initialize()
 	{
 		GameObject* cameraObj = object::Instantiate<GameObject>(eLayerType::Camera, this);
 		Camera* cameraComp = cameraObj->AddComponent<Camera>();
 		cameraComp->TurnLayerMask(eLayerType::UI, false);
 		cameraObj->AddComponent<CameraScript>();
 
-		Scene::Initalize();
+		Scene::Initialize();
 	}
 
 	void PlayScene::Update()

@@ -6,7 +6,7 @@
 namespace mh
 {
 	AudioSource::AudioSource()
-		: Component(enums::eComponentType::AudioSource)
+		: IComponent(enums::eComponentType::AudioSource)
 		, mAudioClip(nullptr)
 	{
 

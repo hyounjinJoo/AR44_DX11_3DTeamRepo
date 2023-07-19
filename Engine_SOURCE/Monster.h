@@ -9,7 +9,7 @@ namespace mh
 		Monster();
 		virtual ~Monster();
 
-		virtual void Initalize();
+		virtual void Initialize();
 		virtual void Update();
 		virtual void FixedUpdate();
 		virtual void Render();

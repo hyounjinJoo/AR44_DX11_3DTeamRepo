@@ -1,6 +1,6 @@
 #include "guiGame.h"
-#include "yaResources.h"
-#include "yaTexture.h"
+#include "Resources.h"
+#include "Texture.h"
 #include "yaGraphicDevice_DX11.h"
 
 namespace gui

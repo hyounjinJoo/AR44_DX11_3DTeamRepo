@@ -8,8 +8,10 @@
 #include "Texture.h"
 #include "Time.h"
 
-namespace 
+namespace mh
 {
+	using namespace mh::graphics;
+
 	ParticleSystem::ParticleSystem()
 		: BaseRenderer(eComponentType::ParticleSystem)
 		, mMaxParticles(100)
@@ -37,7 +39,7 @@ namespace
 		mSharedBuffer = nullptr;
 	}
 
-	void ParticleSystem::Initalize()
+	void ParticleSystem::Initialize()
 	{
 		mCS = Resources::Find<ParticleShader>(L"ParticleCS");
 
@@ -51,7 +53,7 @@ namespace
 		std::shared_ptr<Texture> tex = Resources::Find<Texture>(L"CartoonSmoke");
 		material->SetTexture(eTextureSlot::T0, tex);
 
-		Particle particles[100] = {};
+		tParticle particles[100] = {};
 		Vector4 startPos = Vector4(0.0f, 0.0f, 0.0f, 0.0f);
 		for (size_t i = 0; i < mMaxParticles; i++)
 		{
@@ -64,11 +66,11 @@ namespace
 			particles[i].speed = 100.0f;
 		}
 
-		mBuffer = new StructedBuffer();
-		mBuffer->Create(sizeof(Particle), mMaxParticles, eSRVType::UAV, particles);
+		mBuffer = new graphics::StructedBuffer();
+		mBuffer->Create(sizeof(tParticle), mMaxParticles, eSRVType::UAV, particles);
 
-		mSharedBuffer = new StructedBuffer();
-		mSharedBuffer->Create(sizeof(ParticleShared), 1, eSRVType::UAV, nullptr, true);
+		mSharedBuffer = new graphics::StructedBuffer();
+		mSharedBuffer->Create(sizeof(tParticleShared), 1, eSRVType::UAV, nullptr, true);
 	}
 
 	void ParticleSystem::Update()
@@ -88,27 +90,27 @@ namespace
 			UINT iAliveCount = (UINT)f;
 			mTime = f - std::floor(f);
 
-			ParticleShared shared = { 5, };
+			tParticleShared shared = { 5, };
 			mSharedBuffer->SetData(&shared, 1);
 		}
 		else
 		{
-			ParticleShared shared = {  };
+			tParticleShared shared = {  };
 			mSharedBuffer->SetData(&shared, 1);
 		}
 
 		mMaxParticles = mBuffer->GetStride();
 		Vector3 pos = GetOwner()->GetComponent<Transform>()->GetPosition();
-		mCBData.worldPosition = Vector4(pos.x, pos.y, pos.z, 1.0f);
-		mCBData.maxParticles = mMaxParticles;
-		mCBData.radius = mRadius;
-		mCBData.simulationSpace = (UINT)mSimulationSpace;
-		mCBData.startSpeed = mStartSpeed;
-		mCBData.startSize = mStartSize;
-		mCBData.startColor = mStartColor;
-		mCBData.startLifeTime = mStartLifeTime;
-		mCBData.deltaTime = Time::DeltaTime();
-		mCBData.elapsedTime += Time::DeltaTime();
+		mCBData.WorldPosition = Vector4(pos.x, pos.y, pos.z, 1.0f);
+		mCBData.MaxParticles = mMaxParticles;
+		mCBData.Radius = mRadius;
+		mCBData.SimulationSpace = (UINT)mSimulationSpace;
+		mCBData.StartSpeed = mStartSpeed;
+		mCBData.StartSize = mStartSize;
+		mCBData.StartColor = mStartColor;
+		mCBData.StartLifeTime = mStartLifeTime;
+		mCBData.DeltaTime = Time::DeltaTime();
+		mCBData.ElapsedTime += Time::DeltaTime();
 
 		ConstantBuffer* cb = renderer::constantBuffers[(UINT)eCBType::ParticleSystem];
 		cb->SetData(&mCBData);

@@ -4,7 +4,6 @@
 #include "Texture.h"
 #include "Renderer.h"
 
-using namespace mh::renderer;
 namespace mh::graphics
 {
 	class Material : public Resource
@@ -31,7 +30,7 @@ namespace mh::graphics
 	private:
 		std::shared_ptr<Shader> mShader;
 		std::shared_ptr<Texture> mTexture[(UINT)eTextureSlot::End];
-		MaterialCB mCB;
+		renderer::MaterialCB mCB;
 		eRenderingMode mMode;
 	};
 }

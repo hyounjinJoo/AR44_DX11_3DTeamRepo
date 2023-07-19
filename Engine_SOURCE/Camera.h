@@ -1,9 +1,9 @@
 #pragma once
-#include "Component.h"
+#include "IComponent.h"
 
 namespace  mh
 {
-	class Camera : public Component
+	class Camera : public IComponent
 	{
 	public:
 		enum eProjectionType

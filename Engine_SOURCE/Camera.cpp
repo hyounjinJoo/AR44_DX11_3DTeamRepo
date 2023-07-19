@@ -17,7 +17,7 @@ namespace mh
 	math::Matrix Camera::gProjection = math::Matrix::Identity;
 
 	Camera::Camera()
-		: Component(enums::eComponentType::Camera)
+		: IComponent(enums::eComponentType::Camera)
 		, mType(eProjectionType::Orthographic)
 		, mAspectRatio(1.0f)
 		, mNear(1.0f)
@@ -113,7 +113,7 @@ namespace mh
 	void Camera::RegisterCameraInRenderer()
 	{
 		enums::eSceneType type = SceneManager::GetActiveScene()->GetSceneType();
-		renderer::cameras[(UINT)type].push_back(this);
+		renderer::gCameras[(UINT)type].push_back(this);
 	}
 
 	void Camera::TurnLayerMask(enums::eLayerType _layer, bool _enable)

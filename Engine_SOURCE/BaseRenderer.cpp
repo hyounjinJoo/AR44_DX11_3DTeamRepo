@@ -3,7 +3,7 @@
 namespace mh
 {
 	BaseRenderer::BaseRenderer(enums::eComponentType _type)
-		: Component(_type)
+		: IComponent(_type)
 		, mMesh(nullptr)
 		, mMaterial(nullptr)
 	{

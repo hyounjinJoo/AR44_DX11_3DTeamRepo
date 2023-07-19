@@ -2,6 +2,8 @@
 
 namespace mh::graphics
 {
+    using namespace mh::math;
+
     Material::Material()
         : Resource(eResourceType::Material)
         , mMode(eRenderingMode::Opaque)
@@ -30,16 +32,16 @@ namespace mh::graphics
             mCB.fData = *static_cast<float*>(_data);
             break;
         case mh::graphics::eGPUParam::Vector2:
-            mCB.xy = *static_cast<Vector2*>(_data);
+            mCB.XY = *static_cast<Vector2*>(_data);
             break;
         case mh::graphics::eGPUParam::Vector3:
-            mCB.xyz = *static_cast<Vector3*>(_data);
+            mCB.XYZ = *static_cast<Vector3*>(_data);
             break;
         case mh::graphics::eGPUParam::Vector4:
-            mCB.xyzw = *static_cast<Vector4*>(_data);
+            mCB.XYZW = *static_cast<Vector4*>(_data);
             break;
         case mh::graphics::eGPUParam::Matrix:
-            mCB.matrix = *static_cast<Matrix*>(_data);
+            mCB.Matrix = *static_cast<Matrix*>(_data);
             break;
         default:
             break;

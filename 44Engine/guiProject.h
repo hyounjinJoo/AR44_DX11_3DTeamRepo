@@ -1,8 +1,8 @@
 #pragma once
 #include "guiWidget.h"
 #include "guiTreeWidget.h"
-#include "yaResources.h"
-#include "yaResource.h"
+#include "Resources.h"
+#include "Resource.h"
 
 namespace gui
 {

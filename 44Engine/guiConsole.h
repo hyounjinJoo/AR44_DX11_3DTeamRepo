@@ -8,7 +8,7 @@ namespace gui
 	{
 	public:
 		Console();
-		~Console();
+		virtual ~Console();
 
 		virtual void FixedUpdate() override;
 		virtual void Update() override;

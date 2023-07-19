@@ -1,7 +1,7 @@
 #include "globals.hlsli"
 
-RWStructuredBuffer<Particle> ParticleBuffer : register(u0);
-RWStructuredBuffer<ParticleShared> ParticleSharedBuffer : register(u1);
+RWStructuredBuffer<tParticle> ParticleBuffer : register(u0);
+RWStructuredBuffer<tParticleShared> ParticleSharedBuffer : register(u1);
 
 //각각의 스레드가 동기화할 데이터가 필요하다
 

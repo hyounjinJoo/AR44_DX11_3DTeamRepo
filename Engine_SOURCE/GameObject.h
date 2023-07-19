@@ -1,27 +1,29 @@
 #pragma once
 #include "IComponent.h"
+
+#include "Enums.h"
 #include "Script.h"
 #include "Entity.h"
 
+
 namespace mh
 {
-	enum eState
-	{
-		Active,
-		Paused,
-		Dead,
-	};
-
 	class GameObject : public Entity
 	{
 	public:
 		GameObject();
 		virtual ~GameObject();
 
-		virtual void Initalize();
+		virtual void Initialize();
 		virtual void Update();
 		virtual void FixedUpdate();
 		virtual void Render();
+		enum class eState
+		{
+			Active,
+			Paused,
+			Dead,
+		};
 
 	public:
 		template <typename T>
@@ -54,15 +56,15 @@ namespace mh
 		bool IsDontDestroy() { return mbDontDestroy; }
 		void DontDestroy(bool _enable) { mbDontDestroy = _enable; }
 		
-		eLayerType GetLayerType() { return mType; }
-		void SetLayerType(eLayerType _type) { mType = _type; }
+		enums::eLayerType GetLayerType() { return mType; }
+		void SetLayerType(enums::eLayerType _type) { mType = _type; }
 
 	protected:
-		std::vector<Component*> mComponents;
+		std::vector<IComponent*> mComponents;
 
 	private:
 		eState mState;
-		eLayerType mType;
+		enums::eLayerType mType;
 		std::vector<Script*> mScripts;
 		bool mbDontDestroy;
 	};

@@ -1,14 +1,14 @@
 #include "guiHierarchy.h"
-#include "yaApplication.h"
-#include "yaScene.h"
-#include "yaLayer.h"
-#include "yaSceneManager.h"
+#include "Application.h"
+#include "Scene.h"
+#include "Layer.h"
+#include "SceneManager.h"
 #include "guiInspector.h"
 #include "guiEditor.h"
-#include "yaRenderer.h"
+#include "Renderer.h"
 #include "guiInspector.h"
 
-extern ya::Application application;
+extern mh::Application application;
 extern gui::Editor editor;
 
 namespace gui
@@ -51,11 +51,11 @@ namespace gui
 
 	void Hierarchy::InitializeInspector(void* data)
 	{
-		ya::renderer::inspectorGameObject 
-			= static_cast<ya::GameObject*>(data);
+		mh::renderer::gInspectorGameObject 
+			= static_cast<mh::GameObject*>(data);
 
 		Inspector* inspector = editor.GetWidget<Inspector>("Inspector");
-		inspector->SetTargetGameObject(ya::renderer::inspectorGameObject);
+		inspector->SetTargetGameObject(mh::renderer::gInspectorGameObject);
 		inspector->InitializeTargetGameObject();
 
 
@@ -70,13 +70,13 @@ namespace gui
 
 		TreeWidget::tNode* root = mTreeWidget->AddNode(nullptr, sceneName, 0, true);
 
-		for (size_t i = 0; i < (UINT)ya::enums::eLayerType::End; i++)
+		for (size_t i = 0; i < (UINT)mh::enums::eLayerType::End; i++)
 		{
-			ya::Layer& layer = scene->GetLayer((ya::enums::eLayerType)i);
-			const std::vector<ya::GameObject*>& gameObjs
+			ya::Layer& layer = scene->GetLayer((mh::enums::eLayerType)i);
+			const std::vector<mh::GameObject*>& gameObjs
 				= layer.GetGameObjects();
 
-			for (ya::GameObject* obj : gameObjs)
+			for (mh::GameObject* obj : gameObjs)
 			{
 				AddGameObject(root, obj);
 			}
@@ -84,7 +84,7 @@ namespace gui
 
 	}
 
-	void Hierarchy::AddGameObject(TreeWidget::tNode* parent, ya::GameObject* gameObject)
+	void Hierarchy::AddGameObject(TreeWidget::tNode* parent, mh::GameObject* gameObject)
 	{
 		std::string name(gameObject->GetName().begin(), gameObject->GetName().end());
 

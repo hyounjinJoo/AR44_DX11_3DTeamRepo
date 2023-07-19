@@ -16,7 +16,7 @@ namespace mh
 	{
 	}
 
-	void PlayerScript::Initalize()
+	void PlayerScript::Initialize()
 	{
 	}
 

@@ -3,8 +3,8 @@
 
 #include "framework.h"
 #include "44Engine.h"
-#include "yaApplication.h"
-#include "yaSceneManager.h"
+#include "Application.h"
+#include "SceneManager.h"
 #include "guiEditor.h"
 
 #include "imgui.h"
@@ -27,7 +27,7 @@ WCHAR gTitle[MAX_LOADSTRING];                  // 제목 표시줄 텍스트입�
 WCHAR gWindowClass[MAX_LOADSTRING];            // 기본 창 클래스 이름입니다.
 
 
-ya::Application application;
+mh::Application application;
 gui::Editor editor;
 
 // 이 코드 모듈에 포함된 함수의 선언을 전달합니다:
@@ -146,8 +146,8 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
    UpdateWindow(hWnd);
 
    application.SetWindow(hWnd, 1600, 900);
-   application.Initalize();
-   editor.Initalize();
+   application.Initialize();
+   editor.Initialize();
 
    return TRUE;
 }

@@ -1,12 +1,12 @@
 #include "guiEditor.h"
 #include "yaMesh.h"
-#include "yaResources.h"
-#include "yaMaterial.h"
-#include "yaTransform.h"
-#include "yaMeshRenderer.h"
-#include "yaGridScript.h"
-#include "yaObject.h"
-#include "yaApplication.h"
+#include "Resources.h"
+#include "Material.h"
+#include "Transform.h"
+#include "MeshRenderer.h"
+#include "GridScript.h"
+#include "Object.h"
+#include "Application.h"
 #include "yaGraphicDevice_DX11.h"
 
 #include "imgui.h"
@@ -21,11 +21,11 @@
 #include "guiConsole.h"
 #include "guiListWidget.h"
 
-extern ya::Application application;
+extern mh::Application application;
 
 namespace gui
 {
-	void Editor::Initalize()
+	void Editor::Initialize()
 	{
 		mbEnable = false;
 
@@ -61,7 +61,7 @@ namespace gui
 		//gridMr->SetMesh(ya::Resources::Find<ya::Mesh>(L"RectMesh"));
 		//gridMr->SetMaterial(ya::Resources::Find<Material>(L"GridMaterial"));
 		//ya::GridScript* gridScript = gridObject->AddComponent<ya::GridScript>();
-		//gridScript->SetCamera(mainCamera);
+		//gridScript->SetCamera(gMainCamera);
 
 		//mEditorObjects.push_back(gridObject);
 
@@ -127,11 +127,11 @@ namespace gui
 			obj->Render();
 		}
 
-		for ( DebugMesh& mesh : ya::renderer::debugMeshes)
+		for ( tDebugMesh& mesh : mh::renderer::gDebugMeshes)
 		{
 			DebugRender(mesh);
 		}
-		ya::renderer::debugMeshes.clear();
+		mh::renderer::gDebugMeshes.clear();
 	}
 
 	void Editor::Release()
@@ -161,7 +161,7 @@ namespace gui
 		delete mDebugObjects[(UINT)eColliderType::Circle];
 	}
 
-	void Editor::DebugRender(ya::graphics::DebugMesh& mesh)
+	void Editor::DebugRender(ya::graphics::tDebugMesh& mesh)
 	{
 		DebugObject* debugObj = mDebugObjects[(UINT)mesh.type];
 		
@@ -176,12 +176,12 @@ namespace gui
 			tr->SetScale(Vector3(mesh.radius));
 
 		ya::BaseRenderer* renderer = debugObj->GetComponent<ya::BaseRenderer>();
-		ya::Camera* camera = ya::renderer::mainCamera;
+		ya::Camera* camera = mh::renderer::gMainCamera;
 
 		tr->FixedUpdate();
 
-		ya::Camera::SetGpuViewMatrix(ya::renderer::mainCamera->GetViewMatrix());
-		ya::Camera::SetGpuProjectionMatrix(ya::renderer::mainCamera->GetProjectionMatrix());
+		ya::Camera::SetGpuViewMatrix(mh::renderer::gMainCamera->GetViewMatrix());
+		ya::Camera::SetGpuProjectionMatrix(mh::renderer::gMainCamera->GetProjectionMatrix());
 
 		debugObj->Render();
 	}

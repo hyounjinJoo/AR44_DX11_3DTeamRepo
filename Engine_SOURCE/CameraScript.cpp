@@ -15,7 +15,7 @@ namespace mh
 	{
 	}
 
-	void CameraScript::Initalize()
+	void CameraScript::Initialize()
 	{
 	}
 

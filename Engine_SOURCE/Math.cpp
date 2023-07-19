@@ -51,7 +51,7 @@ namespace mh::math
 
 
 	using namespace DirectX;
-	//using namespace ya::math;
+	//using namespace mh::math;
 
 	/****************************************************************************
 	 *

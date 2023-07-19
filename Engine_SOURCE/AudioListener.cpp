@@ -6,7 +6,7 @@
 namespace mh
 {
 	AudioListener::AudioListener()
-		: Component(enums::eComponentType::AudioListener)
+		: IComponent(enums::eComponentType::AudioListener)
 	{
 
 	}

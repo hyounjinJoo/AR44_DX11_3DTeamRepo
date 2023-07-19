@@ -1,13 +1,13 @@
 #include "guiProject.h"
 
-#include "yaTexture.h"
-#include "yaMaterial.h"
+#include "Texture.h"
+#include "Material.h"
 #include "yaMesh.h"
 #include "yaShader.h"
 
 #include "guiInspector.h"
 #include "guiResource.h"
-#include "yaResources.h"
+#include "Resources.h"
 #include "guiEditor.h"
 
 extern gui::Editor editor;
