@@ -1,9 +1,8 @@
 #pragma once
-#include "yaEntity.h"
+#include "Entity.h"
 #include "imgui.h"
 #include "imgui_impl_win32.h"
 #include "imgui_impl_dx11.h"
-
 
 namespace gui
 {
@@ -27,14 +26,14 @@ namespace gui
 		virtual void Close();
 
 		void AddWidget(Widget* widget);
-		void WindowFocus(bool enable);
+		void WindowFocus(bool bEnable);
 
 		void SetState(eState state) { mState = state; }
-		eState GetState() { return mState; }
+		eState GetState() const { return mState; } 
 		void SetParent(Widget* parent) { mParent = parent; }
-		Widget* GetParent() { return mParent; }
+		Widget* GetParent() const { return mParent; }
 		void SetSize(ImVec2 size) { mSize = size; }
-		ImVec2 GetSize() { return mSize; }
+		ImVec2 GetSize() const { return mSize; }
 
 	protected:
 		ImGuiWindowFlags mWindow_flags;

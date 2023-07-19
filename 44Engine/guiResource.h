@@ -1,7 +1,6 @@
 #pragma once
 #include "guiWidget.h"
-#include "yaResource.h"
-
+#include "Resource.h"
 
 namespace gui
 {
@@ -14,7 +13,7 @@ namespace gui
 		virtual void FixedUpdate() override;
 
 		void SetTarget(ya::Resource* target) { mTarget = target; }
-		ya::Resource* GetTarget() { return mTarget; }
+		ya::Resource* GetTarget() const { return mTarget; }
 
 	private:
 		ya::Resource* mTarget;

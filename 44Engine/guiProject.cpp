@@ -1,20 +1,19 @@
 #include "guiProject.h"
 
-#include "yaTexture.h"
-#include "yaMaterial.h"
+#include "Texture.h"
+#include "Material.h"
 #include "yaMesh.h"
 #include "yaShader.h"
 
 #include "guiInspector.h"
 #include "guiResource.h"
-#include "yaResources.h"
+#include "Resources.h"
 #include "guiEditor.h"
 
 extern gui::Editor editor;
 
 namespace gui
 {
-
 	Project::Project()
 		: mTreeWidget(nullptr)
 	{
@@ -65,7 +64,7 @@ namespace gui
 		//mTreeWidget->Close();
 		mTreeWidget->Clear();
 
-		TreeWidget::Node* pRootNode = mTreeWidget->AddNode(nullptr, "Resources", 0, true);
+		TreeWidget::tNode* pRootNode = mTreeWidget->AddNode(nullptr, "Resources", 0, true);
 
 		//enum class eResourceType
 		//{

@@ -120,321 +120,327 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="yaApplication.cpp">
+    <ClCompile Include="Application.cpp">
       <Filter>High Level Interface</Filter>
     </ClCompile>
-    <ClCompile Include="yaMath.cpp">
+    <ClCompile Include="Math.cpp">
       <Filter>Common\Math</Filter>
     </ClCompile>
-    <ClCompile Include="yaTime.cpp">
+    <ClCompile Include="Time.cpp">
       <Filter>Time</Filter>
     </ClCompile>
-    <ClCompile Include="yaInput.cpp">
+    <ClCompile Include="Input.cpp">
       <Filter>Input</Filter>
     </ClCompile>
-    <ClCompile Include="yaEntity.cpp">
+    <ClCompile Include="Entity.cpp">
       <Filter>Common</Filter>
     </ClCompile>
-    <ClCompile Include="yaResource.cpp">
+    <ClCompile Include="Resource.cpp">
       <Filter>Resource</Filter>
     </ClCompile>
-    <ClCompile Include="yaRenderer.cpp">
+    <ClCompile Include="Renderer.cpp">
       <Filter>Renderer</Filter>
     </ClCompile>
-    <ClCompile Include="yaGameObject.cpp">
+    <ClCompile Include="GameObject.cpp">
       <Filter>GameObject</Filter>
     </ClCompile>
-    <ClCompile Include="yaMesh.cpp">
+    <ClCompile Include="Mesh.cpp">
       <Filter>Resource\Mesh</Filter>
     </ClCompile>
-    <ClCompile Include="yaShader.cpp">
+    <ClCompile Include="Shader.cpp">
       <Filter>Resource\Shader</Filter>
     </ClCompile>
-    <ClCompile Include="yaResources.cpp">
+    <ClCompile Include="Resources.cpp">
       <Filter>Resource\Manager</Filter>
     </ClCompile>
-    <ClCompile Include="yaComponent.cpp">
+    <ClCompile Include="IComponent.cpp">
       <Filter>Component</Filter>
     </ClCompile>
-    <ClCompile Include="yaMaterial.cpp">
+    <ClCompile Include="Material.cpp">
       <Filter>Resource\Material</Filter>
     </ClCompile>
-    <ClCompile Include="yaTexture.cpp">
+    <ClCompile Include="Texture.cpp">
       <Filter>Resource\Texture</Filter>
     </ClCompile>
-    <ClCompile Include="yaScript.cpp">
+    <ClCompile Include="Script.cpp">
       <Filter>Component\Script</Filter>
     </ClCompile>
-    <ClCompile Include="yaTransform.cpp">
+    <ClCompile Include="Transform.cpp">
       <Filter>Component\Transform</Filter>
     </ClCompile>
-    <ClCompile Include="yaMeshRenderer.cpp">
+    <ClCompile Include="MeshRenderer.cpp">
       <Filter>Component\Renderer</Filter>
     </ClCompile>
-    <ClCompile Include="yaPlayerScript.cpp">
+    <ClCompile Include="PlayerScript.cpp">
       <Filter>Component\Script\Contents</Filter>
     </ClCompile>
-    <ClCompile Include="yaCamera.cpp">
+    <ClCompile Include="Camera.cpp">
       <Filter>Component\Camera</Filter>
     </ClCompile>
-    <ClCompile Include="yaCameraScript.cpp">
+    <ClCompile Include="CameraScript.cpp">
       <Filter>Component\Script</Filter>
     </ClCompile>
-    <ClCompile Include="yaSpriteRenderer.cpp">
+    <ClCompile Include="SpriteRenderer.cpp">
       <Filter>Component\Renderer</Filter>
     </ClCompile>
-    <ClCompile Include="yaBaseRenderer.cpp">
+    <ClCompile Include="BaseRenderer.cpp">
       <Filter>Renderer</Filter>
     </ClCompile>
-    <ClCompile Include="yaGridScript.cpp">
+    <ClCompile Include="GridScript.cpp">
       <Filter>Resource\Script</Filter>
     </ClCompile>
-    <ClCompile Include="yaPlayScene.cpp">
+    <ClCompile Include="PlayScene.cpp">
       <Filter>Scene</Filter>
     </ClCompile>
-    <ClCompile Include="yaTitleScene.cpp">
+    <ClCompile Include="TitleScene.cpp">
       <Filter>Scene</Filter>
     </ClCompile>
-    <ClCompile Include="yaLayer.cpp">
+    <ClCompile Include="Layer.cpp">
       <Filter>Scene\Layer</Filter>
     </ClCompile>
-    <ClCompile Include="yaScene.cpp">
+    <ClCompile Include="Scene.cpp">
       <Filter>Scene\Base</Filter>
     </ClCompile>
-    <ClCompile Include="yaSceneManager.cpp">
+    <ClCompile Include="SceneManager.cpp">
       <Filter>Scene\Manager</Filter>
     </ClCompile>
-    <ClCompile Include="yaCollisionManager.cpp">
+    <ClCompile Include="CollisionManager.cpp">
       <Filter>Component\Collider\Manager</Filter>
     </ClCompile>
-    <ClCompile Include="yaPrefab.cpp">
+    <ClCompile Include="Prefab.cpp">
       <Filter>Resource\Prefab</Filter>
     </ClCompile>
-    <ClCompile Include="yaCollider2D.cpp">
+    <ClCompile Include="Collider2D.cpp">
       <Filter>Component\Collider\2D</Filter>
     </ClCompile>
-    <ClCompile Include="yaCollider3D.cpp">
+    <ClCompile Include="Collider3D.cpp">
       <Filter>Component\Collider\3D</Filter>
     </ClCompile>
-    <ClCompile Include="yaCollider.cpp">
+    <ClCompile Include="Collider.cpp">
       <Filter>Component\Collider</Filter>
     </ClCompile>
-    <ClCompile Include="yaPlayer.cpp">
+    <ClCompile Include="Player.cpp">
       <Filter>Component\Script\Contents</Filter>
     </ClCompile>
-    <ClCompile Include="yaMonster.cpp">
+    <ClCompile Include="Monster.cpp">
       <Filter>Component\Script\Contents</Filter>
     </ClCompile>
-    <ClCompile Include="yaAnimation.cpp">
+    <ClCompile Include="Animation.cpp">
       <Filter>Component\Animator</Filter>
     </ClCompile>
-    <ClCompile Include="yaAnimator.cpp">
+    <ClCompile Include="Animator.cpp">
       <Filter>Component\Animator</Filter>
     </ClCompile>
-    <ClCompile Include="yaPaintShader.cpp">
+    <ClCompile Include="PaintShader.cpp">
       <Filter>Resource\Shader\CS</Filter>
     </ClCompile>
-    <ClCompile Include="yaComputeShader.cpp">
+    <ClCompile Include="ComputeShader.cpp">
       <Filter>Resource\Shader\CS\Base</Filter>
     </ClCompile>
-    <ClCompile Include="yaLight.cpp">
+    <ClCompile Include="Light.cpp">
       <Filter>Component\Light</Filter>
     </ClCompile>
-    <ClCompile Include="yaConstantBuffer.cpp">
+    <ClCompile Include="ConstantBuffer.cpp">
       <Filter>Graphics\Buffer</Filter>
     </ClCompile>
-    <ClCompile Include="yaStructedBuffer.cpp">
+    <ClCompile Include="StructedBuffer.cpp">
       <Filter>Graphics\Buffer</Filter>
     </ClCompile>
-    <ClCompile Include="yaGraphicDevice_DX11.cpp">
+    <ClCompile Include="GraphicDevice_DX11.cpp">
       <Filter>Graphics\API</Filter>
     </ClCompile>
-    <ClCompile Include="yaParticleSystem.cpp" />
-    <ClCompile Include="yaParticleShader.cpp" />
-    <ClCompile Include="yaEnums.cpp">
+    <ClCompile Include="ParticleSystem.cpp" />
+    <ClCompile Include="ParticleShader.cpp" />
+    <ClCompile Include="Enums.cpp">
       <Filter>Common</Filter>
     </ClCompile>
-    <ClCompile Include="yaAudioListener.cpp">
+    <ClCompile Include="AudioListener.cpp">
       <Filter>Component\Audio</Filter>
     </ClCompile>
-    <ClCompile Include="yaAudioClip.cpp">
+    <ClCompile Include="AudioClip.cpp">
       <Filter>Component\Audio</Filter>
     </ClCompile>
-    <ClCompile Include="yaFmod.cpp">
+    <ClCompile Include="Fmod.cpp">
       <Filter>Component\Audio</Filter>
     </ClCompile>
-    <ClCompile Include="yaAudioSource.cpp">
+    <ClCompile Include="AudioSource.cpp">
       <Filter>Resource\Audio</Filter>
     </ClCompile>
-    <ClCompile Include="yaFontWrapper.cpp">
+    <ClCompile Include="FontWrapper.cpp">
       <Filter>FontWrapper</Filter>
+    </ClCompile>
+    <ClCompile Include="GPUBuffer.cpp">
+      <Filter>Graphics\Buffer</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CommonInclude.h">
       <Filter>Common</Filter>
     </ClInclude>
-    <ClInclude Include="yaApplication.h">
+    <ClInclude Include="Application.h">
       <Filter>High Level Interface</Filter>
     </ClInclude>
-    <ClInclude Include="yaMath.h">
+    <ClInclude Include="Math.h">
       <Filter>Common\Math</Filter>
     </ClInclude>
-    <ClInclude Include="yaTime.h">
+    <ClInclude Include="Time.h">
       <Filter>Time</Filter>
     </ClInclude>
-    <ClInclude Include="yaInput.h">
+    <ClInclude Include="Input.h">
       <Filter>Input</Filter>
     </ClInclude>
-    <ClInclude Include="yaEntity.h">
+    <ClInclude Include="Entity.h">
       <Filter>Common</Filter>
     </ClInclude>
-    <ClInclude Include="yaResource.h">
+    <ClInclude Include="Resource.h">
       <Filter>Resource</Filter>
     </ClInclude>
-    <ClInclude Include="yaGraphics.h">
+    <ClInclude Include="Graphics.h">
       <Filter>Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="yaEngine.h">
+    <ClInclude Include="Engine.h">
       <Filter>Common</Filter>
     </ClInclude>
-    <ClInclude Include="yaEnums.h">
+    <ClInclude Include="Enums.h">
       <Filter>Common</Filter>
     </ClInclude>
-    <ClInclude Include="yaRenderer.h">
+    <ClInclude Include="Renderer.h">
       <Filter>Renderer</Filter>
     </ClInclude>
-    <ClInclude Include="yaGameObject.h">
+    <ClInclude Include="GameObject.h">
       <Filter>GameObject</Filter>
     </ClInclude>
-    <ClInclude Include="yaMesh.h">
+    <ClInclude Include="Mesh.h">
       <Filter>Resource\Mesh</Filter>
     </ClInclude>
-    <ClInclude Include="yaShader.h">
+    <ClInclude Include="Shader.h">
       <Filter>Resource\Shader</Filter>
     </ClInclude>
-    <ClInclude Include="yaResources.h">
+    <ClInclude Include="Resources.h">
       <Filter>Resource\Manager</Filter>
     </ClInclude>
-    <ClInclude Include="yaComponent.h">
+    <ClInclude Include="IComponent.h">
       <Filter>Component</Filter>
     </ClInclude>
-    <ClInclude Include="yaMaterial.h">
+    <ClInclude Include="Material.h">
       <Filter>Resource\Material</Filter>
     </ClInclude>
-    <ClInclude Include="yaTexture.h">
+    <ClInclude Include="Texture.h">
       <Filter>Resource\Texture</Filter>
     </ClInclude>
-    <ClInclude Include="yaScript.h">
+    <ClInclude Include="Script.h">
       <Filter>Component\Script</Filter>
     </ClInclude>
-    <ClInclude Include="yaTransform.h">
+    <ClInclude Include="Transform.h">
       <Filter>Component\Transform</Filter>
     </ClInclude>
-    <ClInclude Include="yaMeshRenderer.h">
+    <ClInclude Include="MeshRenderer.h">
       <Filter>Component\Renderer</Filter>
     </ClInclude>
-    <ClInclude Include="yaPlayerScript.h">
+    <ClInclude Include="PlayerScript.h">
       <Filter>Component\Script\Contents</Filter>
     </ClInclude>
-    <ClInclude Include="yaCamera.h">
+    <ClInclude Include="Camera.h">
       <Filter>Component\Camera</Filter>
     </ClInclude>
-    <ClInclude Include="yaCameraScript.h">
+    <ClInclude Include="CameraScript.h">
       <Filter>Component\Script</Filter>
     </ClInclude>
-    <ClInclude Include="yaSpriteRenderer.h">
+    <ClInclude Include="SpriteRenderer.h">
       <Filter>Component\Renderer</Filter>
     </ClInclude>
-    <ClInclude Include="yaObject.h">
+    <ClInclude Include="Object.h">
       <Filter>GameObject</Filter>
     </ClInclude>
-    <ClInclude Include="yaBaseRenderer.h">
+    <ClInclude Include="BaseRenderer.h">
       <Filter>Renderer</Filter>
     </ClInclude>
-    <ClInclude Include="yaGridScript.h">
+    <ClInclude Include="GridScript.h">
       <Filter>Resource\Script</Filter>
     </ClInclude>
-    <ClInclude Include="yaTitleScene.h">
+    <ClInclude Include="TitleScene.h">
       <Filter>Scene</Filter>
     </ClInclude>
-    <ClInclude Include="yaPlayScene.h">
+    <ClInclude Include="PlayScene.h">
       <Filter>Scene</Filter>
     </ClInclude>
-    <ClInclude Include="yaLayer.h">
+    <ClInclude Include="Layer.h">
       <Filter>Scene\Layer</Filter>
     </ClInclude>
-    <ClInclude Include="yaScene.h">
+    <ClInclude Include="Scene.h">
       <Filter>Scene\Base</Filter>
     </ClInclude>
-    <ClInclude Include="yaSceneManager.h">
+    <ClInclude Include="SceneManager.h">
       <Filter>Scene\Manager</Filter>
     </ClInclude>
-    <ClInclude Include="yaCollisionManager.h">
+    <ClInclude Include="CollisionManager.h">
       <Filter>Component\Collider\Manager</Filter>
     </ClInclude>
-    <ClInclude Include="yaPrefab.h">
+    <ClInclude Include="Prefab.h">
       <Filter>Resource\Prefab</Filter>
     </ClInclude>
-    <ClInclude Include="yaCollider2D.h">
+    <ClInclude Include="Collider2D.h">
       <Filter>Component\Collider\2D</Filter>
     </ClInclude>
-    <ClInclude Include="yaCollider3D.h">
+    <ClInclude Include="Collider3D.h">
       <Filter>Component\Collider\3D</Filter>
     </ClInclude>
-    <ClInclude Include="yaCollider.h">
+    <ClInclude Include="Collider.h">
       <Filter>Component\Collider</Filter>
     </ClInclude>
-    <ClInclude Include="yaPlayer.h">
+    <ClInclude Include="Player.h">
       <Filter>Component\Script\Contents</Filter>
     </ClInclude>
-    <ClInclude Include="yaMonster.h">
+    <ClInclude Include="Monster.h">
       <Filter>Component\Script\Contents</Filter>
     </ClInclude>
-    <ClInclude Include="yaAnimator.h">
+    <ClInclude Include="Animator.h">
       <Filter>Component\Animator</Filter>
     </ClInclude>
-    <ClInclude Include="yaAnimation.h">
+    <ClInclude Include="Animation.h">
       <Filter>Component\Animator</Filter>
     </ClInclude>
-    <ClInclude Include="yaPaintShader.h">
+    <ClInclude Include="PaintShader.h">
       <Filter>Resource\Shader\CS</Filter>
     </ClInclude>
-    <ClInclude Include="yaComputeShader.h">
+    <ClInclude Include="ComputeShader.h">
       <Filter>Resource\Shader\CS\Base</Filter>
     </ClInclude>
-    <ClInclude Include="yaLight.h">
+    <ClInclude Include="Light.h">
       <Filter>Component\Light</Filter>
     </ClInclude>
-    <ClInclude Include="yaConstantBuffer.h">
+    <ClInclude Include="ConstantBuffer.h">
       <Filter>Graphics\Buffer</Filter>
     </ClInclude>
-    <ClInclude Include="yaStructedBuffer.h">
+    <ClInclude Include="StructedBuffer.h">
       <Filter>Graphics\Buffer</Filter>
     </ClInclude>
-    <ClInclude Include="yaGraphicDevice_DX11.h">
+    <ClInclude Include="GraphicDevice_DX11.h">
       <Filter>Graphics\API</Filter>
     </ClInclude>
-    <ClInclude Include="yaParticleSystem.h" />
-    <ClInclude Include="yaParticleShader.h" />
-    <ClInclude Include="yaAudioListener.h">
+    <ClInclude Include="ParticleSystem.h" />
+    <ClInclude Include="ParticleShader.h" />
+    <ClInclude Include="AudioListener.h">
       <Filter>Component\Audio</Filter>
     </ClInclude>
-    <ClInclude Include="yaAudioClip.h">
+    <ClInclude Include="AudioClip.h">
       <Filter>Component\Audio</Filter>
     </ClInclude>
-    <ClInclude Include="yaFmod.h">
+    <ClInclude Include="Fmod.h">
       <Filter>Component\Audio</Filter>
     </ClInclude>
-    <ClInclude Include="yaAudioSource.h">
+    <ClInclude Include="AudioSource.h">
       <Filter>Resource\Audio</Filter>
     </ClInclude>
-    <ClInclude Include="yaFontWrapper.h">
+    <ClInclude Include="FontWrapper.h">
       <Filter>FontWrapper</Filter>
+    </ClInclude>
+    <ClInclude Include="GPUBuffer.h">
+      <Filter>Graphics\Buffer</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="yaMath.inl">
+    <None Include="Math.inl">
       <Filter>Common\Math</Filter>
     </None>
   </ItemGroup>

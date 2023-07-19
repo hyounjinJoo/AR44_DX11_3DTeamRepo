@@ -1,6 +1,5 @@
 #include "guiYamYamEditor.h"
 
-
 namespace gui
 {
 	YamYamEditor::YamYamEditor()
@@ -54,11 +53,7 @@ namespace gui
 
 	void YamYamEditor::Update()
 	{
-
-        
-        
         //ImGui::Begin("DockSpace Demo", p_open, window_flags);
-
 
         if (!mbPadding)
             ImGui::PopStyleVar();

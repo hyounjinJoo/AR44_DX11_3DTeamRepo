@@ -1,18 +1,18 @@
 #include "guiMeshRenderer.h"
-#include "yaMeshRenderer.h"
+#include "MeshRenderer.h"
 #include "guiEditor.h"
 #include "guiListWidget.h"
-#include "yaResources.h"
-#include "yaResource.h"
+#include "Resources.h"
+#include "Resource.h"
 #include "guiInspector.h"
-#include "yaSpriteRenderer.h"
+#include "SpriteRenderer.h"
 
 extern gui::Editor editor;
 
 namespace gui
 {
 	MeshRenderer::MeshRenderer()
-		: Component(eComponentType::MeshRenderer)
+		: IComponent(eComponentType::MeshRenderer)
 	{
 		SetName("MeshRenderer");
 		SetSize(ImVec2(200.0f, 120.0f));
@@ -25,7 +25,7 @@ namespace gui
 
 	void MeshRenderer::FixedUpdate()
 	{
-		Component::FixedUpdate();
+		IComponent::FixedUpdate();
 
 		if (GetTarget())
 		{
@@ -49,7 +49,7 @@ namespace gui
 
 	void MeshRenderer::Update()
 	{
-		Component::Update();
+		IComponent::Update();
 
 		if (mMesh == nullptr
 			|| mMaterial == nullptr)
@@ -74,13 +74,13 @@ namespace gui
 			std::vector<std::shared_ptr<ya::Mesh>> meshes 
 				= ya::Resources::Finds<ya::Mesh>();
 
-			std::vector<std::wstring> wName;
+			std::vector<std::wstring> name;
 			for (auto mesh : meshes)
 			{
-				wName.push_back(mesh->GetName());
+				name.push_back(mesh->GetName());
 			}
 
-			listUI->SetItemList(wName);
+			listUI->SetItemList(name);
 			listUI->SetEvent(this, std::bind(&MeshRenderer::SetMesh
 				, this, std::placeholders::_1));
 		}
@@ -113,7 +113,7 @@ namespace gui
 
 	void MeshRenderer::LateUpdate()
 	{
-		Component::LateUpdate();
+		IComponent::LateUpdate();
 	}
 
 	void MeshRenderer::SetMesh(std::string key)

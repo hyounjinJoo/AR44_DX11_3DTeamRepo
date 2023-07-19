@@ -1,19 +1,18 @@
 #pragma once
-#include "..\Engine_SOURCE\yaGameObject.h"
-
+#include "..\Engine_SOURCE\GameObject.h"
 
 namespace gui
 {
-	class EditorObject : public ya::GameObject
+	class EditorObject : public mh::GameObject
 	{
 	public:
 		EditorObject();
 		virtual ~EditorObject();
 
-		virtual void Initalize();
-		virtual void Update();
-		virtual void FixedUpdate();
-		virtual void Render();
+		virtual void Initialize() override;
+		virtual void Update() override;
+		virtual void FixedUpdate() override;
+		virtual void Render() override;
 
 	private:
 		

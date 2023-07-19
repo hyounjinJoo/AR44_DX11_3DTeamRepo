@@ -3,7 +3,7 @@
 
 namespace gui
 {
-	class Transform : public Component
+	class Transform : public IComponent
 	{
 	public:
 		Transform();

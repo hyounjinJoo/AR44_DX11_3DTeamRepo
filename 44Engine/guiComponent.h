@@ -1,26 +1,25 @@
 #pragma once
 #include "guiWidget.h"
-#include "yaGameObject.h"
-
+#include "GameObject.h"
 
 
 namespace gui
 {
-	class Component : public Widget
+	class IComponent : public Widget
 	{
 	public:
-		Component(ya::enums::eComponentType type);
-		~Component();
+		IComponent(mh::enums::eComponentType _type);
+		virtual ~IComponent();
 
 		virtual void FixedUpdate() override;
 		virtual void Update() override;
 		virtual void LateUpdate() override;
 
-		void SetTarget(ya::GameObject* target) { mTarget = target; }
-		ya::GameObject* GetTarget() { return mTarget; }
+		void SetTarget(mh::GameObject* _target) { mTarget = _target; }
+		mh::GameObject* GetTarget() { return mTarget; }
 
 	private:
-		ya::enums::eComponentType mType;
-		ya::GameObject* mTarget;
+		mh::enums::eComponentType mType;
+		mh::GameObject* mTarget;
 	};
 }

@@ -10,7 +10,7 @@ namespace gui
 		virtual ~ListWidget();
 
 		virtual void Update() override;
-		void Close() override;
+		virtual void Close() override;
 
 		void SetEvent(Widget* widget, std::function<void(std::string key)> event)
 		{

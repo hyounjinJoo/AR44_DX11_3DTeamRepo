@@ -1,10 +1,10 @@
 #include "guiTransform.h"
-#include "yaTransform.h"
+#include "Transform.h"
 
 namespace gui
 {
 	Transform::Transform()
-		: Component(eComponentType::Transform)
+		: IComponent(eComponentType::Transform)
 	{
 		SetName("Transform");
 		SetSize(ImVec2(200.0f, 120.0f));
@@ -17,7 +17,7 @@ namespace gui
 
 	void Transform::FixedUpdate()
 	{
-		Component::FixedUpdate();
+		IComponent::FixedUpdate();
 
 
 		if (GetTarget() == nullptr)
@@ -32,7 +32,7 @@ namespace gui
 
 	void Transform::Update()
 	{
-		Component::Update();
+		IComponent::Update();
 
 		ImGui::Text("Position"); ImGui::SameLine();
 		ImGui::InputFloat3("##Position", (float*)&mPosisition);
@@ -55,7 +55,7 @@ namespace gui
 
 	void Transform::LateUpdate()
 	{
-		Component::LateUpdate();
+		IComponent::LateUpdate();
 
 	}
 }

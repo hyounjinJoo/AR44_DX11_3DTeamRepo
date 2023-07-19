@@ -14,7 +14,7 @@ namespace gui
 
 	void DebugObject::FixedUpdate()
 	{
-		for (ya::Component* comp : mComponents)
+		for (mh::IComponent* comp : mComponents)
 		{
 			if (comp == nullptr)
 				continue;

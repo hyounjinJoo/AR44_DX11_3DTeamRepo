@@ -1,10 +1,10 @@
 #pragma once
-#include "yaGameObject.h"
+#include "GameObject.h"
 
 
 namespace gui
 {
-	class DebugObject : public ya::GameObject
+	class DebugObject : public mh::GameObject
 	{
 	public:
 		DebugObject();

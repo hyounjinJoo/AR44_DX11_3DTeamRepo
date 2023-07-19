@@ -1,6 +1,6 @@
 #pragma once
 #include "guiWidget.h"
-#include "yaGameObject.h"
+#include "GameObject.h"
 #include "guiComponent.h"
 #include "guiResource.h"
 
@@ -16,9 +16,9 @@ namespace gui
 		virtual void Update() override;
 		virtual void LateUpdate() override;
 
-		ya::GameObject* GetTargetGameObject() { return mTargetGameObject; }
-		void SetTargetGameObject(ya::GameObject* target) { mTargetGameObject = target; }
-		ya::Resource* GetTargetResource() { return mTargetResource; }
+		mh::GameObject* GetTargetGameObject() const { return mTargetGameObject; }
+		void SetTargetGameObject(mh::GameObject* target) { mTargetGameObject = target; }
+		ya::Resource* GetTargetResource() const { return mTargetResource; }
 		void SetTargetResource(ya::Resource* target) { mTargetResource = target; }
 
 		void ClearTarget();
@@ -26,9 +26,9 @@ namespace gui
 		void InitializeTargetResource();
 
 	private:
-		ya::GameObject* mTargetGameObject;
+		mh::GameObject* mTargetGameObject;
 		ya::Resource* mTargetResource;
-		std::vector<gui::Component*> mComponents;
+		std::vector<gui::IComponent*> mComponents;
 		std::vector<gui::Resource*> mResources;
 	};
 }

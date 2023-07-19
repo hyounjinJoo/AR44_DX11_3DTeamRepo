@@ -4,7 +4,7 @@ namespace gui
 {
 	Console::Console()
 	{
-		SetName("Console");
+		SetName(L"Console");
 	}
 
 	Console::~Console()
