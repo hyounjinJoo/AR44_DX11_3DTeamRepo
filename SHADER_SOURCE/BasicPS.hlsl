@@ -44,7 +44,7 @@ float4 main(VSOut In) : SV_Target
 					+ lightColor.specular.rgb
 					+ (OutColor.xyz * lightColor.ambient.rgb));
 
-	//LightAttribute lightAttribute = lightAttributes[0];
+	//tLightAttribute lightAttribute = lightAttributes[0];
 
 
 	////광원의 방향을 월드 좌표계에서 뷰 좌표계로 변환

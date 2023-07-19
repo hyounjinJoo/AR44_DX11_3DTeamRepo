@@ -14,7 +14,7 @@ struct GSOutput
     uint iInstance : SV_InstanceID;
 };
 
-StructuredBuffer<Particle> particleBuffer : register(t15);
+StructuredBuffer<tParticle> particleBuffer : register(t15);
 
 [maxvertexcount(6)]
 void main( point VSOut input[1], inout TriangleStream<GSOutput> output)

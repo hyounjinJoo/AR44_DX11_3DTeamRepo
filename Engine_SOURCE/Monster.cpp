@@ -10,7 +10,7 @@ namespace mh
 	{
 	}
 	
-	void Monster::Initalize()
+	void Monster::Initialize()
 	{
 	}
 	

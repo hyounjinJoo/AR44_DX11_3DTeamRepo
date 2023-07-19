@@ -1,5 +1,5 @@
 #include "guiTexture.h"
-#include "yaTexture.h"
+#include "Texture.h"
 
 namespace gui
 {

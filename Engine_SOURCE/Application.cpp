@@ -24,7 +24,7 @@ namespace mh
 
 	}
 
-	void Application::Initalize()
+	void Application::Initialize()
 	{
 		Time::Initialize();
 		Input::Initialize();
@@ -33,7 +33,7 @@ namespace mh
 
 		CollisionManager::Initialize();
 		renderer::Initialize();
-		SceneManager::Initalize();
+		SceneManager::Initialize();
 	}
 
 	// 게임 로직 캐릭터 이동 등등 
@@ -99,7 +99,7 @@ namespace mh
 			mHeight = _height;
 
 
-			graphics::ValidationMode vaildationMode = graphics::ValidationMode::Disabled;
+			graphics::eValidationMode vaildationMode = graphics::eValidationMode::Disabled;
 			graphicDevice = std::make_unique<graphics::GraphicDevice_DX11>();
 			//graphics::GetDevice() = graphicDevice.get();
 		}

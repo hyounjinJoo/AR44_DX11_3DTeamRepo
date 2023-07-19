@@ -1,11 +1,11 @@
 #pragma once
 #include "guiComponent.h"
-#include "yaMaterial.h"
+#include "Material.h"
 #include "yaMesh.h"
 
 namespace gui
 {
-	class MeshRenderer : public Component
+	class MeshRenderer : public IComponent
 	{
 	public:
 		MeshRenderer();

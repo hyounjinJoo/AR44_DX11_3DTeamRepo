@@ -126,7 +126,7 @@
     <ClCompile Include="Math.cpp">
       <Filter>Common\Math</Filter>
     </ClCompile>
-    <ClCompile Include="yaTime.cpp">
+    <ClCompile Include="Time.cpp">
       <Filter>Time</Filter>
     </ClCompile>
     <ClCompile Include="Input.cpp">
@@ -135,10 +135,10 @@
     <ClCompile Include="Entity.cpp">
       <Filter>Common</Filter>
     </ClCompile>
-    <ClCompile Include="yaResource.cpp">
+    <ClCompile Include="Resource.cpp">
       <Filter>Resource</Filter>
     </ClCompile>
-    <ClCompile Include="yaRenderer.cpp">
+    <ClCompile Include="Renderer.cpp">
       <Filter>Renderer</Filter>
     </ClCompile>
     <ClCompile Include="GameObject.cpp">
@@ -147,25 +147,25 @@
     <ClCompile Include="Mesh.cpp">
       <Filter>Resource\Mesh</Filter>
     </ClCompile>
-    <ClCompile Include="yaShader.cpp">
+    <ClCompile Include="Shader.cpp">
       <Filter>Resource\Shader</Filter>
     </ClCompile>
-    <ClCompile Include="yaResources.cpp">
+    <ClCompile Include="Resources.cpp">
       <Filter>Resource\Manager</Filter>
     </ClCompile>
-    <ClCompile Include="Component.cpp">
+    <ClCompile Include="IComponent.cpp">
       <Filter>Component</Filter>
     </ClCompile>
     <ClCompile Include="Material.cpp">
       <Filter>Resource\Material</Filter>
     </ClCompile>
-    <ClCompile Include="yaTexture.cpp">
+    <ClCompile Include="Texture.cpp">
       <Filter>Resource\Texture</Filter>
     </ClCompile>
-    <ClCompile Include="yaScript.cpp">
+    <ClCompile Include="Script.cpp">
       <Filter>Component\Script</Filter>
     </ClCompile>
-    <ClCompile Include="yaTransform.cpp">
+    <ClCompile Include="Transform.cpp">
       <Filter>Component\Transform</Filter>
     </ClCompile>
     <ClCompile Include="MeshRenderer.cpp">
@@ -180,7 +180,7 @@
     <ClCompile Include="CameraScript.cpp">
       <Filter>Component\Script</Filter>
     </ClCompile>
-    <ClCompile Include="yaSpriteRenderer.cpp">
+    <ClCompile Include="SpriteRenderer.cpp">
       <Filter>Component\Renderer</Filter>
     </ClCompile>
     <ClCompile Include="BaseRenderer.cpp">
@@ -192,22 +192,22 @@
     <ClCompile Include="PlayScene.cpp">
       <Filter>Scene</Filter>
     </ClCompile>
-    <ClCompile Include="yaTitleScene.cpp">
+    <ClCompile Include="TitleScene.cpp">
       <Filter>Scene</Filter>
     </ClCompile>
-    <ClCompile Include="yaLayer.cpp">
+    <ClCompile Include="Layer.cpp">
       <Filter>Scene\Layer</Filter>
     </ClCompile>
-    <ClCompile Include="yaScene.cpp">
+    <ClCompile Include="Scene.cpp">
       <Filter>Scene\Base</Filter>
     </ClCompile>
-    <ClCompile Include="yaSceneManager.cpp">
+    <ClCompile Include="SceneManager.cpp">
       <Filter>Scene\Manager</Filter>
     </ClCompile>
     <ClCompile Include="CollisionManager.cpp">
       <Filter>Component\Collider\Manager</Filter>
     </ClCompile>
-    <ClCompile Include="yaPrefab.cpp">
+    <ClCompile Include="Prefab.cpp">
       <Filter>Resource\Prefab</Filter>
     </ClCompile>
     <ClCompile Include="Collider2D.cpp">
@@ -237,13 +237,13 @@
     <ClCompile Include="ComputeShader.cpp">
       <Filter>Resource\Shader\CS\Base</Filter>
     </ClCompile>
-    <ClCompile Include="yaLight.cpp">
+    <ClCompile Include="Light.cpp">
       <Filter>Component\Light</Filter>
     </ClCompile>
     <ClCompile Include="ConstantBuffer.cpp">
       <Filter>Graphics\Buffer</Filter>
     </ClCompile>
-    <ClCompile Include="yaStructedBuffer.cpp">
+    <ClCompile Include="StructedBuffer.cpp">
       <Filter>Graphics\Buffer</Filter>
     </ClCompile>
     <ClCompile Include="GraphicDevice_DX11.cpp">
@@ -269,6 +269,9 @@
     <ClCompile Include="FontWrapper.cpp">
       <Filter>FontWrapper</Filter>
     </ClCompile>
+    <ClCompile Include="GPUBuffer.cpp">
+      <Filter>Graphics\Buffer</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CommonInclude.h">
@@ -280,7 +283,7 @@
     <ClInclude Include="Math.h">
       <Filter>Common\Math</Filter>
     </ClInclude>
-    <ClInclude Include="yaTime.h">
+    <ClInclude Include="Time.h">
       <Filter>Time</Filter>
     </ClInclude>
     <ClInclude Include="Input.h">
@@ -289,7 +292,7 @@
     <ClInclude Include="Entity.h">
       <Filter>Common</Filter>
     </ClInclude>
-    <ClInclude Include="yaResource.h">
+    <ClInclude Include="Resource.h">
       <Filter>Resource</Filter>
     </ClInclude>
     <ClInclude Include="Graphics.h">
@@ -301,7 +304,7 @@
     <ClInclude Include="Enums.h">
       <Filter>Common</Filter>
     </ClInclude>
-    <ClInclude Include="yaRenderer.h">
+    <ClInclude Include="Renderer.h">
       <Filter>Renderer</Filter>
     </ClInclude>
     <ClInclude Include="GameObject.h">
@@ -310,25 +313,25 @@
     <ClInclude Include="Mesh.h">
       <Filter>Resource\Mesh</Filter>
     </ClInclude>
-    <ClInclude Include="yaShader.h">
+    <ClInclude Include="Shader.h">
       <Filter>Resource\Shader</Filter>
     </ClInclude>
-    <ClInclude Include="yaResources.h">
+    <ClInclude Include="Resources.h">
       <Filter>Resource\Manager</Filter>
     </ClInclude>
-    <ClInclude Include="Component.h">
+    <ClInclude Include="IComponent.h">
       <Filter>Component</Filter>
     </ClInclude>
     <ClInclude Include="Material.h">
       <Filter>Resource\Material</Filter>
     </ClInclude>
-    <ClInclude Include="yaTexture.h">
+    <ClInclude Include="Texture.h">
       <Filter>Resource\Texture</Filter>
     </ClInclude>
-    <ClInclude Include="yaScript.h">
+    <ClInclude Include="Script.h">
       <Filter>Component\Script</Filter>
     </ClInclude>
-    <ClInclude Include="yaTransform.h">
+    <ClInclude Include="Transform.h">
       <Filter>Component\Transform</Filter>
     </ClInclude>
     <ClInclude Include="MeshRenderer.h">
@@ -343,7 +346,7 @@
     <ClInclude Include="CameraScript.h">
       <Filter>Component\Script</Filter>
     </ClInclude>
-    <ClInclude Include="yaSpriteRenderer.h">
+    <ClInclude Include="SpriteRenderer.h">
       <Filter>Component\Renderer</Filter>
     </ClInclude>
     <ClInclude Include="Object.h">
@@ -355,25 +358,25 @@
     <ClInclude Include="GridScript.h">
       <Filter>Resource\Script</Filter>
     </ClInclude>
-    <ClInclude Include="yaTitleScene.h">
+    <ClInclude Include="TitleScene.h">
       <Filter>Scene</Filter>
     </ClInclude>
     <ClInclude Include="PlayScene.h">
       <Filter>Scene</Filter>
     </ClInclude>
-    <ClInclude Include="yaLayer.h">
+    <ClInclude Include="Layer.h">
       <Filter>Scene\Layer</Filter>
     </ClInclude>
-    <ClInclude Include="yaScene.h">
+    <ClInclude Include="Scene.h">
       <Filter>Scene\Base</Filter>
     </ClInclude>
-    <ClInclude Include="yaSceneManager.h">
+    <ClInclude Include="SceneManager.h">
       <Filter>Scene\Manager</Filter>
     </ClInclude>
     <ClInclude Include="CollisionManager.h">
       <Filter>Component\Collider\Manager</Filter>
     </ClInclude>
-    <ClInclude Include="yaPrefab.h">
+    <ClInclude Include="Prefab.h">
       <Filter>Resource\Prefab</Filter>
     </ClInclude>
     <ClInclude Include="Collider2D.h">
@@ -403,13 +406,13 @@
     <ClInclude Include="ComputeShader.h">
       <Filter>Resource\Shader\CS\Base</Filter>
     </ClInclude>
-    <ClInclude Include="yaLight.h">
+    <ClInclude Include="Light.h">
       <Filter>Component\Light</Filter>
     </ClInclude>
     <ClInclude Include="ConstantBuffer.h">
       <Filter>Graphics\Buffer</Filter>
     </ClInclude>
-    <ClInclude Include="yaStructedBuffer.h">
+    <ClInclude Include="StructedBuffer.h">
       <Filter>Graphics\Buffer</Filter>
     </ClInclude>
     <ClInclude Include="GraphicDevice_DX11.h">
@@ -431,6 +434,9 @@
     </ClInclude>
     <ClInclude Include="FontWrapper.h">
       <Filter>FontWrapper</Filter>
+    </ClInclude>
+    <ClInclude Include="GPUBuffer.h">
+      <Filter>Graphics\Buffer</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -17,7 +17,7 @@ namespace mh::enums
 		Monster,
 		Player,
 
-		Particle,
+		tParticle,
 		PostProcess,
 		UI,
 		End = 16,

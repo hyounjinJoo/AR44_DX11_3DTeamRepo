@@ -14,7 +14,7 @@ namespace mh
 	{
 	}
 
-	void MeshRenderer::Initalize()
+	void MeshRenderer::Initialize()
 	{
 	}
 

@@ -1,9 +1,9 @@
 #pragma once
-#include "Component.h"
+#include "IComponent.h"
 
 namespace mh
 {
-	class AudioListener : public Component
+	class AudioListener : public IComponent
 	{
 	public:
 		AudioListener();

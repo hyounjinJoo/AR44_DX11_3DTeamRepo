@@ -22,10 +22,10 @@ namespace mh
 
 	}
 
-	void GridScript::Initalize()
+	void GridScript::Initialize()
 	{
 		eSceneType type = SceneManager::GetActiveScene()->GetSceneType();
-		mCamera = renderer::cameras[(UINT)type][0];
+		mCamera = renderer::gCameras[(UINT)type][0];
 	}
 
 	void GridScript::Update()
@@ -38,7 +38,7 @@ namespace mh
 		GameObject* gameObj = mCamera->GetOwner();
 		Transform* TR = gameObj->GetComponent<Transform>();
 		
-		Vector3 cameraPosition = tr->GetPosition();
+		Vector3 cameraPosition = TR->GetPosition();
 		Vector4 position = Vector4(cameraPosition.x, cameraPosition.y, cameraPosition.z, 1.0f);
 
 		float scale = mCamera->GetScale();
@@ -50,15 +50,15 @@ namespace mh
 		Vector2 resolution(width, height);
 
 		// Constant buffer
-		ConstantBuffer* CB = renderer::constantBuffers[(UINT)eCBType::Grid];
+		graphics::ConstantBuffer* CB = renderer::constantBuffers[(UINT)graphics::eCBType::Grid];
 		renderer::GridCB data;
 		data.cameraPosition = position;
 		data.cameraScale = Vector2(scale, scale);
 		data.resolution = resolution;
-
+		
 		CB->SetData(&data);
-		CB->Bind(eShaderStage::VS);
-		CB->Bind(eShaderStage::PS);
+		CB->Bind(graphics::eShaderStage::VS);
+		CB->Bind(graphics::eShaderStage::PS);
  	}
 
 	void GridScript::FixedUpdate()

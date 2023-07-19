@@ -19,9 +19,9 @@
 #define CBSLOT_PARTICLESYSTEM	5
 #define CBSLOT_NOISE			6
 
-using namespace mh::math;
 namespace mh::graphics
 {
+	using namespace mh::math;
 	enum class eValidationMode
 	{
 		Disabled,
@@ -84,22 +84,6 @@ namespace mh::graphics
 		End,
 	};
 
-
-	struct tGpuBuffer
-	{
-		enum class eType
-		{
-			Buffer,
-			Texture,
-			UnknownType,
-		} type = eType::UnknownType;
-
-		D3D11_BUFFER_DESC desc;
-		Microsoft::WRL::ComPtr<ID3D11Buffer> buffer;
-
-		tGpuBuffer() = default;
-		virtual ~tGpuBuffer() = default;
-	};
 
 	enum class eCBType
 	{

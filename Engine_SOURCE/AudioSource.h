@@ -1,10 +1,10 @@
 #pragma once
-#include "Component.h"
+#include "IComponent.h"
 #include "AudioClip.h"
 
 namespace mh
 {
-	class AudioSource : public Component
+	class AudioSource : public IComponent
 	{
 	public:
 		AudioSource();

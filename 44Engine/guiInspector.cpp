@@ -4,7 +4,7 @@
 #include "imgui_impl_win32.h"
 #include "imgui_impl_dx11.h"
 
-#include "yaRenderer.h"
+#include "Renderer.h"
 
 #include "guiTransform.h"
 #include "guiMeshRenderer.h"
@@ -12,14 +12,14 @@
 
 namespace gui
 {
-	using namespace ya::enums;
+	using namespace mh::enums;
 	Inspector::Inspector()
 	{
 		SetName("Inspector");
 		SetSize(ImVec2(300.0f, 100.0f));
 		
 		mComponents.resize((UINT)eComponentType::End);
-		mTargetGameObject = ya::renderer::inspectorGameObject;
+		mTargetGameObject = mh::renderer::gInspectorGameObject;
 
 		mComponents[(UINT)eComponentType::Transform] = new gui::Transform();
 		mComponents[(UINT)eComponentType::Transform]->SetName("InspectorTransform");
@@ -39,7 +39,7 @@ namespace gui
 
 	Inspector::~Inspector()
 	{
-		for (gui::Component* comp : mComponents)
+		for (gui::IComponent* comp : mComponents)
 		{
 			delete comp;
 			comp = nullptr;
@@ -69,7 +69,7 @@ namespace gui
 
 	void Inspector::ClearTarget()
 	{
-		for (gui::Component* comp : mComponents)
+		for (gui::IComponent* comp : mComponents)
 		{
 			if (comp == nullptr)
 				continue;

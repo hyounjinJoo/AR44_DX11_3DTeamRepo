@@ -8,7 +8,7 @@ struct LightColor
 	float4 ambient;
 };
 
-struct LightAttribute
+struct tLightAttribute
 {
 	LightColor color;
 	float4 position;
@@ -20,8 +20,8 @@ struct LightAttribute
 	int padding;
 };
 
-StructuredBuffer<LightAttribute> lightAttributes : register(t13);
-StructuredBuffer<LightAttribute> lightAttributes3D : register(t14);
+StructuredBuffer<tLightAttribute> lightAttributes : register(t13);
+StructuredBuffer<tLightAttribute> lightAttributes3D : register(t14);
 
 //2D
 void CalculateLight(in out LightColor pLightColor, float3 position, int idx)
@@ -73,7 +73,7 @@ void CalculateLight3D(float3 viewPos, float3 viewNormal, int lightIdx, inout Lig
     //fSpecPow = saturate(dot(-vEye, vViewReflect));
     //fSpecPow = pow(fSpecPow, 30);
     
-    LightAttribute lightInfo = lightAttributes[lightIdx];
+    tLightAttribute lightInfo = lightAttributes[lightIdx];
     
     float3 viewLightDir = (float3) 0.0f;
 

@@ -1,5 +1,5 @@
 #pragma once
-#include "Component.h"
+#include "IComponent.h"
 #include "Mesh.h"
 #include "Material.h"
 #include "BaseRenderer.h"
@@ -13,7 +13,7 @@ namespace mh
 		MeshRenderer();
 		virtual ~MeshRenderer();
 
-		virtual void Initalize() override;
+		virtual void Initialize() override;
 		virtual void Update() override;
 		virtual void FixedUpdate() override;
 		virtual void Render() override;

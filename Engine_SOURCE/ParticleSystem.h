@@ -18,21 +18,21 @@ namespace mh
 		ParticleSystem();
 		~ParticleSystem();
 
-		virtual void Initalize() override;
+		virtual void Initialize() override;
 		virtual void Update() override;
 		virtual void FixedUpdate() override;
 		virtual void Render() override;
 
 	private:
 #pragma region Buffer 선언
-		StructedBuffer* mBuffer;
-		StructedBuffer* mSharedBuffer;
+		graphics::StructedBuffer* mBuffer;
+		graphics::StructedBuffer* mSharedBuffer;
 #pragma endregion
-#pragma region Particle Shader 관련 변수 선언
+#pragma region tParticle Shader 관련 변수 선언
 		std::shared_ptr<graphics::ParticleShader> mCS;
 		renderer::ParticleSystemCB mCBData;
 #pragma endregion
-#pragma region Particle System 관련 변수 선언
+#pragma region tParticle System 관련 변수 선언
 		Vector4 mStartSize;
 		Vector4 mStartColor;
 		

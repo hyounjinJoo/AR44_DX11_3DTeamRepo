@@ -1,10 +1,10 @@
 #pragma once
-#include "Component.h"
+#include "IComponent.h"
 #include "Transform.h"
 
 namespace mh
 {
-	class Collider2D : public Component
+	class Collider2D : public IComponent
 	{
 	public:
 		Collider2D();

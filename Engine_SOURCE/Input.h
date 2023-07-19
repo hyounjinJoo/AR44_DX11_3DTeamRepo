@@ -3,7 +3,7 @@
 #include "Math.h"
 
 
-namespace ya
+namespace mh
 {
 	enum class eKeyCode
 	{
@@ -38,16 +38,18 @@ namespace ya
 		NONE,
 	};
 
-	struct tKey
-	{
-		eKeyCode  eType;
-		eKeyState eState;
-		bool	  bPressed;
-	};
+
 
 	class Input
 	{
 	public:
+		struct tKey
+		{
+			eKeyCode  eType;
+			eKeyState eState;
+			bool	  bPressed;
+		};
+
 		static void Initialize();
 		static void Update();
 

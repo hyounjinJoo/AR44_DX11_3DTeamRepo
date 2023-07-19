@@ -5,10 +5,10 @@ namespace mh
 {
 	GameObject::GameObject()
 		: mState(eState::Active)
-		, mType(eLayerType::None)
+		, mType(enums::eLayerType::None)
 		, mbDontDestroy(false)
 	{
-		mComponents.resize((UINT)eComponentType::End);
+		mComponents.resize((UINT)enums::eComponentType::End);
 		AddComponent(new Transform());
 	}
 
@@ -33,7 +33,7 @@ namespace mh
 		}
 	}
 
-	void GameObject::Initalize()
+	void GameObject::Initialize()
 	{
 
 	}
@@ -99,9 +99,9 @@ namespace mh
 	T* GameObject::AddComponent()
 	{
 		T* _Comp = new T();
-		eComponentType order = _Comp->GetOrder();
+		enums::eComponentType order = _Comp->GetOrder();
 
-		if (order != eComponentType::Script)
+		if (order != enums::eComponentType::Script)
 		{
 			mComponents[(UINT)order] = _Comp;
 			mComponents[(UINT)order]->SetOwner(this);
@@ -112,16 +112,16 @@ namespace mh
 			_Comp->SetOwner(this);
 		}
 
-		_Comp->Initalize();
+		_Comp->Initialize();
 
 		return _Comp;
 	}
 
 	void GameObject::AddComponent(IComponent* _Comp)
 	{
-		eComponentType order = _Comp->GetOrder();
+		enums::eComponentType order = _Comp->GetOrder();
 
-		if (order != eComponentType::Script)
+		if (order != enums::eComponentType::Script)
 		{
 			mComponents[(UINT)order] = _Comp;
 			mComponents[(UINT)order]->SetOwner(this);

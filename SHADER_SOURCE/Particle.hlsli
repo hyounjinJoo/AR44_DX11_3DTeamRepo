@@ -1,5 +1,5 @@
 
-struct Particle
+struct tParticle
 {
     float4 position;
     float4 direction;
@@ -10,7 +10,7 @@ struct Particle
     uint active;
 };
 
-struct ParticleShared
+struct tParticleShared
 {
     uint gActiveCount;
 };
