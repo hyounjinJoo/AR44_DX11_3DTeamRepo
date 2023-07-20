@@ -1,3 +1,5 @@
+#include "EnginePCH.h"
+
 #include "Fmod.h"
 #include <combaseapi.h>
 

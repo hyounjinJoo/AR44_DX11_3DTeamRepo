@@ -1,9 +1,11 @@
+#include "ClientPCH.h"
+
 #include "guiMeshRenderer.h"
 #include "MeshRenderer.h"
 #include "guiEditor.h"
 #include "guiListWidget.h"
-#include "Resources.h"
-#include "Resource.h"
+#include "GameResources.h"
+#include "GameResource.h"
 #include "guiInspector.h"
 #include "SpriteRenderer.h"
 
@@ -29,14 +31,14 @@ namespace gui
 
 		if (GetTarget())
 		{
-			ya::MeshRenderer* meshRenderer
-				= GetTarget()->GetComponent<ya::MeshRenderer>();
+			mh::MeshRenderer* meshRenderer
+				= GetTarget()->GetComponent<mh::MeshRenderer>();
 
 			if (meshRenderer == nullptr)
 				return;
 
-			//ya::SpriteRenderer* spriteRenderer
-			//	= GetTarget()->GetComponent<ya::SpriteRenderer>();
+			//mh::SpriteRenderer* spriteRenderer
+			//	= GetTarget()->GetComponent<mh::SpriteRenderer>();
 
 			//if (spriteRenderer == nullptr)
 			//	return;
@@ -71,8 +73,8 @@ namespace gui
 			
 
 			//모든 메쉬의 리소스를 가져와야한다.
-			std::vector<std::shared_ptr<ya::Mesh>> meshes 
-				= ya::Resources::Finds<ya::Mesh>();
+			std::vector<std::shared_ptr<mh::Mesh>> meshes 
+				= mh::GameResources::Finds<mh::Mesh>();
 
 			std::vector<std::wstring> name;
 			for (auto mesh : meshes)
@@ -96,8 +98,8 @@ namespace gui
 			ListWidget* listUI = editor.GetWidget<ListWidget>("ListWidget");
 			listUI->SetState(eState::Active);
 			//모든 메쉬의 리소스를 가져와야한다.
-			std::vector<std::shared_ptr<ya::Material>> materials
-				= ya::Resources::Finds<ya::Material>();
+			std::vector<std::shared_ptr<mh::graphics::Material>> materials
+				= mh::GameResources::Finds<mh::graphics::Material>();
 
 			std::vector<std::wstring> wName;
 			for (auto material : materials)
@@ -119,18 +121,18 @@ namespace gui
 	void MeshRenderer::SetMesh(std::string key)
 	{
 		std::wstring wKey(key.begin(), key.end());
-		std::shared_ptr<ya::Mesh> mesh = ya::Resources::Find<ya::Mesh>(wKey);
+		std::shared_ptr<mh::Mesh> mesh = mh::GameResources::Find<mh::Mesh>(wKey);
 
 		Inspector* inspector = editor.GetWidget<Inspector>("Inspector");
-		inspector->GetTargetGameObject()->GetComponent<ya::MeshRenderer>()->SetMesh(mesh);
+		inspector->GetTargetGameObject()->GetComponent<mh::MeshRenderer>()->SetMesh(mesh);
 	}
 
 	void MeshRenderer::SetMaterial(std::string key)
 	{
 		std::wstring wKey(key.begin(), key.end());
-		std::shared_ptr<ya::Material> material = ya::Resources::Find<ya::Material>(wKey);
+		std::shared_ptr<mh::graphics::Material> material = mh::GameResources::Find<mh::graphics::Material>(wKey);
 
 		Inspector* inspector = editor.GetWidget<Inspector>("Inspector");
-		inspector->GetTargetGameObject()->GetComponent<ya::MeshRenderer>()->SetMaterial(material);
+		inspector->GetTargetGameObject()->GetComponent<mh::MeshRenderer>()->SetMaterial(material);
 	}
 }

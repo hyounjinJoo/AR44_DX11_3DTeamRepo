@@ -1,16 +1,16 @@
 #pragma once
-#include "Engine.h"
-#include "Resource.h"
+#include "EnginePCH.h"
+#include "GameResource.h"
 
 namespace mh
 {
-	class Resources
+	class GameResources
 	{
 	public:
 		template <typename T>
 		static std::shared_ptr<T> Find(const std::wstring& key)
 		{
-			std::map<std::wstring, std::shared_ptr<Resource>>::iterator iter = mResources.find(key);
+			std::map<std::wstring, std::shared_ptr<GameResource>>::iterator iter = mResources.find(key);
 
 			// 이미 동일한 키값으로 다른 리소스가 먼저 등록되어 있었다.
 			if (iter != mResources.end())
@@ -41,7 +41,7 @@ namespace mh
 		static std::shared_ptr<T> Load(const std::wstring& key, const std::wstring& path)
 		{
 			// 키값으로 탐색
-			std::shared_ptr<T> resource = Resources::Find<T>(key);
+			std::shared_ptr<T> resource = GameResources::Find<T>(key);
 			if (nullptr != resource)
 			{
 				// 해당키로 이미 로딩된게 있으면 해당 리소스를 반환
@@ -61,7 +61,7 @@ namespace mh
 			resource->SetPath(path);
 			resource->SetName(key);
 
-			mResources.insert(std::make_pair(key, std::dynamic_pointer_cast<Resource>(resource)));
+			mResources.insert(std::make_pair(key, std::dynamic_pointer_cast<GameResource>(resource)));
 
 			return resource;
 		}
@@ -72,7 +72,7 @@ namespace mh
 			resource->SetName(key);
 			resource->SetKey(key);
 
-			mResources.insert(std::make_pair(key, std::dynamic_pointer_cast<Resource>(resource)));
+			mResources.insert(std::make_pair(key, std::dynamic_pointer_cast<GameResource>(resource)));
 		}
 
 		static void deleteTest()
@@ -81,11 +81,11 @@ namespace mh
 		}
 
 	private:
-		Resources() = delete;
-		~Resources() = delete;
+		GameResources() = delete;
+		~GameResources() = delete;
 	
 	private:
-		static std::map<std::wstring, std::shared_ptr<Resource>> mResources;
+		static std::map<std::wstring, std::shared_ptr<GameResource>> mResources;
 	};
 
 	

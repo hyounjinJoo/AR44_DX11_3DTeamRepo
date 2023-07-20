@@ -1,6 +1,6 @@
 #pragma once
 #include "CommonInclude.h"
-#include "Math.h"
+#include "SimpleMath.h"
 #include "GraphicDevice_DX11.h"
 
 #include "Graphics.h"
@@ -43,6 +43,12 @@ namespace mh::renderer
 		Vector3 XYZ;
 		Vector4 XYZW;
 		Matrix	Matrix;
+
+		MaterialCB()
+			: iData(0)
+			, fData(0.f)
+		{
+		}
 	};
 
 	CBUFFER(GridCB, CBSLOT_GRID)

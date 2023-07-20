@@ -1,3 +1,5 @@
+#include "EnginePCH.h"
+
 #include "Camera.h"
 #include "CameraScript.h"
 
@@ -9,7 +11,7 @@
 #include "PlayScene.h"
 
 #include "Renderer.h"
-#include "Resources.h"
+#include "GameResources.h"
 
 #include "SceneManager.h"
 #include "SpriteRenderer.h"

@@ -1,7 +1,5 @@
 #pragma once
 #include "IComponent.h"
-
-#include "Enums.h"
 #include "Script.h"
 #include "Entity.h"
 
@@ -11,6 +9,14 @@ namespace mh
 	class GameObject : public Entity
 	{
 	public:
+		enum class eState
+		{
+			Active,
+			Paused,
+			Dead,
+		};
+
+	public:
 		GameObject();
 		virtual ~GameObject();
 
@@ -18,12 +24,6 @@ namespace mh
 		virtual void Update();
 		virtual void FixedUpdate();
 		virtual void Render();
-		enum class eState
-		{
-			Active,
-			Paused,
-			Dead,
-		};
 
 	public:
 		template <typename T>
@@ -68,5 +68,59 @@ namespace mh
 		std::vector<Script*> mScripts;
 		bool mbDontDestroy;
 	};
+
+	template <typename T>
+	T* GameObject::AddComponent()
+	{
+		T* _Comp = new T();
+		enums::eComponentType order = _Comp->GetOrder();
+
+		if (order != enums::eComponentType::Script)
+		{
+			mComponents[(UINT)order] = _Comp;
+			mComponents[(UINT)order]->SetOwner(this);
+		}
+		else
+		{
+			mScripts.push_back(dynamic_cast<Script*>(_Comp));
+			_Comp->SetOwner(this);
+		}
+
+		_Comp->Initialize();
+
+		return _Comp;
+	}
+
+	template <typename T>
+	T* GameObject::GetComponent()
+	{
+		T* castResult;
+		for (auto component : mComponents)
+		{
+			castResult = dynamic_cast<T*>(component);
+
+			if (castResult != nullptr)
+				return castResult;
+		}
+
+		return nullptr;
+	}
+
+	template <typename T>
+	std::vector<T*> GameObject::GetComponents()
+	{
+		std::vector<T*> components = {};
+
+		T* castResult;
+		for (auto component : mComponents)
+		{
+			castResult = dynamic_cast<T*>(component);
+
+			if (castResult != nullptr)
+				components.push_back(castResult);
+		}
+
+		return components;
+	}
 }
 

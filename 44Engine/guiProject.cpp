@@ -1,13 +1,15 @@
+#include "ClientPCH.h"
+
 #include "guiProject.h"
 
 #include "Texture.h"
 #include "Material.h"
-#include "yaMesh.h"
-#include "yaShader.h"
+#include "Mesh.h"
+#include "Shader.h"
 
 #include "guiInspector.h"
 #include "guiResource.h"
-#include "Resources.h"
+#include "GameResources.h"
 #include "guiEditor.h"
 
 extern gui::Editor editor;
@@ -26,7 +28,7 @@ namespace gui
 		SetSize(ImVec2((float)size.x / 2 + size.x / 5, size.y / 4));
 
 		mTreeWidget = new TreeWidget();
-		mTreeWidget->SetName("Resources");
+		mTreeWidget->SetName("GameResources");
 		AddWidget(mTreeWidget);
 
 		mTreeWidget->SetEvent(this
@@ -64,7 +66,7 @@ namespace gui
 		//mTreeWidget->Close();
 		mTreeWidget->Clear();
 
-		TreeWidget::tNode* pRootNode = mTreeWidget->AddNode(nullptr, "Resources", 0, true);
+		TreeWidget::tNode* pRootNode = mTreeWidget->AddNode(nullptr, "GameResources", 0, true);
 
 		//enum class eResourceType
 		//{
@@ -78,15 +80,15 @@ namespace gui
 		//	ComputeShader,
 		//	End,
 		//};
-		AddResources<ya::Mesh>(pRootNode, "Mesh");
-		AddResources<ya::graphics::Texture>(pRootNode, "Texture");
-		AddResources<ya::graphics::Material>(pRootNode, "Materials");
-		AddResources<ya::Shader>(pRootNode, "Shaders");
+		AddResources<mh::Mesh>(pRootNode, "Mesh");
+		AddResources<mh::graphics::Texture>(pRootNode, "Texture");
+		AddResources<mh::graphics::Material>(pRootNode, "Materials");
+		AddResources<mh::Shader>(pRootNode, "Shaders");
 	}
 
 	void Project::toInspector(void* data)
 	{
-		ya::Resource* resource = static_cast<ya::Resource*>(data);
+		mh::GameResource* resource = static_cast<mh::GameResource*>(data);
 
 		Inspector* inspector = editor.GetWidget<Inspector>("Inspector");
 		inspector->SetTargetResource(resource);

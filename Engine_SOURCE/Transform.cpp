@@ -1,3 +1,5 @@
+#include "EnginePCH.h"
+
 #include "Transform.h"
 #include "Renderer.h"
 #include "Camera.h"
@@ -78,9 +80,9 @@ namespace mh
 	void Transform::SetConstantBuffer()
 	{
 		renderer::TransformCB trCb = {};
-		trCb.world = mWorld;
-		trCb.view = Camera::GetGpuViewMatrix();
-		trCb.projection = Camera::GetGpuProjectionMatrix();
+		trCb.World = mWorld;
+		trCb.View = Camera::GetGpuViewMatrix();
+		trCb.Projection = Camera::GetGpuProjectionMatrix();
 
 		graphics::ConstantBuffer* cb = renderer::constantBuffers[(UINT)graphics::eCBType::Transform];
 		cb->SetData(&trCb);

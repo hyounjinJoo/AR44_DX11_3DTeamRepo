@@ -1,13 +1,13 @@
 #include "guiEditor.h"
-#include "yaMesh.h"
-#include "Resources.h"
+#include "Mesh.h"
+#include "GameResources.h"
 #include "Material.h"
 #include "Transform.h"
 #include "MeshRenderer.h"
 #include "GridScript.h"
 #include "Object.h"
 #include "Application.h"
-#include "yaGraphicDevice_DX11.h"
+#include "GraphicDevice_DX11.h"
 
 #include "imgui.h"
 #include "imgui_impl_win32.h"
@@ -25,6 +25,7 @@ extern mh::Application application;
 
 namespace gui
 {
+
 	void Editor::Initialize()
 	{
 		mbEnable = false;
@@ -32,35 +33,35 @@ namespace gui
 		if (mbEnable == false)
 			return;
 
-		// ì¶©ëŒì²´ì˜ ì¢…ë¥˜ ê°¯ìˆ˜ë§Œí¼ë§Œ ìˆìœ¼ë©´ ëœë‹¤.
+		// Ãæµ¹Ã¼ÀÇ Á¾·ù °¹¼ö¸¸Å­¸¸ ÀÖÀ¸¸é µÈ´Ù.
 		mDebugObjects.resize((UINT)eColliderType::End);
 
-		std::shared_ptr<ya::Mesh> rectMesh = ya::Resources::Find<ya::Mesh>(L"DebugRectMesh");
-		std::shared_ptr<ya::Material> material = ya::Resources::Find<Material>(L"DebugMaterial");
+		std::shared_ptr<mh::Mesh> rectMesh = mh::GameResources::Find<mh::Mesh>(L"DebugRectMesh");
+		std::shared_ptr<Material> material = mh::GameResources::Find<mh::graphics::Material>(L"DebugMaterial");
 
 		mDebugObjects[(UINT)eColliderType::Rect] = new DebugObject();
-		ya::MeshRenderer* renderer
-			= mDebugObjects[(UINT)eColliderType::Rect]->AddComponent<ya::MeshRenderer>();
+		mh::MeshRenderer* renderer
+			= mDebugObjects[(UINT)eColliderType::Rect]->AddComponent<mh::MeshRenderer>();
 
 		renderer->SetMaterial(material);
 		renderer->SetMesh(rectMesh);
 
-		std::shared_ptr<ya::Mesh> circleMesh = ya::Resources::Find<ya::Mesh>(L"CircleMesh");
+		std::shared_ptr<mh::Mesh> circleMesh = mh::GameResources::Find<mh::Mesh>(L"CircleMesh");
 
 		mDebugObjects[(UINT)eColliderType::Circle] = new DebugObject();
 		renderer
-			= mDebugObjects[(UINT)eColliderType::Circle]->AddComponent<ya::MeshRenderer>();
+			= mDebugObjects[(UINT)eColliderType::Circle]->AddComponent<mh::MeshRenderer>();
 
 		renderer->SetMaterial(material);
 		renderer->SetMesh(circleMesh);
 
-		//ê·¸ë¦¬ë“œ ì´ìª½ìœ¼ë¡œ ì˜®ê²¨ì¤˜ì•¼ í•œë‹¤.
+		//±×¸®µå ÀÌÂÊÀ¸·Î ¿Å°ÜÁà¾ß ÇÑ´Ù.
 		// Grid Object
 		//EditorObject* gridObject = new EditorObject();
-		//ya::MeshRenderer* gridMr = gridObject->AddComponent<ya::MeshRenderer>();
-		//gridMr->SetMesh(ya::Resources::Find<ya::Mesh>(L"RectMesh"));
-		//gridMr->SetMaterial(ya::Resources::Find<Material>(L"GridMaterial"));
-		//ya::GridScript* gridScript = gridObject->AddComponent<ya::GridScript>();
+		//mh::MeshRenderer* gridMr = gridObject->AddComponent<mh::MeshRenderer>();
+		//gridMr->SetMesh(mh::GameResources::Find<mh::Mesh>(L"RectMesh"));
+		//gridMr->SetMaterial(mh::GameResources::Find<Material>(L"GridMaterial"));
+		//mh::GridScript* gridScript = gridObject->AddComponent<mh::GridScript>();
 		//gridScript->SetCamera(gMainCamera);
 
 		//mEditorObjects.push_back(gridObject);
@@ -161,11 +162,11 @@ namespace gui
 		delete mDebugObjects[(UINT)eColliderType::Circle];
 	}
 
-	void Editor::DebugRender(ya::graphics::tDebugMesh& mesh)
+	void Editor::DebugRender(mh::graphics::tDebugMesh& mesh)
 	{
 		DebugObject* debugObj = mDebugObjects[(UINT)mesh.type];
 		
-		ya::Transform* tr = debugObj->GetComponent<ya::Transform>();
+		mh::Transform* tr = debugObj->GetComponent<mh::Transform>();
 		tr->SetPosition(mesh.position);
 		tr->SetRotation(mesh.rotatation);
 		
@@ -175,13 +176,13 @@ namespace gui
 		else
 			tr->SetScale(Vector3(mesh.radius));
 
-		ya::BaseRenderer* renderer = debugObj->GetComponent<ya::BaseRenderer>();
-		ya::Camera* camera = mh::renderer::gMainCamera;
+		mh::BaseRenderer* renderer = debugObj->GetComponent<mh::BaseRenderer>();
+		mh::Camera* camera = mh::renderer::gMainCamera;
 
 		tr->FixedUpdate();
 
-		ya::Camera::SetGpuViewMatrix(mh::renderer::gMainCamera->GetViewMatrix());
-		ya::Camera::SetGpuProjectionMatrix(mh::renderer::gMainCamera->GetProjectionMatrix());
+		mh::Camera::SetGpuViewMatrix(mh::renderer::gMainCamera->GetViewMatrix());
+		mh::Camera::SetGpuProjectionMatrix(mh::renderer::gMainCamera->GetProjectionMatrix());
 
 		debugObj->Render();
 	}
@@ -218,8 +219,8 @@ namespace gui
 
 		// Setup Platform/Renderer backends
 		ImGui_ImplWin32_Init(application.GetHwnd());
-		ImGui_ImplDX11_Init(ya::graphics::GetDevice()->GetID3D11Device()
-			, ya::graphics::GetDevice()->GetID3D11DeviceContext());
+		ImGui_ImplDX11_Init(mh::graphics::GetDevice()->GetID3D11Device()
+			, mh::graphics::GetDevice()->GetID3D11DeviceContext());
 
 		// Load Fonts
 		// - If no fonts are loaded, dear imgui will use the default font. You can also load multiple fonts and use ImGui::PushFont()/PopFont() to select them.

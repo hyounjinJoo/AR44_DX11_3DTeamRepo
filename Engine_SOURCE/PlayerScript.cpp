@@ -1,8 +1,10 @@
+#include "EnginePCH.h"
+
 #include "PlayerScript.h"
 #include "Transform.h"
 #include "GameObject.h"
 #include "Input.h"
-#include "Time.h"
+#include "TimeManager.h"
 #include "Animator.h"
 
 namespace mh
@@ -27,26 +29,26 @@ namespace mh
 		if (Input::GetKey(eKeyCode::RIGHT))
 		{
 			Vector3 pos = tr->GetPosition();
-			pos.x += 60.0f * Time::DeltaTime();
+			pos.x += 60.0f * TimeManager::DeltaTime();
 			tr->SetPosition(pos);
 		}
 		if (Input::GetKey(eKeyCode::LEFT))
 		{
 			Vector3 pos = tr->GetPosition();
-			pos.x -= 60.0f * Time::DeltaTime();
+			pos.x -= 60.0f * TimeManager::DeltaTime();
 			tr->SetPosition(pos);
 		}
 
 		if (Input::GetKey(eKeyCode::DOWN))
 		{
 			Vector3 pos = tr->GetRotation();
-			pos.y -= 60.0f * Time::DeltaTime();
+			pos.y -= 60.0f * TimeManager::DeltaTime();
 			tr->SetRotation(pos);
 		}
 		if (Input::GetKey(eKeyCode::UP))
 		{
 			Vector3 pos = tr->GetRotation();
-			pos.y += 60.0f * Time::DeltaTime();
+			pos.y += 60.0f * TimeManager::DeltaTime();
 			tr->SetRotation(pos);
 		}
 

@@ -43,12 +43,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="44Engine.h">
-      <Filter>main</Filter>
-    </ClInclude>
-    <ClInclude Include="framework.h">
-      <Filter>main</Filter>
-    </ClInclude>
     <ClInclude Include="Resource.h">
       <Filter>main</Filter>
     </ClInclude>
@@ -136,6 +130,7 @@
     <ClInclude Include="guiTexture.h">
       <Filter>Widget\Resource</Filter>
     </ClInclude>
+    <ClInclude Include="ClientPCH.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="44Engine.rc">
@@ -232,5 +227,6 @@
     <ClCompile Include="guiTexture.cpp">
       <Filter>Widget\Resource</Filter>
     </ClCompile>
+    <ClCompile Include="ClientPCH.cpp" />
   </ItemGroup>
 </Project>

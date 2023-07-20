@@ -1,12 +1,14 @@
+#include "EnginePCH.h"
+
 #include "ParticleSystem.h"
 #include "Mesh.h"
-#include "Resources.h"
+#include "GameResources.h"
 #include "Material.h"
 #include "StructedBuffer.h"
 #include "Transform.h"
 #include "GameObject.h"
 #include "Texture.h"
-#include "Time.h"
+#include "TimeManager.h"
 
 namespace mh
 {
@@ -41,16 +43,16 @@ namespace mh
 
 	void ParticleSystem::Initialize()
 	{
-		mCS = Resources::Find<ParticleShader>(L"ParticleCS");
+		mCS = GameResources::Find<ParticleShader>(L"ParticleCS");
 
-		std::shared_ptr<Mesh> point = Resources::Find<Mesh>(L"PointMesh");
+		std::shared_ptr<Mesh> point = GameResources::Find<Mesh>(L"PointMesh");
 		SetMesh(point);
 
 		// Material 세팅
-		std::shared_ptr<Material> material = Resources::Find<Material>(L"ParticleMaterial");
+		std::shared_ptr<Material> material = GameResources::Find<Material>(L"ParticleMaterial");
 		SetMaterial(material);
 
-		std::shared_ptr<Texture> tex = Resources::Find<Texture>(L"CartoonSmoke");
+		std::shared_ptr<Texture> tex = GameResources::Find<Texture>(L"CartoonSmoke");
 		material->SetTexture(eTextureSlot::T0, tex);
 
 		tParticle particles[100] = {};
@@ -83,7 +85,7 @@ namespace mh
 		float aliveTime = 1.0f / mFrequency;
 
 		//누적시간
-		mTime += Time::DeltaTime();
+		mTime += TimeManager::DeltaTime();
 		if (aliveTime < mTime)
 		{
 			float f = (mTime / aliveTime);
@@ -109,8 +111,8 @@ namespace mh
 		mCBData.StartSize = mStartSize;
 		mCBData.StartColor = mStartColor;
 		mCBData.StartLifeTime = mStartLifeTime;
-		mCBData.DeltaTime = Time::DeltaTime();
-		mCBData.ElapsedTime += Time::DeltaTime();
+		mCBData.DeltaTime = TimeManager::DeltaTime();
+		mCBData.ElapsedTime += TimeManager::DeltaTime();
 
 		ConstantBuffer* cb = renderer::constantBuffers[(UINT)eCBType::ParticleSystem];
 		cb->SetData(&mCBData);

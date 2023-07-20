@@ -1,8 +1,10 @@
+#include "EnginePCH.h"
+
 #include "TitleScene.h"
 #include "Transform.h"
 #include "MeshRenderer.h"
 #include "Renderer.h"
-#include "Resources.h"
+#include "GameResources.h"
 #include "Texture.h"
 #include "PlayerScript.h"
 #include "Camera.h"
@@ -40,7 +42,7 @@ namespace mh
 		//cameraComp->RegisterCameraInRenderer();
 		cameraComp->TurnLayerMask(eLayerType::UI, false);
 		cameraObj->AddComponent<CameraScript>();
-		gMainCamera = cameraComp;
+		renderer::gMainCamera = cameraComp;
 
 
 		GameObject* player = object::Instantiate<GameObject>(eLayerType::Player);
@@ -49,15 +51,15 @@ namespace mh
 		//player->GetComponent<Transform>()->SetRotation(Vector3(15.0f, 45.0f, 0.0f));
 		player->SetName(L"Player");
 		MeshRenderer* mr = player->AddComponent<MeshRenderer>();
-		mr->SetMaterial(Resources::Find<Material>(L"BasicMaterial"));
-		//mr->SetMesh(Resources::Find<Mesh>(L"CubeMesh"));
+		mr->SetMaterial(GameResources::Find<Material>(L"BasicMaterial"));
+		//mr->SetMesh(GameResources::Find<Mesh>(L"CubeMesh"));
 		player->AddComponent<PlayerScript>();
-		mr->SetMesh(Resources::Find<Mesh>(L"SphereMesh"));
+		mr->SetMesh(GameResources::Find<Mesh>(L"SphereMesh"));
 
 		////paint shader
-		//std::shared_ptr<PaintShader> paintShader = Resources::Find<PaintShader>(L"PaintShader");
+		//std::shared_ptr<PaintShader> paintShader = GameResources::Find<PaintShader>(L"PaintShader");
 		////L"SmileTexture"
-		//std::shared_ptr<Texture> paintTex = Resources::Find<Texture>(L"PaintTexture");
+		//std::shared_ptr<Texture> paintTex = GameResources::Find<Texture>(L"PaintTexture");
 		//paintShader->SetTarget(paintTex);
 		//paintShader->OnExcute();
 
@@ -128,7 +130,7 @@ namespace mh
 		//	collider->SetSize(Vector2(1.5f, 0.5f));
 
 		//	Animator* animator = obj->AddComponent<Animator>();
-		//	std::shared_ptr<Texture> texture = Resources::Load<Texture>(L"Zelda", L"Zelda.png");
+		//	std::shared_ptr<Texture> texture = GameResources::Load<Texture>(L"Zelda", L"Zelda.png");
 		//	animator->Create(L"Idle", texture, Vector2(0.0f, 0.0f), Vector2(120.0f, 130.0f), Vector2::Zero, 3, 0.1f);
 		//	animator->Create(L"MoveDown", texture, Vector2(0.0f, 520.0f), Vector2(120.0f, 130.0f), Vector2::Zero, 8, 0.1f);
 		//	animator->Create(L"MoveLeft", texture, Vector2(0.0f, 650.0f), Vector2(120.0f, 130.0f), Vector2::Zero, 10, 0.1f);
@@ -136,9 +138,9 @@ namespace mh
 		//	animator->Play(L"MoveLeft", true);
 
 		//	MeshRenderer* mr = obj->AddComponent<MeshRenderer>();
-		//	std::shared_ptr<Material> mateiral = Resources::Find<Material>(L"SpriteMaterial");
+		//	std::shared_ptr<Material> mateiral = GameResources::Find<Material>(L"SpriteMaterial");
 		//	mr->SetMaterial(mateiral);
-		//	std::shared_ptr<Mesh> mesh = Resources::Find<Mesh>(L"RectMesh");
+		//	std::shared_ptr<Mesh> mesh = GameResources::Find<Mesh>(L"RectMesh");
 		//	mr->SetMesh(mesh);
 		//	obj->AddComponent<PlayerScript>();
 		//	object::DontDestroyOnLoad(obj);
@@ -161,9 +163,9 @@ namespace mh
 		//	//collider->SetSize(Vector2(1.5f, 1.5f));
 
 		//	MeshRenderer* mr = obj->AddComponent<MeshRenderer>();
-		//	std::shared_ptr<Material> mateiral = Resources::Find<Material>(L"RectMaterial");
+		//	std::shared_ptr<Material> mateiral = GameResources::Find<Material>(L"RectMaterial");
 		//	mr->SetMaterial(mateiral);
-		//	std::shared_ptr<Mesh> mesh = Resources::Find<Mesh>(L"RectMesh");
+		//	std::shared_ptr<Mesh> mesh = GameResources::Find<Mesh>(L"RectMesh");
 		//	mr->SetMesh(mesh);
 		//	object::DontDestroyOnLoad(obj);
 		//}
@@ -190,11 +192,11 @@ namespace mh
 		//	//collider->SetSize(Vector2(1.0f, 0.5f));
 
 		//	MeshRenderer* mr = obj->AddComponent<MeshRenderer>();
-		//	std::shared_ptr<Material> mateiral = Resources::Find<Material>(L"PostProcessMaterial");
+		//	std::shared_ptr<Material> mateiral = GameResources::Find<Material>(L"PostProcessMaterial");
 		//	mr->SetMaterial(mateiral);
 
 
-		//	std::shared_ptr<Mesh> mesh = Resources::Find<Mesh>(L"RectMesh");
+		//	std::shared_ptr<Mesh> mesh = GameResources::Find<Mesh>(L"RectMesh");
 		//	mr->SetMesh(mesh);
 		//}
 

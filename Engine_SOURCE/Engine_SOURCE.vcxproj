@@ -129,11 +129,11 @@ call DLLCopy.bat $(Platform) $(Configuration)</Command>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <PrecompiledHeader>NotUsing</PrecompiledHeader>
-      <PrecompiledHeaderFile>
-      </PrecompiledHeaderFile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>EnginePCH.h</PrecompiledHeaderFile>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <LanguageStandard_C>stdc17</LanguageStandard_C>
     </ClCompile>
     <Link>
       <SubSystem>
@@ -157,11 +157,11 @@ call DLLCopy.bat $(Platform) $(Configuration)</Command>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <PrecompiledHeader>NotUsing</PrecompiledHeader>
-      <PrecompiledHeaderFile>
-      </PrecompiledHeaderFile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>EnginePCH.h</PrecompiledHeaderFile>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <LanguageStandard_C>stdc17</LanguageStandard_C>
     </ClCompile>
     <Link>
       <SubSystem>
@@ -198,7 +198,7 @@ call DLLCopy.bat $(Platform) $(Configuration)</Command>
     <ClInclude Include="IComponent.h" />
     <ClInclude Include="ComputeShader.h" />
     <ClInclude Include="ConstantBuffer.h" />
-    <ClInclude Include="Engine.h" />
+    <ClInclude Include="EnginePCH.h" />
     <ClInclude Include="Entity.h" />
     <ClInclude Include="Enums.h" />
     <ClInclude Include="Fmod.h" />
@@ -211,7 +211,7 @@ call DLLCopy.bat $(Platform) $(Configuration)</Command>
     <ClInclude Include="Layer.h" />
     <ClInclude Include="Light.h" />
     <ClInclude Include="Material.h" />
-    <ClInclude Include="Math.h" />
+    <ClInclude Include="SimpleMath.h" />
     <ClInclude Include="Mesh.h" />
     <ClInclude Include="MeshRenderer.h" />
     <ClInclude Include="Monster.h" />
@@ -224,8 +224,8 @@ call DLLCopy.bat $(Platform) $(Configuration)</Command>
     <ClInclude Include="PlayScene.h" />
     <ClInclude Include="Prefab.h" />
     <ClInclude Include="Renderer.h" />
-    <ClInclude Include="Resource.h" />
-    <ClInclude Include="Resources.h" />
+    <ClInclude Include="GameResource.h" />
+    <ClInclude Include="GameResources.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="SceneManager.h" />
     <ClInclude Include="Script.h" />
@@ -233,7 +233,7 @@ call DLLCopy.bat $(Platform) $(Configuration)</Command>
     <ClInclude Include="SpriteRenderer.h" />
     <ClInclude Include="StructedBuffer.h" />
     <ClInclude Include="Texture.h" />
-    <ClInclude Include="Time.h" />
+    <ClInclude Include="TimeManager.h" />
     <ClInclude Include="TitleScene.h" />
     <ClInclude Include="Transform.h" />
   </ItemGroup>
@@ -251,6 +251,10 @@ call DLLCopy.bat $(Platform) $(Configuration)</Command>
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="CameraScript.cpp" />
     <ClCompile Include="Collider.cpp" />
+    <ClCompile Include="EnginePCH.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
+    </ClCompile>
     <ClCompile Include="GPUBuffer.cpp" />
     <ClCompile Include="IComponent.cpp" />
     <ClCompile Include="ComputeShader.cpp" />
@@ -266,7 +270,7 @@ call DLLCopy.bat $(Platform) $(Configuration)</Command>
     <ClCompile Include="Layer.cpp" />
     <ClCompile Include="Light.cpp" />
     <ClCompile Include="Material.cpp" />
-    <ClCompile Include="Math.cpp" />
+    <ClCompile Include="SimpleMath.cpp" />
     <ClCompile Include="Mesh.cpp" />
     <ClCompile Include="MeshRenderer.cpp" />
     <ClCompile Include="Monster.cpp" />
@@ -278,8 +282,8 @@ call DLLCopy.bat $(Platform) $(Configuration)</Command>
     <ClCompile Include="PlayScene.cpp" />
     <ClCompile Include="Prefab.cpp" />
     <ClCompile Include="Renderer.cpp" />
-    <ClCompile Include="Resource.cpp" />
-    <ClCompile Include="Resources.cpp" />
+    <ClCompile Include="GameResource.cpp" />
+    <ClCompile Include="GameResources.cpp" />
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="SceneManager.cpp" />
     <ClCompile Include="Script.cpp" />
@@ -287,12 +291,12 @@ call DLLCopy.bat $(Platform) $(Configuration)</Command>
     <ClCompile Include="SpriteRenderer.cpp" />
     <ClCompile Include="StructedBuffer.cpp" />
     <ClCompile Include="Texture.cpp" />
-    <ClCompile Include="Time.cpp" />
+    <ClCompile Include="TimeManager.cpp" />
     <ClCompile Include="TitleScene.cpp" />
     <ClCompile Include="Transform.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Math.inl" />
+    <None Include="SimpleMath.inl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

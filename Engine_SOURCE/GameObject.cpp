@@ -1,3 +1,5 @@
+#include "EnginePCH.h"
+
 #include "GameObject.h"
 #include "Transform.h"
 
@@ -95,27 +97,7 @@ namespace mh
 		}
 	}
 
-	template <typename T>
-	T* GameObject::AddComponent()
-	{
-		T* _Comp = new T();
-		enums::eComponentType order = _Comp->GetOrder();
 
-		if (order != enums::eComponentType::Script)
-		{
-			mComponents[(UINT)order] = _Comp;
-			mComponents[(UINT)order]->SetOwner(this);
-		}
-		else
-		{
-			mScripts.push_back(dynamic_cast<Script*>(_Comp));
-			_Comp->SetOwner(this);
-		}
-
-		_Comp->Initialize();
-
-		return _Comp;
-	}
 
 	void GameObject::AddComponent(IComponent* _Comp)
 	{
@@ -134,35 +116,5 @@ namespace mh
 	}
 
 
-	template <typename T>
-	T* GameObject::GetComponent()
-	{
-		T* castResult;
-		for (auto component : mComponents)
-		{
-			castResult = dynamic_cast<T*>(component);
 
-			if (castResult != nullptr)
-				return castResult;
-		}
-
-		return nullptr;
-	}
-
-	template <typename T>
-	std::vector<T*> GameObject::GetComponents()
-	{
-		std::vector<T*> components = {};
-
-		T* castResult;
-		for (auto component : mComponents)
-		{
-			castResult = dynamic_cast<T*>(component);
-
-			if (castResult != nullptr)
-				components.push_back(castResult);
-		}
-
-		return components;
-	}
 }

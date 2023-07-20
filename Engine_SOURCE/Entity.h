@@ -1,5 +1,5 @@
 #pragma once
-#include "Engine.h"
+#include "EnginePCH.h"
 
 namespace mh
 {
@@ -26,16 +26,16 @@ namespace gui
 	{
 	public:
 		Entity();
-		Entity(const wchar_t* _name);
+		Entity(const char* _name);
 		Entity(const Entity& _other);
 		virtual ~Entity();
 
-		void SetName(const std::wstring& _name) { mName = _name; }
-		const std::wstring& GetName() const { return mName; }
+		void SetName(const std::string& _name) { mName = _name; }
+		const std::string& GetName() const { return mName; }
 		UINT32 GetID() const { return mID; }
 
 	private:
-		std::wstring mName;
+		std::string mName;
 		const UINT32 mID;
 
 	};

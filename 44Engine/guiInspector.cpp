@@ -1,3 +1,5 @@
+#include "ClientPCH.h"
+
 #include "guiInspector.h"
 
 #include "imgui.h"
@@ -45,7 +47,7 @@ namespace gui
 			comp = nullptr;
 		}
 
-		for (gui::Resource* res : mResources)
+		for (gui::GameResource* res : mResources)
 		{
 			delete res;
 			res = nullptr;
@@ -78,7 +80,7 @@ namespace gui
 			comp->SetTarget(nullptr);
 		}
 
-		for (gui::Resource* res : mResources)
+		for (gui::GameResource* res : mResources)
 		{
 			if (res == nullptr)
 				continue;

@@ -1,5 +1,7 @@
+#include "EnginePCH.h"
+
 #include "Animation.h"
-#include "Time.h"
+#include "TimeManager.h"
 #include "Renderer.h"
 
 namespace mh
@@ -25,7 +27,7 @@ namespace mh
 			return -1;
 
 		// 시간 체크
-		mTime += Time::DeltaTime();
+		mTime += TimeManager::DeltaTime();
 
 		// 누적 시간이 해당 프레임의 유지시간을 넘어서면 다음프레임으로 이동
 		if (mSpriteSheet[mIndex].Duration < mTime)
@@ -87,11 +89,11 @@ namespace mh
 		graphics::ConstantBuffer* cb = renderer::constantBuffers[(UINT)graphics::eCBType::Animation];
 
 		renderer::AnimationCB info = {};
-		info.type = (UINT)enums::eAnimationType::SecondDimension;
-		info.leftTop = mSpriteSheet[mIndex].LeftTop;
-		info.offset = mSpriteSheet[mIndex].Offset;
-		info.size = mSpriteSheet[mIndex].Size;
-		info.atlasSize = mSpriteSheet[mIndex].AtlasSize;
+		info.Type = (UINT)enums::eAnimationType::SecondDimension;
+		info.LeftTop = mSpriteSheet[mIndex].LeftTop;
+		info.Offset = mSpriteSheet[mIndex].Offset;
+		info.Size = mSpriteSheet[mIndex].Size;
+		info.AtlasSize = mSpriteSheet[mIndex].AtlasSize;
 
 		cb->SetData(&info);
 		cb->Bind(graphics::eShaderStage::PS);
@@ -111,7 +113,7 @@ namespace mh
 
 		graphics::ConstantBuffer* cb = renderer::constantBuffers[(UINT)graphics::eCBType::Animation];
 		renderer::AnimationCB info = {};
-		info.type = (UINT)enums::eAnimationType::None;
+		info.Type = (UINT)enums::eAnimationType::None;
 
 		cb->SetData(&info);
 		cb->Bind(graphics::eShaderStage::PS);

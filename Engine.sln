@@ -17,6 +17,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "솔루션 항목", "솔루�
 		.gitattributes = .gitattributes
 		.gitignore = .gitignore
 		DLLCopy.bat = DLLCopy.bat
+		HLSLCopy.bat = HLSLCopy.bat
 		README.md = README.md
 	EndProjectSection
 EndProject

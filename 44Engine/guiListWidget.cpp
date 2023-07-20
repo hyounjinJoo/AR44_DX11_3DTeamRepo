@@ -34,7 +34,7 @@ namespace gui
 					ImGui::SetItemDefaultFocus();
 				}
 				
-				// í•´ë‹¹ ì•„ì´í…œì´ ë”ë¸”í´ë¦­ ë˜ì—ˆë‹¤ë©´
+				// ÇØ´ç ¾ÆÀÌÅÛÀÌ ´õºíÅ¬¸¯ µÇ¾ú´Ù¸é
 				if (ImGui::IsItemHovered() 
 					&& ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left))
 				{

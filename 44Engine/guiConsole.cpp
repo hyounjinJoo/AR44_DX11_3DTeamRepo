@@ -1,10 +1,12 @@
+#include "ClientPCH.h"
+
 #include "guiConsole.h"
 
 namespace gui
 {
 	Console::Console()
 	{
-		SetName(L"Console");
+		SetName("Console");
 	}
 
 	Console::~Console()

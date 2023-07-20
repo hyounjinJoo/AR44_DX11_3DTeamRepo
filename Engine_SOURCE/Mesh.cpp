@@ -1,3 +1,5 @@
+#include "EnginePCH.h"
+
 #include "Mesh.h"
 #include "Renderer.h"
 #include "GraphicDevice_DX11.h"
@@ -5,7 +7,7 @@
 namespace mh
 {
 	Mesh::Mesh()
-		: Resource(eResourceType::Mesh)
+		: GameResource(eResourceType::Mesh)
 		, mVBDesc{}
 		, mIBDesc{}
 		, mIndexCount(0)
@@ -34,7 +36,7 @@ namespace mh
 		D3D11_SUBRESOURCE_DATA subData = {};
 		subData.pSysMem = _data;
 
-		if (!GetDevice()->CreateBuffer(&mVBDesc, &subData, mVertexBuffer.GetAddressOf()))
+		if (!graphics::GetDevice()->CreateBuffer(&mVBDesc, &subData, mVertexBuffer.GetAddressOf()))
 			return false;
 
 		return true;
@@ -51,7 +53,7 @@ namespace mh
 		D3D11_SUBRESOURCE_DATA subData = {};
 		subData.pSysMem = _data;
 
-		if (!GetDevice()->CreateBuffer(&mIBDesc, &subData, mIndexBuffer.GetAddressOf()))
+		if (!graphics::GetDevice()->CreateBuffer(&mIBDesc, &subData, mIndexBuffer.GetAddressOf()))
 		{
 			return false;
 		}
@@ -65,17 +67,17 @@ namespace mh
 		UINT stride = sizeof(renderer::Vertex);
 		UINT offset = 0;
 
-		GetDevice()->BindVertexBuffer(0, 1, mVertexBuffer.GetAddressOf(), &stride, &offset);
-		GetDevice()->BindIndexBuffer(mIndexBuffer.Get(), DXGI_FORMAT_R32_UINT, 0);
+		graphics::GetDevice()->BindVertexBuffer(0, 1, mVertexBuffer.GetAddressOf(), &stride, &offset);
+		graphics::GetDevice()->BindIndexBuffer(mIndexBuffer.Get(), DXGI_FORMAT_R32_UINT, 0);
 	}
 
 	void Mesh::Render() const
 	{
-		GetDevice()->DrawIndexed(mIndexCount, 0, 0);
+		graphics::GetDevice()->DrawIndexed(mIndexCount, 0, 0);
 	}
 	
 	void Mesh::RenderInstanced(UINT _count) const
 	{
-		GetDevice()->DrawIndexedInstanced(mIndexCount, _count, 0, 0, 0);
+		graphics::GetDevice()->DrawIndexedInstanced(mIndexCount, _count, 0, 0, 0);
 	}
 }

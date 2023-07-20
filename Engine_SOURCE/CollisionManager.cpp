@@ -1,3 +1,4 @@
+#include "EnginePCH.h"
 
 #include "CollisionManager.h"
 #include "Scene.h"
@@ -67,7 +68,7 @@ namespace mh
 					continue;
 				if (right->GetComponent<Collider2D>() == nullptr)
 					continue;
-				/*if (left == right) //ì§€ì›Œë„ ìƒê´€ì—†ì–´ì„œ ì£¼ì„ì²˜ë¦¬ (ì˜¤ë¥˜ë‚˜ë©´ ìˆ˜ì •)
+				/*if (left == right) //Áö¿öµµ »ó°ü¾ø¾î¼­ ÁÖ¼®Ã³¸® (¿À·ù³ª¸é ¼öÁ¤)
 					continue;*/
 
 				ColliderCollision(left->GetComponent<Collider2D>(), right->GetComponent<Collider2D>());
@@ -81,14 +82,14 @@ namespace mh
 
 	void CollisionManager::ColliderCollision(Collider2D* _left, Collider2D* _right)
 	{
-		// ë‘ ì¶©ëŒì²´ ë ˆì´ì–´ë¡œ êµ¬ì„±ëœ ID í™•ì¸
+		// µÎ Ãæµ¹Ã¼ ·¹ÀÌ¾î·Î ±¸¼ºµÈ ID È®ÀÎ
 		union_ColliderID colliderID;
 		colliderID.Left = (UINT)_left->GetID();
 		colliderID.Right = (UINT)_right->GetID();
 
-		// ì´ì „ ì¶©ëŒ ì •ë³´ë¥¼ ê²€ìƒ‰í•œë‹¤.
-		// ë§Œì•½ì— ì¶©ëŒì •ë³´ê°€ ì—†ëŠ” ìƒíƒœë¼ë©´
-		// ì¶©ëŒì •ë³´ë¥¼ ìƒì„±í•´ì¤€ë‹¤.
+		// ÀÌÀü Ãæµ¹ Á¤º¸¸¦ °Ë»öÇÑ´Ù.
+		// ¸¸¾à¿¡ Ãæµ¹Á¤º¸°¡ ¾ø´Â »óÅÂ¶ó¸é
+		// Ãæµ¹Á¤º¸¸¦ »ý¼ºÇØÁØ´Ù.
 		std::map<UINT64, bool>::iterator iter = mCollisionMap.find(colliderID.Id);
 		if (iter == mCollisionMap.end())
 		{
@@ -96,10 +97,10 @@ namespace mh
 			iter = mCollisionMap.find(colliderID.Id);
 		}
 
-		// ì¶©ëŒì²´í¬ë¥¼ í•´ì¤€ë‹¤.
-		if (Intersect(_left, _right)) // ì¶©ëŒì„ í•œ ìƒíƒœ
+		// Ãæµ¹Ã¼Å©¸¦ ÇØÁØ´Ù.
+		if (Intersect(_left, _right)) // Ãæµ¹À» ÇÑ »óÅÂ
 		{
-			// ìµœì´ˆ ì¶©ëŒì¤‘ Enter
+			// ÃÖÃÊ Ãæµ¹Áß Enter
 			if (iter->second == false)
 			{
 				if (_left->IsTriiger())
@@ -114,7 +115,7 @@ namespace mh
 
 				iter->second = true;
 			}
-			else // ì¶©ëŒ ì¤‘ì´ì§€ ì•Šì€ ìƒíƒœ Enter
+			else // Ãæµ¹ ÁßÀÌÁö ¾ÊÀº »óÅÂ Enter
 			{
 				if (_left->IsTriiger())
 					_left->OnTriggerStay(_right);
@@ -127,9 +128,9 @@ namespace mh
 					_right->OnCollisionStay(_left);
 			}
 		}
-		else // ì¶©ëŒí•˜ì§€ ì•Šì€ìƒíƒœ
+		else // Ãæµ¹ÇÏÁö ¾ÊÀº»óÅÂ
 		{
-			// ì¶©ëŒ ì¤‘ì¸ìƒíƒœ Exit
+			// Ãæµ¹ ÁßÀÎ»óÅÂ Exit
 			if (iter->second == true)
 			{
 				if (_left->IsTriiger())
@@ -169,7 +170,7 @@ namespace mh
 
 
 
-		// ë¶„ë¦¬ì¶• ë²¡í„° 4ê°œ êµ¬í•˜ê¸°
+		// ºÐ¸®Ãà º¤ÅÍ 4°³ ±¸ÇÏ±â
 		math::Vector3 Axis[4] = {};
 
 		math::Vector3 leftScale = math::Vector3(_left->GetSize().x, _left->GetSize().y, 1.0f);

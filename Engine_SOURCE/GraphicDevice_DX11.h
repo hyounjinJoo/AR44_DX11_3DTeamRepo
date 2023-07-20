@@ -1,9 +1,10 @@
 #pragma once
 #include "Graphics.h"
 
-using namespace mh::enums;
+
 namespace mh::graphics
 {
+	using namespace mh::enums;
 	class Texture;
 
 	class GraphicDevice_DX11

@@ -1,9 +1,11 @@
+#include "EnginePCH.h"
+
 #include "Application.h"
 #include "Renderer.h"
-#include "Time.h"
+#include "TimeManager.h"
 #include "Input.h"
 #include "SceneManager.h"
-#include "Resources.h"
+#include "GameResources.h"
 #include "CollisionManager.h"
 #include "Fmod.h"
 #include "FontWrapper.h"
@@ -26,7 +28,7 @@ namespace mh
 
 	void Application::Initialize()
 	{
-		Time::Initialize();
+		TimeManager::Initialize();
 		Input::Initialize();
 		Fmod::Initialize();
 		FontWrapper::Initialize();
@@ -40,7 +42,7 @@ namespace mh
 	// CPU UPDATE
 	void Application::Update()
 	{
-		Time::Update();
+		TimeManager::Update();
 		Input::Update();
 		CollisionManager::Update();
 		SceneManager::Update();
@@ -55,7 +57,7 @@ namespace mh
 
 	void Application::Render()
 	{
-		Time::Render(mHdc);
+		TimeManager::Render(mHdc);
 
 		graphicDevice->Clear();
 		graphicDevice->AdjustViewPorts();
@@ -84,7 +86,7 @@ namespace mh
 
 	void Application::Release()
 	{
-		Resources::deleteTest();
+		GameResources::deleteTest();
 		Fmod::Release();
 		FontWrapper::Release();
 	}

@@ -1,7 +1,9 @@
-#include "Math.h"
+#include "EnginePCH.h"
+
+#include "SimpleMath.h"
 
 	//-------------------------------------------------------------------------------------
-	// SimpleMath.cpp -- Simplified C++ Math wrapper for DirectXMath
+	// SimpleMath.cpp -- Simplified C++ SimpleMath wrapper for DirectXMath
 	//
 	// Copyright (c) Microsoft Corporation.
 	// Licensed under the MIT License.
@@ -34,7 +36,7 @@ namespace mh::math
 	const Vector3 Vector3::Forward = { 0.f, 0.f, 1.f };
 	const Vector3 Vector3::Backward = { 0.f, 0.f, -1.f };
 
-	const Vector4 mh::math::Vector4::Zero = { 0.f, 0.f, 0.f, 0.f };
+	const Vector4 Vector4::Zero = { 0.f, 0.f, 0.f, 0.f };
 	const Vector4 Vector4::One = { 1.f, 1.f, 1.f, 1.f };
 	const Vector4 Vector4::UnitX = { 1.f, 0.f, 0.f, 0.f };
 	const Vector4 Vector4::UnitY = { 0.f, 1.f, 0.f, 0.f };
@@ -233,7 +235,7 @@ namespace mh::math
 		const float safew = (float(backBufferWidth) + 19.f) / 20.f;
 		const float safeh = (float(backBufferHeight) + 19.f) / 20.f;
 
-		RECT rct;
+		RECT rct = {};
 		rct.left = static_cast<LONG>(safew);
 		rct.top = static_cast<LONG>(safeh);
 		rct.right = static_cast<LONG>(float(backBufferWidth) - safew + 0.5f);

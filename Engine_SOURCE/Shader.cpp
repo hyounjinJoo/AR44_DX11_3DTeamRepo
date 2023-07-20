@@ -1,3 +1,5 @@
+#include "EnginePCH.h"
+
 #include "Shader.h"
 #include "GraphicDevice_DX11.h"
 #include "Renderer.h"
@@ -7,7 +9,7 @@ using namespace mh::graphics;
 namespace mh
 {
 	Shader::Shader()
-		: Resource(eResourceType::GraphicShader)
+		: GameResource(eResourceType::GraphicShader)
 		, mTopology(D3D11_PRIMITIVE_TOPOLOGY::D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST)
 		, mRSType(eRSType::SolidBack)
 		, mDSType(eDSType::Less)
