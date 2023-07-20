@@ -1,3 +1,4 @@
+
 #include "ClientPCH.h"
 
 #include "guiMeshRenderer.h"
@@ -72,7 +73,7 @@ namespace gui
 			listUI->SetState(eState::Active);
 			
 
-			//¸ğµç ¸Ş½¬ÀÇ ¸®¼Ò½º¸¦ °¡Á®¿Í¾ßÇÑ´Ù.
+			//ëª¨ë“  ë©”ì‰¬ì˜ ë¦¬ì†ŒìŠ¤ë¥¼ ê°€ì ¸ì™€ì•¼í•œë‹¤.
 			std::vector<std::shared_ptr<mh::Mesh>> meshes 
 				= mh::GameResources::Finds<mh::Mesh>();
 
@@ -97,7 +98,7 @@ namespace gui
 		{
 			ListWidget* listUI = editor.GetWidget<ListWidget>("ListWidget");
 			listUI->SetState(eState::Active);
-			//¸ğµç ¸Ş½¬ÀÇ ¸®¼Ò½º¸¦ °¡Á®¿Í¾ßÇÑ´Ù.
+			//ëª¨ë“  ë©”ì‰¬ì˜ ë¦¬ì†ŒìŠ¤ë¥¼ ê°€ì ¸ì™€ì•¼í•œë‹¤.
 			std::vector<std::shared_ptr<mh::graphics::Material>> materials
 				= mh::GameResources::Finds<mh::graphics::Material>();
 

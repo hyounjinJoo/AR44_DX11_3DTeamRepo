@@ -15,7 +15,7 @@ namespace mh
 	Application::Application()
 		: mHwnd(nullptr)
 		, mHdc(nullptr)
-		, mHeight(1600)//È­¸é ÇØ»óµµ ¸ô¶ó¼­ 0¸»°í 1600/900»çÀÌÁî·Î ÀÏ´Ü ÃÊ±âÈ­
+		, mHeight(1600)//í™”ë©´ í•´ìƒë„ ëª°ë¼ì„œ 0ë§ê³  1600/900ì‚¬ì´ì¦ˆë¡œ ì¼ë‹¨ ì´ˆê¸°í™”
 		, mWidth(900)
 	{
 
@@ -38,7 +38,7 @@ namespace mh
 		SceneManager::Initialize();
 	}
 
-	// °ÔÀÓ ·ÎÁ÷ Ä³¸¯ÅÍ ÀÌµ¿ µîµî 
+	// ê²Œì„ ë¡œì§ ìºë¦­í„° ì´ë™ ë“±ë“± 
 	// CPU UPDATE
 	void Application::Update()
 	{

@@ -17,7 +17,7 @@ namespace mh::graphics
 
 	bool ConstantBuffer::Create(size_t _size)
 	{
-		// »ó¼ö ¹öÆÛ
+		// ìƒìˆ˜ ë²„í¼
 		desc.ByteWidth = static_cast<UINT>(_size);
 		desc.BindFlags = D3D11_BIND_FLAG::D3D11_BIND_CONSTANT_BUFFER;
 		desc.Usage = D3D11_USAGE::D3D11_USAGE_DYNAMIC;

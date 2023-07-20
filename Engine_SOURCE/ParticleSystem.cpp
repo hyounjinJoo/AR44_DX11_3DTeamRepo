@@ -1,3 +1,4 @@
+
 #include "EnginePCH.h"
 
 #include "ParticleSystem.h"
@@ -48,7 +49,7 @@ namespace mh
 		std::shared_ptr<Mesh> point = GameResources::Find<Mesh>(L"PointMesh");
 		SetMesh(point);
 
-		// Material ¼¼ÆÃ
+		// Material ì„¸íŒ…
 		std::shared_ptr<Material> material = GameResources::Find<Material>(L"ParticleMaterial");
 		SetMaterial(material);
 
@@ -81,10 +82,10 @@ namespace mh
 
 	void ParticleSystem::FixedUpdate()
 	{
-		//ÆÄÆ¼Å¬ »ı¼º ½Ã°£
+		//íŒŒí‹°í´ ìƒì„± ì‹œê°„
 		float aliveTime = 1.0f / mFrequency;
 
-		//´©Àû½Ã°£
+		//ëˆ„ì ì‹œê°„
 		mTime += TimeManager::DeltaTime();
 		if (aliveTime < mTime)
 		{

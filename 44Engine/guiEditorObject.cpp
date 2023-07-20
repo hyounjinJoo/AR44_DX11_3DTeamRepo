@@ -1,3 +1,5 @@
+#include "ClientPCH.h"
+
 #include "guiEditorObject.h"
 
 namespace gui

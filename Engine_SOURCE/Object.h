@@ -80,7 +80,7 @@ namespace mh::object
 		_gameObject->Death();
 	}
 
-	static void DontDestroyOnLoad(GameObject* _gameObject)   //¾À ÀÌµ¿½Ã ÀÌ ¿ÀºêÁ§Æ®´Â »èÁ¦ÇÏÁö ¾Ê´Â´Ù
+	static void DontDestroyOnLoad(GameObject* _gameObject)   //ì”¬ ì´ë™ì‹œ ì´ ì˜¤ë¸Œì íŠ¸ëŠ” ì‚­ì œí•˜ì§€ ì•ŠëŠ”ë‹¤
 	{
 		if (_gameObject == nullptr)
 			return;

@@ -1,3 +1,4 @@
+
 #include "EnginePCH.h"
 
 #include "Camera.h"
@@ -77,7 +78,7 @@ namespace mh
 		if (mActiveScene)
 			mActiveScene->OnExit();
 
-		// ¹Ù²ğ¶§ dontDestory ¿ÀºêÁ§Æ®´Â ´ÙÀ½¾ÀÀ¸·Î °°ÀÌ ³Ñ°ÜÁà¾ßÇÑ´Ù.
+		// ë°”ë€”ë•Œ dontDestory ì˜¤ë¸Œì íŠ¸ëŠ” ë‹¤ìŒì”¬ìœ¼ë¡œ ê°™ì´ ë„˜ê²¨ì¤˜ì•¼í•œë‹¤.
 		std::vector<GameObject*> gameObjs 
 			= mActiveScene->GetDontDestroyGameObjects();
 		mActiveScene = mScenes[(UINT)_Type];

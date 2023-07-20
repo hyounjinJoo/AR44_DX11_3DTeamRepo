@@ -1,3 +1,4 @@
+
 #include "ClientPCH.h"
 
 #include "guiProject.h"
@@ -48,7 +49,7 @@ namespace gui
 	{
 		Widget::FixedUpdate();
 
-		//¸®¼Ò½º°¡ ¹Ù²ï´Ù¸é ¸®¼Ò½º¸ñ·Ï ÃÊ±âÈ­
+		//ë¦¬ì†ŒìŠ¤ê°€ ë°”ë€ë‹¤ë©´ ë¦¬ì†ŒìŠ¤ëª©ë¡ ì´ˆê¸°í™”
 	}
 
 	void Project::Update()

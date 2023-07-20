@@ -1,3 +1,4 @@
+
 #include "EnginePCH.h"
 
 #include "Layer.h"
@@ -6,7 +7,7 @@
 
 namespace mh
 {
-	// z°ª Á¤·Ä ÀÛ¼ºÁß
+	// zê°’ ì •ë ¬ ì‘ì„±ì¤‘
 	//static bool CompareGameObjectByZAxis(GameObject* a, GameObject* b)
 	//{
 	//	Transform* aTr = a->GetComponent<Transform>();
@@ -87,7 +88,7 @@ namespace mh
 	void Layer::Destroy()
 	{
 		std::set<GameObject*> deleteObjects;
-		// »èÁ¦ÇÒ ¿ÀºêÁ§Æ®µéÀ» ÀüºÎ Ã£¾Æ¿Â´Ù.
+		// ì‚­ì œí•  ì˜¤ë¸Œì íŠ¸ë“¤ì„ ì „ë¶€ ì°¾ì•„ì˜¨ë‹¤.
 		for (GameObject* gameObj : mGameObjects)
 		{
 			if (gameObj->GetState() == GameObject::eState::Dead)
@@ -96,7 +97,7 @@ namespace mh
 			}
 		}
 
-		// Áö¿ö¾ßÇÒ ¿ÀºêÁ§Æ®µé °ÔÀÓ ¿ÀºêÁ§Æ® ¸ğÀ½¾È¿¡¼­ »èÁ¦
+		// ì§€ì›Œì•¼í•  ì˜¤ë¸Œì íŠ¸ë“¤ ê²Œì„ ì˜¤ë¸Œì íŠ¸ ëª¨ìŒì•ˆì—ì„œ ì‚­ì œ
 		for (GameObjectIter iter = mGameObjects.begin()
 			; iter != mGameObjects.end()
 			; )
@@ -114,7 +115,7 @@ namespace mh
 			}
 		}
 
-		// »èÁ¦ÇÒ ¿ÀºêÁ§Æ®µéÀ» ½ÇÁ¦ ·¥(¸Ş¸ğ¸®)¿¡¼­ »èÁ¦
+		// ì‚­ì œí•  ì˜¤ë¸Œì íŠ¸ë“¤ì„ ì‹¤ì œ ë¨(ë©”ëª¨ë¦¬)ì—ì„œ ì‚­ì œ
 		for (GameObject* gameObj : deleteObjects)
 		{
 			delete gameObj;

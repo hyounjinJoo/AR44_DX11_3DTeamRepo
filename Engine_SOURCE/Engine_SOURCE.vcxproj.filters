@@ -150,9 +150,6 @@
     <ClCompile Include="Shader.cpp">
       <Filter>Resource\Shader</Filter>
     </ClCompile>
-    <ClCompile Include="IComponent.cpp">
-      <Filter>Component</Filter>
-    </ClCompile>
     <ClCompile Include="Material.cpp">
       <Filter>Resource\Material</Filter>
     </ClCompile>
@@ -272,6 +269,9 @@
     <ClCompile Include="GameResources.cpp" />
     <ClCompile Include="EnginePCH.cpp">
       <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="IComponent.cpp">
+      <Filter>Component\Transform</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

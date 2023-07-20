@@ -1,3 +1,4 @@
+
 #include "EnginePCH.h"
 
 #include "Renderer.h"
@@ -143,7 +144,7 @@ namespace mh::renderer
 		//	Vector2 UV;
 		//};
 
-		// À­¸é
+		// ìœ—ë©´
 		arrCube[0].Pos = Vector4(-0.5f, 0.5f, 0.5f ,1.0f);
 		arrCube[0].Color = Vector4(1.f, 1.f, 1.f, 1.f);
 		arrCube[0].UV = Vector2(0.f, 0.f);
@@ -165,7 +166,7 @@ namespace mh::renderer
 		arrCube[3].Normal = Vector3(0.f, 1.f, 0.f);
 
 
-		// ¾Æ·§ ¸é	
+		// ì•„ë« ë©´	
 		arrCube[4].Pos = Vector4(-0.5f, -0.5f, -0.5f, 1.0f);
 		arrCube[4].Color = Vector4(1.f, 0.f, 0.f, 1.f);
 		arrCube[4].UV = Vector2(0.f, 0.f);
@@ -186,7 +187,7 @@ namespace mh::renderer
 		arrCube[7].UV = Vector2(0.f, 0.f);
 		arrCube[7].Normal = Vector3(0.f, -1.f, 0.f);
 
-		// ¿ŞÂÊ ¸é
+		// ì™¼ìª½ ë©´
 		arrCube[8].Pos = Vector4(-0.5f, 0.5f, 0.5f, 1.0f);
 		arrCube[8].Color = Vector4(0.f, 1.f, 0.f, 1.f);
 		arrCube[8].UV = Vector2(0.f, 0.f);
@@ -207,7 +208,7 @@ namespace mh::renderer
 		arrCube[11].UV = Vector2(0.f, 0.f);
 		arrCube[11].Normal = Vector3(-1.f, 0.f, 0.f);
 
-		// ¿À¸¥ÂÊ ¸é
+		// ì˜¤ë¥¸ìª½ ë©´
 		arrCube[12].Pos = Vector4(0.5f, 0.5f, -0.5f, 1.0f);
 		arrCube[12].Color = Vector4(0.f, 0.f, 1.f, 1.f);
 		arrCube[12].UV = Vector2(0.f, 0.f);
@@ -228,7 +229,7 @@ namespace mh::renderer
 		arrCube[15].UV = Vector2(0.f, 0.f);
 		arrCube[15].Normal = Vector3(1.f, 0.f, 0.f);
 
-		// µŞ ¸é
+		// ë’· ë©´
 		arrCube[16].Pos = Vector4(0.5f, 0.5f, 0.5f, 1.0f);
 		arrCube[16].Color = Vector4(1.f, 1.f, 0.f, 1.f);
 		arrCube[16].UV = Vector2(0.f, 0.f);
@@ -249,7 +250,7 @@ namespace mh::renderer
 		arrCube[19].UV = Vector2(0.f, 0.f);
 		arrCube[19].Normal = Vector3(0.f, 0.f, 1.f);
 
-		// ¾Õ ¸é
+		// ì• ë©´
 		arrCube[20].Pos = Vector4(-0.5f, 0.5f, -0.5f, 1.0f);;
 		arrCube[20].Color = Vector4(1.f, 0.f, 1.f, 1.f);
 		arrCube[20].UV = Vector2(0.f, 0.f);
@@ -306,8 +307,8 @@ namespace mh::renderer
 		sphereVtx.push_back(v);
 
 		// Body
-		UINT iStackCount = 40; // °¡·Î ºĞÇÒ °³¼ö
-		UINT iSliceCount = 40; // ¼¼·Î ºĞÇÒ °³¼ö
+		UINT iStackCount = 40; // ê°€ë¡œ ë¶„í•  ê°œìˆ˜
+		UINT iSliceCount = 40; // ì„¸ë¡œ ë¶„í•  ê°œìˆ˜
 
 		float fStackAngle = XM_PI / iStackCount;
 		float fSliceAngle = XM_2PI / iSliceCount;
@@ -354,8 +355,8 @@ namespace mh::renderer
 		v.BiNormal = Vector3(0.f, 0.f, -1.f);
 		sphereVtx.push_back(v);
 
-		// ÀÎµ¦½º
-		// ºÏ±ØÁ¡
+		// ì¸ë±ìŠ¤
+		// ë¶ê·¹ì 
 		indexes.clear();
 		for (UINT i = 0; i < iSliceCount; ++i)
 		{
@@ -364,7 +365,7 @@ namespace mh::renderer
 			indexes.push_back(i + 1);
 		}
 
-		// ¸öÅë
+		// ëª¸í†µ
 		for (UINT i = 0; i < iStackCount - 2; ++i)
 		{
 			for (UINT j = 0; j < iSliceCount; ++j)
@@ -385,7 +386,7 @@ namespace mh::renderer
 			}
 		}
 
-		// ³²±ØÁ¡
+		// ë‚¨ê·¹ì 
 		UINT iBottomIdx = (UINT)sphereVtx.size() - 1;
 		for (UINT i = 0; i < iSliceCount; ++i)
 		{

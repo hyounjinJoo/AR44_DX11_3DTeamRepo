@@ -1,3 +1,5 @@
+#include "ClientPCH.h"
+
 #include "guiEditor.h"
 #include "Mesh.h"
 #include "GameResources.h"
@@ -33,7 +35,7 @@ namespace gui
 		if (mbEnable == false)
 			return;
 
-		// Ãæµ¹Ã¼ÀÇ Á¾·ù °¹¼ö¸¸Å­¸¸ ÀÖÀ¸¸é µÈ´Ù.
+		// ì¶©ëŒì²´ì˜ ì¢…ë¥˜ ê°¯ìˆ˜ë§Œí¼ë§Œ ìˆìœ¼ë©´ ëœë‹¤.
 		mDebugObjects.resize((UINT)eColliderType::End);
 
 		std::shared_ptr<mh::Mesh> rectMesh = mh::GameResources::Find<mh::Mesh>(L"DebugRectMesh");
@@ -55,7 +57,7 @@ namespace gui
 		renderer->SetMaterial(material);
 		renderer->SetMesh(circleMesh);
 
-		//±×¸®µå ÀÌÂÊÀ¸·Î ¿Å°ÜÁà¾ß ÇÑ´Ù.
+		//ê·¸ë¦¬ë“œ ì´ìª½ìœ¼ë¡œ ì˜®ê²¨ì¤˜ì•¼ í•œë‹¤.
 		// Grid Object
 		//EditorObject* gridObject = new EditorObject();
 		//mh::MeshRenderer* gridMr = gridObject->AddComponent<mh::MeshRenderer>();

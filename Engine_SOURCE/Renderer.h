@@ -87,7 +87,7 @@ namespace mh::renderer
 
 		float StartLifeTime;
 		float DeltaTime;
-		float ElapsedTime; //´©Àû½Ã°£
+		float ElapsedTime; //ëˆ„ì ì‹œê°„
 		int	Padding;
 	};
 

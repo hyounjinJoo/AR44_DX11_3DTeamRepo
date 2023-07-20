@@ -26,10 +26,10 @@ namespace mh
 		if (mbComplete)
 			return -1;
 
-		// ½Ã°£ Ã¼Å©
+		// ì‹œê°„ ì²´í¬
 		mTime += TimeManager::DeltaTime();
 
-		// ´©Àû ½Ã°£ÀÌ ÇØ´ç ÇÁ·¹ÀÓÀÇ À¯Áö½Ã°£À» ³Ñ¾î¼­¸é ´ÙÀ½ÇÁ·¹ÀÓÀ¸·Î ÀÌµ¿
+		// ëˆ„ì  ì‹œê°„ì´ í•´ë‹¹ í”„ë ˆì„ì˜ ìœ ì§€ì‹œê°„ì„ ë„˜ì–´ì„œë©´ ë‹¤ìŒí”„ë ˆì„ìœ¼ë¡œ ì´ë™
 		if (mSpriteSheet[mIndex].Duration < mTime)
 		{
 			mTime = 0.0f;
@@ -68,7 +68,7 @@ namespace mh
 
 		for (int index = 0; index < static_cast<int>(_spriteLegth); index++)
 		{
-			// API ¿Í´Â ´Ù¸£°Ô 0~1 »çÀÌÀÇ ºñÀ²ÁÂÇ¥·Î À§Ä¡¸¦ Ç¥ÇöÇØ¾ßÇÑ´Ù.
+			// API ì™€ëŠ” ë‹¤ë¥´ê²Œ 0~1 ì‚¬ì´ì˜ ë¹„ìœ¨ì¢Œí‘œë¡œ ìœ„ì¹˜ë¥¼ í‘œí˜„í•´ì•¼í•œë‹¤.
 			tSprite sprite = {};
 			sprite.LeftTop = math::Vector2((_leftTop.x + (_size.x * static_cast<float>(index))) / width
 				, (_leftTop.y) / height);

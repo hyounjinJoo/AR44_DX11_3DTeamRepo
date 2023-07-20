@@ -1,3 +1,4 @@
+
 #include "EnginePCH.h"
 
 #include "Mesh.h"
@@ -27,7 +28,7 @@ namespace mh
 
 	bool Mesh::CreateVertexBuffer(void* _data, UINT _count)
 	{
-		// ¹öÅØ½º ¹öÆÛ
+		// ë²„í…ìŠ¤ ë²„í¼
 		mVBDesc.ByteWidth = sizeof(renderer::Vertex) * _count;
 		mVBDesc.BindFlags = D3D11_BIND_FLAG::D3D11_BIND_VERTEX_BUFFER;
 		mVBDesc.Usage = D3D11_USAGE::D3D11_USAGE_DEFAULT;
@@ -63,7 +64,7 @@ namespace mh
 
 	void Mesh::BindBuffer() const
 	{
-		// Input Assembeler ´Ü°è¿¡ ¹öÅØ½º¹öÆÛ Á¤º¸ ÁöÁ¤
+		// Input Assembeler ë‹¨ê³„ì— ë²„í…ìŠ¤ë²„í¼ ì •ë³´ ì§€ì •
 		UINT stride = sizeof(renderer::Vertex);
 		UINT offset = 0;
 

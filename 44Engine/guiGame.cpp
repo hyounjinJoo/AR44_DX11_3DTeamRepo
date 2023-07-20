@@ -1,3 +1,4 @@
+
 #include "ClientPCH.h"
 
 #include "guiGame.h"
@@ -29,7 +30,7 @@ namespace gui
 			= std::make_shared<mh::graphics::Texture>();
 		gameTex->Create(1600, 900, DXGI_FORMAT_R8G8B8A8_UNORM, D3D11_BIND_SHADER_RESOURCE);
 		
-		//61 ¹ø ¼ÎÀÌ´õ ¸®¼Ò½º ºä nullÃÊ±âÈ­
+		//61 ë²ˆ ì…°ì´ë” ë¦¬ì†ŒìŠ¤ ë·° nullì´ˆê¸°í™”
 		ID3D11ShaderResourceView* gameSRV = nullptr;
 		mh::graphics::GetDevice()->BindShaderResource(mh::graphics::eShaderStage::PS, 61, &gameSRV);
 		mh::graphics::GetDevice()->CopyResource(gameTex->GetTexture().Get()
