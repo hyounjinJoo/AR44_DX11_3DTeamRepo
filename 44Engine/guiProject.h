@@ -1,8 +1,8 @@
 #pragma once
 #include "guiWidget.h"
 #include "guiTreeWidget.h"
-#include "Resources.h"
-#include "Resource.h"
+#include "GameResources.h"
+#include "GameResource.h"
 
 namespace gui
 {
@@ -23,7 +23,7 @@ namespace gui
 		void AddResources(TreeWidget::tNode* rootNode, const char* name)
 		{
 			const std::vector<std::shared_ptr<T>> resources
-				= ya::Resources::Finds<T>();
+				= mh::GameResources::Finds<T>();
 
 			TreeWidget::tNode* stemNode
 				= mTreeWidget->AddNode(rootNode, name, 0, true);

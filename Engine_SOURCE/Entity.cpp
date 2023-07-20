@@ -1,3 +1,5 @@
+#include "EnginePCH.h"
+
 #include "Entity.h"
 
 namespace mh
@@ -21,11 +23,11 @@ namespace gui
 {
 	Entity::Entity()
 		: mID(PtrToUint(this))
-		, mName(L"")
+		, mName("")
 	{
 	}
 
-	Entity::Entity(const wchar_t* _name)
+	Entity::Entity(const char* _name)
 		: mID(PtrToUint(this))
 		, mName(_name)
 	{

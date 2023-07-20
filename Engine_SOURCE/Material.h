@@ -1,12 +1,12 @@
 #pragma once
-#include "Resource.h"
+#include "GameResource.h"
 #include "Shader.h"
 #include "Texture.h"
 #include "Renderer.h"
 
 namespace mh::graphics
 {
-	class Material : public Resource
+	class Material : public GameResource
 	{
 	public:
 		Material();

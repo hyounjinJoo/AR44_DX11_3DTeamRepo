@@ -1,3 +1,6 @@
+
+#include "EnginePCH.h"
+
 #include "Transform.h"
 #include "Renderer.h"
 #include "Camera.h"
@@ -28,19 +31,19 @@ namespace mh
 
 	void Transform::Update()
 	{
-		//½ÇÁ¦ ·ÎÁ÷»ó Ä³¸¯ÅÍÀÌµ¿ Ã³¸®
+		//ì‹¤ì œ ë¡œì§ìƒ ìºë¦­í„°ì´ë™ ì²˜ë¦¬
 	}
 
 	void Transform::FixedUpdate()
 	{
-		//·»´õ¸µ¿¡ »ç¿ëµÉ À§Ä¡°ªµéÀ» ¾÷µ¥ÀÌÆ®
+		//ë Œë”ë§ì— ì‚¬ìš©ë  ìœ„ì¹˜ê°’ë“¤ì„ ì—…ë°ì´íŠ¸
 
-		// ¿ùµå Çà·Ä »ý¼º
+		// ì›”ë“œ í–‰ë ¬ ìƒì„±
 		
-		// Å©±â º¯È¯ Çà·Ä
+		// í¬ê¸° ë³€í™˜ í–‰ë ¬
 		Matrix scale = Matrix::CreateScale(mScale);
 
-		// È¸Àü º¯È¯ Çà·Ä
+		// íšŒì „ ë³€í™˜ í–‰ë ¬
 		Matrix rotation;
 
 		Vector3 radian(mRotation.x * (XM_PI / 180)
@@ -51,7 +54,7 @@ namespace mh
 		rotation *= Matrix::CreateRotationY(radian.y);
 		rotation *= Matrix::CreateRotationZ(radian.z);
 
-		// ÀÌµ¿ º¯È¯ Çà·Ä
+		// ì´ë™ ë³€í™˜ í–‰ë ¬
 		Matrix position;
 		position.Translation(mPosition);
 
@@ -61,9 +64,9 @@ namespace mh
 		mRight = Vector3::TransformNormal(Vector3::Right, rotation);
 		mUp = Vector3::TransformNormal(Vector3::Up, rotation);
 		
-		// Ä«¸Þ¶ó ÄÄÆ÷³ÍÆ®¿¡¼­ ¼¼ÆÃÇØÁØ´Ù
-		// ºäÇà·Ä ¼¼ÆÃ
-		// ÇÁ·ÎÁ§¼Ç Çà·Ä ¼¼ÆÃ
+		// ì¹´ë©”ë¼ ì»´í¬ë„ŒíŠ¸ì—ì„œ ì„¸íŒ…í•´ì¤€ë‹¤
+		// ë·°í–‰ë ¬ ì„¸íŒ…
+		// í”„ë¡œì ì…˜ í–‰ë ¬ ì„¸íŒ…
 
 		if (mParent)
 		{
@@ -78,9 +81,9 @@ namespace mh
 	void Transform::SetConstantBuffer()
 	{
 		renderer::TransformCB trCb = {};
-		trCb.world = mWorld;
-		trCb.view = Camera::GetGpuViewMatrix();
-		trCb.projection = Camera::GetGpuProjectionMatrix();
+		trCb.World = mWorld;
+		trCb.View = Camera::GetGpuViewMatrix();
+		trCb.Projection = Camera::GetGpuProjectionMatrix();
 
 		graphics::ConstantBuffer* cb = renderer::constantBuffers[(UINT)graphics::eCBType::Transform];
 		cb->SetData(&trCb);

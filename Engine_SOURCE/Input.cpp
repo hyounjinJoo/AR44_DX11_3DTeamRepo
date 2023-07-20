@@ -1,3 +1,6 @@
+
+#include "EnginePCH.h"
+
 #include "Input.h"
 #include "Application.h"
 
@@ -52,10 +55,10 @@ namespace mh
 			//KEY
 			for (UINT i = 0; i < (UINT)eKeyCode::END; ++i)
 			{
-				// ÇØ´çÅ°°¡ ÇöÀç ´­·ÁÀÖ´Ù.
+				// í•´ë‹¹í‚¤ê°€ í˜„ìž¬ ëˆŒë ¤ìžˆë‹¤.
 				if (GetAsyncKeyState(ASCII[i]) & 0x8000)
 				{
-					// ÀÌÀü ÇÁ·¹ÀÓ¿¡µµ ´­·Á ÀÖ¾ú´Ù.
+					// ì´ì „ í”„ë ˆìž„ì—ë„ ëˆŒë ¤ ìžˆì—ˆë‹¤.
 					if (mKeys[i].bPressed)
 						mKeys[i].eState = eKeyState::PRESSED;
 					else
@@ -63,12 +66,12 @@ namespace mh
 
 					mKeys[i].bPressed = true;
 				}
-				else // ÇØ´çÅ°°¡ ÇöÀç ¾È´­·ÁÀÖ´Ù.
+				else // í•´ë‹¹í‚¤ê°€ í˜„ìž¬ ì•ˆëˆŒë ¤ìžˆë‹¤.
 				{
-					// ÀÌÀü ÇÁ·¹ÀÓ¿¡´Â ´­·Á ÀÖ¾ú´Ù.
+					// ì´ì „ í”„ë ˆìž„ì—ëŠ” ëˆŒë ¤ ìžˆì—ˆë‹¤.
 					if (mKeys[i].bPressed)
 						mKeys[i].eState = eKeyState::UP;
-					else // ÀÌÀü ÇÁ·¹ÀÓ¿¡µµ ¾È´­·Á ÀÖ¾ú´Ù.
+					else // ì´ì „ í”„ë ˆìž„ì—ë„ ì•ˆëˆŒë ¤ ìžˆì—ˆë‹¤.
 						mKeys[i].eState = eKeyState::NONE;
 
 					mKeys[i].bPressed = false;
@@ -78,8 +81,8 @@ namespace mh
 			POINT mousePos = {};
 			GetCursorPos(&mousePos);
 			ScreenToClient(application.GetHwnd(), &mousePos);
-			mMousPosition.x = mousePos.x;
-			mMousPosition.y = mousePos.y;
+			mMousPosition.x = static_cast<float>(mousePos.x);
+			mMousPosition.y = static_cast<float>(mousePos.y);
 		}
 		else
 		{

@@ -1,3 +1,5 @@
+#include "EnginePCH.h"
+
 #include "PaintShader.h"
 
 namespace mh::graphics
@@ -16,8 +18,8 @@ namespace mh::graphics
 	{
 		mTarget->BindUnorderedAccessView(0);
 
-		mGroupX = mTarget->GetWidth() / mThreadGroupCountX + 1;
-		mGroupY = mTarget->GetHeight() / mThreadGroupCountY + 1;
+		mGroupX = static_cast<UINT>(mTarget->GetWidth() / mThreadGroupCountX + 1);
+		mGroupY = static_cast<UINT>(mTarget->GetHeight() / mThreadGroupCountY + 1);
 		mGroupZ = 1;
 	}
 

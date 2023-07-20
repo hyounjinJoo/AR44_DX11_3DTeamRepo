@@ -97,7 +97,7 @@ struct ImGui_ImplWin32_Data
     HWND                        MouseHwnd;
     int                         MouseTrackedArea;   // 0: not tracked, 1: client are, 2: non-client area
     int                         MouseButtonsDown;
-    INT64                       Time;
+    INT64                       TimeManager;
     INT64                       TicksPerSecond;
     ImGuiMouseCursor            LastMouseCursor;
     bool                        WantUpdateMonitors;
@@ -146,7 +146,7 @@ static bool ImGui_ImplWin32_InitEx(void* hwnd, bool platform_has_own_dc)
     bd->hWnd = (HWND)hwnd;
     bd->WantUpdateMonitors = true;
     bd->TicksPerSecond = perf_frequency;
-    bd->Time = perf_counter;
+    bd->TimeManager = perf_counter;
     bd->LastMouseCursor = ImGuiMouseCursor_COUNT;
 
     // Our mouse update function expect PlatformHandle to be filled for the main viewport
@@ -437,8 +437,8 @@ void    ImGui_ImplWin32_NewFrame()
     // Setup time step
     INT64 current_time = 0;
     ::QueryPerformanceCounter((LARGE_INTEGER*)&current_time);
-    io.DeltaTime = (float)(current_time - bd->Time) / bd->TicksPerSecond;
-    bd->Time = current_time;
+    io.DeltaTime = (float)(current_time - bd->TimeManager) / bd->TicksPerSecond;
+    bd->TimeManager = current_time;
 
     // Update OS mouse position
     ImGui_ImplWin32_UpdateMouseData();

@@ -1,6 +1,6 @@
 #pragma once
-#include "Engine.h"
-#include "Math.h"
+#include "EnginePCH.h"
+#include "SimpleMath.h"
 
 #include "..\\External\\Fmod\\Include\\fmod_studio.hpp"
 #include "..\\External\\Fmod\\Include\\fmod.hpp"

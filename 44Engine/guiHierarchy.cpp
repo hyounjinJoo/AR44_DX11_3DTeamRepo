@@ -1,3 +1,5 @@
+#include "ClientPCH.h"
+
 #include "guiHierarchy.h"
 #include "Application.h"
 #include "Scene.h"
@@ -65,14 +67,14 @@ namespace gui
 	{
 		mTreeWidget->Clear();
 
-		ya::Scene* scene = ya::SceneManager::GetActiveScene();
+		mh::Scene* scene = mh::SceneManager::GetActiveScene();
 		std::string sceneName(scene->GetName().begin(), scene->GetName().end());
 
 		TreeWidget::tNode* root = mTreeWidget->AddNode(nullptr, sceneName, 0, true);
 
 		for (size_t i = 0; i < (UINT)mh::enums::eLayerType::End; i++)
 		{
-			ya::Layer& layer = scene->GetLayer((mh::enums::eLayerType)i);
+			mh::Layer& layer = scene->GetLayer((mh::enums::eLayerType)i);
 			const std::vector<mh::GameObject*>& gameObjs
 				= layer.GetGameObjects();
 

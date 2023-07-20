@@ -89,7 +89,7 @@ Index of this file:
 //-------------------------------------------------------------------------
 
 // Widgets
-static const float          DRAGDROP_HOLD_TO_OPEN_TIMER = 0.70f;    // Time for drag-hold to activate items accepting the ImGuiButtonFlags_PressedOnDragDropHold button behavior.
+static const float          DRAGDROP_HOLD_TO_OPEN_TIMER = 0.70f;    // TimeManager for drag-hold to activate items accepting the ImGuiButtonFlags_PressedOnDragDropHold button behavior.
 static const float          DRAG_MOUSE_THRESHOLD_FACTOR = 0.50f;    // Multiplier for the default value of io.MouseDragThreshold to make DragFloat/DragInt react faster to mouse drags.
 
 // Those MIN/MAX values are not define because we need to point to them

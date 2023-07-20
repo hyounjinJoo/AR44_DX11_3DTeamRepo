@@ -1,18 +1,18 @@
 #pragma once
-#include "Engine.h"
-#include "Resource.h"
+#include "EnginePCH.h"
+#include "GameResource.h"
 
 namespace mh
 {
-	class Resources
+	class GameResources
 	{
 	public:
 		template <typename T>
 		static std::shared_ptr<T> Find(const std::wstring& key)
 		{
-			std::map<std::wstring, std::shared_ptr<Resource>>::iterator iter = mResources.find(key);
+			std::map<std::wstring, std::shared_ptr<GameResource>>::iterator iter = mResources.find(key);
 
-			// ÀÌ¹Ì µ¿ÀÏÇÑ Å°°ªÀ¸·Î ´Ù¸¥ ¸®¼Ò½º°¡ ¸ÕÀú µî·ÏµÇ¾î ÀÖ¾ú´Ù.
+			// ì´ë¯¸ ë™ì¼í•œ í‚¤ê°’ìœ¼ë¡œ ë‹¤ë¥¸ ë¦¬ì†ŒìŠ¤ê°€ ë¨¼ì € ë“±ë¡ë˜ì–´ ìˆì—ˆë‹¤.
 			if (iter != mResources.end())
 			{
 				return std::dynamic_pointer_cast<T>(iter->second);
@@ -40,15 +40,15 @@ namespace mh
 		template <typename T>
 		static std::shared_ptr<T> Load(const std::wstring& key, const std::wstring& path)
 		{
-			// Å°°ªÀ¸·Î Å½»ö
-			std::shared_ptr<T> resource = Resources::Find<T>(key);
+			// í‚¤ê°’ìœ¼ë¡œ íƒìƒ‰
+			std::shared_ptr<T> resource = GameResources::Find<T>(key);
 			if (nullptr != resource)
 			{
-				// ÇØ´çÅ°·Î ÀÌ¹Ì ·ÎµùµÈ°Ô ÀÖÀ¸¸é ÇØ´ç ¸®¼Ò½º¸¦ ¹İÈ¯
+				// í•´ë‹¹í‚¤ë¡œ ì´ë¯¸ ë¡œë”©ëœê²Œ ìˆìœ¼ë©´ í•´ë‹¹ ë¦¬ì†ŒìŠ¤ë¥¼ ë°˜í™˜
 				return resource;
 			}
 
-			// ÇØ´ç Å°·Î ·ÎµùµÈ ¸®¼Ò½º°¡ ¾ø´Ù.
+			// í•´ë‹¹ í‚¤ë¡œ ë¡œë”©ëœ ë¦¬ì†ŒìŠ¤ê°€ ì—†ë‹¤.
 			resource = std::make_shared<T>();
 			if (FAILED(resource->Load(path)))
 			{
@@ -61,7 +61,7 @@ namespace mh
 			resource->SetPath(path);
 			resource->SetName(key);
 
-			mResources.insert(std::make_pair(key, std::dynamic_pointer_cast<Resource>(resource)));
+			mResources.insert(std::make_pair(key, std::dynamic_pointer_cast<GameResource>(resource)));
 
 			return resource;
 		}
@@ -72,7 +72,7 @@ namespace mh
 			resource->SetName(key);
 			resource->SetKey(key);
 
-			mResources.insert(std::make_pair(key, std::dynamic_pointer_cast<Resource>(resource)));
+			mResources.insert(std::make_pair(key, std::dynamic_pointer_cast<GameResource>(resource)));
 		}
 
 		static void deleteTest()
@@ -81,11 +81,11 @@ namespace mh
 		}
 
 	private:
-		Resources() = delete;
-		~Resources() = delete;
+		GameResources() = delete;
+		~GameResources() = delete;
 	
 	private:
-		static std::map<std::wstring, std::shared_ptr<Resource>> mResources;
+		static std::map<std::wstring, std::shared_ptr<GameResource>> mResources;
 	};
 
 	

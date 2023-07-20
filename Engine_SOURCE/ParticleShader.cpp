@@ -1,7 +1,9 @@
+#include "EnginePCH.h"
+
 #include "ParticleShader.h"
 #include "Renderer.h"
 #include "ConstantBuffer.h"
-#include "Time.h"
+#include "TimeManager.h"
 
 namespace mh::graphics
 {

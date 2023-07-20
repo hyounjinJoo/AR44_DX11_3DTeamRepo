@@ -1,10 +1,10 @@
 #pragma once
-#include "Resource.h"
+#include "GameResource.h"
 #include "Graphics.h"
 
 namespace mh
 {
-	class Shader : public Resource
+	class Shader : public GameResource
 	{
 	public:
 		Shader();

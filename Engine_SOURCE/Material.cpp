@@ -1,3 +1,5 @@
+#include "EnginePCH.h"
+
 #include "Material.h"
 
 namespace mh::graphics
@@ -5,7 +7,7 @@ namespace mh::graphics
     using namespace mh::math;
 
     Material::Material()
-        : Resource(eResourceType::Material)
+        : GameResource(eResourceType::Material)
         , mMode(eRenderingMode::Opaque)
     {
 
@@ -58,12 +60,12 @@ namespace mh::graphics
 				continue;
             }
 
-            mTexture[slotIndex]->BindShaderResource(eShaderStage::VS, slotIndex);
-            mTexture[slotIndex]->BindShaderResource(eShaderStage::HS, slotIndex);
-            mTexture[slotIndex]->BindShaderResource(eShaderStage::DS, slotIndex);
-            mTexture[slotIndex]->BindShaderResource(eShaderStage::GS, slotIndex);
-            mTexture[slotIndex]->BindShaderResource(eShaderStage::PS, slotIndex);
-            mTexture[slotIndex]->BindShaderResource(eShaderStage::CS, slotIndex);
+            mTexture[slotIndex]->BindShaderResource(eShaderStage::VS, static_cast<UINT>(slotIndex));
+            mTexture[slotIndex]->BindShaderResource(eShaderStage::HS, static_cast<UINT>(slotIndex));
+            mTexture[slotIndex]->BindShaderResource(eShaderStage::DS, static_cast<UINT>(slotIndex));
+            mTexture[slotIndex]->BindShaderResource(eShaderStage::GS, static_cast<UINT>(slotIndex));
+            mTexture[slotIndex]->BindShaderResource(eShaderStage::PS, static_cast<UINT>(slotIndex));
+            mTexture[slotIndex]->BindShaderResource(eShaderStage::CS, static_cast<UINT>(slotIndex));
         }
 
         ConstantBuffer* CB = renderer::constantBuffers[(UINT)eCBType::Material];

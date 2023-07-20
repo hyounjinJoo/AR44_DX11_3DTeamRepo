@@ -1,3 +1,5 @@
+#include "ClientPCH.h"
+
 #include "guiComponent.h"
 
 #include "imgui.h"

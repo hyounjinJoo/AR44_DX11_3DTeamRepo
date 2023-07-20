@@ -1,10 +1,12 @@
+#include "EnginePCH.h"
+
 #include "AudioClip.h"
 #include "Transform.h"
 
 namespace mh
 {
 	AudioClip::AudioClip()
-		: Resource(enums::eResourceType::AudioClip)
+		: GameResource(enums::eResourceType::AudioClip)
 		, mSound(nullptr)
 		, mChannel(nullptr)
 		, mMinDistance(1.0f)

@@ -1,8 +1,10 @@
+#include "EnginePCH.h"
+
 #include "PlayScene.h"
 #include "Transform.h"
 #include "MeshRenderer.h"
 #include "Renderer.h"
-#include "Resources.h"
+#include "GameResources.h"
 #include "Texture.h"
 #include "PlayerScript.h"
 #include "Camera.h"

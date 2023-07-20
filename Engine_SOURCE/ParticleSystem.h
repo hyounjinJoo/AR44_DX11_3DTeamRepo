@@ -24,15 +24,15 @@ namespace mh
 		virtual void Render() override;
 
 	private:
-#pragma region Buffer ¼±¾ğ
+#pragma region Buffer ì„ ì–¸
 		graphics::StructedBuffer* mBuffer;
 		graphics::StructedBuffer* mSharedBuffer;
 #pragma endregion
-#pragma region tParticle Shader °ü·Ã º¯¼ö ¼±¾ğ
+#pragma region tParticle Shader ê´€ë ¨ ë³€ìˆ˜ ì„ ì–¸
 		std::shared_ptr<graphics::ParticleShader> mCS;
 		renderer::ParticleSystemCB mCBData;
 #pragma endregion
-#pragma region tParticle System °ü·Ã º¯¼ö ¼±¾ğ
+#pragma region tParticle System ê´€ë ¨ ë³€ìˆ˜ ì„ ì–¸
 		Vector4 mStartSize;
 		Vector4 mStartColor;
 		
@@ -45,8 +45,9 @@ namespace mh
 		float mStartSpeed;
 		float mTime;
 		
-		//´©Àû½Ã°£
+		//ëˆ„ì ì‹œê°„
 		float mElapsedTime;
 #pragma endregion
 	};
+
 }

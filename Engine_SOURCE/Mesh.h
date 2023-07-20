@@ -1,10 +1,10 @@
 #pragma once
 #include "Graphics.h"
-#include "Resource.h"
+#include "GameResource.h"
 
 namespace mh
 {
-	class Mesh : public Resource 
+	class Mesh : public GameResource 
 	{
 	public:
 		Mesh();

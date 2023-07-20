@@ -1,8 +1,7 @@
-﻿// 44Engine.cpp : 애플리케이션에 대한 진입점을 정의합니다.
-//
+#include "ClientPCH.h"
 
-#include "framework.h"
-#include "44Engine.h"
+// 44Engine.cpp : 애플리케이션에 대한 진입점을 정의합니다.
+//
 #include "Application.h"
 #include "SceneManager.h"
 #include "guiEditor.h"
@@ -85,7 +84,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
         }
     }
 
-    ya::SceneManager::Release();
+    mh::SceneManager::Release();
     application.Release();
     editor.Release();
     return (int) msg.wParam;

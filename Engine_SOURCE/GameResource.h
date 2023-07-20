@@ -1,14 +1,15 @@
 #pragma once
 #include "Entity.h"
 
-using namespace mh::enums;
+
 namespace mh
 {
-	class Resource : public Entity
+	using namespace mh::enums;
+	class GameResource : public Entity
 	{
 	public:
-		Resource(eResourceType type);
-		virtual ~Resource();
+		GameResource(eResourceType type);
+		virtual ~GameResource();
 
 		virtual HRESULT Load(const std::wstring& path) = 0;
 
