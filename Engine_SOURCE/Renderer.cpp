@@ -149,21 +149,29 @@ namespace mh::renderer
 		arrCube[0].Color = Vector4(1.f, 1.f, 1.f, 1.f);
 		arrCube[0].UV = Vector2(0.f, 0.f);
 		arrCube[0].Normal = Vector3(0.f, 1.f, 0.f);
+		arrCube[0].Tangent = Vector3(1.0f, 0.0f, 0.0f);
+		arrCube[0].BiNormal = Vector3(0.0f, 0.0f, 1.0f);
 
 		arrCube[1].Pos = Vector4(0.5f, 0.5f, 0.5f, 1.0f);
 		arrCube[1].Color = Vector4(1.f, 1.f, 1.f, 1.f);
-		arrCube[1].UV = Vector2(0.f, 0.f);
+		arrCube[1].UV = Vector2(1.f, 0.f);
 		arrCube[1].Normal = Vector3(0.f, 1.f, 0.f);
+		arrCube[1].Tangent = Vector3(1.0f, 0.0f, 0.0f);
+		arrCube[1].BiNormal = Vector3(0.0f, 0.0f, 1.0f);
 
 		arrCube[2].Pos = Vector4(0.5f, 0.5f, -0.5f, 1.0f);
 		arrCube[2].Color = Vector4(1.f, 1.f, 1.f, 1.f);
-		arrCube[2].UV = Vector2(0.f, 0.f);
+		arrCube[2].UV = Vector2(0.f, 1.f);
 		arrCube[2].Normal = Vector3(0.f, 1.f, 0.f);
+		arrCube[2].Tangent = Vector3(1.0f, 0.0f, 0.0f);
+		arrCube[2].BiNormal = Vector3(0.0f, 0.0f, 1.0f);
 
 		arrCube[3].Pos = Vector4(-0.5f, 0.5f, -0.5f, 1.0f);
 		arrCube[3].Color = Vector4(1.f, 1.f, 1.f, 1.f);
-		arrCube[3].UV = Vector2(0.f, 0.f);
+		arrCube[3].UV = Vector2(1.f, 1.f);
 		arrCube[3].Normal = Vector3(0.f, 1.f, 0.f);
+		arrCube[3].Tangent = Vector3(1.0f, 0.0f, 0.0f);
+		arrCube[3].BiNormal = Vector3(0.0f, 0.0f, 1.0f);
 
 
 		// 아랫 면	
@@ -171,105 +179,146 @@ namespace mh::renderer
 		arrCube[4].Color = Vector4(1.f, 0.f, 0.f, 1.f);
 		arrCube[4].UV = Vector2(0.f, 0.f);
 		arrCube[4].Normal = Vector3(0.f, -1.f, 0.f);
+		arrCube[4].Tangent = Vector3(-1.0f, 0.0f, 0.0f);
+		arrCube[4].BiNormal = Vector3(0.0f, 0.0f, 1.0f);
 
 		arrCube[5].Pos = Vector4(0.5f, -0.5f, -0.5f, 1.0f);
 		arrCube[5].Color = Vector4(1.f, 0.f, 0.f, 1.f);
-		arrCube[5].UV = Vector2(0.f, 0.f);
+		arrCube[5].UV = Vector2(1.f, 0.f);
 		arrCube[5].Normal = Vector3(0.f, -1.f, 0.f);
+		arrCube[5].Tangent = Vector3(-1.0f, 0.0f, 0.0f);
+		arrCube[5].BiNormal = Vector3(0.0f, 0.0f, 1.0f);
 
 		arrCube[6].Pos = Vector4(0.5f, -0.5f, 0.5f, 1.0f);
 		arrCube[6].Color = Vector4(1.f, 0.f, 0.f, 1.f);
-		arrCube[6].UV = Vector2(0.f, 0.f);
+		arrCube[6].UV = Vector2(0.f, 1.f);
 		arrCube[6].Normal = Vector3(0.f, -1.f, 0.f);
+		arrCube[6].Tangent = Vector3(-1.0f, 0.0f, 0.0f);
+		arrCube[6].BiNormal = Vector3(0.0f, 0.0f, 1.0f);
 
 		arrCube[7].Pos = Vector4(-0.5f, -0.5f, 0.5f, 1.0f);
 		arrCube[7].Color = Vector4(1.f, 0.f, 0.f, 1.f);
-		arrCube[7].UV = Vector2(0.f, 0.f);
+		arrCube[7].UV = Vector2(1.f, 1.f);
 		arrCube[7].Normal = Vector3(0.f, -1.f, 0.f);
+		arrCube[7].Tangent = Vector3(-1.0f, 0.0f, 0.0f);
+		arrCube[7].BiNormal = Vector3(0.0f, 0.0f, 1.0f);
 
 		// 왼쪽 면
 		arrCube[8].Pos = Vector4(-0.5f, 0.5f, 0.5f, 1.0f);
 		arrCube[8].Color = Vector4(0.f, 1.f, 0.f, 1.f);
 		arrCube[8].UV = Vector2(0.f, 0.f);
 		arrCube[8].Normal = Vector3(-1.f, 0.f, 0.f);
+		arrCube[8].Tangent = Vector3(0.0f, 1.0f, 0.0f);
+		arrCube[8].BiNormal = Vector3(0.0f, 0.0f, 1.0f);
 
 		arrCube[9].Pos = Vector4(-0.5f, 0.5f, -0.5f, 1.0f);
 		arrCube[9].Color = Vector4(0.f, 1.f, 0.f, 1.f);
-		arrCube[9].UV = Vector2(0.f, 0.f);
+		arrCube[9].UV = Vector2(1.f, 0.f);
 		arrCube[9].Normal = Vector3(-1.f, 0.f, 0.f);
+		arrCube[9].Tangent = Vector3(0.0f, 1.0f, 0.0f);
+		arrCube[9].BiNormal = Vector3(0.0f, 0.0f, 1.0f);
 
 		arrCube[10].Pos = Vector4(-0.5f, -0.5f, -0.5f, 1.0f);
 		arrCube[10].Color = Vector4(0.f, 1.f, 0.f, 1.f);
-		arrCube[10].UV = Vector2(0.f, 0.f);
+		arrCube[10].UV = Vector2(0.f, 1.f);
 		arrCube[10].Normal = Vector3(-1.f, 0.f, 0.f);
+		arrCube[10].Tangent = Vector3(0.0f, 1.0f, 0.0f);
+		arrCube[10].BiNormal = Vector3(0.0f, 0.0f, 1.0f);
 
 		arrCube[11].Pos = Vector4(-0.5f, -0.5f, 0.5f, 1.0f);
 		arrCube[11].Color = Vector4(0.f, 1.f, 0.f, 1.f);
-		arrCube[11].UV = Vector2(0.f, 0.f);
+		arrCube[11].UV = Vector2(1.f, 1.f);
 		arrCube[11].Normal = Vector3(-1.f, 0.f, 0.f);
+		arrCube[11].Tangent = Vector3(0.0f, 1.0f, 0.0f);
+		arrCube[11].BiNormal = Vector3(0.0f, 0.0f, 1.0f);
+
 
 		// 오른쪽 면
 		arrCube[12].Pos = Vector4(0.5f, 0.5f, -0.5f, 1.0f);
 		arrCube[12].Color = Vector4(0.f, 0.f, 1.f, 1.f);
 		arrCube[12].UV = Vector2(0.f, 0.f);
 		arrCube[12].Normal = Vector3(1.f, 0.f, 0.f);
+		arrCube[12].Tangent = Vector3(0.0f, -1.0f, 0.0f);
+		arrCube[12].BiNormal = Vector3(0.0f, 0.0f, 1.0f);
 
 		arrCube[13].Pos = Vector4(0.5f, 0.5f, 0.5f, 1.0f);
 		arrCube[13].Color = Vector4(0.f, 0.f, 1.f, 1.f);
-		arrCube[13].UV = Vector2(0.f, 0.f);
+		arrCube[13].UV = Vector2(1.f, 0.f);
 		arrCube[13].Normal = Vector3(1.f, 0.f, 0.f);
+		arrCube[13].Tangent = Vector3(0.0f, -1.0f, 0.0f);
+		arrCube[13].BiNormal = Vector3(0.0f, 0.0f, 1.0f);
 
 		arrCube[14].Pos = Vector4(0.5f, -0.5f, 0.5f, 1.0f);
 		arrCube[14].Color = Vector4(0.f, 0.f, 1.f, 1.f);
-		arrCube[14].UV = Vector2(0.f, 0.f);
+		arrCube[14].UV = Vector2(0.f, 1.f);
 		arrCube[14].Normal = Vector3(1.f, 0.f, 0.f);
+		arrCube[14].Tangent = Vector3(0.0f, -1.0f, 0.0f);
+		arrCube[14].BiNormal = Vector3(0.0f, 0.0f, 1.0f);
 
 		arrCube[15].Pos = Vector4(0.5f, -0.5f, -0.5f, 1.0f);
 		arrCube[15].Color = Vector4(0.f, 0.f, 1.f, 1.f);
-		arrCube[15].UV = Vector2(0.f, 0.f);
+		arrCube[15].UV = Vector2(1.f, 1.f);
 		arrCube[15].Normal = Vector3(1.f, 0.f, 0.f);
+		arrCube[15].Tangent = Vector3(0.0f, -1.0f, 0.0f);
+		arrCube[15].BiNormal = Vector3(0.0f, 0.0f, 1.0f);
 
 		// 뒷 면
 		arrCube[16].Pos = Vector4(0.5f, 0.5f, 0.5f, 1.0f);
 		arrCube[16].Color = Vector4(1.f, 1.f, 0.f, 1.f);
 		arrCube[16].UV = Vector2(0.f, 0.f);
 		arrCube[16].Normal = Vector3(0.f, 0.f, 1.f);
+		arrCube[16].Tangent = Vector3(1.0f, 0.0f, 0.0f);
+		arrCube[16].BiNormal = Vector3(0.0f, -1.0f, 1.0f);
 
 		arrCube[17].Pos = Vector4(-0.5f, 0.5f, 0.5f, 1.0f);
 		arrCube[17].Color = Vector4(1.f, 1.f, 0.f, 1.f);
-		arrCube[17].UV = Vector2(0.f, 0.f);
+		arrCube[17].UV = Vector2(1.f, 0.f);
 		arrCube[17].Normal = Vector3(0.f, 0.f, 1.f);
+		arrCube[17].Tangent = Vector3(1.0f, 0.0f, 0.0f);
+		arrCube[17].BiNormal = Vector3(0.0f, -1.0f, 1.0f);
 
 		arrCube[18].Pos = Vector4(-0.5f, -0.5f, 0.5f, 1.0f);
 		arrCube[18].Color = Vector4(1.f, 1.f, 0.f, 1.f);
-		arrCube[18].UV = Vector2(0.f, 0.f);
+		arrCube[18].UV = Vector2(0.f, 1.f);
 		arrCube[18].Normal = Vector3(0.f, 0.f, 1.f);
+		arrCube[18].Tangent = Vector3(1.0f, 0.0f, 0.0f);
+		arrCube[18].BiNormal = Vector3(0.0f, -1.0f, 1.0f);
 
 		arrCube[19].Pos = Vector4(0.5f, -0.5f, 0.5f, 1.0f);
 		arrCube[19].Color = Vector4(1.f, 1.f, 0.f, 1.f);
-		arrCube[19].UV = Vector2(0.f, 0.f);
+		arrCube[19].UV = Vector2(1.f, 1.f);
 		arrCube[19].Normal = Vector3(0.f, 0.f, 1.f);
+		arrCube[19].Tangent = Vector3(1.0f, 0.0f, 0.0f);
+		arrCube[19].BiNormal = Vector3(0.0f, -1.0f, 1.0f);
 
 		// 앞 면
 		arrCube[20].Pos = Vector4(-0.5f, 0.5f, -0.5f, 1.0f);;
 		arrCube[20].Color = Vector4(1.f, 0.f, 1.f, 1.f);
 		arrCube[20].UV = Vector2(0.f, 0.f);
 		arrCube[20].Normal = Vector3(0.f, 0.f, -1.f);
+		arrCube[20].Tangent = Vector3(1.0f, 0.0f, 0.0f);
+		arrCube[20].BiNormal = Vector3(0.0f, 1.0f, 1.0f);
 
 		arrCube[21].Pos = Vector4(0.5f, 0.5f, -0.5f, 1.0f);
 		arrCube[21].Color = Vector4(1.f, 0.f, 1.f, 1.f);
-		arrCube[21].UV = Vector2(0.f, 0.f);
+		arrCube[21].UV = Vector2(1.f, 0.f);
 		arrCube[21].Normal = Vector3(0.f, 0.f, -1.f);
+		arrCube[21].Tangent = Vector3(1.0f, 0.0f, 0.0f);
+		arrCube[21].BiNormal = Vector3(0.0f, 1.0f, 1.0f);
 
 		arrCube[22].Pos = Vector4(0.5f, -0.5f, -0.5f, 1.0f);
 		arrCube[22].Color = Vector4(1.f, 0.f, 1.f, 1.f);
-		arrCube[22].UV = Vector2(0.f, 0.f);
+		arrCube[22].UV = Vector2(0.f, 1.f);
 		arrCube[22].Normal = Vector3(0.f, 0.f, -1.f);
+		arrCube[22].Tangent = Vector3(1.0f, 0.0f, 0.0f);
+		arrCube[22].BiNormal = Vector3(0.0f, 1.0f, 1.0f);
 
 		arrCube[23].Pos = Vector4(-0.5f, -0.5f, -0.5f, 1.0f);
 		arrCube[23].Color = Vector4(1.f, 0.f, 1.f, 1.f);
-		arrCube[23].UV = Vector2(0.f, 0.f);
+		arrCube[23].UV = Vector2(1.f, 1.f);
 		arrCube[23].Normal = Vector3(0.f, 0.f, -1.f);
+		arrCube[23].Tangent = Vector3(1.0f, 0.0f, 0.0f);
+		arrCube[23].BiNormal = Vector3(0.0f, 1.0f, 1.0f);
 
 		indexes.clear();
 		for (size_t i = 0; i < 6; i++)
@@ -757,6 +806,11 @@ namespace mh::renderer
 		GameResources::Load<Texture>(L"noise_02", L"noise\\noise_02.png");
 		GameResources::Load<Texture>(L"noise_03", L"noise\\noise_03.jpg");
 
+		GameResources::Load<Texture>(L"BasicCube", L"Cube\\TILE_01.tga");
+		GameResources::Load<Texture>(L"BasicCubeNormal", L"Cube\\TILE_01_N.tga");
+
+		GameResources::Load<Texture>(L"Brick", L"Cube\\Brick.jpg");
+		GameResources::Load<Texture>(L"Brick_N", L"Cube\\Brick_N.jpg");
 	#pragma endregion
 		#pragma region DYNAMIC TEXTURE
 		std::shared_ptr<Texture> uavTexture = std::make_shared<Texture>();
@@ -779,7 +833,7 @@ namespace mh::renderer
 		std::shared_ptr<Shader> shader = GameResources::Find<Shader>(L"RectShader");
 		std::shared_ptr<Material> material = std::make_shared<Material>();
 		material->SetShader(shader);
-		material->SetTexture(eTextureSlot::T0, texture);
+		material->SetTexture(eTextureSlot::Albedo, texture);
 		GameResources::Insert<Material>(L"RectMaterial", material);
 #pragma endregion
 		#pragma region SPRITE
@@ -788,7 +842,7 @@ namespace mh::renderer
 		std::shared_ptr<Material> spriteMaterial = std::make_shared<Material>();
 		spriteMaterial->SetRenderingMode(eRenderingMode::Transparent);
 		spriteMaterial->SetShader(spriteShader);
-		spriteMaterial->SetTexture(eTextureSlot::T0, spriteTexture);
+		spriteMaterial->SetTexture(eTextureSlot::Albedo, spriteTexture);
 		GameResources::Insert<Material>(L"SpriteMaterial", spriteMaterial);
 #pragma endregion
 		#pragma region UI
@@ -798,7 +852,7 @@ namespace mh::renderer
 		uiMaterial->SetRenderingMode(eRenderingMode::Transparent);
 	
 		uiMaterial->SetShader(uiShader);
-		uiMaterial->SetTexture(eTextureSlot::T0, uiTexture);
+		uiMaterial->SetTexture(eTextureSlot::Albedo, uiTexture);
 		GameResources::Insert<Material>(L"UIMaterial", uiMaterial);
 #pragma endregion
 		#pragma region GRID
@@ -829,12 +883,19 @@ namespace mh::renderer
 		GameResources::Insert<Material>(L"PostProcessMaterial", postProcessMaterial);
 #pragma endregion
 
-#pragma region POSTPROCESS
+#pragma region BASIC
 		std::shared_ptr<Shader> basicShader = GameResources::Find<Shader>(L"BasicShader");
 		std::shared_ptr<Material> basicMaterial = std::make_shared<Material>();
 		basicMaterial->SetRenderingMode(eRenderingMode::Transparent);
 		basicMaterial->SetShader(basicShader);
+
+		std::shared_ptr <Texture> albedo = GameResources::Find<Texture>(L"Brick");
+		basicMaterial->SetTexture(eTextureSlot::Albedo, albedo);
+		albedo = GameResources::Find<Texture>(L"Brick_N");
+		basicMaterial->SetTexture(eTextureSlot::Normal, albedo);
 		GameResources::Insert<Material>(L"BasicMaterial", basicMaterial);
+
+
 #pragma endregion
 
 	}

@@ -39,7 +39,7 @@ float4 main(VSOut In) : SV_Target
     else 
     {
         //UV.x = -UV.x;
-        color = defaultTexture.Sample(anisotropicSampler, In.UV);
+        color = albedoTexture.Sample(anisotropicSampler, In.UV);
     }
     
     

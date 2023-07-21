@@ -25,7 +25,7 @@ namespace mh::graphics
 
     void Material::SetData(eGPUParam _param, void* _data)
     {
-        switch (_param)
+        /*switch (_param)
         {
         case mh::graphics::eGPUParam::Int:
             mCB.iData = *static_cast<int*>(_data);
@@ -47,7 +47,7 @@ namespace mh::graphics
             break;
         default:
             break;
-        }
+        }*/
 
     }
 
@@ -66,6 +66,16 @@ namespace mh::graphics
             mTexture[slotIndex]->BindShaderResource(eShaderStage::GS, static_cast<UINT>(slotIndex));
             mTexture[slotIndex]->BindShaderResource(eShaderStage::PS, static_cast<UINT>(slotIndex));
             mTexture[slotIndex]->BindShaderResource(eShaderStage::CS, static_cast<UINT>(slotIndex));
+        }
+
+        if (mTexture[(UINT)eTextureSlot::Albedo])
+        {
+            mCB.UsedAlbedo = 1;
+        }
+
+        if (mTexture[(UINT)eTextureSlot::Normal])
+        {
+            mCB.UsedNormal = 1;
         }
 
         ConstantBuffer* CB = renderer::constantBuffers[(UINT)eCBType::Material];

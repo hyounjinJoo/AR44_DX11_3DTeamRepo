@@ -1,5 +1,6 @@
 // Material Default Texture
-Texture2D defaultTexture : register(t0);
+Texture2D albedoTexture : register(t0);
+Texture2D normalTexture : register(t1);
 
 //Atlas texture
 Texture2D atlasTexture : register(t12);

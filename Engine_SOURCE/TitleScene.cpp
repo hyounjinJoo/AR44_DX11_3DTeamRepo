@@ -52,9 +52,9 @@ namespace mh
 		player->SetName(L"Player");
 		MeshRenderer* mr = player->AddComponent<MeshRenderer>();
 		mr->SetMaterial(GameResources::Find<Material>(L"BasicMaterial"));
-		//mr->SetMesh(GameResources::Find<Mesh>(L"CubeMesh"));
+		mr->SetMesh(GameResources::Find<Mesh>(L"CubeMesh"));
 		player->AddComponent<PlayerScript>();
-		mr->SetMesh(GameResources::Find<Mesh>(L"SphereMesh"));
+		//mr->SetMesh(GameResources::Find<Mesh>(L"SphereMesh"));
 
 		////paint shader
 		//std::shared_ptr<PaintShader> paintShader = GameResources::Find<PaintShader>(L"PaintShader");
@@ -77,7 +77,7 @@ namespace mh
 			lightComp->SetAmbient(Vector4(0.15f, 0.15f, 0.15f, 1.0f));
 		}
 
-		{
+		/*{
 			GameObject* directionalLight = object::Instantiate<GameObject>(eLayerType::Player);
 			directionalLight->SetName(L"PointLight");
 
@@ -97,7 +97,7 @@ namespace mh
 			lightComp->SetType(eLightType::Point);
 			lightComp->SetRadius(20.0f);
 			lightComp->SetDiffuse(Vector4(0.0f, 0.0f, 1.0f, 1.0f));
-		}
+		}*/
 
 
 		//// Main Camera Game Object
