@@ -1,9 +1,10 @@
 #pragma once
 #include "Graphics.h"
 
-using namespace mh::enums;
+
 namespace mh::graphics
 {
+	using namespace mh::enums;
 	class Texture;
 
 	class GraphicDevice_DX11
@@ -55,7 +56,7 @@ namespace mh::graphics
 		void CopyResource(ID3D11Resource* _pDstResource, ID3D11Resource* _pSrcResource);
 		void SetData(ID3D11Buffer* _buffer, void* _data, UINT _size);
 
-		void Clear() const;// È­¸é Áö¿öÁÖ±â
+		void Clear() const;// í™”ë©´ ì§€ì›Œì£¼ê¸°
 		void AdjustViewPorts();
 		void OMSetRenderTarget();
 

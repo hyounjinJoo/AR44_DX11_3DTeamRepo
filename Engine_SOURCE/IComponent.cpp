@@ -1,3 +1,5 @@
+#include "EnginePCH.h"
+
 #include "IComponent.h"
 
 namespace mh

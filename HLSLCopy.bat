@@ -11,14 +11,11 @@ if "%Configuration%"=="" set Configuration=Debug
 echo Running %0... 
 echo Mode: %Configuration%
 
-:: *.dll 파일 복사
-xcopy /d /s /y /i /r .\External\dll\*.dll .\%Platform%\%Configuration%
 
-
-
-:: GameResource 파일 복사
-if not exist .\%Platform%\%Configuration%\GameResources ( mkdir .\%Platform%\%Configuration%\GameResources )
-xcopy /d /s /y /i /r .\GameResources\* .\%Platform%\%Configuration%\GameResources
+:: Shader 파일 복사
+if not exist .\%Platform%\%Configuration%\SHADER_SOURCE ( mkdir .\%Platform%\%Configuration%\SHADER_SOURCE )
+xcopy /d /s /y /i /r .\SHADER_SOURCE\*.hlsl .\%Platform%\%Configuration%\SHADER_SOURCE
+xcopy /d /s /y /i /r .\SHADER_SOURCE\*hlsli .\%Platform%\%Configuration%\SHADER_SOURCE
 
 
 :: 1번 Argument에 아무것도 들어오지 않았을 경우(== 직접 실행했을 경우) 일시 정지

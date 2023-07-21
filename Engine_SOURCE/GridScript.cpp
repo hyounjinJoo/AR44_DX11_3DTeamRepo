@@ -1,3 +1,5 @@
+#include "EnginePCH.h"
+
 #include "GridScript.h"
 #include "Transform.h"
 #include "GameObject.h"
@@ -45,16 +47,16 @@ namespace mh
 
 		RECT winRect;
 		GetClientRect(application.GetHwnd(), &winRect);
-		float width = winRect.right - winRect.left;
-		float height = winRect.bottom - winRect.top;
+		float width = static_cast<float>(winRect.right - winRect.left);
+		float height = static_cast<float>(winRect.bottom - winRect.top);
 		Vector2 resolution(width, height);
 
 		// Constant buffer
 		graphics::ConstantBuffer* CB = renderer::constantBuffers[(UINT)graphics::eCBType::Grid];
 		renderer::GridCB data;
-		data.cameraPosition = position;
-		data.cameraScale = Vector2(scale, scale);
-		data.resolution = resolution;
+		data.CameraPosition = position;
+		data.CameraScale = Vector2(scale, scale);
+		data.Resolution = resolution;
 		
 		CB->SetData(&data);
 		CB->Bind(graphics::eShaderStage::VS);

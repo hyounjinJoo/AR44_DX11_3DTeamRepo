@@ -1,17 +1,20 @@
-﻿#include "Time.h"
+﻿#include "EnginePCH.h"
+
+#include "TimeManager.h"
 #include "Application.h"
 
 extern mh::Application application;
 
 namespace mh
 {
-    LARGE_INTEGER	Time::mCpuFrequency = {};
-    LARGE_INTEGER   Time::mPrevFrequency = {};
-    LARGE_INTEGER	Time::mCurFrequency = {};
-    float			Time::mDeltaTime = 0.0f;
-    float			Time::mOneSecond = 0.0f;
+    
+    LARGE_INTEGER	TimeManager::mCpuFrequency = {};
+    LARGE_INTEGER   TimeManager::mPrevFrequency = {};
+    LARGE_INTEGER	TimeManager::mCurFrequency = {};
+    float			TimeManager::mDeltaTime = 0.0f;
+    float			TimeManager::mOneSecond = 0.0f;
 
-    void Time::Initialize()
+    void TimeManager::Initialize()
     {
         //CPU 의 초당 반복되는 주파수를 얻어온다.
         QueryPerformanceFrequency(&mCpuFrequency);
@@ -20,7 +23,7 @@ namespace mh
         QueryPerformanceCounter(&mPrevFrequency);
     }
 
-    void Time::Update()
+    void TimeManager::Update()
     {
         QueryPerformanceCounter(&mCurFrequency);
 
@@ -31,7 +34,7 @@ namespace mh
         mPrevFrequency.QuadPart = mCurFrequency.QuadPart;
     }
 
-    void Time::Render(HDC _hdc)
+    void TimeManager::Render(HDC _hdc)
     {
         static int iCount = 0;
         ++iCount;
@@ -46,7 +49,7 @@ namespace mh
             wchar_t szFloat[50] = {};
             float FPS = 1.f / mDeltaTime;
             swprintf_s(szFloat, 50, L"DeltaTime : %d", iCount);
-            int iLen = wcsnlen_s(szFloat, 50);
+            int iLen = static_cast<int>(wcsnlen_s(szFloat, 50));
             //TextOut(_dc, 10, 10, szFloat, iLen);
 
             SetWindowText(hWnd, szFloat);

@@ -1,6 +1,6 @@
 #pragma once
 #include "..\External\DirectXTex\Include\DirectXTex.h"
-#include "Resource.h"
+#include "GameResource.h"
 #include "GraphicDevice_DX11.h"
 
 
@@ -9,7 +9,7 @@
 using namespace mh::enums;
 namespace mh::graphics
 {
-	class Texture : public Resource
+	class Texture : public GameResource
 	{
 	public:
 		Texture();

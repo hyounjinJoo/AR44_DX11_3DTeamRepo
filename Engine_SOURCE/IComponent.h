@@ -1,5 +1,5 @@
 #pragma once
-#include "Math.h"
+#include "SimpleMath.h"
 #include "Entity.h"
 
 namespace mh

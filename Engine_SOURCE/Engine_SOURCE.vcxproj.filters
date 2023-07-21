@@ -123,10 +123,10 @@
     <ClCompile Include="Application.cpp">
       <Filter>High Level Interface</Filter>
     </ClCompile>
-    <ClCompile Include="Math.cpp">
+    <ClCompile Include="SimpleMath.cpp">
       <Filter>Common\Math</Filter>
     </ClCompile>
-    <ClCompile Include="Time.cpp">
+    <ClCompile Include="TimeManager.cpp">
       <Filter>Time</Filter>
     </ClCompile>
     <ClCompile Include="Input.cpp">
@@ -135,7 +135,7 @@
     <ClCompile Include="Entity.cpp">
       <Filter>Common</Filter>
     </ClCompile>
-    <ClCompile Include="Resource.cpp">
+    <ClCompile Include="GameResource.cpp">
       <Filter>Resource</Filter>
     </ClCompile>
     <ClCompile Include="Renderer.cpp">
@@ -149,12 +149,6 @@
     </ClCompile>
     <ClCompile Include="Shader.cpp">
       <Filter>Resource\Shader</Filter>
-    </ClCompile>
-    <ClCompile Include="Resources.cpp">
-      <Filter>Resource\Manager</Filter>
-    </ClCompile>
-    <ClCompile Include="IComponent.cpp">
-      <Filter>Component</Filter>
     </ClCompile>
     <ClCompile Include="Material.cpp">
       <Filter>Resource\Material</Filter>
@@ -272,6 +266,13 @@
     <ClCompile Include="GPUBuffer.cpp">
       <Filter>Graphics\Buffer</Filter>
     </ClCompile>
+    <ClCompile Include="GameResources.cpp" />
+    <ClCompile Include="EnginePCH.cpp">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="IComponent.cpp">
+      <Filter>Component\Transform</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CommonInclude.h">
@@ -280,10 +281,10 @@
     <ClInclude Include="Application.h">
       <Filter>High Level Interface</Filter>
     </ClInclude>
-    <ClInclude Include="Math.h">
+    <ClInclude Include="SimpleMath.h">
       <Filter>Common\Math</Filter>
     </ClInclude>
-    <ClInclude Include="Time.h">
+    <ClInclude Include="TimeManager.h">
       <Filter>Time</Filter>
     </ClInclude>
     <ClInclude Include="Input.h">
@@ -292,13 +293,13 @@
     <ClInclude Include="Entity.h">
       <Filter>Common</Filter>
     </ClInclude>
-    <ClInclude Include="Resource.h">
+    <ClInclude Include="GameResource.h">
       <Filter>Resource</Filter>
     </ClInclude>
     <ClInclude Include="Graphics.h">
       <Filter>Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="Engine.h">
+    <ClInclude Include="EnginePCH.h">
       <Filter>Common</Filter>
     </ClInclude>
     <ClInclude Include="Enums.h">
@@ -315,9 +316,6 @@
     </ClInclude>
     <ClInclude Include="Shader.h">
       <Filter>Resource\Shader</Filter>
-    </ClInclude>
-    <ClInclude Include="Resources.h">
-      <Filter>Resource\Manager</Filter>
     </ClInclude>
     <ClInclude Include="IComponent.h">
       <Filter>Component</Filter>
@@ -438,9 +436,10 @@
     <ClInclude Include="GPUBuffer.h">
       <Filter>Graphics\Buffer</Filter>
     </ClInclude>
+    <ClInclude Include="GameResources.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Math.inl">
+    <None Include="SimpleMath.inl">
       <Filter>Common\Math</Filter>
     </None>
   </ItemGroup>

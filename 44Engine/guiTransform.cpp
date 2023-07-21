@@ -1,10 +1,12 @@
+#include "ClientPCH.h"
+
 #include "guiTransform.h"
 #include "Transform.h"
 
 namespace gui
 {
 	Transform::Transform()
-		: IComponent(eComponentType::Transform)
+		: IComponent(mh::enums::eComponentType::Transform)
 	{
 		SetName("Transform");
 		SetSize(ImVec2(200.0f, 120.0f));
@@ -23,7 +25,7 @@ namespace gui
 		if (GetTarget() == nullptr)
 			return;
 
-		ya::Transform* tr = GetTarget()->GetComponent<ya::Transform>();
+		mh::Transform* tr = GetTarget()->GetComponent<mh::Transform>();
 
 		mPosisition = tr->GetPosition();
 		mRotation = tr->GetRotation();
@@ -45,7 +47,7 @@ namespace gui
 
 		if (GetTarget())
 		{
-			ya::Transform* tr = GetTarget()->GetComponent<ya::Transform>();
+			mh::Transform* tr = GetTarget()->GetComponent<mh::Transform>();
 
 			tr->SetPosition(mPosisition);
 			tr->SetRotation(mRotation);

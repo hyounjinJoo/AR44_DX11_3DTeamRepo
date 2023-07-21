@@ -1,10 +1,10 @@
 #pragma once
 #include "Graphics.h"
-#include "Resource.h"
+#include "GameResource.h"
 
 namespace mh::graphics
 {
-	class ComputeShader : public Resource
+	class ComputeShader : public GameResource
 	{
 	public:
 		ComputeShader(UINT _threadGroupX, UINT _threadGroupY, UINT _threadGroupZ);

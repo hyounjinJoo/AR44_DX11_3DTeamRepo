@@ -1,3 +1,5 @@
+#include "EnginePCH.h"
+
 #include "Texture.h"
 
 #ifdef _DEBUG
@@ -12,7 +14,7 @@ namespace mh::graphics
 	
 
 	Texture::Texture()
-		: Resource(eResourceType::Texture)
+		: GameResource(eResourceType::Texture)
 		, mDesc{}
 		, mTexture(nullptr)
 	{
@@ -135,7 +137,7 @@ namespace mh::graphics
 	HRESULT Texture::Load(const std::wstring& _name)
 	{
 		std::filesystem::path parentPath = std::filesystem::current_path();
-		std::wstring _fullPath = parentPath.wstring() + L"\\Resources\\" + _name;
+		std::wstring _fullPath = parentPath.wstring() + L"\\GameResources\\" + _name;
 
 		LoadFile(_fullPath);
 		InitializeResource();

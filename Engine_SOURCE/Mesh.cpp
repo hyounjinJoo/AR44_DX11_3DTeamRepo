@@ -1,3 +1,6 @@
+
+#include "EnginePCH.h"
+
 #include "Mesh.h"
 #include "Renderer.h"
 #include "GraphicDevice_DX11.h"
@@ -5,7 +8,7 @@
 namespace mh
 {
 	Mesh::Mesh()
-		: Resource(eResourceType::Mesh)
+		: GameResource(eResourceType::Mesh)
 		, mVBDesc{}
 		, mIBDesc{}
 		, mIndexCount(0)
@@ -25,7 +28,7 @@ namespace mh
 
 	bool Mesh::CreateVertexBuffer(void* _data, UINT _count)
 	{
-		// ¹öÅØ½º ¹öÆÛ
+		// ë²„í…ìŠ¤ ë²„í¼
 		mVBDesc.ByteWidth = sizeof(renderer::Vertex) * _count;
 		mVBDesc.BindFlags = D3D11_BIND_FLAG::D3D11_BIND_VERTEX_BUFFER;
 		mVBDesc.Usage = D3D11_USAGE::D3D11_USAGE_DEFAULT;
@@ -34,7 +37,7 @@ namespace mh
 		D3D11_SUBRESOURCE_DATA subData = {};
 		subData.pSysMem = _data;
 
-		if (!GetDevice()->CreateBuffer(&mVBDesc, &subData, mVertexBuffer.GetAddressOf()))
+		if (!graphics::GetDevice()->CreateBuffer(&mVBDesc, &subData, mVertexBuffer.GetAddressOf()))
 			return false;
 
 		return true;
@@ -51,7 +54,7 @@ namespace mh
 		D3D11_SUBRESOURCE_DATA subData = {};
 		subData.pSysMem = _data;
 
-		if (!GetDevice()->CreateBuffer(&mIBDesc, &subData, mIndexBuffer.GetAddressOf()))
+		if (!graphics::GetDevice()->CreateBuffer(&mIBDesc, &subData, mIndexBuffer.GetAddressOf()))
 		{
 			return false;
 		}
@@ -61,21 +64,21 @@ namespace mh
 
 	void Mesh::BindBuffer() const
 	{
-		// Input Assembeler ´Ü°è¿¡ ¹öÅØ½º¹öÆÛ Á¤º¸ ÁöÁ¤
+		// Input Assembeler ë‹¨ê³„ì— ë²„í…ìŠ¤ë²„í¼ ì •ë³´ ì§€ì •
 		UINT stride = sizeof(renderer::Vertex);
 		UINT offset = 0;
 
-		GetDevice()->BindVertexBuffer(0, 1, mVertexBuffer.GetAddressOf(), &stride, &offset);
-		GetDevice()->BindIndexBuffer(mIndexBuffer.Get(), DXGI_FORMAT_R32_UINT, 0);
+		graphics::GetDevice()->BindVertexBuffer(0, 1, mVertexBuffer.GetAddressOf(), &stride, &offset);
+		graphics::GetDevice()->BindIndexBuffer(mIndexBuffer.Get(), DXGI_FORMAT_R32_UINT, 0);
 	}
 
 	void Mesh::Render() const
 	{
-		GetDevice()->DrawIndexed(mIndexCount, 0, 0);
+		graphics::GetDevice()->DrawIndexed(mIndexCount, 0, 0);
 	}
 	
 	void Mesh::RenderInstanced(UINT _count) const
 	{
-		GetDevice()->DrawIndexedInstanced(mIndexCount, _count, 0, 0, 0);
+		graphics::GetDevice()->DrawIndexedInstanced(mIndexCount, _count, 0, 0, 0);
 	}
 }

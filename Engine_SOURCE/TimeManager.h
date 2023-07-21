@@ -1,9 +1,9 @@
 #pragma once
-#include "Engine.h"
+#include "EnginePCH.h"
 
 namespace mh
 {
-	class Time
+	class TimeManager
 	{
 	public:
 		static __forceinline float DeltaTime() { return mDeltaTime; }

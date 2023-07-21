@@ -1,4 +1,6 @@
-#pragma once
+#ifndef ENGINE_PCH
+#define ENGINE_PCH
+
 #include <string>
 #include <Windows.h>
 #include <assert.h>
@@ -16,11 +18,12 @@
 #include <memory>
 #include <filesystem>
 
-
 #include "CommonInclude.h"
 #include "Enums.h"
 
 
 
+
+#endif
 
 

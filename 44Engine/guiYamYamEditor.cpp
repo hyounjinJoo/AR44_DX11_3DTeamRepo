@@ -1,3 +1,5 @@
+#include "ClientPCH.h"
+
 #include "guiYamYamEditor.h"
 
 namespace gui

@@ -6,7 +6,7 @@
 #pragma comment (lib, "d3d11.lib")
 #pragma comment (lib, "d3dcompiler.lib")
 
-#include "Math.h"
+#include "SimpleMath.h"
 
 #define CB_GETBINDSLOT(name) __CBUFFERBINDSLOT__##name##__
 #define CBUFFER(name, slot) static const int CB_GETBINDSLOT(name) = slot; struct alignas(16) name

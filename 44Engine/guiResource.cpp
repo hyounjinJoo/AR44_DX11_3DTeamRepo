@@ -1,18 +1,20 @@
+#include "ClientPCH.h"
+
 #include "guiResource.h"
 
 namespace gui
 {
-	Resource::Resource()
+	GameResource::GameResource()
 	{
 
 	}
 
-	Resource::~Resource()
+	GameResource::~GameResource()
 	{
 
 	}
 
-	void Resource::FixedUpdate()
+	void GameResource::FixedUpdate()
 	{
 		if (mTarget == nullptr)
 			return;

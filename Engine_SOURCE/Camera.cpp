@@ -1,3 +1,6 @@
+
+#include "EnginePCH.h"
+
 #include "Camera.h"
 #include "Transform.h"
 #include "GameObject.h"
@@ -71,7 +74,7 @@ namespace mh
 		// Crate Translate view matrix
 		mView = math::Matrix::Identity;
 		mView *= math::Matrix::CreateTranslation(-pos);
-		//È¸Àü Á¤º¸
+		//íšŒì „ ì •ë³´
 
 		math::Vector3 up = tr->Up();
 		math::Vector3 right = tr->Right();

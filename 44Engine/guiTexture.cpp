@@ -1,3 +1,5 @@
+#include "ClientPCH.h"
+
 #include "guiTexture.h"
 #include "Texture.h"
 
@@ -15,8 +17,8 @@ namespace gui
 
 	void Texture::Update()
 	{
-		ya::graphics::Texture* targetTex 
-			= dynamic_cast<ya::graphics::Texture*>(GetTarget());
+		mh::graphics::Texture* targetTex 
+			= dynamic_cast<mh::graphics::Texture*>(GetTarget());
 
 		if (targetTex == nullptr)
 			return;

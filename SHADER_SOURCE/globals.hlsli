@@ -1,5 +1,5 @@
 #include "Light.hlsli"
-#include "tParticle.hlsli"
+#include "Particle.hlsli"
 #include "Resource.hlsli"
 #include "Sampler.hlsli"
 //#include "ConstantBuffer.hlsli"

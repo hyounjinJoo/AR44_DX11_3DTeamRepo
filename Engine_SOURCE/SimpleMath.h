@@ -1,8 +1,5 @@
 #pragma once
-#include "Engine.h"
-#include <math.h>
-
-
+#include "EnginePCH.h"
 
 #if __has_include("DirectXMath.h")
 // In this case, DirectXMath is coming from Windows SDK.
@@ -12,8 +9,6 @@
 #include <DirectXPackedVector.h>
 #include <DirectXCollision.h>
 #endif
-
-#define XM_CONSTEXPR
 
 using namespace DirectX;
 using namespace DirectX::PackedVector;
@@ -46,7 +41,7 @@ namespace mh::math
         Rectangle(Rectangle&&) = default;
         Rectangle& operator=(Rectangle&&) = default;
 
-        operator RECT() noexcept { RECT rct; rct.left = x; rct.top = y; rct.right = (x + width); rct.bottom = (y + height); return rct; }
+        operator RECT() noexcept { RECT rct = {}; rct.left = x; rct.top = y; rct.right = (x + width); rct.bottom = (y + height); return rct; }
 #ifdef __cplusplus_winrt
         operator Windows::Foundation::Rect() noexcept { return Windows::Foundation::Rect(float(x), float(y), float(width), float(height)); }
 #endif
@@ -980,5 +975,5 @@ namespace mh::math
         static RECT __cdecl ComputeTitleSafeArea(UINT backBufferWidth, UINT backBufferHeight) noexcept;
     };
 
-#include "Math.inl"
+#include "SimpleMath.inl"
 }

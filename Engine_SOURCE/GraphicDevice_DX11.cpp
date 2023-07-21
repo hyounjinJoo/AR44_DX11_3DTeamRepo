@@ -1,10 +1,13 @@
+
+#include "EnginePCH.h"
+
 #include "GraphicDevice_DX11.h"
 
 #include "Application.h"
 #include "ConstantBuffer.h"
 #include "Mesh.h"
 #include "Renderer.h"
-#include "Resources.h"
+#include "GameResources.h"
 #include "Texture.h"
 
 extern mh::Application application;
@@ -15,11 +18,11 @@ namespace mh::graphics
 	{
 		graphics::GetDevice() = this;
 
-		/// 1. Device ¿Í SwapChain »ý¼ºÇÑ´Ù.
-		/// 2. ¹é¹öÆÛ¿¡ ½ÇÁ¦·Î ·»´õ¸µÇÒ ·»´õÅ¸°Ù ºä¸¦ »ý¼ºÇØ¾ßÇÑ´Ù.
-		/// 3. È­¸éÀ» Å¬¸®¾î ÇØÁà¾ßÇÑ´Ù. ºäÆ÷Æ®¸¦ »ý¼ºÇØÁà¾ß ÇÑ´Ù.
-		/// 4. ¸ÅÇÁ·¹ÀÓ¸¶´Ù À§¿¡¼­ »ý¼ºÇÑ ·»´õÅ¸°Ùºä¿¡ ·»´õ¸µÇØÁÖ¾î¾ßÇÑ´Ù.
-		/// 5. SwapchainÀ» ÀÌ¿ëÇÏ¿© ÃÖÁ¾ µð¹ÙÀÌ½º(µð½ºÇÃ·¹ÀÌ)¿¡ È­¸éÀ» ±×·ÁÁà¾ßÇÑ´Ù.
+		/// 1. Device ì™€ SwapChain ìƒì„±í•œë‹¤.
+		/// 2. ë°±ë²„í¼ì— ì‹¤ì œë¡œ ë Œë”ë§í•  ë Œë”íƒ€ê²Ÿ ë·°ë¥¼ ìƒì„±í•´ì•¼í•œë‹¤.
+		/// 3. í™”ë©´ì„ í´ë¦¬ì–´ í•´ì¤˜ì•¼í•œë‹¤. ë·°í¬íŠ¸ë¥¼ ìƒì„±í•´ì¤˜ì•¼ í•œë‹¤.
+		/// 4. ë§¤í”„ë ˆìž„ë§ˆë‹¤ ìœ„ì—ì„œ ìƒì„±í•œ ë Œë”íƒ€ê²Ÿë·°ì— ë Œë”ë§í•´ì£¼ì–´ì•¼í•œë‹¤.
+		/// 5. Swapchainì„ ì´ìš©í•˜ì—¬ ìµœì¢… ë””ë°”ì´ìŠ¤(ë””ìŠ¤í”Œë ˆì´)ì— í™”ë©´ì„ ê·¸ë ¤ì¤˜ì•¼í•œë‹¤.
 		HWND hwnd = application.GetHwnd();
 
 		// Device, Device Context
@@ -64,7 +67,7 @@ namespace mh::graphics
 		// Get rendertarget for swapchain
 		hr = mSwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (void**)renderTarget.GetAddressOf());
 		mRenderTargetTexture->Create(renderTarget);
-		Resources::Insert<Texture>(L"RenderTargetTexture", mRenderTargetTexture);
+		GameResources::Insert<Texture>(L"RenderTargetTexture", mRenderTargetTexture);
 
 		D3D11_TEXTURE2D_DESC depthBuffer = {};
 		depthBuffer.BindFlags = D3D11_BIND_FLAG::D3D11_BIND_DEPTH_STENCIL;

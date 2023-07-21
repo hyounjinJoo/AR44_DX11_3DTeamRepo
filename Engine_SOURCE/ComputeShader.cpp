@@ -1,10 +1,12 @@
+#include "EnginePCH.h"
+
 #include "ComputeShader.h"
 #include "GraphicDevice_DX11.h"
 
 namespace mh::graphics
 {
 	ComputeShader::ComputeShader(UINT _threadGroupX, UINT _threadGroupY, UINT _threadGroupZ)
-		: Resource(enums::eResourceType::ComputeShader)
+		: GameResource(enums::eResourceType::ComputeShader)
 		, mCSBlob(nullptr)
 		, mCS(nullptr)
 		, mThreadGroupCountX(_threadGroupX)
@@ -16,7 +18,7 @@ namespace mh::graphics
 	{
 	}
 	ComputeShader::ComputeShader()
-		: Resource(enums::eResourceType::ComputeShader)
+		: GameResource(enums::eResourceType::ComputeShader)
 		, mCSBlob(nullptr)
 		, mCS(nullptr)
 		, mThreadGroupCountX(0)

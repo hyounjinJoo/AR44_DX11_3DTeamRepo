@@ -1,3 +1,6 @@
+
+#include "EnginePCH.h"
+
 #include "Camera.h"
 #include "CameraScript.h"
 
@@ -9,7 +12,7 @@
 #include "PlayScene.h"
 
 #include "Renderer.h"
-#include "Resources.h"
+#include "GameResources.h"
 
 #include "SceneManager.h"
 #include "SpriteRenderer.h"
@@ -75,7 +78,7 @@ namespace mh
 		if (mActiveScene)
 			mActiveScene->OnExit();
 
-		// ¹Ù²ğ¶§ dontDestory ¿ÀºêÁ§Æ®´Â ´ÙÀ½¾ÀÀ¸·Î °°ÀÌ ³Ñ°ÜÁà¾ßÇÑ´Ù.
+		// ë°”ë€”ë•Œ dontDestory ì˜¤ë¸Œì íŠ¸ëŠ” ë‹¤ìŒì”¬ìœ¼ë¡œ ê°™ì´ ë„˜ê²¨ì¤˜ì•¼í•œë‹¤.
 		std::vector<GameObject*> gameObjs 
 			= mActiveScene->GetDontDestroyGameObjects();
 		mActiveScene = mScenes[(UINT)_Type];
