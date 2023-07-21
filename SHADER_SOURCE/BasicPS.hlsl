@@ -4,7 +4,6 @@ struct VSIn
 {
 	float4 Position : POSITION;
 	float2 UV : TEXCOORD;
-	float3 Normal : NORMAL;
 	float3 Tangent : TANGENT;
 	float3 Normal : NORMAL;
 	float3 BiNormal : BINORMAL;
@@ -37,11 +36,11 @@ struct VSOut
 
 float4 main(VSOut In) : SV_Target
 {
-	float4 outColor = float4(1.0f, 1.0f, 1.0f, 1.0f);
+	float4 OutColor = float4(1.0f, 1.0f, 1.0f, 1.0f);
 
 	if (usedAlbedo == 1)
 	{
-		outColor = albedoTexture.Sample(anisotropicSampler, In.UV);
+		OutColor = albedoTexture.Sample(anisotropicSampler, In.UV);
 	}
 
 	float3 vNormal = In.ViewNormal;
@@ -71,11 +70,11 @@ float4 main(VSOut In) : SV_Target
 		CalculateLight3D(In.ViewPos, vNormal, i, lightColor);
 	}
 
-	outColor.rgb = (outColor.rgb * lightColor.diffuse.rgb
+	OutColor.rgb = (OutColor.rgb * lightColor.diffuse.rgb
 					+ lightColor.specular.rgb
-					+ (outColor.xyz * lightColor.ambient.rgb));
+					+ (OutColor.xyz * lightColor.ambient.rgb));
 
 
-	return outColor;
+	return OutColor;
         
 }
