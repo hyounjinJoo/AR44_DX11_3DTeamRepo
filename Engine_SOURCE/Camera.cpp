@@ -1,3 +1,6 @@
+
+#include "EnginePCH.h"
+
 #include "Camera.h"
 #include "Transform.h"
 #include "GameObject.h"
@@ -17,7 +20,7 @@ namespace mh
 	math::Matrix Camera::gProjection = math::Matrix::Identity;
 
 	Camera::Camera()
-		: Component(enums::eComponentType::Camera)
+		: IComponent(enums::eComponentType::Camera)
 		, mType(eProjectionType::Orthographic)
 		, mAspectRatio(1.0f)
 		, mNear(1.0f)
@@ -71,7 +74,7 @@ namespace mh
 		// Crate Translate view matrix
 		mView = math::Matrix::Identity;
 		mView *= math::Matrix::CreateTranslation(-pos);
-		//È¸Àü Á¤º¸
+		//íšŒì „ ì •ë³´
 
 		math::Vector3 up = tr->Up();
 		math::Vector3 right = tr->Right();
@@ -113,7 +116,7 @@ namespace mh
 	void Camera::RegisterCameraInRenderer()
 	{
 		enums::eSceneType type = SceneManager::GetActiveScene()->GetSceneType();
-		renderer::cameras[(UINT)type].push_back(this);
+		renderer::gCameras[(UINT)type].push_back(this);
 	}
 
 	void Camera::TurnLayerMask(enums::eLayerType _layer, bool _enable)

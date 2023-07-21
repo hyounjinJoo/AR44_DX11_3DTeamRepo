@@ -1,17 +1,18 @@
 // Material Default Texture
-Texture2D defaultTexture : register(t0);
+Texture2D albedoTexture : register(t0);
+Texture2D normalTexture : register(t1);
 
 //Atlas texture
 Texture2D atlasTexture : register(t12);
 
 // Light
-//StructuredBuffer<LightAttribute> lightAttributes : register(t13);
-//StructuredBuffer<LightAttribute> lightAttributes3D : register(t14);
+//StructuredBuffer<tLightAttribute> lightAttributes : register(t13);
+//StructuredBuffer<tLightAttribute> lightAttributes3D : register(t14);
 
-// Particle
-//StructuredBuffer<Particle> particleBuffer : register(t15);
-//RWStructuredBuffer<Particle> ParticleBuffer : register(u0);
-//RWStructuredBuffer<ParticleShared> ParticleSharedBuffer : register(u1);
+// tParticle
+//StructuredBuffer<tParticle> particleBuffer : register(t15);
+//RWStructuredBuffer<tParticle> ParticleBuffer : register(u0);
+//RWStructuredBuffer<tParticleShared> ParticleSharedBuffer : register(u1);
 
 // noise
 //Texture2D NoiseTexture : register(t16);

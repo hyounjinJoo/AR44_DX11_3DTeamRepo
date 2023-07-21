@@ -1,9 +1,10 @@
 #pragma once
-#include "Graphics.h"
+#include "GPUBuffer.h"
 
 namespace mh::graphics
 {
-	class ConstantBuffer : GpuBuffer
+	class ConstantBuffer : 
+		public GPUBuffer
 	{
 	public:
 		ConstantBuffer(eCBType _type);

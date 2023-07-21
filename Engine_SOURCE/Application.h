@@ -1,5 +1,5 @@
 #pragma once
-#include "Engine.h"
+#include "EnginePCH.h"
 #include "Graphics.h"
 #include "GraphicDevice_DX11.h"
 
@@ -11,7 +11,7 @@ namespace mh
 		Application();
 		~Application();
 
-		virtual void Initalize();
+		virtual void Initialize();
 		virtual void Update();
 		virtual void FixedUpdate();
 		virtual void Render();

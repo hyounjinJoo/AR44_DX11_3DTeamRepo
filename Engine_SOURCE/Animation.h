@@ -9,11 +9,11 @@ namespace mh
 	public:
 		struct tSprite
 		{
-			math::Vector2 LeftTop;	// ÁÂÃø »ó´Ü ÁÂÇ¥
-			math::Vector2 Size;		// ÁÂÃø»ó´ÜºÎÅÍ Àß¶ó³¾ °¡·Î ¼¼·ÎÀÇ ÇÈ¼¿ ±æÀÌ
-			math::Vector2 Offset;		// ·»´õ¸µ À§Ä¡ Á¶Á¤ÇÏ±âÀ§ÇÑ ÁÂÇ¥
-			math::Vector2 AtlasSize;  // ÅØ½ºÃ³ ÀÌ¹ÌÁöÀÇ Å©±â
-			float Duration;		// ÇÁ·¹ÀÓ°£¿¡ ½Ã°£ °£°İ
+			math::Vector2 LeftTop;	// ì¢Œì¸¡ ìƒë‹¨ ì¢Œí‘œ
+			math::Vector2 Size;		// ì¢Œì¸¡ìƒë‹¨ë¶€í„° ì˜ë¼ë‚¼ ê°€ë¡œ ì„¸ë¡œì˜ í”½ì…€ ê¸¸ì´
+			math::Vector2 Offset;		// ë Œë”ë§ ìœ„ì¹˜ ì¡°ì •í•˜ê¸°ìœ„í•œ ì¢Œí‘œ
+			math::Vector2 AtlasSize;  // í…ìŠ¤ì²˜ ì´ë¯¸ì§€ì˜ í¬ê¸°
+			float Duration;		// í”„ë ˆì„ê°„ì— ì‹œê°„ ê°„ê²©
 
 			tSprite()
 				: LeftTop(0.0f, 0.0f)

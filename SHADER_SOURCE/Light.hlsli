@@ -8,7 +8,7 @@ struct LightColor
 	float4 ambient;
 };
 
-struct LightAttribute
+struct tLightAttribute
 {
 	LightColor color;
 	float4 position;
@@ -20,8 +20,8 @@ struct LightAttribute
 	int padding;
 };
 
-StructuredBuffer<LightAttribute> lightAttributes : register(t13);
-StructuredBuffer<LightAttribute> lightAttributes3D : register(t14);
+StructuredBuffer<tLightAttribute> lightAttributes : register(t13);
+StructuredBuffer<tLightAttribute> lightAttributes3D : register(t14);
 
 //2D
 void CalculateLight(in out LightColor pLightColor, float3 position, int idx)
@@ -56,48 +56,48 @@ static float3 globalLightAmb = float3(0.15f, 0.15f, 0.15f);
 void CalculateLight3D(float3 viewPos, float3 viewNormal, int lightIdx, inout LightColor lightColor)
 {
     
-    //    //±¤¿øÀÇ ¹æÇâÀ» ¿ùµå ÁÂÇ¥°è¿¡¼­ ºä ÁÂÇ¥°è·Î º¯È¯
+    //    //ê´‘ì›ì˜ ë°©í–¥ì„ ì›”ë“œ ì¢Œí‘œê³„ì—ì„œ ë·° ì¢Œí‘œê³„ë¡œ ë³€í™˜
     //float3 ViewLightDir = normalize(mul(float4(lightAttribute.direction.xyz, 0.0f), view));
     
     //float intensity = saturate(dot(-ViewLightDir, In.ViewNormal));
     //float fSpecPow = 0.0f;
     
-    ////ºä ½ºÆäÀÌ½º »ó¿¡¼­ Ç¥¸éÀÇ ºûÀÇ ¼¼±â¸¦ ±¸ÇØ¾ßÇÔ
+    ////ë·° ìŠ¤í˜ì´ìŠ¤ ìƒì—ì„œ í‘œë©´ì˜ ë¹›ì˜ ì„¸ê¸°ë¥¼ êµ¬í•´ì•¼í•¨
     //float3 vViewReflect
     //= normalize(ViewLightDir + 2.0f * dot(-ViewLightDir, In.ViewNormal) * In.ViewNormal);
     
-    //// ½ÃÁ¡¿¡¼­ Ç¥¸éÀ» ÇâÇÏ´Â º¤ÅÍ
+    //// ì‹œì ì—ì„œ í‘œë©´ì„ í–¥í•˜ëŠ” ë²¡í„°
     //float3 vEye = normalize(In.ViewPos);
     
-    ////½Ã¼± º¤ÅÍ¶û ¹İ»çº¤ÅÍ¸¦ ³»ÀûÇØ¼­ ¹İ»ç±¤ÀÇ ¼¼±â¸¦ ±¸ÇÑ´Ù.
+    ////ì‹œì„  ë²¡í„°ë‘ ë°˜ì‚¬ë²¡í„°ë¥¼ ë‚´ì í•´ì„œ ë°˜ì‚¬ê´‘ì˜ ì„¸ê¸°ë¥¼ êµ¬í•œë‹¤.
     //fSpecPow = saturate(dot(-vEye, vViewReflect));
     //fSpecPow = pow(fSpecPow, 30);
     
-    LightAttribute lightInfo = lightAttributes[lightIdx];
+    tLightAttribute lightInfo = lightAttributes[lightIdx];
     
     float3 viewLightDir = (float3) 0.0f;
 
-        //view space »ó¿¡¼­ ºûÀÇ ¼¼±â¸¦ ±¸ÇÔ
+        //view space ìƒì—ì„œ ë¹›ì˜ ì„¸ê¸°ë¥¼ êµ¬í•¨
     float fDiffPow = 0.0f;
     float fSpecPow = 0.0f;
     
     // Directional
     if (0 == lightInfo.type)
     {
-        viewLightDir = normalize(mul(float4(lightInfo.direction.xyz, 0.0f), view));
+        viewLightDir = normalize(mul(float4(lightInfo.direction.xyz, 0.0f), view).xyz);
 
-        //view space »ó¿¡¼­ ºûÀÇ ¼¼±â¸¦ ±¸ÇÔ
+        //view space ìƒì—ì„œ ë¹›ì˜ ì„¸ê¸°ë¥¼ êµ¬í•¨
         fDiffPow = saturate(dot(-viewLightDir, viewNormal));
         fSpecPow = 0.0f;
         
-        // ¹İ»ç±¤ ¼¼±â¸¦ ±¸ÇÔ
-        // Ç¥¸éÀÇ ºûÀÇ ¹İ»çº¤ÅÍ
+        // ë°˜ì‚¬ê´‘ ì„¸ê¸°ë¥¼ êµ¬í•¨
+        // í‘œë©´ì˜ ë¹›ì˜ ë°˜ì‚¬ë²¡í„°
         float3 viewReflect = normalize(viewLightDir + 2.0f * dot(-viewLightDir, viewNormal) * viewNormal);
         
-        // ½ÃÁ¡¿¡¼­ Ç¥¸éÀ» ÇâÇÏ´Â º¤ÅÍ
+        // ì‹œì ì—ì„œ í‘œë©´ì„ í–¥í•˜ëŠ” ë²¡í„°
         float3 vEye = normalize(viewPos);
     
-        //½Ã¼± º¤ÅÍ¶û ¹İ»çº¤ÅÍ¸¦ ³»ÀûÇØ¼­ ¹İ»ç±¤ÀÇ ¼¼±â¸¦ ±¸ÇÑ´Ù.
+        //ì‹œì„  ë²¡í„°ë‘ ë°˜ì‚¬ë²¡í„°ë¥¼ ë‚´ì í•´ì„œ ë°˜ì‚¬ê´‘ì˜ ì„¸ê¸°ë¥¼ êµ¬í•œë‹¤.
         fSpecPow = saturate(dot(-vEye, viewReflect));
         fSpecPow = pow(fSpecPow, 30);
         
@@ -112,32 +112,32 @@ void CalculateLight3D(float3 viewPos, float3 viewNormal, int lightIdx, inout Lig
     // point
     else if (1 == lightInfo.type)
     {
-        // view space »ó¿¡¼­ ±¤¿øÀÇ À§Ä¡¸¦ ¾Ë¾Æ³½´Ù.
-        float3 vLightViewPos = mul(float4(lightInfo.position.xyz, 1.0f), view);
+        // view space ìƒì—ì„œ ê´‘ì›ì˜ ìœ„ì¹˜ë¥¼ ì•Œì•„ë‚¸ë‹¤.
+        float3 vLightViewPos = mul(float4(lightInfo.position.xyz, 1.0f), view).xyz;
         
-        // ±¤¿øÀÇ À§Ä¡¿¡¼­ Ç¥¸éÀ» ÇâÇÏ´Â º¤ÅÍ
+        // ê´‘ì›ì˜ ìœ„ì¹˜ì—ì„œ í‘œë©´ì„ í–¥í•˜ëŠ” ë²¡í„°
         viewLightDir = viewPos - vLightViewPos;
         
-        //±¤¿ø¿¡¼­ Ç¥¸é±îÁöÀÇ °Å¸®¸¦ ±¸ÇÑ´Ù.
+        //ê´‘ì›ì—ì„œ í‘œë©´ê¹Œì§€ì˜ ê±°ë¦¬ë¥¼ êµ¬í•œë‹¤.
         float dist = length(viewLightDir);
         
-        // ±¤¿ø¿¡¼­ Ç¥¸éÀ» ÇâÇÏ´Â ´ÜÀ§º¤ÅÍ¸¦ ±¸ÇÑ´Ù.
+        // ê´‘ì›ì—ì„œ í‘œë©´ì„ í–¥í•˜ëŠ” ë‹¨ìœ„ë²¡í„°ë¥¼ êµ¬í•œë‹¤.
         viewLightDir = normalize(viewLightDir);
         
-        // ¹İ°æ´ëºñ °Å¸®¿¡ µû¸¥ ºûÀÇ ¼¼±â ºñÀ²
+        // ë°˜ê²½ëŒ€ë¹„ ê±°ë¦¬ì— ë”°ë¥¸ ë¹›ì˜ ì„¸ê¸° ë¹„ìœ¨
         float ratio = cos(saturate(dist / lightInfo.radius) * 3.1415926535 * 0.5f);
         
-        //view space »ó¿¡¼­ Ç¥¸éÀÇ ºûÀÇ ¼¼±â¸¦ ±¸ÇÔ
+        //view space ìƒì—ì„œ í‘œë©´ì˜ ë¹›ì˜ ì„¸ê¸°ë¥¼ êµ¬í•¨
         fDiffPow = saturate(dot(-viewLightDir, viewNormal)) * ratio;
         
-        // ¹İ»ç±¤ÀÇ ¼¼±â¸¦ ±¸ÇÔ
-        // Ç¥¸éÀÇ ºûÀÇ ¹İ»çº¤ÅÍ
+        // ë°˜ì‚¬ê´‘ì˜ ì„¸ê¸°ë¥¼ êµ¬í•¨
+        // í‘œë©´ì˜ ë¹›ì˜ ë°˜ì‚¬ë²¡í„°
         float3 viewReflect = normalize(viewLightDir + 2.0f * dot(-viewLightDir, viewNormal) * viewNormal);
         
-        // ½ÃÁ¡¿¡¼­ Ç¥¸éÀ» ÇâÇÏ´Â º¤ÅÍ
+        // ì‹œì ì—ì„œ í‘œë©´ì„ í–¥í•˜ëŠ” ë²¡í„°
         float3 vEye = normalize(viewPos);
         
-        //½Ã¼± º¤ÅÍ¶û ¹İ»çº¤ÅÍ¸¦ ³»ÀûÇØ¼­ ¹İ»ç±¤ÀÇ ¼¼±â¸¦ ±¸ÇÑ´Ù.
+        //ì‹œì„  ë²¡í„°ë‘ ë°˜ì‚¬ë²¡í„°ë¥¼ ë‚´ì í•´ì„œ ë°˜ì‚¬ê´‘ì˜ ì„¸ê¸°ë¥¼ êµ¬í•œë‹¤.
         fSpecPow = saturate(dot(-vEye, viewReflect));
         fSpecPow = pow(fSpecPow, 30);
     }
@@ -146,13 +146,13 @@ void CalculateLight3D(float3 viewPos, float3 viewNormal, int lightIdx, inout Lig
         
     }
     
-    // ÃÖÁ¾ ³­¹İ»ç±¤
+    // ìµœì¢… ë‚œë°˜ì‚¬ê´‘
     lightColor.diffuse += lightInfo.color.diffuse * fDiffPow;
         
-        // Á¤¹İ»ç±¤
+        // ì •ë°˜ì‚¬ê´‘
     lightColor.specular += lightInfo.color.specular * fSpecPow;
         
-        // ÁÖº¯±¤
+        // ì£¼ë³€ê´‘
     lightColor.ambient = lightInfo.color.ambient;
 }
 

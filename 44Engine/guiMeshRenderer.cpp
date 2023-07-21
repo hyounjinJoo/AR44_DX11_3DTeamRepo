@@ -1,18 +1,21 @@
+
+#include "ClientPCH.h"
+
 #include "guiMeshRenderer.h"
-#include "yaMeshRenderer.h"
+#include "MeshRenderer.h"
 #include "guiEditor.h"
 #include "guiListWidget.h"
-#include "yaResources.h"
-#include "yaResource.h"
+#include "GameResources.h"
+#include "GameResource.h"
 #include "guiInspector.h"
-#include "yaSpriteRenderer.h"
+#include "SpriteRenderer.h"
 
 extern gui::Editor editor;
 
 namespace gui
 {
 	MeshRenderer::MeshRenderer()
-		: Component(eComponentType::MeshRenderer)
+		: IComponent(eComponentType::MeshRenderer)
 	{
 		SetName("MeshRenderer");
 		SetSize(ImVec2(200.0f, 120.0f));
@@ -25,18 +28,18 @@ namespace gui
 
 	void MeshRenderer::FixedUpdate()
 	{
-		Component::FixedUpdate();
+		IComponent::FixedUpdate();
 
 		if (GetTarget())
 		{
-			ya::MeshRenderer* meshRenderer
-				= GetTarget()->GetComponent<ya::MeshRenderer>();
+			mh::MeshRenderer* meshRenderer
+				= GetTarget()->GetComponent<mh::MeshRenderer>();
 
 			if (meshRenderer == nullptr)
 				return;
 
-			//ya::SpriteRenderer* spriteRenderer
-			//	= GetTarget()->GetComponent<ya::SpriteRenderer>();
+			//mh::SpriteRenderer* spriteRenderer
+			//	= GetTarget()->GetComponent<mh::SpriteRenderer>();
 
 			//if (spriteRenderer == nullptr)
 			//	return;
@@ -49,7 +52,7 @@ namespace gui
 
 	void MeshRenderer::Update()
 	{
-		Component::Update();
+		IComponent::Update();
 
 		if (mMesh == nullptr
 			|| mMaterial == nullptr)
@@ -70,9 +73,9 @@ namespace gui
 			listUI->SetState(eState::Active);
 			
 
-			//¸ğµç ¸Ş½¬ÀÇ ¸®¼Ò½º¸¦ °¡Á®¿Í¾ßÇÑ´Ù.
-			std::vector<std::shared_ptr<ya::Mesh>> meshes 
-				= ya::Resources::Finds<ya::Mesh>();
+			//ëª¨ë“  ë©”ì‰¬ì˜ ë¦¬ì†ŒìŠ¤ë¥¼ ê°€ì ¸ì™€ì•¼í•œë‹¤.
+			std::vector<std::shared_ptr<mh::Mesh>> meshes 
+				= mh::GameResources::Finds<mh::Mesh>();
 
 			std::vector<std::wstring> name;
 			for (auto mesh : meshes)
@@ -95,9 +98,9 @@ namespace gui
 		{
 			ListWidget* listUI = editor.GetWidget<ListWidget>("ListWidget");
 			listUI->SetState(eState::Active);
-			//¸ğµç ¸Ş½¬ÀÇ ¸®¼Ò½º¸¦ °¡Á®¿Í¾ßÇÑ´Ù.
-			std::vector<std::shared_ptr<ya::Material>> materials
-				= ya::Resources::Finds<ya::Material>();
+			//ëª¨ë“  ë©”ì‰¬ì˜ ë¦¬ì†ŒìŠ¤ë¥¼ ê°€ì ¸ì™€ì•¼í•œë‹¤.
+			std::vector<std::shared_ptr<mh::graphics::Material>> materials
+				= mh::GameResources::Finds<mh::graphics::Material>();
 
 			std::vector<std::wstring> wName;
 			for (auto material : materials)
@@ -113,24 +116,24 @@ namespace gui
 
 	void MeshRenderer::LateUpdate()
 	{
-		Component::LateUpdate();
+		IComponent::LateUpdate();
 	}
 
 	void MeshRenderer::SetMesh(std::string key)
 	{
 		std::wstring wKey(key.begin(), key.end());
-		std::shared_ptr<ya::Mesh> mesh = ya::Resources::Find<ya::Mesh>(wKey);
+		std::shared_ptr<mh::Mesh> mesh = mh::GameResources::Find<mh::Mesh>(wKey);
 
 		Inspector* inspector = editor.GetWidget<Inspector>("Inspector");
-		inspector->GetTargetGameObject()->GetComponent<ya::MeshRenderer>()->SetMesh(mesh);
+		inspector->GetTargetGameObject()->GetComponent<mh::MeshRenderer>()->SetMesh(mesh);
 	}
 
 	void MeshRenderer::SetMaterial(std::string key)
 	{
 		std::wstring wKey(key.begin(), key.end());
-		std::shared_ptr<ya::Material> material = ya::Resources::Find<ya::Material>(wKey);
+		std::shared_ptr<mh::graphics::Material> material = mh::GameResources::Find<mh::graphics::Material>(wKey);
 
 		Inspector* inspector = editor.GetWidget<Inspector>("Inspector");
-		inspector->GetTargetGameObject()->GetComponent<ya::MeshRenderer>()->SetMaterial(material);
+		inspector->GetTargetGameObject()->GetComponent<mh::MeshRenderer>()->SetMaterial(material);
 	}
 }

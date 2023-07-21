@@ -1,3 +1,5 @@
+#include "EnginePCH.h"
+
 #include "Collider2D.h"
 #include "GameObject.h"
 #include "Renderer.h"
@@ -7,7 +9,7 @@ namespace mh
 {
 	UINT Collider2D::gColliderNumber = 0;
 	Collider2D::Collider2D()
-		: Component(enums::eComponentType::Collider)
+		: IComponent(enums::eComponentType::Collider)
 		, mType(enums::eColliderType::None)
 		, mTransform(nullptr)
 		, mSize(math::Vector2::One)
@@ -54,14 +56,14 @@ namespace mh
 
 		math::Matrix worldMatrix = scaleMatrix * rotationMatrix * positionMatrix;
 
-		graphics::DebugMesh meshAttribute = {};
+		graphics::tDebugMesh meshAttribute = {};
 		meshAttribute.position = math::Vector3(colliderPos.x, colliderPos.y, colliderPos.z);
 		meshAttribute.radius = mRadius;
 		meshAttribute.rotatation = rotation;
 		meshAttribute.scale = scale;
 		meshAttribute.type = mType;
 
-		renderer::debugMeshes.push_back(meshAttribute);
+		renderer::gDebugMeshes.push_back(meshAttribute);
 	}
 
 	void Collider2D::Render()

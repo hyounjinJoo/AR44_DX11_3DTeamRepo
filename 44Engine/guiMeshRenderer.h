@@ -1,11 +1,11 @@
 #pragma once
 #include "guiComponent.h"
-#include "yaMaterial.h"
-#include "yaMesh.h"
+#include "Material.h"
+#include "Mesh.h"
 
 namespace gui
 {
-	class MeshRenderer : public Component
+	class MeshRenderer : public IComponent
 	{
 	public:
 		MeshRenderer();
@@ -19,7 +19,7 @@ namespace gui
 		void SetMaterial(std::string key);
 
 	private:
-		std::shared_ptr<ya::graphics::Material> mMaterial;
-		std::shared_ptr<ya::Mesh> mMesh;
+		std::shared_ptr<mh::graphics::Material> mMaterial;
+		std::shared_ptr<mh::Mesh> mMesh;
 	};
 }

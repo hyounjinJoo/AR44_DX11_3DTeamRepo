@@ -1,10 +1,12 @@
 #pragma once
-#include "Component.h"
+#include "IComponent.h"
 #include "Animation.h"
 
 namespace mh
 {
-	class Animator : public Component
+	using namespace mh::math;
+
+	class Animator : public IComponent
 	{
 	public:
 		struct tEvents

@@ -1,9 +1,11 @@
+#include "EnginePCH.h"
+
 #include "Animator.h"
 
 namespace mh
 {
 	Animator::Animator()
-		: Component(enums::eComponentType::Animator)
+		: IComponent(enums::eComponentType::Animator)
 		, mAnimations{}
 		, mEvents{}
 		, mActiveAnimation(nullptr)

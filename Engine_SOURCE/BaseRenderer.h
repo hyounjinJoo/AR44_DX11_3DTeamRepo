@@ -1,11 +1,11 @@
 #pragma once
-#include "Component.h"
+#include "IComponent.h"
 #include "Mesh.h"
 #include "Material.h"
 
 namespace mh
 {
-	class BaseRenderer : public Component
+	class BaseRenderer : public IComponent
 	{
 	public:
 		BaseRenderer(enums::eComponentType _type);

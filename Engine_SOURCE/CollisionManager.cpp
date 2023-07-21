@@ -1,3 +1,5 @@
+#include "EnginePCH.h"
+
 #include "CollisionManager.h"
 #include "Scene.h"
 #include "SceneManager.h"
@@ -55,14 +57,14 @@ namespace mh
 
 		for (GameObject* left : lefts)
 		{
-			if (left->GetState() != GameObject::Active)
+			if (left->GetState() != GameObject::eState::Active)
 				continue;
 			if (left->GetComponent<Collider2D>() == nullptr)
 				continue;
 
 			for (GameObject* right : rights)
 			{
-				if (right->GetState() != GameObject::Active)
+				if (right->GetState() != GameObject::eState::Active)
 					continue;
 				if (right->GetComponent<Collider2D>() == nullptr)
 					continue;

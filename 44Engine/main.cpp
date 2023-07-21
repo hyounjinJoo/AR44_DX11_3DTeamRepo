@@ -1,10 +1,9 @@
-﻿// 44Engine.cpp : 애플리케이션에 대한 진입점을 정의합니다.
-//
+#include "ClientPCH.h"
 
-#include "framework.h"
-#include "44Engine.h"
-#include "yaApplication.h"
-#include "yaSceneManager.h"
+// 44Engine.cpp : 애플리케이션에 대한 진입점을 정의합니다.
+//
+#include "Application.h"
+#include "SceneManager.h"
 #include "guiEditor.h"
 
 #include "imgui.h"
@@ -27,7 +26,7 @@ WCHAR gTitle[MAX_LOADSTRING];                  // 제목 표시줄 텍스트입�
 WCHAR gWindowClass[MAX_LOADSTRING];            // 기본 창 클래스 이름입니다.
 
 
-ya::Application application;
+mh::Application application;
 gui::Editor editor;
 
 // 이 코드 모듈에 포함된 함수의 선언을 전달합니다:
@@ -85,7 +84,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
         }
     }
 
-    ya::SceneManager::Release();
+    mh::SceneManager::Release();
     application.Release();
     editor.Release();
     return (int) msg.wParam;
@@ -146,8 +145,8 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
    UpdateWindow(hWnd);
 
    application.SetWindow(hWnd, 1600, 900);
-   application.Initalize();
-   editor.Initalize();
+   application.Initialize();
+   editor.Initialize();
 
    return TRUE;
 }

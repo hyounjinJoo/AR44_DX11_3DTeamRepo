@@ -1,21 +1,21 @@
 #pragma once
 #include "guiWidget.h"
-#include "yaResource.h"
+#include "GameResource.h"
 
 namespace gui
 {
-	class Resource : public Widget
+	class GameResource : public Widget
 	{
 	public:
-		Resource();
-		~Resource();
+		GameResource();
+		~GameResource();
 
 		virtual void FixedUpdate() override;
-
-		void SetTarget(ya::Resource* target) { mTarget = target; }
-		ya::Resource* GetTarget() const { return mTarget; }
+		
+		void SetTarget(mh::GameResource* target) { mTarget = target; }
+		mh::GameResource* GetTarget() const { return mTarget; }
 
 	private:
-		ya::Resource* mTarget;
+		mh::GameResource* mTarget;
 	};
 }

@@ -1,9 +1,11 @@
+#include "EnginePCH.h"
+
 #include "Application.h"
 #include "Renderer.h"
-#include "Time.h"
+#include "TimeManager.h"
 #include "Input.h"
 #include "SceneManager.h"
-#include "Resources.h"
+#include "GameResources.h"
 #include "CollisionManager.h"
 #include "Fmod.h"
 #include "FontWrapper.h"
@@ -13,7 +15,7 @@ namespace mh
 	Application::Application()
 		: mHwnd(nullptr)
 		, mHdc(nullptr)
-		, mHeight(1600)//È­¸é ÇØ»óµµ ¸ô¶ó¼­ 0¸»°í 1600/900»çÀÌÁî·Î ÀÏ´Ü ÃÊ±âÈ­
+		, mHeight(1600)//í™”ë©´ í•´ìƒë„ ëª°ë¼ì„œ 0ë§ê³  1600/900ì‚¬ì´ì¦ˆë¡œ ì¼ë‹¨ ì´ˆê¸°í™”
 		, mWidth(900)
 	{
 
@@ -24,23 +26,23 @@ namespace mh
 
 	}
 
-	void Application::Initalize()
+	void Application::Initialize()
 	{
-		Time::Initialize();
+		TimeManager::Initialize();
 		Input::Initialize();
 		Fmod::Initialize();
 		FontWrapper::Initialize();
 
 		CollisionManager::Initialize();
 		renderer::Initialize();
-		SceneManager::Initalize();
+		SceneManager::Initialize();
 	}
 
-	// °ÔÀÓ ·ÎÁ÷ Ä³¸¯ÅÍ ÀÌµ¿ µîµî 
+	// ê²Œìž„ ë¡œì§ ìºë¦­í„° ì´ë™ ë“±ë“± 
 	// CPU UPDATE
 	void Application::Update()
 	{
-		Time::Update();
+		TimeManager::Update();
 		Input::Update();
 		CollisionManager::Update();
 		SceneManager::Update();
@@ -55,7 +57,7 @@ namespace mh
 
 	void Application::Render()
 	{
-		Time::Render(mHdc);
+		TimeManager::Render(mHdc);
 
 		graphicDevice->Clear();
 		graphicDevice->AdjustViewPorts();
@@ -84,7 +86,7 @@ namespace mh
 
 	void Application::Release()
 	{
-		Resources::deleteTest();
+		GameResources::deleteTest();
 		Fmod::Release();
 		FontWrapper::Release();
 	}
@@ -99,7 +101,7 @@ namespace mh
 			mHeight = _height;
 
 
-			graphics::ValidationMode vaildationMode = graphics::ValidationMode::Disabled;
+			graphics::eValidationMode vaildationMode = graphics::eValidationMode::Disabled;
 			graphicDevice = std::make_unique<graphics::GraphicDevice_DX11>();
 			//graphics::GetDevice() = graphicDevice.get();
 		}

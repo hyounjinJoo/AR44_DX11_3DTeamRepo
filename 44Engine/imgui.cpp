@@ -7,7 +7,7 @@
 // - Call and read ImGui::ShowDemoWindow() in imgui_demo.cpp. All applications in examples/ are doing that.
 // Read imgui.cpp for details, links and comments.
 
-// Resources:
+// GameResources:
 // - FAQ                   http://dearimgui.com/faq
 // - Homepage & latest     https://github.com/ocornut/imgui
 // - Releases & changelog  https://github.com/ocornut/imgui/releases
@@ -988,8 +988,8 @@ CODE
 #define IMGUI_DEBUG_INI_SETTINGS    0   // Save additional comments in .ini file (particularly helps for Docking, but makes saving slower)
 
 // When using CTRL+TAB (or Gamepad Square+L/R) we delay the visual a little in order to reduce visual noise doing a fast switch.
-static const float NAV_WINDOWING_HIGHLIGHT_DELAY            = 0.20f;    // Time before the highlight and screen dimming starts fading in
-static const float NAV_WINDOWING_LIST_APPEAR_DELAY          = 0.15f;    // Time before the window list starts to appear
+static const float NAV_WINDOWING_HIGHLIGHT_DELAY            = 0.20f;    // TimeManager before the highlight and screen dimming starts fading in
+static const float NAV_WINDOWING_LIST_APPEAR_DELAY          = 0.15f;    // TimeManager before the window list starts to appear
 
 // Window resizing from edges (when io.ConfigWindowsResizeFromEdges = true and ImGuiBackendFlags_HasMouseCursors is set in io.BackendFlags by backend)
 static const float WINDOWS_HOVER_PADDING                    = 4.0f;     // Extend outside window for hovering/resizing (maxxed with TouchPadding) and inside windows for borders. Affect FindHoveredWindow().
@@ -4242,7 +4242,7 @@ ImDrawData* ImGui::GetDrawData()
 
 double ImGui::GetTime()
 {
-    return GImGui->Time;
+    return GImGui->TimeManager;
 }
 
 int ImGui::GetFrameCount()
@@ -4597,7 +4597,7 @@ void ImGui::NewFrame()
     // Load settings on first frame, save settings when modified (after a delay)
     UpdateSettings();
 
-    g.Time += g.IO.DeltaTime;
+    g.TimeManager += g.IO.DeltaTime;
     g.WithinFrameScope = true;
     g.FrameCount += 1;
     g.TooltipOverrideCount = 0;
@@ -4782,7 +4782,7 @@ void ImGui::NewFrame()
 
     // Mark all windows as not visible and compact unused memory.
     IM_ASSERT(g.WindowsFocusOrder.Size <= g.Windows.Size);
-    const float memory_compact_start_time = (g.GcCompactAll || g.IO.ConfigMemoryCompactTimer < 0.0f) ? FLT_MAX : (float)g.Time - g.IO.ConfigMemoryCompactTimer;
+    const float memory_compact_start_time = (g.GcCompactAll || g.IO.ConfigMemoryCompactTimer < 0.0f) ? FLT_MAX : (float)g.TimeManager - g.IO.ConfigMemoryCompactTimer;
     for (int i = 0; i != g.Windows.Size; i++)
     {
         ImGuiWindow* window = g.Windows[i];
@@ -6524,7 +6524,7 @@ bool ImGui::Begin(const char* name, bool* p_open, ImGuiWindowFlags flags)
         window->FlagsPreviousFrame = window->Flags;
         window->Flags = (ImGuiWindowFlags)flags;
         window->LastFrameActive = current_frame;
-        window->LastTimeActive = (float)g.Time;
+        window->LastTimeActive = (float)g.TimeManager;
         window->BeginOrderWithinParent = 0;
         window->BeginOrderWithinContext = (short)(g.WindowsActiveCount++);
     }
@@ -8457,8 +8457,8 @@ void ImGui::GetKeyChordName(ImGuiKeyChord key_chord, char* out_buf, int out_buf_
         GetKeyName((ImGuiKey)(key_chord & ~ImGuiMod_Mask_)));
 }
 
-// t0 = previous time (e.g.: g.Time - g.IO.DeltaTime)
-// t1 = current time (e.g.: g.Time)
+// t0 = previous time (e.g.: g.TimeManager - g.IO.DeltaTime)
+// t1 = current time (e.g.: g.TimeManager)
 // An event is triggered at:
 //  t = 0.0f     t = repeat_delay,    t = repeat_delay + repeat_rate*N
 int ImGui::CalcTypematicRepeatAmount(float t0, float t1, float repeat_delay, float repeat_rate)
@@ -9108,7 +9108,7 @@ static void ImGui::UpdateMouseInputs()
         if (io.MouseClicked[i])
         {
             bool is_repeated_click = false;
-            if ((float)(g.Time - io.MouseClickedTime[i]) < io.MouseDoubleClickTime)
+            if ((float)(g.TimeManager - io.MouseClickedTime[i]) < io.MouseDoubleClickTime)
             {
                 ImVec2 delta_from_click_pos = IsMousePosValid(&io.MousePos) ? (io.MousePos - io.MouseClickedPos[i]) : ImVec2(0.0f, 0.0f);
                 if (ImLengthSqr(delta_from_click_pos) < io.MouseDoubleClickMaxDist * io.MouseDoubleClickMaxDist)
@@ -9118,7 +9118,7 @@ static void ImGui::UpdateMouseInputs()
                 io.MouseClickedLastCount[i]++;
             else
                 io.MouseClickedLastCount[i] = 1;
-            io.MouseClickedTime[i] = g.Time;
+            io.MouseClickedTime[i] = g.TimeManager;
             io.MouseClickedPos[i] = io.MousePos;
             io.MouseClickedCount[i] = io.MouseClickedLastCount[i];
             io.MouseDragMaxDistanceAbs[i] = ImVec2(0.0f, 0.0f);
@@ -20360,13 +20360,13 @@ void ImGui::ShowStackToolWindow(bool* p_open)
     MetricsHelpMarker("Hover an item with the mouse to display elements of the ID Stack leading to the item's final ID.\nEach level of the stack correspond to a PushID() call.\nAll levels of the stack are hashed together to make the final ID of a widget (ID displayed at the bottom level of the stack).\nRead FAQ entry about the ID stack for details.");
 
     // CTRL+C to copy path
-    const float time_since_copy = (float)g.Time - tool->CopyToClipboardLastTime;
+    const float time_since_copy = (float)g.TimeManager - tool->CopyToClipboardLastTime;
     Checkbox("Ctrl+C: copy path to clipboard", &tool->CopyToClipboardOnCtrlC);
     SameLine();
     TextColored((time_since_copy >= 0.0f && time_since_copy < 0.75f && ImFmod(time_since_copy, 0.25f) < 0.25f * 0.5f) ? ImVec4(1.f, 1.f, 0.3f, 1.f) : ImVec4(), "*COPIED*");
     if (tool->CopyToClipboardOnCtrlC && IsKeyDown(ImGuiMod_Ctrl) && IsKeyPressed(ImGuiKey_C))
     {
-        tool->CopyToClipboardLastTime = (float)g.Time;
+        tool->CopyToClipboardLastTime = (float)g.TimeManager;
         char* p = g.TempBuffer.Data;
         char* p_end = p + g.TempBuffer.Size;
         for (int stack_n = 0; stack_n < tool->Results.Size && p + 3 < p_end; stack_n++)

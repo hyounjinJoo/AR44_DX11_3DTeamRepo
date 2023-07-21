@@ -3,26 +3,23 @@
 set Platform=%1
 set Configuration=%2
 
-:: ¸¸¾à Argument°¡ µé¾î¿ÀÁö ¾Ê¾ÒÀ» °æ¿ì ±âº»°ª ¼³Á¤
+:: ë§Œì•½ Argumentê°€ ë“¤ì–´ì˜¤ì§€ ì•Šì•˜ì„ ê²½ìš° ê¸°ë³¸ê°’ ì„¤ì •
 if "%Platform%"=="" set Platform=x64
 if "%Configuration%"=="" set Configuration=Debug
 
-:: ¸Ş½ÃÁö Ç¥½Ã
+:: ë©”ì‹œì§€ í‘œì‹œ
 echo Running %0... 
 echo Mode: %Configuration%
 
-:: *.dll ÆÄÀÏ º¹»ç
+:: *.dll íŒŒì¼ ë³µì‚¬
 xcopy /d /s /y /i /r .\External\dll\*.dll .\%Platform%\%Configuration%
 
-:: Shader ÆÄÀÏ º¹»ç
-if not exist .\%Platform%\%Configuration%\SHADER_SOURCE ( mkdir .\%Platform%\%Configuration%\SHADER_SOURCE )
-xcopy /d /s /y /i /r .\SHADER_SOURCE\*.hlsl .\%Platform%\%Configuration%\SHADER_SOURCE
-xcopy /d /s /y /i /r .\SHADER_SOURCE\*hlsli .\%Platform%\%Configuration%\SHADER_SOURCE
-
-:: Resource ÆÄÀÏ º¹»ç
-if not exist .\%Platform%\%Configuration%\Resources ( mkdir .\%Platform%\%Configuration%\Resources )
-xcopy /d /s /y /i /r .\Resources\* .\%Platform%\%Configuration%\Resources
 
 
-:: 1¹ø Argument¿¡ ¾Æ¹«°Íµµ µé¾î¿ÀÁö ¾Ê¾ÒÀ» °æ¿ì(== Á÷Á¢ ½ÇÇàÇßÀ» °æ¿ì) ÀÏ½Ã Á¤Áö
+:: GameResource íŒŒì¼ ë³µì‚¬
+if not exist .\%Platform%\%Configuration%\GameResources ( mkdir .\%Platform%\%Configuration%\GameResources )
+xcopy /d /s /y /i /r .\GameResources\* .\%Platform%\%Configuration%\GameResources
+
+
+:: 1ë²ˆ Argumentì— ì•„ë¬´ê²ƒë„ ë“¤ì–´ì˜¤ì§€ ì•Šì•˜ì„ ê²½ìš°(== ì§ì ‘ ì‹¤í–‰í–ˆì„ ê²½ìš°) ì¼ì‹œ ì •ì§€
 if "%2"=="" pause

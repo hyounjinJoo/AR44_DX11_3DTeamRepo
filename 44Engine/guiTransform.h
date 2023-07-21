@@ -3,7 +3,7 @@
 
 namespace gui
 {
-	class Transform : public Component
+	class Transform : public IComponent
 	{
 	public:
 		Transform();
@@ -14,9 +14,9 @@ namespace gui
 		virtual void LateUpdate() override;
 
 	private:
-		ya::math::Vector3 mPosisition;
-		ya::math::Vector3 mRotation;
-		ya::math::Vector3 mScale;
+		mh::math::Vector3 mPosisition;
+		mh::math::Vector3 mRotation;
+		mh::math::Vector3 mScale;
 	};
 
 }

@@ -1,3 +1,4 @@
+
 #pragma once
 
 namespace mh::enums
@@ -17,7 +18,7 @@ namespace mh::enums
 		Monster,
 		Player,
 
-		Particle,
+		tParticle,
 		PostProcess,
 		UI,
 		End = 16,
@@ -26,7 +27,7 @@ namespace mh::enums
 	enum class eComponentType
 	{
 		None,
-		Transform, // À§Ä¡ µ¥ÀÌÅÍ ¼öÁ¤ÇÏ´Â ÄÄÆ÷³ÍÆ®
+		Transform, // ìœ„ì¹˜ ë°ì´í„° ìˆ˜ì •í•˜ëŠ” ì»´í¬ë„ŒíŠ¸
 		Camera,
 		Mesh,
 		Collider,

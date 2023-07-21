@@ -1,10 +1,10 @@
 #pragma once
-#include "Resource.h"
+#include "GameResource.h"
 #include "Fmod.h"
 
 namespace mh
 {
-	class AudioClip : public Resource
+	class AudioClip : public GameResource
 	{
 	public:
 		AudioClip();

@@ -2,21 +2,21 @@
 #include "guiDebugObject.h"
 #include "guiEditorObject.h"
 #include "guiWidget.h"
-#include "yaGraphics.h"
+#include "Graphics.h"
 
 namespace gui
 {
 	class Editor
 	{
 	public:
-		void Initalize();
+		void Initialize();
 		void Run();
 
 		void Update();
 		void FixedUpdate();
 		void Render();
 		void Release();
-		void DebugRender(ya::graphics::DebugMesh& mesh);
+		void DebugRender(mh::graphics::tDebugMesh& mesh);
 
 		void ImGuiInitialize();
 		void ImGuiRun();

@@ -1,3 +1,5 @@
+#include "EnginePCH.h"
+
 #include "AudioListener.h"
 #include "Transform.h"
 #include "GameObject.h"
@@ -6,7 +8,7 @@
 namespace mh
 {
 	AudioListener::AudioListener()
-		: Component(enums::eComponentType::AudioListener)
+		: IComponent(enums::eComponentType::AudioListener)
 	{
 
 	}
