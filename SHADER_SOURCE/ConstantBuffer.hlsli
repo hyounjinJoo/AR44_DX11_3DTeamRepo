@@ -7,12 +7,10 @@ cbuffer Transform : register(b0)
 
 cbuffer MaterialData : register(b1)
 {
-    int cbiData;
-    float cbfData;
-    float2 cbxy;
-    float3 cbxyz;
-    float4 cbxyzw;
-    matrix cbmat;
+    uint usedAlbedo;
+    uint usedNormal;
+    uint padd1;
+    uint padd2;
 }
 
 cbuffer Grid : register(b2)
@@ -50,7 +48,7 @@ cbuffer ParticleSystem : register(b5)
     
     float startLifeTime;
     float deltaTime;
-    float elapsedTime; //´©Àû½Ã°£
+    float elapsedTime; //ëˆ„ì ì‹œê°„
     int padding;
 }
 

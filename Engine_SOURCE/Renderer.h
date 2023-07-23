@@ -37,18 +37,16 @@ namespace mh::renderer
 
 	CBUFFER(MaterialCB, CBSLOT_MATERIAL)
 	{
-		int		iData;
-		float	fData;
-		Vector2 XY;
-		Vector3 XYZ;
-		Vector4 XYZW;
-		Matrix	Matrix;
-
-		MaterialCB()
+		/*MaterialCB()
 			: iData(0)
 			, fData(0.f)
 		{
-		}
+		}*/
+		UINT UsedAlbedo;
+		UINT UsedNormal;
+
+		UINT Padd0;
+		UINT Padd1;
 	};
 
 	CBUFFER(GridCB, CBSLOT_GRID)

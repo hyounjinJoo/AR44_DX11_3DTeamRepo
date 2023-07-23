@@ -116,8 +116,8 @@ namespace mh::graphics
 
 	enum class eTextureSlot
 	{
-		T0,
-		T1,
+		Albedo,
+		Normal,
 		T2,
 		T3,
 		T4,

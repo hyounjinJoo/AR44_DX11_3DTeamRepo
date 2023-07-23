@@ -4,7 +4,9 @@ struct VSIn
 {
 	float4 Position : POSITION;
 	float2 UV : TEXCOORD;
+	float3 Tangent : TANGENT;
 	float3 Normal : NORMAL;
+	float3 BiNormal : BINORMAL;
 };
 
 struct VSOut
@@ -14,7 +16,9 @@ struct VSOut
     
 	float3 ViewPos : POSITION;
 	float3 ViewNormal : NORMAL;
-	float intensity : FOG;
+
+	float3 ViewTanget : TANGENT;
+	float3 ViewBiNormal : BINORMAL;
 };
 
 //diffuse
@@ -26,49 +30,51 @@ struct VSOut
 //static float3 globalLightColor = float3(1.0f, 1.0f, 1.0f);
 //static float3 globalLightAmb = float3(0.15f, 0.15f, 0.15f);
 
+// Material Default Texture
+//Texture2D albedoTexture : register(t0);
+//Texture2D normalTexture : register(t1);
+
 float4 main(VSOut In) : SV_Target
 {
-	float4 OutColor = float4(0.5f, 0.5f, 0.5f, 1.0f);
-    
+	float4 OutColor = float4(1.0f, 1.0f, 1.0f, 1.0f);
+
+	if (usedAlbedo == 1)
+	{
+		OutColor = albedoTexture.Sample(anisotropicSampler, In.UV);
+	}
+
+	float3 vNormal = In.ViewNormal;
+
+	if (usedNormal == 1)
+	{
+	// Î¨ºÏ≤¥Ïùò ÌëúÎ©¥Ïóê Ï†ÅÏö©Îê† ÌÉÑÏ††Ìä∏ Í≥µÍ∞Ñ Í∏∞Ï§Ä Î∞©Ìñ•Î≤°ÌÑ∞Î•º Í∞ÄÏ†∏Ïò®Îã§.
+			vNormal = normalTexture.Sample(anisotropicSampler, In.UV);
+
+	// 0~1Í∞íÏùÑ -1~1Ïùò Í∞íÏúºÎ°ú Î≥ÄÌôò
+			vNormal = (vNormal * 2.0f) - 1.0f;
+
+			float3x3 matTBN =
+			{
+				In.ViewTanget,
+				In.ViewBiNormal,
+				In.ViewNormal,
+			};
+
+		vNormal = normalize(mul(vNormal, matTBN));
+	}
+
 
 	LightColor lightColor = (LightColor)0.0f;
-
-
-	//void CalculateLight3D ( float3 viewPos, float3 viewNormal, int lightIdx, inout LightColor lightColor)
 	for (int i = 0; i < numberOfLight; i++)
 	{
-		CalculateLight3D(In.ViewPos, In.ViewNormal, i, lightColor);
+		CalculateLight3D(In.ViewPos, vNormal, i, lightColor);
 	}
 
 	OutColor.rgb = (OutColor.rgb * lightColor.diffuse.rgb
 					+ lightColor.specular.rgb
 					+ (OutColor.xyz * lightColor.ambient.rgb));
 
-	//tLightAttribute lightAttribute = lightAttributes[0];
 
-
-	////±§ø¯¿« πÊ«‚¿ª ø˘µÂ ¡¬«•∞Ëø°º≠ ∫‰ ¡¬«•∞Ë∑Œ ∫Ø»Ø
-	//float3 ViewLightDir = normalize(mul(float4(lightAttribute.direction.xyz, 0.0f), view));
-
-	//float intensity = saturate(dot(-ViewLightDir, In.ViewNormal));
-	//float fSpecPow = 0.0f;
-
-	////∫‰ Ω∫∆‰¿ÃΩ∫ ªÛø°º≠ «•∏È¿« ∫˚¿« ºº±‚∏¶ ±∏«ÿæﬂ«‘
-	//float3 vViewReflect
-	//= normalize(ViewLightDir + 2.0f * dot(-ViewLightDir, In.ViewNormal) * In.ViewNormal);
-
-	//// Ω√¡°ø°º≠ «•∏È¿ª «‚«œ¥¬ ∫§≈Õ
-	//float3 vEye = normalize(In.ViewPos);
-
-	////Ω√º± ∫§≈Õ∂˚ π›ªÁ∫§≈Õ∏¶ ≥ª¿˚«ÿº≠ π›ªÁ±§¿« ºº±‚∏¶ ±∏«—¥Ÿ.
-	//fSpecPow = saturate(dot(-vEye, vViewReflect));
-	//fSpecPow = pow(fSpecPow, 30);
-
-
-	//OutColor.rgb = (OutColor.rgb * lightAttribute.color.diffuse.rgb * intensity
-	//                + lightAttribute.color.specular.rgb * fSpecPow * 1.0f
-	//                + (OutColor.xyz * lightAttribute.color.ambient.rgb));
-    
 	return OutColor;
         
 }
