@@ -17,12 +17,12 @@ namespace mh
 		virtual void Render() override;
 
 		void SetMesh(const std::shared_ptr<Mesh> _mesh) { mMesh = _mesh; }
-		void SetMaterial(const std::shared_ptr <graphics::Material> _shader) { mMaterial = _shader; }
+		void SetMaterial(const std::shared_ptr <GPU::Material> _shader) { mMaterial = _shader; }
 		std::shared_ptr<Mesh> GetMesh() const { return mMesh; }
-		std::shared_ptr <graphics::Material> GetMaterial() const { return mMaterial; }
+		std::shared_ptr <GPU::Material> GetMaterial() const { return mMaterial; }
 
 	private:
 		std::shared_ptr <Mesh> mMesh;
-		std::shared_ptr <graphics::Material> mMaterial;
+		std::shared_ptr <GPU::Material> mMaterial;
 	};
 }

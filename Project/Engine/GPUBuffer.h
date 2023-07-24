@@ -1,9 +1,9 @@
 #pragma once
 #include "Entity.h"
 
-#include "Graphics.h"
+#include "define_GPU.h"
 
-namespace mh::graphics
+namespace mh::GPU
 {
 	class GPUBuffer
 		: public Entity

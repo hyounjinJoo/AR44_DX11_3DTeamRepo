@@ -194,7 +194,7 @@ loop
   mov r4.yzw, r4.yyzw
   mov r5.xyz, r5.xyzx
 
-#line 81 "C:\Users\ekdrn\source\repos\_AR44_DX11_3DTeam_Portfolio\Project\Engine\Default_HLSL\SH_Light.hlsli"
+#line 78 "C:\Users\ekdrn\source\repos\_AR44_DX11_3DTeam_Portfolio\Project\Engine\Default_HLSL\SH_Light.hlsli"
   ld_structured_indexable(structured_buffer, stride=96)(mixed,mixed,mixed,mixed) r9.x, r5.w, l(0), t13.xxxx  // r9.x <- lightInfo.color.diffuse.x
   ld_structured_indexable(structured_buffer, stride=96)(mixed,mixed,mixed,mixed) r9.y, r5.w, l(4), t13.xxxx  // r9.y <- lightInfo.color.diffuse.y
   ld_structured_indexable(structured_buffer, stride=96)(mixed,mixed,mixed,mixed) r9.z, r5.w, l(8), t13.xxxx  // r9.z <- lightInfo.color.diffuse.z
@@ -213,16 +213,16 @@ loop
   ld_structured_indexable(structured_buffer, stride=96)(mixed,mixed,mixed,mixed) r11.y, r5.w, l(80), t13.xxxx  // r11.y <- lightInfo.type
   ld_structured_indexable(structured_buffer, stride=96)(mixed,mixed,mixed,mixed) r11.z, r5.w, l(84), t13.xxxx  // r11.z <- lightInfo.radius
 
-#line 86
+#line 83
   mov r11.w, l(0)  // r11.w <- fDiffPow
 
-#line 87
+#line 84
   mov r12.x, l(0)  // r12.x <- fSpecPow
 
-#line 90
+#line 87
   if_z r11.y
 
-#line 92
+#line 89
     mul r12.yzw, r9.wwww, cb0[4].xxyz
     mul r13.xyz, r10.wwww, cb0[5].xyzx
     add r12.yzw, r12.yyzw, r13.xxyz
@@ -234,13 +234,13 @@ loop
     rsq r9.w, r9.w
     mul r12.yzw, r9.wwww, r12.yyzw  // r12.y <- viewLightDir.x; r12.z <- viewLightDir.y; r12.w <- viewLightDir.z
 
-#line 95
+#line 92
     mov r13.xyz, -r12.yzwy
     dp3 r9.w, r13.xyzx, r8.xyzx
     max r9.w, r9.w, l(0.000000)
     min r11.w, r9.w, l(1.000000)
 
-#line 100
+#line 97
     mov r13.xyz, -r12.yzwy
     dp3 r9.w, r13.xyzx, r8.xyzx
     mul r9.w, r9.w, l(2.000000)
@@ -250,31 +250,31 @@ loop
     rsq r9.w, r9.w
     mul r12.yzw, r9.wwww, r12.yyzw  // r12.y <- viewReflect.x; r12.z <- viewReflect.y; r12.w <- viewReflect.z
 
-#line 103
+#line 100
     dp3 r9.w, r7.xyzx, r7.xyzx
     rsq r9.w, r9.w
     mul r13.xyz, r7.xyzx, r9.wwww  // r13.x <- vEye.x; r13.y <- vEye.y; r13.z <- vEye.z
 
-#line 106
+#line 103
     mov r13.xyz, -r13.xyzx
     dp3 r9.w, r13.xyzx, r12.yzwy
     max r9.w, r9.w, l(0.000000)
     min r9.w, r9.w, l(1.000000)  // r9.w <- fSpecPow
 
-#line 107
+#line 104
     itof r10.w, l(30)
     log r9.w, r9.w
     mul r9.w, r9.w, r10.w
     exp r12.x, r9.w  // r12.x <- fSpecPow
 
-#line 116
+#line 113
   else   // Prior locations: r9.w <- lightInfo.direction.x; r10.w <- lightInfo.direction.y
 
-#line 118
+#line 115
     ieq r9.w, r11.y, l(1)
     if_nz r9.w
 
-#line 121
+#line 118
       mul r12.yzw, r6.wwww, cb0[4].xxyz
       mul r13.xyz, r7.wwww, cb0[5].xyzx
       add r12.yzw, r12.yyzw, r13.xxyz
@@ -283,20 +283,20 @@ loop
       mul r13.xyz, cb0[7].xyzx, l(1.000000, 1.000000, 1.000000, 0.000000)
       add r12.yzw, r12.yyzw, r13.xxyz  // r12.y <- vLightViewPos.x; r12.z <- vLightViewPos.y; r12.w <- vLightViewPos.z
 
-#line 124
+#line 121
       mov r12.yzw, -r12.yyzw
       add r12.yzw, r7.xxyz, r12.yyzw  // r12.y <- viewLightDir.x; r12.z <- viewLightDir.y; r12.w <- viewLightDir.z
 
-#line 127
+#line 124
       dp3 r6.w, r12.yzwy, r12.yzwy
       sqrt r6.w, r6.w  // r6.w <- dist
 
-#line 130
+#line 127
       dp3 r7.w, r12.yzwy, r12.yzwy
       rsq r7.w, r7.w
       mul r12.yzw, r7.wwww, r12.yyzw
 
-#line 133
+#line 130
       div r6.w, r6.w, r11.z
       max r6.w, r6.w, l(0.000000)
       min r6.w, r6.w, l(1.000000)
@@ -304,14 +304,14 @@ loop
       mul r6.w, r6.w, l(0.500000)
       sincos null, r6.w, r6.w  // r6.w <- ratio
 
-#line 136
+#line 133
       mov r11.xyz, -r12.yzwy
       dp3 r7.w, r11.xyzx, r8.xyzx
       max r7.w, r7.w, l(0.000000)
       min r7.w, r7.w, l(1.000000)
       mul r11.w, r6.w, r7.w
 
-#line 140
+#line 137
       mov r11.xyz, -r12.yzwy
       dp3 r6.w, r11.xyzx, r8.xyzx
       mul r6.w, r6.w, l(2.000000)
@@ -321,36 +321,36 @@ loop
       rsq r6.w, r6.w
       mul r8.xyz, r6.wwww, r8.xyzx  // r8.x <- viewReflect.x; r8.y <- viewReflect.y; r8.z <- viewReflect.z
 
-#line 143
+#line 140
       dp3 r6.w, r7.xyzx, r7.xyzx
       rsq r6.w, r6.w
       mul r7.xyz, r6.wwww, r7.xyzx  // r7.x <- vEye.x; r7.y <- vEye.y; r7.z <- vEye.z
 
-#line 146
+#line 143
       mov r7.xyz, -r7.xyzx
       dp3 r6.w, r7.xyzx, r8.xyzx
       max r6.w, r6.w, l(0.000000)
       min r6.w, r6.w, l(1.000000)  // r6.w <- fSpecPow
 
-#line 147
+#line 144
       itof r7.x, l(30)
       log r6.w, r6.w
       mul r6.w, r6.w, r7.x
       exp r12.x, r6.w  // r12.x <- fSpecPow
 
-#line 152
+#line 149
     endif 
   endif 
 
-#line 155
+#line 152
   mul r7.xyz, r9.xyzx, r11.wwww
   add r4.yzw, r4.yyzw, r7.xxyz
 
-#line 158
+#line 155
   mul r7.xyz, r10.xyzx, r12.xxxx
   add r5.xyz, r5.xyzx, r7.xyzx
 
-#line 161
+#line 158
   mov r6.xyz, r6.xyzx  // r6.x <- lightColor.ambient.x; r6.y <- lightColor.ambient.y; r6.z <- lightColor.ambient.z
 
 #line 70 "C:\Users\ekdrn\source\repos\_AR44_DX11_3DTeam_Portfolio\Project\Engine\Default_HLSL\PS_Basic.hlsl"
@@ -375,12 +375,12 @@ ret
 // Approximately 170 instruction slots used
 #endif
 
-const BYTE g_main[] =
+const BYTE PS_Basic[] =
 {
-     68,  88,  66,  67, 180, 212, 
-    164, 248, 198, 170, 185, 238, 
-    125,  38, 190, 153, 132, 121, 
-    147, 231,   1,   0,   0,   0, 
+     68,  88,  66,  67, 137, 212, 
+    156,  64, 220, 243, 199, 255, 
+    181,  11, 184, 182, 215, 171, 
+    166,  60,   1,   0,   0,   0, 
     228, 215,   0,   0,   6,   0, 
       0,   0,  56,   0,   0,   0, 
      12,   6,   0,   0, 228,   6, 
@@ -1909,10 +1909,10 @@ const BYTE g_main[] =
       0,   0,   0,   0,   0,   0, 
       0,   0,   0,   0,   0,   0, 
       0,   0, 148,  46,  49,   1, 
-     63,  63, 190, 100,   1,   0, 
-      0,   0, 159, 234,   9,  62, 
-    149, 207, 145,  64, 143, 135, 
-    172, 141,  54,  56,  60,  75, 
+    183, 109, 190, 100,   1,   0, 
+      0,   0, 238,  66,  51, 242, 
+    162,  96, 126,  78, 131, 204, 
+    233, 232,  90, 250, 127,  25, 
       0,   0,   0,   0,   0,   0, 
       0,   0,   1,   0,   0,   0, 
       1,   0,   0,   0,   0,   0, 
@@ -1995,7 +1995,7 @@ const BYTE g_main[] =
       0,   0,   0,   0,   0,   0, 
       0,   0,   0,   0, 254, 239, 
     254, 239,   1,   0,   0,   0, 
-    153,  47,   0,   0,   0,  67, 
+    147,  47,   0,   0,   0,  67, 
      58,  92,  85, 115, 101, 114, 
     115,  92, 101, 107, 100, 114, 
     110,  92, 115, 111, 117, 114, 
@@ -2095,9 +2095,9 @@ const BYTE g_main[] =
       3,   0, 220, 192,   1,   0, 
      35, 131,   3,   0, 117,  14, 
       0,   0,  80, 185,   1,   0, 
-    155, 253,   0,   0, 134, 226, 
+    117, 231,   0,   0, 134, 226, 
       2,   0, 100, 185,   1,   0, 
-    233,  83,   1,   0, 192,   1, 
+     39,  41,   1,   0, 192,   1, 
       2,   0,  56, 153,   1,   0, 
       0,  16,   0,   0,   0,   0, 
       0,   0,   0,   0,   0,   0, 
@@ -2597,13 +2597,12 @@ const BYTE g_main[] =
      35, 100, 101, 102, 105, 110, 
     101,  32,  83,  72,  95,  76, 
      73,  71,  72,  84,  13,  10, 
-     13,  10,  13,  10,  13,  10, 
-     35, 105, 110,  99, 108, 117, 
-    100, 101,  32,  34,  83,  72, 
-     95,  67, 111, 110, 115, 116, 
-     97, 110, 116,  66, 117, 102, 
-    102, 101, 114,  46, 104, 108, 
-    115, 108, 105,  34,  13,  10, 
+     13,  10,  35, 105, 110,  99, 
+    108, 117, 100, 101,  32,  34, 
+     83,  72,  95,  67, 111, 110, 
+    115, 116,  97, 110, 116,  66, 
+    117, 102, 102, 101, 114,  46, 
+    104, 108, 115, 108, 105,  34, 
      13,  10,  13,  10, 115, 116, 
     114, 117,  99, 116,  32,  76, 
     105, 103, 104, 116,  67, 111, 
@@ -3454,6 +3453,7 @@ const BYTE g_main[] =
      10, 125,  13,  10,  13,  10, 
      13,  10,  35, 101, 110, 100, 
     105, 102,  13,  10,   0,   0, 
+      0,   0,   0,   0,   0,   0, 
       0,   0,   0,   0,   0,   0, 
       0,   0,   0,   0,   0,   0, 
       0,   0,   0,   0,   0,   0, 
@@ -4725,8 +4725,8 @@ const BYTE g_main[] =
      32,  49,  41,  13,  10,   9, 
     123,  13,  10,   9,   9,  79, 
     117, 116,  27, 226,  48,   1, 
-    180,   1,   0,   0,  57, 153, 
-     35,  59,  14, 190, 217,   1, 
+    180,   1,   0,   0,  57, 226, 
+    119, 237,  41, 190, 217,   1, 
       1,   0,   0,   0,   0,   0, 
       0,   0,   0,   0,   0,   0, 
       0,   0,   0,   0,   0,   0, 
@@ -4784,8 +4784,8 @@ const BYTE g_main[] =
       0,   0,   0,   0,   0,   0, 
       0,   0, 243,   1,   0,   0, 
      40,   0,   0,   0,  27, 226, 
-     48,   1,   0, 172,  10, 143, 
-     56,  20,   0,   0, 144,   1, 
+     48,   1, 139, 186,  40, 223, 
+     50,  20,   0,   0, 144,   1, 
       0,   0,  99,   0,   0,   0, 
     243,   1,   0,   0,   0,   0, 
       0,   0,   0,   0,   0,   0, 
@@ -5605,9 +5605,9 @@ const BYTE g_main[] =
     172,  90, 174, 176,  89,  71, 
     128, 189, 113,  10, 114, 237, 
       0,   0, 144,   1,   0,   0, 
-     16,   1, 105,  49, 114, 154, 
-    172,  56, 147,  23,  54,  42, 
-     55, 196,  42,  50,  82, 252, 
+     16,   1,   0,   0, 139, 108, 
+    117, 114, 253, 143, 131, 171, 
+    250,  81, 185, 121, 217,  40, 
       0,   0,  86,   2,   0,   0, 
      16,   1, 180, 232, 182,   7, 
     116,  80, 210, 241, 110,  66, 
@@ -6321,7 +6321,7 @@ const BYTE g_main[] =
       0,   0,  20,   0,   0,   0, 
       1,   0,   0,   0,   0,  16, 
       0,   0,  48,   0,   0,   0, 
-     62,   0,   0,   0,   0,   0, 
+     59,   0,   0,   0,   0,   0, 
       0,   0,  36,   0,   0,   0, 
       0,   0,   0,   0,  20,   0, 
       0,   0,  48,   0,   0,   0, 
@@ -6396,13 +6396,13 @@ const BYTE g_main[] =
      22,  16,   0,   0,   1,   0, 
       0,   2,  14,   0,  23,  21, 
       0,  16,   0,   0,   3,   2, 
-    240, 211,   0,   0, 242, 241, 
+    176, 210,   0,   0, 242, 241, 
      10,   0,  24,  21,  24,  16, 
       0,   0,   1,   0,   1,   0, 
      10,   0,  24,  21,  25,  16, 
       0,   0,   1,   0,   0,   2, 
      14,   0,  23,  21,   0,   0, 
-      0,   0,  10,   2, 240, 211, 
+      0,   0,  10,   2, 176, 210, 
       0,   0, 242, 241,  10,   0, 
      24,  21,  27,  16,   0,   0, 
       1,   0,   1,   0,  10,   0, 
@@ -6789,13 +6789,12 @@ const BYTE g_main[] =
      35, 100, 101, 102, 105, 110, 
     101,  32,  83,  72,  95,  76, 
      73,  71,  72,  84,  13,  10, 
-     13,  10,  13,  10,  13,  10, 
-     35, 105, 110,  99, 108, 117, 
-    100, 101,  32,  34,  83,  72, 
-     95,  67, 111, 110, 115, 116, 
-     97, 110, 116,  66, 117, 102, 
-    102, 101, 114,  46, 104, 108, 
-    115, 108, 105,  34,  13,  10, 
+     13,  10,  35, 105, 110,  99, 
+    108, 117, 100, 101,  32,  34, 
+     83,  72,  95,  67, 111, 110, 
+    115, 116,  97, 110, 116,  66, 
+    117, 102, 102, 101, 114,  46, 
+    104, 108, 115, 108, 105,  34, 
      13,  10,  13,  10, 115, 116, 
     114, 117,  99, 116,  32,  76, 
     105, 103, 104, 116,  67, 111, 
@@ -8213,29 +8212,30 @@ const BYTE g_main[] =
       4,   0,   0,  43,   5,   0, 
       0, 100,   0,   0,   0,   0, 
       0,   0,   0, 250,   3,   0, 
-      0,  96,   4,   0,   0,  52, 
-     14,   0,   0,   0,   0,   0, 
-      0,   0,   0,   0,   0,  83, 
+      0,  96,   4,   0,   0,   0, 
+      0,   0,   0,   0,   0,   0, 
+      0,   0,   0,   0,   0,  77, 
      43,   0,   0,   0,   0,   0, 
       0,   0,   0,   0,   0,   0, 
       0,   0,   0,  43,   1,   0, 
-      0, 198,   0,   0,   0, 150, 
+      0, 198,   0,   0,   0, 144, 
      42,   0,   0,  46,   3,   0, 
-      0, 148,   3,   0,   0, 150, 
-     38,   0,   0, 144,   5,   0, 
-      0, 242,   5,   0,   0,   0, 
+      0, 148,   3,   0,   0,  52, 
+     14,   0,   0, 144,   5,   0, 
+      0, 242,   5,   0,   0, 144, 
+     38,   0,   0,   0,   0,   0, 
       0,   0,   0,   0,   0,   0, 
-      0,   0,   0,   0,   0,   0, 
-      0,   0,   0, 109,  34,   0, 
+      0,   0,   0, 103,  34,   0, 
       0,   0,   0,   0,   0,   0, 
       0,   0,   0,   0,   0,   0, 
       0,   0,   0,   0,   0,  99, 
-      0,   0,   0, 156,  39,   0, 
+      0,   0,   0, 150,  39,   0, 
       0,   0,   0,   0,   0,  86, 
       2,   0,   0, 194,   2,   0, 
       0, 144,   1,   0,   0, 243, 
       1,   0,   0,  63,  13,   0, 
       0,  25,   0,   0,   0,   0, 
+      0,   0,   0,   0,   0,   0, 
       0,   0,   0,   0,   0,   0, 
       0,   0,   0,   0,   0,   0, 
       0,   0,   0,   0,   0,   0, 
@@ -9077,10 +9077,10 @@ const BYTE g_main[] =
       0,   0,   0,   0,   0,   0, 
       0,   0,   0,   0,   0,   0, 
       0,   0, 148,  46,  49,   1, 
-     63,  63, 190, 100,   1,   0, 
-      0,   0, 159, 234,   9,  62, 
-    149, 207, 145,  64, 143, 135, 
-    172, 141,  54,  56,  60,  75, 
+    183, 109, 190, 100,   1,   0, 
+      0,   0, 238,  66,  51, 242, 
+    162,  96, 126,  78, 131, 204, 
+    233, 232,  90, 250, 127,  25, 
     163,   3,   0,   0,  47,  76, 
     105, 110, 107,  73, 110, 102, 
     111,   0,  47, 110,  97, 109, 
@@ -9337,9 +9337,9 @@ const BYTE g_main[] =
       0,   0, 116,   3,   0,   0, 
      95,   4,   0,   0,  88,   0, 
       0,   0,   0,   0,   0,   0, 
-     77,  48,   0,   0, 180,   1, 
+     71,  48,   0,   0, 180,   1, 
       0,   0, 234,   6,   0,   0, 
-    244,   0,   0,   0,  56,  20, 
+    244,   0,   0,   0,  50,  20, 
       0,   0,  40,   4,   0,   0, 
       5,   1,   0,   0, 249,   2, 
       0,   0, 188,   0,   0,   0, 

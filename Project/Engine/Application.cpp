@@ -104,9 +104,9 @@ namespace mh
 			mHeight = _height;
 
 
-			graphics::eValidationMode vaildationMode = graphics::eValidationMode::Disabled;
-			graphicDevice = std::make_unique<graphics::GraphicDevice_DX11>();
-			//graphics::GetDevice() = graphicDevice.get();
+			GPU::eValidationMode vaildationMode = GPU::eValidationMode::Disabled;
+			graphicDevice = std::make_unique<GPU::GraphicDevice_DX11>();
+			//GPU::GetDevice() = graphicDevice.get();
 		}
 
 		RECT rt = { 0, 0, (LONG)_width , (LONG)_height };

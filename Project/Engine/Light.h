@@ -1,6 +1,6 @@
 #pragma once
 #include "IComponent.h"
-#include "Graphics.h"
+#include "define_GPU.h"
 
 
 namespace mh
@@ -18,7 +18,7 @@ namespace mh
 		virtual void FixedUpdate() override;
 		virtual void Render() override;
 
-		graphics::tLightAttribute GetLightAttribute() { return mAttribute; }
+		GPU::tLightAttribute GetLightAttribute() { return mAttribute; }
 
 		void SetDiffuse(const Vector4& diffuse) { mAttribute.diffuse = diffuse; }
 		void SetSpecular(const Vector4& spec) { mAttribute.specular = spec; }
@@ -32,6 +32,6 @@ namespace mh
 		float GetAngle() { mAttribute.angle; }
 
 	private:
-		graphics::tLightAttribute mAttribute;
+		GPU::tLightAttribute mAttribute;
 	};
 }

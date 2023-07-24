@@ -83,9 +83,9 @@ namespace gui
 		//	End,
 		//};
 		AddResources<mh::Mesh>(pRootNode, "Mesh");
-		AddResources<mh::graphics::Texture>(pRootNode, "Texture");
-		AddResources<mh::graphics::Material>(pRootNode, "Materials");
-		AddResources<mh::Shader>(pRootNode, "Shaders");
+		AddResources<mh::GPU::Texture>(pRootNode, "Texture");
+		AddResources<mh::GPU::Material>(pRootNode, "Materials");
+		AddResources<mh::GPU::Shader>(pRootNode, "Shaders");
 	}
 
 	void Project::toInspector(void* data)

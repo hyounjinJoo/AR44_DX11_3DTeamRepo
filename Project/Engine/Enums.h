@@ -3,6 +3,19 @@
 
 namespace mh::enums
 {
+	enum class eResult
+	{
+		Success,
+		Fail_OpenFile,
+		
+		
+		Fail_Compile,
+		Fail_Create,
+
+		Fail_NotImplemented
+	};
+
+
 	enum class eSceneType
 	{
 		Tilte,

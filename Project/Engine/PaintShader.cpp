@@ -2,7 +2,7 @@
 
 #include "PaintShader.h"
 
-namespace mh::graphics
+namespace mh::GPU
 {
 	PaintShader::PaintShader()
 		: ComputeShader()

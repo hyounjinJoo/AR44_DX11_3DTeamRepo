@@ -1,9 +1,9 @@
 #pragma once
-#include "Graphics.h"
+#include "define_GPU.h"
 
 #include "Enums.h"
 
-namespace mh::graphics
+namespace mh::GPU
 {
 	using namespace mh::enums;
 	class Texture;
@@ -24,6 +24,10 @@ namespace mh::graphics
 		bool CreateDepthStencilView(ID3D11Resource* _pResource, const D3D11_DEPTH_STENCIL_VIEW_DESC* _pDesc, ID3D11DepthStencilView** _ppDepthStencilView);
 		bool CreateShaderResourceView(ID3D11Resource* _pResource, const D3D11_SHADER_RESOURCE_VIEW_DESC* _pDesc, ID3D11ShaderResourceView** _ppSRView);
 		bool CreateVertexShader(const void* _pShaderByteCode, SIZE_T _byteCodeLength, ID3D11ClassLinkage* _pClassLinkage, ID3D11VertexShader** _ppVertexShader);
+
+		bool CreateHullShader(const void* _pShaderByteCode, SIZE_T _byteCodeLength, ID3D11ClassLinkage* _pClassLinkage, ID3D11HullShader** _ppHullShader);
+		bool CreateDomainShader(const void* _pShaderByteCode, SIZE_T _byteCodeLength, ID3D11ClassLinkage* _pClassLinkage, ID3D11DomainShader** _ppDomainShader);
+
 		bool CreateGeometryShader(const void* pShaderByteCode, SIZE_T _byteCodeLength, ID3D11ClassLinkage* _pClassLinkage, ID3D11GeometryShader** _ppVertexShader);
 		bool CreatePixelShader(const void* _pShaderByteCode, SIZE_T _byteCodeLength, ID3D11ClassLinkage* _pClassLinkage, ID3D11PixelShader** _ppPixelShader);
 		bool CreateComputeShader(const void* _pShaderByteCode, SIZE_T _byteCodeLength, ID3D11ClassLinkage* _pClassLinkage, ID3D11ComputeShader** _ppComputeShader);

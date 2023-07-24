@@ -9,6 +9,7 @@
 #include "SimpleMath.h"
 
 #include "Enums.h"
+#include "define_Macro.h"
 
 #define CB_GETBINDSLOT(name) __CBUFFERBINDSLOT__##name##__
 #define CBUFFER(name, slot) static const int CB_GETBINDSLOT(name) = slot; struct alignas(16) name
@@ -21,7 +22,7 @@
 #define CBSLOT_PARTICLESYSTEM	5
 #define CBSLOT_NOISE			6
 
-namespace mh::graphics
+namespace mh::GPU
 {
 	using namespace mh::enums;
 	using namespace mh::math;
@@ -30,6 +31,16 @@ namespace mh::graphics
 		Disabled,
 		Enabled,
 		GPU,
+	};
+
+	enum class eGSStage
+	{
+		VS,
+		HS,
+		DS,
+		GS,
+		PS,
+		END
 	};
 
 	enum class eShaderStage
@@ -41,8 +52,36 @@ namespace mh::graphics
 		PS,
 		CS,
 		ALL,
-		Count,
+		END
 	};
+
+	namespace eShaderStageFlag
+	{
+		enum Flag
+		{
+			VS = BIT_MASK(0),
+			HS = BIT_MASK(1),
+			DS = BIT_MASK(2),
+			GS = BIT_MASK(3),
+			PS = BIT_MASK(4),
+			CS = BIT_MASK(5),
+			ALL = VS | HS | DS | GS | PS | CS,
+		};
+	}
+	using eShaderStageFlag_ = int;
+
+	namespace SHADER_VERSION
+	{
+		constexpr const char* GS[(int)eShaderStage::END]
+			= {
+			"vs_5_0",
+			"hs_5_0",
+			"ds_5_0",
+			"gs_5_0",
+			"ps_5_0"
+		};
+		constexpr const char* CS = "cs_5_0";
+	}
 
 	enum class eSamplerType
 	{

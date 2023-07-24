@@ -1,9 +1,11 @@
 #pragma once
-#include "Graphics.h"
+#include "define_GPU.h"
 #include "GameResource.h"
 
-namespace mh::graphics
+namespace mh::GPU
 {
+	using namespace mh::enums;
+
 	class ComputeShader : public GameResource
 	{
 	public:
@@ -13,11 +15,17 @@ namespace mh::graphics
 
 		virtual HRESULT Load(const std::filesystem::path& _path) override;
 
-		bool Create(const std::wstring& _file, const std::string& _funcName);
+		eResult CreateByCompile(const std::filesystem::path& _FullPath, const std::string& _funcName);
+		eResult CreateByHeader(const unsigned char* _pByteCode, size_t _ByteCodeSize);
+		eResult CreateByCSO(const std::filesystem::path& _FileName);
+
 		void OnExcute();
 
 		virtual void Binds();
 		virtual void Clear();
+
+	private:
+		eResult CreateShader(const void* _pByteCode, size_t _ByteCodeSize);
 
 	protected:
 		Microsoft::WRL::ComPtr<ID3DBlob> mCSBlob;

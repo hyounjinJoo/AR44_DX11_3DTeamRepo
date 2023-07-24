@@ -1,11 +1,21 @@
 #pragma once
 
-#include "Enums.h"
+#include "define_Macro.h"
 
-#define STRKEY constexpr const char*
+#include "Enums.h"
 
 namespace mh::define
 {
+	namespace strKey_Default
+	{
+		STRKEY_DECLARE(PointMesh);
+		STRKEY_DECLARE(RectMesh);
+		STRKEY_DECLARE(DebugRectMesh);
+		STRKEY_DECLARE(CircleMesh);
+		STRKEY_DECLARE(CubeMesh);
+		STRKEY_DECLARE(SphereMesh);
+	}
+
 
 	namespace DirName
 	{

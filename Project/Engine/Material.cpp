@@ -2,7 +2,7 @@
 
 #include "Material.h"
 
-namespace mh::graphics
+namespace mh::GPU
 {
     using namespace mh::math;
 
@@ -27,22 +27,22 @@ namespace mh::graphics
     {
         /*switch (_param)
         {
-        case mh::graphics::eGPUParam::Int:
+        case mh::GPU::eGPUParam::Int:
             mCB.iData = *static_cast<int*>(_data);
             break;
-        case mh::graphics::eGPUParam::Float:
+        case mh::GPU::eGPUParam::Float:
             mCB.fData = *static_cast<float*>(_data);
             break;
-        case mh::graphics::eGPUParam::Vector2:
+        case mh::GPU::eGPUParam::Vector2:
             mCB.XY = *static_cast<Vector2*>(_data);
             break;
-        case mh::graphics::eGPUParam::Vector3:
+        case mh::GPU::eGPUParam::Vector3:
             mCB.XYZ = *static_cast<Vector3*>(_data);
             break;
-        case mh::graphics::eGPUParam::Vector4:
+        case mh::GPU::eGPUParam::Vector4:
             mCB.XYZW = *static_cast<Vector4*>(_data);
             break;
-        case mh::graphics::eGPUParam::Matrix:
+        case mh::GPU::eGPUParam::Matrix:
             mCB.Matrix = *static_cast<Matrix*>(_data);
             break;
         default:

@@ -7,9 +7,6 @@
     <Filter Include="High Level Interface">
       <UniqueIdentifier>{ef2cc17f-dc8c-4713-acb5-11a43c435929}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Graphics">
-      <UniqueIdentifier>{84407bf0-b431-49e7-b0cd-167e818415ab}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Common\Math">
       <UniqueIdentifier>{8f5edaa5-ad5d-423a-bc41-5e68a8621da5}</UniqueIdentifier>
     </Filter>
@@ -103,12 +100,6 @@
     <Filter Include="Resource\Shader\CS\Base">
       <UniqueIdentifier>{82c69a64-ee51-4444-9a9e-4a866b36d916}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Graphics\Buffer">
-      <UniqueIdentifier>{b9697f64-adc5-45fb-b641-4131688e3073}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Graphics\API">
-      <UniqueIdentifier>{afdf7dd2-7ae1-4a73-be9e-835569536d5a}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Component\Audio">
       <UniqueIdentifier>{326cbbf6-1cb8-4ba7-bc32-aa2759b923f9}</UniqueIdentifier>
     </Filter>
@@ -162,6 +153,15 @@
     </Filter>
     <Filter Include="Default HLSL\ComputeShader">
       <UniqueIdentifier>{245c7a15-9423-486f-941f-a4b3cf54ce3c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GPU">
+      <UniqueIdentifier>{84407bf0-b431-49e7-b0cd-167e818415ab}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GPU\Buffer">
+      <UniqueIdentifier>{b9697f64-adc5-45fb-b641-4131688e3073}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GPU\API">
+      <UniqueIdentifier>{afdf7dd2-7ae1-4a73-be9e-835569536d5a}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -280,13 +280,13 @@
       <Filter>Component\Light</Filter>
     </ClCompile>
     <ClCompile Include="ConstantBuffer.cpp">
-      <Filter>Graphics\Buffer</Filter>
+      <Filter>GPU\Buffer</Filter>
     </ClCompile>
     <ClCompile Include="StructedBuffer.cpp">
-      <Filter>Graphics\Buffer</Filter>
+      <Filter>GPU\Buffer</Filter>
     </ClCompile>
     <ClCompile Include="GraphicDevice_DX11.cpp">
-      <Filter>Graphics\API</Filter>
+      <Filter>GPU\API</Filter>
     </ClCompile>
     <ClCompile Include="ParticleSystem.cpp" />
     <ClCompile Include="ParticleShader.cpp" />
@@ -309,7 +309,7 @@
       <Filter>FontWrapper</Filter>
     </ClCompile>
     <ClCompile Include="GPUBuffer.cpp">
-      <Filter>Graphics\Buffer</Filter>
+      <Filter>GPU\Buffer</Filter>
     </ClCompile>
     <ClCompile Include="EnginePCH.cpp">
       <Filter>Common</Filter>
@@ -350,8 +350,8 @@
     <ClInclude Include="GameResource.h">
       <Filter>Resource</Filter>
     </ClInclude>
-    <ClInclude Include="Graphics.h">
-      <Filter>Graphics</Filter>
+    <ClInclude Include="define_GPU.h">
+      <Filter>GPU</Filter>
     </ClInclude>
     <ClInclude Include="EnginePCH.h">
       <Filter>Common</Filter>
@@ -462,13 +462,13 @@
       <Filter>Component\Light</Filter>
     </ClInclude>
     <ClInclude Include="ConstantBuffer.h">
-      <Filter>Graphics\Buffer</Filter>
+      <Filter>GPU\Buffer</Filter>
     </ClInclude>
     <ClInclude Include="StructedBuffer.h">
-      <Filter>Graphics\Buffer</Filter>
+      <Filter>GPU\Buffer</Filter>
     </ClInclude>
     <ClInclude Include="GraphicDevice_DX11.h">
-      <Filter>Graphics\API</Filter>
+      <Filter>GPU\API</Filter>
     </ClInclude>
     <ClInclude Include="ParticleSystem.h" />
     <ClInclude Include="ParticleShader.h" />
@@ -488,7 +488,7 @@
       <Filter>FontWrapper</Filter>
     </ClInclude>
     <ClInclude Include="GPUBuffer.h">
-      <Filter>Graphics\Buffer</Filter>
+      <Filter>GPU\Buffer</Filter>
     </ClInclude>
     <ClInclude Include="json-cpp\json.h">
       <Filter>JsonCPP</Filter>
@@ -516,6 +516,9 @@
       <Filter>Resource</Filter>
     </ClInclude>
     <ClInclude Include="DefaultShaders.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="define_Macro.h">
       <Filter>Common</Filter>
     </ClInclude>
   </ItemGroup>

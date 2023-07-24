@@ -42,7 +42,7 @@ namespace mh
 		virtual void Render() override;
 
 		bool Create(const std::wstring& _name
-			, std::shared_ptr<graphics::Texture> _atlas
+			, std::shared_ptr<GPU::Texture> _atlas
 			, Vector2 _leftTop, Vector2 _size
 			, Vector2 _offset
 			, UINT _spriteLength

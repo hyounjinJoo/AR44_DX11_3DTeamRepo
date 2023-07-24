@@ -5,7 +5,7 @@
 #include "ConstantBuffer.h"
 #include "TimeManager.h"
 
-namespace mh::graphics
+namespace mh::GPU
 {
 	ParticleShader::ParticleShader()
 		: ComputeShader(128, 1, 1)

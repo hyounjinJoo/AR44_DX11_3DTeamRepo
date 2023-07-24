@@ -1,9 +1,18 @@
 #pragma once
 #include "GameResource.h"
-#include "Graphics.h"
+#include "define_GPU.h"
 
-namespace mh
+namespace mh::GPU
 {
+	using Microsoft::WRL::ComPtr;
+	namespace stdfs = std::filesystem;
+
+	struct tShaderCode
+	{
+		ComPtr<ID3DBlob> blob;
+		std::string strKey;
+	};
+
 	class Shader : public GameResource
 	{
 	public:
@@ -12,41 +21,45 @@ namespace mh
 
 		virtual HRESULT Load(const std::filesystem::path& _path) override;
 
-		void Create(graphics::eShaderStage _stage, const std::wstring& _file, const std::string& _funName);
+		eResult CreateByCompile(GPU::eGSStage _stage, const stdfs::path& _FullPath, const std::string& _funcName);
+		
+		eResult CreateByHeader(GPU::eGSStage _stage, const unsigned char* _pByteCode, size_t _ByteCodeSize);
+
+		eResult CreateByCSO(GPU::eGSStage _stage, const stdfs::path& _FileName);
+
+		eResult CreateInputLayout(const std::vector<D3D11_INPUT_ELEMENT_DESC>& _VecLayoutDesc);
+
 		void Binds();
 
 		ID3D11InputLayout* GetInputLayout() { return mInputLayout.Get(); }
 		ID3D11InputLayout** GetInputLayoutAddressOf() { return mInputLayout.GetAddressOf(); }
 
-		void* GetVSBlobBufferPointer() { return mVSBlob->GetBufferPointer(); }
-		SIZE_T GetVSBlobBufferSize() { return mVSBlob->GetBufferSize(); }
-
 		void SetTopology(D3D11_PRIMITIVE_TOPOLOGY _topology) { mTopology = _topology; }
-		void SetRSState(graphics::eRSType _state) { mRSType = _state; }
-		void SetDSState(graphics::eDSType _state) { mDSType = _state; }
-		void SetBSState(graphics::eBSType _state) { mBSType = _state; }
+		void SetRSState(GPU::eRSType _state) { mRSType = _state; }
+		void SetDSState(GPU::eDSType _state) { mDSType = _state; }
+		void SetBSState(GPU::eBSType _state) { mBSType = _state; }
 
 	private:
-		Microsoft::WRL::ComPtr<ID3D11InputLayout> mInputLayout;
+		eResult CreateShader(GPU::eGSStage _stage, const void* _pByteCode, size_t _ByteCodeSize);
+
+	private:
+		std::vector<D3D11_INPUT_ELEMENT_DESC> mVecInputLayoutDesc;
+		ComPtr<ID3D11InputLayout> mInputLayout;
 		D3D11_PRIMITIVE_TOPOLOGY mTopology;
-		graphics::eShaderStage mStage;
+		GPU::eGSStage mStage;
 
-		Microsoft::WRL::ComPtr<ID3DBlob> mVSBlob;
-		Microsoft::WRL::ComPtr<ID3DBlob> mHSBlob;
-		Microsoft::WRL::ComPtr<ID3DBlob> mDSBlob;
-		Microsoft::WRL::ComPtr<ID3DBlob> mGSBlob;
-		Microsoft::WRL::ComPtr<ID3DBlob> mPSBlob;
+		tShaderCode mArrShaderCode[(int)GPU::eGSStage::END];
 
-		Microsoft::WRL::ComPtr<ID3D11VertexShader> mVS;
-		Microsoft::WRL::ComPtr<ID3D11HullShader> mHS;
-		Microsoft::WRL::ComPtr<ID3D11DomainShader> mDS;
-		Microsoft::WRL::ComPtr<ID3D11GeometryShader> mGS;
-		Microsoft::WRL::ComPtr<ID3D11PixelShader> mPS;
+		ComPtr<ID3D11VertexShader>		mVS;
+		ComPtr<ID3D11HullShader>		mHS;
+		ComPtr<ID3D11DomainShader>		mDS;
+		ComPtr<ID3D11GeometryShader>	mGS;
+		ComPtr<ID3D11PixelShader>		mPS;
 
-		graphics::eRSType mRSType;
-		graphics::eDSType mDSType;
-		graphics::eBSType mBSType;
+		GPU::eRSType mRSType;
+		GPU::eDSType mDSType;
+		GPU::eBSType mBSType;
 
-		Microsoft::WRL::ComPtr<ID3DBlob> mErrorBlob;
+		ComPtr<ID3DBlob> mErrorBlob;
 	};
 }

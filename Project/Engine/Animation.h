@@ -33,7 +33,7 @@ namespace mh
 		void FixedUpdate();
 		void Render();
 
-		void Create(const std::wstring& _name, std::shared_ptr<graphics::Texture> _atlas
+		void Create(const std::wstring& _name, std::shared_ptr<GPU::Texture> _atlas
 			, math::Vector2 _leftTop, math::Vector2 _size, math::Vector2 _offset
 			, UINT _spriteLegth, float _duration);
 
@@ -47,7 +47,7 @@ namespace mh
 	private:
 		class Animator* mAnimator;
 		std::wstring mAnimationName;
-		std::shared_ptr<graphics::Texture> mAtlas;
+		std::shared_ptr<GPU::Texture> mAtlas;
 		std::vector<tSprite> mSpriteSheet;
 		int mIndex;
 		float mTime;

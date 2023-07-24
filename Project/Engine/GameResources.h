@@ -8,9 +8,9 @@ namespace mh
 	{
 	public:
 		template <typename T>
-		static std::shared_ptr<T> Find(const std::wstring& key)
+		static std::shared_ptr<T> Find(const std::string& key)
 		{
-			std::map<std::wstring, std::shared_ptr<GameResource>>::iterator iter = mResources.find(key);
+			std::map<std::string, std::shared_ptr<GameResource>>::iterator iter = mResources.find(key);
 
 			// 이미 동일한 키값으로 다른 리소스가 먼저 등록되어 있었다.
 			if (iter != mResources.end())
@@ -38,7 +38,7 @@ namespace mh
 		}
 
 		template <typename T>
-		static std::shared_ptr<T> Load(const std::wstring& key, const std::wstring& path)
+		static std::shared_ptr<T> Load(const std::string& key, const std::string& path)
 		{
 			// 키값으로 탐색
 			std::shared_ptr<T> resource = GameResources::Find<T>(key);
@@ -67,7 +67,7 @@ namespace mh
 		}
 
 		template <typename T>
-		static void Insert(const std::wstring& key, std::shared_ptr<T> resource)
+		static void Insert(const std::string& key, std::shared_ptr<T> resource)
 		{
 			resource->SetName(key);
 			resource->SetKey(key);
@@ -85,7 +85,7 @@ namespace mh
 		~GameResources() = delete;
 	
 	private:
-		static std::map<std::wstring, std::shared_ptr<GameResource>> mResources;
+		static std::map<std::string, std::shared_ptr<GameResource>> mResources;
 	};
 
 	

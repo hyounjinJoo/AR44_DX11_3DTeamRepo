@@ -4,7 +4,7 @@
 #include "Texture.h"
 #include "Renderer.h"
 
-namespace mh::graphics
+namespace mh::GPU
 {
 	class Material : public GameResource
 	{

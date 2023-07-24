@@ -2,7 +2,7 @@
 #include "ComputeShader.h"
 #include "StructedBuffer.h"
 
-namespace mh::graphics
+namespace mh::GPU
 {
 	class ParticleShader : public ComputeShader
 	{

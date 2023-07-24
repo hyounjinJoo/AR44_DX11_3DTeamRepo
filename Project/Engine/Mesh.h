@@ -1,5 +1,5 @@
 #pragma once
-#include "Graphics.h"
+#include "define_GPU.h"
 #include "GameResource.h"
 
 namespace mh

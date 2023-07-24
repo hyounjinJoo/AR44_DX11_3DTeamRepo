@@ -3,7 +3,7 @@
 #include "SimpleMath.h"
 #include "GraphicDevice_DX11.h"
 
-#include "Graphics.h"
+#include "define_GPU.h"
 
 #include "Mesh.h"
 #include "Shader.h"
@@ -16,7 +16,7 @@
 
 namespace mh::renderer
 {
-	using namespace mh::graphics;
+	using namespace mh::GPU;
 
 	struct Vertex
 	{
@@ -106,8 +106,8 @@ namespace mh::renderer
 	
 	extern std::vector<Camera*> gCameras[];
 	extern std::vector<tDebugMesh> gDebugMeshes;
-	extern std::vector<graphics::tLightAttribute> gLights;
-	extern graphics::StructedBuffer* gLightsBuffer;
+	extern std::vector<GPU::tLightAttribute> gLights;
+	extern GPU::StructedBuffer* gLightsBuffer;
 
 	extern GameObject* gInspectorGameObject;
 
@@ -116,7 +116,7 @@ namespace mh::renderer
 	void Release();
 
 	//Renderer
-	void PushLightAttribute(const graphics::tLightAttribute& lightAttribute);
+	void PushLightAttribute(const GPU::tLightAttribute& lightAttribute);
 	void BindLights();
 	void BindNoiseTexture();
 	void CopyRenderTarget();

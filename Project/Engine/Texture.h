@@ -7,7 +7,7 @@
 #include <DirectXTex/DirectXTex.h>
 
 
-namespace mh::graphics
+namespace mh::GPU
 {
 	using namespace mh::enums;
 	class Texture : public GameResource

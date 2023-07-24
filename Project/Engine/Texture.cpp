@@ -14,7 +14,7 @@
 
 
 
-namespace mh::graphics
+namespace mh::GPU
 {
 	namespace stdfs = std::filesystem;
 
