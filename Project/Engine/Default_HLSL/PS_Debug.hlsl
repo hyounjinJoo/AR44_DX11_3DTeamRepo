@@ -1,4 +1,4 @@
-#include "globals.hlsli"
+#include "SH_Globals.hlsli"
 
 float4 main(float4 position : SV_Position) : SV_TARGET
 {

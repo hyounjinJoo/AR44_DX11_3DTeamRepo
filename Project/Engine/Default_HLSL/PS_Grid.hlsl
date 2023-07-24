@@ -1,4 +1,4 @@
-#include "globals.hlsli"
+#include "SH_Globals.hlsli"
 
 struct VSIn
 {

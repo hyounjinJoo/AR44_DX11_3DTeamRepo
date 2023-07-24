@@ -1,4 +1,5 @@
-
+#ifndef SH_BLUR
+#define SH_BLUR
 
 
 Texture2D NoiseTexture : register(t16);
@@ -46,3 +47,5 @@ float4 GaussianBlur(float2 UV)
     
     return Out;
 }
+
+#endif

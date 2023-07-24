@@ -1,3 +1,5 @@
+#ifndef SH_PARTICLE
+#define SH_PARTICLE
 
 struct tParticle
 {
@@ -15,3 +17,4 @@ struct tParticleShared
     uint gActiveCount;
 };
 
+#endif

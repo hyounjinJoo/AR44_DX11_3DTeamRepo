@@ -515,6 +515,9 @@
     <ClInclude Include="GameResources.h">
       <Filter>Resource</Filter>
     </ClInclude>
+    <ClInclude Include="DefaultShaders.h">
+      <Filter>Common</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="SimpleMath.inl">
@@ -546,10 +549,10 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="Default_HLSL\VS_Basic.hlsl">
+    <FxCompile Include="Default_HLSL\PS_Basic.hlsl">
       <Filter>Default HLSL\Basic</Filter>
     </FxCompile>
-    <FxCompile Include="Default_HLSL\PS_Basic.hlsl">
+    <FxCompile Include="Default_HLSL\VS_Basic.hlsl">
       <Filter>Default HLSL\Basic</Filter>
     </FxCompile>
     <FxCompile Include="Default_HLSL\PS_Debug.hlsl">

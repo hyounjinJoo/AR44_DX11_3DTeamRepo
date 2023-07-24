@@ -1,4 +1,9 @@
-#include "ConstantBuffer.hlsli"
+#ifndef SH_LIGHT
+#define SH_LIGHT
+
+
+
+#include "SH_ConstantBuffer.hlsli"
 
 
 struct LightColor
@@ -157,3 +162,4 @@ void CalculateLight3D(float3 viewPos, float3 viewNormal, int lightIdx, inout Lig
 }
 
 
+#endif

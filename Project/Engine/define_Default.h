@@ -6,6 +6,7 @@
 
 namespace mh::define
 {
+
 	namespace DirName
 	{
 		STRKEY Resource = "Res";

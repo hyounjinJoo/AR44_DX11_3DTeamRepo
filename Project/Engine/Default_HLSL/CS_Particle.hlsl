@@ -1,4 +1,4 @@
-#include "globals.hlsli"
+#include "SH_Globals.hlsli"
 
 RWStructuredBuffer<tParticle> ParticleBuffer : register(u0);
 RWStructuredBuffer<tParticleShared> ParticleSharedBuffer : register(u1);

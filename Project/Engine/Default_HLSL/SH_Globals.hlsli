@@ -1,12 +1,14 @@
-#include "Light.hlsli"
-#include "Particle.hlsli"
-#include "Resource.hlsli"
-#include "Sampler.hlsli"
-//#include "ConstantBuffer.hlsli"
-#include "Blur.hlsli"
+#ifndef SH_GLOBALS
+#define SH_GLOBALS
 
+#include "SH_Light.hlsli"
+#include "SH_Particle.hlsli"
+#include "SH_Resource.hlsli"
+#include "SH_Sampler.hlsli"
+#include "SH_ConstantBuffer.hlsli"
+#include "SH_Blur.hlsli"
 
-
+#endif
 
 
 

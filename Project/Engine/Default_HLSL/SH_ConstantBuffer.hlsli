@@ -1,3 +1,6 @@
+#ifndef SH_CONSTANTBUFFER
+#define SH_CONSTANTBUFFER
+
 cbuffer Transform : register(b0)
 {
     row_major matrix world;
@@ -56,3 +59,6 @@ cbuffer ParticleSystem : register(b5)
 //{
 //    float4 NoiseSize;
 //}
+
+
+#endif

@@ -1,3 +1,6 @@
+#ifndef SH_RESOURCE
+#define SH_RESOURCE
+
 // Material Default Texture
 Texture2D albedoTexture : register(t0);
 Texture2D normalTexture : register(t1);
@@ -20,3 +23,5 @@ Texture2D atlasTexture : register(t12);
 // postProcess
 Texture2D postProcessTexture : register(t60);
 Texture2D guiGameTexture : register(t61);
+
+#endif
