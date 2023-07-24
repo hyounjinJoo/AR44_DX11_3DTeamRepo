@@ -6,7 +6,7 @@
 #include <Engine/Texture.h>
 #include <Engine/Material.h>
 #include <Engine/Mesh.h>
-#include <Engine/Shader.h>
+#include <Engine/GraphicsShader.h>
 #include <Engine/GameResources.h>
 
 #include "guiInspector.h"
@@ -85,7 +85,7 @@ namespace gui
 		AddResources<mh::Mesh>(pRootNode, "Mesh");
 		AddResources<mh::GPU::Texture>(pRootNode, "Texture");
 		AddResources<mh::GPU::Material>(pRootNode, "Materials");
-		AddResources<mh::GPU::Shader>(pRootNode, "Shaders");
+		AddResources<mh::GPU::GraphicsShader>(pRootNode, "Shaders");
 	}
 
 	void Project::toInspector(void* data)

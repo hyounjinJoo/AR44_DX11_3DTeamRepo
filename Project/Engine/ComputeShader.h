@@ -1,12 +1,12 @@
 #pragma once
 #include "define_GPU.h"
-#include "GameResource.h"
+#include "Shader.h"
 
 namespace mh::GPU
 {
 	using namespace mh::enums;
 
-	class ComputeShader : public GameResource
+	class ComputeShader : public Shader
 	{
 	public:
 		ComputeShader(UINT _threadGroupX, UINT _threadGroupY, UINT _threadGroupZ);

@@ -6,7 +6,7 @@
 #include "define_GPU.h"
 
 #include "Mesh.h"
-#include "Shader.h"
+#include "GraphicsShader.h"
 #include "ConstantBuffer.h"
 #include "Camera.h"
 #include "Light.h"

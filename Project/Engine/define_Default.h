@@ -30,8 +30,8 @@ namespace mh::define
 			/*Font,*/
 			"Prefab",
 			"MeshData",
-			"Shader/Graphics",
-			"Shader/Compute",
+			"GraphicsShader/Graphics",
+			"GraphicsShader/Compute",
 			"AudioClip",
 			"Script"
 		};

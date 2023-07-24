@@ -28,7 +28,7 @@ namespace mh
 		GPU::StructedBuffer* mBuffer;
 		GPU::StructedBuffer* mSharedBuffer;
 #pragma endregion
-#pragma region tParticle Shader 관련 변수 선언
+#pragma region tParticle GraphicsShader 관련 변수 선언
 		std::shared_ptr<GPU::ParticleShader> mCS;
 		renderer::ParticleSystemCB mCBData;
 #pragma endregion

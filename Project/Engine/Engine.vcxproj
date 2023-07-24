@@ -268,6 +268,7 @@ call DLLCopy.bat $(Configuration)</Command>
     <ClInclude Include="define_GPU.h" />
     <ClInclude Include="GridScript.h" />
     <ClInclude Include="Input.h" />
+    <ClInclude Include="Shader.h" />
     <ClInclude Include="Singleton.h" />
     <ClInclude Include="json-cpp\json-forwards.h" />
     <ClInclude Include="json-cpp\json.h" />
@@ -293,7 +294,7 @@ call DLLCopy.bat $(Configuration)</Command>
     <ClInclude Include="Scene.h" />
     <ClInclude Include="SceneManager.h" />
     <ClInclude Include="Script.h" />
-    <ClInclude Include="Shader.h" />
+    <ClInclude Include="GraphicsShader.h" />
     <ClInclude Include="SpriteRenderer.h" />
     <ClInclude Include="StructedBuffer.h" />
     <ClInclude Include="Texture.h" />
@@ -344,6 +345,7 @@ call DLLCopy.bat $(Configuration)</Command>
     <ClCompile Include="Light.cpp" />
     <ClCompile Include="Material.cpp" />
     <ClCompile Include="PathMgr.cpp" />
+    <ClCompile Include="Shader.cpp" />
     <ClCompile Include="SimpleMath.cpp" />
     <ClCompile Include="Mesh.cpp" />
     <ClCompile Include="MeshRenderer.cpp" />
@@ -361,7 +363,7 @@ call DLLCopy.bat $(Configuration)</Command>
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="SceneManager.cpp" />
     <ClCompile Include="Script.cpp" />
-    <ClCompile Include="Shader.cpp" />
+    <ClCompile Include="GraphicsShader.cpp" />
     <ClCompile Include="SpriteRenderer.cpp" />
     <ClCompile Include="StructedBuffer.cpp" />
     <ClCompile Include="Texture.cpp" />

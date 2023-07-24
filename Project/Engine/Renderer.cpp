@@ -460,34 +460,34 @@ namespace mh::renderer
 	void LoadShader()
 	{
 #pragma region DEFAULT TRIANGLE SHADER
-		std::shared_ptr<Shader> TriangleShader = std::make_shared<Shader>();
+		std::shared_ptr<GraphicsShader> TriangleShader = std::make_shared<GraphicsShader>();
 		TriangleShader->CreateByHeader(eGSStage::VS, VS_Triangle, sizeof(VS_Triangle));
 		TriangleShader->CreateByHeader(eGSStage::PS, PS_Triangle, sizeof(PS_Triangle));
 		//shader->Create(eShaderStage::VS, "TriangleVS.hlsl", "main");
 		//shader->Create(eShaderStage::PS, "TrianglePS.hlsl", "main");
 
-		GameResources::Insert<Shader>("RectShader", TriangleShader);
+		GameResources::Insert<GraphicsShader>("RectShader", TriangleShader);
 #pragma endregion
 #pragma region SPRITE SHADER
-		std::shared_ptr<Shader> spriteShader = std::make_shared<Shader>();
+		std::shared_ptr<GraphicsShader> spriteShader = std::make_shared<GraphicsShader>();
 		spriteShader->CreateByHeader(eGSStage::VS, VS_Sprite, sizeof(VS_Sprite));
 		spriteShader->CreateByHeader(eGSStage::PS, PS_Sprite, sizeof(PS_Sprite));
 		//spriteShader->Create(eShaderStage::VS, "SpriteVS.hlsl", "main");
 		//spriteShader->Create(eShaderStage::PS, "SpritePS.hlsl", "main");
 		spriteShader->SetRSState(eRSType::SolidNone);
-		GameResources::Insert<Shader>("SpriteShader", spriteShader);
+		GameResources::Insert<GraphicsShader>("SpriteShader", spriteShader);
 #pragma endregion
 #pragma region UI SHADER
-		std::shared_ptr<Shader> uiShader = std::make_shared<Shader>();
+		std::shared_ptr<GraphicsShader> uiShader = std::make_shared<GraphicsShader>();
 		uiShader->CreateByHeader(eGSStage::VS, VS_UserInterface, sizeof(VS_UserInterface));
 		uiShader->CreateByHeader(eGSStage::PS, PS_UserInterface, sizeof(PS_UserInterface));
 		//uiShader->Create(eShaderStage::VS, "UserInterfaceVS.hlsl", "main");
 		//uiShader->Create(eShaderStage::PS, "UserInterfacePS.hlsl", "main");
 
-		GameResources::Insert<Shader>("UIShader", uiShader);
+		GameResources::Insert<GraphicsShader>("UIShader", uiShader);
 #pragma endregion
 #pragma region GRID SHADER
-		std::shared_ptr<Shader> gridShader = std::make_shared<Shader>();
+		std::shared_ptr<GraphicsShader> gridShader = std::make_shared<GraphicsShader>();
 		gridShader->CreateByHeader(eGSStage::VS, VS_Grid, sizeof(VS_Grid));
 		gridShader->CreateByHeader(eGSStage::PS, PS_Grid, sizeof(PS_Grid));
 
@@ -497,10 +497,10 @@ namespace mh::renderer
 		gridShader->SetDSState(eDSType::NoWrite);
 		gridShader->SetBSState(eBSType::AlphaBlend);
 
-		GameResources::Insert<Shader>("GridShader", gridShader);
+		GameResources::Insert<GraphicsShader>("GridShader", gridShader);
 #pragma endregion
 #pragma region DEBUG SHADER
-		std::shared_ptr<Shader> debugShader = std::make_shared<Shader>();
+		std::shared_ptr<GraphicsShader> debugShader = std::make_shared<GraphicsShader>();
 		debugShader->CreateByHeader(eGSStage::VS, VS_Debug, sizeof(VS_Debug));
 		debugShader->CreateByHeader(eGSStage::PS, PS_Debug, sizeof(PS_Debug));
 
@@ -511,7 +511,7 @@ namespace mh::renderer
 		debugShader->SetBSState(eBSType::AlphaBlend);
 		debugShader->SetTopology(D3D11_PRIMITIVE_TOPOLOGY::D3D11_PRIMITIVE_TOPOLOGY_LINESTRIP);
 
-		GameResources::Insert<Shader>("DebugShader", debugShader);
+		GameResources::Insert<GraphicsShader>("DebugShader", debugShader);
 #pragma endregion
 #pragma region PAINT SHADER
 		std::shared_ptr<PaintShader> paintShader = std::make_shared<PaintShader>();
@@ -520,7 +520,7 @@ namespace mh::renderer
 		GameResources::Insert<PaintShader>("PaintShader", paintShader);
 #pragma endregion
 #pragma region PARTICLE SHADER
-		std::shared_ptr<Shader> particleShader = std::make_shared<Shader>();
+		std::shared_ptr<GraphicsShader> particleShader = std::make_shared<GraphicsShader>();
 
 		particleShader->CreateByHeader(eGSStage::VS, VS_Particle, sizeof(VS_Particle));
 		particleShader->CreateByHeader(eGSStage::GS, GS_Particle, sizeof(GS_Particle));
@@ -532,7 +532,7 @@ namespace mh::renderer
 		particleShader->SetDSState(eDSType::NoWrite);
 		particleShader->SetBSState(eBSType::AlphaBlend);
 		particleShader->SetTopology(D3D11_PRIMITIVE_TOPOLOGY::D3D11_PRIMITIVE_TOPOLOGY_POINTLIST);
-		GameResources::Insert<Shader>("ParticleShader", particleShader);
+		GameResources::Insert<GraphicsShader>("ParticleShader", particleShader);
 
 		std::shared_ptr<ParticleShader> particleCS = std::make_shared<ParticleShader>();
 		GameResources::Insert<ParticleShader>("ParticleCS", particleCS);
@@ -540,19 +540,19 @@ namespace mh::renderer
 		//particleCS->Create("ParticleCS.hlsl", "main");
 #pragma endregion
 #pragma region POST PROCESS SHADER
-		std::shared_ptr<Shader> postProcessShader = std::make_shared<Shader>();
+		std::shared_ptr<GraphicsShader> postProcessShader = std::make_shared<GraphicsShader>();
 		postProcessShader->CreateByHeader(eGSStage::VS, VS_PostProcess, sizeof(VS_PostProcess));
 		postProcessShader->CreateByHeader(eGSStage::PS, PS_PostProcess, sizeof(PS_PostProcess));
 		//postProcessShader->Create(eShaderStage::VS, "PostProcessVS.hlsl", "main");
 		//postProcessShader->Create(eShaderStage::PS, "PostProcessPS.hlsl", "main");
 		postProcessShader->SetDSState(eDSType::NoWrite);
-		GameResources::Insert<Shader>("PostProcessShader", postProcessShader);
+		GameResources::Insert<GraphicsShader>("PostProcessShader", postProcessShader);
 #pragma endregion
 #pragma region BASIC 3D
-		std::shared_ptr<Shader> basicShader = std::make_shared<Shader>();
+		std::shared_ptr<GraphicsShader> basicShader = std::make_shared<GraphicsShader>();
 		basicShader->CreateByHeader(eGSStage::VS, VS_Basic, sizeof(VS_Basic));
 		basicShader->CreateByHeader(eGSStage::PS, PS_Basic, sizeof(PS_Basic));
-		GameResources::Insert<Shader>("BasicShader", basicShader);
+		GameResources::Insert<GraphicsShader>("BasicShader", basicShader);
 #pragma endregion
 	}
 
@@ -593,25 +593,25 @@ namespace mh::renderer
 		//Vector3 BiNormal;
 		//Vector3 Normal;
 
-		std::shared_ptr<Shader> shader = GameResources::Find<Shader>("RectShader");
+		std::shared_ptr<GraphicsShader> shader = GameResources::Find<GraphicsShader>("RectShader");
 		shader->CreateInputLayout(vecLayoutDesc);
 
-		std::shared_ptr<Shader> spriteShader = GameResources::Find<Shader>("SpriteShader");
+		std::shared_ptr<GraphicsShader> spriteShader = GameResources::Find<GraphicsShader>("SpriteShader");
 		spriteShader->CreateInputLayout(vecLayoutDesc);
 
-		std::shared_ptr<Shader> uiShader = GameResources::Find<Shader>("UIShader");
+		std::shared_ptr<GraphicsShader> uiShader = GameResources::Find<GraphicsShader>("UIShader");
 		uiShader->CreateInputLayout(vecLayoutDesc);
 
-		std::shared_ptr<Shader> gridShader = GameResources::Find<Shader>("GridShader");
+		std::shared_ptr<GraphicsShader> gridShader = GameResources::Find<GraphicsShader>("GridShader");
 		uiShader->CreateInputLayout(vecLayoutDesc);
 
-		std::shared_ptr<Shader> debugShader = GameResources::Find<Shader>("DebugShader");
+		std::shared_ptr<GraphicsShader> debugShader = GameResources::Find<GraphicsShader>("DebugShader");
 		debugShader->CreateInputLayout(vecLayoutDesc);
 
-		std::shared_ptr<Shader> particleShader = GameResources::Find<Shader>("ParticleShader");
+		std::shared_ptr<GraphicsShader> particleShader = GameResources::Find<GraphicsShader>("ParticleShader");
 		particleShader->CreateInputLayout(vecLayoutDesc);
 
-		std::shared_ptr<Shader> postProcessShader = GameResources::Find<Shader>("PostProcessShader");
+		std::shared_ptr<GraphicsShader> postProcessShader = GameResources::Find<GraphicsShader>("PostProcessShader");
 		postProcessShader->CreateInputLayout(vecLayoutDesc);
 
 
@@ -644,7 +644,7 @@ namespace mh::renderer
 
 
 
-		std::shared_ptr<Shader> basicShader = GameResources::Find<Shader>("BasicShader");
+		std::shared_ptr<GraphicsShader> basicShader = GameResources::Find<GraphicsShader>("BasicShader");
 		basicShader->CreateInputLayout(vecLayoutDesc);
 
 #pragma endregion
@@ -845,7 +845,7 @@ namespace mh::renderer
 	{
 		#pragma region DEFAULT
 		std::shared_ptr <Texture> texture = GameResources::Find<Texture>("PaintTexture");
-		std::shared_ptr<Shader> shader = GameResources::Find<Shader>("RectShader");
+		std::shared_ptr<GraphicsShader> shader = GameResources::Find<GraphicsShader>("RectShader");
 		std::shared_ptr<Material> material = std::make_shared<Material>();
 		material->SetShader(shader);
 		material->SetTexture(eTextureSlot::Albedo, texture);
@@ -853,7 +853,7 @@ namespace mh::renderer
 #pragma endregion
 		#pragma region SPRITE
 		std::shared_ptr <Texture> spriteTexture= GameResources::Find<Texture>("DefaultSprite");
-		std::shared_ptr<Shader> spriteShader = GameResources::Find<Shader>("SpriteShader");
+		std::shared_ptr<GraphicsShader> spriteShader = GameResources::Find<GraphicsShader>("SpriteShader");
 		std::shared_ptr<Material> spriteMaterial = std::make_shared<Material>();
 		spriteMaterial->SetRenderingMode(eRenderingMode::Transparent);
 		spriteMaterial->SetShader(spriteShader);
@@ -862,7 +862,7 @@ namespace mh::renderer
 #pragma endregion
 		#pragma region UI
 		std::shared_ptr <Texture> uiTexture = GameResources::Find<Texture>("HPBarTexture");
-		std::shared_ptr<Shader> uiShader = GameResources::Find<Shader>("UIShader");
+		std::shared_ptr<GraphicsShader> uiShader = GameResources::Find<GraphicsShader>("UIShader");
 		std::shared_ptr<Material> uiMaterial = std::make_shared<Material>();
 		uiMaterial->SetRenderingMode(eRenderingMode::Transparent);
 	
@@ -871,27 +871,27 @@ namespace mh::renderer
 		GameResources::Insert<Material>("UIMaterial", uiMaterial);
 #pragma endregion
 		#pragma region GRID
-		std::shared_ptr<Shader> gridShader = GameResources::Find<Shader>("GridShader");
+		std::shared_ptr<GraphicsShader> gridShader = GameResources::Find<GraphicsShader>("GridShader");
 		std::shared_ptr<Material> gridMaterial = std::make_shared<Material>();
 		gridMaterial->SetShader(gridShader);
 		GameResources::Insert<Material>("GridMaterial", gridMaterial);
 #pragma endregion
 		#pragma region DEBUG
-		std::shared_ptr<Shader> debugShader = GameResources::Find<Shader>("DebugShader");
+		std::shared_ptr<GraphicsShader> debugShader = GameResources::Find<GraphicsShader>("DebugShader");
 		std::shared_ptr<Material> debugMaterial = std::make_shared<Material>();
 		debugMaterial->SetRenderingMode(eRenderingMode::Transparent);
 		debugMaterial->SetShader(debugShader);
 		GameResources::Insert<Material>("DebugMaterial", debugMaterial);
 #pragma endregion
 		#pragma region PARTICLE
-		std::shared_ptr<Shader> particleShader = GameResources::Find<Shader>("ParticleShader");
+		std::shared_ptr<GraphicsShader> particleShader = GameResources::Find<GraphicsShader>("ParticleShader");
 		std::shared_ptr<Material> particleMaterial = std::make_shared<Material>();
 		particleMaterial->SetRenderingMode(eRenderingMode::Transparent);
 		particleMaterial->SetShader(particleShader);
 		GameResources::Insert<Material>("ParticleMaterial", particleMaterial);
 #pragma endregion
 #pragma region POSTPROCESS
-		std::shared_ptr<Shader> postProcessShader = GameResources::Find<Shader>("PostProcessShader");
+		std::shared_ptr<GraphicsShader> postProcessShader = GameResources::Find<GraphicsShader>("PostProcessShader");
 		std::shared_ptr<Material> postProcessMaterial = std::make_shared<Material>();
 		postProcessMaterial->SetRenderingMode(eRenderingMode::PostProcess);
 		postProcessMaterial->SetShader(postProcessShader);
@@ -899,7 +899,7 @@ namespace mh::renderer
 #pragma endregion
 
 #pragma region BASIC
-		std::shared_ptr<Shader> basicShader = GameResources::Find<Shader>("BasicShader");
+		std::shared_ptr<GraphicsShader> basicShader = GameResources::Find<GraphicsShader>("BasicShader");
 		std::shared_ptr<Material> basicMaterial = std::make_shared<Material>();
 		basicMaterial->SetRenderingMode(eRenderingMode::Transparent);
 		basicMaterial->SetShader(basicShader);

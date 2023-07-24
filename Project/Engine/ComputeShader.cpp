@@ -60,7 +60,7 @@ namespace mh::GPU
 			mCSBlob.GetAddressOf(), 
 			mErrorBlob.GetAddressOf())))
 		{
-			std::string ErrMsg = "Failed to compile Compute Shader!\n\n";
+			std::string ErrMsg = "Failed to compile Compute GraphicsShader!\n\n";
 			ErrMsg += "<Error Info>\n";
 			ErrMsg += static_cast<const char*>(mErrorBlob->GetBufferPointer());
 			ERROR_MESSAGE_A(ErrMsg.c_str());
@@ -82,7 +82,7 @@ namespace mh::GPU
 		HRESULT hr = D3DCreateBlob(_ByteCodeSize, mCSBlob.ReleaseAndGetAddressOf());
 		if (FAILED(hr))
 		{
-			ERROR_MESSAGE_W(L"Shader를 저장할 Blob 생성에 실패했습니다.");
+			ERROR_MESSAGE_W(L"GraphicsShader를 저장할 Blob 생성에 실패했습니다.");
 
 			return eResult::Fail_Create;
 		}

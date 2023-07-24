@@ -31,9 +31,6 @@
     <Filter Include="Resource\Mesh">
       <UniqueIdentifier>{5ddde7d6-5dbf-4474-8ff2-f014eaefe47e}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Resource\Shader">
-      <UniqueIdentifier>{f6d54454-faa4-4b11-8592-0408c79bef47}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Resource\Manager">
       <UniqueIdentifier>{566c056d-bc1c-4a66-9874-1eb8b38721ee}</UniqueIdentifier>
     </Filter>
@@ -93,12 +90,6 @@
     </Filter>
     <Filter Include="Component\Light">
       <UniqueIdentifier>{8a4cefad-b3b9-4953-99ce-2821de45ba85}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Resource\Shader\CS">
-      <UniqueIdentifier>{107a3f26-c3c5-4ea8-a106-cdf993577762}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Resource\Shader\CS\Base">
-      <UniqueIdentifier>{82c69a64-ee51-4444-9a9e-4a866b36d916}</UniqueIdentifier>
     </Filter>
     <Filter Include="Component\Audio">
       <UniqueIdentifier>{326cbbf6-1cb8-4ba7-bc32-aa2759b923f9}</UniqueIdentifier>
@@ -163,6 +154,18 @@
     <Filter Include="GPU\API">
       <UniqueIdentifier>{afdf7dd2-7ae1-4a73-be9e-835569536d5a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Resource\Shaders">
+      <UniqueIdentifier>{dce3eb15-75d6-4644-8a32-cf9d11564bb1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource\Shaders\Compute">
+      <UniqueIdentifier>{107a3f26-c3c5-4ea8-a106-cdf993577762}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource\Shaders\Compute\Base">
+      <UniqueIdentifier>{82c69a64-ee51-4444-9a9e-4a866b36d916}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource\Shaders\Graphics">
+      <UniqueIdentifier>{f6d54454-faa4-4b11-8592-0408c79bef47}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Application.cpp">
@@ -191,9 +194,6 @@
     </ClCompile>
     <ClCompile Include="Mesh.cpp">
       <Filter>Resource\Mesh</Filter>
-    </ClCompile>
-    <ClCompile Include="Shader.cpp">
-      <Filter>Resource\Shader</Filter>
     </ClCompile>
     <ClCompile Include="Material.cpp">
       <Filter>Resource\Material</Filter>
@@ -271,10 +271,10 @@
       <Filter>Component\Animator</Filter>
     </ClCompile>
     <ClCompile Include="PaintShader.cpp">
-      <Filter>Resource\Shader\CS</Filter>
+      <Filter>Resource\Shaders\Compute</Filter>
     </ClCompile>
     <ClCompile Include="ComputeShader.cpp">
-      <Filter>Resource\Shader\CS\Base</Filter>
+      <Filter>Resource\Shaders\Compute\Base</Filter>
     </ClCompile>
     <ClCompile Include="Light.cpp">
       <Filter>Component\Light</Filter>
@@ -330,6 +330,12 @@
     <ClCompile Include="GameResources.cpp">
       <Filter>Resource</Filter>
     </ClCompile>
+    <ClCompile Include="Shader.cpp">
+      <Filter>Resource\Shaders</Filter>
+    </ClCompile>
+    <ClCompile Include="GraphicsShader.cpp">
+      <Filter>Resource\Shaders\Graphics</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application.h">
@@ -367,9 +373,6 @@
     </ClInclude>
     <ClInclude Include="Mesh.h">
       <Filter>Resource\Mesh</Filter>
-    </ClInclude>
-    <ClInclude Include="Shader.h">
-      <Filter>Resource\Shader</Filter>
     </ClInclude>
     <ClInclude Include="IComponent.h">
       <Filter>Component</Filter>
@@ -453,10 +456,10 @@
       <Filter>Component\Animator</Filter>
     </ClInclude>
     <ClInclude Include="PaintShader.h">
-      <Filter>Resource\Shader\CS</Filter>
+      <Filter>Resource\Shaders\Compute</Filter>
     </ClInclude>
     <ClInclude Include="ComputeShader.h">
-      <Filter>Resource\Shader\CS\Base</Filter>
+      <Filter>Resource\Shaders\Compute\Base</Filter>
     </ClInclude>
     <ClInclude Include="Light.h">
       <Filter>Component\Light</Filter>
@@ -520,6 +523,12 @@
     </ClInclude>
     <ClInclude Include="define_Macro.h">
       <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Shader.h">
+      <Filter>Resource\Shaders</Filter>
+    </ClInclude>
+    <ClInclude Include="GraphicsShader.h">
+      <Filter>Resource\Shaders\Graphics</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
