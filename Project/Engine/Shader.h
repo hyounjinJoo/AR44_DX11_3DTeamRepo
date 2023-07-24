@@ -10,7 +10,7 @@ namespace mh
 		Shader();
 		virtual ~Shader();
 
-		virtual HRESULT Load(const std::wstring& _path) override;
+		virtual HRESULT Load(const std::filesystem::path& _path) override;
 
 		void Create(graphics::eShaderStage _stage, const std::wstring& _file, const std::string& _funName);
 		void Binds();

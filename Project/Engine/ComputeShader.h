@@ -11,7 +11,7 @@ namespace mh::graphics
 		ComputeShader();
 		~ComputeShader();
 
-		virtual HRESULT Load(const std::wstring& _path) override;
+		virtual HRESULT Load(const std::filesystem::path& _path) override;
 
 		bool Create(const std::wstring& _file, const std::string& _funcName);
 		void OnExcute();

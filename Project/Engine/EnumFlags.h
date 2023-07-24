@@ -1,10 +1,12 @@
 #pragma once
+
 #include <cstdlib>
 #include <cstring>
 #include <cstdint>
 #include <type_traits>
 
 #define arraysize(a) (sizeof(a) / sizeof(a[0]))
+
 
 // Enable enum flags:
 // https://www.justsoftwaresolutions.co.uk/cplusplus/using-enum-classes-as-bitfields.html

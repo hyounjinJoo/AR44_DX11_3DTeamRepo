@@ -21,7 +21,7 @@ namespace mh
 
 	}
 
-	HRESULT Mesh::Load(const std::wstring& _path)
+	HRESULT Mesh::Load(const std::filesystem::path& _path)
 	{
 		return E_NOTIMPL;
 	}

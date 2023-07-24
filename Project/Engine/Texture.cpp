@@ -2,6 +2,9 @@
 
 #include "Texture.h"
 
+#include "Func.h"
+
+
 #ifdef _DEBUG
 #pragma comment(lib, "..\\External\\DirectXTex\\lib\\Debug\\DirectXTex.lib") 
 #else 
@@ -134,30 +137,29 @@ namespace mh::graphics
 	}
 
 	//test.cpp
-	HRESULT Texture::Load(const std::wstring& _name)
+	HRESULT Texture::Load(const std::filesystem::path& _FileName)
 	{
-		std::filesystem::path parentPath = std::filesystem::current_path();
-		std::wstring _fullPath = parentPath.wstring() + L"\\GameResources\\" + _name;
+		std::filesystem::path fullPath = std::filesystem::current_path();
+		fullPath /= L"GameResources";
+		fullPath /= _FileName;
 
-		LoadFile(_fullPath);
+		LoadFile(fullPath);
 		InitializeResource();
 
 		return S_OK;
 	}
 
-	void Texture::LoadFile(const std::wstring& _fullPath)
+	void Texture::LoadFile(const std::filesystem::path& _fullPath)
 	{
-		wchar_t szExtension[256] = {};
-		_wsplitpath_s(_fullPath.c_str(), nullptr, 0, nullptr, 0, nullptr, 0, szExtension, 256);
+		std::wstring Extension = _fullPath.extension().wstring();
+		StringConv::UpperCase(Extension);
 
-		std::wstring extension(szExtension);
-
-		if (extension == L".dds" || extension == L".DDS")
+		if (Extension == L".DDS")
 		{
 			if (FAILED(LoadFromDDSFile(_fullPath.c_str(), DDS_FLAGS::DDS_FLAGS_NONE, nullptr, mImage)))
 				return;
 		}
-		else if (extension == L".tga" || extension == L".TGA")
+		else if (Extension == L".TGA")
 		{
 			if (FAILED(LoadFromTGAFile(_fullPath.c_str(), nullptr, mImage)))
 				return;

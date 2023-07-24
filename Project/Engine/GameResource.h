@@ -5,13 +5,14 @@
 namespace mh
 {
 	using namespace mh::enums;
+
 	class GameResource : public Entity
 	{
 	public:
 		GameResource(eResourceType type);
 		virtual ~GameResource();
 
-		virtual HRESULT Load(const std::wstring& path) = 0;
+		virtual HRESULT Load(const std::filesystem::path& path) = 0;
 
 		const std::wstring& GetKey() { return mKey; }
 		const std::wstring& GetPath() { return mPath; }

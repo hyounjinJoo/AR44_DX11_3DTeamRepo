@@ -23,7 +23,7 @@ namespace mh
 
 	}
 
-	HRESULT Shader::Load(const std::wstring& _path)
+	HRESULT Shader::Load(const std::filesystem::path& _path)
 	{
 		return E_NOTIMPL;
 	}

@@ -10,7 +10,7 @@ namespace mh
 		Mesh();
 		virtual ~Mesh();
 
-		virtual HRESULT Load(const std::wstring& _path) override;
+		virtual HRESULT Load(const std::filesystem::path& _path) override;
 
 		bool CreateVertexBuffer(void* _data, UINT _count);
 		bool CreateIndexBuffer(void* _data, UINT _count);

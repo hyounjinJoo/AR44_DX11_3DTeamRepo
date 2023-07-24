@@ -18,7 +18,7 @@ namespace mh::graphics
 
     }
 
-    HRESULT Material::Load(const std::wstring& _path)
+    HRESULT Material::Load(const std::filesystem::path& _path)
     {
         return E_NOTIMPL;
     }

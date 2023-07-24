@@ -12,7 +12,7 @@ namespace mh::graphics
 		Material();
 		virtual ~Material();
 
-		virtual HRESULT Load(const std::wstring& _path) override;
+		virtual HRESULT Load(const std::filesystem::path& _path) override;
 
 		void SetData(eGPUParam _param, void* _data);
 		void Bind();

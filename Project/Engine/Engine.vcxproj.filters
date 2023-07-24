@@ -279,11 +279,12 @@
     <ClCompile Include="json-cpp\jsoncpp.cpp">
       <Filter>JsonCPP</Filter>
     </ClCompile>
+    <ClCompile Include="Func.cpp" />
+    <ClCompile Include="AtExit.cpp">
+      <Filter>Common</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="CommonInclude.h">
-      <Filter>Common</Filter>
-    </ClInclude>
     <ClInclude Include="Application.h">
       <Filter>High Level Interface</Filter>
     </ClInclude>
@@ -448,6 +449,16 @@
     </ClInclude>
     <ClInclude Include="json-cpp\json-forwards.h">
       <Filter>JsonCPP</Filter>
+    </ClInclude>
+    <ClInclude Include="Func.h" />
+    <ClInclude Include="AtExit.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="ISingleton.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="EnumFlags.h">
+      <Filter>Common</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

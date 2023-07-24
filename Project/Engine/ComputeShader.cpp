@@ -35,7 +35,7 @@ namespace mh::graphics
 	ComputeShader::~ComputeShader()
 	{
 	}
-	HRESULT ComputeShader::Load(const std::wstring& _path)
+	HRESULT ComputeShader::Load(const std::filesystem::path& _path)
 	{
 		return E_NOTIMPL;
 	}

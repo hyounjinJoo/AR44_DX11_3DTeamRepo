@@ -20,8 +20,8 @@ namespace mh::graphics
 
 		bool Create(UINT _width, UINT _height, DXGI_FORMAT _format, UINT _bindFlag);
 		bool Create(Microsoft::WRL::ComPtr<ID3D11Texture2D> _texture);
-		virtual HRESULT Load(const std::wstring& _path) override;
-		void LoadFile(const std::wstring& _name);
+		virtual HRESULT Load(const std::filesystem::path& _path) override;
+		void LoadFile(const std::filesystem::path& _fullPath);
 		void InitializeResource();
 		void BindShaderResource(eShaderStage _stage, UINT _slot);
 		void BindUnorderedAccessView(UINT _startSlot);
