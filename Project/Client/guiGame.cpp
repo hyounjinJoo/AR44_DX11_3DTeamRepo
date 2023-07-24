@@ -1,10 +1,10 @@
 
 #include "ClientPCH.h"
-
 #include "guiGame.h"
-#include "GameResources.h"
-#include "Texture.h"
-#include "GraphicDevice_DX11.h"
+
+#include <Engine/GameResources.h>
+#include <Engine/Texture.h>
+#include <Engine/GraphicDevice_DX11.h>
 
 namespace gui
 {

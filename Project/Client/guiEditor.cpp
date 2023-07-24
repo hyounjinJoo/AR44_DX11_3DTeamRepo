@@ -1,15 +1,15 @@
 #include "ClientPCH.h"
-
 #include "guiEditor.h"
-#include "Mesh.h"
-#include "GameResources.h"
-#include "Material.h"
-#include "Transform.h"
-#include "MeshRenderer.h"
-#include "GridScript.h"
-#include "Object.h"
-#include "Application.h"
-#include "GraphicDevice_DX11.h"
+
+#include <Engine/Mesh.h>
+#include <Engine/GameResources.h>
+#include <Engine/Material.h>
+#include <Engine/Transform.h>
+#include <Engine/MeshRenderer.h>
+#include <Engine/GridScript.h>
+#include <Engine/Object.h>
+#include <Engine/Application.h>
+#include <Engine/GraphicDevice_DX11.h>
 
 #include "imgui.h"
 #include "imgui_impl_win32.h"

@@ -14,8 +14,11 @@ xcopy /d /s /y /i /r .\External\DLL\%Configuration%\*.dll .\Output\%Configuratio
 
 
 :: GameResource 파일 복사
-if not exist .\Output\%Configuration%\GameResources ( mkdir .\Output\%Configuration%\GameResources )
-xcopy /d /s /y /i /r .\GameResources\* .\Output\%Configuration%\GameResources
+if "%Configuration%"=="Release" ( 
+	if not exist .\Output\Release\Res ( mkdir .\Output\Release\Res ) 
+	xcopy /d /s /y /i /r .\Output\Debug\Res\* .\Output\Release\Res 
+)
+
 
 
 :: 1번 Argument에 아무것도 들어오지 않았을 경우(== 직접 실행했을 경우) 일시 정지

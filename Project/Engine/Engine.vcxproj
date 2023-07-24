@@ -219,6 +219,7 @@ call DLLCopy.bat $(Configuration)</Command>
     <ClInclude Include="Camera.h" />
     <ClInclude Include="CameraScript.h" />
     <ClInclude Include="Collider.h" />
+    <ClInclude Include="define_Default.h" />
     <ClInclude Include="GPUBuffer.h" />
     <ClInclude Include="IComponent.h" />
     <ClInclude Include="ComputeShader.h" />
@@ -233,12 +234,13 @@ call DLLCopy.bat $(Configuration)</Command>
     <ClInclude Include="Graphics.h" />
     <ClInclude Include="GridScript.h" />
     <ClInclude Include="Input.h" />
-    <ClInclude Include="ISingleton.h" />
+    <ClInclude Include="Singleton.h" />
     <ClInclude Include="json-cpp\json-forwards.h" />
     <ClInclude Include="json-cpp\json.h" />
     <ClInclude Include="Layer.h" />
     <ClInclude Include="Light.h" />
     <ClInclude Include="Material.h" />
+    <ClInclude Include="PathMgr.h" />
     <ClInclude Include="SimpleMath.h" />
     <ClInclude Include="Mesh.h" />
     <ClInclude Include="MeshRenderer.h" />
@@ -307,6 +309,7 @@ call DLLCopy.bat $(Configuration)</Command>
     <ClCompile Include="Layer.cpp" />
     <ClCompile Include="Light.cpp" />
     <ClCompile Include="Material.cpp" />
+    <ClCompile Include="PathMgr.cpp" />
     <ClCompile Include="SimpleMath.cpp" />
     <ClCompile Include="Mesh.cpp" />
     <ClCompile Include="MeshRenderer.cpp" />
@@ -334,6 +337,7 @@ call DLLCopy.bat $(Configuration)</Command>
     <ClCompile Include="Func.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="cpp.hint" />
     <None Include="SimpleMath.inl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

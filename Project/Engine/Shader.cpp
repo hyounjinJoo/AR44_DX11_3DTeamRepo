@@ -4,10 +4,14 @@
 #include "GraphicDevice_DX11.h"
 #include "Renderer.h"
 
+#include "PathMgr.h"
+
 using namespace mh::graphics;
 
 namespace mh
 {
+	namespace stdfs = std::filesystem;
+
 	Shader::Shader()
 		: GameResource(eResourceType::GraphicShader)
 		, mTopology(D3D11_PRIMITIVE_TOPOLOGY::D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST)
@@ -33,15 +37,16 @@ namespace mh
 		mErrorBlob = nullptr;
 
 		// Vertex Shader
-		std::filesystem::path path = std::filesystem::current_path();
-		path += "\\SHADER_SOURCE\\";
+		//TODO: 임시
+		stdfs::path ShaderPath = PathMgr::GetInst()->GetAbsolutePath().parent_path().parent_path();
 
-		std::wstring shaderPath(path.c_str());
-		shaderPath += _file;
+		ShaderPath /= "Project";
+		ShaderPath /= "SHADER_SOURCE";
+		ShaderPath /= _file;
 		
 		if (_stage == graphics::eShaderStage::VS)
 		{
-			D3DCompileFromFile(shaderPath.c_str(), nullptr, D3D_COMPILE_STANDARD_FILE_INCLUDE
+			D3DCompileFromFile(ShaderPath.wstring().c_str(), nullptr, D3D_COMPILE_STANDARD_FILE_INCLUDE
 								, _funcName.c_str() , "vs_5_0", 0, 0
 								, mVSBlob.GetAddressOf()
 								, mErrorBlob.GetAddressOf());
@@ -59,7 +64,7 @@ namespace mh
 		}
 		else if (_stage == graphics::eShaderStage::PS)
 		{
-			D3DCompileFromFile(shaderPath.c_str(), nullptr, D3D_COMPILE_STANDARD_FILE_INCLUDE
+			D3DCompileFromFile(ShaderPath.wstring().c_str(), nullptr, D3D_COMPILE_STANDARD_FILE_INCLUDE
 				, _funcName.c_str(), "ps_5_0", 0, 0
 				, mPSBlob.GetAddressOf()
 				, mErrorBlob.GetAddressOf());
@@ -77,7 +82,7 @@ namespace mh
 		}
 		else if (_stage == graphics::eShaderStage::GS)
 		{
-			D3DCompileFromFile(shaderPath.c_str(), nullptr, D3D_COMPILE_STANDARD_FILE_INCLUDE
+			D3DCompileFromFile(ShaderPath.wstring().c_str(), nullptr, D3D_COMPILE_STANDARD_FILE_INCLUDE
 				, _funcName.c_str(), "gs_5_0", 0, 0
 				, mGSBlob.GetAddressOf()
 				, mErrorBlob.GetAddressOf());

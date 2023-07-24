@@ -10,6 +10,8 @@
 #include "Fmod.h"
 #include "FontWrapper.h"
 
+#include "PathMgr.h"
+
 namespace mh
 {
 	Application::Application()
@@ -28,6 +30,7 @@ namespace mh
 
 	void Application::Initialize()
 	{
+		PathMgr::GetInst()->Init();
 		TimeManager::Initialize();
 		Input::Initialize();
 		Fmod::Initialize();

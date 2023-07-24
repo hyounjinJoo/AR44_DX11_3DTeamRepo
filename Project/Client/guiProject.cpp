@@ -3,14 +3,15 @@
 
 #include "guiProject.h"
 
-#include "Texture.h"
-#include "Material.h"
-#include "Mesh.h"
-#include "Shader.h"
+#include <Engine/Texture.h>
+#include <Engine/Material.h>
+#include <Engine/Mesh.h>
+#include <Engine/Shader.h>
+#include <Engine/GameResources.h>
 
 #include "guiInspector.h"
 #include "guiResource.h"
-#include "GameResources.h"
+
 #include "guiEditor.h"
 
 extern gui::Editor editor;

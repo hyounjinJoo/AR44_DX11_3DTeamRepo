@@ -6,7 +6,8 @@ namespace mh
 {
 	using namespace mh::enums;
 
-	class GameResource : public Entity
+	class GameResource 
+		: public Entity
 	{
 	public:
 		GameResource(eResourceType type);
@@ -16,7 +17,7 @@ namespace mh
 
 		const std::wstring& GetKey() { return mKey; }
 		const std::wstring& GetPath() { return mPath; }
-		eResourceType GetType() { return mType; }
+		eResourceType GetResType() { return mType; }
 
 		void SetKey(const std::wstring& key) { mKey = key; }
 		void SetPath(const std::wstring& path) { mPath = path; }

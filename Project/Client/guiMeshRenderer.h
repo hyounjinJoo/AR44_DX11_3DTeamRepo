@@ -1,7 +1,7 @@
 #pragma once
 #include "guiComponent.h"
-#include "Material.h"
-#include "Mesh.h"
+#include <Engine/Material.h>
+#include <Engine/Mesh.h>
 
 namespace gui
 {

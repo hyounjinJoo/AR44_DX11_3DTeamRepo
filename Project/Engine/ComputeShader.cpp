@@ -1,10 +1,15 @@
 #include "EnginePCH.h"
 
+#include "PathMgr.h"
+
 #include "ComputeShader.h"
 #include "GraphicDevice_DX11.h"
 
+
 namespace mh::graphics
 {
+	namespace stdfs = std::filesystem;
+
 	ComputeShader::ComputeShader(UINT _threadGroupX, UINT _threadGroupY, UINT _threadGroupZ)
 		: GameResource(enums::eResourceType::ComputeShader)
 		, mCSBlob(nullptr)
@@ -43,14 +48,14 @@ namespace mh::graphics
 	{
 		Microsoft::WRL::ComPtr<ID3DBlob> mErrorBlob = nullptr;
 
-		// Vertex Shader
-		std::filesystem::path path = std::filesystem::current_path();
-		path += "\\SHADER_SOURCE\\";
+		//TODO: 임시
+		stdfs::path ShaderPath = PathMgr::GetInst()->GetAbsolutePath().parent_path().parent_path();
 
-		std::wstring shaderPath(path.c_str());
-		shaderPath += _file;
+		ShaderPath /= "Project";
+		ShaderPath /= "SHADER_SOURCE";
+		ShaderPath /= _file;
 
-		D3DCompileFromFile(shaderPath.c_str(), nullptr, D3D_COMPILE_STANDARD_FILE_INCLUDE
+		D3DCompileFromFile(ShaderPath.wstring().c_str(), nullptr, D3D_COMPILE_STANDARD_FILE_INCLUDE
 			, _funcName.c_str(), "cs_5_0", 0, 0
 			, mCSBlob.GetAddressOf()
 			, mErrorBlob.GetAddressOf());

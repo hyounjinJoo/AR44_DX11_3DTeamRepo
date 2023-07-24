@@ -1,20 +1,22 @@
 #include "EnginePCH.h"
-
 #include "Texture.h"
 
-#include "Func.h"
-
-
 #ifdef _DEBUG
-#pragma comment(lib, "..\\External\\DirectXTex\\lib\\Debug\\DirectXTex.lib") 
+#pragma comment(lib, "DirectXTex/Debug/DirectXTex.lib") 
 #else 
-#pragma comment(lib, "..\\External\\DirectXTex\\lib\\Release\\DirectXTex.lib") 
+#pragma comment(lib, "DirectXTex/Release/DirectXTex.lib") 
 #endif
+
+
+#include "Func.h"
+#include "PathMgr.h"
+
+
 
 
 namespace mh::graphics
 {
-	
+	namespace stdfs = std::filesystem;
 
 	Texture::Texture()
 		: GameResource(eResourceType::Texture)
@@ -136,20 +138,21 @@ namespace mh::graphics
 		return true;
 	}
 
-	//test.cpp
+	
 	HRESULT Texture::Load(const std::filesystem::path& _FileName)
 	{
-		std::filesystem::path fullPath = std::filesystem::current_path();
-		fullPath /= L"GameResources";
-		fullPath /= _FileName;
+		stdfs::path FullPath = PathMgr::GetInst()->GetRelativeResourcePath(GetResType());
 
-		LoadFile(fullPath);
+		HRESULT hr = LoadFile(FullPath / _FileName);
+
+		if (FAILED(hr))
+			return E_FAIL;
+
 		InitializeResource();
-
 		return S_OK;
 	}
 
-	void Texture::LoadFile(const std::filesystem::path& _fullPath)
+	HRESULT Texture::LoadFile(const std::filesystem::path& _fullPath)
 	{
 		std::wstring Extension = _fullPath.extension().wstring();
 		StringConv::UpperCase(Extension);
@@ -157,18 +160,20 @@ namespace mh::graphics
 		if (Extension == L".DDS")
 		{
 			if (FAILED(LoadFromDDSFile(_fullPath.c_str(), DDS_FLAGS::DDS_FLAGS_NONE, nullptr, mImage)))
-				return;
+				return E_FAIL;
 		}
 		else if (Extension == L".TGA")
 		{
 			if (FAILED(LoadFromTGAFile(_fullPath.c_str(), nullptr, mImage)))
-				return;
+				return E_FAIL;
 		}
 		else // WIC (png, jpg, jpeg, bmp )
 		{
 			if (FAILED(LoadFromWICFile(_fullPath.c_str(), WIC_FLAGS::WIC_FLAGS_NONE, nullptr, mImage)))
-				return;
+				return E_FAIL;
 		}
+
+		return S_OK;
 	}
 
 	void Texture::InitializeResource()

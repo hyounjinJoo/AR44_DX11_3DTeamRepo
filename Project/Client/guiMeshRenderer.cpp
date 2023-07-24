@@ -1,14 +1,16 @@
 
 #include "ClientPCH.h"
 
+#include <Engine/MeshRenderer.h>
+#include <Engine/GameResources.h>
+#include <Engine/SpriteRenderer.h>
+#include <Engine/GameResource.h>
+
 #include "guiMeshRenderer.h"
-#include "MeshRenderer.h"
 #include "guiEditor.h"
 #include "guiListWidget.h"
-#include "GameResources.h"
-#include "GameResource.h"
 #include "guiInspector.h"
-#include "SpriteRenderer.h"
+
 
 extern gui::Editor editor;
 

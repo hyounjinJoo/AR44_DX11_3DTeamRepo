@@ -121,6 +121,15 @@
     <Filter Include="JsonCPP">
       <UniqueIdentifier>{8999b6ba-42f6-4ffd-bf94-77b6220cb4dc}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Default HLSL">
+      <UniqueIdentifier>{1587745f-0e8d-4a49-99cd-34f3fcc7f1d8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Manager">
+      <UniqueIdentifier>{e30f37b2-b57a-4eaf-8f8e-4f5e39da69f2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Manager\Path">
+      <UniqueIdentifier>{55f0ac87-ecae-4903-812d-900d85e3e0da}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Application.cpp">
@@ -269,7 +278,6 @@
     <ClCompile Include="GPUBuffer.cpp">
       <Filter>Graphics\Buffer</Filter>
     </ClCompile>
-    <ClCompile Include="GameResources.cpp" />
     <ClCompile Include="EnginePCH.cpp">
       <Filter>Common</Filter>
     </ClCompile>
@@ -282,6 +290,12 @@
     <ClCompile Include="Func.cpp" />
     <ClCompile Include="AtExit.cpp">
       <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="PathMgr.cpp">
+      <Filter>Manager\Path</Filter>
+    </ClCompile>
+    <ClCompile Include="GameResources.cpp">
+      <Filter>Resource</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -443,7 +457,6 @@
     <ClInclude Include="GPUBuffer.h">
       <Filter>Graphics\Buffer</Filter>
     </ClInclude>
-    <ClInclude Include="GameResources.h" />
     <ClInclude Include="json-cpp\json.h">
       <Filter>JsonCPP</Filter>
     </ClInclude>
@@ -454,16 +467,28 @@
     <ClInclude Include="AtExit.h">
       <Filter>Common</Filter>
     </ClInclude>
-    <ClInclude Include="ISingleton.h">
+    <ClInclude Include="Singleton.h">
       <Filter>Common</Filter>
     </ClInclude>
     <ClInclude Include="EnumFlags.h">
       <Filter>Common</Filter>
     </ClInclude>
+    <ClInclude Include="PathMgr.h">
+      <Filter>Manager\Path</Filter>
+    </ClInclude>
+    <ClInclude Include="define_Default.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="GameResources.h">
+      <Filter>Resource</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="SimpleMath.inl">
       <Filter>Common\Math</Filter>
+    </None>
+    <None Include="cpp.hint">
+      <Filter>Common</Filter>
     </None>
   </ItemGroup>
 </Project>

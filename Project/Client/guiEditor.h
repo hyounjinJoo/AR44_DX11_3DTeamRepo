@@ -2,7 +2,7 @@
 #include "guiDebugObject.h"
 #include "guiEditorObject.h"
 #include "guiWidget.h"
-#include "Graphics.h"
+#include <Engine/Graphics.h>
 
 namespace gui
 {
