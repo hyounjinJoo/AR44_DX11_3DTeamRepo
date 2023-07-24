@@ -130,6 +130,39 @@
     <Filter Include="Manager\Path">
       <UniqueIdentifier>{55f0ac87-ecae-4903-812d-900d85e3e0da}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Default HLSL\Basic">
+      <UniqueIdentifier>{2adb82e1-5f22-46c3-a5da-0d7e5d44b3a9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Default HLSL\Func">
+      <UniqueIdentifier>{1525a989-93b1-4230-8a73-19c8920caa61}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Default HLSL\Debug">
+      <UniqueIdentifier>{b39a4fae-8739-4b21-861f-f7c841a93a08}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Default HLSL\Grid">
+      <UniqueIdentifier>{e8e80722-fac3-4961-99e8-24d1cd7da7f7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Default HLSL\Light">
+      <UniqueIdentifier>{1a4442f2-56d4-48ba-9103-265cb4de05f5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Default HLSL\Particle">
+      <UniqueIdentifier>{0b66c208-bf9e-408d-99b7-e5669fc35533}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Default HLSL\PostProcess">
+      <UniqueIdentifier>{73d94a25-d679-4f51-9399-88f2843a4596}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Default HLSL\Triangle">
+      <UniqueIdentifier>{b5968184-c3cc-4eba-b9b7-6a870e58f633}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Default HLSL\Sprite">
+      <UniqueIdentifier>{5b1da4e4-3080-4a5f-b341-5cbc1034b747}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Default HLSL\UserInterface">
+      <UniqueIdentifier>{4cd66c69-9aa2-47f4-b155-83a9f01a43f6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Default HLSL\ComputeShader">
+      <UniqueIdentifier>{245c7a15-9423-486f-941f-a4b3cf54ce3c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Application.cpp">
@@ -490,5 +523,85 @@
     <None Include="cpp.hint">
       <Filter>Common</Filter>
     </None>
+    <None Include="Default_HLSL\SH_ConstantBuffer.hlsli">
+      <Filter>Default HLSL</Filter>
+    </None>
+    <None Include="Default_HLSL\SH_Globals.hlsli">
+      <Filter>Default HLSL</Filter>
+    </None>
+    <None Include="Default_HLSL\SH_Particle.hlsli">
+      <Filter>Default HLSL</Filter>
+    </None>
+    <None Include="Default_HLSL\SH_Resource.hlsli">
+      <Filter>Default HLSL</Filter>
+    </None>
+    <None Include="Default_HLSL\SH_Sampler.hlsli">
+      <Filter>Default HLSL</Filter>
+    </None>
+    <None Include="Default_HLSL\SH_Blur.hlsli">
+      <Filter>Default HLSL\Func</Filter>
+    </None>
+    <None Include="Default_HLSL\SH_Light.hlsli">
+      <Filter>Default HLSL\Light</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="Default_HLSL\VS_Basic.hlsl">
+      <Filter>Default HLSL\Basic</Filter>
+    </FxCompile>
+    <FxCompile Include="Default_HLSL\PS_Basic.hlsl">
+      <Filter>Default HLSL\Basic</Filter>
+    </FxCompile>
+    <FxCompile Include="Default_HLSL\PS_Debug.hlsl">
+      <Filter>Default HLSL\Debug</Filter>
+    </FxCompile>
+    <FxCompile Include="Default_HLSL\VS_Debug.hlsl">
+      <Filter>Default HLSL\Debug</Filter>
+    </FxCompile>
+    <FxCompile Include="Default_HLSL\PS_Grid.hlsl">
+      <Filter>Default HLSL\Grid</Filter>
+    </FxCompile>
+    <FxCompile Include="Default_HLSL\VS_Grid.hlsl">
+      <Filter>Default HLSL\Grid</Filter>
+    </FxCompile>
+    <FxCompile Include="Default_HLSL\CS_Particle.hlsl">
+      <Filter>Default HLSL\Particle</Filter>
+    </FxCompile>
+    <FxCompile Include="Default_HLSL\GS_Particle.hlsl">
+      <Filter>Default HLSL\Particle</Filter>
+    </FxCompile>
+    <FxCompile Include="Default_HLSL\PS_Particle.hlsl">
+      <Filter>Default HLSL\Particle</Filter>
+    </FxCompile>
+    <FxCompile Include="Default_HLSL\VS_Particle.hlsl">
+      <Filter>Default HLSL\Particle</Filter>
+    </FxCompile>
+    <FxCompile Include="Default_HLSL\VS_PostProcess.hlsl">
+      <Filter>Default HLSL\PostProcess</Filter>
+    </FxCompile>
+    <FxCompile Include="Default_HLSL\PS_PostProcess.hlsl">
+      <Filter>Default HLSL\PostProcess</Filter>
+    </FxCompile>
+    <FxCompile Include="Default_HLSL\VS_Triangle.hlsl">
+      <Filter>Default HLSL\Triangle</Filter>
+    </FxCompile>
+    <FxCompile Include="Default_HLSL\PS_Triangle.hlsl">
+      <Filter>Default HLSL\Triangle</Filter>
+    </FxCompile>
+    <FxCompile Include="Default_HLSL\VS_Sprite.hlsl">
+      <Filter>Default HLSL\Sprite</Filter>
+    </FxCompile>
+    <FxCompile Include="Default_HLSL\PS_Sprite.hlsl">
+      <Filter>Default HLSL\Sprite</Filter>
+    </FxCompile>
+    <FxCompile Include="Default_HLSL\VS_UserInterface.hlsl">
+      <Filter>Default HLSL\UserInterface</Filter>
+    </FxCompile>
+    <FxCompile Include="Default_HLSL\PS_UserInterface.hlsl">
+      <Filter>Default HLSL\UserInterface</Filter>
+    </FxCompile>
+    <FxCompile Include="Default_HLSL\CS_Paint.hlsl">
+      <Filter>Default HLSL\ComputeShader</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>
