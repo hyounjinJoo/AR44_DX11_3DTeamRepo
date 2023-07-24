@@ -35,7 +35,7 @@ namespace mh
 	{
 		// Main Camera Game Object
 		GameObject* cameraObj = object::Instantiate<GameObject>(eLayerType::Camera);
-		cameraObj->SetName(L"MainCamera");
+		cameraObj->SetName("MainCamera");
 		cameraObj->GetComponent<Transform>()->SetPosition(Vector3(0.0f, 0.0f, -20.0f));
 		Camera* cameraComp = cameraObj->AddComponent<Camera>();
 		cameraComp->SetProjectionType(Camera::eProjectionType::Perspective);
@@ -49,10 +49,10 @@ namespace mh
 		player->GetComponent<Transform>()->SetPosition(Vector3(0.0f, 0.0f, 10.0f));
 		player->GetComponent<Transform>()->SetScale(Vector3(5.0f, 5.0f, 5.0f));
 		//player->GetComponent<Transform>()->SetRotation(Vector3(15.0f, 45.0f, 0.0f));
-		player->SetName(L"Player");
+		player->SetName("Player");
 		MeshRenderer* mr = player->AddComponent<MeshRenderer>();
-		mr->SetMaterial(GameResources::Find<Material>(L"BasicMaterial"));
-		mr->SetMesh(GameResources::Find<Mesh>(L"CubeMesh"));
+		mr->SetMaterial(GameResources::Find<Material>("BasicMaterial"));
+		mr->SetMesh(GameResources::Find<Mesh>("CubeMesh"));
 		player->AddComponent<PlayerScript>();
 		//mr->SetMesh(GameResources::Find<Mesh>(L"SphereMesh"));
 
@@ -65,7 +65,7 @@ namespace mh
 
 		{
 			GameObject* directionalLight = object::Instantiate<GameObject>(eLayerType::Player);
-			directionalLight->SetName(L"directionalLight");
+			directionalLight->SetName("directionalLight");
 
 			directionalLight->GetComponent<Transform>()->SetPosition(Vector3(0.0f, 100.0f, 0.0f));
 			directionalLight->GetComponent<Transform>()->SetRotation(Vector3(45.0f, 0.0f, 0.0f));

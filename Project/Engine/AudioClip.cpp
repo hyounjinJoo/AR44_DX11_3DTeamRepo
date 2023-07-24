@@ -22,10 +22,9 @@ namespace mh
 		mSound = nullptr;
 	}
 
-	HRESULT AudioClip::Load(const std::wstring& _path)
+	HRESULT AudioClip::Load(const std::filesystem::path& _path)
 	{
-		std::string cPath(_path.begin(), _path.end());
-		if (!Fmod::CreateSound(cPath, &mSound))
+		if (!Fmod::CreateSound(_path.string(), &mSound))
 			return S_FALSE;
 
 		mSound->set3DMinMaxDistance(mMinDistance, mMaxDistance);

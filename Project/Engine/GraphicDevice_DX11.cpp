@@ -12,11 +12,11 @@
 
 extern mh::Application application;
 
-namespace mh::graphics
+namespace mh::GPU
 {
 	GraphicDevice_DX11::GraphicDevice_DX11(eValidationMode _validationMode)
 	{
-		graphics::GetDevice() = this;
+		GPU::GetDevice() = this;
 
 		/// 1. Device 와 SwapChain 생성한다.
 		/// 2. 백버퍼에 실제로 렌더링할 렌더타겟 뷰를 생성해야한다.
@@ -67,7 +67,7 @@ namespace mh::graphics
 		// Get rendertarget for swapchain
 		hr = mSwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (void**)renderTarget.GetAddressOf());
 		mRenderTargetTexture->Create(renderTarget);
-		GameResources::Insert<Texture>(L"RenderTargetTexture", mRenderTargetTexture);
+		GameResources::Insert<Texture>("RenderTargetTexture", mRenderTargetTexture);
 
 		D3D11_TEXTURE2D_DESC depthBuffer = {};
 		depthBuffer.BindFlags = D3D11_BIND_FLAG::D3D11_BIND_DEPTH_STENCIL;
@@ -202,6 +202,26 @@ namespace mh::graphics
 	bool GraphicDevice_DX11::CreateVertexShader(const void* _pShaderByteCode, SIZE_T _byteCodeLength, ID3D11ClassLinkage* _pClassLinkage, ID3D11VertexShader** _ppVertexShader)
 	{
 		if (FAILED(mDevice->CreateVertexShader(_pShaderByteCode, _byteCodeLength, _pClassLinkage, _ppVertexShader)))
+		{
+			return false;
+		}
+
+		return true;
+	}
+
+	bool GraphicDevice_DX11::CreateHullShader(const void* _pShaderByteCode, SIZE_T _byteCodeLength, ID3D11ClassLinkage* _pClassLinkage, ID3D11HullShader** _ppHullShader)
+	{
+		if (FAILED(mDevice->CreateHullShader(_pShaderByteCode, _byteCodeLength, _pClassLinkage, _ppHullShader)))
+		{
+			return false;
+		}
+
+		return true;
+	}
+
+	bool GraphicDevice_DX11::CreateDomainShader(const void* _pShaderByteCode, SIZE_T _byteCodeLength, ID3D11ClassLinkage* _pClassLinkage, ID3D11DomainShader** _ppDomainShader)
+	{
+		if (FAILED(mDevice->CreateDomainShader(_pShaderByteCode, _byteCodeLength, _pClassLinkage, _ppDomainShader)))
 		{
 			return false;
 		}
@@ -347,22 +367,22 @@ namespace mh::graphics
 	{
 		switch (_stage)
 		{
-		case mh::graphics::eShaderStage::VS:
+		case mh::GPU::eShaderStage::VS:
 			mContext->VSSetConstantBuffers((UINT)_type, 1, &_buffer);
 			break;
-		case mh::graphics::eShaderStage::HS:
+		case mh::GPU::eShaderStage::HS:
 			mContext->HSSetConstantBuffers((UINT)_type, 1, &_buffer);
 			break;
-		case mh::graphics::eShaderStage::DS:
+		case mh::GPU::eShaderStage::DS:
 			mContext->DSSetConstantBuffers((UINT)_type, 1, &_buffer);
 			break;
-		case mh::graphics::eShaderStage::GS:
+		case mh::GPU::eShaderStage::GS:
 			mContext->GSSetConstantBuffers((UINT)_type, 1, &_buffer);
 			break;
-		case mh::graphics::eShaderStage::PS:
+		case mh::GPU::eShaderStage::PS:
 			mContext->PSSetConstantBuffers((UINT)_type, 1, &_buffer);
 			break;
-		case mh::graphics::eShaderStage::CS:
+		case mh::GPU::eShaderStage::CS:
 			mContext->CSSetConstantBuffers((UINT)_type, 1, &_buffer);
 			break;
 		default:
@@ -376,22 +396,22 @@ namespace mh::graphics
 	{
 		switch (_stage)
 		{
-		case mh::graphics::eShaderStage::VS:
+		case mh::GPU::eShaderStage::VS:
 			mContext->VSSetShaderResources(_slot, 1, _ppShaderResourceViews);
 			break;
-		case mh::graphics::eShaderStage::HS:
+		case mh::GPU::eShaderStage::HS:
 			mContext->HSSetShaderResources(_slot, 1, _ppShaderResourceViews);
 			break;
-		case mh::graphics::eShaderStage::DS:
+		case mh::GPU::eShaderStage::DS:
 			mContext->DSSetShaderResources(_slot, 1, _ppShaderResourceViews);
 			break;
-		case mh::graphics::eShaderStage::GS:
+		case mh::GPU::eShaderStage::GS:
 			mContext->GSSetShaderResources(_slot, 1, _ppShaderResourceViews);
 			break;
-		case mh::graphics::eShaderStage::PS:
+		case mh::GPU::eShaderStage::PS:
 			mContext->PSSetShaderResources(_slot, 1, _ppShaderResourceViews);
 			break;
-		case mh::graphics::eShaderStage::CS:
+		case mh::GPU::eShaderStage::CS:
 			mContext->CSSetShaderResources(_slot, 1, _ppShaderResourceViews);
 			break;
 		default:
@@ -410,22 +430,22 @@ namespace mh::graphics
 	{
 		switch (_stage)
 		{
-		case mh::graphics::eShaderStage::VS:
+		case mh::GPU::eShaderStage::VS:
 			mContext->VSSetSamplers(_slot, _NumSamplers, _ppSamplers);
 			break;
-		case mh::graphics::eShaderStage::HS:
+		case mh::GPU::eShaderStage::HS:
 			mContext->HSSetSamplers(_slot, _NumSamplers, _ppSamplers);
 			break;
-		case mh::graphics::eShaderStage::DS:
+		case mh::GPU::eShaderStage::DS:
 			mContext->DSSetSamplers(_slot, _NumSamplers, _ppSamplers);
 			break;
-		case mh::graphics::eShaderStage::GS:
+		case mh::GPU::eShaderStage::GS:
 			mContext->GSSetSamplers(_slot, _NumSamplers, _ppSamplers);
 			break;
-		case mh::graphics::eShaderStage::PS:
+		case mh::GPU::eShaderStage::PS:
 			mContext->PSSetSamplers(_slot, _NumSamplers, _ppSamplers);
 			break;
-		case mh::graphics::eShaderStage::CS:
+		case mh::GPU::eShaderStage::CS:
 			mContext->CSSetSamplers(_slot, _NumSamplers, _ppSamplers);
 			break;
 		default:

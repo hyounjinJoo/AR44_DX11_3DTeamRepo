@@ -1,0 +1,8 @@
+
+#define SINGLETON(_Type) \
+friend class Singleton<_Type>;\
+friend std::unique_ptr<_Type> std::make_unique<_Type>();\
+friend std::unique_ptr<_Type>::deleter_type;\
+private:\
+_Type();\
+~_Type()

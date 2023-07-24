@@ -6,7 +6,7 @@
 #include "imgui_impl_win32.h"
 #include "imgui_impl_dx11.h"
 
-#include "Renderer.h"
+#include <Engine/Renderer.h>
 
 #include "guiTransform.h"
 #include "guiMeshRenderer.h"

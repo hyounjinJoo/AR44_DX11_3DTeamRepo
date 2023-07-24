@@ -3,7 +3,7 @@
 #include "StructedBuffer.h"
 #include "GraphicDevice_DX11.h"
 
-namespace mh::graphics
+namespace mh::GPU
 {
 	StructedBuffer::StructedBuffer()
 		: mSRV(nullptr)

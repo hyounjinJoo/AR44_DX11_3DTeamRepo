@@ -1,5 +1,6 @@
 #pragma once
-#include "..\Engine_SOURCE\GameObject.h"
+
+#include <Engine/GameObject.h>
 
 namespace gui
 {

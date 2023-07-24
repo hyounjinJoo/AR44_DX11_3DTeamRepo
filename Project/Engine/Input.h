@@ -1,6 +1,6 @@
 
 #pragma once
-#include "CommonInclude.h"
+#include "EnumFlags.h"
 #include "SimpleMath.h"
 
 

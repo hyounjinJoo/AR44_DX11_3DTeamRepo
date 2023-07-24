@@ -1,7 +1,7 @@
 #include "ClientPCH.h"
 
 #include "guiTexture.h"
-#include "Texture.h"
+#include <Engine/Texture.h>
 
 namespace gui
 {
@@ -17,8 +17,8 @@ namespace gui
 
 	void Texture::Update()
 	{
-		mh::graphics::Texture* targetTex 
-			= dynamic_cast<mh::graphics::Texture*>(GetTarget());
+		mh::GPU::Texture* targetTex 
+			= dynamic_cast<mh::GPU::Texture*>(GetTarget());
 
 		if (targetTex == nullptr)
 			return;

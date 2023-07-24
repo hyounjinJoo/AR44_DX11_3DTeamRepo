@@ -56,7 +56,7 @@ namespace mh
 
 		math::Matrix worldMatrix = scaleMatrix * rotationMatrix * positionMatrix;
 
-		graphics::tDebugMesh meshAttribute = {};
+		GPU::tDebugMesh meshAttribute = {};
 		meshAttribute.position = math::Vector3(colliderPos.x, colliderPos.y, colliderPos.z);
 		meshAttribute.radius = mRadius;
 		meshAttribute.rotatation = rotation;

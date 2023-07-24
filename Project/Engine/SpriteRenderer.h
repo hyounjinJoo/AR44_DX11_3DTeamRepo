@@ -5,7 +5,7 @@
 #include "Material.h"
 #include "BaseRenderer.h"
 
-using namespace mh::graphics;
+using namespace mh::GPU;
 namespace mh
 {
 	class SpriteRenderer : public BaseRenderer

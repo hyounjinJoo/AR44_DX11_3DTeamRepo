@@ -1,17 +1,22 @@
 #include "EnginePCH.h"
-
 #include "Texture.h"
 
 #ifdef _DEBUG
-#pragma comment(lib, "..\\External\\DirectXTex\\lib\\Debug\\DirectXTex.lib") 
+#pragma comment(lib, "DirectXTex/Debug/DirectXTex.lib") 
 #else 
-#pragma comment(lib, "..\\External\\DirectXTex\\lib\\Release\\DirectXTex.lib") 
+#pragma comment(lib, "DirectXTex/Release/DirectXTex.lib") 
 #endif
 
 
-namespace mh::graphics
+#include "Func.h"
+#include "PathMgr.h"
+
+
+
+
+namespace mh::GPU
 {
-	
+	namespace stdfs = std::filesystem;
 
 	Texture::Texture()
 		: GameResource(eResourceType::Texture)
@@ -133,40 +138,42 @@ namespace mh::graphics
 		return true;
 	}
 
-	//test.cpp
-	HRESULT Texture::Load(const std::wstring& _name)
+	
+	HRESULT Texture::Load(const std::filesystem::path& _FileName)
 	{
-		std::filesystem::path parentPath = std::filesystem::current_path();
-		std::wstring _fullPath = parentPath.wstring() + L"\\GameResources\\" + _name;
+		stdfs::path FullPath = PathMgr::GetInst()->GetRelativeResourcePath(GetResType());
 
-		LoadFile(_fullPath);
+		HRESULT hr = LoadFile(FullPath / _FileName);
+
+		if (FAILED(hr))
+			return E_FAIL;
+
 		InitializeResource();
-
 		return S_OK;
 	}
 
-	void Texture::LoadFile(const std::wstring& _fullPath)
+	HRESULT Texture::LoadFile(const std::filesystem::path& _fullPath)
 	{
-		wchar_t szExtension[256] = {};
-		_wsplitpath_s(_fullPath.c_str(), nullptr, 0, nullptr, 0, nullptr, 0, szExtension, 256);
+		std::wstring Extension = _fullPath.extension().wstring();
+		StringConv::UpperCase(Extension);
 
-		std::wstring extension(szExtension);
-
-		if (extension == L".dds" || extension == L".DDS")
+		if (Extension == L".DDS")
 		{
 			if (FAILED(LoadFromDDSFile(_fullPath.c_str(), DDS_FLAGS::DDS_FLAGS_NONE, nullptr, mImage)))
-				return;
+				return E_FAIL;
 		}
-		else if (extension == L".tga" || extension == L".TGA")
+		else if (Extension == L".TGA")
 		{
 			if (FAILED(LoadFromTGAFile(_fullPath.c_str(), nullptr, mImage)))
-				return;
+				return E_FAIL;
 		}
 		else // WIC (png, jpg, jpeg, bmp )
 		{
 			if (FAILED(LoadFromWICFile(_fullPath.c_str(), WIC_FLAGS::WIC_FLAGS_NONE, nullptr, mImage)))
-				return;
+				return E_FAIL;
 		}
+
+		return S_OK;
 	}
 
 	void Texture::InitializeResource()

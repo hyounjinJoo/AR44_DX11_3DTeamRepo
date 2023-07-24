@@ -6,7 +6,7 @@ namespace mh
 {
 	Entity::Entity()
 		: mID(PtrToUint(this))
-		, mName(L"")
+		, mName("")
 	{
 	}
 	Entity::Entity(const Entity& _other)

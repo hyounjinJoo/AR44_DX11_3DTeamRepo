@@ -1,10 +1,16 @@
 #include "EnginePCH.h"
 
+#include "PathMgr.h"
+
 #include "ComputeShader.h"
 #include "GraphicDevice_DX11.h"
 
-namespace mh::graphics
+#include "define_GPU.h"
+
+namespace mh::GPU
 {
+	namespace stdfs = std::filesystem;
+
 	ComputeShader::ComputeShader(UINT _threadGroupX, UINT _threadGroupY, UINT _threadGroupZ)
 		: GameResource(enums::eResourceType::ComputeShader)
 		, mCSBlob(nullptr)
@@ -35,39 +41,68 @@ namespace mh::graphics
 	ComputeShader::~ComputeShader()
 	{
 	}
-	HRESULT ComputeShader::Load(const std::wstring& _path)
+	HRESULT ComputeShader::Load(const std::filesystem::path& _path)
 	{
 		return E_NOTIMPL;
 	}
-	bool ComputeShader::Create(const std::wstring& _file, const std::string& _funcName)
+	eResult ComputeShader::CreateByCompile(const std::filesystem::path& _FullPath, const std::string& _funcName)
 	{
 		Microsoft::WRL::ComPtr<ID3DBlob> mErrorBlob = nullptr;
 
-		// Vertex Shader
-		std::filesystem::path path = std::filesystem::current_path();
-		path += "\\SHADER_SOURCE\\";
+		if (FAILED(D3DCompileFromFile(
+			_FullPath.wstring().c_str(), 
+			nullptr, 
+			D3D_COMPILE_STANDARD_FILE_INCLUDE, 
+			_funcName.c_str(), 
+			mh::GPU::SHADER_VERSION::CS, 
+			0, 
+			0, 
+			mCSBlob.GetAddressOf(), 
+			mErrorBlob.GetAddressOf())))
+		{
+			std::string ErrMsg = "Failed to compile Compute Shader!\n\n";
+			ErrMsg += "<Error Info>\n";
+			ErrMsg += static_cast<const char*>(mErrorBlob->GetBufferPointer());
+			ERROR_MESSAGE_A(ErrMsg.c_str());
 
-		std::wstring shaderPath(path.c_str());
-		shaderPath += _file;
+			mErrorBlob = nullptr;
 
-		D3DCompileFromFile(shaderPath.c_str(), nullptr, D3D_COMPILE_STANDARD_FILE_INCLUDE
-			, _funcName.c_str(), "cs_5_0", 0, 0
-			, mCSBlob.GetAddressOf()
-			, mErrorBlob.GetAddressOf());
+			return eResult::Fail_Compile;
+		}
 
-		//if (mErrorBlob)
-		//{
-		//	OutputDebugStringA((char*)mErrorBlob->GetBufferPointer());
-		//	mErrorBlob->Release();
-		//}
 
-		GetDevice()->CreateComputeShader(mCSBlob->GetBufferPointer()
-			, mCSBlob->GetBufferSize()
-			, nullptr
-			, mCS.GetAddressOf());
-
-		return true;
+		return eResult::Success;
 	}
+
+	eResult ComputeShader::CreateByHeader(const unsigned char* _pByteCode, size_t _ByteCodeSize)
+	{
+		//헤더 형태로 만드는 쉐이더는 무조건 엔진 내부 기본 리소스라고 가정한다.
+		SetEngineDefaultRes(true);
+
+		HRESULT hr = D3DCreateBlob(_ByteCodeSize, mCSBlob.ReleaseAndGetAddressOf());
+		if (FAILED(hr))
+		{
+			ERROR_MESSAGE_W(L"Shader를 저장할 Blob 생성에 실패했습니다.");
+
+			return eResult::Fail_Create;
+		}
+
+		unsigned char* pCode = reinterpret_cast<unsigned char*>(mCSBlob->GetBufferPointer());
+		//할당된 메모리 사이즈는 무조건 같아야 함
+		size_t DestSize = mCSBlob->GetBufferSize();
+		MH_ASSERT(_ByteCodeSize == DestSize);
+
+		//데이터 복사
+		memcpy_s(pCode, DestSize, _pByteCode, _ByteCodeSize);
+
+		return CreateShader(pCode, DestSize);
+	}
+
+	eResult ComputeShader::CreateByCSO(const std::filesystem::path& _FileName)
+	{
+		return eResult::Fail_NotImplemented;
+	}
+
 	void ComputeShader::OnExcute()
 	{
 		Binds();
@@ -83,5 +118,21 @@ namespace mh::graphics
 	}
 	void ComputeShader::Clear()
 	{
+	}
+	eResult ComputeShader::CreateShader(const void* _pByteCode, size_t _ByteCodeSize)
+	{
+		eResult result = eResult::Fail_Create;
+
+		if (GetDevice()->CreateComputeShader(
+			_pByteCode,
+			_ByteCodeSize,
+			nullptr,
+			mCS.ReleaseAndGetAddressOf())
+			)
+		{
+			result = eResult::Success;
+		}
+
+		return result;
 	}
 }

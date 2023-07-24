@@ -4,9 +4,11 @@
 #include "Material.h"
 #include "BaseRenderer.h"
 
-using namespace mh::graphics;
+
 namespace mh
 {
+	using namespace mh::GPU;
+
 	class MeshRenderer : public BaseRenderer
 	{
 	public:

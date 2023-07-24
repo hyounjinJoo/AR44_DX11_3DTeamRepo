@@ -3,7 +3,7 @@
 #include "GPUBuffer.h"
 
 
-namespace mh::graphics
+namespace mh::GPU
 {
 	class StructedBuffer 
 		: public GPUBuffer

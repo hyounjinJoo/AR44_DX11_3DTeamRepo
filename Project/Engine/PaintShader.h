@@ -2,7 +2,7 @@
 #include "ComputeShader.h"
 #include "Texture.h"
 
-namespace mh::graphics
+namespace mh::GPU
 {
 	class PaintShader : public ComputeShader
 	{

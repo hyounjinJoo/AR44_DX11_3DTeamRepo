@@ -1,13 +1,14 @@
 #include "ClientPCH.h"
-
 #include "guiHierarchy.h"
-#include "Application.h"
-#include "Scene.h"
-#include "Layer.h"
-#include "SceneManager.h"
+
+#include <Engine/Application.h>
+#include <Engine/Scene.h>
+#include <Engine/Layer.h>
+#include <Engine/SceneManager.h>
+#include <Engine/Renderer.h>
+
 #include "guiInspector.h"
 #include "guiEditor.h"
-#include "Renderer.h"
 #include "guiInspector.h"
 
 extern mh::Application application;

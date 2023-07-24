@@ -52,15 +52,15 @@ namespace mh
 		Vector2 resolution(width, height);
 
 		// Constant buffer
-		graphics::ConstantBuffer* CB = renderer::constantBuffers[(UINT)graphics::eCBType::Grid];
+		GPU::ConstantBuffer* CB = renderer::constantBuffers[(UINT)GPU::eCBType::Grid];
 		renderer::GridCB data;
 		data.CameraPosition = position;
 		data.CameraScale = Vector2(scale, scale);
 		data.Resolution = resolution;
 		
 		CB->SetData(&data);
-		CB->Bind(graphics::eShaderStage::VS);
-		CB->Bind(graphics::eShaderStage::PS);
+		CB->Bind(GPU::eShaderStage::VS);
+		CB->Bind(GPU::eShaderStage::PS);
  	}
 
 	void GridScript::FixedUpdate()

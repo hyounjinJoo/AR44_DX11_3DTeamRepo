@@ -1,6 +1,10 @@
 
 #include "EnginePCH.h"
 
+#include "define_Default.h"
+
+#include "DefaultShaders.h"
+
 #include "Renderer.h"
 #include "TimeManager.h"
 #include "GameResources.h"
@@ -30,10 +34,11 @@ namespace mh::renderer
 
 	void LoadMesh()
 	{
+		using namespace mh::define;
 		#pragma region POINT MESH
 		Vertex v = {};
 		std::shared_ptr<Mesh> pointMesh = std::make_shared<Mesh>();
-		GameResources::Insert<Mesh>(L"PointMesh", pointMesh);
+		GameResources::Insert<Mesh>(strKey_Default::PointMesh, pointMesh);
 		pointMesh->CreateVertexBuffer(&v, 1);
 		UINT pointIndex = 0;
 		pointMesh->CreateIndexBuffer(&pointIndex, 1);
@@ -58,7 +63,7 @@ namespace mh::renderer
 
 		// Crate Mesh
 		std::shared_ptr<Mesh> mesh = std::make_shared<Mesh>();
-		GameResources::Insert<Mesh>(L"RectMesh", mesh);
+		GameResources::Insert<Mesh>(strKey_Default::RectMesh, mesh);
 		mesh->CreateVertexBuffer(gVertices, 4);
 
 		std::vector<UINT> indexes;
@@ -90,7 +95,7 @@ namespace mh::renderer
 
 		// Create Mesh
 		std::shared_ptr<Mesh> debugmesh = std::make_shared<Mesh>();
-		GameResources::Insert<Mesh>(L"DebugRectMesh", debugmesh);
+		GameResources::Insert<Mesh>(strKey_Default::DebugRectMesh, debugmesh);
 		debugmesh->CreateVertexBuffer(gVertices, 4);
 		debugmesh->CreateIndexBuffer(indexes.data(), static_cast<UINT>(indexes.size()));
 #pragma endregion
@@ -130,7 +135,7 @@ namespace mh::renderer
 
 		// Crate Mesh
 		std::shared_ptr<Mesh> cirlceMesh = std::make_shared<Mesh>();
-		GameResources::Insert<Mesh>(L"CircleMesh", cirlceMesh);
+		GameResources::Insert<Mesh>(strKey_Default::CircleMesh, cirlceMesh);
 		cirlceMesh->CreateVertexBuffer(circleVtxes.data(), static_cast<UINT>(circleVtxes.size()));
 		cirlceMesh->CreateIndexBuffer(indexes.data(), static_cast<UINT>(indexes.size()));
 #pragma endregion
@@ -334,7 +339,7 @@ namespace mh::renderer
 
 		// Crate Mesh
 		std::shared_ptr<Mesh> cubMesh = std::make_shared<Mesh>();
-		GameResources::Insert<Mesh>(L"CubeMesh", cubMesh);
+		GameResources::Insert<Mesh>(strKey_Default::CubeMesh, cubMesh);
 		cubMesh->CreateVertexBuffer(arrCube, 24);
 		cubMesh->CreateIndexBuffer(indexes.data(), static_cast<UINT>(indexes.size()));
 #pragma endregion
@@ -445,7 +450,7 @@ namespace mh::renderer
 		}
 
 		std::shared_ptr<Mesh> sphereMesh = std::make_shared<Mesh>();
-		GameResources::Insert<Mesh>(L"SphereMesh", sphereMesh);
+		GameResources::Insert<Mesh>(strKey_Default::SphereMesh, sphereMesh);
 		sphereMesh->CreateVertexBuffer(sphereVtx.data(), static_cast<UINT>(sphereVtx.size()));
 		sphereMesh->CreateIndexBuffer(indexes.data(), static_cast<UINT>(indexes.size()));
 
@@ -455,182 +460,192 @@ namespace mh::renderer
 	void LoadShader()
 	{
 #pragma region DEFAULT TRIANGLE SHADER
-		std::shared_ptr<Shader> shader = std::make_shared<Shader>();
-		shader->Create(eShaderStage::VS, L"TriangleVS.hlsl", "main");
-		shader->Create(eShaderStage::PS, L"TrianglePS.hlsl", "main");
+		std::shared_ptr<Shader> TriangleShader = std::make_shared<Shader>();
+		TriangleShader->CreateByHeader(eGSStage::VS, VS_Triangle, sizeof(VS_Triangle));
+		TriangleShader->CreateByHeader(eGSStage::PS, PS_Triangle, sizeof(PS_Triangle));
+		//shader->Create(eShaderStage::VS, "TriangleVS.hlsl", "main");
+		//shader->Create(eShaderStage::PS, "TrianglePS.hlsl", "main");
 
-		GameResources::Insert<Shader>(L"RectShader", shader);
+		GameResources::Insert<Shader>("RectShader", TriangleShader);
 #pragma endregion
 #pragma region SPRITE SHADER
 		std::shared_ptr<Shader> spriteShader = std::make_shared<Shader>();
-		spriteShader->Create(eShaderStage::VS, L"SpriteVS.hlsl", "main");
-		spriteShader->Create(eShaderStage::PS, L"SpritePS.hlsl", "main");
+		spriteShader->CreateByHeader(eGSStage::VS, VS_Sprite, sizeof(VS_Sprite));
+		spriteShader->CreateByHeader(eGSStage::PS, PS_Sprite, sizeof(PS_Sprite));
+		//spriteShader->Create(eShaderStage::VS, "SpriteVS.hlsl", "main");
+		//spriteShader->Create(eShaderStage::PS, "SpritePS.hlsl", "main");
 		spriteShader->SetRSState(eRSType::SolidNone);
-		GameResources::Insert<Shader>(L"SpriteShader", spriteShader);
+		GameResources::Insert<Shader>("SpriteShader", spriteShader);
 #pragma endregion
 #pragma region UI SHADER
 		std::shared_ptr<Shader> uiShader = std::make_shared<Shader>();
-		uiShader->Create(eShaderStage::VS, L"UserInterfaceVS.hlsl", "main");
-		uiShader->Create(eShaderStage::PS, L"UserInterfacePS.hlsl", "main");
+		uiShader->CreateByHeader(eGSStage::VS, VS_UserInterface, sizeof(VS_UserInterface));
+		uiShader->CreateByHeader(eGSStage::PS, PS_UserInterface, sizeof(PS_UserInterface));
+		//uiShader->Create(eShaderStage::VS, "UserInterfaceVS.hlsl", "main");
+		//uiShader->Create(eShaderStage::PS, "UserInterfacePS.hlsl", "main");
 
-		GameResources::Insert<Shader>(L"UIShader", uiShader);
+		GameResources::Insert<Shader>("UIShader", uiShader);
 #pragma endregion
 #pragma region GRID SHADER
 		std::shared_ptr<Shader> gridShader = std::make_shared<Shader>();
-		gridShader->Create(eShaderStage::VS, L"GridVS.hlsl", "main");
-		gridShader->Create(eShaderStage::PS, L"GridPS.hlsl", "main");
+		gridShader->CreateByHeader(eGSStage::VS, VS_Grid, sizeof(VS_Grid));
+		gridShader->CreateByHeader(eGSStage::PS, PS_Grid, sizeof(PS_Grid));
+
+		//gridShader->Create(eShaderStage::VS, "GridVS.hlsl", "main");
+		//gridShader->Create(eShaderStage::PS, "GridPS.hlsl", "main");
 		gridShader->SetRSState(eRSType::SolidNone);
 		gridShader->SetDSState(eDSType::NoWrite);
 		gridShader->SetBSState(eBSType::AlphaBlend);
 
-		GameResources::Insert<Shader>(L"GridShader", gridShader);
+		GameResources::Insert<Shader>("GridShader", gridShader);
 #pragma endregion
 #pragma region DEBUG SHADER
 		std::shared_ptr<Shader> debugShader = std::make_shared<Shader>();
-		debugShader->Create(eShaderStage::VS, L"DebugVS.hlsl", "main");
-		debugShader->Create(eShaderStage::PS, L"DebugPS.hlsl", "main");
+		debugShader->CreateByHeader(eGSStage::VS, VS_Debug, sizeof(VS_Debug));
+		debugShader->CreateByHeader(eGSStage::PS, PS_Debug, sizeof(PS_Debug));
+
+		//debugShader->Create(eShaderStage::VS, "DebugVS.hlsl", "main");
+		//debugShader->Create(eShaderStage::PS, "DebugPS.hlsl", "main");
 		debugShader->SetRSState(eRSType::SolidNone);
 		debugShader->SetDSState(eDSType::NoWrite);
 		debugShader->SetBSState(eBSType::AlphaBlend);
 		debugShader->SetTopology(D3D11_PRIMITIVE_TOPOLOGY::D3D11_PRIMITIVE_TOPOLOGY_LINESTRIP);
 
-		GameResources::Insert<Shader>(L"DebugShader", debugShader);
+		GameResources::Insert<Shader>("DebugShader", debugShader);
 #pragma endregion
 #pragma region PAINT SHADER
 		std::shared_ptr<PaintShader> paintShader = std::make_shared<PaintShader>();
-		paintShader->Create(L"PaintCS.hlsl", "main");
-		GameResources::Insert<PaintShader>(L"PaintShader", paintShader);
+		paintShader->CreateByHeader(CS_Paint, sizeof(CS_Paint));
+		//paintShader->Create("PaintCS.hlsl", "main");
+		GameResources::Insert<PaintShader>("PaintShader", paintShader);
 #pragma endregion
 #pragma region PARTICLE SHADER
 		std::shared_ptr<Shader> particleShader = std::make_shared<Shader>();
-		particleShader->Create(eShaderStage::VS, L"ParticleVS.hlsl", "main");
-		particleShader->Create(eShaderStage::GS, L"ParticleGS.hlsl", "main");
-		particleShader->Create(eShaderStage::PS, L"ParticlePS.hlsl", "main");
+
+		particleShader->CreateByHeader(eGSStage::VS, VS_Particle, sizeof(VS_Particle));
+		particleShader->CreateByHeader(eGSStage::GS, GS_Particle, sizeof(GS_Particle));
+		particleShader->CreateByHeader(eGSStage::PS, PS_Particle, sizeof(PS_Particle));
+		//particleShader->Create(eShaderStage::VS, "ParticleVS.hlsl", "main");
+		//particleShader->Create(eShaderStage::GS, "ParticleGS.hlsl", "main");
+		//particleShader->Create(eShaderStage::PS, "ParticlePS.hlsl", "main");
 		particleShader->SetRSState(eRSType::SolidNone);
 		particleShader->SetDSState(eDSType::NoWrite);
 		particleShader->SetBSState(eBSType::AlphaBlend);
 		particleShader->SetTopology(D3D11_PRIMITIVE_TOPOLOGY::D3D11_PRIMITIVE_TOPOLOGY_POINTLIST);
-		GameResources::Insert<Shader>(L"ParticleShader", particleShader);
+		GameResources::Insert<Shader>("ParticleShader", particleShader);
 
 		std::shared_ptr<ParticleShader> particleCS = std::make_shared<ParticleShader>();
-		GameResources::Insert<ParticleShader>(L"ParticleCS", particleCS);
-		particleCS->Create(L"ParticleCS.hlsl", "main");
+		GameResources::Insert<ParticleShader>("ParticleCS", particleCS);
+		particleCS->CreateByHeader(CS_Particle, sizeof(CS_Particle));
+		//particleCS->Create("ParticleCS.hlsl", "main");
 #pragma endregion
 #pragma region POST PROCESS SHADER
 		std::shared_ptr<Shader> postProcessShader = std::make_shared<Shader>();
-		postProcessShader->Create(eShaderStage::VS, L"PostProcessVS.hlsl", "main");
-		postProcessShader->Create(eShaderStage::PS, L"PostProcessPS.hlsl", "main");
+		postProcessShader->CreateByHeader(eGSStage::VS, VS_PostProcess, sizeof(VS_PostProcess));
+		postProcessShader->CreateByHeader(eGSStage::PS, PS_PostProcess, sizeof(PS_PostProcess));
+		//postProcessShader->Create(eShaderStage::VS, "PostProcessVS.hlsl", "main");
+		//postProcessShader->Create(eShaderStage::PS, "PostProcessPS.hlsl", "main");
 		postProcessShader->SetDSState(eDSType::NoWrite);
-		GameResources::Insert<Shader>(L"PostProcessShader", postProcessShader);
+		GameResources::Insert<Shader>("PostProcessShader", postProcessShader);
 #pragma endregion
 #pragma region BASIC 3D
 		std::shared_ptr<Shader> basicShader = std::make_shared<Shader>();
-		basicShader->Create(eShaderStage::VS, L"BasicVS.hlsl", "main");
-		basicShader->Create(eShaderStage::PS, L"BasicPS.hlsl", "main");
-		GameResources::Insert<Shader>(L"BasicShader", basicShader);
+		basicShader->CreateByHeader(eGSStage::VS, VS_Basic, sizeof(VS_Basic));
+		basicShader->CreateByHeader(eGSStage::PS, PS_Basic, sizeof(PS_Basic));
+		GameResources::Insert<Shader>("BasicShader", basicShader);
 #pragma endregion
 	}
 
 	void SetUpState()
 	{
-		#pragma region Input layout 2D
-		D3D11_INPUT_ELEMENT_DESC arrLayoutDesc[6] = {};
+		#pragma region Input layout
+		std::vector<D3D11_INPUT_ELEMENT_DESC> vecLayoutDesc;
+		D3D11_INPUT_ELEMENT_DESC LayoutDesc{};
 
-		arrLayoutDesc[0].AlignedByteOffset = 0;
-		arrLayoutDesc[0].Format = DXGI_FORMAT_R32G32B32A32_FLOAT;
-		arrLayoutDesc[0].InputSlot = 0;
-		arrLayoutDesc[0].InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
-		arrLayoutDesc[0].SemanticName = "POSITION";
-		arrLayoutDesc[0].SemanticIndex = 0;
+		LayoutDesc.AlignedByteOffset = 0;
+		LayoutDesc.Format = DXGI_FORMAT_R32G32B32A32_FLOAT;
+		LayoutDesc.InputSlot = 0;
+		LayoutDesc.InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
+		LayoutDesc.SemanticName = "POSITION";
+		LayoutDesc.SemanticIndex = 0;
+		vecLayoutDesc.push_back(LayoutDesc);
+		LayoutDesc = D3D11_INPUT_ELEMENT_DESC{};
 
-		arrLayoutDesc[1].AlignedByteOffset = 16;
-		arrLayoutDesc[1].Format = DXGI_FORMAT_R32G32B32A32_FLOAT;
-		arrLayoutDesc[1].InputSlot = 0;
-		arrLayoutDesc[1].InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
-		arrLayoutDesc[1].SemanticName = "COLOR";
-		arrLayoutDesc[1].SemanticIndex = 0;
+		LayoutDesc.AlignedByteOffset = 16;
+		LayoutDesc.Format = DXGI_FORMAT_R32G32B32A32_FLOAT;
+		LayoutDesc.InputSlot = 0;
+		LayoutDesc.InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
+		LayoutDesc.SemanticName = "COLOR";
+		LayoutDesc.SemanticIndex = 0;
+		vecLayoutDesc.push_back(LayoutDesc);
+		LayoutDesc = D3D11_INPUT_ELEMENT_DESC{};
 
-		arrLayoutDesc[2].AlignedByteOffset = 32;
-		arrLayoutDesc[2].Format = DXGI_FORMAT_R32G32_FLOAT;
-		arrLayoutDesc[2].InputSlot = 0;
-		arrLayoutDesc[2].InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
-		arrLayoutDesc[2].SemanticName = "TEXCOORD";
-		arrLayoutDesc[2].SemanticIndex = 0;
-
-		arrLayoutDesc[3].AlignedByteOffset = 40;
-		arrLayoutDesc[3].Format = DXGI_FORMAT_R32G32B32_FLOAT;
-		arrLayoutDesc[3].InputSlot = 0;
-		arrLayoutDesc[3].InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
-		arrLayoutDesc[3].SemanticName = "TANGENT";
-		arrLayoutDesc[3].SemanticIndex = 0;
-
-		arrLayoutDesc[4].AlignedByteOffset = 52;
-		arrLayoutDesc[4].Format = DXGI_FORMAT_R32G32B32_FLOAT;
-		arrLayoutDesc[4].InputSlot = 0;
-		arrLayoutDesc[4].InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
-		arrLayoutDesc[4].SemanticName = "BINORMAL";
-		arrLayoutDesc[4].SemanticIndex = 0;
-
-		arrLayoutDesc[5].AlignedByteOffset = 64;
-		arrLayoutDesc[5].Format = DXGI_FORMAT_R32G32B32_FLOAT;
-		arrLayoutDesc[5].InputSlot = 0;
-		arrLayoutDesc[5].InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
-		arrLayoutDesc[5].SemanticName = "NORMAL";
-		arrLayoutDesc[5].SemanticIndex = 0;
+		LayoutDesc.AlignedByteOffset = 32;
+		LayoutDesc.Format = DXGI_FORMAT_R32G32_FLOAT;
+		LayoutDesc.InputSlot = 0;
+		LayoutDesc.InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
+		LayoutDesc.SemanticName = "TEXCOORD";
+		LayoutDesc.SemanticIndex = 0;
+		vecLayoutDesc.push_back(LayoutDesc);
+		LayoutDesc = D3D11_INPUT_ELEMENT_DESC{};
 
 		//Vector3 Tangent;
 		//Vector3 BiNormal;
 		//Vector3 Normal;
 
+		std::shared_ptr<Shader> shader = GameResources::Find<Shader>("RectShader");
+		shader->CreateInputLayout(vecLayoutDesc);
 
-		std::shared_ptr<Shader> shader = GameResources::Find<Shader>(L"RectShader");
-		GetDevice()->CreateInputLayout(arrLayoutDesc, 3
-			, shader->GetVSBlobBufferPointer()
-			, shader->GetVSBlobBufferSize()
-			, shader->GetInputLayoutAddressOf());
+		std::shared_ptr<Shader> spriteShader = GameResources::Find<Shader>("SpriteShader");
+		spriteShader->CreateInputLayout(vecLayoutDesc);
 
-		std::shared_ptr<Shader> spriteShader = GameResources::Find<Shader>(L"SpriteShader");
-		GetDevice()->CreateInputLayout(arrLayoutDesc, 3
-			, spriteShader->GetVSBlobBufferPointer()
-			, spriteShader->GetVSBlobBufferSize()
-			, spriteShader->GetInputLayoutAddressOf());
+		std::shared_ptr<Shader> uiShader = GameResources::Find<Shader>("UIShader");
+		uiShader->CreateInputLayout(vecLayoutDesc);
 
-		std::shared_ptr<Shader> uiShader = GameResources::Find<Shader>(L"UIShader");
-		GetDevice()->CreateInputLayout(arrLayoutDesc, 3
-			, uiShader->GetVSBlobBufferPointer()
-			, uiShader->GetVSBlobBufferSize()
-			, uiShader->GetInputLayoutAddressOf());
+		std::shared_ptr<Shader> gridShader = GameResources::Find<Shader>("GridShader");
+		uiShader->CreateInputLayout(vecLayoutDesc);
 
-		std::shared_ptr<Shader> gridShader = GameResources::Find<Shader>(L"GridShader");
-		GetDevice()->CreateInputLayout(arrLayoutDesc, 3
-			, gridShader->GetVSBlobBufferPointer()
-			, gridShader->GetVSBlobBufferSize()
-			, gridShader->GetInputLayoutAddressOf());
+		std::shared_ptr<Shader> debugShader = GameResources::Find<Shader>("DebugShader");
+		debugShader->CreateInputLayout(vecLayoutDesc);
+
+		std::shared_ptr<Shader> particleShader = GameResources::Find<Shader>("ParticleShader");
+		particleShader->CreateInputLayout(vecLayoutDesc);
+
+		std::shared_ptr<Shader> postProcessShader = GameResources::Find<Shader>("PostProcessShader");
+		postProcessShader->CreateInputLayout(vecLayoutDesc);
 
 
-		std::shared_ptr<Shader> debugShader = GameResources::Find<Shader>(L"DebugShader");
-		GetDevice()->CreateInputLayout(arrLayoutDesc, 3
-			, debugShader->GetVSBlobBufferPointer()
-			, debugShader->GetVSBlobBufferSize()
-			, debugShader->GetInputLayoutAddressOf());
+		LayoutDesc.AlignedByteOffset = 40;
+		LayoutDesc.Format = DXGI_FORMAT_R32G32B32_FLOAT;
+		LayoutDesc.InputSlot = 0;
+		LayoutDesc.InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
+		LayoutDesc.SemanticName = "TANGENT";
+		LayoutDesc.SemanticIndex = 0;
+		vecLayoutDesc.push_back(LayoutDesc);
+		LayoutDesc = D3D11_INPUT_ELEMENT_DESC{};
 
-		std::shared_ptr<Shader> particleShader = GameResources::Find<Shader>(L"ParticleShader");
-		GetDevice()->CreateInputLayout(arrLayoutDesc, 3
-			, particleShader->GetVSBlobBufferPointer()
-			, particleShader->GetVSBlobBufferSize()
-			, particleShader->GetInputLayoutAddressOf());
+		LayoutDesc.AlignedByteOffset = 52;
+		LayoutDesc.Format = DXGI_FORMAT_R32G32B32_FLOAT;
+		LayoutDesc.InputSlot = 0;
+		LayoutDesc.InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
+		LayoutDesc.SemanticName = "BINORMAL";
+		LayoutDesc.SemanticIndex = 0;
+		vecLayoutDesc.push_back(LayoutDesc);
+		LayoutDesc = D3D11_INPUT_ELEMENT_DESC{};
 
-		std::shared_ptr<Shader> postProcessShader = GameResources::Find<Shader>(L"PostProcessShader");
-		GetDevice()->CreateInputLayout(arrLayoutDesc, 3
-			, postProcessShader->GetVSBlobBufferPointer()
-			, postProcessShader->GetVSBlobBufferSize()
-			, postProcessShader->GetInputLayoutAddressOf());
+		LayoutDesc.AlignedByteOffset = 64;
+		LayoutDesc.Format = DXGI_FORMAT_R32G32B32_FLOAT;
+		LayoutDesc.InputSlot = 0;
+		LayoutDesc.InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
+		LayoutDesc.SemanticName = "NORMAL";
+		LayoutDesc.SemanticIndex = 0;
+		vecLayoutDesc.push_back(LayoutDesc);
+		LayoutDesc = D3D11_INPUT_ELEMENT_DESC{};
 
-		std::shared_ptr<Shader> basicShader = GameResources::Find<Shader>(L"BasicShader");
-		GetDevice()->CreateInputLayout(arrLayoutDesc, 6
-			, basicShader->GetVSBlobBufferPointer()
-			, basicShader->GetVSBlobBufferSize()
-			, basicShader->GetInputLayoutAddressOf());
+
+
+		std::shared_ptr<Shader> basicShader = GameResources::Find<Shader>("BasicShader");
+		basicShader->CreateInputLayout(vecLayoutDesc);
 
 #pragma endregion
 
@@ -798,25 +813,25 @@ namespace mh::renderer
 	void LoadTexture()
 	{
 		#pragma region STATIC TEXTURE
-		GameResources::Load<Texture>(L"SmileTexture", L"Smile.png");
-		GameResources::Load<Texture>(L"DefaultSprite", L"Light.png");
-		GameResources::Load<Texture>(L"HPBarTexture", L"HPBar.png");
-		GameResources::Load<Texture>(L"CartoonSmoke", L"particle\\CartoonSmoke.png");
-		GameResources::Load<Texture>(L"noise_01", L"noise\\noise_01.png");
-		GameResources::Load<Texture>(L"noise_02", L"noise\\noise_02.png");
-		GameResources::Load<Texture>(L"noise_03", L"noise\\noise_03.jpg");
+		GameResources::Load<Texture>("SmileTexture", "Smile.png");
+		GameResources::Load<Texture>("DefaultSprite", "Light.png");
+		GameResources::Load<Texture>("HPBarTexture", "HPBar.png");
+		GameResources::Load<Texture>("CartoonSmoke", "particle\\CartoonSmoke.png");
+		GameResources::Load<Texture>("noise_01", "noise\\noise_01.png");
+		GameResources::Load<Texture>("noise_02", "noise\\noise_02.png");
+		GameResources::Load<Texture>("noise_03", "noise\\noise_03.jpg");
 
-		GameResources::Load<Texture>(L"BasicCube", L"Cube\\TILE_01.tga");
-		GameResources::Load<Texture>(L"BasicCubeNormal", L"Cube\\TILE_01_N.tga");
+		GameResources::Load<Texture>("BasicCube", "Cube\\TILE_01.tga");
+		GameResources::Load<Texture>("BasicCubeNormal", "Cube\\TILE_01_N.tga");
 
-		GameResources::Load<Texture>(L"Brick", L"Cube\\Brick.jpg");
-		GameResources::Load<Texture>(L"Brick_N", L"Cube\\Brick_N.jpg");
+		GameResources::Load<Texture>("Brick", "Cube\\Brick.jpg");
+		GameResources::Load<Texture>("Brick_N", "Cube\\Brick_N.jpg");
 	#pragma endregion
 		#pragma region DYNAMIC TEXTURE
 		std::shared_ptr<Texture> uavTexture = std::make_shared<Texture>();
 		uavTexture->Create(1024, 1024, DXGI_FORMAT_R8G8B8A8_UNORM, D3D11_BIND_SHADER_RESOURCE 
 			| D3D11_BIND_UNORDERED_ACCESS);
-		GameResources::Insert<Texture>(L"PaintTexture", uavTexture);
+		GameResources::Insert<Texture>("PaintTexture", uavTexture);
 	#pragma endregion
 
 		//noise
@@ -829,71 +844,71 @@ namespace mh::renderer
 	void LoadMaterial()
 	{
 		#pragma region DEFAULT
-		std::shared_ptr <Texture> texture = GameResources::Find<Texture>(L"PaintTexture");
-		std::shared_ptr<Shader> shader = GameResources::Find<Shader>(L"RectShader");
+		std::shared_ptr <Texture> texture = GameResources::Find<Texture>("PaintTexture");
+		std::shared_ptr<Shader> shader = GameResources::Find<Shader>("RectShader");
 		std::shared_ptr<Material> material = std::make_shared<Material>();
 		material->SetShader(shader);
 		material->SetTexture(eTextureSlot::Albedo, texture);
-		GameResources::Insert<Material>(L"RectMaterial", material);
+		GameResources::Insert<Material>("RectMaterial", material);
 #pragma endregion
 		#pragma region SPRITE
-		std::shared_ptr <Texture> spriteTexture= GameResources::Find<Texture>(L"DefaultSprite");
-		std::shared_ptr<Shader> spriteShader = GameResources::Find<Shader>(L"SpriteShader");
+		std::shared_ptr <Texture> spriteTexture= GameResources::Find<Texture>("DefaultSprite");
+		std::shared_ptr<Shader> spriteShader = GameResources::Find<Shader>("SpriteShader");
 		std::shared_ptr<Material> spriteMaterial = std::make_shared<Material>();
 		spriteMaterial->SetRenderingMode(eRenderingMode::Transparent);
 		spriteMaterial->SetShader(spriteShader);
 		spriteMaterial->SetTexture(eTextureSlot::Albedo, spriteTexture);
-		GameResources::Insert<Material>(L"SpriteMaterial", spriteMaterial);
+		GameResources::Insert<Material>("SpriteMaterial", spriteMaterial);
 #pragma endregion
 		#pragma region UI
-		std::shared_ptr <Texture> uiTexture = GameResources::Find<Texture>(L"HPBarTexture");
-		std::shared_ptr<Shader> uiShader = GameResources::Find<Shader>(L"UIShader");
+		std::shared_ptr <Texture> uiTexture = GameResources::Find<Texture>("HPBarTexture");
+		std::shared_ptr<Shader> uiShader = GameResources::Find<Shader>("UIShader");
 		std::shared_ptr<Material> uiMaterial = std::make_shared<Material>();
 		uiMaterial->SetRenderingMode(eRenderingMode::Transparent);
 	
 		uiMaterial->SetShader(uiShader);
 		uiMaterial->SetTexture(eTextureSlot::Albedo, uiTexture);
-		GameResources::Insert<Material>(L"UIMaterial", uiMaterial);
+		GameResources::Insert<Material>("UIMaterial", uiMaterial);
 #pragma endregion
 		#pragma region GRID
-		std::shared_ptr<Shader> gridShader = GameResources::Find<Shader>(L"GridShader");
+		std::shared_ptr<Shader> gridShader = GameResources::Find<Shader>("GridShader");
 		std::shared_ptr<Material> gridMaterial = std::make_shared<Material>();
 		gridMaterial->SetShader(gridShader);
-		GameResources::Insert<Material>(L"GridMaterial", gridMaterial);
+		GameResources::Insert<Material>("GridMaterial", gridMaterial);
 #pragma endregion
 		#pragma region DEBUG
-		std::shared_ptr<Shader> debugShader = GameResources::Find<Shader>(L"DebugShader");
+		std::shared_ptr<Shader> debugShader = GameResources::Find<Shader>("DebugShader");
 		std::shared_ptr<Material> debugMaterial = std::make_shared<Material>();
 		debugMaterial->SetRenderingMode(eRenderingMode::Transparent);
 		debugMaterial->SetShader(debugShader);
-		GameResources::Insert<Material>(L"DebugMaterial", debugMaterial);
+		GameResources::Insert<Material>("DebugMaterial", debugMaterial);
 #pragma endregion
 		#pragma region PARTICLE
-		std::shared_ptr<Shader> particleShader = GameResources::Find<Shader>(L"ParticleShader");
+		std::shared_ptr<Shader> particleShader = GameResources::Find<Shader>("ParticleShader");
 		std::shared_ptr<Material> particleMaterial = std::make_shared<Material>();
 		particleMaterial->SetRenderingMode(eRenderingMode::Transparent);
 		particleMaterial->SetShader(particleShader);
-		GameResources::Insert<Material>(L"ParticleMaterial", particleMaterial);
+		GameResources::Insert<Material>("ParticleMaterial", particleMaterial);
 #pragma endregion
 #pragma region POSTPROCESS
-		std::shared_ptr<Shader> postProcessShader = GameResources::Find<Shader>(L"PostProcessShader");
+		std::shared_ptr<Shader> postProcessShader = GameResources::Find<Shader>("PostProcessShader");
 		std::shared_ptr<Material> postProcessMaterial = std::make_shared<Material>();
 		postProcessMaterial->SetRenderingMode(eRenderingMode::PostProcess);
 		postProcessMaterial->SetShader(postProcessShader);
-		GameResources::Insert<Material>(L"PostProcessMaterial", postProcessMaterial);
+		GameResources::Insert<Material>("PostProcessMaterial", postProcessMaterial);
 #pragma endregion
 
 #pragma region BASIC
-		std::shared_ptr<Shader> basicShader = GameResources::Find<Shader>(L"BasicShader");
+		std::shared_ptr<Shader> basicShader = GameResources::Find<Shader>("BasicShader");
 		std::shared_ptr<Material> basicMaterial = std::make_shared<Material>();
 		basicMaterial->SetRenderingMode(eRenderingMode::Transparent);
 		basicMaterial->SetShader(basicShader);
 
-		std::shared_ptr <Texture> albedo = GameResources::Find<Texture>(L"Brick");
+		std::shared_ptr <Texture> albedo = GameResources::Find<Texture>("Brick");
 		basicMaterial->SetTexture(eTextureSlot::Albedo, albedo);
-		albedo = GameResources::Find<Texture>(L"Brick_N");
+		albedo = GameResources::Find<Texture>("Brick_N");
 		basicMaterial->SetTexture(eTextureSlot::Normal, albedo);
-		GameResources::Insert<Material>(L"BasicMaterial", basicMaterial);
+		GameResources::Insert<Material>("BasicMaterial", basicMaterial);
 
 
 #pragma endregion
@@ -963,7 +978,7 @@ namespace mh::renderer
 	float NoiseTime = 10.0f;
 	void BindNoiseTexture()
 	{
-		std::shared_ptr<Texture> noise = GameResources::Find<Texture>(L"noise_03");
+		std::shared_ptr<Texture> noise = GameResources::Find<Texture>("noise_03");
 		noise->BindShaderResource(eShaderStage::VS, 16);
 		noise->BindShaderResource(eShaderStage::HS, 16);
 		noise->BindShaderResource(eShaderStage::DS, 16);
@@ -989,7 +1004,7 @@ namespace mh::renderer
 
 	void CopyRenderTarget()
 	{
-		std::shared_ptr<Texture> renderTarget = GameResources::Find<Texture>(L"RenderTargetTexture");
+		std::shared_ptr<Texture> renderTarget = GameResources::Find<Texture>("RenderTargetTexture");
 
 		ID3D11ShaderResourceView* srv = nullptr;
 		GetDevice()->BindShaderResource(eShaderStage::PS, 60, &srv);
