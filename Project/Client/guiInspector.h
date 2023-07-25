@@ -29,8 +29,8 @@ namespace gui
 		mh::GameObject* mTargetGameObject;
 		mh::IRes* mTargetResource;
 
-		gui::IComponent* mTransform;
-		std::vector<gui::IComponent*> mComponents;
+		guiComponent* mTransform;
+		std::vector<gui::guiComponent*> mComponents;
 		std::vector<gui::IRes*> mResources;
 	};
 }

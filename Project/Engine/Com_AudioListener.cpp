@@ -30,10 +30,10 @@ namespace mh
 
 	void Com_AudioListener::FixedUpdate()
 	{
-		Transform* tr = GetOwner()->GetComponent<Transform>();
-		math::Vector3 pos = tr->GetPosition();
-		math::Vector3 foward = tr->Foward();
-		math::Vector3 up = tr->Up();
+		Transform& tr = GetOwner()->GetTransform();
+		math::Vector3 pos = tr.GetPosition();
+		math::Vector3 foward = tr.Foward();
+		math::Vector3 up = tr.Up();
 
 		math::Vector3 vel = { 0.0f, 0.0f, 0.0f };
 		Fmod::Set3DListenerAttributes(&pos, &vel, &foward, &up);

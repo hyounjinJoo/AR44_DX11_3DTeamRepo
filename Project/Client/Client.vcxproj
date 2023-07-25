@@ -73,25 +73,25 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <OutDir>$(SolutionDir)Output\$(Configuration)\</OutDir>
-    <IntDir>$(SolutionDir)Obj\$(Configuration)\$(ProjectName)\</IntDir>
+    <IntDir>$(SolutionDir)Output\Obj\$(Configuration)\$(ProjectName)\</IntDir>
     <ExternalIncludePath>$(SolutionDir)Project\;$(SolutionDir)External\Include\;$(ExternalIncludePath)</ExternalIncludePath>
     <LibraryPath>$(SolutionDir)External\Lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <OutDir>$(SolutionDir)Output\$(Configuration)\</OutDir>
-    <IntDir>$(SolutionDir)Obj\$(Configuration)\$(ProjectName)\</IntDir>
+    <IntDir>$(SolutionDir)Output\Obj\$(Configuration)\$(ProjectName)\</IntDir>
     <ExternalIncludePath>$(SolutionDir)Project\;$(SolutionDir)External\Include\;$(ExternalIncludePath)</ExternalIncludePath>
     <LibraryPath>$(SolutionDir)External\Lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <OutDir>$(SolutionDir)Output\$(Configuration)\</OutDir>
-    <IntDir>$(SolutionDir)Obj\$(Configuration)\$(ProjectName)\</IntDir>
+    <IntDir>$(SolutionDir)Output\Obj\$(Configuration)\$(ProjectName)\</IntDir>
     <ExternalIncludePath>$(SolutionDir)Project\;$(SolutionDir)External\Include\;$(ExternalIncludePath)</ExternalIncludePath>
     <LibraryPath>$(SolutionDir)External\Lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <OutDir>$(SolutionDir)Output\$(Configuration)\</OutDir>
-    <IntDir>$(SolutionDir)Obj\$(Configuration)\$(ProjectName)\</IntDir>
+    <IntDir>$(SolutionDir)Output\Obj\$(Configuration)\$(ProjectName)\</IntDir>
     <ExternalIncludePath>$(SolutionDir)Project\;$(SolutionDir)External\Include\;$(ExternalIncludePath)</ExternalIncludePath>
     <LibraryPath>$(SolutionDir)External\Lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
@@ -184,7 +184,7 @@ call HLSLCopy.bat $(Platform) $(Configuration)</Command>
     <ClInclude Include="guiInspector.h" />
     <ClInclude Include="guiMaterial.h" />
     <ClInclude Include="guiMesh.h" />
-    <ClInclude Include="guiMeshRenderer.h" />
+    <ClInclude Include="guiCom_Renderer_Mesh.h" />
     <ClInclude Include="guiProject.h" />
     <ClInclude Include="guiResource.h" />
     <ClInclude Include="guiTexture.h" />
@@ -219,7 +219,7 @@ call HLSLCopy.bat $(Platform) $(Configuration)</Command>
     <ClCompile Include="guiInspector.cpp" />
     <ClCompile Include="guiMaterial.cpp" />
     <ClCompile Include="guiMesh.cpp" />
-    <ClCompile Include="guiMeshRenderer.cpp" />
+    <ClCompile Include="guiCom_Renderer_Mesh.cpp" />
     <ClCompile Include="guiProject.cpp" />
     <ClCompile Include="guiResource.cpp" />
     <ClCompile Include="guiTexture.cpp" />

@@ -1,9 +1,10 @@
 #pragma once
 #include "IComponent.h"
-#include "Transform.h"
+
 
 namespace mh
 {
+	class Transform;
 	class ICollider2D : public IComponent
 	{
 	public:

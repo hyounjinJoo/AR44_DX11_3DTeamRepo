@@ -103,7 +103,7 @@ namespace mh
 		}
 
 		mMaxParticles = mBuffer->GetStride();
-		Vector3 pos = GetOwner()->GetComponent<Transform>()->GetPosition();
+		Vector3 pos = GetOwner()->GetTransform().GetPosition();
 		mCBData.WorldPosition = Vector4(pos.x, pos.y, pos.z, 1.0f);
 		mCBData.MaxParticles = mMaxParticles;
 		mCBData.Radius = mRadius;
@@ -126,7 +126,7 @@ namespace mh
 
 	void Com_Renderer_ParticleSystem::Render()
 	{
-		GetOwner()->GetComponent<Transform>()->SetConstantBuffer();
+		GetOwner()->GetTransform().SetConstantBuffer();
 		mBuffer->BindSRV(eShaderStage::GS, 15);
 
 		GetMaterial()->Bind();

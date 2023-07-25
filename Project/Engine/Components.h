@@ -7,5 +7,4 @@
 #include "ICollider2D.h"
 #include "ICollider3D.h"
 
-
 #include "IScript.h"

@@ -6,25 +6,22 @@
 
 namespace gui
 {
-	//TODO: 정상작동 안함
-	Transform::Transform()
-		: IComponent(mh::define::eComponentType::Animator)
+	guiTransform::guiTransform()
 	{
-		SetKey("Transform");
+		SetKey("guiTransform");
 		SetSize(ImVec2(200.0f, 120.0f));
 	}
 
-	Transform::~Transform()
+	guiTransform::~guiTransform()
 	{
 
 	}
 
-	void Transform::FixedUpdate()
+	void guiTransform::FixedUpdate()
 	{
-		IComponent::FixedUpdate();
+		Widget::FixedUpdate();
 
-
-		if (GetTarget() == nullptr)
+		if (nullptr == mTarget)
 			return;
 
 		mh::Transform* tr = GetTarget()->GetComponent<mh::Transform>();
@@ -34,9 +31,9 @@ namespace gui
 		mScale = tr->GetScale();
 	}
 
-	void Transform::Update()
+	void guiTransform::Update()
 	{
-		IComponent::Update();
+		Widget::Update();
 
 		ImGui::Text("Position"); ImGui::SameLine();
 		ImGui::InputFloat3("##Position", (float*)&mPosisition);
@@ -57,9 +54,9 @@ namespace gui
 		}
 	}
 
-	void Transform::LateUpdate()
+	void guiTransform::LateUpdate()
 	{
-		IComponent::LateUpdate();
+		Widget::LateUpdate();
 
 	}
 }

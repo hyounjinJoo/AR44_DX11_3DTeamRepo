@@ -5,11 +5,11 @@
 
 namespace gui
 {
-	class IComponent : public Widget
+	class guiComponent : public Widget
 	{
 	public:
-		IComponent(mh::define::eComponentType _type);
-		virtual ~IComponent();
+		guiComponent(mh::define::eComponentType _type);
+		virtual ~guiComponent();
 
 		virtual void FixedUpdate() override;
 		virtual void Update() override;

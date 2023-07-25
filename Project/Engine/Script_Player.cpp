@@ -24,32 +24,32 @@ namespace mh
 
 	void Script_Player::Update()
 	{
-		Transform* tr = GetOwner()->GetComponent<Transform>();
+		Transform& tr = GetOwner()->GetTransform();
 
 		if (Input::GetKey(eKeyCode::RIGHT))
 		{
-			Vector3 pos = tr->GetPosition();
+			Vector3 pos = tr.GetPosition();
 			pos.x += 60.0f * TimeManager::DeltaTime();
-			tr->SetPosition(pos);
+			tr.SetPosition(pos);
 		}
 		if (Input::GetKey(eKeyCode::LEFT))
 		{
-			Vector3 pos = tr->GetPosition();
+			Vector3 pos = tr.GetPosition();
 			pos.x -= 60.0f * TimeManager::DeltaTime();
-			tr->SetPosition(pos);
+			tr.SetPosition(pos);
 		}
 
 		if (Input::GetKey(eKeyCode::DOWN))
 		{
-			Vector3 pos = tr->GetRotation();
+			Vector3 pos = tr.GetRotation();
 			pos.y -= 60.0f * TimeManager::DeltaTime();
-			tr->SetRotation(pos);
+			tr.SetRotation(pos);
 		}
 		if (Input::GetKey(eKeyCode::UP))
 		{
-			Vector3 pos = tr->GetRotation();
+			Vector3 pos = tr.GetRotation();
 			pos.y += 60.0f * TimeManager::DeltaTime();
-			tr->SetRotation(pos);
+			tr.SetRotation(pos);
 		}
 
 		Com_Animator* animator = GetOwner()->GetComponent<Com_Animator>();

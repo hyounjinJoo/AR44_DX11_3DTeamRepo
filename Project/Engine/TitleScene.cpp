@@ -39,7 +39,7 @@ namespace mh
 		// Main Com_Camera Game Object
 		GameObject* cameraObj = object::Instantiate<GameObject>(eLayerType::Com_Camera);
 		cameraObj->SetName("MainCamera");
-		cameraObj->GetComponent<Transform>()->SetPosition(Vector3(0.0f, 0.0f, -20.0f));
+		cameraObj->GetTransform().SetPosition(Vector3(0.0f, 0.0f, -20.0f));
 		Com_Camera* cameraComp = cameraObj->AddComponent<Com_Camera>();
 		cameraComp->SetProjectionType(Com_Camera::eProjectionType::Perspective);
 		//cameraComp->RegisterCameraInRenderer();
@@ -49,9 +49,9 @@ namespace mh
 
 
 		GameObject* player = object::Instantiate<GameObject>(eLayerType::Player);
-		player->GetComponent<Transform>()->SetPosition(Vector3(0.0f, 0.0f, 10.0f));
-		player->GetComponent<Transform>()->SetScale(Vector3(5.0f, 5.0f, 5.0f));
-		//player->GetComponent<Transform>()->SetRotation(Vector3(15.0f, 45.0f, 0.0f));
+		player->GetTransform().SetPosition(Vector3(0.0f, 0.0f, 10.0f));
+		player->GetTransform().SetScale(Vector3(5.0f, 5.0f, 5.0f));
+		//player->GetTransform().SetRotation(Vector3(15.0f, 45.0f, 0.0f));
 		player->SetName("Player");
 		Com_Renderer_Mesh* mr = player->AddComponent<Com_Renderer_Mesh>();
 
@@ -72,8 +72,8 @@ namespace mh
 			GameObject* directionalLight = object::Instantiate<GameObject>(eLayerType::Player);
 			directionalLight->SetName("directionalLight");
 
-			directionalLight->GetComponent<Transform>()->SetPosition(Vector3(0.0f, 100.0f, 0.0f));
-			directionalLight->GetComponent<Transform>()->SetRotation(Vector3(45.0f, 0.0f, 0.0f));
+			directionalLight->GetTransform().SetPosition(Vector3(0.0f, 100.0f, 0.0f));
+			directionalLight->GetTransform().SetRotation(Vector3(45.0f, 0.0f, 0.0f));
 
 			Com_Light* lightComp = directionalLight->AddComponent<Com_Light>();
 			lightComp->SetType(eLightType::Directional);
@@ -86,7 +86,7 @@ namespace mh
 			GameObject* directionalLight = object::Instantiate<GameObject>(eLayerType::Player);
 			directionalLight->SetName(L"PointLight");
 
-			directionalLight->GetComponent<Transform>()->SetPosition(Vector3(3.0f, 0.0f, 0.0f));
+			directionalLight->GetTransform().SetPosition(Vector3(3.0f, 0.0f, 0.0f));
 			Com_Light* lightComp = directionalLight->AddComponent<Com_Light>();
 			lightComp->SetType(eLightType::Point);
 			lightComp->SetRadius(20.0f);
@@ -97,7 +97,7 @@ namespace mh
 			GameObject* directionalLight = object::Instantiate<GameObject>(eLayerType::Player);
 			directionalLight->SetName(L"PointLight");
 
-			directionalLight->GetComponent<Transform>()->SetPosition(Vector3(6.0f, 0.0f, 0.0f));
+			directionalLight->GetTransform().SetPosition(Vector3(6.0f, 0.0f, 0.0f));
 			Com_Light* lightComp = directionalLight->AddComponent<Com_Light>();
 			lightComp->SetType(eLightType::Point);
 			lightComp->SetRadius(20.0f);
@@ -126,7 +126,7 @@ namespace mh
 		//	
 		//	renderer::gInspectorGameObject = obj;
 		//	obj->SetName(L"Zelda");
-		//	zeldaTr = obj->GetComponent<Transform>();
+		//	zeldaTr = obj->GetTransform();
 		//	zeldaTr->SetPosition(Vector3(0.0f, 0.0f, 20.0f));
 		//	zeldaTr->SetRotation(Vector3(0.0f, 0.0f, 45.0f));
 		//	zeldaTr->SetScale(Vector3(200.0f, 200.0f, 1.0f));
@@ -155,12 +155,12 @@ namespace mh
 		//{
 		//	Player* obj = object::Instantiate<Player>(eLayerType::Player);
 		//	obj->SetName(L"SMILE");
-		//	Transform* tr = obj->GetComponent<Transform>();
-		//	tr->SetPosition(Vector3(2.0f, 0.0f, 5.0f));
-		//	//tr->SetParent(zeldaTr);
-		//	//tr->SetScale(Vector3(2.0f, 1.0f, 1.0f));
-		//	//tr->SetRotation(Vector3(0.0f, 0.0f, XM_PIDIV2 / 2.0f));
-		//	//tr->SetScale(Vector3(1.0f, 1.0f, 1.0f));
+		//	Transform& tr = obj->GetTransform();
+		//	tr.SetPosition(Vector3(2.0f, 0.0f, 5.0f));
+		//	//tr.SetParent(zeldaTr);
+		//	//tr.SetScale(Vector3(2.0f, 1.0f, 1.0f));
+		//	//tr.SetRotation(Vector3(0.0f, 0.0f, XM_PIDIV2 / 2.0f));
+		//	//tr.SetScale(Vector3(1.0f, 1.0f, 1.0f));
 		//	ICollider2D* collider = obj->AddComponent<ICollider2D>();
 		//	collider->SetSize(Vector2(2.0f, 2.0f));
 		//	collider->SetType(eColliderType::Rect);
@@ -179,8 +179,8 @@ namespace mh
 		//{
 		//	Player* obj = object::Instantiate<Player>(eLayerType::tParticle);
 		//	obj->SetName(L"PARTICLE");
-		//	Transform* tr = obj->GetComponent<Transform>();
-		//	tr->SetPosition(Vector3(0.0f, 0.0f, 100.0f));
+		//	Transform& tr = obj->GetTransform();
+		//	tr.SetPosition(Vector3(0.0f, 0.0f, 100.0f));
 		//	obj->AddComponent<Com_Renderer_ParticleSystem>();
 		//}
 
@@ -188,7 +188,7 @@ namespace mh
 		//{
 		//	GameObject* obj = object::Instantiate<GameObject>(eLayerType::PostProcess);
 		//	obj->SetName(L"PostProcessGameObject");
-		//	zeldaTr = obj->GetComponent<Transform>();
+		//	zeldaTr = obj->GetTransform();
 		//	zeldaTr->SetPosition(Vector3(0.0f, 0.0f, 19.0f));
 		//	zeldaTr->SetScale(Vector3(200.0f, 200.0f, 1.0f));
 

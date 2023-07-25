@@ -10,8 +10,8 @@ namespace mh
 	// z값 정렬 작성중
 	//static bool CompareGameObjectByZAxis(GameObject* a, GameObject* b)
 	//{
-	//	Transform* aTr = a->GetComponent<Transform>();
-	//	Transform* bTr = b->GetComponent<Transform>();
+	//	Transform* aTr = a->GetTransform();
+	//	Transform* bTr = b->GetTransform();
 
 	//	if (aTr->GetPosition().z <= bTr->GetPosition().z)
 	//	{

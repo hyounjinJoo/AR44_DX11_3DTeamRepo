@@ -103,7 +103,7 @@
     <ClInclude Include="guiTransform.h">
       <Filter>Widget\Components</Filter>
     </ClInclude>
-    <ClInclude Include="guiMeshRenderer.h">
+    <ClInclude Include="guiCom_Renderer_Mesh.h">
       <Filter>Widget\Components</Filter>
     </ClInclude>
     <ClInclude Include="guiComponent.h">
@@ -184,7 +184,7 @@
     <ClCompile Include="guiEditorObject.cpp">
       <Filter>Editor\Object</Filter>
     </ClCompile>
-    <ClCompile Include="guiMeshRenderer.cpp">
+    <ClCompile Include="guiCom_Renderer_Mesh.cpp">
       <Filter>Widget\Components</Filter>
     </ClCompile>
     <ClCompile Include="guiTransform.cpp">

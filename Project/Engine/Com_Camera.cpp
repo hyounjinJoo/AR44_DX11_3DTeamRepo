@@ -68,17 +68,17 @@ namespace mh
 
 	void Com_Camera::CreateViewMatrix()
 	{
-		Transform* tr = GetOwner()->GetComponent<Transform>();
-		math::Vector3 pos = tr->GetPosition();
+		Transform& tr = GetOwner()->GetTransform();
+		math::Vector3 pos = tr.GetPosition();
 
 		// Crate Translate view matrix
 		mView = math::Matrix::Identity;
 		mView *= math::Matrix::CreateTranslation(-pos);
 		//회전 정보
 
-		math::Vector3 up = tr->Up();
-		math::Vector3 right = tr->Right();
-		math::Vector3 foward = tr->Foward();
+		math::Vector3 up = tr.Up();
+		math::Vector3 right = tr.Right();
+		math::Vector3 foward = tr.Foward();
 
 		math::Matrix viewRotate;
 		viewRotate._11 = right.x; viewRotate._12 = up.x; viewRotate._13 = foward.x;

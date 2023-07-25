@@ -29,7 +29,7 @@ namespace mh
 
 	void Com_Renderer_Sprite::Render()
 	{
-		GetOwner()->GetComponent<Transform>()->SetConstantBuffer();
+		GetOwner()->GetTransform().SetConstantBuffer();
 
 		GetMesh()->BindBuffer();
 		GetMaterial()->Bind();

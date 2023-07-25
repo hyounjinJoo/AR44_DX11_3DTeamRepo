@@ -2,7 +2,7 @@
 #include "Entity.h"
 
 #include "Components.h"
-
+#include "Transform.h"
 namespace mh
 {
 	class GameObject : public Entity
@@ -66,7 +66,6 @@ namespace mh
 		Transform mTransform;
 		std::vector<IComponent*> mVecComponent;
 
-	private:
 		std::string mName;
 		eState mState;
 		define::eLayerType mType;

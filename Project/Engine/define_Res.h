@@ -96,7 +96,7 @@ namespace mh::define
 			namespace texture
 			{
 				STRKEY SmileTexture = "Smile.png";
-				STRKEY DefaultSprite = "Com_Light.png";
+				STRKEY DefaultSprite = "Light.png";
 				STRKEY HPBarTexture = "HPBar.png";
 				STRKEY CartoonSmoke = "particle\\CartoonSmoke.png";
 				STRKEY noise_01 = "noise\\noise_01.png";

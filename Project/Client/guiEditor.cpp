@@ -180,13 +180,13 @@ namespace gui
 			tr->SetScale(Vector3(mesh.radius));
 
 
-		mh::BaseRenderer* renderer = debugObj->GetComponent<mh::BaseRenderer>();
-		mh::Camera* camera = mh::renderer::gMainCamera;
+		mh::IRenderer* renderer = debugObj->GetComponent<mh::IRenderer>();
+		mh::Com_Camera* camera = mh::renderer::gMainCamera;
 
 		tr->FixedUpdate();
 
-		mh::Camera::SetGpuViewMatrix(mh::renderer::gMainCamera->GetViewMatrix());
-		mh::Camera::SetGpuProjectionMatrix(mh::renderer::gMainCamera->GetProjectionMatrix());
+		mh::Com_Camera::SetGpuViewMatrix(mh::renderer::gMainCamera->GetViewMatrix());
+		mh::Com_Camera::SetGpuProjectionMatrix(mh::renderer::gMainCamera->GetProjectionMatrix());
 
 		debugObj->Render();
 	}

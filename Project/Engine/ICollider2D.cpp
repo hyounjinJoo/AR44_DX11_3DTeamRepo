@@ -1,7 +1,8 @@
 #include "EnginePCH.h"
-
 #include "ICollider2D.h"
+
 #include "GameObject.h"
+
 #include "Renderer.h"
 #include "IScript.h"
 
@@ -27,7 +28,7 @@ namespace mh
 
 	void ICollider2D::Initialize()
 	{
-		mTransform = GetOwner()->GetComponent<Transform>();
+		mTransform = &(GetOwner()->GetTransform());
 	}
 
 	void ICollider2D::Update()

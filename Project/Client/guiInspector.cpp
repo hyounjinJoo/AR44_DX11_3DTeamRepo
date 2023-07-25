@@ -9,7 +9,7 @@
 #include <Engine/Renderer.h>
 
 #include "guiTransform.h"
-#include "guiMeshRenderer.h"
+#include "guiCom_Renderer_Mesh.h"
 #include "guiTexture.h"
 
 namespace gui
@@ -29,10 +29,10 @@ namespace gui
 		//mTransform->SetTarget(mTargetGameObject);
 		//AddWidget(mTransform);
 		//
-		//mComponents[(UINT)eComponentType::] = new gui::MeshRenderer();
-		//mComponents[(UINT)eComponentType::MeshRenderer]->SetKey("InspectorMeshRenderer");
-		//mComponents[(UINT)eComponentType::MeshRenderer]->SetTarget(mTargetGameObject);
-		//AddWidget(mComponents[(UINT)eComponentType::MeshRenderer]);
+		//mComponents[(UINT)eComponentType::] = new gui::Com_Renderer_Mesh();
+		//mComponents[(UINT)eComponentType::Com_Renderer_Mesh]->SetKey("InspectorMeshRenderer");
+		//mComponents[(UINT)eComponentType::Com_Renderer_Mesh]->SetTarget(mTargetGameObject);
+		//AddWidget(mComponents[(UINT)eComponentType::Com_Renderer_Mesh]);
 
 		mResources.resize((UINT)eResourceType::End);
 		mResources[(UINT)eResourceType::Texture] = new gui::Texture();
@@ -42,7 +42,7 @@ namespace gui
 
 	Inspector::~Inspector()
 	{
-		for (gui::IComponent* comp : mComponents)
+		for (guiComponent* comp : mComponents)
 		{
 			delete comp;
 			comp = nullptr;
@@ -58,7 +58,7 @@ namespace gui
 	void Inspector::FixedUpdate()
 	{
 		//mComponents[(UINT)eComponentType::Transform]->SetTarget(mTarget);
-		//mComponents[(UINT)eComponentType::MeshRenderer]->SetTarget(mTarget);
+		//mComponents[(UINT)eComponentType::Com_Renderer_Mesh]->SetTarget(mTarget);
 	}
 
 	void Inspector::Update()
@@ -72,7 +72,7 @@ namespace gui
 
 	void Inspector::ClearTarget()
 	{
-		for (gui::IComponent* comp : mComponents)
+		for (guiComponent* comp : mComponents)
 		{
 			if (comp == nullptr)
 				continue;
@@ -99,8 +99,8 @@ namespace gui
 
 		//mComponents[(UINT)eComponentType::]->SetState(eState::Active);
 		//mComponents[(UINT)eComponentType::Transform]->SetTarget(mTargetGameObject);
-		//mComponents[(UINT)eComponentType::MeshRenderer]->SetState(eState::Active);
-		//mComponents[(UINT)eComponentType::MeshRenderer]->SetTarget(mTargetGameObject);
+		//mComponents[(UINT)eComponentType::Com_Renderer_Mesh]->SetState(eState::Active);
+		//mComponents[(UINT)eComponentType::Com_Renderer_Mesh]->SetTarget(mTargetGameObject);
 	}
 
 	void Inspector::InitializeTargetResource()

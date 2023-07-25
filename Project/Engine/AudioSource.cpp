@@ -29,9 +29,9 @@ namespace mh
 
 	void AudioSource::FixedUpdate()
 	{
-		Transform* tr = GetOwner()->GetComponent<Transform>();
-		math::Vector3 pos = tr->GetPosition();
-		math::Vector3 foward = tr->Foward();
+		Transform& tr = GetOwner()->GetTransform();
+		math::Vector3 pos = tr.GetPosition();
+		math::Vector3 foward = tr.Foward();
 
 		mAudioClip->Set3DAttributes(pos, foward);
 	}

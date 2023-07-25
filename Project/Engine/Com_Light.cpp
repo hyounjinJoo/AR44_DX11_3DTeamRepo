@@ -30,10 +30,10 @@ namespace mh
 
 	void Com_Light::FixedUpdate()
 	{
-		Transform* tr = GetOwner()->GetComponent<Transform>();
-		Vector3 position = tr->GetPosition();
+		Transform& tr = GetOwner()->GetTransform();
+		Vector3 position = tr.GetPosition();
 		mAttribute.position = Vector4(position.x, position.y, position.z, 1.0f);
-		mAttribute.direction = Vector4(tr->Foward().x, tr->Foward().y, tr->Foward().z, 0.0f);
+		mAttribute.direction = Vector4(tr.Foward().x, tr.Foward().y, tr.Foward().z, 0.0f);
 		//mAttribute.type = define::eLightType::Directional;
 
 		renderer::PushLightAttribute(mAttribute);

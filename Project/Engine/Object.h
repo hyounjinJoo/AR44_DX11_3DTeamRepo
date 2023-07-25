@@ -38,8 +38,8 @@ namespace mh::object
 		Layer& layer = scene->GetLayer(_type);
 		layer.AddGameObject(gameObject);
 
-		Transform* tr = gameObject->GameObject::GetComponent<Transform>();
-		tr->SetParent(_parent);
+		Transform& tr = gameObject->GameObject::GetTransform();
+		tr.SetParent(_parent);
 
 		return gameObject;
 	}
@@ -52,9 +52,9 @@ namespace mh::object
 		Layer& layer = scene->GetLayer(_type);
 		layer.AddGameObject(gameObject);
 
-		Transform* tr = gameObject->GameObject::GetComponent<Transform>();
-		tr->SetPosition(_position);
-		tr->SetRotation(_rotation);
+		Transform& tr = gameObject->GameObject::GetTransform();
+		tr.SetPosition(_position);
+		tr.SetRotation(_rotation);
 
 		return gameObject;
 	}
@@ -67,10 +67,10 @@ namespace mh::object
 		Layer& layer = scene->GetLayer(_type);
 		layer.AddGameObject(gameObject);
 
-		Transform* tr = gameObject->GameObject::GetComponent<Transform>();
-		tr->SetPosition(_position);
-		tr->SetRotation(_rotation);
-		tr->SetParent(_parent);
+		Transform& tr = gameObject->GameObject::GetTransform();
+		tr.SetPosition(_position);
+		tr.SetRotation(_rotation);
+		tr.SetParent(_parent);
 
 		return gameObject;
 	}

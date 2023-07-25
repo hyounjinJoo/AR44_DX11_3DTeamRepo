@@ -162,11 +162,11 @@ namespace mh
 			,math::Vector3{-0.5f, -0.5f, 0.0f}
 		};
 
-		Transform* leftTr = _left->GetOwner()->GetComponent<Transform>();
-		Transform* rightTr = _right->GetOwner()->GetComponent<Transform>();
+		Transform& leftTr = _left->GetOwner()->GetTransform();
+		Transform& rightTr = _right->GetOwner()->GetTransform();
 
-		math::Matrix leftMat = leftTr->GetWorldMatrix();
-		math::Matrix rightMat = rightTr->GetWorldMatrix();
+		math::Matrix leftMat = leftTr.GetWorldMatrix();
+		math::Matrix rightMat = rightTr.GetWorldMatrix();
 
 
 
@@ -195,7 +195,7 @@ namespace mh
 		for (int index = 0; index < 4; index++)
 			Axis[index].z = 0.0f;
 
-		math::Vector3 vc = leftTr->GetPosition() - rightTr->GetPosition();
+		math::Vector3 vc = leftTr.GetPosition() - rightTr.GetPosition();
 		vc.z = 0.0f;
 
 		math::Vector3 centerDir = vc;

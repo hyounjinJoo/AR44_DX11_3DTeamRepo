@@ -15,20 +15,7 @@ namespace mh
 	{
 	}
 
-	void IRenderer::Initialize()
-	{
-	}
-
-	void IRenderer::Update()
-	{
-	}
-
-	void IRenderer::FixedUpdate()
-	{
-	}
-
-	void IRenderer::Render()
-	{
-	}
-
 }
+
+
+

@@ -19,9 +19,6 @@
     <Filter Include="Input">
       <UniqueIdentifier>{cd4b9eba-c6cf-46a9-a814-89a620c95213}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Renderer">
-      <UniqueIdentifier>{f2d38e5b-5248-43e0-b712-e484a165f414}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Scene">
       <UniqueIdentifier>{976687b1-0493-449e-87e3-f6bf27d49c71}</UniqueIdentifier>
     </Filter>
@@ -174,9 +171,6 @@
     <ClCompile Include="Entity.cpp">
       <Filter>Common</Filter>
     </ClCompile>
-    <ClCompile Include="Renderer.cpp">
-      <Filter>Renderer</Filter>
-    </ClCompile>
     <ClCompile Include="GameObject.cpp">
       <Filter>GameObject</Filter>
     </ClCompile>
@@ -206,9 +200,6 @@
     </ClCompile>
     <ClCompile Include="Com_Renderer_Sprite.cpp">
       <Filter>GameObject\Component\Renderer</Filter>
-    </ClCompile>
-    <ClCompile Include="IRenderer.cpp">
-      <Filter>Renderer</Filter>
     </ClCompile>
     <ClCompile Include="GridScript.cpp">
       <Filter>Resource\Script</Filter>
@@ -305,7 +296,6 @@
     <ClCompile Include="GraphicsShader.cpp">
       <Filter>Resource\Shaders\Graphics</Filter>
     </ClCompile>
-    <ClCompile Include="IRes.cpp" />
     <ClCompile Include="define_Enum.cpp">
       <Filter>Common\define</Filter>
     </ClCompile>
@@ -331,6 +321,16 @@
     <ClCompile Include="Com_Renderer_ParticleSystem.cpp">
       <Filter>GameObject\Component\Renderer</Filter>
     </ClCompile>
+    <ClCompile Include="IRes.cpp">
+      <Filter>Resource</Filter>
+    </ClCompile>
+    <ClCompile Include="IRenderer.cpp">
+      <Filter>GameObject\Component\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="Renderer.cpp">
+      <Filter>Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="ComMgr.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application.h">
@@ -350,9 +350,6 @@
     </ClInclude>
     <ClInclude Include="EnginePCH.h">
       <Filter>Common</Filter>
-    </ClInclude>
-    <ClInclude Include="Renderer.h">
-      <Filter>Renderer</Filter>
     </ClInclude>
     <ClInclude Include="GameObject.h">
       <Filter>GameObject</Filter>
@@ -389,9 +386,6 @@
     </ClInclude>
     <ClInclude Include="Object.h">
       <Filter>GameObject</Filter>
-    </ClInclude>
-    <ClInclude Include="IRenderer.h">
-      <Filter>Renderer</Filter>
     </ClInclude>
     <ClInclude Include="GridScript.h">
       <Filter>Resource\Script</Filter>
@@ -494,7 +488,6 @@
     <ClInclude Include="GraphicsShader.h">
       <Filter>Resource\Shaders\Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="IRes.h" />
     <ClInclude Include="define_Res.h">
       <Filter>Common\define</Filter>
     </ClInclude>
@@ -538,6 +531,16 @@
     <ClInclude Include="Com_Renderer_ParticleSystem.h">
       <Filter>GameObject\Component\Renderer</Filter>
     </ClInclude>
+    <ClInclude Include="IRes.h">
+      <Filter>Resource</Filter>
+    </ClInclude>
+    <ClInclude Include="IRenderer.h">
+      <Filter>GameObject\Component\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="Renderer.h">
+      <Filter>Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="ComMgr.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="SimpleMath.inl">
