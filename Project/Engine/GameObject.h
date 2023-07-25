@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Enums.h"
+#include "define_Enum.h"
 #include "IComponent.h"
 #include "Script.h"
 #include "Entity.h"
@@ -41,6 +41,9 @@ namespace mh
 		
 		const std::vector<Script*>& GetScripts() { return mScripts; }
 
+		void SetName(const std::string_view _Name) { mName = _Name; }
+		const std::string& GetName() const { return mName; }
+
 	public:
 		bool IsDead()
 		{
@@ -57,15 +60,16 @@ namespace mh
 		bool IsDontDestroy() { return mbDontDestroy; }
 		void DontDestroy(bool _enable) { mbDontDestroy = _enable; }
 		
-		enums::eLayerType GetLayerType() { return mType; }
-		void SetLayerType(enums::eLayerType _type) { mType = _type; }
+		define::eLayerType GetLayerType() { return mType; }
+		void SetLayerType(define::eLayerType _type) { mType = _type; }
 
 	protected:
 		std::vector<IComponent*> mComponents;
 
 	private:
+		std::string mName;
 		eState mState;
-		enums::eLayerType mType;
+		define::eLayerType mType;
 		std::vector<Script*> mScripts;
 		bool mbDontDestroy;
 	};
@@ -74,9 +78,9 @@ namespace mh
 	T* GameObject::AddComponent()
 	{
 		T* _Comp = new T();
-		enums::eComponentType order = _Comp->GetOrder();
+		define::eComponentType order = _Comp->GetOrder();
 
-		if (order != enums::eComponentType::Script)
+		if (order != define::eComponentType::Script)
 		{
 			mComponents[(UINT)order] = _Comp;
 			mComponents[(UINT)order]->SetOwner(this);

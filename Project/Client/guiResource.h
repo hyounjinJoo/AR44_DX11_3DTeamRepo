@@ -1,21 +1,21 @@
 #pragma once
 #include "guiWidget.h"
-#include <Engine/GameResource.h>
+#include <Engine/IRes.h>
 
 namespace gui
 {
-	class GameResource : public Widget
+	class IRes : public Widget
 	{
 	public:
-		GameResource();
-		~GameResource();
+		IRes();
+		~IRes();
 
 		virtual void FixedUpdate() override;
 		
-		void SetTarget(mh::GameResource* target) { mTarget = target; }
-		mh::GameResource* GetTarget() const { return mTarget; }
+		void SetTarget(mh::IRes* target) { mTarget = target; }
+		mh::IRes* GetTarget() const { return mTarget; }
 
 	private:
-		mh::GameResource* mTarget;
+		mh::IRes* mTarget;
 	};
 }

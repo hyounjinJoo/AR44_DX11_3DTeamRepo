@@ -1,12 +1,12 @@
 #pragma once
 #include "Entity.h"
 
-#include "Enums.h"
+#include "define_Component.h"
 #include "SimpleMath.h"
 
 namespace mh
 {
-	using namespace mh::enums;
+	using namespace mh::define;
 	class GameObject;
 	class IComponent : public Entity
 	{

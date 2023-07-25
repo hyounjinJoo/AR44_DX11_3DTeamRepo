@@ -327,7 +327,7 @@ Reader::Reader() : features_(Features::all()) {}
 
 Reader::Reader(const Features& features) : features_(features) {}
 
-bool Reader::parse(const std::string& document, Value& root,
+bool Reader::parse(const std::string_view document, Value& root,
                    bool collectComments) {
   document_.assign(document.begin(), document.end());
   const char* begin = document_.c_str();

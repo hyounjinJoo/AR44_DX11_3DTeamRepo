@@ -29,7 +29,7 @@ namespace  mh
 		void CreateProjectionMatrix();
 		void RegisterCameraInRenderer();
 
-		void TurnLayerMask(enums::eLayerType _layer, bool _enable = true);
+		void TurnLayerMask(define::eLayerType _layer, bool _enable = true);
 		void EnableLayerMasks() { mLayerMasks.set(); }
 		void DisableLayerMasks() { mLayerMasks.reset(); }
 
@@ -61,7 +61,7 @@ namespace  mh
 		float mFar;
 		float mScale;
 
-		std::bitset<(UINT)enums::eLayerType::End> mLayerMasks;
+		std::bitset<(UINT)define::eLayerType::End> mLayerMasks;
 		std::vector<GameObject*> mOpaqueGameObjects;
 		std::vector<GameObject*> mCutoutGameObjects;
 		std::vector<GameObject*> mTransparentGameObjects;

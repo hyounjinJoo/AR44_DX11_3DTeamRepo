@@ -1,6 +1,6 @@
 #pragma once
 
-#include "GameResource.h"
+#include "IRes.h"
 #include "GraphicDevice_DX11.h"
 
 
@@ -9,8 +9,8 @@
 
 namespace mh::GPU
 {
-	using namespace mh::enums;
-	class Texture : public GameResource
+	using namespace mh::define;
+	class Texture : public IRes
 	{
 	public:
 		Texture();

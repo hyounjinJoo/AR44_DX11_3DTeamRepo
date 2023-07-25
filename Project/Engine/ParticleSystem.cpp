@@ -3,7 +3,7 @@
 
 #include "ParticleSystem.h"
 #include "Mesh.h"
-#include "GameResources.h"
+#include "ResMgr.h"
 #include "Material.h"
 #include "StructedBuffer.h"
 #include "Transform.h"
@@ -44,16 +44,17 @@ namespace mh
 
 	void ParticleSystem::Initialize()
 	{
-		mCS = GameResources::Find<ParticleShader>("ParticleCS");
+		using namespace strKey::Default;
+		mCS = ResMgr::GetInst()->Find<ParticleShader>(shader::compute::ParticleCS);
 
-		std::shared_ptr<Mesh> point = GameResources::Find<Mesh>("PointMesh");
+		std::shared_ptr<Mesh> point = ResMgr::GetInst()->Find<Mesh>(mesh::PointMesh);
 		SetMesh(point);
 
 		// Material 세팅
-		std::shared_ptr<Material> material = GameResources::Find<Material>("ParticleMaterial");
+		std::shared_ptr<Material> material = ResMgr::GetInst()->Find<Material>(material::ParticleMaterial);
 		SetMaterial(material);
 
-		std::shared_ptr<Texture> tex = GameResources::Find<Texture>("CartoonSmoke");
+		std::shared_ptr<Texture> tex = ResMgr::GetInst()->Find<Texture>(texture::CartoonSmoke);
 		material->SetTexture(eTextureSlot::Albedo, tex);
 
 		tParticle particles[100] = {};

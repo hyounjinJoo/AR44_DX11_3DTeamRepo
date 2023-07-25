@@ -7,10 +7,10 @@ namespace mh
 {
 	GameObject::GameObject()
 		: mState(eState::Active)
-		, mType(enums::eLayerType::None)
+		, mType(define::eLayerType::None)
 		, mbDontDestroy(false)
 	{
-		mComponents.resize((UINT)enums::eComponentType::End);
+		mComponents.resize((UINT)define::eComponentType::End);
 		AddComponent(new Transform());
 	}
 
@@ -101,9 +101,9 @@ namespace mh
 
 	void GameObject::AddComponent(IComponent* _Comp)
 	{
-		enums::eComponentType order = _Comp->GetOrder();
+		define::eComponentType order = _Comp->GetOrder();
 
-		if (order != enums::eComponentType::Script)
+		if (order != define::eComponentType::Script)
 		{
 			mComponents[(UINT)order] = _Comp;
 			mComponents[(UINT)order]->SetOwner(this);

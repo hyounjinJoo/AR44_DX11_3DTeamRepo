@@ -5,10 +5,10 @@
 
 namespace mh
 {
-	Scene::Scene(enums::eSceneType _type)
+	Scene::Scene(define::eSceneType _type)
 		: mType(_type)
 	{
-		mLayers.resize((UINT)enums::eLayerType::End);
+		mLayers.resize((UINT)define::eLayerType::End);
 	}
 
 	Scene::~Scene()
@@ -57,7 +57,7 @@ namespace mh
 	void Scene::OnExit()
 	{
 	}
-	void Scene::AddGameObject(GameObject* _gameObj, const enums::eLayerType _type)
+	void Scene::AddGameObject(GameObject* _gameObj, const define::eLayerType _type)
 	{
 		mLayers[(UINT)_type].AddGameObject(_gameObj);
 		_gameObj->SetLayerType(_type);
@@ -78,7 +78,7 @@ namespace mh
 
 		return gameObjects;
 	}
-	const std::vector<GameObject*>& Scene::GetGameObjects(const enums::eLayerType _type)
+	const std::vector<GameObject*>& Scene::GetGameObjects(const define::eLayerType _type)
 	{
 		return mLayers[(UINT)_type].GetGameObjects();
 	}

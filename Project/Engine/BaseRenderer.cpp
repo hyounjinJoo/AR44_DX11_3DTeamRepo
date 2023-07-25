@@ -4,7 +4,7 @@
 
 namespace mh
 {
-	BaseRenderer::BaseRenderer(enums::eComponentType _type)
+	BaseRenderer::BaseRenderer(define::eComponentType _type)
 		: IComponent(_type)
 		, mMesh(nullptr)
 		, mMaterial(nullptr)

@@ -1,12 +1,12 @@
 #pragma once
-#include "GameResource.h"
+#include "IRes.h"
 #include "GraphicsShader.h"
 #include "Texture.h"
 #include "Renderer.h"
 
 namespace mh::GPU
 {
-	class Material : public GameResource
+	class Material : public IRes
 	{
 	public:
 		Material();

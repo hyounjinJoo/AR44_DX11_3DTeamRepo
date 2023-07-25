@@ -8,7 +8,7 @@
 
 #include "SimpleMath.h"
 
-#include "Enums.h"
+#include "define_Enum.h"
 #include "define_Macro.h"
 
 #define CB_GETBINDSLOT(name) __CBUFFERBINDSLOT__##name##__
@@ -24,7 +24,7 @@
 
 namespace mh::GPU
 {
-	using namespace mh::enums;
+	using namespace mh::define;
 	using namespace mh::math;
 	enum class eValidationMode
 	{
@@ -178,7 +178,7 @@ namespace mh::GPU
 
 	struct tDebugMesh
 	{
-		enums::eColliderType type;
+		define::eColliderType type;
 		math::Vector3 position;
 		math::Vector3 rotatation;
 		math::Vector3 scale;
@@ -197,7 +197,7 @@ namespace mh::GPU
 		Vector4 position;
 		Vector4 direction;
 
-		enums::eLightType type;
+		define::eLightType type;
 		float radius;
 		float angle;
 		int padding;

@@ -6,7 +6,7 @@
 namespace mh
 {
 	using namespace mh::math;
-	using namespace mh::enums;
+	using namespace mh::define;
 	class Light : public IComponent
 	{
 	public:

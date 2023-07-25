@@ -8,7 +8,7 @@
 namespace mh
 {
 	AudioListener::AudioListener()
-		: IComponent(enums::eComponentType::AudioListener)
+		: IComponent(define::eComponentType::AudioListener)
 	{
 
 	}

@@ -1,11 +1,11 @@
 #pragma once
 #include "define_GPU.h"
 
-#include "Enums.h"
+#include "define_Enum.h"
 
 namespace mh::GPU
 {
-	using namespace mh::enums;
+	using namespace mh::define;
 	class Texture;
 
 	class GraphicDevice_DX11

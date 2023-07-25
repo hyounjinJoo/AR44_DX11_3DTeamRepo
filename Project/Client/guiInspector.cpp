@@ -14,28 +14,28 @@
 
 namespace gui
 {
-	using namespace mh::enums;
+	using namespace mh::define;
 	Inspector::Inspector()
 	{
-		SetName("Inspector");
+		SetKey("Inspector");
 		SetSize(ImVec2(300.0f, 100.0f));
 		
 		mComponents.resize((UINT)eComponentType::End);
 		mTargetGameObject = mh::renderer::gInspectorGameObject;
 
 		mComponents[(UINT)eComponentType::Transform] = new gui::Transform();
-		mComponents[(UINT)eComponentType::Transform]->SetName("InspectorTransform");
+		mComponents[(UINT)eComponentType::Transform]->SetKey("InspectorTransform");
 		mComponents[(UINT)eComponentType::Transform]->SetTarget(mTargetGameObject);
 		AddWidget(mComponents[(UINT)eComponentType::Transform]);
 		
 		mComponents[(UINT)eComponentType::MeshRenderer] = new gui::MeshRenderer();
-		mComponents[(UINT)eComponentType::MeshRenderer]->SetName("InspectorMeshRenderer");
+		mComponents[(UINT)eComponentType::MeshRenderer]->SetKey("InspectorMeshRenderer");
 		mComponents[(UINT)eComponentType::MeshRenderer]->SetTarget(mTargetGameObject);
 		AddWidget(mComponents[(UINT)eComponentType::MeshRenderer]);
 
 		mResources.resize((UINT)eResourceType::End);
 		mResources[(UINT)eResourceType::Texture] = new gui::Texture();
-		mResources[(UINT)eResourceType::Texture]->SetName("InspectorTexture");
+		mResources[(UINT)eResourceType::Texture]->SetKey("InspectorTexture");
 		AddWidget(mResources[(UINT)eResourceType::Texture]);
 	}
 
@@ -47,7 +47,7 @@ namespace gui
 			comp = nullptr;
 		}
 
-		for (gui::GameResource* res : mResources)
+		for (gui::IRes* res : mResources)
 		{
 			delete res;
 			res = nullptr;
@@ -80,7 +80,7 @@ namespace gui
 			comp->SetTarget(nullptr);
 		}
 
-		for (gui::GameResource* res : mResources)
+		for (gui::IRes* res : mResources)
 		{
 			if (res == nullptr)
 				continue;

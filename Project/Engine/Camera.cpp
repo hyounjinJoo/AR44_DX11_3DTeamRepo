@@ -20,7 +20,7 @@ namespace mh
 	math::Matrix Camera::gProjection = math::Matrix::Identity;
 
 	Camera::Camera()
-		: IComponent(enums::eComponentType::Camera)
+		: IComponent(define::eComponentType::Camera)
 		, mType(eProjectionType::Orthographic)
 		, mAspectRatio(1.0f)
 		, mNear(1.0f)
@@ -115,11 +115,11 @@ namespace mh
 
 	void Camera::RegisterCameraInRenderer()
 	{
-		enums::eSceneType type = SceneManager::GetActiveScene()->GetSceneType();
+		define::eSceneType type = SceneManager::GetActiveScene()->GetSceneType();
 		renderer::gCameras[(UINT)type].push_back(this);
 	}
 
-	void Camera::TurnLayerMask(enums::eLayerType _layer, bool _enable)
+	void Camera::TurnLayerMask(define::eLayerType _layer, bool _enable)
 	{
 		mLayerMasks.set((UINT)_layer, _enable);
 	}
@@ -132,11 +132,11 @@ namespace mh
 		mPostProcessGameObjects.clear();
 
 		Scene* scene = SceneManager::GetActiveScene();
-		for (int index = 0; index < (UINT)enums::eLayerType::End; index++)
+		for (int index = 0; index < (UINT)define::eLayerType::End; index++)
 		{
 			if (mLayerMasks[index] == true)
 			{
-				Layer& layer = scene->GetLayer((enums::eLayerType)index);
+				Layer& layer = scene->GetLayer((define::eLayerType)index);
 				GameObjects gameObjects = layer.GetGameObjects();
 				if (gameObjects.size() == 0)
 					continue;

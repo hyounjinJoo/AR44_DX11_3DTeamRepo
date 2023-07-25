@@ -9,7 +9,7 @@ namespace gui
 		: Widget()
 		, mListIndex(-1)
 	{
-		SetName("ListWidget");
+		SetKey("ListWidget");
 		SetState(eState::Paused);
 		SetSize(ImVec2(200.0f, 200.0f));
 	}

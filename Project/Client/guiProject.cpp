@@ -7,7 +7,7 @@
 #include <Engine/Material.h>
 #include <Engine/Mesh.h>
 #include <Engine/GraphicsShader.h>
-#include <Engine/GameResources.h>
+#include <Engine/ResMgr.h>
 
 #include "guiInspector.h"
 #include "guiResource.h"
@@ -18,10 +18,12 @@ extern gui::Editor editor;
 
 namespace gui
 {
+	using namespace mh::math;
+
 	Project::Project()
 		: mTreeWidget(nullptr)
 	{
-		SetName("Project");
+		SetKey("Project");
 		UINT width = 1600;
 		UINT height = 900;
 
@@ -30,7 +32,7 @@ namespace gui
 		SetSize(ImVec2((float)size.x / 2 + size.x / 5, size.y / 4));
 
 		mTreeWidget = new TreeWidget();
-		mTreeWidget->SetName("GameResources");
+		mTreeWidget->SetKey("GameResources");
 		AddWidget(mTreeWidget);
 
 		mTreeWidget->SetEvent(this
@@ -90,7 +92,7 @@ namespace gui
 
 	void Project::toInspector(void* data)
 	{
-		mh::GameResource* resource = static_cast<mh::GameResource*>(data);
+		mh::IRes* resource = static_cast<mh::IRes*>(data);
 
 		Inspector* inspector = editor.GetWidget<Inspector>("Inspector");
 		inspector->SetTargetResource(resource);

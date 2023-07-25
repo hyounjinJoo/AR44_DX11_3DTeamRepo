@@ -2,7 +2,7 @@
 #include "guiEditor.h"
 
 #include <Engine/Mesh.h>
-#include <Engine/GameResources.h>
+#include <Engine/ResMgr.h>
 #include <Engine/Material.h>
 #include <Engine/Transform.h>
 #include <Engine/MeshRenderer.h>
@@ -27,7 +27,8 @@ extern mh::Application application;
 
 namespace gui
 {
-	using namespace mh::enums;
+	using namespace mh::define;
+	using namespace mh::math;
 	void Editor::Initialize()
 	{
 		mbEnable = false;
@@ -38,8 +39,8 @@ namespace gui
 		// 충돌체의 종류 갯수만큼만 있으면 된다.
 		mDebugObjects.resize((UINT)eColliderType::End);
 
-		std::shared_ptr<mh::Mesh> rectMesh = mh::GameResources::Find<mh::Mesh>("DebugRectMesh");
-		std::shared_ptr<mh::Material> material = mh::GameResources::Find<mh::GPU::Material>("DebugMaterial");
+		std::shared_ptr<mh::Mesh> rectMesh = mh::ResMgr::GetInst()->Find<mh::Mesh>(mh::strKey::Default::mesh::DebugRectMesh);
+		std::shared_ptr<mh::Material> material = mh::ResMgr::GetInst()->Find<mh::GPU::Material>(mh::strKey::Default::material::DebugMaterial);
 
 		mDebugObjects[(UINT)eColliderType::Rect] = new DebugObject();
 		mh::MeshRenderer* renderer
@@ -48,7 +49,7 @@ namespace gui
 		renderer->SetMaterial(material);
 		renderer->SetMesh(rectMesh);
 
-		std::shared_ptr<mh::Mesh> circleMesh = mh::GameResources::Find<mh::Mesh>("CircleMesh");
+		std::shared_ptr<mh::Mesh> circleMesh = mh::ResMgr::GetInst()->Find<mh::Mesh>("CircleMesh");
 
 		mDebugObjects[(UINT)eColliderType::Circle] = new DebugObject();
 		renderer
@@ -61,8 +62,8 @@ namespace gui
 		// Grid Object
 		//EditorObject* gridObject = new EditorObject();
 		//mh::MeshRenderer* gridMr = gridObject->AddComponent<mh::MeshRenderer>();
-		//gridMr->SetMesh(mh::GameResources::Find<mh::Mesh>(L"RectMesh"));
-		//gridMr->SetMaterial(mh::GameResources::Find<Material>(L"GridMaterial"));
+		//gridMr->SetMesh(mh::ResMgr::GetInst()->Find<mh::Mesh>(L"RectMesh"));
+		//gridMr->SetMaterial(mh::ResMgr::GetInst()->Find<Material>(L"GridMaterial"));
 		//mh::GridScript* gridScript = gridObject->AddComponent<mh::GridScript>();
 		//gridScript->SetCamera(gMainCamera);
 

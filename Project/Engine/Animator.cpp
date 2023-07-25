@@ -5,7 +5,7 @@
 namespace mh
 {
 	Animator::Animator()
-		: IComponent(enums::eComponentType::Animator)
+		: IComponent(define::eComponentType::Animator)
 		, mAnimations{}
 		, mEvents{}
 		, mActiveAnimation(nullptr)

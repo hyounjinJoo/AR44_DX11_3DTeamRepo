@@ -8,7 +8,7 @@
 namespace mh
 {
 	AudioSource::AudioSource()
-		: IComponent(enums::eComponentType::AudioSource)
+		: IComponent(define::eComponentType::AudioSource)
 		, mAudioClip(nullptr)
 	{
 

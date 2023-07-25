@@ -6,7 +6,7 @@
 
 namespace mh
 {
-	std::bitset<(UINT)enums::eLayerType::End> CollisionManager::mLayerCollisionMatrix[(UINT)enums::eLayerType::End] = {};
+	std::bitset<(UINT)define::eLayerType::End> CollisionManager::mLayerCollisionMatrix[(UINT)define::eLayerType::End] = {};
 	std::map<UINT64, bool> CollisionManager::mCollisionMap;
 
 	void CollisionManager::Initialize()
@@ -15,13 +15,13 @@ namespace mh
 	void CollisionManager::Update()
 	{
 		Scene* scene = SceneManager::GetActiveScene();
-		for (UINT row = 0; row < (UINT)enums::eLayerType::End; row++)
+		for (UINT row = 0; row < (UINT)define::eLayerType::End; row++)
 		{
-			for (UINT column = 0; column < (UINT)enums::eLayerType::End; column++)
+			for (UINT column = 0; column < (UINT)define::eLayerType::End; column++)
 			{
 				if (mLayerCollisionMatrix[row][column])
 				{
-					LayerCollision(scene, (enums::eLayerType)row, (enums::eLayerType)column);
+					LayerCollision(scene, (define::eLayerType)row, (define::eLayerType)column);
 				}
 			}
 		}
@@ -32,7 +32,7 @@ namespace mh
 	void CollisionManager::Render()
 	{
 	}
-	void CollisionManager::CollisionLayerCheck(enums::eLayerType _left, enums::eLayerType _right, bool _enable)
+	void CollisionManager::CollisionLayerCheck(define::eLayerType _left, define::eLayerType _right, bool _enable)
 	{
 		int row = 0;
 		int column = 0;
@@ -50,7 +50,7 @@ namespace mh
 
 		mLayerCollisionMatrix[row][column] = _enable;
 	}
-	void CollisionManager::LayerCollision(Scene* _scene, enums::eLayerType _left, enums::eLayerType _right)
+	void CollisionManager::LayerCollision(Scene* _scene, define::eLayerType _left, define::eLayerType _right)
 	{
 		const std::vector<GameObject*>& lefts = _scene->GetGameObjects(_left);
 		const std::vector<GameObject*>& rights = _scene->GetGameObjects(_right);

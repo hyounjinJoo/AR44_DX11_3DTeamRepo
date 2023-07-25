@@ -7,7 +7,7 @@
 namespace mh
 {
 	Script::Script()
-		: IComponent(enums::eComponentType::Script)
+		: IComponent(define::eComponentType::Script)
 	{
 
 	}

@@ -28,9 +28,9 @@ namespace mh
 		mSystem->initialize(1024, FMOD_STUDIO_INIT_NORMAL, FMOD_INIT_NORMAL, extraDriverData);
 	}
 
-	bool Fmod::CreateSound(const std::string& path,  FMOD::Sound** sound)
+	bool Fmod::CreateSound(const std::string_view path,  FMOD::Sound** sound)
 	{
-		if (FMOD_OK != mCoreSystem->createSound(path.c_str(), FMOD_3D, 0, sound))
+		if (FMOD_OK != mCoreSystem->createSound(std::string(path).c_str(), FMOD_3D, 0, sound))
 			return false;
 
 		return true;

@@ -8,7 +8,7 @@ namespace mh
 	class BaseRenderer : public IComponent
 	{
 	public:
-		BaseRenderer(enums::eComponentType _type);
+		BaseRenderer(define::eComponentType _type);
 		virtual ~BaseRenderer();
 
 		virtual void Initialize() override;

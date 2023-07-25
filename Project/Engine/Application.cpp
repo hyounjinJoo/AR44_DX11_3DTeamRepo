@@ -5,7 +5,7 @@
 #include "TimeManager.h"
 #include "Input.h"
 #include "SceneManager.h"
-#include "GameResources.h"
+#include "ResMgr.h"
 #include "CollisionManager.h"
 #include "Fmod.h"
 #include "FontWrapper.h"
@@ -30,6 +30,8 @@ namespace mh
 
 	void Application::Initialize()
 	{
+		ResMgr::GetInst();
+
 		PathMgr::GetInst()->Init();
 		TimeManager::Initialize();
 		Input::Initialize();
@@ -89,7 +91,6 @@ namespace mh
 
 	void Application::Release()
 	{
-		GameResources::deleteTest();
 		Fmod::Release();
 		FontWrapper::Release();
 	}

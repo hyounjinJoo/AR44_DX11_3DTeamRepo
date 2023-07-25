@@ -3,12 +3,13 @@
 
 #include <Engine/Transform.h>
 
+
 namespace gui
 {
 	Transform::Transform()
-		: IComponent(mh::enums::eComponentType::Transform)
+		: IComponent(mh::define::eComponentType::Transform)
 	{
-		SetName("Transform");
+		SetKey("Transform");
 		SetSize(ImVec2(200.0f, 120.0f));
 	}
 

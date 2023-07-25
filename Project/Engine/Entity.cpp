@@ -6,12 +6,12 @@ namespace mh
 {
 	Entity::Entity()
 		: mID(PtrToUint(this))
-		, mName("")
+		, mStrKey()
 	{
 	}
 	Entity::Entity(const Entity& _other)
 		: mID(PtrToUint(this))
-		, mName(_other.mName)
+		, mStrKey(_other.mStrKey)
 	{
 	}
 	Entity::~Entity()
@@ -23,20 +23,20 @@ namespace gui
 {
 	Entity::Entity()
 		: mID(PtrToUint(this))
-		, mName("")
+		, mStrKey("")
 	{
 	}
 
-	Entity::Entity(const char* _name)
+	Entity::Entity(const char* _strKey)
 		: mID(PtrToUint(this))
-		, mName(_name)
+		, mStrKey(_strKey)
 	{
 
 	}
 
 	Entity::Entity(const Entity& _other)
 		: mID(PtrToUint(this))
-		, mName(_other.mName)
+		, mStrKey(_other.mStrKey)
 	{
 	}
 	Entity::~Entity()

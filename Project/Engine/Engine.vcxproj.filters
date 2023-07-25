@@ -166,6 +166,9 @@
     <Filter Include="Resource\Shaders\Graphics">
       <UniqueIdentifier>{f6d54454-faa4-4b11-8592-0408c79bef47}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Common\define">
+      <UniqueIdentifier>{db0f6041-2434-4f35-bd27-dbe1b692a9db}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Application.cpp">
@@ -182,9 +185,6 @@
     </ClCompile>
     <ClCompile Include="Entity.cpp">
       <Filter>Common</Filter>
-    </ClCompile>
-    <ClCompile Include="GameResource.cpp">
-      <Filter>Resource</Filter>
     </ClCompile>
     <ClCompile Include="Renderer.cpp">
       <Filter>Renderer</Filter>
@@ -290,9 +290,6 @@
     </ClCompile>
     <ClCompile Include="ParticleSystem.cpp" />
     <ClCompile Include="ParticleShader.cpp" />
-    <ClCompile Include="Enums.cpp">
-      <Filter>Common</Filter>
-    </ClCompile>
     <ClCompile Include="AudioListener.cpp">
       <Filter>Component\Audio</Filter>
     </ClCompile>
@@ -314,9 +311,6 @@
     <ClCompile Include="EnginePCH.cpp">
       <Filter>Common</Filter>
     </ClCompile>
-    <ClCompile Include="IComponent.cpp">
-      <Filter>Component\Transform</Filter>
-    </ClCompile>
     <ClCompile Include="json-cpp\jsoncpp.cpp">
       <Filter>JsonCPP</Filter>
     </ClCompile>
@@ -327,15 +321,23 @@
     <ClCompile Include="PathMgr.cpp">
       <Filter>Manager\Path</Filter>
     </ClCompile>
-    <ClCompile Include="GameResources.cpp">
+    <ClCompile Include="ResMgr.cpp">
       <Filter>Resource</Filter>
     </ClCompile>
-    <ClCompile Include="Shader.cpp">
+    <ClCompile Include="IShader.cpp">
       <Filter>Resource\Shaders</Filter>
     </ClCompile>
     <ClCompile Include="GraphicsShader.cpp">
       <Filter>Resource\Shaders\Graphics</Filter>
     </ClCompile>
+    <ClCompile Include="IRes.cpp" />
+    <ClCompile Include="define_Enum.cpp">
+      <Filter>Common\define</Filter>
+    </ClCompile>
+    <ClCompile Include="IComponent.cpp">
+      <Filter>Component</Filter>
+    </ClCompile>
+    <ClCompile Include="MeshData.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application.h">
@@ -353,16 +355,10 @@
     <ClInclude Include="Entity.h">
       <Filter>Common</Filter>
     </ClInclude>
-    <ClInclude Include="GameResource.h">
-      <Filter>Resource</Filter>
-    </ClInclude>
     <ClInclude Include="define_GPU.h">
       <Filter>GPU</Filter>
     </ClInclude>
     <ClInclude Include="EnginePCH.h">
-      <Filter>Common</Filter>
-    </ClInclude>
-    <ClInclude Include="Enums.h">
       <Filter>Common</Filter>
     </ClInclude>
     <ClInclude Include="Renderer.h">
@@ -506,29 +502,43 @@
     <ClInclude Include="Singleton.h">
       <Filter>Common</Filter>
     </ClInclude>
-    <ClInclude Include="EnumFlags.h">
-      <Filter>Common</Filter>
-    </ClInclude>
     <ClInclude Include="PathMgr.h">
       <Filter>Manager\Path</Filter>
     </ClInclude>
-    <ClInclude Include="define_Default.h">
-      <Filter>Common</Filter>
-    </ClInclude>
-    <ClInclude Include="GameResources.h">
+    <ClInclude Include="ResMgr.h">
       <Filter>Resource</Filter>
     </ClInclude>
     <ClInclude Include="DefaultShaders.h">
       <Filter>Common</Filter>
     </ClInclude>
-    <ClInclude Include="define_Macro.h">
-      <Filter>Common</Filter>
-    </ClInclude>
-    <ClInclude Include="Shader.h">
+    <ClInclude Include="IShader.h">
       <Filter>Resource\Shaders</Filter>
     </ClInclude>
     <ClInclude Include="GraphicsShader.h">
       <Filter>Resource\Shaders\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="IRes.h" />
+    <ClInclude Include="define_Res.h">
+      <Filter>Common\define</Filter>
+    </ClInclude>
+    <ClInclude Include="define_Macro.h">
+      <Filter>Common\define</Filter>
+    </ClInclude>
+    <ClInclude Include="define_Struct.h">
+      <Filter>Common\define</Filter>
+    </ClInclude>
+    <ClInclude Include="define_Enum.h">
+      <Filter>Common\define</Filter>
+    </ClInclude>
+    <ClInclude Include="EnumFlags.h">
+      <Filter>Common\define</Filter>
+    </ClInclude>
+    <ClInclude Include="define_Component.h">
+      <Filter>Common\define</Filter>
+    </ClInclude>
+    <ClInclude Include="MeshData.h" />
+    <ClInclude Include="defines.h">
+      <Filter>Common\define</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

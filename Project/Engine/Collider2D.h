@@ -23,7 +23,7 @@ namespace mh
 		virtual void OnTriggerStay(Collider2D* _collider);
 		virtual void OnTriggerExit(Collider2D* _collider);
 
-		void SetType(enums::eColliderType _type) { mType = _type; }
+		void SetType(define::eColliderType _type) { mType = _type; }
 		void SetSize(math::Vector2 _size) { mSize = _size; }
 		void SetCenter(math::Vector2 _center) { mCenter = _center; }
 		void SetRadius(float _radius) { mRadius = _radius; }
@@ -35,7 +35,7 @@ namespace mh
 	private:
 		static UINT gColliderNumber;
 		UINT mID; 
-		enums::eColliderType mType;
+		define::eColliderType mType;
 		Transform* mTransform;
 
 		math::Vector2 mSize;

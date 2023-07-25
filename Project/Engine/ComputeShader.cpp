@@ -6,13 +6,14 @@
 #include "GraphicDevice_DX11.h"
 
 #include "define_GPU.h"
+#include "define_Res.h"
 
 namespace mh::GPU
 {
 	namespace stdfs = std::filesystem;
 
 	ComputeShader::ComputeShader(UINT _threadGroupX, UINT _threadGroupY, UINT _threadGroupZ)
-		: GameResource(enums::eResourceType::ComputeShader)
+		: IShader(define::eResourceType::ComputeShader)
 		, mCSBlob(nullptr)
 		, mCS(nullptr)
 		, mThreadGroupCountX(_threadGroupX)
@@ -24,7 +25,7 @@ namespace mh::GPU
 	{
 	}
 	ComputeShader::ComputeShader()
-		: GameResource(enums::eResourceType::ComputeShader)
+		: IShader(define::eResourceType::ComputeShader)
 		, mCSBlob(nullptr)
 		, mCS(nullptr)
 		, mThreadGroupCountX(0)
@@ -45,7 +46,7 @@ namespace mh::GPU
 	{
 		return E_NOTIMPL;
 	}
-	eResult ComputeShader::CreateByCompile(const std::filesystem::path& _FullPath, const std::string& _funcName)
+	eResult ComputeShader::CreateByCompile(const std::filesystem::path& _FullPath, const std::string_view _funcName)
 	{
 		Microsoft::WRL::ComPtr<ID3DBlob> mErrorBlob = nullptr;
 
@@ -53,7 +54,7 @@ namespace mh::GPU
 			_FullPath.wstring().c_str(), 
 			nullptr, 
 			D3D_COMPILE_STANDARD_FILE_INCLUDE, 
-			_funcName.c_str(), 
+			std::string(_funcName).c_str(), 
 			mh::GPU::SHADER_VERSION::CS, 
 			0, 
 			0, 

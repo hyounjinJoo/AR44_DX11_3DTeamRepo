@@ -6,7 +6,7 @@
 namespace mh
 {
 	AudioClip::AudioClip()
-		: GameResource(enums::eResourceType::AudioClip)
+		: IRes(define::eResourceType::AudioClip)
 		, mSound(nullptr)
 		, mChannel(nullptr)
 		, mMinDistance(1.0f)

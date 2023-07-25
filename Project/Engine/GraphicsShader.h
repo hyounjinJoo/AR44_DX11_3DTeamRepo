@@ -1,5 +1,5 @@
 #pragma once
-#include "Shader.h"
+#include "IShader.h"
 #include "define_GPU.h"
 
 namespace mh::GPU
@@ -13,7 +13,7 @@ namespace mh::GPU
 		std::string strKey;
 	};
 
-	class GraphicsShader : public Shader
+	class GraphicsShader : public IShader
 	{
 	public:
 		GraphicsShader();
@@ -21,7 +21,7 @@ namespace mh::GPU
 
 		virtual HRESULT Load(const std::filesystem::path& _path) override;
 
-		eResult CreateByCompile(GPU::eGSStage _stage, const stdfs::path& _FullPath, const std::string& _funcName);
+		eResult CreateByCompile(GPU::eGSStage _stage, const stdfs::path& _FullPath, const std::string_view _funcName);
 		
 		eResult CreateByHeader(GPU::eGSStage _stage, const unsigned char* _pByteCode, size_t _ByteCodeSize);
 

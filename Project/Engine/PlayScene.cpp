@@ -4,7 +4,7 @@
 #include "Transform.h"
 #include "MeshRenderer.h"
 #include "Renderer.h"
-#include "GameResources.h"
+#include "ResMgr.h"
 #include "Texture.h"
 #include "PlayerScript.h"
 #include "Camera.h"

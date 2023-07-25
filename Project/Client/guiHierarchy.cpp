@@ -19,11 +19,11 @@ namespace gui
 	Hierarchy::Hierarchy()
 		: mTreeWidget(nullptr)
 	{
-		SetName("Hierarchy");
+		SetKey("Hierarchy");
 		SetSize(ImVec2(1600 / 2, 900 / 2));
 
 		mTreeWidget = new TreeWidget();
-		mTreeWidget->SetName("Scenes");
+		mTreeWidget->SetKey("Scenes");
 		AddWidget(mTreeWidget);
 
 		mTreeWidget->SetEvent(this
@@ -69,13 +69,13 @@ namespace gui
 		mTreeWidget->Clear();
 
 		mh::Scene* scene = mh::SceneManager::GetActiveScene();
-		std::string sceneName(scene->GetName().begin(), scene->GetName().end());
+		std::string sceneName = scene->GetKey();
 
 		TreeWidget::tNode* root = mTreeWidget->AddNode(nullptr, sceneName, 0, true);
 
-		for (size_t i = 0; i < (UINT)mh::enums::eLayerType::End; i++)
+		for (size_t i = 0; i < (UINT)mh::define::eLayerType::End; i++)
 		{
-			mh::Layer& layer = scene->GetLayer((mh::enums::eLayerType)i);
+			mh::Layer& layer = scene->GetLayer((mh::define::eLayerType)i);
 			const std::vector<mh::GameObject*>& gameObjs
 				= layer.GetGameObjects();
 

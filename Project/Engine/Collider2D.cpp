@@ -9,8 +9,8 @@ namespace mh
 {
 	UINT Collider2D::gColliderNumber = 0;
 	Collider2D::Collider2D()
-		: IComponent(enums::eComponentType::Collider)
-		, mType(enums::eColliderType::None)
+		: IComponent(define::eComponentType::Collider)
+		, mType(define::eColliderType::None)
 		, mTransform(nullptr)
 		, mSize(math::Vector2::One)
 		, mCenter(math::Vector2::Zero)

@@ -9,10 +9,10 @@
 namespace mh::GPU
 {
 	namespace stdfs = std::filesystem;
-	using namespace mh::enums;
+	using namespace mh::define;
 
 	GraphicsShader::GraphicsShader()
-		: GameResource(eResourceType::GraphicShader)
+		: IShader(eResourceType::GraphicsShader)
 		, mArrShaderCode{}
 		, mTopology(D3D11_PRIMITIVE_TOPOLOGY::D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST)
 		, mRSType(eRSType::SolidBack)
@@ -33,7 +33,7 @@ namespace mh::GPU
 		return E_NOTIMPL;
 	}
 
-	eResult GraphicsShader::CreateByCompile(GPU::eGSStage _stage, const stdfs::path& _FullPath, const std::string& _funcName)
+	eResult GraphicsShader::CreateByCompile(GPU::eGSStage _stage, const stdfs::path& _FullPath, const std::string_view _funcName)
 	{
 		mArrShaderCode[(int)_stage] = {};
 
@@ -41,7 +41,7 @@ namespace mh::GPU
 			_FullPath.wstring().c_str(),
 			nullptr,
 			D3D_COMPILE_STANDARD_FILE_INCLUDE,
-			_funcName.c_str(),
+			std::string(_funcName).c_str(),
 			GPU::SHADER_VERSION::GS[(int)_stage],
 			0u,
 			0u,

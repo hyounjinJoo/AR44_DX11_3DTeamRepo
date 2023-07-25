@@ -1,9 +1,10 @@
 #pragma once
 #include "IComponent.h"
 
-using namespace mh::math;
+
 namespace mh
 {
+	using namespace mh::math;
 	class Transform : public IComponent
 	{
 	public:

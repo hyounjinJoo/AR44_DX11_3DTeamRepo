@@ -12,7 +12,7 @@
 #include "PlayScene.h"
 
 #include "Renderer.h"
-#include "GameResources.h"
+#include "ResMgr.h"
 
 #include "SceneManager.h"
 #include "SpriteRenderer.h"
@@ -32,10 +32,10 @@ namespace mh
 		mScenes.resize((UINT)eSceneType::End);
 
 		mScenes[(UINT)eSceneType::Tilte] = new TitleScene();
-		mScenes[(UINT)eSceneType::Tilte]->SetName("TitleScene");
+		mScenes[(UINT)eSceneType::Tilte]->SetKey("TitleScene");
 
 		mScenes[(UINT)eSceneType::Play] = new PlayScene();
-		mScenes[(UINT)eSceneType::Play]->SetName("PlayScene");
+		mScenes[(UINT)eSceneType::Play]->SetKey("PlayScene");
 
 		mActiveScene = mScenes[(UINT)eSceneType::Tilte];
 
