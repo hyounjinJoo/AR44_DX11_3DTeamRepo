@@ -238,19 +238,20 @@ call DLLCopy.bat $(Configuration)</Command>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Animation.h" />
-    <ClInclude Include="Animator.h" />
+    <ClInclude Include="Components.h" />
+    <ClInclude Include="Com_Animator.h" />
     <ClInclude Include="AtExit.h" />
     <ClInclude Include="AudioClip.h" />
-    <ClInclude Include="AudioListener.h" />
+    <ClInclude Include="Com_AudioListener.h" />
     <ClInclude Include="AudioSource.h" />
-    <ClInclude Include="Collider3D.h" />
-    <ClInclude Include="Collider2D.h" />
+    <ClInclude Include="ICollider3D.h" />
+    <ClInclude Include="ICollider2D.h" />
     <ClInclude Include="CollisionManager.h" />
     <ClInclude Include="Application.h" />
-    <ClInclude Include="BaseRenderer.h" />
-    <ClInclude Include="Camera.h" />
-    <ClInclude Include="CameraScript.h" />
-    <ClInclude Include="Collider.h" />
+    <ClInclude Include="IRenderer.h" />
+    <ClInclude Include="Com_Camera.h" />
+    <ClInclude Include="Script_Camera.h" />
+    <ClInclude Include="ICollider.h" />
     <ClInclude Include="DefaultShaders.h" />
     <ClInclude Include="defines.h" />
     <ClInclude Include="define_Component.h" />
@@ -277,19 +278,19 @@ call DLLCopy.bat $(Configuration)</Command>
     <ClInclude Include="json-cpp\json-forwards.h" />
     <ClInclude Include="json-cpp\json.h" />
     <ClInclude Include="Layer.h" />
-    <ClInclude Include="Light.h" />
+    <ClInclude Include="Com_Light.h" />
     <ClInclude Include="Material.h" />
     <ClInclude Include="PathMgr.h" />
     <ClInclude Include="SimpleMath.h" />
     <ClInclude Include="Mesh.h" />
-    <ClInclude Include="MeshRenderer.h" />
+    <ClInclude Include="Com_Renderer_Mesh.h" />
     <ClInclude Include="Monster.h" />
     <ClInclude Include="Object.h" />
     <ClInclude Include="PaintShader.h" />
     <ClInclude Include="ParticleShader.h" />
-    <ClInclude Include="ParticleSystem.h" />
+    <ClInclude Include="Com_Renderer_ParticleSystem.h" />
     <ClInclude Include="Player.h" />
-    <ClInclude Include="PlayerScript.h" />
+    <ClInclude Include="Script_Player.h" />
     <ClInclude Include="PlayScene.h" />
     <ClInclude Include="Prefab.h" />
     <ClInclude Include="Renderer.h" />
@@ -297,9 +298,9 @@ call DLLCopy.bat $(Configuration)</Command>
     <ClInclude Include="ResMgr.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="SceneManager.h" />
-    <ClInclude Include="Script.h" />
+    <ClInclude Include="IScript.h" />
     <ClInclude Include="GraphicsShader.h" />
-    <ClInclude Include="SpriteRenderer.h" />
+    <ClInclude Include="Com_Renderer_Sprite.h" />
     <ClInclude Include="StructedBuffer.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="TimeManager.h" />
@@ -309,19 +310,19 @@ call DLLCopy.bat $(Configuration)</Command>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Animation.cpp" />
-    <ClCompile Include="Animator.cpp" />
+    <ClCompile Include="Com_Animator.cpp" />
     <ClCompile Include="AtExit.cpp" />
     <ClCompile Include="AudioClip.cpp" />
-    <ClCompile Include="AudioListener.cpp" />
+    <ClCompile Include="Com_AudioListener.cpp" />
     <ClCompile Include="AudioSource.cpp" />
-    <ClCompile Include="Collider3D.cpp" />
-    <ClCompile Include="Collider2D.cpp" />
+    <ClCompile Include="ICollider3D.cpp" />
+    <ClCompile Include="ICollider2D.cpp" />
     <ClCompile Include="CollisionManager.cpp" />
     <ClCompile Include="Application.cpp" />
-    <ClCompile Include="BaseRenderer.cpp" />
-    <ClCompile Include="Camera.cpp" />
-    <ClCompile Include="CameraScript.cpp" />
-    <ClCompile Include="Collider.cpp" />
+    <ClCompile Include="IRenderer.cpp" />
+    <ClCompile Include="Com_Camera.cpp" />
+    <ClCompile Include="Script_Camera.cpp" />
+    <ClCompile Include="ICollider.cpp" />
     <ClCompile Include="EnginePCH.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
@@ -346,20 +347,20 @@ call DLLCopy.bat $(Configuration)</Command>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="Layer.cpp" />
-    <ClCompile Include="Light.cpp" />
+    <ClCompile Include="Com_Light.cpp" />
     <ClCompile Include="Material.cpp" />
     <ClCompile Include="MeshData.cpp" />
     <ClCompile Include="PathMgr.cpp" />
     <ClCompile Include="IShader.cpp" />
     <ClCompile Include="SimpleMath.cpp" />
     <ClCompile Include="Mesh.cpp" />
-    <ClCompile Include="MeshRenderer.cpp" />
+    <ClCompile Include="Com_Renderer_Mesh.cpp" />
     <ClCompile Include="Monster.cpp" />
     <ClCompile Include="PaintShader.cpp" />
     <ClCompile Include="ParticleShader.cpp" />
-    <ClCompile Include="ParticleSystem.cpp" />
+    <ClCompile Include="Com_Renderer_ParticleSystem.cpp" />
     <ClCompile Include="Player.cpp" />
-    <ClCompile Include="PlayerScript.cpp" />
+    <ClCompile Include="Script_Player.cpp" />
     <ClCompile Include="PlayScene.cpp" />
     <ClCompile Include="Prefab.cpp" />
     <ClCompile Include="Renderer.cpp" />
@@ -367,9 +368,9 @@ call DLLCopy.bat $(Configuration)</Command>
     <ClCompile Include="ResMgr.cpp" />
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="SceneManager.cpp" />
-    <ClCompile Include="Script.cpp" />
+    <ClCompile Include="IScript.cpp" />
     <ClCompile Include="GraphicsShader.cpp" />
-    <ClCompile Include="SpriteRenderer.cpp" />
+    <ClCompile Include="Com_Renderer_Sprite.cpp" />
     <ClCompile Include="StructedBuffer.cpp" />
     <ClCompile Include="Texture.cpp" />
     <ClCompile Include="TimeManager.cpp" />

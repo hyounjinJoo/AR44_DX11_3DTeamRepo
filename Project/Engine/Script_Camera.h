@@ -1,13 +1,13 @@
 #pragma once
-#include "Script.h"
+#include "IScript.h"
 
 namespace mh
 {
-	class CameraScript : public Script
+	class Script_Camera : public IScript
 	{
 	public:
-		CameraScript();
-		~CameraScript();
+		Script_Camera();
+		virtual ~Script_Camera();
 
 		virtual void Initialize() override;
 		virtual void Update() override;

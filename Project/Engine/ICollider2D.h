@@ -4,24 +4,24 @@
 
 namespace mh
 {
-	class Collider2D : public IComponent
+	class ICollider2D : public IComponent
 	{
 	public:
-		Collider2D();
-		~Collider2D();
+		ICollider2D();
+		virtual ~ICollider2D();
 
 		virtual void Initialize() override;
 		virtual void Update() override;
 		virtual void FixedUpdate() override;
 		virtual void Render() override;
 
-		virtual void OnCollisionEnter(Collider2D* _collider);
-		virtual void OnCollisionStay(Collider2D* _collider);
-		virtual void OnCollisionExit(Collider2D* _collider);
+		virtual void OnCollisionEnter(ICollider2D* _collider);
+		virtual void OnCollisionStay(ICollider2D* _collider);
+		virtual void OnCollisionExit(ICollider2D* _collider);
 
-		virtual void OnTriggerEnter(Collider2D* _collider);
-		virtual void OnTriggerStay(Collider2D* _collider);
-		virtual void OnTriggerExit(Collider2D* _collider);
+		virtual void OnTriggerEnter(ICollider2D* _collider);
+		virtual void OnTriggerStay(ICollider2D* _collider);
+		virtual void OnTriggerExit(ICollider2D* _collider);
 
 		void SetType(define::eColliderType _type) { mType = _type; }
 		void SetSize(math::Vector2 _size) { mSize = _size; }

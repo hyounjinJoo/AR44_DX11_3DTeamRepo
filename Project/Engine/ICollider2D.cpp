@@ -1,14 +1,14 @@
 #include "EnginePCH.h"
 
-#include "Collider2D.h"
+#include "ICollider2D.h"
 #include "GameObject.h"
 #include "Renderer.h"
-#include "Script.h"
+#include "IScript.h"
 
 namespace mh
 {
-	UINT Collider2D::gColliderNumber = 0;
-	Collider2D::Collider2D()
+	UINT ICollider2D::gColliderNumber = 0;
+	ICollider2D::ICollider2D()
 		: IComponent(define::eComponentType::Collider)
 		, mType(define::eColliderType::None)
 		, mTransform(nullptr)
@@ -21,20 +21,20 @@ namespace mh
 		mID = gColliderNumber++;
 	}
 
-	Collider2D::~Collider2D()
+	ICollider2D::~ICollider2D()
 	{
 	}
 
-	void Collider2D::Initialize()
+	void ICollider2D::Initialize()
 	{
 		mTransform = GetOwner()->GetComponent<Transform>();
 	}
 
-	void Collider2D::Update()
+	void ICollider2D::Update()
 	{
 	}
 
-	void Collider2D::FixedUpdate()
+	void ICollider2D::FixedUpdate()
 	{
 		math::Vector3 scale = mTransform->GetScale();
 		scale *= math::Vector3(mSize.x, mSize.y, 1.0f);
@@ -66,59 +66,59 @@ namespace mh
 		renderer::gDebugMeshes.push_back(meshAttribute);
 	}
 
-	void Collider2D::Render()
+	void ICollider2D::Render()
 	{
 	}
 
-	void Collider2D::OnCollisionEnter(Collider2D* _collider)
+	void ICollider2D::OnCollisionEnter(ICollider2D* _collider)
 	{
-		const std::vector<Script*>& scripts = GetOwner()->GetScripts();
-		for (Script* script : scripts)
+		const std::vector<IScript*>& scripts = GetOwner()->GetScripts();
+		for (IScript* script : scripts)
 		{
 			script->OnCollisionEnter(_collider);
 		}
 	}
 
-	void Collider2D::OnCollisionStay(Collider2D* _collider)
+	void ICollider2D::OnCollisionStay(ICollider2D* _collider)
 	{
-		const std::vector<Script*>& scripts = GetOwner()->GetScripts();
-		for (Script* script : scripts)
+		const std::vector<IScript*>& scripts = GetOwner()->GetScripts();
+		for (IScript* script : scripts)
 		{
 			script->OnCollisionStay(_collider);
 		}
 	}
 
-	void Collider2D::OnCollisionExit(Collider2D* _collider)
+	void ICollider2D::OnCollisionExit(ICollider2D* _collider)
 	{
-		const std::vector<Script*>& scripts = GetOwner()->GetScripts();
-		for (Script* script : scripts)
+		const std::vector<IScript*>& scripts = GetOwner()->GetScripts();
+		for (IScript* script : scripts)
 		{
 			script->OnCollisionExit(_collider);
 		}
 	}
 
-	void Collider2D::OnTriggerEnter(Collider2D* _collider)
+	void ICollider2D::OnTriggerEnter(ICollider2D* _collider)
 	{
-		const std::vector<Script*>& scripts = GetOwner()->GetScripts();
-		for (Script* script : scripts)
+		const std::vector<IScript*>& scripts = GetOwner()->GetScripts();
+		for (IScript* script : scripts)
 		{
 			script->OnTriggerEnter(_collider);
 		}
 	}
 
-	void Collider2D::OnTriggerStay(Collider2D* _collider)
+	void ICollider2D::OnTriggerStay(ICollider2D* _collider)
 	{
-		const std::vector<Script*>& scripts = GetOwner()->GetScripts();
-		for (Script* script : scripts)
+		const std::vector<IScript*>& scripts = GetOwner()->GetScripts();
+		for (IScript* script : scripts)
 		{
 			script->OnTriggerStay(_collider);
 		}
 	}
 
-	void Collider2D::OnTriggerExit(Collider2D* _collider)
+	void ICollider2D::OnTriggerExit(ICollider2D* _collider)
 	{
-		const std::vector<Script*>& scripts = GetOwner()->GetScripts();
-		for (Script* script : scripts)
+		const std::vector<IScript*>& scripts = GetOwner()->GetScripts();
+		for (IScript* script : scripts)
 		{
 			script->OnTriggerExit(_collider);
 		}

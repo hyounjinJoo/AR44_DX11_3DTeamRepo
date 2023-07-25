@@ -1,41 +1,40 @@
 #include "EnginePCH.h"
 
-#include "SpriteRenderer.h"
+#include "Com_Renderer_Sprite.h"
 #include "GameObject.h"
 #include "Transform.h"
-#include "Animator.h"
+#include "Com_Animator.h"
 
 namespace mh
 {
-	SpriteRenderer::SpriteRenderer()
-		: BaseRenderer(eComponentType::SpriteRenderer)
+	Com_Renderer_Sprite::Com_Renderer_Sprite()
 	{
 	}
 
-	SpriteRenderer::~SpriteRenderer()
+	Com_Renderer_Sprite::~Com_Renderer_Sprite()
 	{
 	}
 
-	void SpriteRenderer::Initialize()
+	void Com_Renderer_Sprite::Initialize()
 	{
 	}
 
-	void SpriteRenderer::Update()
+	void Com_Renderer_Sprite::Update()
 	{
 	}
 
-	void SpriteRenderer::FixedUpdate()
+	void Com_Renderer_Sprite::FixedUpdate()
 	{
 	}
 
-	void SpriteRenderer::Render()
+	void Com_Renderer_Sprite::Render()
 	{
 		GetOwner()->GetComponent<Transform>()->SetConstantBuffer();
 
 		GetMesh()->BindBuffer();
 		GetMaterial()->Bind();
 
-		Animator* animator = GetOwner()->GetComponent<Animator>();
+		Com_Animator* animator = GetOwner()->GetComponent<Com_Animator>();
 		if (animator)
 		{
 			animator->Binds();

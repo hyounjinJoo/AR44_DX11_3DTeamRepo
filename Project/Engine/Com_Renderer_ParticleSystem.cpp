@@ -1,7 +1,7 @@
 
 #include "EnginePCH.h"
 
-#include "ParticleSystem.h"
+#include "Com_Renderer_ParticleSystem.h"
 #include "Mesh.h"
 #include "ResMgr.h"
 #include "Material.h"
@@ -15,9 +15,8 @@ namespace mh
 {
 	using namespace mh::GPU;
 
-	ParticleSystem::ParticleSystem()
-		: BaseRenderer(eComponentType::ParticleSystem)
-		, mMaxParticles(100)
+	Com_Renderer_ParticleSystem::Com_Renderer_ParticleSystem()
+		: mMaxParticles(100)
 		, mStartSize(Vector4(50.0f, 50.0f, 1.0f, 1.0f))
 		, mStartColor(Vector4(1.0f, 0.2f, 0.2f, 1.0f))
 		, mStartLifeTime(3.0f)
@@ -33,7 +32,7 @@ namespace mh
 
 	}
 
-	ParticleSystem::~ParticleSystem()
+	Com_Renderer_ParticleSystem::~Com_Renderer_ParticleSystem()
 	{
 		delete mBuffer;
 		mBuffer = nullptr;
@@ -42,7 +41,7 @@ namespace mh
 		mSharedBuffer = nullptr;
 	}
 
-	void ParticleSystem::Initialize()
+	void Com_Renderer_ParticleSystem::Initialize()
 	{
 		using namespace strKey::Default;
 		mCS = ResMgr::GetInst()->Find<ParticleShader>(shader::compute::ParticleCS);
@@ -77,11 +76,11 @@ namespace mh
 		mSharedBuffer->Create(sizeof(tParticleShared), 1, eSRVType::UAV, nullptr, true);
 	}
 
-	void ParticleSystem::Update()
+	void Com_Renderer_ParticleSystem::Update()
 	{
 	}
 
-	void ParticleSystem::FixedUpdate()
+	void Com_Renderer_ParticleSystem::FixedUpdate()
 	{
 		//파티클 생성 시간
 		float aliveTime = 1.0f / mFrequency;
@@ -116,7 +115,7 @@ namespace mh
 		mCBData.DeltaTime = TimeManager::DeltaTime();
 		mCBData.ElapsedTime += TimeManager::DeltaTime();
 
-		ConstantBuffer* cb = renderer::constantBuffers[(UINT)eCBType::ParticleSystem];
+		ConstantBuffer* cb = renderer::constantBuffers[(UINT)eCBType::Com_Renderer_ParticleSystem];
 		cb->SetData(&mCBData);
 		cb->Bind(eShaderStage::ALL);
 
@@ -125,7 +124,7 @@ namespace mh
 		mCS->OnExcute();
 	}
 
-	void ParticleSystem::Render()
+	void Com_Renderer_ParticleSystem::Render()
 	{
 		GetOwner()->GetComponent<Transform>()->SetConstantBuffer();
 		mBuffer->BindSRV(eShaderStage::GS, 15);

@@ -13,7 +13,7 @@ extern mh::Application application;
 namespace mh
 {
 	GridScript::GridScript()
-		: Script()
+		: IScript()
 		, mCamera(nullptr)
 	{
 

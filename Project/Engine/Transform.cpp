@@ -3,19 +3,20 @@
 
 #include "Transform.h"
 #include "Renderer.h"
-#include "Camera.h"
+#include "Com_Camera.h"
 
 namespace mh
 {
 	Transform::Transform()
-		: IComponent(eComponentType::Transform)
+		: mOwner()
+		, mParent()
 		, mFoward(Vector3::Forward)
 		, mRight(Vector3::Right)
 		, mUp(Vector3::Up)
 		, mScale(Vector3::One)
 		, mRotation(Vector3::Zero)
 		, mPosition(Vector3::One)
-		, mParent(nullptr)
+		
 	{
 		
 	}
@@ -24,15 +25,15 @@ namespace mh
 	{
 	}
 
-	void Transform::Initialize()
-	{
-		//cos(180);
-	}
+	//void Transform::Initialize()
+	//{
+	//	//cos(180);
+	//}
 
-	void Transform::Update()
-	{
-		//실제 로직상 캐릭터이동 처리
-	}
+	//void Transform::Update()
+	//{
+	//	//실제 로직상 캐릭터이동 처리
+	//}
 
 	void Transform::FixedUpdate()
 	{
@@ -74,16 +75,13 @@ namespace mh
 		}
 	}
 
-	void Transform::Render()
-	{
-	}
 
 	void Transform::SetConstantBuffer()
 	{
 		renderer::TransformCB trCb = {};
 		trCb.World = mWorld;
-		trCb.View = Camera::GetGpuViewMatrix();
-		trCb.Projection = Camera::GetGpuProjectionMatrix();
+		trCb.View = Com_Camera::GetGpuViewMatrix();
+		trCb.Projection = Com_Camera::GetGpuProjectionMatrix();
 
 		GPU::ConstantBuffer* cb = renderer::constantBuffers[(UINT)GPU::eCBType::Transform];
 		cb->SetData(&trCb);

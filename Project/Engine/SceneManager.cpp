@@ -1,21 +1,21 @@
 
 #include "EnginePCH.h"
 
-#include "Camera.h"
-#include "CameraScript.h"
+#include "Com_Camera.h"
+#include "Script_Camera.h"
 
 #include "GridScript.h"
 
-#include "MeshRenderer.h"
+#include "Com_Renderer_Mesh.h"
 
-#include "PlayerScript.h"
+#include "Script_Player.h"
 #include "PlayScene.h"
 
 #include "Renderer.h"
 #include "ResMgr.h"
 
 #include "SceneManager.h"
-#include "SpriteRenderer.h"
+#include "Com_Renderer_Sprite.h"
 
 #include "Transform.h"
 #include "TitleScene.h"

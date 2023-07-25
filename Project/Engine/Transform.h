@@ -1,23 +1,28 @@
 #pragma once
-#include "IComponent.h"
 
+#include "Entity.h"
+
+#include "SimpleMath.h"
 
 namespace mh
 {
 	using namespace mh::math;
-	class Transform : public IComponent
+
+	class GameObject;
+	class Transform : public Entity
 	{
 	public:
 		Transform();
 		virtual ~Transform();
 
-		virtual void Initialize() override;
-		virtual void Update() override;
-		virtual void FixedUpdate() override;
-		virtual void Render() override;
+		//void Initialize();
+		//void Update();
+		void FixedUpdate();
+		//void Render() {};
 
 		void SetConstantBuffer();
 		
+		void SetOwner(GameObject* _pOwner) { mOwner = _pOwner; }
 		void SetParent(Transform* _parent) { mParent = _parent; }
 		Transform* GetParent() { return mParent; }
 
@@ -36,6 +41,7 @@ namespace mh
 		Matrix& GetWorldMatrix() { return mWorld; }
 
 	private:
+		GameObject* mOwner;
 		Transform* mParent;
 		Vector3 mFoward;
 		Vector3 mRight;

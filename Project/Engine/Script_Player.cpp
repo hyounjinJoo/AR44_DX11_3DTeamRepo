@@ -1,28 +1,28 @@
 #include "EnginePCH.h"
 
-#include "PlayerScript.h"
+#include "Script_Player.h"
 #include "Transform.h"
 #include "GameObject.h"
 #include "Input.h"
 #include "TimeManager.h"
-#include "Animator.h"
+#include "Com_Animator.h"
 
 namespace mh
 {
-	PlayerScript::PlayerScript()
-		: Script()
+	Script_Player::Script_Player()
+		: IScript()
 	{
 	}
 
-	PlayerScript::~PlayerScript()
+	Script_Player::~Script_Player()
 	{
 	}
 
-	void PlayerScript::Initialize()
+	void Script_Player::Initialize()
 	{
 	}
 
-	void PlayerScript::Update()
+	void Script_Player::Update()
 	{
 		Transform* tr = GetOwner()->GetComponent<Transform>();
 
@@ -52,38 +52,38 @@ namespace mh
 			tr->SetRotation(pos);
 		}
 
-		Animator* animator = GetOwner()->GetComponent<Animator>();
+		Com_Animator* animator = GetOwner()->GetComponent<Com_Animator>();
 		if (Input::GetKey(eKeyCode::N_1))
 		{
-			animator->Play(L"MoveDown");
+			animator->Play("MoveDown");
 		}
 	}
 
-	void PlayerScript::Render()
+	void Script_Player::Render()
 	{
 	}
 
-	void PlayerScript::OnCollisionEnter(Collider2D* _collider)
+	void Script_Player::OnCollisionEnter(ICollider2D* _collider)
 	{
 	}
 
-	void PlayerScript::OnCollisionStay(Collider2D* _collider)
+	void Script_Player::OnCollisionStay(ICollider2D* _collider)
 	{
 	}
 
-	void PlayerScript::OnCollisionExit(Collider2D* _collider)
+	void Script_Player::OnCollisionExit(ICollider2D* _collider)
 	{
 	}
 
-	void PlayerScript::Start()
+	void Script_Player::Start()
 	{
 	}
 
-	void PlayerScript::Action()
+	void Script_Player::Action()
 	{
 	}
 
-	void PlayerScript::End()
+	void Script_Player::End()
 	{
 	}
 

@@ -1,6 +1,6 @@
 #include "EnginePCH.h"
 
-#include "CameraScript.h"
+#include "Script_Camera.h"
 #include "Transform.h"
 #include "GameObject.h"
 #include "Input.h"
@@ -8,20 +8,20 @@
 
 namespace mh
 {
-	CameraScript::CameraScript()
-		: Script()
+	Script_Camera::Script_Camera()
+		: IScript()
 	{
 	}
 
-	CameraScript::~CameraScript()
+	Script_Camera::~Script_Camera()
 	{
 	}
 
-	void CameraScript::Initialize()
+	void Script_Camera::Initialize()
 	{
 	}
 
-	void CameraScript::Update()
+	void Script_Camera::Update()
 	{
 		Transform* tr = GetOwner()->GetComponent<Transform>();
 
@@ -54,7 +54,7 @@ namespace mh
 
 		tr->SetPosition(pos);
 	}
-	void CameraScript::Render()
+	void Script_Camera::Render()
 	{
 	}
 }

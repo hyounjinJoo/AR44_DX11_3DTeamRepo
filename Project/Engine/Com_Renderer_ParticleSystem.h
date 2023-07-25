@@ -1,5 +1,5 @@
 #pragma once
-#include "BaseRenderer.h"
+#include "IRenderer.h"
 #include "ParticleShader.h"
 
 namespace mh
@@ -12,11 +12,11 @@ namespace mh
 
 	class StructedBuffer;
 
-	class ParticleSystem : public BaseRenderer
+	class Com_Renderer_ParticleSystem : public IRenderer
 	{
 	public:
-		ParticleSystem();
-		~ParticleSystem();
+		Com_Renderer_ParticleSystem();
+		~Com_Renderer_ParticleSystem();
 
 		virtual void Initialize() override;
 		virtual void Update() override;

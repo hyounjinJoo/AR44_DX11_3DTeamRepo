@@ -5,11 +5,11 @@
 
 namespace mh
 {
-	class BaseRenderer : public IComponent
+	class IRenderer : public IComponent
 	{
 	public:
-		BaseRenderer(define::eComponentType _type);
-		virtual ~BaseRenderer();
+		IRenderer();
+		virtual ~IRenderer();
 
 		virtual void Initialize() override;
 		virtual void Update() override;

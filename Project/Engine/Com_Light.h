@@ -7,11 +7,11 @@ namespace mh
 {
 	using namespace mh::math;
 	using namespace mh::define;
-	class Light : public IComponent
+	class Com_Light : public IComponent
 	{
 	public:
-		Light();
-		~Light();
+		Com_Light();
+		~Com_Light();
 
 		virtual void Initialize() override;
 		virtual void Update() override;

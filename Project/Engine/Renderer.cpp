@@ -23,8 +23,8 @@ namespace mh::renderer
 	Microsoft::WRL::ComPtr<ID3D11DepthStencilState> gDepthStencilStates[(UINT)eDSType::End] = {};
 	Microsoft::WRL::ComPtr<ID3D11BlendState> gBlendStates[(UINT)eBSType::End] = {};
 	
-	Camera* gMainCamera = nullptr;
-	std::vector<Camera*> gCameras[(UINT)eSceneType::End];
+	Com_Camera* gMainCamera = nullptr;
+	std::vector<Com_Camera*> gCameras[(UINT)eSceneType::End];
 	std::vector<tDebugMesh> gDebugMeshes;
 	std::vector<tLightAttribute> gLights;
 	StructedBuffer* gLightsBuffer = nullptr;
@@ -828,11 +828,11 @@ namespace mh::renderer
 		constantBuffers[(UINT)eCBType::Animation] = new ConstantBuffer(eCBType::Animation);
 		constantBuffers[(UINT)eCBType::Animation]->Create(sizeof(AnimationCB));
 
-		constantBuffers[(UINT)eCBType::Light] = new ConstantBuffer(eCBType::Light);
-		constantBuffers[(UINT)eCBType::Light]->Create(sizeof(LightCB));
+		constantBuffers[(UINT)eCBType::Com_Light] = new ConstantBuffer(eCBType::Com_Light);
+		constantBuffers[(UINT)eCBType::Com_Light]->Create(sizeof(LightCB));
 
-		constantBuffers[(UINT)eCBType::ParticleSystem] = new ConstantBuffer(eCBType::ParticleSystem);
-		constantBuffers[(UINT)eCBType::ParticleSystem]->Create(sizeof(ParticleSystemCB));
+		constantBuffers[(UINT)eCBType::Com_Renderer_ParticleSystem] = new ConstantBuffer(eCBType::Com_Renderer_ParticleSystem);
+		constantBuffers[(UINT)eCBType::Com_Renderer_ParticleSystem]->Create(sizeof(ParticleSystemCB));
 
 		constantBuffers[(UINT)eCBType::Noise] = new ConstantBuffer(eCBType::Noise);
 		constantBuffers[(UINT)eCBType::Noise]->Create(sizeof(NoiseCB));
@@ -999,7 +999,7 @@ namespace mh::renderer
 		BindLights();
 		
 		eSceneType type = SceneManager::GetActiveScene()->GetSceneType();
-		for (Camera* cam : gCameras[(UINT)type])
+		for (Com_Camera* cam : gCameras[(UINT)type])
 		{
 			if (cam == nullptr)
 				continue;
@@ -1025,7 +1025,7 @@ namespace mh::renderer
 		renderer::LightCB trCb = {};
 		trCb.NumberOfLight = static_cast<UINT>(gLights.size());
 
-		ConstantBuffer* cb = renderer::constantBuffers[(UINT)eCBType::Light];
+		ConstantBuffer* cb = renderer::constantBuffers[(UINT)eCBType::Com_Light];
 		cb->SetData(&trCb);
 		cb->Bind(eShaderStage::VS);
 		cb->Bind(eShaderStage::PS);

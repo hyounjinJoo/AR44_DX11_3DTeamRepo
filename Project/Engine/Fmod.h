@@ -1,6 +1,5 @@
 #pragma once
 
-#include "EnginePCH.h"
 #include "SimpleMath.h"
 
 #include <Fmod/fmod.hpp>

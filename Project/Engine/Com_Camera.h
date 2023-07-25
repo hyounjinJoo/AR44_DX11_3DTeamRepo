@@ -3,7 +3,7 @@
 
 namespace  mh
 {
-	class Camera : public IComponent
+	class Com_Camera : public IComponent
 	{
 	public:
 		enum eProjectionType
@@ -17,8 +17,8 @@ namespace  mh
 		__forceinline static void SetGpuViewMatrix(math::Matrix _view) { gView = _view; }
 		__forceinline static void SetGpuProjectionMatrix(math::Matrix _projection) { gProjection = _projection; }
 
-		Camera();
-		virtual ~Camera();
+		Com_Camera();
+		virtual ~Com_Camera();
 
 		virtual void Initialize() override;
 		virtual void Update() override;

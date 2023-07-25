@@ -1,34 +1,33 @@
 #include "EnginePCH.h"
 
-#include "MeshRenderer.h"
+#include "Com_Renderer_Mesh.h"
 #include "GameObject.h"
 #include "Transform.h"
-#include "Animator.h"
+#include "Com_Animator.h"
 
 namespace mh
 {
-	MeshRenderer::MeshRenderer()
-		: BaseRenderer(eComponentType::MeshRenderer)
+	Com_Renderer_Mesh::Com_Renderer_Mesh()
 	{
 	}
 
-	MeshRenderer::~MeshRenderer()
+	Com_Renderer_Mesh::~Com_Renderer_Mesh()
 	{
 	}
 
-	void MeshRenderer::Initialize()
+	void Com_Renderer_Mesh::Initialize()
 	{
 	}
 
-	void MeshRenderer::Update()
+	void Com_Renderer_Mesh::Update()
 	{
 	}
 
-	void MeshRenderer::FixedUpdate()
+	void Com_Renderer_Mesh::FixedUpdate()
 	{
 	}
 
-	void MeshRenderer::Render()
+	void Com_Renderer_Mesh::Render()
 	{
 		//GetOwner()->GetComponent<Transform>()->SetConstantBuffer();
 
@@ -43,7 +42,7 @@ namespace mh
 		GetMesh()->BindBuffer();
 		GetMaterial()->Bind();
 
-		//Animator* animator = GetOwner()->GetComponent<Animator>();
+		//Com_Animator* animator = GetOwner()->GetComponent<Com_Animator>();
 		//if (animator)
 		//{
 		//	animator->Binds();

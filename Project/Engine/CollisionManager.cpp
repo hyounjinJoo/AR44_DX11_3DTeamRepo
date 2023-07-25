@@ -59,19 +59,19 @@ namespace mh
 		{
 			if (left->GetState() != GameObject::eState::Active)
 				continue;
-			if (left->GetComponent<Collider2D>() == nullptr)
+			if (left->GetComponent<ICollider2D>() == nullptr)
 				continue;
 
 			for (GameObject* right : rights)
 			{
 				if (right->GetState() != GameObject::eState::Active)
 					continue;
-				if (right->GetComponent<Collider2D>() == nullptr)
+				if (right->GetComponent<ICollider2D>() == nullptr)
 					continue;
 				/*if (left == right) //지워도 상관없어서 주석처리 (오류나면 수정)
 					continue;*/
 
-				ColliderCollision(left->GetComponent<Collider2D>(), right->GetComponent<Collider2D>());
+				ColliderCollision(left->GetComponent<ICollider2D>(), right->GetComponent<ICollider2D>());
 			}
 
 			/*if ((UINT)left == (UINT)right)  
@@ -80,7 +80,7 @@ namespace mh
 
 	}
 
-	void CollisionManager::ColliderCollision(Collider2D* _left, Collider2D* _right)
+	void CollisionManager::ColliderCollision(ICollider2D* _left, ICollider2D* _right)
 	{
 		// 두 충돌체 레이어로 구성된 ID 확인
 		union_ColliderID colliderID;
@@ -148,7 +148,7 @@ namespace mh
 		}
 	}
 
-	bool CollisionManager::Intersect(Collider2D* _left, Collider2D* _right)
+	bool CollisionManager::Intersect(ICollider2D* _left, ICollider2D* _right)
 	{
 		// Rect vs Rect 
 		// 0 --- 1

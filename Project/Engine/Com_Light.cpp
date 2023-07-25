@@ -1,34 +1,34 @@
 #include "EnginePCH.h"
 
-#include "Light.h"
+#include "Com_Light.h"
 #include "Transform.h"
 #include "GameObject.h"
 #include "Renderer.h"
 
 namespace mh
 {
-	Light::Light()
+	Com_Light::Com_Light()
 		: IComponent(eComponentType::Light)
 	{
 
 	}
 
-	Light::~Light()
+	Com_Light::~Com_Light()
 	{
 
 	}
 
-	void Light::Initialize()
+	void Com_Light::Initialize()
 	{
 
 	}
 
-	void Light::Update()
+	void Com_Light::Update()
 	{
 
 	}
 
-	void Light::FixedUpdate()
+	void Com_Light::FixedUpdate()
 	{
 		Transform* tr = GetOwner()->GetComponent<Transform>();
 		Vector3 position = tr->GetPosition();
@@ -39,7 +39,7 @@ namespace mh
 		renderer::PushLightAttribute(mAttribute);
 	}
 
-	void Light::Render()
+	void Com_Light::Render()
 	{
 
 	}

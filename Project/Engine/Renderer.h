@@ -8,8 +8,8 @@
 #include "Mesh.h"
 #include "GraphicsShader.h"
 #include "ConstantBuffer.h"
-#include "Camera.h"
-#include "Light.h"
+#include "Com_Camera.h"
+#include "Com_Light.h"
 #include "StructedBuffer.h"
 
 
@@ -97,14 +97,14 @@ namespace mh::renderer
 
 
 	extern Vertex gVertices[4];
-	extern Camera* gMainCamera;
+	extern Com_Camera* gMainCamera;
 	extern ConstantBuffer* constantBuffers[];
 	extern Microsoft::WRL::ComPtr<ID3D11SamplerState> gSamplerStates[];
 	extern Microsoft::WRL::ComPtr<ID3D11RasterizerState> gRasterizerStates[];
 	extern Microsoft::WRL::ComPtr<ID3D11DepthStencilState> gDepthStencilStates[];
 	extern Microsoft::WRL::ComPtr<ID3D11BlendState> gBlendStates[];
 	
-	extern std::vector<Camera*> gCameras[];
+	extern std::vector<Com_Camera*> gCameras[];
 	extern std::vector<tDebugMesh> gDebugMeshes;
 	extern std::vector<GPU::tLightAttribute> gLights;
 	extern GPU::StructedBuffer* gLightsBuffer;

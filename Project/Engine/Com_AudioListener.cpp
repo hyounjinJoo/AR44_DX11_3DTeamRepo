@@ -1,34 +1,34 @@
 #include "EnginePCH.h"
 
-#include "AudioListener.h"
+#include "Com_AudioListener.h"
 #include "Transform.h"
 #include "GameObject.h"
 #include "Fmod.h"
 
 namespace mh
 {
-	AudioListener::AudioListener()
+	Com_AudioListener::Com_AudioListener()
 		: IComponent(define::eComponentType::AudioListener)
 	{
 
 	}
 
-	AudioListener::~AudioListener()
+	Com_AudioListener::~Com_AudioListener()
 	{
 
 	}
 
-	void AudioListener::Initialize()
+	void Com_AudioListener::Initialize()
 	{
 
 	}
 
-	void AudioListener::Update()
+	void Com_AudioListener::Update()
 	{
 
 	}
 
-	void AudioListener::FixedUpdate()
+	void Com_AudioListener::FixedUpdate()
 	{
 		Transform* tr = GetOwner()->GetComponent<Transform>();
 		math::Vector3 pos = tr->GetPosition();
@@ -39,7 +39,7 @@ namespace mh
 		Fmod::Set3DListenerAttributes(&pos, &vel, &foward, &up);
 	}
 
-	void AudioListener::Render()
+	void Com_AudioListener::Render()
 	{
 
 	}

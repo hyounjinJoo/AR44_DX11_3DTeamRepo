@@ -2,18 +2,18 @@
 #include "IComponent.h"
 #include "Mesh.h"
 #include "Material.h"
-#include "BaseRenderer.h"
+#include "IRenderer.h"
 
 
 namespace mh
 {
 	using namespace mh::GPU;
 
-	class MeshRenderer : public BaseRenderer
+	class Com_Renderer_Mesh : public IRenderer
 	{
 	public:
-		MeshRenderer();
-		virtual ~MeshRenderer();
+		Com_Renderer_Mesh();
+		virtual ~Com_Renderer_Mesh();
 
 		virtual void Initialize() override;
 		virtual void Update() override;

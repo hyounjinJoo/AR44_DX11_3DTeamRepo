@@ -19,7 +19,7 @@
 #include "GraphicsShader.h"
 #include "ComputeShader.h"
 
-#include "Script.h"
+#include "IScript.h"
 
 
 namespace mh

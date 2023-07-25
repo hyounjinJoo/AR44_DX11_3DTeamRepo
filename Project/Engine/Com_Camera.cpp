@@ -1,7 +1,7 @@
 
 #include "EnginePCH.h"
 
-#include "Camera.h"
+#include "Com_Camera.h"
 #include "Transform.h"
 #include "GameObject.h"
 #include "Application.h"
@@ -9,17 +9,17 @@
 #include "Scene.h"
 #include "SceneManager.h"
 #include "Material.h"
-#include "BaseRenderer.h"
+#include "IRenderer.h"
 #include "SceneManager.h"
 
 extern mh::Application application;
 
 namespace mh
 {
-	math::Matrix Camera::gView = math::Matrix::Identity;
-	math::Matrix Camera::gProjection = math::Matrix::Identity;
+	math::Matrix Com_Camera::gView = math::Matrix::Identity;
+	math::Matrix Com_Camera::gProjection = math::Matrix::Identity;
 
-	Camera::Camera()
+	Com_Camera::Com_Camera()
 		: IComponent(define::eComponentType::Camera)
 		, mType(eProjectionType::Orthographic)
 		, mAspectRatio(1.0f)
@@ -30,22 +30,22 @@ namespace mh
 		EnableLayerMasks();
 	}
 
-	Camera::~Camera()
+	Com_Camera::~Com_Camera()
 	{
 	}
 
-	void Camera::Initialize()
+	void Com_Camera::Initialize()
 	{
 
 		RegisterCameraInRenderer();
 	}
 
-	void Camera::Update()
+	void Com_Camera::Update()
 	{
 
 	}
 
-	void Camera::FixedUpdate()
+	void Com_Camera::FixedUpdate()
 	{
 		CreateViewMatrix();
 		CreateProjectionMatrix();
@@ -53,7 +53,7 @@ namespace mh
 		RegisterCameraInRenderer();
 	}
 
-	void Camera::Render()
+	void Com_Camera::Render()
 	{
 		gView = mView;
 		gProjection = mProjection;
@@ -66,7 +66,7 @@ namespace mh
 		RenderPostProcess();
 	}
 
-	void Camera::CreateViewMatrix()
+	void Com_Camera::CreateViewMatrix()
 	{
 		Transform* tr = GetOwner()->GetComponent<Transform>();
 		math::Vector3 pos = tr->GetPosition();
@@ -88,7 +88,7 @@ namespace mh
 		mView *= viewRotate;
 	}
 
-	void Camera::CreateProjectionMatrix()
+	void Com_Camera::CreateProjectionMatrix()
 	{
 		RECT winRect;
 		GetClientRect(application.GetHwnd(), &winRect);
@@ -113,18 +113,18 @@ namespace mh
 		}
 	}
 
-	void Camera::RegisterCameraInRenderer()
+	void Com_Camera::RegisterCameraInRenderer()
 	{
 		define::eSceneType type = SceneManager::GetActiveScene()->GetSceneType();
 		renderer::gCameras[(UINT)type].push_back(this);
 	}
 
-	void Camera::TurnLayerMask(define::eLayerType _layer, bool _enable)
+	void Com_Camera::TurnLayerMask(define::eLayerType _layer, bool _enable)
 	{
 		mLayerMasks.set((UINT)_layer, _enable);
 	}
 
-	void Camera::SortGameObjects()
+	void Com_Camera::SortGameObjects()
 	{
 		mOpaqueGameObjects.clear();
 		mCutoutGameObjects.clear();
@@ -149,7 +149,7 @@ namespace mh
 		}
 	}
 
-	void Camera::RenderOpaque()
+	void Com_Camera::RenderOpaque()
 	{
 		for (GameObject* obj : mOpaqueGameObjects)
 		{
@@ -160,7 +160,7 @@ namespace mh
 		}
 	}
 
-	void Camera::RenderCutout()
+	void Com_Camera::RenderCutout()
 	{
 		for (GameObject* obj : mCutoutGameObjects)
 		{
@@ -171,7 +171,7 @@ namespace mh
 		}
 	}
 
-	void Camera::RenderTransparent()
+	void Com_Camera::RenderTransparent()
 	{
 		for (GameObject* obj : mTransparentGameObjects)
 		{
@@ -182,7 +182,7 @@ namespace mh
 		}
 	}
 
-	void Camera::RenderPostProcess()
+	void Com_Camera::RenderPostProcess()
 	{
 
 		for (GameObject* obj : mPostProcessGameObjects)
@@ -194,10 +194,10 @@ namespace mh
 		}
 	}
 
-	void Camera::PushGameObjectToRenderingModes(GameObject* _gameObj)
+	void Com_Camera::PushGameObjectToRenderingModes(GameObject* _gameObj)
 	{
-		BaseRenderer* renderer
-			= _gameObj->GetComponent<BaseRenderer>();
+		IRenderer* renderer
+			= _gameObj->GetComponent<IRenderer>();
 		if (renderer == nullptr)
 			return;
 

@@ -5,43 +5,69 @@
 
 namespace mh::define
 {
+	STRKEY ComponentPrefix = "Com_";
+
 	enum class eComponentType
 	{
-		UNKNOWN = -1 ,
-		Transform, // 위치 데이터 수정하는 컴포넌트
-		Camera,
-		Mesh,
+		UNKNOWN = -1,
+
 		Collider,
-		//Collider2,
-		MeshRenderer,
-		SpriteRenderer,
 		Animator,
-		ParticleSystem,
-		AudioListener,
-		AudioSource,
 		Light,
-		UI,
-		//FadeOut,FadeIn
-		Script,
-		End,
+		Camera,
+
+		AudioSource,
+		AudioListener,
+
+		Renderer,
+
+		Scripts,
+
+		END
+		
+		////Transform, // 위치 데이터 수정하는 컴포넌트
+		//Com_Camera,
+		//Mesh,
+		//Collider,
+		////Collider2,
+		//Renderer,
+		////Com_Renderer_Mesh,
+		////Com_Renderer_Sprite,
+		//Com_Animator,
+		//Com_Renderer_ParticleSystem,
+		//Com_AudioListener,
+		//AudioSource,
+		//Com_Light,
+		//UI,
+		////FadeOut,FadeIn
+		//IScript,
+		//End,
+
 	};
 
-	STRKEY ArrComName[(int)eComponentType::End] =
+	STRKEY ArrComName[(int)eComponentType::END] =
 	{
-		"Transform", // 위치 데이터 수정하는 컴포넌트
-		"Camera",
-		"Mesh",
 		"Collider",
-		//"Collider2",
-		"MeshRenderer",
-		"SpriteRenderer",
 		"Animator",
-		"ParticleSystem",
-		"AudioListener",
-		"AudioSource",
 		"Light",
-		"UI",
-		//"FadeOut,FadeI",
-		"Scrip",
+		"Camera",
+
+		"AudioSource",
+		"AudioListener",
+
+		"Renderer",
+
+		"Scripts"
 	};
+
+
+	namespace Default
+	{
+		namespace com
+		{
+			STRKEY_DECLARE(Com_Animator);
+			STRKEY_DECLARE(Com_Camera);
+			STRKEY_DECLARE(Com_Light);
+		}
+	}
 }

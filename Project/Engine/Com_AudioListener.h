@@ -1,22 +1,18 @@
 #pragma once
-
 #include "IComponent.h"
-#include "Mesh.h"
-#include "Material.h"
-#include "BaseRenderer.h"
 
-using namespace mh::GPU;
 namespace mh
 {
-	class SpriteRenderer : public BaseRenderer
+	class Com_AudioListener : public IComponent
 	{
 	public:
-		SpriteRenderer();
-		virtual ~SpriteRenderer();
+		Com_AudioListener();
+		virtual ~Com_AudioListener();
 
 		virtual void Initialize() override;
 		virtual void Update() override;
 		virtual void FixedUpdate() override;
 		virtual void Render() override;
+	private:
 	};
 }

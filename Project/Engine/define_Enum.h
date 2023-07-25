@@ -26,7 +26,7 @@ namespace mh::define
 	enum class eLayerType
 	{
 		None = 0,
-		Camera,
+		Com_Camera,
 		Grid,
 		Monster,
 		Player,

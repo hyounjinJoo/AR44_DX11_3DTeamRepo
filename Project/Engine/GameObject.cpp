@@ -10,13 +10,14 @@ namespace mh
 		, mType(define::eLayerType::None)
 		, mbDontDestroy(false)
 	{
-		mComponents.resize((UINT)define::eComponentType::End);
-		AddComponent(new Transform());
+		mTransform.SetOwner(this);
+		mVecComponent.resize((UINT)define::eComponentType::END);
+		//AddComponent(new Transform());
 	}
 
 	GameObject::~GameObject()
 	{
-		for (IComponent* component : mComponents)
+		for (IComponent* component : mVecComponent)
 		{
 			if (component == nullptr)
 				continue;
@@ -42,7 +43,9 @@ namespace mh
 
 	void GameObject::Update()
 	{
-		for (IComponent* component : mComponents)
+		//mTransform.Update();
+
+		for (IComponent* component : mVecComponent)
 		{
 			if (component == nullptr)
 				continue;
@@ -61,7 +64,9 @@ namespace mh
 
 	void GameObject::FixedUpdate()
 	{
-		for (IComponent* component : mComponents)
+
+		mTransform.FixedUpdate();
+		for (IComponent* component : mVecComponent)
 		{
 			if (component == nullptr)
 				continue;
@@ -80,7 +85,7 @@ namespace mh
 
 	void GameObject::Render()
 	{
-		for (IComponent* component : mComponents)
+		for (IComponent* component : mVecComponent)
 		{
 			if (component == nullptr)
 				continue;
@@ -103,14 +108,14 @@ namespace mh
 	{
 		define::eComponentType order = _Comp->GetOrder();
 
-		if (order != define::eComponentType::Script)
+		if (order != define::eComponentType::Scripts)
 		{
-			mComponents[(UINT)order] = _Comp;
-			mComponents[(UINT)order]->SetOwner(this);
+			mVecComponent[(UINT)order] = _Comp;
+			mVecComponent[(UINT)order]->SetOwner(this);
 		}
 		else
 		{
-			mScripts.push_back(dynamic_cast<Script*>(_Comp));
+			mScripts.push_back(dynamic_cast<IScript*>(_Comp));
 			_Comp->SetOwner(this);
 		}
 	}

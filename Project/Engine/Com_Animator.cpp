@@ -1,10 +1,10 @@
 #include "EnginePCH.h"
 
-#include "Animator.h"
+#include "Com_Animator.h"
 
 namespace mh
 {
-	Animator::Animator()
+	Com_Animator::Com_Animator()
 		: IComponent(define::eComponentType::Animator)
 		, mAnimations{}
 		, mEvents{}
@@ -13,7 +13,7 @@ namespace mh
 	{
 
 	}
-	Animator::~Animator()
+	Com_Animator::~Com_Animator()
 	{
 		for (auto anim : mAnimations)
 		{
@@ -27,10 +27,10 @@ namespace mh
 			evt.second = nullptr;
 		}
 	}
-	void Animator::Initialize()
+	void Com_Animator::Initialize()
 	{
 	}
-	void Animator::Update()
+	void Com_Animator::Update()
 	{
 		if (mActiveAnimation == nullptr)
 			return;
@@ -57,14 +57,14 @@ namespace mh
 		}
 
 	}
-	void Animator::FixedUpdate()
+	void Com_Animator::FixedUpdate()
 	{
 	}
-	void Animator::Render()
+	void Com_Animator::Render()
 	{
 	}
 
-	bool Animator::Create(const std::wstring& _name, std::shared_ptr<GPU::Texture> _atlas
+	bool Com_Animator::Create(const std::string_view _name, std::shared_ptr<GPU::Texture> _atlas
 		, math::Vector2 _leftTop, math::Vector2 _size, math::Vector2 _offset
 		, UINT _spriteLegth, float _duration)
 	{
@@ -87,10 +87,9 @@ namespace mh
 		return true;
 	}
 
-	Animation* Animator::FindAnimation(const std::wstring& _name) const
+	Animation* Com_Animator::FindAnimation(const std::string_view _name) const
 	{
-		auto iter
-			= mAnimations.find(_name);
+		const auto iter = mAnimations.find(_name);
 
 		if (iter == mAnimations.end())
 		{
@@ -100,9 +99,9 @@ namespace mh
 		return iter->second;
 	}
 	
-	Animator::tEvents* Animator::FindEvents(const std::wstring& _name) const
+	Com_Animator::tEvents* Com_Animator::FindEvents(const std::string_view _name) const
 	{
-		std::map<std::wstring, tEvents*>::const_iterator iter
+		const auto iter
 			= mEvents.find(_name);
 
 		if (iter == mEvents.end())
@@ -112,7 +111,7 @@ namespace mh
 
 		return iter->second;
 	}
-	void Animator::Play(const std::wstring& _name, bool _loop)
+	void Com_Animator::Play(const std::string_view _name, bool _loop)
 	{
 		Animation* prevAnimation = mActiveAnimation;
 		tEvents* events = nullptr;
@@ -132,7 +131,7 @@ namespace mh
 			events->StartEvent();
 	}
 
-	void Animator::Binds()
+	void Com_Animator::Binds()
 	{
 		if (mActiveAnimation == nullptr)
 			return;
@@ -140,7 +139,7 @@ namespace mh
 		mActiveAnimation->BindShader();
 	}
 
-	void Animator::Clear()
+	void Com_Animator::Clear()
 	{
 		if (mActiveAnimation == nullptr)
 			return;
@@ -150,25 +149,25 @@ namespace mh
 
 
 
-	std::function<void()>& Animator::GetStartEvent(const std::wstring& _name) const
+	std::function<void()>& Com_Animator::GetStartEvent(const std::string_view _name) const
 	{
 		tEvents* events = FindEvents(_name);
 
 		return events->StartEvent.Event;
 	}
-	std::function<void()>& Animator::GetCompleteEvent(const std::wstring& _name) const
+	std::function<void()>& Com_Animator::GetCompleteEvent(const std::string_view _name) const
 	{
 		tEvents* events = FindEvents(_name);
 
 		return events->CompleteEvent.Event;
 	}
-	std::function<void()>& Animator::GetEndEvent(const std::wstring& _name) const
+	std::function<void()>& Com_Animator::GetEndEvent(const std::string_view _name) const
 	{
 		tEvents* events = FindEvents(_name);
 
 		return events->EndEvent.Event;
 	}
-	std::function<void()>& Animator::GetEvent(const std::wstring& _name, UINT _index) const
+	std::function<void()>& Com_Animator::GetEvent(const std::string_view _name, UINT _index) const
 	{
 		tEvents* events = FindEvents(_name);
 

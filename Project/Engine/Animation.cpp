@@ -55,7 +55,7 @@ namespace mh
 	{
 	}
 
-	void Animation::Create(const std::wstring& _name
+	void Animation::Create(const std::string_view _name
 		, std::shared_ptr<GPU::Texture> _atlas
 		, math::Vector2 _leftTop, math::Vector2 _size, math::Vector2 _offset
 		, UINT _spriteLegth, float _duration)

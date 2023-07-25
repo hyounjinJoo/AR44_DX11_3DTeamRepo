@@ -1,9 +1,7 @@
 #pragma once
-
-#include "define_Enum.h"
-#include "IComponent.h"
-#include "Script.h"
 #include "Entity.h"
+
+#include "Components.h"
 
 namespace mh
 {
@@ -39,7 +37,7 @@ namespace mh
 		template <typename T>
 		std::vector<T*> GetComponents();
 		
-		const std::vector<Script*>& GetScripts() { return mScripts; }
+		const std::vector<IScript*>& GetScripts() { return mScripts; }
 
 		void SetName(const std::string_view _Name) { mName = _Name; }
 		const std::string& GetName() const { return mName; }
@@ -63,14 +61,15 @@ namespace mh
 		define::eLayerType GetLayerType() { return mType; }
 		void SetLayerType(define::eLayerType _type) { mType = _type; }
 
-	protected:
-		std::vector<IComponent*> mComponents;
+	private:
+		Transform mTransform;
+		std::vector<IComponent*> mVecComponent;
 
 	private:
 		std::string mName;
 		eState mState;
 		define::eLayerType mType;
-		std::vector<Script*> mScripts;
+		std::vector<IScript*> mScripts;
 		bool mbDontDestroy;
 	};
 
@@ -80,14 +79,14 @@ namespace mh
 		T* _Comp = new T();
 		define::eComponentType order = _Comp->GetOrder();
 
-		if (order != define::eComponentType::Script)
+		if (order != define::eComponentType::Scripts)
 		{
-			mComponents[(UINT)order] = _Comp;
-			mComponents[(UINT)order]->SetOwner(this);
+			mVecComponent[(UINT)order] = _Comp;
+			mVecComponent[(UINT)order]->SetOwner(this);
 		}
 		else
 		{
-			mScripts.push_back(dynamic_cast<Script*>(_Comp));
+			mScripts.push_back(dynamic_cast<IScript*>(_Comp));
 			_Comp->SetOwner(this);
 		}
 
@@ -100,7 +99,7 @@ namespace mh
 	T* GameObject::GetComponent()
 	{
 		T* castResult;
-		for (auto component : mComponents)
+		for (auto component : mVecComponent)
 		{
 			castResult = dynamic_cast<T*>(component);
 
@@ -117,7 +116,7 @@ namespace mh
 		std::vector<T*> components = {};
 
 		T* castResult;
-		for (auto component : mComponents)
+		for (auto component : mVecComponent)
 		{
 			castResult = dynamic_cast<T*>(component);
 

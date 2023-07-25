@@ -6,24 +6,24 @@
 
 #include "TitleScene.h"
 #include "Transform.h"
-#include "MeshRenderer.h"
+#include "Com_Renderer_Mesh.h"
 #include "Renderer.h"
 #include "Texture.h"
-#include "PlayerScript.h"
-#include "Camera.h"
-#include "CameraScript.h"
-#include "SpriteRenderer.h"
+#include "Script_Player.h"
+#include "Com_Camera.h"
+#include "Script_Camera.h"
+#include "Com_Renderer_Sprite.h"
 #include "GridScript.h"
 #include "Object.h"
 #include "Input.h"
-#include "Collider2D.h"
+#include "ICollider2D.h"
 #include "Player.h"
 #include "Monster.h"
 #include "CollisionManager.h"
-#include "Animator.h"
-#include "Light.h"
+#include "Com_Animator.h"
+#include "Com_Light.h"
 #include "PaintShader.h"
-#include "ParticleSystem.h"
+#include "Com_Renderer_ParticleSystem.h"
 
 namespace mh
 {
@@ -36,15 +36,15 @@ namespace mh
 	}
 	void TitleScene::Initialize()
 	{
-		// Main Camera Game Object
-		GameObject* cameraObj = object::Instantiate<GameObject>(eLayerType::Camera);
+		// Main Com_Camera Game Object
+		GameObject* cameraObj = object::Instantiate<GameObject>(eLayerType::Com_Camera);
 		cameraObj->SetName("MainCamera");
 		cameraObj->GetComponent<Transform>()->SetPosition(Vector3(0.0f, 0.0f, -20.0f));
-		Camera* cameraComp = cameraObj->AddComponent<Camera>();
-		cameraComp->SetProjectionType(Camera::eProjectionType::Perspective);
+		Com_Camera* cameraComp = cameraObj->AddComponent<Com_Camera>();
+		cameraComp->SetProjectionType(Com_Camera::eProjectionType::Perspective);
 		//cameraComp->RegisterCameraInRenderer();
 		cameraComp->TurnLayerMask(eLayerType::UI, false);
-		cameraObj->AddComponent<CameraScript>();
+		cameraObj->AddComponent<Script_Camera>();
 		renderer::gMainCamera = cameraComp;
 
 
@@ -53,12 +53,12 @@ namespace mh
 		player->GetComponent<Transform>()->SetScale(Vector3(5.0f, 5.0f, 5.0f));
 		//player->GetComponent<Transform>()->SetRotation(Vector3(15.0f, 45.0f, 0.0f));
 		player->SetName("Player");
-		MeshRenderer* mr = player->AddComponent<MeshRenderer>();
+		Com_Renderer_Mesh* mr = player->AddComponent<Com_Renderer_Mesh>();
 
 		
 		mr->SetMaterial(ResMgr::GetInst()->Find<Material>(strKey::Default::material::Basic3DMaterial));
 		mr->SetMesh(ResMgr::GetInst()->Find<Mesh>(strKey::Default::mesh::CubeMesh));
-		player->AddComponent<PlayerScript>();
+		player->AddComponent<Script_Player>();
 		//mr->SetMesh(ResMgr::GetInst()->Find<Mesh>(L"SphereMesh"));
 
 		////paint shader
@@ -75,7 +75,7 @@ namespace mh
 			directionalLight->GetComponent<Transform>()->SetPosition(Vector3(0.0f, 100.0f, 0.0f));
 			directionalLight->GetComponent<Transform>()->SetRotation(Vector3(45.0f, 0.0f, 0.0f));
 
-			Light* lightComp = directionalLight->AddComponent<Light>();
+			Com_Light* lightComp = directionalLight->AddComponent<Com_Light>();
 			lightComp->SetType(eLightType::Directional);
 			lightComp->SetDiffuse(Vector4(1.0f, 1.0f, 1.0f, 1.0f));
 			lightComp->SetSpecular(Vector4(1.0f, 1.0f, 1.0f, 1.0f));
@@ -87,7 +87,7 @@ namespace mh
 			directionalLight->SetName(L"PointLight");
 
 			directionalLight->GetComponent<Transform>()->SetPosition(Vector3(3.0f, 0.0f, 0.0f));
-			Light* lightComp = directionalLight->AddComponent<Light>();
+			Com_Light* lightComp = directionalLight->AddComponent<Com_Light>();
 			lightComp->SetType(eLightType::Point);
 			lightComp->SetRadius(20.0f);
 			lightComp->SetDiffuse(Vector4(1.0f, 0.0f, 0.0f, 1.0f));
@@ -98,21 +98,21 @@ namespace mh
 			directionalLight->SetName(L"PointLight");
 
 			directionalLight->GetComponent<Transform>()->SetPosition(Vector3(6.0f, 0.0f, 0.0f));
-			Light* lightComp = directionalLight->AddComponent<Light>();
+			Com_Light* lightComp = directionalLight->AddComponent<Com_Light>();
 			lightComp->SetType(eLightType::Point);
 			lightComp->SetRadius(20.0f);
 			lightComp->SetDiffuse(Vector4(0.0f, 0.0f, 1.0f, 1.0f));
 		}*/
 
 
-		//// Main Camera Game Object
-		//GameObject* cameraObj = object::Instantiate<GameObject>(eLayerType::Camera);
+		//// Main Com_Camera Game Object
+		//GameObject* cameraObj = object::Instantiate<GameObject>(eLayerType::Com_Camera);
 		//cameraObj->SetName(L"MainCamera");
-		//Camera* cameraComp = cameraObj->AddComponent<Camera>();
-		//cameraComp->SetProjectionType(Camera::eProjectionType::Orthographic);
+		//Com_Camera* cameraComp = cameraObj->AddComponent<Com_Camera>();
+		//cameraComp->SetProjectionType(Com_Camera::eProjectionType::Orthographic);
 		////cameraComp->RegisterCameraInRenderer();
 		//cameraComp->TurnLayerMask(eLayerType::UI, false);
-		//cameraObj->AddComponent<CameraScript>();
+		//cameraObj->AddComponent<Script_Camera>();
 		//gMainCamera = cameraComp;
 		//
 
@@ -130,11 +130,11 @@ namespace mh
 		//	zeldaTr->SetPosition(Vector3(0.0f, 0.0f, 20.0f));
 		//	zeldaTr->SetRotation(Vector3(0.0f, 0.0f, 45.0f));
 		//	zeldaTr->SetScale(Vector3(200.0f, 200.0f, 1.0f));
-		//	Collider2D* collider = obj->AddComponent<Collider2D>();
+		//	ICollider2D* collider = obj->AddComponent<ICollider2D>();
 		//	collider->SetType(eColliderType::Rect);
 		//	collider->SetSize(Vector2(1.5f, 0.5f));
 
-		//	Animator* animator = obj->AddComponent<Animator>();
+		//	Com_Animator* animator = obj->AddComponent<Com_Animator>();
 		//	std::shared_ptr<Texture> texture = ResMgr::GetInst()->Load<Texture>(L"Zelda", L"Zelda.png");
 		//	animator->Create(L"Idle", texture, Vector2(0.0f, 0.0f), Vector2(120.0f, 130.0f), Vector2::Zero, 3, 0.1f);
 		//	animator->Create(L"MoveDown", texture, Vector2(0.0f, 520.0f), Vector2(120.0f, 130.0f), Vector2::Zero, 8, 0.1f);
@@ -142,12 +142,12 @@ namespace mh
 
 		//	animator->Play(L"MoveLeft", true);
 
-		//	MeshRenderer* mr = obj->AddComponent<MeshRenderer>();
+		//	Com_Renderer_Mesh* mr = obj->AddComponent<Com_Renderer_Mesh>();
 		//	std::shared_ptr<Material> mateiral = ResMgr::GetInst()->Find<Material>(L"SpriteMaterial");
 		//	mr->SetMaterial(mateiral);
 		//	std::shared_ptr<Mesh> mesh = ResMgr::GetInst()->Find<Mesh>(L"RectMesh");
 		//	mr->SetMesh(mesh);
-		//	obj->AddComponent<PlayerScript>();
+		//	obj->AddComponent<Script_Player>();
 		//	object::DontDestroyOnLoad(obj);
 		//}
 
@@ -161,13 +161,13 @@ namespace mh
 		//	//tr->SetScale(Vector3(2.0f, 1.0f, 1.0f));
 		//	//tr->SetRotation(Vector3(0.0f, 0.0f, XM_PIDIV2 / 2.0f));
 		//	//tr->SetScale(Vector3(1.0f, 1.0f, 1.0f));
-		//	Collider2D* collider = obj->AddComponent<Collider2D>();
+		//	ICollider2D* collider = obj->AddComponent<ICollider2D>();
 		//	collider->SetSize(Vector2(2.0f, 2.0f));
 		//	collider->SetType(eColliderType::Rect);
 		//	//collider->SetCenter(Vector2(0.2f, 0.2f));
 		//	//collider->SetSize(Vector2(1.5f, 1.5f));
 
-		//	MeshRenderer* mr = obj->AddComponent<MeshRenderer>();
+		//	Com_Renderer_Mesh* mr = obj->AddComponent<Com_Renderer_Mesh>();
 		//	std::shared_ptr<Material> mateiral = ResMgr::GetInst()->Find<Material>(L"RectMaterial");
 		//	mr->SetMaterial(mateiral);
 		//	std::shared_ptr<Mesh> mesh = ResMgr::GetInst()->Find<Mesh>(L"RectMesh");
@@ -181,7 +181,7 @@ namespace mh
 		//	obj->SetName(L"PARTICLE");
 		//	Transform* tr = obj->GetComponent<Transform>();
 		//	tr->SetPosition(Vector3(0.0f, 0.0f, 100.0f));
-		//	obj->AddComponent<ParticleSystem>();
+		//	obj->AddComponent<Com_Renderer_ParticleSystem>();
 		//}
 
 		////post process object
@@ -192,11 +192,11 @@ namespace mh
 		//	zeldaTr->SetPosition(Vector3(0.0f, 0.0f, 19.0f));
 		//	zeldaTr->SetScale(Vector3(200.0f, 200.0f, 1.0f));
 
-		//	Collider2D* collider = obj->AddComponent<Collider2D>();
+		//	ICollider2D* collider = obj->AddComponent<ICollider2D>();
 		//	collider->SetType(eColliderType::Rect);
 		//	//collider->SetSize(Vector2(1.0f, 0.5f));
 
-		//	MeshRenderer* mr = obj->AddComponent<MeshRenderer>();
+		//	Com_Renderer_Mesh* mr = obj->AddComponent<Com_Renderer_Mesh>();
 		//	std::shared_ptr<Material> mateiral = ResMgr::GetInst()->Find<Material>(L"PostProcessMaterial");
 		//	mr->SetMaterial(mateiral);
 
