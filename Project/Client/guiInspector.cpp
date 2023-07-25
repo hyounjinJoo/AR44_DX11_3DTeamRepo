@@ -20,18 +20,19 @@ namespace gui
 		SetKey("Inspector");
 		SetSize(ImVec2(300.0f, 100.0f));
 		
-		mComponents.resize((UINT)eComponentType::End);
+		mComponents.resize((UINT)eComponentType::END);
 		mTargetGameObject = mh::renderer::gInspectorGameObject;
 
-		mComponents[(UINT)eComponentType::Transform] = new gui::Transform();
-		mComponents[(UINT)eComponentType::Transform]->SetKey("InspectorTransform");
-		mComponents[(UINT)eComponentType::Transform]->SetTarget(mTargetGameObject);
-		AddWidget(mComponents[(UINT)eComponentType::Transform]);
-		
-		mComponents[(UINT)eComponentType::MeshRenderer] = new gui::MeshRenderer();
-		mComponents[(UINT)eComponentType::MeshRenderer]->SetKey("InspectorMeshRenderer");
-		mComponents[(UINT)eComponentType::MeshRenderer]->SetTarget(mTargetGameObject);
-		AddWidget(mComponents[(UINT)eComponentType::MeshRenderer]);
+		//TODO: 여기 작동 안함
+		//mTransform = new gui::Transform();
+		//mTransform->SetKey("InspectorTransform");
+		//mTransform->SetTarget(mTargetGameObject);
+		//AddWidget(mTransform);
+		//
+		//mComponents[(UINT)eComponentType::] = new gui::MeshRenderer();
+		//mComponents[(UINT)eComponentType::MeshRenderer]->SetKey("InspectorMeshRenderer");
+		//mComponents[(UINT)eComponentType::MeshRenderer]->SetTarget(mTargetGameObject);
+		//AddWidget(mComponents[(UINT)eComponentType::MeshRenderer]);
 
 		mResources.resize((UINT)eResourceType::End);
 		mResources[(UINT)eResourceType::Texture] = new gui::Texture();
@@ -94,10 +95,12 @@ namespace gui
 	{
 		ClearTarget();
 
-		mComponents[(UINT)eComponentType::Transform]->SetState(eState::Active);
-		mComponents[(UINT)eComponentType::Transform]->SetTarget(mTargetGameObject);
-		mComponents[(UINT)eComponentType::MeshRenderer]->SetState(eState::Active);
-		mComponents[(UINT)eComponentType::MeshRenderer]->SetTarget(mTargetGameObject);
+
+
+		//mComponents[(UINT)eComponentType::]->SetState(eState::Active);
+		//mComponents[(UINT)eComponentType::Transform]->SetTarget(mTargetGameObject);
+		//mComponents[(UINT)eComponentType::MeshRenderer]->SetState(eState::Active);
+		//mComponents[(UINT)eComponentType::MeshRenderer]->SetTarget(mTargetGameObject);
 	}
 
 	void Inspector::InitializeTargetResource()

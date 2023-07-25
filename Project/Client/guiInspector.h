@@ -10,7 +10,7 @@ namespace gui
 	{
 	public:
 		Inspector();
-		~Inspector();
+		virtual ~Inspector();
 
 		virtual void FixedUpdate() override;
 		virtual void Update() override;
@@ -28,6 +28,8 @@ namespace gui
 	private:
 		mh::GameObject* mTargetGameObject;
 		mh::IRes* mTargetResource;
+
+		gui::IComponent* mTransform;
 		std::vector<gui::IComponent*> mComponents;
 		std::vector<gui::IRes*> mResources;
 	};

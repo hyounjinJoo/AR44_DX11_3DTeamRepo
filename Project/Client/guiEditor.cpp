@@ -5,7 +5,7 @@
 #include <Engine/ResMgr.h>
 #include <Engine/Material.h>
 #include <Engine/Transform.h>
-#include <Engine/MeshRenderer.h>
+#include <Engine/Com_Renderer_Mesh.h>
 #include <Engine/GridScript.h>
 #include <Engine/Object.h>
 #include <Engine/Application.h>
@@ -43,8 +43,8 @@ namespace gui
 		std::shared_ptr<mh::Material> material = mh::ResMgr::GetInst()->Find<mh::GPU::Material>(mh::strKey::Default::material::DebugMaterial);
 
 		mDebugObjects[(UINT)eColliderType::Rect] = new DebugObject();
-		mh::MeshRenderer* renderer
-			= mDebugObjects[(UINT)eColliderType::Rect]->AddComponent<mh::MeshRenderer>();
+		mh::Com_Renderer_Mesh* renderer
+			= mDebugObjects[(UINT)eColliderType::Rect]->AddComponent<mh::Com_Renderer_Mesh>();
 
 		renderer->SetMaterial(material);
 		renderer->SetMesh(rectMesh);
@@ -53,7 +53,7 @@ namespace gui
 
 		mDebugObjects[(UINT)eColliderType::Circle] = new DebugObject();
 		renderer
-			= mDebugObjects[(UINT)eColliderType::Circle]->AddComponent<mh::MeshRenderer>();
+			= mDebugObjects[(UINT)eColliderType::Circle]->AddComponent<mh::Com_Renderer_Mesh>();
 
 		renderer->SetMaterial(material);
 		renderer->SetMesh(circleMesh);
@@ -61,7 +61,7 @@ namespace gui
 		//그리드 이쪽으로 옮겨줘야 한다.
 		// Grid Object
 		//EditorObject* gridObject = new EditorObject();
-		//mh::MeshRenderer* gridMr = gridObject->AddComponent<mh::MeshRenderer>();
+		//mh::Com_Renderer_Mesh* gridMr = gridObject->AddComponent<mh::Com_Renderer_Mesh>();
 		//gridMr->SetMesh(mh::ResMgr::GetInst()->Find<mh::Mesh>(L"RectMesh"));
 		//gridMr->SetMaterial(mh::ResMgr::GetInst()->Find<Material>(L"GridMaterial"));
 		//mh::GridScript* gridScript = gridObject->AddComponent<mh::GridScript>();
@@ -178,6 +178,7 @@ namespace gui
 			tr->SetScale(mesh.scale);
 		else
 			tr->SetScale(Vector3(mesh.radius));
+
 
 		mh::BaseRenderer* renderer = debugObj->GetComponent<mh::BaseRenderer>();
 		mh::Camera* camera = mh::renderer::gMainCamera;

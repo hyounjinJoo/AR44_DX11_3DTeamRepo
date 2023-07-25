@@ -34,8 +34,8 @@ namespace gui
 
 		if (GetTarget())
 		{
-			mh::MeshRenderer* meshRenderer
-				= GetTarget()->GetComponent<mh::MeshRenderer>();
+			mh::Com_Renderer_Mesh* meshRenderer
+				= GetTarget()->GetComponent<mh::Com_Renderer_Mesh>();
 
 			if (meshRenderer == nullptr)
 				return;
@@ -126,7 +126,7 @@ namespace gui
 		std::shared_ptr<mh::Mesh> mesh = mh::ResMgr::GetInst()->Find<mh::Mesh>(_strKey);
 
 		Inspector* inspector = editor.GetWidget<Inspector>("Inspector");
-		inspector->GetTargetGameObject()->GetComponent<mh::MeshRenderer>()->SetMesh(mesh);
+		inspector->GetTargetGameObject()->GetComponent<mh::Com_Renderer_Mesh>()->SetMesh(mesh);
 	}
 
 	void MeshRenderer::SetMaterial(const std::string& _strKey)
@@ -134,6 +134,6 @@ namespace gui
 		std::shared_ptr<mh::GPU::Material> material = mh::ResMgr::GetInst()->Find<mh::GPU::Material>(_strKey);
 
 		Inspector* inspector = editor.GetWidget<Inspector>("Inspector");
-		inspector->GetTargetGameObject()->GetComponent<mh::MeshRenderer>()->SetMaterial(material);
+		inspector->GetTargetGameObject()->GetComponent<mh::Com_Renderer_Mesh>()->SetMaterial(material);
 	}
 }

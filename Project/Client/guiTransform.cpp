@@ -6,8 +6,9 @@
 
 namespace gui
 {
+	//TODO: 정상작동 안함
 	Transform::Transform()
-		: IComponent(mh::define::eComponentType::Transform)
+		: IComponent(mh::define::eComponentType::Animator)
 	{
 		SetKey("Transform");
 		SetSize(ImVec2(200.0f, 120.0f));

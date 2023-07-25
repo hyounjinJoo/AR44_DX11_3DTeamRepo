@@ -19,23 +19,24 @@ namespace mh
 		GameObject();
 		virtual ~GameObject();
 
+		//DebugObject에서 재정의해서 사용 중
 		virtual void Initialize();
 		virtual void Update();
 		virtual void FixedUpdate();
 		virtual void Render();
 
 	public:
+		Transform& GetTransform() { return mTransform; }
+
 		template <typename T>
 		T* AddComponent();
 		
 		void AddComponent(IComponent* _component);
 
-
 		template <typename T>
 		T* GetComponent();
 
-		template <typename T>
-		std::vector<T*> GetComponents();
+		const std::vector<IComponent*>& GetComponents() { return mVecComponent; }
 		
 		const std::vector<IScript*>& GetScripts() { return mScripts; }
 
@@ -110,21 +111,21 @@ namespace mh
 		return nullptr;
 	}
 
-	template <typename T>
-	std::vector<T*> GameObject::GetComponents()
-	{
-		std::vector<T*> components = {};
+	//template <typename T>
+	//std::vector<T*> GameObject::GetComponents()
+	//{
+	//	std::vector<T*> components = {};
 
-		T* castResult;
-		for (auto component : mVecComponent)
-		{
-			castResult = dynamic_cast<T*>(component);
+	//	T* castResult;
+	//	for (auto component : mVecComponent)
+	//	{
+	//		castResult = dynamic_cast<T*>(component);
 
-			if (castResult != nullptr)
-				components.push_back(castResult);
-		}
+	//		if (castResult != nullptr)
+	//			components.push_back(castResult);
+	//	}
 
-		return components;
-	}
+	//	return components;
+	//}
 }
 
