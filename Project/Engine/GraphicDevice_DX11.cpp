@@ -7,7 +7,7 @@
 #include "ConstantBuffer.h"
 #include "Mesh.h"
 #include "Renderer.h"
-#include "GameResources.h"
+#include "ResMgr.h"
 #include "Texture.h"
 
 extern mh::Application application;
@@ -67,7 +67,7 @@ namespace mh::GPU
 		// Get rendertarget for swapchain
 		hr = mSwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (void**)renderTarget.GetAddressOf());
 		mRenderTargetTexture->Create(renderTarget);
-		GameResources::Insert<Texture>("RenderTargetTexture", mRenderTargetTexture);
+		ResMgr::GetInst()->Add(strKey::Default::texture::RenderTarget, mRenderTargetTexture);
 
 		D3D11_TEXTURE2D_DESC depthBuffer = {};
 		depthBuffer.BindFlags = D3D11_BIND_FLAG::D3D11_BIND_DEPTH_STENCIL;

@@ -384,3 +384,6 @@ FodyWeavers.xsd
 # Exclude Engine Lib
 !External/*
 External/Lib/Engine
+
+# Exclude Shader header
+CompiledShaderHeader/

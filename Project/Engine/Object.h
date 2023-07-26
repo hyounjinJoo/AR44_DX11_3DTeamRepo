@@ -3,12 +3,12 @@
 #include "Layer.h"
 #include "GameObject.h"
 #include "SceneManager.h"
-#include "Transform.h"
+#include "Com_Transform.h"
 
 namespace mh::object
 {
 	template <typename T>
-	static T* Instantiate(enums::eLayerType _type)
+	static T* Instantiate(define::eLayerType _type)
 	{
 		T* gameObject = new T();
 		Scene* scene = SceneManager::GetActiveScene();
@@ -21,7 +21,7 @@ namespace mh::object
 	}
 
 	template <typename T>
-	static T* Instantiate(enums::eLayerType _type, Scene* _scene)
+	static T* Instantiate(define::eLayerType _type, Scene* _scene)
 	{
 		T* gameObject = new T();
 		Layer& layer = _scene->GetLayer(_type);
@@ -31,46 +31,46 @@ namespace mh::object
 	}
 
 	template <typename T>
-	static T* Instantiate(enums::eLayerType _type, Transform* _parent)
+	static T* Instantiate(define::eLayerType _type, Com_Transform* _parent)
 	{
 		T* gameObject = new T();
 		Scene* scene = SceneManager::GetActiveScene();
 		Layer& layer = scene->GetLayer(_type);
 		layer.AddGameObject(gameObject);
 
-		Transform* tr = gameObject->GameObject::GetComponent<Transform>();
-		tr->SetParent(_parent);
+		Com_Transform& tr = gameObject->GameObject::GetTransform();
+		tr.SetParent(_parent);
 
 		return gameObject;
 	}
 
 	template <typename T>
-	static T* Instantiate(enums::eLayerType _type, Vector3 _position, Vector3 _rotation)
+	static T* Instantiate(define::eLayerType _type, Vector3 _position, Vector3 _rotation)
 	{
 		T* gameObject = new T();
 		Scene* scene = SceneManager::GetActiveScene();
 		Layer& layer = scene->GetLayer(_type);
 		layer.AddGameObject(gameObject);
 
-		Transform* tr = gameObject->GameObject::GetComponent<Transform>();
-		tr->SetPosition(_position);
-		tr->SetRotation(_rotation);
+		Com_Transform& tr = gameObject->GameObject::GetTransform();
+		tr.SetPosition(_position);
+		tr.SetRotation(_rotation);
 
 		return gameObject;
 	}
 
 	template <typename T>
-	static T* Instantiate(enums::eLayerType _type, Vector3 _position, Vector3 _rotation, Transform* _parent)
+	static T* Instantiate(define::eLayerType _type, Vector3 _position, Vector3 _rotation, Com_Transform* _parent)
 	{
 		T* gameObject = new T();
 		Scene* scene = SceneManager::GetActiveScene();
 		Layer& layer = scene->GetLayer(_type);
 		layer.AddGameObject(gameObject);
 
-		Transform* tr = gameObject->GameObject::GetComponent<Transform>();
-		tr->SetPosition(_position);
-		tr->SetRotation(_rotation);
-		tr->SetParent(_parent);
+		Com_Transform& tr = gameObject->GameObject::GetTransform();
+		tr.SetPosition(_position);
+		tr.SetRotation(_rotation);
+		tr.SetParent(_parent);
 
 		return gameObject;
 	}

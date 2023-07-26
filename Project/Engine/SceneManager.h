@@ -13,7 +13,7 @@ namespace mh
 		static void Destroy();
 		static void Release();
 
-		static void		LoadScene(enums::eSceneType _Type);
+		static void		LoadScene(define::eSceneType _Type);
 		static Scene*	GetActiveScene() { return mActiveScene; }
 
 	private:

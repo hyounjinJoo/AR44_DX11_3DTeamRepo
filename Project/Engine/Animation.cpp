@@ -55,7 +55,7 @@ namespace mh
 	{
 	}
 
-	void Animation::Create(const std::wstring& _name
+	void Animation::Create(const std::string_view _name
 		, std::shared_ptr<GPU::Texture> _atlas
 		, math::Vector2 _leftTop, math::Vector2 _size, math::Vector2 _offset
 		, UINT _spriteLegth, float _duration)
@@ -89,7 +89,7 @@ namespace mh
 		GPU::ConstantBuffer* cb = renderer::constantBuffers[(UINT)GPU::eCBType::Animation];
 
 		renderer::AnimationCB info = {};
-		info.Type = (UINT)enums::eAnimationType::SecondDimension;
+		info.Type = (UINT)define::eAnimationType::SecondDimension;
 		info.LeftTop = mSpriteSheet[mIndex].LeftTop;
 		info.Offset = mSpriteSheet[mIndex].Offset;
 		info.Size = mSpriteSheet[mIndex].Size;
@@ -113,7 +113,7 @@ namespace mh
 
 		GPU::ConstantBuffer* cb = renderer::constantBuffers[(UINT)GPU::eCBType::Animation];
 		renderer::AnimationCB info = {};
-		info.Type = (UINT)enums::eAnimationType::None;
+		info.Type = (UINT)define::eAnimationType::None;
 
 		cb->SetData(&info);
 		cb->Bind(GPU::eShaderStage::PS);

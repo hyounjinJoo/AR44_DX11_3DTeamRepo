@@ -1,7 +1,7 @@
 #include "EnginePCH.h"
 
 #include "GridScript.h"
-#include "Transform.h"
+#include "Com_Transform.h"
 #include "GameObject.h"
 #include "Application.h"
 #include "ConstantBuffer.h"
@@ -13,7 +13,7 @@ extern mh::Application application;
 namespace mh
 {
 	GridScript::GridScript()
-		: Script()
+		: IScript()
 		, mCamera(nullptr)
 	{
 
@@ -38,9 +38,9 @@ namespace mh
 		}
 
 		GameObject* gameObj = mCamera->GetOwner();
-		Transform* TR = gameObj->GetComponent<Transform>();
+		Com_Transform& TR = gameObj->GetTransform();
 		
-		Vector3 cameraPosition = TR->GetPosition();
+		Vector3 cameraPosition = TR.GetPosition();
 		Vector4 position = Vector4(cameraPosition.x, cameraPosition.y, cameraPosition.z, 1.0f);
 
 		float scale = mCamera->GetScale();

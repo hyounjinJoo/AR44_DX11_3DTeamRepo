@@ -8,7 +8,7 @@
 namespace mh
 {
 	Mesh::Mesh()
-		: GameResource(eResourceType::Mesh)
+		: IRes(eResourceType::Mesh)
 		, mVBDesc{}
 		, mIBDesc{}
 		, mIndexCount(0)

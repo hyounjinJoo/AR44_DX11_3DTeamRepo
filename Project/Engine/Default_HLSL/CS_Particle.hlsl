@@ -3,9 +3,9 @@
 RWStructuredBuffer<tParticle> ParticleBuffer : register(u0);
 RWStructuredBuffer<tParticleShared> ParticleSharedBuffer : register(u1);
 
-//°¢°¢ÀÇ ½º·¹µå°¡ µ¿±âÈ­ÇÒ µ¥ÀÌÅÍ°¡ ÇÊ¿äÇÏ´Ù
+//ê°ê°ì˜ ìŠ¤ë ˆë“œê°€ ë™ê¸°í™”í•  ë°ì´í„°ê°€ í•„ìš”í•˜ë‹¤
 
-//1024°³°¡ ÃÖ´ë ½º·¹µå °³¼ö
+//1024ê°œê°€ ìµœëŒ€ ìŠ¤ë ˆë“œ ê°œìˆ˜
 [numthreads(128, 1, 1)]
 void main( uint3 DTid : SV_DispatchThreadID )
 {
@@ -19,9 +19,9 @@ void main( uint3 DTid : SV_DispatchThreadID )
             int originValue = ParticleSharedBuffer[0].gActiveCount;
             int exchange = originValue - 1;
             
-            // ½º·¹µå µ¿±âÈ­
-            // dest°ªÀ» exchange°ªÀ¸·Î ¹Ù²Ù´Â µ¿¾È
-            // ´Ù¸¥½º·¹µå´Â ¸ØÃá´Ù.
+            // ìŠ¤ë ˆë“œ ë™ê¸°í™”
+            // destê°’ì„ exchangeê°’ìœ¼ë¡œ ë°”ê¾¸ëŠ” ë™ì•ˆ
+            // ë‹¤ë¥¸ìŠ¤ë ˆë“œëŠ” ë©ˆì¶˜ë‹¤.
             //InterlockedExchange(ParticleSharedBuffer[0].gActiveCount, exchange, exchange);
             InterlockedCompareExchange(ParticleSharedBuffer[0].gActiveCount
                                         , originValue, exchange, exchange);
@@ -35,8 +35,8 @@ void main( uint3 DTid : SV_DispatchThreadID )
         
         if (ParticleBuffer[DTid.x].active)
         {
-                // ·£´ı°ªÀ¸·Î À§Ä¡¿Í ¹æÇâÀ» ¼³Á¤ÇØÁØ´Ù.
-                // »ùÇÃ¸µÀ» ½ÃµµÇÒ UV °è»êÇØÁØ´Ù.
+                // ëœë¤ê°’ìœ¼ë¡œ ìœ„ì¹˜ì™€ ë°©í–¥ì„ ì„¤ì •í•´ì¤€ë‹¤.
+                // ìƒ˜í”Œë§ì„ ì‹œë„í•  UV ê³„ì‚°í•´ì¤€ë‹¤.
             float4 Random = (float4) 0.0f;
             float2 UV = float2((float) DTid.x / maxParticles, 0.5f);
             UV.x += elapsedTime;
@@ -50,8 +50,8 @@ void main( uint3 DTid : SV_DispatchThreadID )
                     , GaussianBlur(UV + float2(0.2f, 0.0f)).x
                 );
 
-            //// radius ¿øÇü ¹üÀ§·Î ½ºÆù
-            float fTheta = Random.xy * 3.141592f * 2.0f;
+            //// radius ì›í˜• ë²”ìœ„ë¡œ ìŠ¤í°
+            float fTheta = Random.x * 3.141592f * 2.0f;
             ParticleBuffer[DTid.x].position.xy = float2 ( cos(fTheta), sin(fTheta) ) * Random.y * radius;
             ParticleBuffer[DTid.x].position.z = 100.0f;
             
@@ -63,7 +63,7 @@ void main( uint3 DTid : SV_DispatchThreadID )
                 ParticleBuffer[DTid.x].position.xyz += worldPosition.xyz;
             }
             
-            ////ÆÄÆ¼Å¬ ¼Ó·Â
+            ////íŒŒí‹°í´ ì†ë ¥
             ParticleBuffer[DTid.x].time = 0.0f;
             ParticleBuffer[DTid.x].speed = startSpeed;
             ParticleBuffer[DTid.x].lifeTime = startLifeTime;

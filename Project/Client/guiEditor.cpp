@@ -2,10 +2,10 @@
 #include "guiEditor.h"
 
 #include <Engine/Mesh.h>
-#include <Engine/GameResources.h>
+#include <Engine/ResMgr.h>
 #include <Engine/Material.h>
-#include <Engine/Transform.h>
-#include <Engine/MeshRenderer.h>
+#include <Engine/Com_Transform.h>
+#include <Engine/Com_Renderer_Mesh.h>
 #include <Engine/GridScript.h>
 #include <Engine/Object.h>
 #include <Engine/Application.h>
@@ -27,7 +27,8 @@ extern mh::Application application;
 
 namespace gui
 {
-	using namespace mh::enums;
+	using namespace mh::define;
+	using namespace mh::math;
 	void Editor::Initialize()
 	{
 		mbEnable = false;
@@ -38,21 +39,21 @@ namespace gui
 		// 충돌체의 종류 갯수만큼만 있으면 된다.
 		mDebugObjects.resize((UINT)eColliderType::End);
 
-		std::shared_ptr<mh::Mesh> rectMesh = mh::GameResources::Find<mh::Mesh>("DebugRectMesh");
-		std::shared_ptr<mh::Material> material = mh::GameResources::Find<mh::GPU::Material>("DebugMaterial");
+		std::shared_ptr<mh::Mesh> rectMesh = mh::ResMgr::GetInst()->Find<mh::Mesh>(mh::strKey::Default::mesh::DebugRectMesh);
+		std::shared_ptr<mh::Material> material = mh::ResMgr::GetInst()->Find<mh::GPU::Material>(mh::strKey::Default::material::DebugMaterial);
 
 		mDebugObjects[(UINT)eColliderType::Rect] = new DebugObject();
-		mh::MeshRenderer* renderer
-			= mDebugObjects[(UINT)eColliderType::Rect]->AddComponent<mh::MeshRenderer>();
+		mh::Com_Renderer_Mesh* renderer
+			= mDebugObjects[(UINT)eColliderType::Rect]->AddComponent<mh::Com_Renderer_Mesh>();
 
 		renderer->SetMaterial(material);
 		renderer->SetMesh(rectMesh);
 
-		std::shared_ptr<mh::Mesh> circleMesh = mh::GameResources::Find<mh::Mesh>("CircleMesh");
+		std::shared_ptr<mh::Mesh> circleMesh = mh::ResMgr::GetInst()->Find<mh::Mesh>("CircleMesh");
 
 		mDebugObjects[(UINT)eColliderType::Circle] = new DebugObject();
 		renderer
-			= mDebugObjects[(UINT)eColliderType::Circle]->AddComponent<mh::MeshRenderer>();
+			= mDebugObjects[(UINT)eColliderType::Circle]->AddComponent<mh::Com_Renderer_Mesh>();
 
 		renderer->SetMaterial(material);
 		renderer->SetMesh(circleMesh);
@@ -60,9 +61,9 @@ namespace gui
 		//그리드 이쪽으로 옮겨줘야 한다.
 		// Grid Object
 		//EditorObject* gridObject = new EditorObject();
-		//mh::MeshRenderer* gridMr = gridObject->AddComponent<mh::MeshRenderer>();
-		//gridMr->SetMesh(mh::GameResources::Find<mh::Mesh>(L"RectMesh"));
-		//gridMr->SetMaterial(mh::GameResources::Find<Material>(L"GridMaterial"));
+		//mh::Com_Renderer_Mesh* gridMr = gridObject->AddComponent<mh::Com_Renderer_Mesh>();
+		//gridMr->SetMesh(mh::ResMgr::GetInst()->Find<mh::Mesh>(L"RectMesh"));
+		//gridMr->SetMaterial(mh::ResMgr::GetInst()->Find<Material>(L"GridMaterial"));
 		//mh::GridScript* gridScript = gridObject->AddComponent<mh::GridScript>();
 		//gridScript->SetCamera(gMainCamera);
 
@@ -168,7 +169,7 @@ namespace gui
 	{
 		DebugObject* debugObj = mDebugObjects[(UINT)mesh.type];
 		
-		mh::Transform* tr = debugObj->GetComponent<mh::Transform>();
+		mh::Com_Transform* tr = debugObj->GetComponent<mh::Com_Transform>();
 		tr->SetPosition(mesh.position);
 		tr->SetRotation(mesh.rotatation);
 		
@@ -178,13 +179,14 @@ namespace gui
 		else
 			tr->SetScale(Vector3(mesh.radius));
 
-		mh::BaseRenderer* renderer = debugObj->GetComponent<mh::BaseRenderer>();
-		mh::Camera* camera = mh::renderer::gMainCamera;
+
+		mh::IRenderer* renderer = debugObj->GetComponent<mh::IRenderer>();
+		mh::Com_Camera* camera = mh::renderer::gMainCamera;
 
 		tr->FixedUpdate();
 
-		mh::Camera::SetGpuViewMatrix(mh::renderer::gMainCamera->GetViewMatrix());
-		mh::Camera::SetGpuProjectionMatrix(mh::renderer::gMainCamera->GetProjectionMatrix());
+		mh::Com_Camera::SetGpuViewMatrix(mh::renderer::gMainCamera->GetViewMatrix());
+		mh::Com_Camera::SetGpuProjectionMatrix(mh::renderer::gMainCamera->GetProjectionMatrix());
 
 		debugObj->Render();
 	}

@@ -1,10 +1,10 @@
 #pragma once
-#include "Script.h"
-#include "Camera.h"
+#include "IScript.h"
+#include "Com_Camera.h"
 
 namespace mh
 {
-	class GridScript : public Script
+	class GridScript : public IScript
 	{
 	public:
 		GridScript();
@@ -15,9 +15,9 @@ namespace mh
 		virtual void FixedUpdate();
 		virtual void Render();
 
-		void SetCamera(Camera* camera) { mCamera = camera; }
+		void SetCamera(Com_Camera* camera) { mCamera = camera; }
 
 	private:
-		Camera* mCamera;
+		Com_Camera* mCamera;
 	};
 }

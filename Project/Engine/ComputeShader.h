@@ -1,12 +1,12 @@
 #pragma once
 #include "define_GPU.h"
-#include "GameResource.h"
+#include "IShader.h"
 
 namespace mh::GPU
 {
-	using namespace mh::enums;
+	using namespace mh::define;
 
-	class ComputeShader : public GameResource
+	class ComputeShader : public IShader
 	{
 	public:
 		ComputeShader(UINT _threadGroupX, UINT _threadGroupY, UINT _threadGroupZ);
@@ -15,7 +15,7 @@ namespace mh::GPU
 
 		virtual HRESULT Load(const std::filesystem::path& _path) override;
 
-		eResult CreateByCompile(const std::filesystem::path& _FullPath, const std::string& _funcName);
+		eResult CreateByCompile(const std::filesystem::path& _FullPath, const std::string_view _funcName);
 		eResult CreateByHeader(const unsigned char* _pByteCode, size_t _ByteCodeSize);
 		eResult CreateByCSO(const std::filesystem::path& _FileName);
 

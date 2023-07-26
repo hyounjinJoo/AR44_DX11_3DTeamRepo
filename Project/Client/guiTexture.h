@@ -3,7 +3,7 @@
 
 namespace gui
 {
-	class Texture : public gui::GameResource
+	class Texture : public gui::IRes
 	{
 	public:
 		Texture();

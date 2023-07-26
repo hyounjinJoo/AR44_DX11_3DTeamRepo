@@ -4,7 +4,7 @@
 
 namespace mh
 {
-	IComponent::IComponent(enums::eComponentType _type)
+	IComponent::IComponent(define::eComponentType _type)
 		: mType(_type)
 		, mOwner(nullptr)
 	{

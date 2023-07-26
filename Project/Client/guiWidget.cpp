@@ -52,7 +52,7 @@ namespace gui
 		{
 			bool open = (bool)GetState();
 			FixedUpdate();
-			ImGui::Begin(GetName().c_str(), &open, mWindow_flags);
+			ImGui::Begin(GetKey().c_str(), &open, mWindow_flags);
 			Update();
 			for (Widget* child : mChilds)
 			{
@@ -65,7 +65,7 @@ namespace gui
 		else
 		{
 			FixedUpdate();
-			ImGui::BeginChild(GetName().c_str(), mSize);
+			ImGui::BeginChild(GetKey().c_str(), mSize);
 			Update();
 			for (Widget* child : mChilds)
 			{
@@ -90,7 +90,7 @@ namespace gui
 	{
 		if (bEnable == true)
 		{
-			ImGui::SetWindowFocus(GetName().c_str());
+			ImGui::SetWindowFocus(GetKey().c_str());
 		}
 		else
 		{

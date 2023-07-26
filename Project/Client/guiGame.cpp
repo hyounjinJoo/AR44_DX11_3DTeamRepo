@@ -2,7 +2,7 @@
 #include "ClientPCH.h"
 #include "guiGame.h"
 
-#include <Engine/GameResources.h>
+#include <Engine/ResMgr.h>
 #include <Engine/Texture.h>
 #include <Engine/GraphicDevice_DX11.h>
 
@@ -10,7 +10,7 @@ namespace gui
 {
 	Game::Game()
 	{
-		SetName("Game");
+		SetKey("Game");
 	}
 
 	Game::~Game()
@@ -24,7 +24,7 @@ namespace gui
 	void Game::Update()
 	{
 		std::shared_ptr<mh::GPU::Texture> renderTarget
-			= mh::GameResources::Find<mh::GPU::Texture>("RenderTargetTexture");
+			= mh::ResMgr::GetInst()->Find<mh::GPU::Texture>(mh::strKey::Default::texture::RenderTarget);
 
 		std::shared_ptr<mh::GPU::Texture> gameTex
 			= std::make_shared<mh::GPU::Texture>();

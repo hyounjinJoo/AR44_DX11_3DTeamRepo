@@ -6,7 +6,7 @@ namespace gui
 {
 	Console::Console()
 	{
-		SetName("Console");
+		SetKey("Console");
 	}
 
 	Console::~Console()

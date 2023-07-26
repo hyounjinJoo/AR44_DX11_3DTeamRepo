@@ -16,12 +16,13 @@ namespace gui
 
 	void DebugObject::FixedUpdate()
 	{
-		for (mh::IComponent* comp : mComponents)
+		const auto& vecCom = GetComponents();
+		for (size_t i = 0; i < vecCom.size(); ++i)
 		{
-			if (comp == nullptr)
+			if (nullptr == vecCom[i])
 				continue;
 
-			comp->FixedUpdate();
+			vecCom[i]->FixedUpdate();
 		}
 	}
 }

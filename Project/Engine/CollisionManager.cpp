@@ -6,7 +6,7 @@
 
 namespace mh
 {
-	std::bitset<(UINT)enums::eLayerType::End> CollisionManager::mLayerCollisionMatrix[(UINT)enums::eLayerType::End] = {};
+	std::bitset<(UINT)define::eLayerType::End> CollisionManager::mLayerCollisionMatrix[(UINT)define::eLayerType::End] = {};
 	std::map<UINT64, bool> CollisionManager::mCollisionMap;
 
 	void CollisionManager::Initialize()
@@ -15,13 +15,13 @@ namespace mh
 	void CollisionManager::Update()
 	{
 		Scene* scene = SceneManager::GetActiveScene();
-		for (UINT row = 0; row < (UINT)enums::eLayerType::End; row++)
+		for (UINT row = 0; row < (UINT)define::eLayerType::End; row++)
 		{
-			for (UINT column = 0; column < (UINT)enums::eLayerType::End; column++)
+			for (UINT column = 0; column < (UINT)define::eLayerType::End; column++)
 			{
 				if (mLayerCollisionMatrix[row][column])
 				{
-					LayerCollision(scene, (enums::eLayerType)row, (enums::eLayerType)column);
+					LayerCollision(scene, (define::eLayerType)row, (define::eLayerType)column);
 				}
 			}
 		}
@@ -32,7 +32,7 @@ namespace mh
 	void CollisionManager::Render()
 	{
 	}
-	void CollisionManager::CollisionLayerCheck(enums::eLayerType _left, enums::eLayerType _right, bool _enable)
+	void CollisionManager::CollisionLayerCheck(define::eLayerType _left, define::eLayerType _right, bool _enable)
 	{
 		int row = 0;
 		int column = 0;
@@ -50,7 +50,7 @@ namespace mh
 
 		mLayerCollisionMatrix[row][column] = _enable;
 	}
-	void CollisionManager::LayerCollision(Scene* _scene, enums::eLayerType _left, enums::eLayerType _right)
+	void CollisionManager::LayerCollision(Scene* _scene, define::eLayerType _left, define::eLayerType _right)
 	{
 		const std::vector<GameObject*>& lefts = _scene->GetGameObjects(_left);
 		const std::vector<GameObject*>& rights = _scene->GetGameObjects(_right);
@@ -59,19 +59,19 @@ namespace mh
 		{
 			if (left->GetState() != GameObject::eState::Active)
 				continue;
-			if (left->GetComponent<Collider2D>() == nullptr)
+			if (left->GetComponent<ICollider2D>() == nullptr)
 				continue;
 
 			for (GameObject* right : rights)
 			{
 				if (right->GetState() != GameObject::eState::Active)
 					continue;
-				if (right->GetComponent<Collider2D>() == nullptr)
+				if (right->GetComponent<ICollider2D>() == nullptr)
 					continue;
 				/*if (left == right) //지워도 상관없어서 주석처리 (오류나면 수정)
 					continue;*/
 
-				ColliderCollision(left->GetComponent<Collider2D>(), right->GetComponent<Collider2D>());
+				ColliderCollision(left->GetComponent<ICollider2D>(), right->GetComponent<ICollider2D>());
 			}
 
 			/*if ((UINT)left == (UINT)right)  
@@ -80,7 +80,7 @@ namespace mh
 
 	}
 
-	void CollisionManager::ColliderCollision(Collider2D* _left, Collider2D* _right)
+	void CollisionManager::ColliderCollision(ICollider2D* _left, ICollider2D* _right)
 	{
 		// 두 충돌체 레이어로 구성된 ID 확인
 		union_ColliderID colliderID;
@@ -148,7 +148,7 @@ namespace mh
 		}
 	}
 
-	bool CollisionManager::Intersect(Collider2D* _left, Collider2D* _right)
+	bool CollisionManager::Intersect(ICollider2D* _left, ICollider2D* _right)
 	{
 		// Rect vs Rect 
 		// 0 --- 1
@@ -162,11 +162,11 @@ namespace mh
 			,math::Vector3{-0.5f, -0.5f, 0.0f}
 		};
 
-		Transform* leftTr = _left->GetOwner()->GetComponent<Transform>();
-		Transform* rightTr = _right->GetOwner()->GetComponent<Transform>();
+		Com_Transform& leftTr = _left->GetOwner()->GetTransform();
+		Com_Transform& rightTr = _right->GetOwner()->GetTransform();
 
-		math::Matrix leftMat = leftTr->GetWorldMatrix();
-		math::Matrix rightMat = rightTr->GetWorldMatrix();
+		math::Matrix leftMat = leftTr.GetWorldMatrix();
+		math::Matrix rightMat = rightTr.GetWorldMatrix();
 
 
 
@@ -195,7 +195,7 @@ namespace mh
 		for (int index = 0; index < 4; index++)
 			Axis[index].z = 0.0f;
 
-		math::Vector3 vc = leftTr->GetPosition() - rightTr->GetPosition();
+		math::Vector3 vc = leftTr.GetPosition() - rightTr.GetPosition();
 		vc.z = 0.0f;
 
 		math::Vector3 centerDir = vc;

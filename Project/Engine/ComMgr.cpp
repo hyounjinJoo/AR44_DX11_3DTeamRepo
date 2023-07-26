@@ -1,0 +1,35 @@
+#include "EnginePCH.h"
+#include "ComMgr.h"
+
+#include "IComponent.h"
+
+namespace mh
+{
+    ComMgr::ComMgr()
+    {
+    }
+
+    ComMgr::~ComMgr()
+    {
+    }
+
+	IComponent* ComMgr::GetNewCom(const std::string_view _strKey)
+	{
+		const auto& iter = mUmapComConstructor.find(_strKey);
+		if (iter == mUmapComConstructor.end())
+			return nullptr;
+
+		IComponent* pCom = iter->second();
+		pCom->SetKey(_strKey);
+		return pCom;
+	}
+
+	const std::string_view ComMgr::GetComName(const std::type_info& _typeid_T_)
+	{
+		const auto& iter = mUmapComName.find(std::type_index(_typeid_T_));
+		if (iter == mUmapComName.end())
+			return "";
+		return iter->second;
+	}
+}
+

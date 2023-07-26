@@ -6,8 +6,8 @@
 #include <Engine/Texture.h>
 #include <Engine/Material.h>
 #include <Engine/Mesh.h>
-#include <Engine/Shader.h>
-#include <Engine/GameResources.h>
+#include <Engine/GraphicsShader.h>
+#include <Engine/ResMgr.h>
 
 #include "guiInspector.h"
 #include "guiResource.h"
@@ -18,10 +18,12 @@ extern gui::Editor editor;
 
 namespace gui
 {
+	using namespace mh::math;
+
 	Project::Project()
 		: mTreeWidget(nullptr)
 	{
-		SetName("Project");
+		SetKey("Project");
 		UINT width = 1600;
 		UINT height = 900;
 
@@ -30,7 +32,7 @@ namespace gui
 		SetSize(ImVec2((float)size.x / 2 + size.x / 5, size.y / 4));
 
 		mTreeWidget = new TreeWidget();
-		mTreeWidget->SetName("GameResources");
+		mTreeWidget->SetKey("GameResources");
 		AddWidget(mTreeWidget);
 
 		mTreeWidget->SetEvent(this
@@ -85,12 +87,12 @@ namespace gui
 		AddResources<mh::Mesh>(pRootNode, "Mesh");
 		AddResources<mh::GPU::Texture>(pRootNode, "Texture");
 		AddResources<mh::GPU::Material>(pRootNode, "Materials");
-		AddResources<mh::GPU::Shader>(pRootNode, "Shaders");
+		AddResources<mh::GPU::GraphicsShader>(pRootNode, "Shaders");
 	}
 
 	void Project::toInspector(void* data)
 	{
-		mh::GameResource* resource = static_cast<mh::GameResource*>(data);
+		mh::IRes* resource = static_cast<mh::IRes*>(data);
 
 		Inspector* inspector = editor.GetWidget<Inspector>("Inspector");
 		inspector->SetTargetResource(resource);

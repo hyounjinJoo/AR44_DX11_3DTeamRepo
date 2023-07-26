@@ -13,11 +13,14 @@ echo Mode: %Configuration%
 xcopy /d /s /y /i /r .\External\DLL\%Configuration%\*.dll .\Output\%Configuration%
 
 
-:: GameResource 파일 복사
-if "%Configuration%"=="Release" ( 
-	if not exist .\Output\Release\Res ( mkdir .\Output\Release\Res ) 
-	xcopy /d /s /y /i /r .\Output\Debug\Res\* .\Output\Release\Res 
+:: Res 폴더가 없을 경우 폴더 생성
+if not exist .\Output\%Configuration%\Res ( mkdir .\Output\%Configuration%\Res )
+
+:: 리소스가 있을 경우 복사 시행
+if exist .\Res (
+	xcopy /d /s /y /i /r .\Res\* .\Output\%Configuration%\Res
 )
+
 
 
 

@@ -1,12 +1,12 @@
 #pragma once
-#include "GameResource.h"
+#include "IRes.h"
 #include "Fmod.h"
 
 namespace mh
 {
 	namespace stdfs = std::filesystem;
 
-	class AudioClip : public GameResource
+	class AudioClip : public IRes
 	{
 	public:
 		AudioClip();

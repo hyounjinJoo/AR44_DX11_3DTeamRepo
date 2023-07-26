@@ -1,15 +1,15 @@
 #include "EnginePCH.h"
 
 #include "PlayScene.h"
-#include "Transform.h"
-#include "MeshRenderer.h"
+#include "Com_Transform.h"
+#include "Com_Renderer_Mesh.h"
 #include "Renderer.h"
-#include "GameResources.h"
+#include "ResMgr.h"
 #include "Texture.h"
-#include "PlayerScript.h"
-#include "Camera.h"
-#include "CameraScript.h"
-#include "SpriteRenderer.h"
+#include "Script_Player.h"
+#include "Com_Camera.h"
+#include "Script_Camera.h"
+#include "Com_Renderer_Sprite.h"
 #include "GridScript.h"
 #include "Object.h"
 #include "Input.h"
@@ -28,10 +28,10 @@ namespace mh
 
 	void PlayScene::Initialize()
 	{
-		GameObject* cameraObj = object::Instantiate<GameObject>(eLayerType::Camera, this);
-		Camera* cameraComp = cameraObj->AddComponent<Camera>();
+		GameObject* cameraObj = object::Instantiate<GameObject>(eLayerType::Com_Camera, this);
+		Com_Camera* cameraComp = cameraObj->AddComponent<Com_Camera>();
 		cameraComp->TurnLayerMask(eLayerType::UI, false);
-		cameraObj->AddComponent<CameraScript>();
+		cameraObj->AddComponent<Script_Camera>();
 
 		Scene::Initialize();
 	}

@@ -19,7 +19,7 @@ namespace mh::GPU
 	namespace stdfs = std::filesystem;
 
 	Texture::Texture()
-		: GameResource(eResourceType::Texture)
+		: IRes(eResourceType::Texture)
 		, mDesc{}
 		, mTexture(nullptr)
 	{

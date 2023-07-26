@@ -33,7 +33,7 @@ namespace mh
 		void FixedUpdate();
 		void Render();
 
-		void Create(const std::wstring& _name, std::shared_ptr<GPU::Texture> _atlas
+		void Create(const std::string_view _name, std::shared_ptr<GPU::Texture> _atlas
 			, math::Vector2 _leftTop, math::Vector2 _size, math::Vector2 _offset
 			, UINT _spriteLegth, float _duration);
 
@@ -42,11 +42,11 @@ namespace mh
 		void Clear();
 
 		bool IsComplete() const { return mbComplete; }
-		const std::wstring& GetAnimationName() const { return mAnimationName; }
+		const std::string_view GetAnimationName() const { return mAnimationName; }
 
 	private:
-		class Animator* mAnimator;
-		std::wstring mAnimationName;
+		class Com_Animator* mAnimator;
+		std::string mAnimationName;
 		std::shared_ptr<GPU::Texture> mAtlas;
 		std::vector<tSprite> mSpriteSheet;
 		int mIndex;
