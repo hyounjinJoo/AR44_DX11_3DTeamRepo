@@ -5,7 +5,7 @@
 #include "Mesh.h"
 #include "ResMgr.h"
 #include "Material.h"
-#include "StructedBuffer.h"
+#include "StructBuffer.h"
 #include "Com_Transform.h"
 #include "GameObject.h"
 #include "Texture.h"
@@ -69,10 +69,10 @@ namespace mh
 			particles[i].speed = 100.0f;
 		}
 
-		mBuffer = new GPU::StructedBuffer();
+		mBuffer = new GPU::StructBuffer();
 		mBuffer->Create(sizeof(tParticle), mMaxParticles, eSRVType::UAV, particles);
 
-		mSharedBuffer = new GPU::StructedBuffer();
+		mSharedBuffer = new GPU::StructBuffer();
 		mSharedBuffer->Create(sizeof(tParticleShared), 1, eSRVType::UAV, nullptr, true);
 	}
 
@@ -115,7 +115,7 @@ namespace mh
 		mCBData.DeltaTime = TimeMgr::DeltaTime();
 		mCBData.ElapsedTime += TimeMgr::DeltaTime();
 
-		ConstantBuffer* cb = renderer::constantBuffers[(UINT)eCBType::Com_Renderer_ParticleSystem];
+		ConstBuffer* cb = renderer::constantBuffers[(UINT)eCBType::Com_Renderer_ParticleSystem];
 		cb->SetData(&mCBData);
 		cb->Bind(eShaderStage::ALL);
 
@@ -126,7 +126,7 @@ namespace mh
 
 	void Com_Renderer_ParticleSystem::Render()
 	{
-		GetOwner()->GetTransform().SetConstantBuffer();
+		GetOwner()->GetTransform().SetConstBuffer();
 		mBuffer->BindSRV(eShaderStage::GS, 15);
 
 		GetMaterial()->Bind();

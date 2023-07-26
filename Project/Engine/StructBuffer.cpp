@@ -1,11 +1,11 @@
 #include "EnginePCH.h"
+#include "StructBuffer.h"
 
-#include "StructedBuffer.h"
 #include "GraphicDevice_DX11.h"
 
 namespace mh::GPU
 {
-	StructedBuffer::StructedBuffer()
+	StructBuffer::StructBuffer()
 		: mSRV(nullptr)
 		, mType(eSRVType::SRV)
 		, mSize(0)
@@ -19,12 +19,12 @@ namespace mh::GPU
 		
 	}
 
-	StructedBuffer::~StructedBuffer()
+	StructBuffer::~StructBuffer()
 	{
 
 	}
 
-	bool StructedBuffer::Create(UINT _size, UINT _stride, eSRVType _type, void* _data, bool _cpuAccess)
+	bool StructBuffer::Create(UINT _size, UINT _stride, eSRVType _type, void* _data, bool _cpuAccess)
 	{
 		mType = _type;
 		mSize = _size;
@@ -43,7 +43,7 @@ namespace mh::GPU
 		return true;
 	}
 
-	void StructedBuffer::SetData(void* data, UINT bufferCount)
+	void StructBuffer::SetData(void* data, UINT bufferCount)
 	{
 		if (mStride < bufferCount)
 		{
@@ -56,7 +56,7 @@ namespace mh::GPU
 		GetDevice()->CopyResource(buffer.Get(), mWriteBuffer.Get());
 	}
 
-	void StructedBuffer::GetData(void* data, UINT size)
+	void StructBuffer::GetData(void* data, UINT size)
 	{
 		GetDevice()->CopyResource(mReadBuffer.Get(), buffer.Get());
 
@@ -71,21 +71,21 @@ namespace mh::GPU
 		}
 	}
 
-	void StructedBuffer::BindSRV(eShaderStage stage, UINT slot)
+	void StructBuffer::BindSRV(eShaderStage stage, UINT slot)
 	{
 		mSRVSlot = slot;
 
 		GetDevice()->BindShaderResource(stage, slot, mSRV.GetAddressOf());
 	}
 
-	void StructedBuffer::BindUAV(eShaderStage stage, UINT slot)
+	void StructBuffer::BindUAV(eShaderStage stage, UINT slot)
 	{
 		mUAVSlot = slot;
 		UINT i = -1;
 		GetDevice()->BindUnorderdAccessView(slot, 1, mUAV.GetAddressOf(), &i);
 	}
 
-	void StructedBuffer::Clear()
+	void StructBuffer::Clear()
 	{
 		ID3D11ShaderResourceView* srv = nullptr;
 		GetDevice()->BindShaderResource(eShaderStage::VS, mSRVSlot, &srv);
@@ -100,7 +100,7 @@ namespace mh::GPU
 		GetDevice()->BindUnorderdAccessView(mUAVSlot, 1, &uav, &i);
 	}
 
-	void StructedBuffer::setDiscription()
+	void StructBuffer::setDiscription()
 	{
 		desc.ByteWidth = mSize * mStride;
 		desc.StructureByteStride = mSize;
@@ -120,7 +120,7 @@ namespace mh::GPU
 		}
 	}
 
-	bool StructedBuffer::createBuffer(void* data)
+	bool StructBuffer::createBuffer(void* data)
 	{
 		if (data)
 		{
@@ -139,7 +139,7 @@ namespace mh::GPU
 		return true;
 	}
 
-	bool StructedBuffer::createView()
+	bool StructBuffer::createView()
 	{
 		D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc = {};
 		srvDesc.BufferEx.NumElements = mStride;
@@ -161,7 +161,7 @@ namespace mh::GPU
 		return false;
 	}
 
-	bool StructedBuffer::createRWBuffer()
+	bool StructBuffer::createRWBuffer()
 	{
 		//mWriteBuffer(nullptr)
 		//mReadBuffer(nullptr)

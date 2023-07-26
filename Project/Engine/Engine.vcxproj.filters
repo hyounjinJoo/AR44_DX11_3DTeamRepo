@@ -255,10 +255,10 @@
     <ClCompile Include="Com_Light.cpp">
       <Filter>GameObject\Component\Light</Filter>
     </ClCompile>
-    <ClCompile Include="ConstantBuffer.cpp">
+    <ClCompile Include="ConstBuffer.cpp">
       <Filter>GPU\Buffer</Filter>
     </ClCompile>
-    <ClCompile Include="StructedBuffer.cpp">
+    <ClCompile Include="StructBuffer.cpp">
       <Filter>GPU\Buffer</Filter>
     </ClCompile>
     <ClCompile Include="GraphicDevice_DX11.cpp">
@@ -315,9 +315,6 @@
     <ClCompile Include="IRenderer.cpp">
       <Filter>GameObject\Component\Renderer</Filter>
     </ClCompile>
-    <ClCompile Include="Renderer.cpp">
-      <Filter>Manager</Filter>
-    </ClCompile>
     <ClCompile Include="ComMgr.cpp">
       <Filter>Manager</Filter>
     </ClCompile>
@@ -334,6 +331,9 @@
       <Filter>Resource\Audio</Filter>
     </ClCompile>
     <ClCompile Include="CollisionMgr.cpp" />
+    <ClCompile Include="RenderMgr.cpp">
+      <Filter>Manager</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application.h">
@@ -441,10 +441,10 @@
     <ClInclude Include="Com_Light.h">
       <Filter>GameObject\Component\Light</Filter>
     </ClInclude>
-    <ClInclude Include="ConstantBuffer.h">
+    <ClInclude Include="ConstBuffer.h">
       <Filter>GPU\Buffer</Filter>
     </ClInclude>
-    <ClInclude Include="StructedBuffer.h">
+    <ClInclude Include="StructBuffer.h">
       <Filter>GPU\Buffer</Filter>
     </ClInclude>
     <ClInclude Include="GraphicDevice_DX11.h">
@@ -528,9 +528,6 @@
     <ClInclude Include="IRenderer.h">
       <Filter>GameObject\Component\Renderer</Filter>
     </ClInclude>
-    <ClInclude Include="Renderer.h">
-      <Filter>Manager</Filter>
-    </ClInclude>
     <ClInclude Include="ComMgr.h">
       <Filter>Manager</Filter>
     </ClInclude>
@@ -547,6 +544,9 @@
       <Filter>Resource\Audio</Filter>
     </ClInclude>
     <ClInclude Include="CollisionMgr.h" />
+    <ClInclude Include="RenderMgr.h">
+      <Filter>Manager</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="SimpleMath.inl">
@@ -555,7 +555,7 @@
     <None Include="cpp.hint">
       <Filter>Common</Filter>
     </None>
-    <None Include="Default_HLSL\SH_ConstantBuffer.hlsli">
+    <None Include="Default_HLSL\SH_ConstBuffer.hlsli">
       <Filter>Default HLSL</Filter>
     </None>
     <None Include="Default_HLSL\SH_Globals.hlsli">

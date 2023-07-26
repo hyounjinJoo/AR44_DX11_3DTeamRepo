@@ -78,7 +78,7 @@ namespace mh::GPU
             mCB.UsedNormal = 1;
         }
 
-        ConstantBuffer* CB = renderer::constantBuffers[(UINT)eCBType::Material];
+        ConstBuffer* CB = renderer::constantBuffers[(UINT)eCBType::Material];
         CB->SetData(&mCB);
         CB->Bind(eShaderStage::VS);
         CB->Bind(eShaderStage::GS);

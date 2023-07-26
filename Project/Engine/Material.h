@@ -2,7 +2,7 @@
 #include "IRes.h"
 #include "GraphicsShader.h"
 #include "Texture.h"
-#include "Renderer.h"
+#include "RenderMgr.h"
 
 namespace mh::GPU
 {

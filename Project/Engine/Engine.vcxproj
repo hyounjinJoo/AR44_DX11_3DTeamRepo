@@ -252,6 +252,7 @@ call DLLCopy.bat $(Configuration)</Command>
     <ClInclude Include="Application.h" />
     <ClInclude Include="IRenderer.h" />
     <ClInclude Include="Com_Camera.h" />
+    <ClInclude Include="RenderMgr.h" />
     <ClInclude Include="Script_Camera.h" />
     <ClInclude Include="ICollider.h" />
     <ClInclude Include="DefaultShaders.h" />
@@ -263,7 +264,7 @@ call DLLCopy.bat $(Configuration)</Command>
     <ClInclude Include="GPUBuffer.h" />
     <ClInclude Include="IComponent.h" />
     <ClInclude Include="ComputeShader.h" />
-    <ClInclude Include="ConstantBuffer.h" />
+    <ClInclude Include="ConstBuffer.h" />
     <ClInclude Include="EnginePCH.h" />
     <ClInclude Include="Entity.h" />
     <ClInclude Include="define_Enum.h" />
@@ -295,7 +296,6 @@ call DLLCopy.bat $(Configuration)</Command>
     <ClInclude Include="Script_Player.h" />
     <ClInclude Include="PlayScene.h" />
     <ClInclude Include="Prefab.h" />
-    <ClInclude Include="Renderer.h" />
     <ClInclude Include="IRes.h" />
     <ClInclude Include="ResMgr.h" />
     <ClInclude Include="Scene.h" />
@@ -303,7 +303,7 @@ call DLLCopy.bat $(Configuration)</Command>
     <ClInclude Include="IScript.h" />
     <ClInclude Include="GraphicsShader.h" />
     <ClInclude Include="Com_Renderer_Sprite.h" />
-    <ClInclude Include="StructedBuffer.h" />
+    <ClInclude Include="StructBuffer.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="TimeMgr.h" />
     <ClInclude Include="TitleScene.h" />
@@ -325,6 +325,7 @@ call DLLCopy.bat $(Configuration)</Command>
     <ClCompile Include="Application.cpp" />
     <ClCompile Include="IRenderer.cpp" />
     <ClCompile Include="Com_Camera.cpp" />
+    <ClCompile Include="RenderMgr.cpp" />
     <ClCompile Include="Script_Camera.cpp" />
     <ClCompile Include="ICollider.cpp" />
     <ClCompile Include="EnginePCH.cpp">
@@ -335,7 +336,7 @@ call DLLCopy.bat $(Configuration)</Command>
     <ClCompile Include="GPUBuffer.cpp" />
     <ClCompile Include="IComponent.cpp" />
     <ClCompile Include="ComputeShader.cpp" />
-    <ClCompile Include="ConstantBuffer.cpp" />
+    <ClCompile Include="ConstBuffer.cpp" />
     <ClCompile Include="Entity.cpp" />
     <ClCompile Include="Fmod.cpp" />
     <ClCompile Include="FontWrapper.cpp" />
@@ -366,7 +367,6 @@ call DLLCopy.bat $(Configuration)</Command>
     <ClCompile Include="Script_Player.cpp" />
     <ClCompile Include="PlayScene.cpp" />
     <ClCompile Include="Prefab.cpp" />
-    <ClCompile Include="Renderer.cpp" />
     <ClCompile Include="IRes.cpp" />
     <ClCompile Include="ResMgr.cpp" />
     <ClCompile Include="Scene.cpp" />
@@ -374,7 +374,7 @@ call DLLCopy.bat $(Configuration)</Command>
     <ClCompile Include="IScript.cpp" />
     <ClCompile Include="GraphicsShader.cpp" />
     <ClCompile Include="Com_Renderer_Sprite.cpp" />
-    <ClCompile Include="StructedBuffer.cpp" />
+    <ClCompile Include="StructBuffer.cpp" />
     <ClCompile Include="Texture.cpp" />
     <ClCompile Include="TimeMgr.cpp" />
     <ClCompile Include="TitleScene.cpp" />
@@ -385,7 +385,7 @@ call DLLCopy.bat $(Configuration)</Command>
     <None Include="cpp.hint" />
     <None Include="Default_HLSL\SH_Blur.hlsli" />
     <None Include="Default_HLSL\SH_Common.hlsli" />
-    <None Include="Default_HLSL\SH_ConstantBuffer.hlsli" />
+    <None Include="Default_HLSL\SH_ConstBuffer.hlsli" />
     <None Include="Default_HLSL\SH_Globals.hlsli" />
     <None Include="Default_HLSL\SH_Light.hlsli" />
     <None Include="Default_HLSL\SH_Particle.hlsli" />

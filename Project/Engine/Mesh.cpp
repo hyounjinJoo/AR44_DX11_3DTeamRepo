@@ -2,7 +2,7 @@
 #include "EnginePCH.h"
 
 #include "Mesh.h"
-#include "Renderer.h"
+#include "RenderMgr.h"
 #include "GraphicDevice_DX11.h"
 
 namespace mh
@@ -26,10 +26,10 @@ namespace mh
 		return E_NOTIMPL;
 	}
 
-	bool Mesh::CreateVertexBuffer(void* _data, UINT _count)
+	bool Mesh::CreateVertexBuffer(void* _data, size_t _dataStride, size_t _count)
 	{
 		// 버텍스 버퍼
-		mVBDesc.ByteWidth = sizeof(renderer::Vertex) * _count;
+		mVBDesc.ByteWidth = (UINT)(_dataStride * _count);
 		mVBDesc.BindFlags = D3D11_BIND_FLAG::D3D11_BIND_VERTEX_BUFFER;
 		mVBDesc.Usage = D3D11_USAGE::D3D11_USAGE_DEFAULT;
 		mVBDesc.CPUAccessFlags = 0;
@@ -37,13 +37,18 @@ namespace mh
 		D3D11_SUBRESOURCE_DATA subData = {};
 		subData.pSysMem = _data;
 
-		if (!GPU::GetDevice()->CreateBuffer(&mVBDesc, &subData, mVertexBuffer.GetAddressOf()))
-			return false;
+		bool Result = GPU::GetDevice()->CreateBuffer(&mVBDesc, &subData, mVertexBuffer.GetAddressOf());
 
-		return true;
+		if(false == Result)
+		{
+			mVertexBuffer = nullptr;
+			mVBDesc = {};
+		}
+			
+		return Result;
 	}
 
-	bool Mesh::CreateIndexBuffer(void* _data, UINT _count)
+	bool Mesh::CreateIndexBuffer(void* _data, size_t _count)
 	{
 		mIndexCount = _count;
 		mIBDesc.ByteWidth = sizeof(UINT) * _count;
@@ -54,18 +59,22 @@ namespace mh
 		D3D11_SUBRESOURCE_DATA subData = {};
 		subData.pSysMem = _data;
 
-		if (!GPU::GetDevice()->CreateBuffer(&mIBDesc, &subData, mIndexBuffer.GetAddressOf()))
+		bool bResult = GPU::GetDevice()->CreateBuffer(&mIBDesc, &subData, mIndexBuffer.GetAddressOf());
+
+		if (false == bResult)
 		{
-			return false;
+			mIndexBuffer = nullptr;
+			mIndexCount = 0u;
+			mIBDesc = {};
 		}
 
-		return true;
+		return bResult;
 	}
 
 	void Mesh::BindBuffer() const
 	{
 		// Input Assembeler 단계에 버텍스버퍼 정보 지정
-		UINT stride = sizeof(renderer::Vertex);
+		UINT stride = sizeof(renderer::Vertex3D);
 		UINT offset = 0;
 
 		GPU::GetDevice()->BindVertexBuffer(0, 1, mVertexBuffer.GetAddressOf(), &stride, &offset);

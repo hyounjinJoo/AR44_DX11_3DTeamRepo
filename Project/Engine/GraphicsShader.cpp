@@ -2,7 +2,7 @@
 
 #include "GraphicsShader.h"
 #include "GraphicDevice_DX11.h"
-#include "Renderer.h"
+#include "RenderMgr.h"
 
 #include "PathMgr.h"
 

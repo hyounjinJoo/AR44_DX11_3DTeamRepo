@@ -48,7 +48,7 @@ namespace mh::GPU
 		void BindComputeShader(ID3D11ComputeShader* _pComputeShader, ID3D11ClassInstance* const* _ppClassInstances, UINT _NumClassInstances)const;
 		void Dispatch(UINT _threadGroupCountX, UINT _threadGroupCountY, UINT _threadGroupCountZ)const;
 		void BindViewports(D3D11_VIEWPORT* _viewPort)const;
-		void BindConstantBuffer(eShaderStage _stage, eCBType _type, ID3D11Buffer* _buffer)const;
+		void BindConstBuffer(eShaderStage _stage, eCBType _type, ID3D11Buffer* _buffer)const;
 		void BindShaderResource(eShaderStage _stage, UINT _slot, ID3D11ShaderResourceView* const* _ppShaderResourceViews)const;
 		void BindUnorderdAccessView(UINT _startSlot, UINT _NumUAVs
 			, ID3D11UnorderedAccessView* const* _ppUnorderedAccessViews, const UINT* _pUAVInitialCounts)const;

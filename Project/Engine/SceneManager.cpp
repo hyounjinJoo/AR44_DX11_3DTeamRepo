@@ -11,7 +11,7 @@
 #include "Script_Player.h"
 #include "PlayScene.h"
 
-#include "Renderer.h"
+#include "RenderMgr.h"
 #include "ResMgr.h"
 
 #include "SceneManager.h"

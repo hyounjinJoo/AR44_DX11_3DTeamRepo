@@ -1,7 +1,7 @@
 #ifndef SH_LIGHT
 #define SH_LIGHT
 
-#include "SH_ConstantBuffer.hlsli"
+#include "SH_ConstBuffer.hlsli"
 
 struct LightColor
 {

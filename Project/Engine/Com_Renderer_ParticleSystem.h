@@ -10,7 +10,7 @@ namespace mh
 		World,
 	};
 
-	class StructedBuffer;
+	class StructBuffer;
 
 	class Com_Renderer_ParticleSystem : public IRenderer
 	{
@@ -25,8 +25,8 @@ namespace mh
 
 	private:
 #pragma region Buffer 선언
-		GPU::StructedBuffer* mBuffer;
-		GPU::StructedBuffer* mSharedBuffer;
+		GPU::StructBuffer* mBuffer;
+		GPU::StructBuffer* mSharedBuffer;
 #pragma endregion
 #pragma region tParticle GraphicsShader 관련 변수 선언
 		std::shared_ptr<GPU::ParticleShader> mCS;

@@ -3,7 +3,7 @@
 #include "Com_Light.h"
 #include "Com_Transform.h"
 #include "GameObject.h"
-#include "Renderer.h"
+#include "RenderMgr.h"
 
 namespace mh
 {

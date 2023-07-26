@@ -20,7 +20,7 @@ namespace mh
 		virtual void FixedUpdate();
 		virtual void Render() {};
 
-		void SetConstantBuffer();
+		void SetConstBuffer();
 		
 
 		Vector3 GetPosition() { return mPosition; };

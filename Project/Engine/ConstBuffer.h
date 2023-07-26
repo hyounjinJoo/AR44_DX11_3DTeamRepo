@@ -3,12 +3,12 @@
 
 namespace mh::GPU
 {
-	class ConstantBuffer 
+	class ConstBuffer 
 		: public GPUBuffer
 	{
 	public:
-		ConstantBuffer(eCBType _type);
-		virtual ~ConstantBuffer();
+		ConstBuffer(eCBType _type);
+		virtual ~ConstBuffer();
 
 		bool Create(size_t _size);
 		void SetData(void* _data);

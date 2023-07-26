@@ -3,7 +3,7 @@
 
 #include "GameObject.h"
 
-#include "Renderer.h"
+#include "RenderMgr.h"
 #include "IScript.h"
 
 namespace mh

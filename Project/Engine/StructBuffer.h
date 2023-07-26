@@ -2,15 +2,14 @@
 
 #include "GPUBuffer.h"
 
-
 namespace mh::GPU
 {
-	class StructedBuffer 
+	class StructBuffer 
 		: public GPUBuffer
 	{
 	public:
-		StructedBuffer();
-		virtual ~StructedBuffer();
+		StructBuffer();
+		virtual ~StructBuffer();
 
 		bool Create(UINT _size, UINT _stride, eSRVType _type, void* _data, bool _cpuAccess = false);
 		void SetData(void* _data, UINT _bufferCount);

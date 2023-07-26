@@ -1,5 +1,5 @@
-#ifndef SH_CONSTANTBUFFER
-#define SH_CONSTANTBUFFER
+#ifndef SH_CONST_BUFFER
+#define SH_CONST_BUFFER
 
 cbuffer Transform : register(b0)
 {

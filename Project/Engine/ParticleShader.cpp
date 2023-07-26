@@ -1,8 +1,8 @@
 #include "EnginePCH.h"
 
 #include "ParticleShader.h"
-#include "Renderer.h"
-#include "ConstantBuffer.h"
+#include "RenderMgr.h"
+#include "ConstBuffer.h"
 #include "TimeMgr.h"
 
 namespace mh::GPU

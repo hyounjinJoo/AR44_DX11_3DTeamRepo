@@ -2,7 +2,7 @@
 #include "Application.h"
 
 #include "DefaultComInitializer.h"
-#include "Renderer.h"
+#include "RenderMgr.h"
 #include "TimeMgr.h"
 #include "Input.h"
 #include "SceneManager.h"

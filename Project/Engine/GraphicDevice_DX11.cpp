@@ -4,9 +4,9 @@
 #include "GraphicDevice_DX11.h"
 
 #include "Application.h"
-#include "ConstantBuffer.h"
+#include "ConstBuffer.h"
 #include "Mesh.h"
-#include "Renderer.h"
+#include "RenderMgr.h"
 #include "ResMgr.h"
 #include "Texture.h"
 
@@ -363,27 +363,27 @@ namespace mh::GPU
 		mContext->RSSetViewports(1, _viewPort);
 	}
 
-	void GraphicDevice_DX11::BindConstantBuffer(eShaderStage _stage, eCBType _type, ID3D11Buffer* _buffer) const
+	void GraphicDevice_DX11::BindConstBuffer(eShaderStage _stage, eCBType _type, ID3D11Buffer* _buffer) const
 	{
 		switch (_stage)
 		{
 		case mh::GPU::eShaderStage::VS:
-			mContext->VSSetConstantBuffers((UINT)_type, 1, &_buffer);
+			mContext->VSSetConstBuffers((UINT)_type, 1, &_buffer);
 			break;
 		case mh::GPU::eShaderStage::HS:
-			mContext->HSSetConstantBuffers((UINT)_type, 1, &_buffer);
+			mContext->HSSetConstBuffers((UINT)_type, 1, &_buffer);
 			break;
 		case mh::GPU::eShaderStage::DS:
-			mContext->DSSetConstantBuffers((UINT)_type, 1, &_buffer);
+			mContext->DSSetConstBuffers((UINT)_type, 1, &_buffer);
 			break;
 		case mh::GPU::eShaderStage::GS:
-			mContext->GSSetConstantBuffers((UINT)_type, 1, &_buffer);
+			mContext->GSSetConstBuffers((UINT)_type, 1, &_buffer);
 			break;
 		case mh::GPU::eShaderStage::PS:
-			mContext->PSSetConstantBuffers((UINT)_type, 1, &_buffer);
+			mContext->PSSetConstBuffers((UINT)_type, 1, &_buffer);
 			break;
 		case mh::GPU::eShaderStage::CS:
-			mContext->CSSetConstantBuffers((UINT)_type, 1, &_buffer);
+			mContext->CSSetConstBuffers((UINT)_type, 1, &_buffer);
 			break;
 		default:
 			assert(true);

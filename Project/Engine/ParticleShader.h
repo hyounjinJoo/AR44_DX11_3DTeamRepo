@@ -1,6 +1,6 @@
 #pragma once
 #include "ComputeShader.h"
-#include "StructedBuffer.h"
+#include "StructBuffer.h"
 
 namespace mh::GPU
 {
@@ -13,11 +13,11 @@ namespace mh::GPU
 		virtual void Binds() override;
 		virtual void Clear() override;
 
-		void SetStrcutedBuffer(StructedBuffer* _buffer) { mBuffer = _buffer; }
-		void SetSharedStrutedBuffer(StructedBuffer* _buffer) { mSharedBuffer = _buffer; }
+		void SetStrcutedBuffer(StructBuffer* _buffer) { mBuffer = _buffer; }
+		void SetSharedStrutedBuffer(StructBuffer* _buffer) { mSharedBuffer = _buffer; }
 
 	private:
-		StructedBuffer* mBuffer;
-		StructedBuffer* mSharedBuffer;
+		StructBuffer* mBuffer;
+		StructBuffer* mSharedBuffer;
 	};
 }

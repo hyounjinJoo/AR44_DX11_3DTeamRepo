@@ -2,7 +2,7 @@
 
 #include "Animation.h"
 #include "TimeMgr.h"
-#include "Renderer.h"
+#include "RenderMgr.h"
 
 namespace mh
 {
@@ -86,7 +86,7 @@ namespace mh
 	{
 		mAtlas->BindShaderResource(GPU::eShaderStage::PS, 12);
 
-		GPU::ConstantBuffer* cb = renderer::constantBuffers[(UINT)GPU::eCBType::Animation];
+		GPU::ConstBuffer* cb = renderer::constantBuffers[(UINT)GPU::eCBType::Animation];
 
 		renderer::AnimationCB info = {};
 		info.Type = (UINT)define::eAnimationType::SecondDimension;
@@ -111,7 +111,7 @@ namespace mh
 		//Texture clear
 		GPU::Texture::Clear(12);
 
-		GPU::ConstantBuffer* cb = renderer::constantBuffers[(UINT)GPU::eCBType::Animation];
+		GPU::ConstBuffer* cb = renderer::constantBuffers[(UINT)GPU::eCBType::Animation];
 		renderer::AnimationCB info = {};
 		info.Type = (UINT)define::eAnimationType::None;
 

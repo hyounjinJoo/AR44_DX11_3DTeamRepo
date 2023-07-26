@@ -4,8 +4,8 @@
 #include "Com_Transform.h"
 #include "GameObject.h"
 #include "Application.h"
-#include "ConstantBuffer.h"
-#include "Renderer.h"
+#include "ConstBuffer.h"
+#include "RenderMgr.h"
 #include "SceneManager.h"
 
 extern mh::Application application;
@@ -52,7 +52,7 @@ namespace mh
 		Vector2 resolution(width, height);
 
 		// Constant buffer
-		GPU::ConstantBuffer* CB = renderer::constantBuffers[(UINT)GPU::eCBType::Grid];
+		GPU::ConstBuffer* CB = renderer::constantBuffers[(UINT)GPU::eCBType::Grid];
 		renderer::GridCB data;
 		data.CameraPosition = position;
 		data.CameraScale = Vector2(scale, scale);

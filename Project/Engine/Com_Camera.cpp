@@ -5,7 +5,7 @@
 #include "Com_Transform.h"
 #include "GameObject.h"
 #include "Application.h"
-#include "Renderer.h"
+#include "RenderMgr.h"
 #include "Scene.h"
 #include "SceneManager.h"
 #include "Material.h"
