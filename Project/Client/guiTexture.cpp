@@ -35,8 +35,8 @@ namespace gui
 		//ImGui::InputText("##TexPath"
 		//	, (char*)path.data(), path.size(), ImGuiInputTextFlags_ReadOnly);
 
-		int width = targetTex->GetWidth();
-		int height = targetTex->GetHeight();
+		int width = (int)targetTex->GetWidth();
+		int height = (int)targetTex->GetHeight();
 
 
 		char wBuffer[256] = "";

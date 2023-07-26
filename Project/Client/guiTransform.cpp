@@ -7,6 +7,7 @@
 namespace gui
 {
 	guiTransform::guiTransform()
+		: guiComponent(mh::define::eComponentType::Transform)
 	{
 		SetKey("guiTransform");
 		SetSize(ImVec2(200.0f, 120.0f));

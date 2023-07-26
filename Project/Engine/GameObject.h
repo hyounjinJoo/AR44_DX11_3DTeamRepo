@@ -19,6 +19,8 @@ namespace mh
 		GameObject();
 		virtual ~GameObject();
 
+		GameObject(const GameObject& _other) = default;
+
 		//DebugObject에서 재정의해서 사용 중
 		virtual void Initialize();
 		virtual void Update();

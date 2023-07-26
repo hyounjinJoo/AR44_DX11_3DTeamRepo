@@ -8,8 +8,7 @@
 namespace mh
 {
 	Transform::Transform()
-		: mOwner()
-		, mParent()
+		: IComponent(eComponentType::Transform)
 		, mFoward(Vector3::Forward)
 		, mRight(Vector3::Right)
 		, mUp(Vector3::Up)
@@ -18,22 +17,11 @@ namespace mh
 		, mPosition(Vector3::One)
 		
 	{
-		
 	}
 
 	Transform::~Transform()
 	{
 	}
-
-	//void Transform::Initialize()
-	//{
-	//	//cos(180);
-	//}
-
-	//void Transform::Update()
-	//{
-	//	//실제 로직상 캐릭터이동 처리
-	//}
 
 	void Transform::FixedUpdate()
 	{
@@ -69,10 +57,11 @@ namespace mh
 		// 뷰행렬 세팅
 		// 프로젝션 행렬 세팅
 
-		if (mParent)
-		{
-			mWorld *= mParent->mWorld;
-		}
+		//TODO: 부모자식 구조 구현
+		//if (mParent)
+		//{
+		//	mWorld *= mParent->mWorld;
+		//}
 	}
 
 

@@ -7,8 +7,10 @@ namespace mh
 	{
 	public:
 		Entity();
-		Entity(const Entity& _other);
 		virtual ~Entity();
+
+		//TODO: Clone 함수 추가
+		Entity(const Entity& _other);
 
 		void SetKey(const std::string_view _strKey) { mStrKey = _strKey; }
 		const std::string& GetKey() const { return mStrKey; }

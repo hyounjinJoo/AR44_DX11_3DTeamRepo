@@ -3,7 +3,7 @@
 
 namespace gui
 {
-	class guiTransform : public Widget
+	class guiTransform : public guiComponent
 	{
 	public:
 		guiTransform();

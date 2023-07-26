@@ -11,6 +11,7 @@ namespace mh::define
 	{
 		UNKNOWN = -1,
 
+		Transform,
 		Collider,
 		Animator,
 		Light,
@@ -47,6 +48,7 @@ namespace mh::define
 
 	STRKEY ArrComName[(int)eComponentType::END] =
 	{
+		"Transform",
 		"Collider",
 		"Animator",
 		"Light",

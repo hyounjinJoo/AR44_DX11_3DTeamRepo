@@ -10,21 +10,22 @@ namespace mh
 		, mType(define::eLayerType::None)
 		, mbDontDestroy(false)
 	{
-		mTransform.SetOwner(this);
 		mVecComponent.resize((UINT)define::eComponentType::END);
-		//AddComponent(new Transform());
+		
+		AddComponent(&mTransform);
 	}
 
 	GameObject::~GameObject()
 	{
-		for (IComponent* component : mVecComponent)
+		//Transform을 제외하고 나머지는 동적할당 한 컴포넌트이므로 제거
+		for (size_t i = 1; i < mVecComponent.size(); ++i)
 		{
-			if (component == nullptr)
+			if (nullptr == mVecComponent[i])
 				continue;
 
-			delete component;
-			component = nullptr;
+			delete mVecComponent[i];
 		}
+
 
 		for (IComponent* script : mScripts)
 		{
@@ -35,6 +36,7 @@ namespace mh
 			script = nullptr;
 		}
 	}
+
 
 	void GameObject::Initialize()
 	{
