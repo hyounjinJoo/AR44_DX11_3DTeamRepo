@@ -15,7 +15,7 @@ namespace mh
 	};
 
 	//	class Scene;
-	class CollisionManager
+	class CollisionMgr
 	{
 	public:
 		static void Initialize();

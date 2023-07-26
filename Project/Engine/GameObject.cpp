@@ -28,6 +28,7 @@ namespace mh
 		, mName(_other.mName)
 	{
 		mFixedComponents.resize((int)eComponentType::Scripts);
+		AddComponent(&mTransform);
 
 		//TODO: Clone
 		//1. 컴포넌트 목록 복사

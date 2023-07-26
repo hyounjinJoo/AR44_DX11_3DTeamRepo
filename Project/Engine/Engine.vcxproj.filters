@@ -297,9 +297,6 @@
       <Filter>GameObject\Component</Filter>
     </ClCompile>
     <ClCompile Include="MeshData.cpp" />
-    <ClCompile Include="CollisionManager.cpp">
-      <Filter>Manager</Filter>
-    </ClCompile>
     <ClCompile Include="ResMgr.cpp">
       <Filter>Manager</Filter>
     </ClCompile>
@@ -336,6 +333,7 @@
     <ClCompile Include="AudioClip.cpp">
       <Filter>Resource\Audio</Filter>
     </ClCompile>
+    <ClCompile Include="CollisionMgr.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application.h">
@@ -512,9 +510,6 @@
     <ClInclude Include="Components.h">
       <Filter>GameObject\Component</Filter>
     </ClInclude>
-    <ClInclude Include="CollisionManager.h">
-      <Filter>Manager</Filter>
-    </ClInclude>
     <ClInclude Include="ResMgr.h">
       <Filter>Manager</Filter>
     </ClInclude>
@@ -551,6 +546,7 @@
     <ClInclude Include="AudioClip.h">
       <Filter>Resource\Audio</Filter>
     </ClInclude>
+    <ClInclude Include="CollisionMgr.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="SimpleMath.inl">

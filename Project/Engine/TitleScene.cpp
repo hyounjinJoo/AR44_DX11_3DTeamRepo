@@ -19,7 +19,7 @@
 #include "ICollider2D.h"
 #include "Player.h"
 #include "Monster.h"
-#include "CollisionManager.h"
+#include "CollisionMgr.h"
 #include "Com_Animator.h"
 #include "Com_Light.h"
 #include "PaintShader.h"

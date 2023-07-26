@@ -7,7 +7,7 @@
 #include "Input.h"
 #include "SceneManager.h"
 #include "ResMgr.h"
-#include "CollisionManager.h"
+#include "CollisionMgr.h"
 #include "Fmod.h"
 #include "FontWrapper.h"
 
@@ -41,7 +41,7 @@ namespace mh
 		Fmod::Initialize();
 		FontWrapper::Initialize();
 
-		CollisionManager::Initialize();
+		CollisionMgr::Initialize();
 		renderer::Initialize();
 		SceneManager::Initialize();
 	}
@@ -52,14 +52,14 @@ namespace mh
 	{
 		TimeManager::Update();
 		Input::Update();
-		CollisionManager::Update();
+		CollisionMgr::Update();
 		SceneManager::Update();
 	}
 
 	// GPU update
 	void Application::FixedUpdate()
 	{
-		CollisionManager::FixedUpdate();
+		CollisionMgr::FixedUpdate();
 		SceneManager::FixedUpdate();
 	}
 
