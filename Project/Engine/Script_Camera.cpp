@@ -4,7 +4,7 @@
 #include "Com_Transform.h"
 #include "GameObject.h"
 #include "Input.h"
-#include "TimeManager.h"
+#include "TimeMgr.h"
 
 namespace mh
 {
@@ -29,27 +29,27 @@ namespace mh
 
 		if (Input::GetKeyState(eKeyCode::D) == eKeyState::PRESSED)
 		{
-			pos += 100.0f * tr.Right() * TimeManager::DeltaTime();
+			pos += 100.0f * tr.Right() * TimeMgr::DeltaTime();
 		}
 		else if (Input::GetKeyState(eKeyCode::A) == eKeyState::PRESSED)
 		{
-			pos += 100.0f * -tr.Right() * TimeManager::DeltaTime();
+			pos += 100.0f * -tr.Right() * TimeMgr::DeltaTime();
 		}
 		else if (Input::GetKeyState(eKeyCode::W) == eKeyState::PRESSED)
 		{
-			pos += 100.0f * tr.Foward() * TimeManager::DeltaTime();
+			pos += 100.0f * tr.Foward() * TimeMgr::DeltaTime();
 		}
 		else if (Input::GetKeyState(eKeyCode::S) == eKeyState::PRESSED)
 		{
-			pos += 100.0f * -tr.Foward() * TimeManager::DeltaTime();
+			pos += 100.0f * -tr.Foward() * TimeMgr::DeltaTime();
 		}
 		else if (Input::GetKeyState(eKeyCode::Q) == eKeyState::PRESSED)
 		{
-			pos += 100.0f * tr.Up() * TimeManager::DeltaTime();
+			pos += 100.0f * tr.Up() * TimeMgr::DeltaTime();
 		}
 		else if (Input::GetKeyState(eKeyCode::E) == eKeyState::PRESSED)
 		{
-			pos += 100.0f * -tr.Up() * TimeManager::DeltaTime();
+			pos += 100.0f * -tr.Up() * TimeMgr::DeltaTime();
 		}
 
 		tr.SetPosition(pos);

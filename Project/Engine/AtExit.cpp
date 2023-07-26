@@ -10,3 +10,4 @@ void AtExit::CallAtExit()
 		m_vecAtExit[i]();
 	}
 }
+

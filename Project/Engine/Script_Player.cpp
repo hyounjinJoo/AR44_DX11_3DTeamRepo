@@ -4,7 +4,7 @@
 #include "Com_Transform.h"
 #include "GameObject.h"
 #include "Input.h"
-#include "TimeManager.h"
+#include "TimeMgr.h"
 #include "Com_Animator.h"
 
 namespace mh
@@ -29,26 +29,26 @@ namespace mh
 		if (Input::GetKey(eKeyCode::RIGHT))
 		{
 			Vector3 pos = tr.GetPosition();
-			pos.x += 60.0f * TimeManager::DeltaTime();
+			pos.x += 60.0f * TimeMgr::DeltaTime();
 			tr.SetPosition(pos);
 		}
 		if (Input::GetKey(eKeyCode::LEFT))
 		{
 			Vector3 pos = tr.GetPosition();
-			pos.x -= 60.0f * TimeManager::DeltaTime();
+			pos.x -= 60.0f * TimeMgr::DeltaTime();
 			tr.SetPosition(pos);
 		}
 
 		if (Input::GetKey(eKeyCode::DOWN))
 		{
 			Vector3 pos = tr.GetRotation();
-			pos.y -= 60.0f * TimeManager::DeltaTime();
+			pos.y -= 60.0f * TimeMgr::DeltaTime();
 			tr.SetRotation(pos);
 		}
 		if (Input::GetKey(eKeyCode::UP))
 		{
 			Vector3 pos = tr.GetRotation();
-			pos.y += 60.0f * TimeManager::DeltaTime();
+			pos.y += 60.0f * TimeMgr::DeltaTime();
 			tr.SetRotation(pos);
 		}
 

@@ -305,7 +305,7 @@ call DLLCopy.bat $(Configuration)</Command>
     <ClInclude Include="Com_Renderer_Sprite.h" />
     <ClInclude Include="StructedBuffer.h" />
     <ClInclude Include="Texture.h" />
-    <ClInclude Include="TimeManager.h" />
+    <ClInclude Include="TimeMgr.h" />
     <ClInclude Include="TitleScene.h" />
     <ClInclude Include="Com_Transform.h" />
     <ClInclude Include="Func.h" />
@@ -376,7 +376,7 @@ call DLLCopy.bat $(Configuration)</Command>
     <ClCompile Include="Com_Renderer_Sprite.cpp" />
     <ClCompile Include="StructedBuffer.cpp" />
     <ClCompile Include="Texture.cpp" />
-    <ClCompile Include="TimeManager.cpp" />
+    <ClCompile Include="TimeMgr.cpp" />
     <ClCompile Include="TitleScene.cpp" />
     <ClCompile Include="Com_Transform.cpp" />
     <ClCompile Include="Func.cpp" />
@@ -384,6 +384,7 @@ call DLLCopy.bat $(Configuration)</Command>
   <ItemGroup>
     <None Include="cpp.hint" />
     <None Include="Default_HLSL\SH_Blur.hlsli" />
+    <None Include="Default_HLSL\SH_Common.hlsli" />
     <None Include="Default_HLSL\SH_ConstantBuffer.hlsli" />
     <None Include="Default_HLSL\SH_Globals.hlsli" />
     <None Include="Default_HLSL\SH_Light.hlsli" />

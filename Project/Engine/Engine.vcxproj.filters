@@ -300,7 +300,7 @@
     <ClCompile Include="ResMgr.cpp">
       <Filter>Manager</Filter>
     </ClCompile>
-    <ClCompile Include="TimeManager.cpp">
+    <ClCompile Include="TimeMgr.cpp">
       <Filter>Manager</Filter>
     </ClCompile>
     <ClCompile Include="PathMgr.cpp">
@@ -513,7 +513,7 @@
     <ClInclude Include="ResMgr.h">
       <Filter>Manager</Filter>
     </ClInclude>
-    <ClInclude Include="TimeManager.h">
+    <ClInclude Include="TimeMgr.h">
       <Filter>Manager</Filter>
     </ClInclude>
     <ClInclude Include="PathMgr.h">
@@ -575,6 +575,9 @@
     </None>
     <None Include="Default_HLSL\SH_Light.hlsli">
       <Filter>Default HLSL\Light</Filter>
+    </None>
+    <None Include="Default_HLSL\SH_Common.hlsli">
+      <Filter>Default HLSL</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>

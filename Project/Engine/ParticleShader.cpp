@@ -3,7 +3,7 @@
 #include "ParticleShader.h"
 #include "Renderer.h"
 #include "ConstantBuffer.h"
-#include "TimeManager.h"
+#include "TimeMgr.h"
 
 namespace mh::GPU
 {

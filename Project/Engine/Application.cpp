@@ -3,7 +3,7 @@
 
 #include "DefaultComInitializer.h"
 #include "Renderer.h"
-#include "TimeManager.h"
+#include "TimeMgr.h"
 #include "Input.h"
 #include "SceneManager.h"
 #include "ResMgr.h"
@@ -36,7 +36,7 @@ namespace mh
 		ResMgr::GetInst();
 
 		PathMgr::GetInst()->Init();
-		TimeManager::Initialize();
+		TimeMgr::Initialize();
 		Input::Initialize();
 		Fmod::Initialize();
 		FontWrapper::Initialize();
@@ -50,7 +50,7 @@ namespace mh
 	// CPU UPDATE
 	void Application::Update()
 	{
-		TimeManager::Update();
+		TimeMgr::Update();
 		Input::Update();
 		CollisionMgr::Update();
 		SceneManager::Update();
@@ -65,7 +65,7 @@ namespace mh
 
 	void Application::Render()
 	{
-		TimeManager::Render(mHdc);
+		TimeMgr::Render(mHdc);
 
 		graphicDevice->Clear();
 		graphicDevice->AdjustViewPorts();

@@ -7,7 +7,7 @@
 
 #include "ResMgr.h"
 #include "Renderer.h"
-#include "TimeManager.h"
+#include "TimeMgr.h"
 
 #include "Material.h"
 #include "SceneManager.h"
@@ -1045,7 +1045,7 @@ namespace mh::renderer
 		NoiseCB info = {};
 		info.NoiseSize.x = static_cast<float>(noise->GetWidth());
 		info.NoiseSize.y = static_cast<float>(noise->GetHeight());
-		NoiseTime -= TimeManager::DeltaTime();
+		NoiseTime -= TimeMgr::DeltaTime();
 		info.NoiseTime = NoiseTime;
 
 		ConstantBuffer* cb = renderer::constantBuffers[(UINT)eCBType::Noise];

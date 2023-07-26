@@ -9,7 +9,7 @@
 #include "Com_Transform.h"
 #include "GameObject.h"
 #include "Texture.h"
-#include "TimeManager.h"
+#include "TimeMgr.h"
 
 namespace mh
 {
@@ -86,7 +86,7 @@ namespace mh
 		float aliveTime = 1.0f / mFrequency;
 
 		//누적시간
-		mTime += TimeManager::DeltaTime();
+		mTime += TimeMgr::DeltaTime();
 		if (aliveTime < mTime)
 		{
 			float f = (mTime / aliveTime);
@@ -112,8 +112,8 @@ namespace mh
 		mCBData.StartSize = mStartSize;
 		mCBData.StartColor = mStartColor;
 		mCBData.StartLifeTime = mStartLifeTime;
-		mCBData.DeltaTime = TimeManager::DeltaTime();
-		mCBData.ElapsedTime += TimeManager::DeltaTime();
+		mCBData.DeltaTime = TimeMgr::DeltaTime();
+		mCBData.ElapsedTime += TimeMgr::DeltaTime();
 
 		ConstantBuffer* cb = renderer::constantBuffers[(UINT)eCBType::Com_Renderer_ParticleSystem];
 		cb->SetData(&mCBData);
