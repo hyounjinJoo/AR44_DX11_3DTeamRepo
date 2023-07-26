@@ -1,6 +1,6 @@
 #pragma once
 #include "guiWidget.h"
-#include "GameObject.h"
+#include <Engine/GameObject.h>
 #include "guiComponent.h"
 #include "guiResource.h"
 

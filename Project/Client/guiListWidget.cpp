@@ -1,7 +1,7 @@
 #include "ClientPCH.h"
-
-
 #include "guiListWidget.h"
+
+#include <Engine/Func.h>
 
 namespace gui
 {
@@ -29,7 +29,7 @@ namespace gui
 				bool bselectable = (mListIndex == i);
 				if (ImGui::Selectable(mResourceList[i].c_str(), &bselectable))
 				{
-					mListIndex = i;
+					mListIndex = (int)i;
 				}
 
 				if (bselectable)
@@ -63,9 +63,9 @@ namespace gui
 
 	void ListWidget::SetItemList(const std::vector<std::wstring>& list)
 	{
-		for (auto wName : list)
+		for (const auto& wName : list)
 		{
-			std::string name(wName.begin(), wName.end());
+			std::string name = StringConv::ConvertUnicodeToUTF8(wName);
 			mResourceList.push_back(name);
 		}
 	}

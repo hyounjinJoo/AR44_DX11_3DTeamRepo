@@ -64,7 +64,7 @@ namespace mh
 	{
 	}
 
-	bool Animator::Create(const std::wstring& _name, std::shared_ptr<graphics::Texture> _atlas
+	bool Animator::Create(const std::wstring& _name, std::shared_ptr<GPU::Texture> _atlas
 		, math::Vector2 _leftTop, math::Vector2 _size, math::Vector2 _offset
 		, UINT _spriteLegth, float _duration)
 	{

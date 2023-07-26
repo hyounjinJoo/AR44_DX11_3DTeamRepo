@@ -1,6 +1,6 @@
 #pragma once
 #include "guiWidget.h"
-#include "GameResource.h"
+#include <Engine/GameResource.h>
 
 namespace gui
 {

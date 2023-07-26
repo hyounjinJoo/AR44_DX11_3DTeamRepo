@@ -3,7 +3,7 @@
 #include "ConstantBuffer.h"
 #include "GraphicDevice_DX11.h"
 
-namespace mh::graphics
+namespace mh::GPU
 {
 	ConstantBuffer::ConstantBuffer(eCBType _type)
 		: mType(_type)

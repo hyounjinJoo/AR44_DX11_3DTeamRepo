@@ -1,6 +1,8 @@
 #pragma once
 #include "guiWidget.h"
-#include "GameObject.h"
+
+
+#include <Engine/GameObject.h>
 #include "guiTreeWidget.h"
 
 namespace gui

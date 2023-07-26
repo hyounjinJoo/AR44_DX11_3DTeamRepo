@@ -71,6 +71,30 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <OutDir>$(SolutionDir)Output\$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)Obj\$(Configuration)\$(ProjectName)\</IntDir>
+    <ExternalIncludePath>$(SolutionDir)Project\;$(SolutionDir)External\Include\;$(ExternalIncludePath)</ExternalIncludePath>
+    <LibraryPath>$(SolutionDir)External\Lib;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <OutDir>$(SolutionDir)Output\$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)Obj\$(Configuration)\$(ProjectName)\</IntDir>
+    <ExternalIncludePath>$(SolutionDir)Project\;$(SolutionDir)External\Include\;$(ExternalIncludePath)</ExternalIncludePath>
+    <LibraryPath>$(SolutionDir)External\Lib;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <OutDir>$(SolutionDir)Output\$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)Obj\$(Configuration)\$(ProjectName)\</IntDir>
+    <ExternalIncludePath>$(SolutionDir)Project\;$(SolutionDir)External\Include\;$(ExternalIncludePath)</ExternalIncludePath>
+    <LibraryPath>$(SolutionDir)External\Lib;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <OutDir>$(SolutionDir)Output\$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)Obj\$(Configuration)\$(ProjectName)\</IntDir>
+    <ExternalIncludePath>$(SolutionDir)Project\;$(SolutionDir)External\Include\;$(ExternalIncludePath)</ExternalIncludePath>
+    <LibraryPath>$(SolutionDir)External\Lib;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
@@ -109,7 +133,8 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir);$(SolutionDir);$(SolutionDir)Engine_SOURCE;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>
+      </AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
@@ -134,7 +159,8 @@ call HLSLCopy.bat $(Platform) $(Configuration)</Command>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir);$(SolutionDir);$(SolutionDir)Engine_SOURCE;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>
+      </AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
@@ -236,10 +262,10 @@ call HLSLCopy.bat $(Platform) $(Configuration)</Command>
     <ClCompile Include="guiWidget.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="44Engine.rc" />
+    <ResourceCompile Include="Client.rc" />
   </ItemGroup>
   <ItemGroup>
-    <Image Include="44Engine.ico" />
+    <Image Include="Client.ico" />
     <Image Include="small.ico" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

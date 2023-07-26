@@ -10,6 +10,5 @@ namespace mh
 	}
 	GameResource::~GameResource()
 	{
-		int a = 0;
 	}
 }

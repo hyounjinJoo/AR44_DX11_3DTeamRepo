@@ -21,7 +21,7 @@ namespace mh
 
 	}
 
-	HRESULT Mesh::Load(const std::wstring& _path)
+	HRESULT Mesh::Load(const std::filesystem::path& _path)
 	{
 		return E_NOTIMPL;
 	}
@@ -37,7 +37,7 @@ namespace mh
 		D3D11_SUBRESOURCE_DATA subData = {};
 		subData.pSysMem = _data;
 
-		if (!graphics::GetDevice()->CreateBuffer(&mVBDesc, &subData, mVertexBuffer.GetAddressOf()))
+		if (!GPU::GetDevice()->CreateBuffer(&mVBDesc, &subData, mVertexBuffer.GetAddressOf()))
 			return false;
 
 		return true;
@@ -54,7 +54,7 @@ namespace mh
 		D3D11_SUBRESOURCE_DATA subData = {};
 		subData.pSysMem = _data;
 
-		if (!graphics::GetDevice()->CreateBuffer(&mIBDesc, &subData, mIndexBuffer.GetAddressOf()))
+		if (!GPU::GetDevice()->CreateBuffer(&mIBDesc, &subData, mIndexBuffer.GetAddressOf()))
 		{
 			return false;
 		}
@@ -68,17 +68,17 @@ namespace mh
 		UINT stride = sizeof(renderer::Vertex);
 		UINT offset = 0;
 
-		graphics::GetDevice()->BindVertexBuffer(0, 1, mVertexBuffer.GetAddressOf(), &stride, &offset);
-		graphics::GetDevice()->BindIndexBuffer(mIndexBuffer.Get(), DXGI_FORMAT_R32_UINT, 0);
+		GPU::GetDevice()->BindVertexBuffer(0, 1, mVertexBuffer.GetAddressOf(), &stride, &offset);
+		GPU::GetDevice()->BindIndexBuffer(mIndexBuffer.Get(), DXGI_FORMAT_R32_UINT, 0);
 	}
 
 	void Mesh::Render() const
 	{
-		graphics::GetDevice()->DrawIndexed(mIndexCount, 0, 0);
+		GPU::GetDevice()->DrawIndexed(mIndexCount, 0, 0);
 	}
 	
 	void Mesh::RenderInstanced(UINT _count) const
 	{
-		graphics::GetDevice()->DrawIndexedInstanced(mIndexCount, _count, 0, 0, 0);
+		GPU::GetDevice()->DrawIndexedInstanced(mIndexCount, _count, 0, 0, 0);
 	}
 }

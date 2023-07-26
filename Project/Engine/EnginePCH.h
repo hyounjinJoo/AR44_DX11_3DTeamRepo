@@ -20,7 +20,7 @@
 
 #include <combaseapi.h>
 
-#include "CommonInclude.h"
+#include "EnumFlags.h"
 
 #include "json-cpp\json.h"
 

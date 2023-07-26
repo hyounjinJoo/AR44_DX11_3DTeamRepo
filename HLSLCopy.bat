@@ -13,9 +13,9 @@ echo Mode: %Configuration%
 
 
 :: Shader 파일 복사
-if not exist .\%Platform%\%Configuration%\SHADER_SOURCE ( mkdir .\%Platform%\%Configuration%\SHADER_SOURCE )
-xcopy /d /s /y /i /r .\SHADER_SOURCE\*.hlsl .\%Platform%\%Configuration%\SHADER_SOURCE
-xcopy /d /s /y /i /r .\SHADER_SOURCE\*hlsli .\%Platform%\%Configuration%\SHADER_SOURCE
+::if not exist .\Project\SHADER_SOURCE ( mkdir .\%Platform%\%Configuration%\SHADER_SOURCE )
+::xcopy /d /s /y /i /r .\SHADER_SOURCE\*.hlsl .\%Platform%\%Configuration%\SHADER_SOURCE
+::xcopy /d /s /y /i /r .\SHADER_SOURCE\*hlsli .\%Platform%\%Configuration%\SHADER_SOURCE
 
 
 :: 1번 Argument에 아무것도 들어오지 않았을 경우(== 직접 실행했을 경우) 일시 정지

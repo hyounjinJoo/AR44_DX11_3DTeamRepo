@@ -85,13 +85,13 @@ namespace mh
 		trCb.View = Camera::GetGpuViewMatrix();
 		trCb.Projection = Camera::GetGpuProjectionMatrix();
 
-		graphics::ConstantBuffer* cb = renderer::constantBuffers[(UINT)graphics::eCBType::Transform];
+		GPU::ConstantBuffer* cb = renderer::constantBuffers[(UINT)GPU::eCBType::Transform];
 		cb->SetData(&trCb);
-		cb->Bind(graphics::eShaderStage::VS);
-		cb->Bind(graphics::eShaderStage::HS);
-		cb->Bind(graphics::eShaderStage::DS);
-		cb->Bind(graphics::eShaderStage::GS);
-		cb->Bind(graphics::eShaderStage::PS);
-		cb->Bind(graphics::eShaderStage::CS);
+		cb->Bind(GPU::eShaderStage::VS);
+		cb->Bind(GPU::eShaderStage::HS);
+		cb->Bind(GPU::eShaderStage::DS);
+		cb->Bind(GPU::eShaderStage::GS);
+		cb->Bind(GPU::eShaderStage::PS);
+		cb->Bind(GPU::eShaderStage::CS);
 	}
 }

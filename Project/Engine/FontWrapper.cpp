@@ -19,7 +19,7 @@ namespace mh
 		if (FAILED(FW1CreateFactory(FW1_VERSION, &mFW1Factory)))
 			return false;
 
-		ID3D11Device* pDevice = graphics::GetDevice()->GetID3D11Device();
+		ID3D11Device* pDevice = GPU::GetDevice()->GetID3D11Device();
 		if (FAILED(mFW1Factory->CreateFontWrapper(pDevice, L"Arial", &mFontWrapper)))
 			return false;
 
@@ -28,7 +28,7 @@ namespace mh
 
 	void FontWrapper::DrawFont(const wchar_t* _string, float _x, float _y, float _size, UINT _rgb)
 	{
-		ID3D11DeviceContext* context = graphics::GetDevice()->GetID3D11DeviceContext();
+		ID3D11DeviceContext* context = GPU::GetDevice()->GetID3D11DeviceContext();
 		mFontWrapper->DrawString(context,
 								 _string, // String
 								 _size,// Font size

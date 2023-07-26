@@ -2,7 +2,7 @@
 #include "guiDebugObject.h"
 #include "guiEditorObject.h"
 #include "guiWidget.h"
-#include "Graphics.h"
+#include <Engine/define_GPU.h>
 
 namespace gui
 {
@@ -16,7 +16,7 @@ namespace gui
 		void FixedUpdate();
 		void Render();
 		void Release();
-		void DebugRender(mh::graphics::tDebugMesh& mesh);
+		void DebugRender(mh::GPU::tDebugMesh& mesh);
 
 		void ImGuiInitialize();
 		void ImGuiRun();

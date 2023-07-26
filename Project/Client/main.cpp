@@ -2,8 +2,10 @@
 
 // 44Engine.cpp : 애플리케이션에 대한 진입점을 정의합니다.
 //
-#include "Application.h"
-#include "SceneManager.h"
+#include <Engine/Application.h>
+#include <Engine/SceneManager.h>
+#include <Engine/AtExit.h>
+
 #include "guiEditor.h"
 
 #include "imgui.h"
@@ -12,9 +14,9 @@
 
 
 #ifdef _DEBUG
-#pragma comment(lib, "..\\x64\\Debug\\Lib\\Engine_SOURCE.lib") 
+#pragma comment(lib, "Engine/Debug/Engine.lib") 
 #else 
-#pragma comment(lib, "..\\x64\\Release\\Lib\\Engine_SOURCE.lib") 
+#pragma comment(lib, "Engine/Release/Engine.lib") 
 #endif
 
 
@@ -55,13 +57,8 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
         return FALSE;
     }
 
-
-
-
     HACCEL hAccelTable = LoadAccelerators(hInstance, MAKEINTRESOURCE(IDC_MY44ENGINE));
-
     MSG msg;
-
     // 기본 메시지 루프입니다:
     while (true)
     {
@@ -84,9 +81,15 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
         }
     }
 
+
+   
     mh::SceneManager::Release();
+
+    AtExit::CallAtExit();
     application.Release();
     editor.Release();
+
+
     return (int) msg.wParam;
 }
 

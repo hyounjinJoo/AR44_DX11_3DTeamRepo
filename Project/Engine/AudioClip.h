@@ -4,13 +4,15 @@
 
 namespace mh
 {
+	namespace stdfs = std::filesystem;
+
 	class AudioClip : public GameResource
 	{
 	public:
 		AudioClip();
 		~AudioClip();
 
-		virtual HRESULT Load(const std::wstring& _path) override;
+		virtual HRESULT Load(const std::filesystem::path& _path) override;
 
 		void Play();
 		void Stop();

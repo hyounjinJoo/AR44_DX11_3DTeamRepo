@@ -201,24 +201,24 @@ namespace mh
 		if (renderer == nullptr)
 			return;
 
-		std::shared_ptr<graphics::Material> material = renderer->GetMaterial();
+		std::shared_ptr<GPU::Material> material = renderer->GetMaterial();
 		//if (material == nullptr)
 		//	continue;
 
-		graphics::eRenderingMode mode = material->GetRenderingMode();
+		GPU::eRenderingMode mode = material->GetRenderingMode();
 
 		switch (mode)
 		{
-		case graphics::eRenderingMode::Opaque:
+		case GPU::eRenderingMode::Opaque:
 			mOpaqueGameObjects.push_back(_gameObj);
 			break;
-		case graphics::eRenderingMode::CutOut:
+		case GPU::eRenderingMode::CutOut:
 			mCutoutGameObjects.push_back(_gameObj);
 			break;
-		case graphics::eRenderingMode::Transparent:
+		case GPU::eRenderingMode::Transparent:
 			mTransparentGameObjects.push_back(_gameObj);
 			break;
-		case graphics::eRenderingMode::PostProcess:
+		case GPU::eRenderingMode::PostProcess:
 			mPostProcessGameObjects.push_back(_gameObj);
 			break;
 		default:

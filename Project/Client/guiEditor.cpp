@@ -1,15 +1,15 @@
 #include "ClientPCH.h"
-
 #include "guiEditor.h"
-#include "Mesh.h"
-#include "GameResources.h"
-#include "Material.h"
-#include "Transform.h"
-#include "MeshRenderer.h"
-#include "GridScript.h"
-#include "Object.h"
-#include "Application.h"
-#include "GraphicDevice_DX11.h"
+
+#include <Engine/Mesh.h>
+#include <Engine/GameResources.h>
+#include <Engine/Material.h>
+#include <Engine/Transform.h>
+#include <Engine/MeshRenderer.h>
+#include <Engine/GridScript.h>
+#include <Engine/Object.h>
+#include <Engine/Application.h>
+#include <Engine/GraphicDevice_DX11.h>
 
 #include "imgui.h"
 #include "imgui_impl_win32.h"
@@ -27,7 +27,7 @@ extern mh::Application application;
 
 namespace gui
 {
-
+	using namespace mh::enums;
 	void Editor::Initialize()
 	{
 		mbEnable = false;
@@ -38,8 +38,8 @@ namespace gui
 		// 충돌체의 종류 갯수만큼만 있으면 된다.
 		mDebugObjects.resize((UINT)eColliderType::End);
 
-		std::shared_ptr<mh::Mesh> rectMesh = mh::GameResources::Find<mh::Mesh>(L"DebugRectMesh");
-		std::shared_ptr<Material> material = mh::GameResources::Find<mh::graphics::Material>(L"DebugMaterial");
+		std::shared_ptr<mh::Mesh> rectMesh = mh::GameResources::Find<mh::Mesh>("DebugRectMesh");
+		std::shared_ptr<mh::Material> material = mh::GameResources::Find<mh::GPU::Material>("DebugMaterial");
 
 		mDebugObjects[(UINT)eColliderType::Rect] = new DebugObject();
 		mh::MeshRenderer* renderer
@@ -48,7 +48,7 @@ namespace gui
 		renderer->SetMaterial(material);
 		renderer->SetMesh(rectMesh);
 
-		std::shared_ptr<mh::Mesh> circleMesh = mh::GameResources::Find<mh::Mesh>(L"CircleMesh");
+		std::shared_ptr<mh::Mesh> circleMesh = mh::GameResources::Find<mh::Mesh>("CircleMesh");
 
 		mDebugObjects[(UINT)eColliderType::Circle] = new DebugObject();
 		renderer
@@ -130,7 +130,7 @@ namespace gui
 			obj->Render();
 		}
 
-		for ( tDebugMesh& mesh : mh::renderer::gDebugMeshes)
+		for ( mh::GPU::tDebugMesh& mesh : mh::renderer::gDebugMeshes)
 		{
 			DebugRender(mesh);
 		}
@@ -164,7 +164,7 @@ namespace gui
 		delete mDebugObjects[(UINT)eColliderType::Circle];
 	}
 
-	void Editor::DebugRender(mh::graphics::tDebugMesh& mesh)
+	void Editor::DebugRender(mh::GPU::tDebugMesh& mesh)
 	{
 		DebugObject* debugObj = mDebugObjects[(UINT)mesh.type];
 		
@@ -221,8 +221,8 @@ namespace gui
 
 		// Setup Platform/Renderer backends
 		ImGui_ImplWin32_Init(application.GetHwnd());
-		ImGui_ImplDX11_Init(mh::graphics::GetDevice()->GetID3D11Device()
-			, mh::graphics::GetDevice()->GetID3D11DeviceContext());
+		ImGui_ImplDX11_Init(mh::GPU::GetDevice()->GetID3D11Device()
+			, mh::GPU::GetDevice()->GetID3D11DeviceContext());
 
 		// Load Fonts
 		// - If no fonts are loaded, dear imgui will use the default font. You can also load multiple fonts and use ImGui::PushFont()/PopFont() to select them.

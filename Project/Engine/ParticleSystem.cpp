@@ -13,7 +13,7 @@
 
 namespace mh
 {
-	using namespace mh::graphics;
+	using namespace mh::GPU;
 
 	ParticleSystem::ParticleSystem()
 		: BaseRenderer(eComponentType::ParticleSystem)
@@ -44,16 +44,16 @@ namespace mh
 
 	void ParticleSystem::Initialize()
 	{
-		mCS = GameResources::Find<ParticleShader>(L"ParticleCS");
+		mCS = GameResources::Find<ParticleShader>("ParticleCS");
 
-		std::shared_ptr<Mesh> point = GameResources::Find<Mesh>(L"PointMesh");
+		std::shared_ptr<Mesh> point = GameResources::Find<Mesh>("PointMesh");
 		SetMesh(point);
 
 		// Material 세팅
-		std::shared_ptr<Material> material = GameResources::Find<Material>(L"ParticleMaterial");
+		std::shared_ptr<Material> material = GameResources::Find<Material>("ParticleMaterial");
 		SetMaterial(material);
 
-		std::shared_ptr<Texture> tex = GameResources::Find<Texture>(L"CartoonSmoke");
+		std::shared_ptr<Texture> tex = GameResources::Find<Texture>("CartoonSmoke");
 		material->SetTexture(eTextureSlot::Albedo, tex);
 
 		tParticle particles[100] = {};
@@ -69,10 +69,10 @@ namespace mh
 			particles[i].speed = 100.0f;
 		}
 
-		mBuffer = new graphics::StructedBuffer();
+		mBuffer = new GPU::StructedBuffer();
 		mBuffer->Create(sizeof(tParticle), mMaxParticles, eSRVType::UAV, particles);
 
-		mSharedBuffer = new graphics::StructedBuffer();
+		mSharedBuffer = new GPU::StructedBuffer();
 		mSharedBuffer->Create(sizeof(tParticleShared), 1, eSRVType::UAV, nullptr, true);
 	}
 
