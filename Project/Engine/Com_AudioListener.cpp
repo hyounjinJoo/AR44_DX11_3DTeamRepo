@@ -1,7 +1,7 @@
 #include "EnginePCH.h"
 
 #include "Com_AudioListener.h"
-#include "Transform.h"
+#include "Com_Transform.h"
 #include "GameObject.h"
 #include "Fmod.h"
 
@@ -30,7 +30,7 @@ namespace mh
 
 	void Com_AudioListener::FixedUpdate()
 	{
-		Transform& tr = GetOwner()->GetTransform();
+		Com_Transform& tr = GetOwner()->GetTransform();
 		math::Vector3 pos = tr.GetPosition();
 		math::Vector3 foward = tr.Foward();
 		math::Vector3 up = tr.Up();

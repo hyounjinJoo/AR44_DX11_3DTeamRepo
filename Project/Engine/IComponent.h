@@ -19,7 +19,7 @@ namespace mh
 		virtual void FixedUpdate() = 0;
 		virtual void Render() = 0;
 
-		eComponentType GetOrder() const { return mType; };
+		eComponentType GetComType() const { return mType; };
 
 		GameObject* GetOwner() const { return mOwner; }
 		void SetOwner(GameObject* _owner) { mOwner = _owner; }

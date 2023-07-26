@@ -4,7 +4,7 @@
 #include <Engine/Mesh.h>
 #include <Engine/ResMgr.h>
 #include <Engine/Material.h>
-#include <Engine/Transform.h>
+#include <Engine/Com_Transform.h>
 #include <Engine/Com_Renderer_Mesh.h>
 #include <Engine/GridScript.h>
 #include <Engine/Object.h>
@@ -169,7 +169,7 @@ namespace gui
 	{
 		DebugObject* debugObj = mDebugObjects[(UINT)mesh.type];
 		
-		mh::Transform* tr = debugObj->GetComponent<mh::Transform>();
+		mh::Com_Transform* tr = debugObj->GetComponent<mh::Com_Transform>();
 		tr->SetPosition(mesh.position);
 		tr->SetRotation(mesh.rotatation);
 		

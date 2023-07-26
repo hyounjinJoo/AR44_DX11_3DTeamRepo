@@ -1,7 +1,7 @@
 #include "EnginePCH.h"
 
 #include "Script_Camera.h"
-#include "Transform.h"
+#include "Com_Transform.h"
 #include "GameObject.h"
 #include "Input.h"
 #include "TimeManager.h"
@@ -23,7 +23,7 @@ namespace mh
 
 	void Script_Camera::Update()
 	{
-		Transform& tr = GetOwner()->GetTransform();
+		Com_Transform& tr = GetOwner()->GetTransform();
 
 		Vector3 pos = tr.GetPosition();
 

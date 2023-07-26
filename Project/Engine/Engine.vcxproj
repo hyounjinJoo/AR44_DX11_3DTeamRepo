@@ -244,7 +244,8 @@ call DLLCopy.bat $(Configuration)</Command>
     <ClInclude Include="AtExit.h" />
     <ClInclude Include="AudioClip.h" />
     <ClInclude Include="Com_AudioListener.h" />
-    <ClInclude Include="AudioSource.h" />
+    <ClInclude Include="Com_AudioSource.h" />
+    <ClInclude Include="DefaultComInitializer.h" />
     <ClInclude Include="ICollider3D.h" />
     <ClInclude Include="ICollider2D.h" />
     <ClInclude Include="CollisionManager.h" />
@@ -306,7 +307,7 @@ call DLLCopy.bat $(Configuration)</Command>
     <ClInclude Include="Texture.h" />
     <ClInclude Include="TimeManager.h" />
     <ClInclude Include="TitleScene.h" />
-    <ClInclude Include="Transform.h" />
+    <ClInclude Include="Com_Transform.h" />
     <ClInclude Include="Func.h" />
   </ItemGroup>
   <ItemGroup>
@@ -316,7 +317,8 @@ call DLLCopy.bat $(Configuration)</Command>
     <ClCompile Include="AtExit.cpp" />
     <ClCompile Include="AudioClip.cpp" />
     <ClCompile Include="Com_AudioListener.cpp" />
-    <ClCompile Include="AudioSource.cpp" />
+    <ClCompile Include="Com_AudioSource.cpp" />
+    <ClCompile Include="DefaultComInitializer.cpp" />
     <ClCompile Include="ICollider3D.cpp" />
     <ClCompile Include="ICollider2D.cpp" />
     <ClCompile Include="CollisionManager.cpp" />
@@ -335,7 +337,6 @@ call DLLCopy.bat $(Configuration)</Command>
     <ClCompile Include="ComputeShader.cpp" />
     <ClCompile Include="ConstantBuffer.cpp" />
     <ClCompile Include="Entity.cpp" />
-    <ClCompile Include="define_Enum.cpp" />
     <ClCompile Include="Fmod.cpp" />
     <ClCompile Include="FontWrapper.cpp" />
     <ClCompile Include="GameObject.cpp" />
@@ -377,7 +378,7 @@ call DLLCopy.bat $(Configuration)</Command>
     <ClCompile Include="Texture.cpp" />
     <ClCompile Include="TimeManager.cpp" />
     <ClCompile Include="TitleScene.cpp" />
-    <ClCompile Include="Transform.cpp" />
+    <ClCompile Include="Com_Transform.cpp" />
     <ClCompile Include="Func.cpp" />
   </ItemGroup>
   <ItemGroup>

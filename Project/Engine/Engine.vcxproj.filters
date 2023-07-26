@@ -157,6 +157,9 @@
     <Filter Include="GameObject\Component\Audio">
       <UniqueIdentifier>{326cbbf6-1cb8-4ba7-bc32-aa2759b923f9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="GameObject\Component\0. Transform">
+      <UniqueIdentifier>{62546181-5d07-413f-a9e5-329a0986165d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Application.cpp">
@@ -265,14 +268,8 @@
     <ClCompile Include="Com_AudioListener.cpp">
       <Filter>GameObject\Component\Audio</Filter>
     </ClCompile>
-    <ClCompile Include="AudioClip.cpp">
-      <Filter>GameObject\Component\Audio</Filter>
-    </ClCompile>
     <ClCompile Include="Fmod.cpp">
       <Filter>GameObject\Component\Audio</Filter>
-    </ClCompile>
-    <ClCompile Include="AudioSource.cpp">
-      <Filter>Resource\Audio</Filter>
     </ClCompile>
     <ClCompile Include="FontWrapper.cpp">
       <Filter>FontWrapper</Filter>
@@ -296,16 +293,10 @@
     <ClCompile Include="GraphicsShader.cpp">
       <Filter>Resource\Shaders\Graphics</Filter>
     </ClCompile>
-    <ClCompile Include="define_Enum.cpp">
-      <Filter>Common\define</Filter>
-    </ClCompile>
     <ClCompile Include="IComponent.cpp">
       <Filter>GameObject\Component</Filter>
     </ClCompile>
     <ClCompile Include="MeshData.cpp" />
-    <ClCompile Include="Transform.cpp">
-      <Filter>GameObject</Filter>
-    </ClCompile>
     <ClCompile Include="CollisionManager.cpp">
       <Filter>Manager</Filter>
     </ClCompile>
@@ -330,7 +321,21 @@
     <ClCompile Include="Renderer.cpp">
       <Filter>Manager</Filter>
     </ClCompile>
-    <ClCompile Include="ComMgr.cpp" />
+    <ClCompile Include="ComMgr.cpp">
+      <Filter>Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="DefaultComInitializer.cpp">
+      <Filter>GameObject\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="Com_Transform.cpp">
+      <Filter>GameObject\Component\0. Transform</Filter>
+    </ClCompile>
+    <ClCompile Include="Com_AudioSource.cpp">
+      <Filter>GameObject\Component\Audio</Filter>
+    </ClCompile>
+    <ClCompile Include="AudioClip.cpp">
+      <Filter>Resource\Audio</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application.h">
@@ -451,14 +456,8 @@
     <ClInclude Include="Com_AudioListener.h">
       <Filter>GameObject\Component\Audio</Filter>
     </ClInclude>
-    <ClInclude Include="AudioClip.h">
-      <Filter>GameObject\Component\Audio</Filter>
-    </ClInclude>
     <ClInclude Include="Fmod.h">
       <Filter>GameObject\Component\Audio</Filter>
-    </ClInclude>
-    <ClInclude Include="AudioSource.h">
-      <Filter>Resource\Audio</Filter>
     </ClInclude>
     <ClInclude Include="FontWrapper.h">
       <Filter>FontWrapper</Filter>
@@ -513,9 +512,6 @@
     <ClInclude Include="Components.h">
       <Filter>GameObject\Component</Filter>
     </ClInclude>
-    <ClInclude Include="Transform.h">
-      <Filter>GameObject</Filter>
-    </ClInclude>
     <ClInclude Include="CollisionManager.h">
       <Filter>Manager</Filter>
     </ClInclude>
@@ -540,7 +536,21 @@
     <ClInclude Include="Renderer.h">
       <Filter>Manager</Filter>
     </ClInclude>
-    <ClInclude Include="ComMgr.h" />
+    <ClInclude Include="ComMgr.h">
+      <Filter>Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="DefaultComInitializer.h">
+      <Filter>GameObject\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="Com_Transform.h">
+      <Filter>GameObject\Component\0. Transform</Filter>
+    </ClInclude>
+    <ClInclude Include="Com_AudioSource.h">
+      <Filter>GameObject\Component\Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="AudioClip.h">
+      <Filter>Resource\Audio</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="SimpleMath.inl">

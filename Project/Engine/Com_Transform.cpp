@@ -1,13 +1,13 @@
 
 #include "EnginePCH.h"
 
-#include "Transform.h"
+#include "Com_Transform.h"
 #include "Renderer.h"
 #include "Com_Camera.h"
 
 namespace mh
 {
-	Transform::Transform()
+	Com_Transform::Com_Transform()
 		: IComponent(eComponentType::Transform)
 		, mFoward(Vector3::Forward)
 		, mRight(Vector3::Right)
@@ -15,15 +15,15 @@ namespace mh
 		, mScale(Vector3::One)
 		, mRotation(Vector3::Zero)
 		, mPosition(Vector3::One)
-		
+	{
+		SetKey("Com_Transform");
+	}
+
+	Com_Transform::~Com_Transform()
 	{
 	}
 
-	Transform::~Transform()
-	{
-	}
-
-	void Transform::FixedUpdate()
+	void Com_Transform::FixedUpdate()
 	{
 		//렌더링에 사용될 위치값들을 업데이트
 
@@ -65,7 +65,7 @@ namespace mh
 	}
 
 
-	void Transform::SetConstantBuffer()
+	void Com_Transform::SetConstantBuffer()
 	{
 		renderer::TransformCB trCb = {};
 		trCb.World = mWorld;

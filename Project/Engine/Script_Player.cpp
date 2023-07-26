@@ -1,7 +1,7 @@
 #include "EnginePCH.h"
 
 #include "Script_Player.h"
-#include "Transform.h"
+#include "Com_Transform.h"
 #include "GameObject.h"
 #include "Input.h"
 #include "TimeManager.h"
@@ -24,7 +24,7 @@ namespace mh
 
 	void Script_Player::Update()
 	{
-		Transform& tr = GetOwner()->GetTransform();
+		Com_Transform& tr = GetOwner()->GetTransform();
 
 		if (Input::GetKey(eKeyCode::RIGHT))
 		{

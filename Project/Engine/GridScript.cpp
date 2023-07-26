@@ -1,7 +1,7 @@
 #include "EnginePCH.h"
 
 #include "GridScript.h"
-#include "Transform.h"
+#include "Com_Transform.h"
 #include "GameObject.h"
 #include "Application.h"
 #include "ConstantBuffer.h"
@@ -38,7 +38,7 @@ namespace mh
 		}
 
 		GameObject* gameObj = mCamera->GetOwner();
-		Transform& TR = gameObj->GetTransform();
+		Com_Transform& TR = gameObj->GetTransform();
 		
 		Vector3 cameraPosition = TR.GetPosition();
 		Vector4 position = Vector4(cameraPosition.x, cameraPosition.y, cameraPosition.z, 1.0f);

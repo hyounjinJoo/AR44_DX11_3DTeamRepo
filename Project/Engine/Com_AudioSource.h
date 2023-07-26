@@ -4,11 +4,11 @@
 
 namespace mh
 {
-	class AudioSource : public IComponent
+	class Com_AudioSource : public IComponent
 	{
 	public:
-		AudioSource();
-		~AudioSource();
+		Com_AudioSource();
+		~Com_AudioSource();
 
 		virtual void Initialize() override;
 		virtual void Update() override;

@@ -17,6 +17,7 @@
 #include <limits>
 #include <memory>
 #include <filesystem>
+#include <span>
 
 #include <combaseapi.h>
 

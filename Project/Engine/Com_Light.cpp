@@ -1,7 +1,7 @@
 #include "EnginePCH.h"
 
 #include "Com_Light.h"
-#include "Transform.h"
+#include "Com_Transform.h"
 #include "GameObject.h"
 #include "Renderer.h"
 
@@ -30,7 +30,7 @@ namespace mh
 
 	void Com_Light::FixedUpdate()
 	{
-		Transform& tr = GetOwner()->GetTransform();
+		Com_Transform& tr = GetOwner()->GetTransform();
 		Vector3 position = tr.GetPosition();
 		mAttribute.position = Vector4(position.x, position.y, position.z, 1.0f);
 		mAttribute.direction = Vector4(tr.Foward().x, tr.Foward().y, tr.Foward().z, 0.0f);

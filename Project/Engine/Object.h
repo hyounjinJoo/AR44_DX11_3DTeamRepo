@@ -3,7 +3,7 @@
 #include "Layer.h"
 #include "GameObject.h"
 #include "SceneManager.h"
-#include "Transform.h"
+#include "Com_Transform.h"
 
 namespace mh::object
 {
@@ -31,14 +31,14 @@ namespace mh::object
 	}
 
 	template <typename T>
-	static T* Instantiate(define::eLayerType _type, Transform* _parent)
+	static T* Instantiate(define::eLayerType _type, Com_Transform* _parent)
 	{
 		T* gameObject = new T();
 		Scene* scene = SceneManager::GetActiveScene();
 		Layer& layer = scene->GetLayer(_type);
 		layer.AddGameObject(gameObject);
 
-		Transform& tr = gameObject->GameObject::GetTransform();
+		Com_Transform& tr = gameObject->GameObject::GetTransform();
 		tr.SetParent(_parent);
 
 		return gameObject;
@@ -52,7 +52,7 @@ namespace mh::object
 		Layer& layer = scene->GetLayer(_type);
 		layer.AddGameObject(gameObject);
 
-		Transform& tr = gameObject->GameObject::GetTransform();
+		Com_Transform& tr = gameObject->GameObject::GetTransform();
 		tr.SetPosition(_position);
 		tr.SetRotation(_rotation);
 
@@ -60,14 +60,14 @@ namespace mh::object
 	}
 
 	template <typename T>
-	static T* Instantiate(define::eLayerType _type, Vector3 _position, Vector3 _rotation, Transform* _parent)
+	static T* Instantiate(define::eLayerType _type, Vector3 _position, Vector3 _rotation, Com_Transform* _parent)
 	{
 		T* gameObject = new T();
 		Scene* scene = SceneManager::GetActiveScene();
 		Layer& layer = scene->GetLayer(_type);
 		layer.AddGameObject(gameObject);
 
-		Transform& tr = gameObject->GameObject::GetTransform();
+		Com_Transform& tr = gameObject->GameObject::GetTransform();
 		tr.SetPosition(_position);
 		tr.SetRotation(_rotation);
 		tr.SetParent(_parent);

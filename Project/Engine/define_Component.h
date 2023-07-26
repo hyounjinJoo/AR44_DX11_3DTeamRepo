@@ -37,7 +37,7 @@ namespace mh::define
 		//Com_Animator,
 		//Com_Renderer_ParticleSystem,
 		//Com_AudioListener,
-		//AudioSource,
+		//Com_AudioSource,
 		//Com_Light,
 		//UI,
 		////FadeOut,FadeIn
@@ -63,13 +63,19 @@ namespace mh::define
 	};
 
 
-	namespace Default
+	namespace strKey::Default
 	{
 		namespace com
 		{
 			STRKEY_DECLARE(Com_Animator);
+			STRKEY_DECLARE(Com_AudioListener);
+			STRKEY_DECLARE(Com_AudioSource);
 			STRKEY_DECLARE(Com_Camera);
 			STRKEY_DECLARE(Com_Light);
+			STRKEY_DECLARE(Com_Renderer_Mesh);
+			STRKEY_DECLARE(Com_Renderer_ParticleSystem);
+			STRKEY_DECLARE(Com_Renderer_Sprite);
+			STRKEY_DECLARE(Com_Transform);
 		}
 	}
 }

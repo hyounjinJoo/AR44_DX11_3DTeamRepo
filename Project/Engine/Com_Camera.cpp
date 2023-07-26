@@ -2,7 +2,7 @@
 #include "EnginePCH.h"
 
 #include "Com_Camera.h"
-#include "Transform.h"
+#include "Com_Transform.h"
 #include "GameObject.h"
 #include "Application.h"
 #include "Renderer.h"
@@ -68,7 +68,7 @@ namespace mh
 
 	void Com_Camera::CreateViewMatrix()
 	{
-		Transform& tr = GetOwner()->GetTransform();
+		Com_Transform& tr = GetOwner()->GetTransform();
 		math::Vector3 pos = tr.GetPosition();
 
 		// Crate Translate view matrix

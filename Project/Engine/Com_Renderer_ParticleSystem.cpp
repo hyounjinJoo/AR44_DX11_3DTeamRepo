@@ -6,7 +6,7 @@
 #include "ResMgr.h"
 #include "Material.h"
 #include "StructedBuffer.h"
-#include "Transform.h"
+#include "Com_Transform.h"
 #include "GameObject.h"
 #include "Texture.h"
 #include "TimeManager.h"

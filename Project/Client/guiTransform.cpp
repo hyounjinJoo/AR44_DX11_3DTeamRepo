@@ -1,7 +1,7 @@
 #include "ClientPCH.h"
 #include "guiTransform.h"
 
-#include <Engine/Transform.h>
+#include <Engine/Com_Transform.h>
 
 
 namespace gui
@@ -25,7 +25,7 @@ namespace gui
 		if (nullptr == mTarget)
 			return;
 
-		mh::Transform* tr = GetTarget()->GetComponent<mh::Transform>();
+		mh::Com_Transform* tr = GetTarget()->GetComponent<mh::Com_Transform>();
 
 		mPosisition = tr->GetPosition();
 		mRotation = tr->GetRotation();
@@ -47,7 +47,7 @@ namespace gui
 
 		if (GetTarget())
 		{
-			mh::Transform* tr = GetTarget()->GetComponent<mh::Transform>();
+			mh::Com_Transform* tr = GetTarget()->GetComponent<mh::Com_Transform>();
 
 			tr->SetPosition(mPosisition);
 			tr->SetRotation(mRotation);

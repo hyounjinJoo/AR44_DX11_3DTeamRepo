@@ -4,7 +4,7 @@
 
 namespace mh
 {
-	class Transform;
+	class Com_Transform;
 	class ICollider2D : public IComponent
 	{
 	public:
@@ -37,7 +37,7 @@ namespace mh
 		static UINT gColliderNumber;
 		UINT mID; 
 		define::eColliderType mType;
-		Transform* mTransform;
+		Com_Transform* mTransform;
 
 		math::Vector2 mSize;
 		math::Vector2 mCenter;

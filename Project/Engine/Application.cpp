@@ -1,6 +1,7 @@
 #include "EnginePCH.h"
-
 #include "Application.h"
+
+#include "DefaultComInitializer.h"
 #include "Renderer.h"
 #include "TimeManager.h"
 #include "Input.h"
@@ -30,6 +31,8 @@ namespace mh
 
 	void Application::Initialize()
 	{
+		DefaultComInitializer::Init();
+
 		ResMgr::GetInst();
 
 		PathMgr::GetInst()->Init();

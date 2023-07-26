@@ -1,127 +1,204 @@
 #include "EnginePCH.h"
 
 #include "GameObject.h"
-#include "Transform.h"
+#include "Com_Transform.h"
 
 namespace mh
 {
 	GameObject::GameObject()
-		: mState(eState::Active)
-		, mType(define::eLayerType::None)
-		, mbDontDestroy(false)
+		: mTransform()
+		, mFixedComponents()
+		, mState(eState::Active)
+		, mLayerType(define::eLayerType::None)
+		, mbDontDestroy()
+		, mName()
 	{
-		mVecComponent.resize((UINT)define::eComponentType::END);
-		
+		mFixedComponents.resize((int)eComponentType::Scripts);
 		AddComponent(&mTransform);
+	}
+
+
+	GameObject::GameObject(const GameObject& _other)
+		: Entity(_other)
+		, mTransform(_other.mTransform)
+		, mFixedComponents()
+		, mState(_other.mState)
+		, mLayerType(_other.mLayerType)
+		, mbDontDestroy(_other.mbDontDestroy)
+		, mName(_other.mName)
+	{
+		mFixedComponents.resize((int)eComponentType::Scripts);
+
+		//TODO: Clone
+		//1. 컴포넌트 목록 복사
+		for (size_t i = 0; i < _other.mFixedComponents.size(); ++i)
+		{
+			if (_other.mFixedComponents[i])
+			{
+				//AddComponent(_other.mFixedComponents[i]->Clone());
+			}
+		}
+
+		//2. 자녀 오브젝트 복사
+		for (size_t i = 0; i < _other.mFixedComponents.size(); ++i)
+		{
+			//AddChildGameObj(_other.mFixedComponents[i]->Clone());
+		}
 	}
 
 	GameObject::~GameObject()
 	{
-		//Transform을 제외하고 나머지는 동적할당 한 컴포넌트이므로 제거
-		for (size_t i = 1; i < mVecComponent.size(); ++i)
+		//Transform은 제거 X
+		for (size_t i = 1; i < mFixedComponents.size(); ++i)
 		{
-			if (nullptr == mVecComponent[i])
+			if (nullptr == mFixedComponents[i])
 				continue;
-
-			delete mVecComponent[i];
+			delete mFixedComponents[i];
 		}
 
-
-		for (IComponent* script : mScripts)
+		for (size_t i = 0; i < mScripts.size(); ++i)
 		{
-			if (script == nullptr)
+			if (nullptr == mScripts[i])
 				continue;
-
-			delete script;
-			script = nullptr;
+			delete mScripts[i];
+		}
+		for (size_t i = 0; i < mChilds.size(); ++i)
+		{
+			if (nullptr == mChilds[i])
+				continue;
+			delete mChilds[i];
 		}
 	}
-
-
+	
 	void GameObject::Initialize()
 	{
-
+		for (size_t i = 0; i < mFixedComponents.size(); ++i)
+		{
+			if (nullptr == mFixedComponents[i])
+				continue;
+			mFixedComponents[i]->Initialize();
+		}
+		for (size_t i = 0; i < mScripts.size(); ++i)
+		{
+			if (nullptr == mScripts[i])
+				continue;
+			mScripts[i]->Initialize();
+		}
+		for (size_t i = 0; i < mChilds.size(); ++i)
+		{
+			if (nullptr == mChilds[i])
+				continue;
+			mChilds[i]->Initialize();
+		}
 	}
 
 	void GameObject::Update()
 	{
-		//mTransform.Update();
-
-		for (IComponent* component : mVecComponent)
+		for (size_t i = 0; i < mFixedComponents.size(); ++i)
 		{
-			if (component == nullptr)
+			if (nullptr == mFixedComponents[i])
 				continue;
-
-			component->Update();
+			mFixedComponents[i]->Update();
 		}
-
-		for (IComponent* script : mScripts)
+		for (size_t i = 0; i < mScripts.size(); ++i)
 		{
-			if (script == nullptr)
+			if (nullptr == mScripts[i])
 				continue;
-
-			script->Update();
+			mScripts[i]->Update();
+		}
+		for (size_t i = 0; i < mChilds.size(); ++i)
+		{
+			if (nullptr == mChilds[i])
+				continue;
+			mChilds[i]->Update();
 		}
 	}
 
 	void GameObject::FixedUpdate()
 	{
-
-		mTransform.FixedUpdate();
-		for (IComponent* component : mVecComponent)
+		for (size_t i = 0; i < mFixedComponents.size(); ++i)
 		{
-			if (component == nullptr)
+			if (nullptr == mFixedComponents[i])
 				continue;
-
-			component->FixedUpdate();
+			mFixedComponents[i]->FixedUpdate();
 		}
-
-		for (IComponent* script : mScripts)
+		for (size_t i = 0; i < mScripts.size(); ++i)
 		{
-			if (script == nullptr)
+			if (nullptr == mScripts[i])
 				continue;
-
-			script->FixedUpdate();
+			mScripts[i]->FixedUpdate();
+		}
+		for (size_t i = 0; i < mChilds.size(); ++i)
+		{
+			if (nullptr == mChilds[i])
+				continue;
+			mChilds[i]->FixedUpdate();
 		}
 	}
 
 	void GameObject::Render()
 	{
-		for (IComponent* component : mVecComponent)
+		for (size_t i = 0; i < mFixedComponents.size(); ++i)
 		{
-			if (component == nullptr)
+			if (nullptr == mFixedComponents[i])
 				continue;
-
-			component->Render();
+			mFixedComponents[i]->Render();
 		}
-
-		for (IComponent* script : mScripts)
+		for (size_t i = 0; i < mScripts.size(); ++i)
 		{
-			if (script == nullptr)
+			if (nullptr == mScripts[i])
 				continue;
-
-			script->Render();
+			mScripts[i]->Render();
+		}
+		for (size_t i = 0; i < mChilds.size(); ++i)
+		{
+			if (nullptr == mChilds[i])
+				continue;
+			mChilds[i]->Render();
 		}
 	}
 
 
 
-	void GameObject::AddComponent(IComponent* _Comp)
+	IComponent* GameObject::AddComponent(IComponent* _pCom)
 	{
-		define::eComponentType order = _Comp->GetOrder();
+		if (nullptr == _pCom)
+			return nullptr;
 
-		if (order != define::eComponentType::Scripts)
+		eComponentType ComType = _pCom->GetComType();
+
+		if (_pCom->GetKey().empty())
 		{
-			mVecComponent[(UINT)order] = _Comp;
-			mVecComponent[(UINT)order]->SetOwner(this);
+			ERROR_MESSAGE_W(
+				LR"(
+컴포넌트에 String Key가 없습니다.
+new를 써서 만들지 말고, 
+AddComponent<T> 또는 ComMgr::GetNewComponent()를 통해서 생성하세요.
+)");
+			MH_ASSERT(false == _pCom->GetKey().empty());
+			SAFE_DELETE(_pCom);
+			return nullptr;
+		}
+
+		if (eComponentType::Scripts == ComType)
+		{
+			mScripts.push_back(static_cast<IScript*>(_pCom));
 		}
 		else
 		{
-			mScripts.push_back(dynamic_cast<IScript*>(_Comp));
-			_Comp->SetOwner(this);
+			if (nullptr != mFixedComponents[(int)ComType])
+			{
+				SAFE_DELETE(_pCom);
+				ERROR_MESSAGE_W(L"이미 중복된 타입의 컴포넌트가 들어가 있습니다.");
+				MH_ASSERT(nullptr);
+				return nullptr;
+			}
+
+			mFixedComponents[(int)ComType] = _pCom;
 		}
+
+
+		_pCom->SetOwner(this);
+		return _pCom;
 	}
-
-
-
 }

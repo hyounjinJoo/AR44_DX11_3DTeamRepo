@@ -5,7 +5,7 @@
 
 
 #include "TitleScene.h"
-#include "Transform.h"
+#include "Com_Transform.h"
 #include "Com_Renderer_Mesh.h"
 #include "Renderer.h"
 #include "Texture.h"
@@ -119,7 +119,7 @@ namespace mh
 		//
 
 
-		//Transform* zeldaTr;
+		//Com_Transform* zeldaTr;
 		////SMILE RECT
 		//{
 		//	Player* obj = object::Instantiate<Player>(eLayerType::Player);
@@ -155,7 +155,7 @@ namespace mh
 		//{
 		//	Player* obj = object::Instantiate<Player>(eLayerType::Player);
 		//	obj->SetName(L"SMILE");
-		//	Transform& tr = obj->GetTransform();
+		//	Com_Transform& tr = obj->GetTransform();
 		//	tr.SetPosition(Vector3(2.0f, 0.0f, 5.0f));
 		//	//tr.SetParent(zeldaTr);
 		//	//tr.SetScale(Vector3(2.0f, 1.0f, 1.0f));
@@ -179,7 +179,7 @@ namespace mh
 		//{
 		//	Player* obj = object::Instantiate<Player>(eLayerType::tParticle);
 		//	obj->SetName(L"PARTICLE");
-		//	Transform& tr = obj->GetTransform();
+		//	Com_Transform& tr = obj->GetTransform();
 		//	tr.SetPosition(Vector3(0.0f, 0.0f, 100.0f));
 		//	obj->AddComponent<Com_Renderer_ParticleSystem>();
 		//}

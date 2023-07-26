@@ -9,11 +9,11 @@ namespace mh
 	using namespace mh::math;
 
 	class GameObject;
-	class Transform : public IComponent
+	class Com_Transform : public IComponent
 	{
 	public:
-		Transform();
-		virtual ~Transform();
+		Com_Transform();
+		virtual ~Com_Transform();
 
 		virtual void Initialize() final {};
 		virtual void Update() final {};

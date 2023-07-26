@@ -162,8 +162,8 @@ namespace mh
 			,math::Vector3{-0.5f, -0.5f, 0.0f}
 		};
 
-		Transform& leftTr = _left->GetOwner()->GetTransform();
-		Transform& rightTr = _right->GetOwner()->GetTransform();
+		Com_Transform& leftTr = _left->GetOwner()->GetTransform();
+		Com_Transform& rightTr = _right->GetOwner()->GetTransform();
 
 		math::Matrix leftMat = leftTr.GetWorldMatrix();
 		math::Matrix rightMat = rightTr.GetWorldMatrix();

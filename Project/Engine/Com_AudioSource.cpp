@@ -1,54 +1,54 @@
 #include "EnginePCH.h"
 
-#include "AudioSource.h"
+#include "Com_AudioSource.h"
 #include "AudioClip.h"
-#include "Transform.h"
+#include "Com_Transform.h"
 #include "GameObject.h"
 
 namespace mh
 {
-	AudioSource::AudioSource()
+	Com_AudioSource::Com_AudioSource()
 		: IComponent(define::eComponentType::AudioSource)
 		, mAudioClip(nullptr)
 	{
 
 	}
 
-	AudioSource::~AudioSource()
+	Com_AudioSource::~Com_AudioSource()
 	{
 
 	}
 
-	void AudioSource::Initialize()
+	void Com_AudioSource::Initialize()
 	{
 	}
 
-	void AudioSource::Update()
+	void Com_AudioSource::Update()
 	{
 	}
 
-	void AudioSource::FixedUpdate()
+	void Com_AudioSource::FixedUpdate()
 	{
-		Transform& tr = GetOwner()->GetTransform();
+		Com_Transform& tr = GetOwner()->GetTransform();
 		math::Vector3 pos = tr.GetPosition();
 		math::Vector3 foward = tr.Foward();
 
 		mAudioClip->Set3DAttributes(pos, foward);
 	}
 
-	void AudioSource::Render()
+	void Com_AudioSource::Render()
 	{
 	}
 
-	void AudioSource::Play()
+	void Com_AudioSource::Play()
 	{
 		mAudioClip->Play();
 	}
-	void AudioSource::Stop()
+	void Com_AudioSource::Stop()
 	{
 		mAudioClip->Stop();
 	}
-	void AudioSource::SetLoop(bool _loop)
+	void Com_AudioSource::SetLoop(bool _loop)
 	{
 		mAudioClip->SetLoop(_loop);
 	}

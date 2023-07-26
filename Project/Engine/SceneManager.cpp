@@ -17,7 +17,7 @@
 #include "SceneManager.h"
 #include "Com_Renderer_Sprite.h"
 
-#include "Transform.h"
+#include "Com_Transform.h"
 #include "TitleScene.h"
 #include "Texture.h"
 
