@@ -4,17 +4,17 @@
 
 namespace gui
 {
-	GameResource::GameResource()
+	IRes::IRes()
 	{
 
 	}
 
-	GameResource::~GameResource()
+	IRes::~IRes()
 	{
 
 	}
 
-	void GameResource::FixedUpdate()
+	void IRes::FixedUpdate()
 	{
 		if (mTarget == nullptr)
 			return;
@@ -24,7 +24,7 @@ namespace gui
 		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, (ImVec4)ImColor::HSV(0.0f, 0.7f, 0.7f));
 		ImGui::PushStyleColor(ImGuiCol_ButtonActive, (ImVec4)ImColor::HSV(0.0f, 0.8f, 0.8f));
 
-		ImGui::Button(mh::enums::charResourceType[(UINT)mTarget->GetResType()]);
+		ImGui::Button(mh::define::ArrResName[(UINT)mTarget->GetResType()]);
 		ImGui::PopStyleColor(3);
 		ImGui::PopID();
 	}

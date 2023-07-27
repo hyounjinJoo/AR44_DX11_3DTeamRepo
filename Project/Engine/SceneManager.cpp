@@ -1,23 +1,23 @@
 
 #include "EnginePCH.h"
 
-#include "Camera.h"
-#include "CameraScript.h"
+#include "Com_Camera.h"
+#include "Script_Camera.h"
 
 #include "GridScript.h"
 
-#include "MeshRenderer.h"
+#include "Com_Renderer_Mesh.h"
 
-#include "PlayerScript.h"
+#include "Script_Player.h"
 #include "PlayScene.h"
 
 #include "Renderer.h"
-#include "GameResources.h"
+#include "ResMgr.h"
 
 #include "SceneManager.h"
-#include "SpriteRenderer.h"
+#include "Com_Renderer_Sprite.h"
 
-#include "Transform.h"
+#include "Com_Transform.h"
 #include "TitleScene.h"
 #include "Texture.h"
 
@@ -32,10 +32,10 @@ namespace mh
 		mScenes.resize((UINT)eSceneType::End);
 
 		mScenes[(UINT)eSceneType::Tilte] = new TitleScene();
-		mScenes[(UINT)eSceneType::Tilte]->SetName("TitleScene");
+		mScenes[(UINT)eSceneType::Tilte]->SetKey("TitleScene");
 
 		mScenes[(UINT)eSceneType::Play] = new PlayScene();
-		mScenes[(UINT)eSceneType::Play]->SetName("PlayScene");
+		mScenes[(UINT)eSceneType::Play]->SetKey("PlayScene");
 
 		mActiveScene = mScenes[(UINT)eSceneType::Tilte];
 

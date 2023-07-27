@@ -9,7 +9,7 @@ namespace gui
         , mbFullscreen(true)
         , mDockspace_flags(ImGuiDockNodeFlags_None)
 	{
-		SetName("YamYamEditor");
+		SetKey("YamYamEditor");
         SetSize(ImVec2(100.0f, 100.0f));
 
 	}

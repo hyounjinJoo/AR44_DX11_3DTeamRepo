@@ -7,7 +7,7 @@ namespace mh::GPU
     using namespace mh::math;
 
     Material::Material()
-        : GameResource(eResourceType::Material)
+        : IRes(eResourceType::Material)
         , mMode(eRenderingMode::Opaque)
     {
 

@@ -7,15 +7,17 @@ namespace mh
 	{
 	public:
 		Entity();
-		Entity(const Entity& _other);
 		virtual ~Entity();
 
-		void SetName(const std::string& _name) { mName = _name; }
-		const std::string& GetName() const { return mName; }
+		//TODO: Clone 함수 추가
+		Entity(const Entity& _other);
+
+		void SetKey(const std::string_view _strKey) { mStrKey = _strKey; }
+		const std::string& GetKey() const { return mStrKey; }
 		UINT32 GetID() const { return mID; }
 
 	private:
-		std::string mName;
+		std::string mStrKey;
 		const UINT32 mID;
 	};
 }
@@ -26,18 +28,17 @@ namespace gui
 	{
 	public:
 		Entity();
-		Entity(const char* _name);
+		Entity(const char* _StrKey);
 		Entity(const Entity& _other);
 		virtual ~Entity();
 
-		void SetName(const std::string& _name) { mName = _name; }
-		const std::string& GetName() const { return mName; }
+		void SetKey(const std::string_view _StrKey) { mStrKey = _StrKey; }
+		const std::string& GetKey() const { return mStrKey; }
 		UINT32 GetID() const { return mID; }
 
 	private:
-		std::string mName;
+		std::string mStrKey;
 		const UINT32 mID;
-
 	};
 }
 

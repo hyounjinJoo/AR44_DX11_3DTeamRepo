@@ -93,6 +93,7 @@ namespace mh::math
         Vector2() noexcept : XMFLOAT2(0.f, 0.f) {}
         constexpr explicit Vector2(float ix) noexcept : XMFLOAT2(ix, ix) {}
         constexpr Vector2(float ix, float iy) noexcept : XMFLOAT2(ix, iy) {}
+        constexpr Vector2(UINT ux, UINT uy) noexcept : Vector2((float)ux, (float)uy) {}
         explicit Vector2(_In_reads_(2) const float* pArray) noexcept : XMFLOAT2(pArray) {}
         Vector2(FXMVECTOR V) noexcept { XMStoreFloat2(this, V); }
         Vector2(const XMFLOAT2& V) noexcept { this->x = V.x; this->y = V.y; }

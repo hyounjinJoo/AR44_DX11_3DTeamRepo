@@ -1,12 +1,12 @@
 #pragma once
 #include "Entity.h"
 
-#include "Enums.h"
+#include "define_Component.h"
 #include "SimpleMath.h"
 
 namespace mh
 {
-	using namespace mh::enums;
+	using namespace mh::define;
 	class GameObject;
 	class IComponent : public Entity
 	{
@@ -19,7 +19,7 @@ namespace mh
 		virtual void FixedUpdate() = 0;
 		virtual void Render() = 0;
 
-		eComponentType GetOrder() const { return mType; };
+		eComponentType GetComType() const { return mType; };
 
 		GameObject* GetOwner() const { return mOwner; }
 		void SetOwner(GameObject* _owner) { mOwner = _owner; }

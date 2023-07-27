@@ -6,13 +6,14 @@
 #include "GraphicDevice_DX11.h"
 
 #include "define_GPU.h"
+#include "define_Res.h"
 
 namespace mh::GPU
 {
 	namespace stdfs = std::filesystem;
 
 	ComputeShader::ComputeShader(UINT _threadGroupX, UINT _threadGroupY, UINT _threadGroupZ)
-		: GameResource(enums::eResourceType::ComputeShader)
+		: IShader(define::eResourceType::ComputeShader)
 		, mCSBlob(nullptr)
 		, mCS(nullptr)
 		, mThreadGroupCountX(_threadGroupX)
@@ -24,7 +25,7 @@ namespace mh::GPU
 	{
 	}
 	ComputeShader::ComputeShader()
-		: GameResource(enums::eResourceType::ComputeShader)
+		: IShader(define::eResourceType::ComputeShader)
 		, mCSBlob(nullptr)
 		, mCS(nullptr)
 		, mThreadGroupCountX(0)
@@ -45,7 +46,7 @@ namespace mh::GPU
 	{
 		return E_NOTIMPL;
 	}
-	eResult ComputeShader::CreateByCompile(const std::filesystem::path& _FullPath, const std::string& _funcName)
+	eResult ComputeShader::CreateByCompile(const std::filesystem::path& _FullPath, const std::string_view _funcName)
 	{
 		Microsoft::WRL::ComPtr<ID3DBlob> mErrorBlob = nullptr;
 
@@ -53,14 +54,14 @@ namespace mh::GPU
 			_FullPath.wstring().c_str(), 
 			nullptr, 
 			D3D_COMPILE_STANDARD_FILE_INCLUDE, 
-			_funcName.c_str(), 
+			std::string(_funcName).c_str(), 
 			mh::GPU::SHADER_VERSION::CS, 
 			0, 
 			0, 
 			mCSBlob.GetAddressOf(), 
 			mErrorBlob.GetAddressOf())))
 		{
-			std::string ErrMsg = "Failed to compile Compute Shader!\n\n";
+			std::string ErrMsg = "Failed to compile Compute GraphicsShader!\n\n";
 			ErrMsg += "<Error Info>\n";
 			ErrMsg += static_cast<const char*>(mErrorBlob->GetBufferPointer());
 			ERROR_MESSAGE_A(ErrMsg.c_str());
@@ -82,7 +83,7 @@ namespace mh::GPU
 		HRESULT hr = D3DCreateBlob(_ByteCodeSize, mCSBlob.ReleaseAndGetAddressOf());
 		if (FAILED(hr))
 		{
-			ERROR_MESSAGE_W(L"Shader를 저장할 Blob 생성에 실패했습니다.");
+			ERROR_MESSAGE_W(L"GraphicsShader를 저장할 Blob 생성에 실패했습니다.");
 
 			return eResult::Fail_Create;
 		}

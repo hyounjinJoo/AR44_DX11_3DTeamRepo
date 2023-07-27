@@ -21,19 +21,19 @@ float4 main(VSOut In) : SV_TARGET
     //if (In.Pos.x < 0)
     //    return;
     
-    const int width = 100;
-    const int height = 100;
+	const uint width = 100;
+	const uint height = 100;
     
-    uint worldX = (int) In.WorldPos.x;
-    uint worldY = (int) In.WorldPos.y;
+	uint worldX = (uint) In.WorldPos.x;
+	uint worldY = (uint) In.WorldPos.y;
     
-    // ¼± µÎ²²
-    const float thickness = 1.0f;
+    // ì„  ë‘ê»˜
+    const uint thickness = 1u;
     
-    if (abs((worldX + 1) % width) <= thickness)
+    if (((worldX + 1u) % width) <= thickness)
         return Out;
     
-    if (abs((worldY + 1) % height) <= thickness)
+    if (((worldY + 1u) % height) <= thickness)
         return Out;
     
     discard;

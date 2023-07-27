@@ -4,12 +4,12 @@
 #include <filesystem>
 
 
-#include "define_Default.h"
+#include "define_Res.h"
 
 
 namespace mh
 {
-	using namespace mh::enums;
+	using namespace mh::define;
 	class PathMgr
 		:public Singleton<PathMgr>
 	{

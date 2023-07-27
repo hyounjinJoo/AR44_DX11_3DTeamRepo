@@ -2,8 +2,8 @@
 #include "guiWidget.h"
 #include "guiTreeWidget.h"
 
-#include <Engine/GameResource.h>
-#include <Engine/GameResources.h>
+#include <Engine/IRes.h>
+#include <Engine/ResMgr.h>
 
 namespace gui
 {
@@ -23,16 +23,15 @@ namespace gui
 		template <typename T>
 		void AddResources(TreeWidget::tNode* rootNode, const char* name)
 		{
-			const std::vector<std::shared_ptr<T>> resources
-				= mh::GameResources::Finds<T>();
+			const std::unordered_map<std::string, std::shared_ptr<mh::IRes>, mh::define::tUmap_StringViewHasher, std::equal_to<>>& resources
+				= mh::ResMgr::GetInst()->GetResources<T>();
 
 			TreeWidget::tNode* stemNode
 				= mTreeWidget->AddNode(rootNode, name, 0, true);
 
-			for (std::shared_ptr<T> resource : resources)
+			for (const auto& resource : resources)
 			{
-				std::string name(resource->GetName().begin(), resource->GetName().end());
-				mTreeWidget->AddNode(stemNode, name, resource.get());
+				mTreeWidget->AddNode(stemNode, resource.first, resource.second.get());
 			}
 		}
 

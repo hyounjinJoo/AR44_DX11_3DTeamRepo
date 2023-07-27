@@ -1,40 +1,40 @@
 #include "ClientPCH.h"
 #include "guiTransform.h"
 
-#include <Engine/Transform.h>
+#include <Engine/Com_Transform.h>
+
 
 namespace gui
 {
-	Transform::Transform()
-		: IComponent(mh::enums::eComponentType::Transform)
+	guiTransform::guiTransform()
+		: guiComponent(mh::define::eComponentType::Transform)
 	{
-		SetName("Transform");
+		SetKey("guiTransform");
 		SetSize(ImVec2(200.0f, 120.0f));
 	}
 
-	Transform::~Transform()
+	guiTransform::~guiTransform()
 	{
 
 	}
 
-	void Transform::FixedUpdate()
+	void guiTransform::FixedUpdate()
 	{
-		IComponent::FixedUpdate();
+		Widget::FixedUpdate();
 
-
-		if (GetTarget() == nullptr)
+		if (nullptr == mTarget)
 			return;
 
-		mh::Transform* tr = GetTarget()->GetComponent<mh::Transform>();
+		mh::Com_Transform* tr = GetTarget()->GetComponent<mh::Com_Transform>();
 
 		mPosisition = tr->GetPosition();
 		mRotation = tr->GetRotation();
 		mScale = tr->GetScale();
 	}
 
-	void Transform::Update()
+	void guiTransform::Update()
 	{
-		IComponent::Update();
+		Widget::Update();
 
 		ImGui::Text("Position"); ImGui::SameLine();
 		ImGui::InputFloat3("##Position", (float*)&mPosisition);
@@ -47,7 +47,7 @@ namespace gui
 
 		if (GetTarget())
 		{
-			mh::Transform* tr = GetTarget()->GetComponent<mh::Transform>();
+			mh::Com_Transform* tr = GetTarget()->GetComponent<mh::Com_Transform>();
 
 			tr->SetPosition(mPosisition);
 			tr->SetRotation(mRotation);
@@ -55,9 +55,9 @@ namespace gui
 		}
 	}
 
-	void Transform::LateUpdate()
+	void guiTransform::LateUpdate()
 	{
-		IComponent::LateUpdate();
+		Widget::LateUpdate();
 
 	}
 }

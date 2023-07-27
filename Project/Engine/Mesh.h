@@ -1,10 +1,10 @@
 #pragma once
 #include "define_GPU.h"
-#include "GameResource.h"
+#include "IRes.h"
 
 namespace mh
 {
-	class Mesh : public GameResource 
+	class Mesh : public IRes 
 	{
 	public:
 		Mesh();
