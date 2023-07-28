@@ -1,5 +1,7 @@
 #pragma once
 #include <wrl.h>
+using Microsoft::WRL::ComPtr;
+
 #include <d3d11.h>
 #include <d3dcompiler.h>
 
@@ -21,6 +23,7 @@
 #define CBSLOT_NUMBEROFLIGHT	4
 #define CBSLOT_PARTICLESYSTEM	5
 #define CBSLOT_NOISE			6
+#define CBSLOT_SBUFFER			7
 
 namespace mh
 {
@@ -59,6 +62,7 @@ namespace mh
 	{
 		enum Flag
 		{
+			NONE = 0,
 			VS = BIT_MASK(0),
 			HS = BIT_MASK(1),
 			DS = BIT_MASK(2),
@@ -136,6 +140,7 @@ namespace mh
 		Light,
 		ParticleSystem,
 		Noise,
+		SBuffer,
 		End,
 	};
 
@@ -174,6 +179,15 @@ namespace mh
 		Array2DT11,
 
 		End,
+	};
+
+	enum class eBufferViewType
+	{
+		NONE,
+		SRV,
+		UAV,
+		RTV,
+		DSV,
 	};
 
 	struct tDebugMesh

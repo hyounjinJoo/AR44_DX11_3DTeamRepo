@@ -28,15 +28,16 @@ namespace gui
 
 		std::shared_ptr<mh::Texture> gameTex
 			= std::make_shared<mh::Texture>();
-		gameTex->Create(1600, 900, DXGI_FORMAT_R8G8B8A8_UNORM, D3D11_BIND_SHADER_RESOURCE);
+		gameTex->Create(1600, 900, DXGI_FORMAT_R8G8B8A8_UNORM, D3D11_BIND_SHADER_RESOURCE, D3D11_USAGE_DYNAMIC);
 		
 		//61 번 셰이더 리소스 뷰 null초기화
 		ID3D11ShaderResourceView* gameSRV = nullptr;
-		mh::GPUMgr::GetInst()->BindShaderResource(mh::eShaderStage::PS, 61, &gameSRV);
-		mh::GPUMgr::GetInst()->CopyResource(gameTex->GetTexture().Get()
+		auto pContext = mh::GPUMgr::GetInst()->GetContext();
+		pContext->PSSetShaderResources(61, 1u, &gameSRV);
+		pContext->CopyResource(gameTex->GetTexture().Get()
 			, renderTarget->GetTexture().Get());
 
-		gameTex->BindShaderResource(mh::eShaderStage::PS, 61);
+		gameTex->BindDataSRV(61, mh::eShaderStageFlag::PS);
 
 		ImGuiIO io = ImGui::GetIO();
 		ImVec2 panelSize = ImGui::GetWindowSize();

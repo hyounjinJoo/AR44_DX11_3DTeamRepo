@@ -89,7 +89,7 @@ namespace mh
 
 	void Animation::BindShader()
 	{
-		mAtlas->BindShaderResource(eShaderStage::PS, 12);
+		mAtlas->BindDataSRV(12u, eShaderStageFlag::PS);
 
 		ConstBuffer* cb = RenderMgr::GetInst()->GetConstBuffer(eCBType::Animation);
 
@@ -101,7 +101,7 @@ namespace mh
 		info.AtlasSize = mSpriteSheet[mIndex].AtlasSize;
 
 		cb->SetData(&info);
-		cb->Bind(eShaderStage::PS);
+		cb->BindData(eShaderStageFlag::PS);
 	}
 
 	void Animation::Reset()
@@ -122,7 +122,7 @@ namespace mh
 		info.Type = (UINT)define::eAnimationType::None;
 
 		cb->SetData(&info);
-		cb->Bind(eShaderStage::PS);
+		cb->BindData(eShaderStageFlag::PS);
 	}
 
 }

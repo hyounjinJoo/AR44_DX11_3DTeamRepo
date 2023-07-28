@@ -5,6 +5,7 @@
 
 namespace mh
 {
+
 	class GPUBuffer
 		: public Entity
 	{
@@ -12,6 +13,12 @@ namespace mh
 		GPUBuffer() = default;
 		virtual ~GPUBuffer() = default;
 
+	public:
+		const D3D11_BUFFER_DESC& GetDesc() const { return mDesc; }
+		ComPtr<ID3D11Buffer> GetBuffer() { return mBuffer; }
+
+
+	protected:
 		enum class eType
 		{
 			Buffer,
@@ -19,8 +26,8 @@ namespace mh
 			UnknownType,
 		} type = eType::UnknownType;
 
-		D3D11_BUFFER_DESC desc;
-		Microsoft::WRL::ComPtr<ID3D11Buffer> buffer;
+		D3D11_BUFFER_DESC mDesc;
+		ComPtr<ID3D11Buffer> mBuffer;
 	};
 
 }

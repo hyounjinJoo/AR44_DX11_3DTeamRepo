@@ -13,6 +13,7 @@
 
 namespace mh
 {
+
 	GPUMgr::GPUMgr()
 		: mDevice()
 		, mContext()
@@ -41,7 +42,6 @@ namespace mh
 			Reset();
 			return false;
 		}
-
 		// SwapChain
 		DXGI_SWAP_CHAIN_DESC swapChainDesc = {};
 
@@ -196,7 +196,7 @@ namespace mh
 
 		std::shared_ptr<Texture> DSTex = std::make_shared<mh::Texture>();
 		
-		if (false == DSTex->Create(_Width, _Height, DXGI_FORMAT_D24_UNORM_S8_UINT, D3D11_BIND_FLAG::D3D11_BIND_DEPTH_STENCIL))
+		if (false == DSTex->Create(_Width, _Height, DXGI_FORMAT_D24_UNORM_S8_UINT, D3D11_BIND_FLAG::D3D11_BIND_DEPTH_STENCIL, D3D11_USAGE_DEFAULT))
 		{
 			ERROR_MESSAGE_W(L"Depth Stencil 버퍼 생성에 실패했습니다.");
 			return nullptr;
@@ -210,107 +210,10 @@ namespace mh
 		RECT winRect;
 		GetClientRect(_hWnd, &winRect);
 		mViewPort = { 0.0f, 0.0f, FLOAT(winRect.right - winRect.left), FLOAT(winRect.bottom - winRect.top), 0.0f, 1.0f };
-		BindViewports(&mViewPort);
+		mContext->RSSetViewports(1u, &mViewPort);
 		mContext->OMSetRenderTargets(1, mRenderTargetTexture->GetRTV().GetAddressOf(), mDepthStencilBufferTexture->GetDSV().Get());
 	}
 
-
-
-	void GPUMgr::BindConstBuffer(eShaderStage _stage, eCBType _type, ID3D11Buffer* _buffer) const
-	{
-		switch (_stage)
-		{
-		case mh::eShaderStage::VS:
-			mContext->VSSetConstantBuffers((UINT)_type, 1, &_buffer);
-			break;
-		case mh::eShaderStage::HS:
-			mContext->HSSetConstantBuffers((UINT)_type, 1, &_buffer);
-			break;
-		case mh::eShaderStage::DS:
-			mContext->DSSetConstantBuffers((UINT)_type, 1, &_buffer);
-			break;
-		case mh::eShaderStage::GS:
-			mContext->GSSetConstantBuffers((UINT)_type, 1, &_buffer);
-			break;
-		case mh::eShaderStage::PS:
-			mContext->PSSetConstantBuffers((UINT)_type, 1, &_buffer);
-			break;
-		case mh::eShaderStage::CS:
-			mContext->CSSetConstantBuffers((UINT)_type, 1, &_buffer);
-			break;
-		default:
-			assert(true);
-			break;
-		}
-	}
-
-	void GPUMgr::BindShaderResource(eShaderStage _stage, UINT _slot
-		, ID3D11ShaderResourceView* const* _ppShaderResourceViews) const
-	{
-		switch (_stage)
-		{
-		case mh::eShaderStage::VS:
-			mContext->VSSetShaderResources(_slot, 1, _ppShaderResourceViews);
-			break;
-		case mh::eShaderStage::HS:
-			mContext->HSSetShaderResources(_slot, 1, _ppShaderResourceViews);
-			break;
-		case mh::eShaderStage::DS:
-			mContext->DSSetShaderResources(_slot, 1, _ppShaderResourceViews);
-			break;
-		case mh::eShaderStage::GS:
-			mContext->GSSetShaderResources(_slot, 1, _ppShaderResourceViews);
-			break;
-		case mh::eShaderStage::PS:
-			mContext->PSSetShaderResources(_slot, 1, _ppShaderResourceViews);
-			break;
-		case mh::eShaderStage::CS:
-			mContext->CSSetShaderResources(_slot, 1, _ppShaderResourceViews);
-			break;
-		default:
-			assert(true);
-			break;
-		}
-	}
-
-
-
-	void GPUMgr::BindSamplers(eShaderStage _stage, UINT _slot, UINT _NumSamplers, ID3D11SamplerState* const* _ppSamplers) const
-	{
-		switch (_stage)
-		{
-		case mh::eShaderStage::VS:
-			mContext->VSSetSamplers(_slot, _NumSamplers, _ppSamplers);
-			break;
-		case mh::eShaderStage::HS:
-			mContext->HSSetSamplers(_slot, _NumSamplers, _ppSamplers);
-			break;
-		case mh::eShaderStage::DS:
-			mContext->DSSetSamplers(_slot, _NumSamplers, _ppSamplers);
-			break;
-		case mh::eShaderStage::GS:
-			mContext->GSSetSamplers(_slot, _NumSamplers, _ppSamplers);
-			break;
-		case mh::eShaderStage::PS:
-			mContext->PSSetSamplers(_slot, _NumSamplers, _ppSamplers);
-			break;
-		case mh::eShaderStage::CS:
-			mContext->CSSetSamplers(_slot, _NumSamplers, _ppSamplers);
-			break;
-		default:
-			assert(true);
-			break;
-		}
-	}
-
-	void GPUMgr::BindsSamplers(UINT _slot, UINT _NumSamplers, ID3D11SamplerState* const* _ppSamplers) const
-	{
-		mContext->VSSetSamplers(_slot, _NumSamplers, _ppSamplers);
-		mContext->HSSetSamplers(_slot, _NumSamplers, _ppSamplers);
-		mContext->DSSetSamplers(_slot, _NumSamplers, _ppSamplers);
-		mContext->GSSetSamplers(_slot, _NumSamplers, _ppSamplers);
-		mContext->PSSetSamplers(_slot, _NumSamplers, _ppSamplers);
-	}
 
 	void GPUMgr::SetData(ID3D11Buffer* _buffer, void* _data, UINT _size)
 	{
@@ -332,8 +235,7 @@ namespace mh
 		RECT winRect;
 		GetClientRect(_hWnd, &winRect);
 		mViewPort = { 0.0f, 0.0f, FLOAT(winRect.right - winRect.left), FLOAT(winRect.bottom - winRect.top), 0.0f, 1.0f };
-		BindViewports(&mViewPort);
-
+		mContext->RSSetViewports(1u, &mViewPort);
 		mContext->OMSetRenderTargets(1, mRenderTargetTexture->GetRTV().GetAddressOf(), mDepthStencilBufferTexture->GetDSV().Get());
 	}
 
@@ -344,6 +246,8 @@ namespace mh
 			mRenderTargetTexture->GetRTV().GetAddressOf(),
 			mDepthStencilBufferTexture->GetDSV().Get());
 	}
+
+
 
 }
 

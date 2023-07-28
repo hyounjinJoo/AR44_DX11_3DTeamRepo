@@ -7,6 +7,9 @@ namespace mh
 {
 	ConstBuffer::ConstBuffer(eCBType _type)
 		: mType(_type)
+		, mDataSize()
+		, mDataCount()
+		, mPresetTargetStage(eShaderStageFlag::ALL)
 	{
 
 	}
@@ -15,41 +18,76 @@ namespace mh
 	{
 	}
 
-	bool ConstBuffer::Create(size_t _size)
+	bool ConstBuffer::Create(size_t _dataSize, UINT _dataCount)
 	{
+		mDataSize = (UINT)_dataSize;
+		mDataCount = _dataCount;
+
 		// 상수 버퍼
-		desc.ByteWidth = static_cast<UINT>(_size);
-		desc.BindFlags = D3D11_BIND_FLAG::D3D11_BIND_CONSTANT_BUFFER;
-		desc.Usage = D3D11_USAGE::D3D11_USAGE_DYNAMIC;
-		desc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
-		desc.MiscFlags = 0;
-		desc.StructureByteStride = 0;
+		mDesc.ByteWidth = mDataSize * _dataCount;
+		mDesc.BindFlags = D3D11_BIND_FLAG::D3D11_BIND_CONSTANT_BUFFER;
+		mDesc.Usage = D3D11_USAGE::D3D11_USAGE_DYNAMIC;
+		mDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+		mDesc.MiscFlags = 0;
+		mDesc.StructureByteStride = 0;
 
-		if (!GPUMgr::GetInst()->CreateBuffer(&desc, nullptr, buffer.GetAddressOf()))
-			return false;
-
-		return true;
-	}
-
-	void ConstBuffer::SetData(void* _data)
-	{
-		GPUMgr::GetInst()->SetData(buffer.Get(), _data, desc.ByteWidth);
-	}
-
-	void ConstBuffer::Bind(eShaderStage _stage)
-	{
-		if (_stage == eShaderStage::ALL)
+		bool bResult = SUCCEEDED(GPUMgr::GetInst()->GetDevice()->CreateBuffer(&mDesc, nullptr, mBuffer.GetAddressOf()));
+			
+		if (false == bResult)
 		{
-			GPUMgr::GetInst()->BindConstBuffer(eShaderStage::VS, mType, buffer.Get());
-			GPUMgr::GetInst()->BindConstBuffer(eShaderStage::HS, mType, buffer.Get());
-			GPUMgr::GetInst()->BindConstBuffer(eShaderStage::DS, mType, buffer.Get());
-			GPUMgr::GetInst()->BindConstBuffer(eShaderStage::GS, mType, buffer.Get());
-			GPUMgr::GetInst()->BindConstBuffer(eShaderStage::PS, mType, buffer.Get());
-			GPUMgr::GetInst()->BindConstBuffer(eShaderStage::CS, mType, buffer.Get());
+			mDesc = {};
+			mBuffer = nullptr;
 		}
-		else
+
+		return bResult;
+	}
+
+	void ConstBuffer::SetData(void* _data, UINT _dataCount)
+	{
+		MH_ASSERT(nullptr != _data && _dataCount <= mDataCount);
+	
+
+		auto pContext = GPUMgr::GetInst()->GetContext();
+		D3D11_MAPPED_SUBRESOURCE tSubRes{};
+
+		if (SUCCEEDED(pContext->Map(GetBuffer().Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &tSubRes)))
 		{
-			GPUMgr::GetInst()->BindConstBuffer(_stage, mType, buffer.Get());
+			memcpy(tSubRes.pData, _data, mDataSize * _dataCount);
+			pContext->Unmap(mBuffer.Get(), 0);
+		}
+	}
+
+	void ConstBuffer::BindData(eShaderStageFlag_ _stageFlag)
+	{
+		if (eShaderStageFlag::NONE == _stageFlag)
+		{
+			_stageFlag = mPresetTargetStage;
+		}
+
+		auto pContext = GPUMgr::GetInst()->GetContext();
+		if (eShaderStageFlag::VS == _stageFlag)
+		{
+			pContext->VSSetConstantBuffers((UINT)mType, 1u, GetBuffer().GetAddressOf());
+		}
+		if (eShaderStageFlag::HS == _stageFlag)
+		{
+			pContext->HSSetConstantBuffers((UINT)mType, 1u, GetBuffer().GetAddressOf());
+		}
+		if (eShaderStageFlag::DS == _stageFlag)
+		{
+			pContext->DSSetConstantBuffers((UINT)mType, 1u, GetBuffer().GetAddressOf());
+		}
+		if (eShaderStageFlag::GS == _stageFlag)
+		{
+			pContext->GSSetConstantBuffers((UINT)mType, 1u, GetBuffer().GetAddressOf());
+		}
+		if (eShaderStageFlag::PS == _stageFlag)
+		{
+			pContext->PSSetConstantBuffers((UINT)mType, 1u, GetBuffer().GetAddressOf());
+		}
+		if (eShaderStageFlag::CS == _stageFlag)
+		{
+			pContext->CSSetConstantBuffers((UINT)mType, 1u, GetBuffer().GetAddressOf());
 		}
 	}
 }

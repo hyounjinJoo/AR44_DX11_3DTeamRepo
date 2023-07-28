@@ -20,8 +20,8 @@ namespace mh
 
 	void ParticleShader::Binds()
 	{
-		mBuffer->BindUAV(eShaderStage::CS, 0);
-		mSharedBuffer->BindUAV(eShaderStage::CS, 1);
+		mBuffer->BindDataUAV(0);
+		mSharedBuffer->BindDataUAV(1);
 
 		mGroupX = mBuffer->GetStride() / mThreadGroupCountX + 1;
 		mGroupY = 1;
@@ -30,7 +30,7 @@ namespace mh
 
 	void ParticleShader::Clear()
 	{
-		mBuffer->Clear();
-		mSharedBuffer->Clear();
+		mBuffer->UnBind();
+		mSharedBuffer->UnBind();
 	}
 }

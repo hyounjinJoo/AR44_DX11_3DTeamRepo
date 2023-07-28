@@ -59,8 +59,7 @@ namespace mh
 		data.Resolution = resolution;
 		
 		CB->SetData(&data);
-		CB->Bind(eShaderStage::VS);
-		CB->Bind(eShaderStage::PS);
+		CB->BindData(eShaderStageFlag::VS | eShaderStageFlag::PS);
  	}
 
 	void GridScript::FixedUpdate()

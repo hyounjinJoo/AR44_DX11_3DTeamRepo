@@ -61,12 +61,7 @@ namespace mh
 				continue;
             }
 
-            mTexture[slotIndex]->BindShaderResource(eShaderStage::VS, static_cast<UINT>(slotIndex));
-            mTexture[slotIndex]->BindShaderResource(eShaderStage::HS, static_cast<UINT>(slotIndex));
-            mTexture[slotIndex]->BindShaderResource(eShaderStage::DS, static_cast<UINT>(slotIndex));
-            mTexture[slotIndex]->BindShaderResource(eShaderStage::GS, static_cast<UINT>(slotIndex));
-            mTexture[slotIndex]->BindShaderResource(eShaderStage::PS, static_cast<UINT>(slotIndex));
-            mTexture[slotIndex]->BindShaderResource(eShaderStage::CS, static_cast<UINT>(slotIndex));
+            mTexture[slotIndex]->BindDataSRV((UINT)slotIndex, eShaderStageFlag::ALL);
         }
 
         if (mTexture[(UINT)eTextureSlot::Albedo])
@@ -81,9 +76,9 @@ namespace mh
 
         ConstBuffer* CB = RenderMgr::GetInst()->GetConstBuffer(eCBType::Material);
         CB->SetData(&mCB);
-        CB->Bind(eShaderStage::VS);
-        CB->Bind(eShaderStage::GS);
-        CB->Bind(eShaderStage::PS);
+
+        eShaderStageFlag_ flag = eShaderStageFlag::VS | eShaderStageFlag::GS | eShaderStageFlag::PS;
+        CB->BindData(flag);
 
         mShader->Binds();
     }
@@ -97,7 +92,7 @@ namespace mh
 				continue;
 			}
 
-            mTexture[slotIndex]->Clear();
+            mTexture[slotIndex]->UnBind();
         }
     }
 }

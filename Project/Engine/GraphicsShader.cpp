@@ -109,13 +109,13 @@ namespace mh
 
 		mVecInputLayoutDesc = _VecLayoutDesc;
 
-		if (false == GPUMgr::GetInst()->CreateInputLayout(
+		if (FAILED(GPUMgr::GetInst()->GetDevice()->CreateInputLayout(
 			mVecInputLayoutDesc.data(),
 			(UINT)mVecInputLayoutDesc.size(),
 			VSBlobData->GetBufferPointer(),
 			VSBlobData->GetBufferSize(),
 			mInputLayout.ReleaseAndGetAddressOf()
-		))
+		)))
 		{
 			ERROR_MESSAGE_W(L"Input Layout 생성에 실패했습니다.");
 			return eResult::Fail_Create;
@@ -127,33 +127,39 @@ namespace mh
 
 	void GraphicsShader::Binds()
 	{
-		GPUMgr::GetInst()->BindPrimitiveTopology(mTopology);
-		GPUMgr::GetInst()->BindInputLayout(mInputLayout.Get());
+		auto pContext = GPUMgr::GetInst()->GetContext();
 
-		GPUMgr::GetInst()->BindVertexShader(mVS.Get(), nullptr, 0);
-		GPUMgr::GetInst()->BindHullShader(mHS.Get(), nullptr, 0);
-		GPUMgr::GetInst()->BindDomainShader(mDS.Get(), nullptr, 0);
-		GPUMgr::GetInst()->BindGeometryShader(mGS.Get(), nullptr, 0);
-		GPUMgr::GetInst()->BindPixelShader(mPS.Get(), nullptr, 0);
+		pContext->IASetPrimitiveTopology(mTopology);
+		pContext->IASetInputLayout(mInputLayout.Get());
+		pContext->VSSetShader(mVS.Get(), nullptr, 0);
+		pContext->HSSetShader(mHS.Get(), nullptr, 0);
+		pContext->DSSetShader(mDS.Get(), nullptr, 0);
+		pContext->GSSetShader(mGS.Get(), nullptr, 0);
+		pContext->PSSetShader(mPS.Get(), nullptr, 0);
 
-		Microsoft::WRL::ComPtr<ID3D11RasterizerState> rs = RenderMgr::GetInst()->GetRasterizerState(mRSType);
-		Microsoft::WRL::ComPtr<ID3D11DepthStencilState> ds = RenderMgr::GetInst()->GetDepthStencilState(mDSType);
-		Microsoft::WRL::ComPtr<ID3D11BlendState> bs = RenderMgr::GetInst()->GetBlendState(mBSType);
+		
+		RenderMgr* RenderMgr = RenderMgr::GetInst();
+		ID3D11RasterizerState*		rs = RenderMgr->GetRasterizerState(mRSType).Get();
+		ID3D11DepthStencilState*	ds = RenderMgr->GetDepthStencilState(mDSType).Get();
+		ID3D11BlendState*			bs = RenderMgr->GetBlendState(mBSType).Get();
 
-		GPUMgr::GetInst()->BindRasterizerState(rs.Get());
-		GPUMgr::GetInst()->BindDepthStencilState(ds.Get());
-		GPUMgr::GetInst()->BindBlendState(bs.Get());
+		pContext->RSSetState(rs);
+		pContext->OMSetDepthStencilState(ds, 0u);
+
+		constexpr float blendFactor[4] = { 0.f, 0.f, 0.f, 0.f };
+		pContext->OMSetBlendState(bs, blendFactor, UINT_MAX);
 	}
 
 	eResult GraphicsShader::CreateShader(eGSStage _stage, const void* _pByteCode, size_t _ByteCodeSize)
 	{
 		MH_ASSERT(_pByteCode && _ByteCodeSize);
 
+		auto pDevice = GPUMgr::GetInst()->GetDevice();
 		switch (_stage)
 		{
 		case eGSStage::VS:
 		{
-			if (false == GPUMgr::GetInst()->CreateVertexShader(_pByteCode, _ByteCodeSize, nullptr, mVS.ReleaseAndGetAddressOf()))
+			if (FAILED(pDevice->CreateVertexShader(_pByteCode, _ByteCodeSize, nullptr, mVS.ReleaseAndGetAddressOf())))
 			{
 				ERROR_MESSAGE_W(L"Vertex GraphicsShader 생성에 실패했습니다.");
 				return eResult::Fail_Create;
@@ -164,7 +170,7 @@ namespace mh
 
 		case eGSStage::HS:
 		{
-			if (false == GPUMgr::GetInst()->CreateHullShader(_pByteCode, _ByteCodeSize, nullptr, mHS.ReleaseAndGetAddressOf()))
+			if (FAILED(pDevice->CreateHullShader(_pByteCode, _ByteCodeSize, nullptr, mHS.ReleaseAndGetAddressOf())))
 			{
 				ERROR_MESSAGE_W(L"Hull GraphicsShader 생성에 실패했습니다.");
 				return eResult::Fail_Create;
@@ -176,7 +182,7 @@ namespace mh
 
 		case eGSStage::DS:
 		{
-			if (false == GPUMgr::GetInst()->CreateDomainShader(_pByteCode, _ByteCodeSize, nullptr, mDS.ReleaseAndGetAddressOf()))
+			if (FAILED(pDevice->CreateDomainShader(_pByteCode, _ByteCodeSize, nullptr, mDS.ReleaseAndGetAddressOf())))
 			{
 				ERROR_MESSAGE_W(L"Domain GraphicsShader 생성에 실패했습니다.");
 				return eResult::Fail_Create;
@@ -188,7 +194,7 @@ namespace mh
 
 		case eGSStage::GS:
 		{
-			if (false == GPUMgr::GetInst()->CreateGeometryShader(_pByteCode, _ByteCodeSize, nullptr, mGS.ReleaseAndGetAddressOf()))
+			if (FAILED(pDevice->CreateGeometryShader(_pByteCode, _ByteCodeSize, nullptr, mGS.ReleaseAndGetAddressOf())))
 			{
 				ERROR_MESSAGE_W(L"Geometry GraphicsShader 생성에 실패했습니다.");
 				return eResult::Fail_Create;
@@ -200,7 +206,7 @@ namespace mh
 
 		case eGSStage::PS:
 		{
-			if (false == GPUMgr::GetInst()->CreatePixelShader(_pByteCode, _ByteCodeSize, nullptr, mPS.ReleaseAndGetAddressOf()))
+			if (FAILED(pDevice->CreatePixelShader(_pByteCode, _ByteCodeSize, nullptr, mPS.ReleaseAndGetAddressOf())))
 			{
 				ERROR_MESSAGE_W(L"Pixel GraphicsShader 생성에 실패했습니다.");
 				return eResult::Fail_Create;

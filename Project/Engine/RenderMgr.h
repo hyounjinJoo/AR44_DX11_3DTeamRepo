@@ -85,6 +85,11 @@ namespace mh
 		float NoiseTime;
 	};
 
+	CBUFFER(SBufferCB, CBSLOT_SBUFFER)
+	{
+		UINT SBufferDataCount;
+	};
+
 
 
 	
