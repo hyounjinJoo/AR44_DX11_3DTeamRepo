@@ -261,7 +261,7 @@
     <ClCompile Include="StructBuffer.cpp">
       <Filter>GPU\Buffer</Filter>
     </ClCompile>
-    <ClCompile Include="GraphicDevice_DX11.cpp">
+    <ClCompile Include="GPUMgr.cpp">
       <Filter>GPU\API</Filter>
     </ClCompile>
     <ClCompile Include="ParticleShader.cpp" />
@@ -447,7 +447,7 @@
     <ClInclude Include="StructBuffer.h">
       <Filter>GPU\Buffer</Filter>
     </ClInclude>
-    <ClInclude Include="GraphicDevice_DX11.h">
+    <ClInclude Include="GPUMgr.h">
       <Filter>GPU\API</Filter>
     </ClInclude>
     <ClInclude Include="ParticleShader.h" />

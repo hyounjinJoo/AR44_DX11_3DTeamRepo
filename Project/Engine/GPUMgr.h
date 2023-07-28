@@ -5,6 +5,7 @@
 
 namespace mh::GPU
 {
+
 	using namespace mh::define;
 	class Texture;
 

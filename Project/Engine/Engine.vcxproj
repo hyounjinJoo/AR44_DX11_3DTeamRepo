@@ -271,7 +271,7 @@ call DLLCopy.bat $(Configuration)</Command>
     <ClInclude Include="Fmod.h" />
     <ClInclude Include="FontWrapper.h" />
     <ClInclude Include="GameObject.h" />
-    <ClInclude Include="GraphicDevice_DX11.h" />
+    <ClInclude Include="GPUMgr.h" />
     <ClInclude Include="define_GPU.h" />
     <ClInclude Include="GridScript.h" />
     <ClInclude Include="Input.h" />
@@ -341,7 +341,7 @@ call DLLCopy.bat $(Configuration)</Command>
     <ClCompile Include="Fmod.cpp" />
     <ClCompile Include="FontWrapper.cpp" />
     <ClCompile Include="GameObject.cpp" />
-    <ClCompile Include="GraphicDevice_DX11.cpp" />
+    <ClCompile Include="GPUMgr.cpp" />
     <ClCompile Include="GridScript.cpp" />
     <ClCompile Include="Input.cpp" />
     <ClCompile Include="json-cpp\jsoncpp.cpp">
