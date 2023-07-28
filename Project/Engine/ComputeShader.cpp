@@ -3,12 +3,12 @@
 #include "PathMgr.h"
 
 #include "ComputeShader.h"
-#include "GraphicDevice_DX11.h"
+#include "GPUMgr.h"
 
 #include "define_GPU.h"
 #include "define_Res.h"
 
-namespace mh::GPU
+namespace mh
 {
 	namespace stdfs = std::filesystem;
 
@@ -55,7 +55,7 @@ namespace mh::GPU
 			nullptr, 
 			D3D_COMPILE_STANDARD_FILE_INCLUDE, 
 			std::string(_funcName).c_str(), 
-			mh::GPU::SHADER_VERSION::CS, 
+			mh::SHADER_VERSION::CS, 
 			0, 
 			0, 
 			mCSBlob.GetAddressOf(), 

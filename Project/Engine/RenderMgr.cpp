@@ -17,8 +17,6 @@
 
 namespace mh
 {
-	using GPU::Texture;
-
 	RenderMgr::RenderMgr()
 		: mMainCamera{}
 		, mConstBuffers{}
@@ -39,7 +37,10 @@ namespace mh
 	{
 		for (int i = 0; i < (int)eCBType::End; ++i)
 		{
-			SAFE_DELETE(mConstBuffers[i]);
+			if (nullptr == mConstBuffers[i])
+				continue;
+
+			delete mConstBuffers[i];
 		}
 	}
 	void RenderMgr::Initialize()
@@ -998,7 +999,7 @@ namespace mh
 
 #pragma endregion
 #pragma region STRUCTED BUFFER
-		mLightsBuffer = new StructBuffer();
+		mLightsBuffer = std::make_unique<StructBuffer>();
 		mLightsBuffer->Create(sizeof(tLightAttribute), 128, eSRVType::SRV, nullptr, true);
 #pragma endregion
 	}

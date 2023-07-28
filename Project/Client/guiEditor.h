@@ -16,7 +16,7 @@ namespace gui
 		void FixedUpdate();
 		void Render();
 		void Release();
-		void DebugRender(mh::GPU::tDebugMesh& mesh);
+		void DebugRender(mh::tDebugMesh& mesh);
 
 		void ImGuiInitialize();
 		void ImGuiRun();

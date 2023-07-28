@@ -25,7 +25,7 @@
 namespace mh
 {
 	using namespace mh::define;
-	using namespace mh::GPU;
+	using namespace mh;
 	namespace stdfs = std::filesystem;
 
 	class ResMgr 

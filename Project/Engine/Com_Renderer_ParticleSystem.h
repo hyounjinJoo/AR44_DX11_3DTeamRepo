@@ -25,11 +25,11 @@ namespace mh
 
 	private:
 #pragma region Buffer 선언
-		GPU::StructBuffer* mBuffer;
-		GPU::StructBuffer* mSharedBuffer;
+		StructBuffer* mBuffer;
+		StructBuffer* mSharedBuffer;
 #pragma endregion
 #pragma region tParticle GraphicsShader 관련 변수 선언
-		std::shared_ptr<GPU::ParticleShader> mCS;
+		std::shared_ptr<ParticleShader> mCS;
 		ParticleSystemCB mCBData;
 #pragma endregion
 #pragma region tParticle System 관련 변수 선언

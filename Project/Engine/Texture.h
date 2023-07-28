@@ -1,15 +1,15 @@
 #pragma once
 
 #include "IRes.h"
-#include "GraphicDevice_DX11.h"
+#include "GPUMgr.h"
 
 #include <DirectXTex/DirectXTex.h>
 
 
-namespace mh::GPU
+namespace mh
 {
 	using namespace mh::define;
-	using namespace mh::GPU;
+	using Microsoft::WRL::ComPtr;
 
 	class Texture : public IRes
 	{
@@ -35,19 +35,19 @@ namespace mh::GPU
 		size_t GetHeight() { return mDesc.Height; }
 		size_t GetWidth() { return mDesc.Width; }
 
-		Microsoft::WRL::ComPtr<ID3D11Texture2D> GetTexture() { return mTexture; }
-		Microsoft::WRL::ComPtr<ID3D11DepthStencilView> GetDSV() { return mDSV; }
-		Microsoft::WRL::ComPtr<ID3D11RenderTargetView> GetRTV() { return mRTV; }
-		Microsoft::WRL::ComPtr<ID3D11UnorderedAccessView> GetUAV() { return mUAV; }
-		Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> GetSRV() { return mSRV; }
+		ComPtr<ID3D11Texture2D> GetTexture() { return mTexture; }
+		ComPtr<ID3D11DepthStencilView> GetDSV() { return mDSV; }
+		ComPtr<ID3D11RenderTargetView> GetRTV() { return mRTV; }
+		ComPtr<ID3D11UnorderedAccessView> GetUAV() { return mUAV; }
+		ComPtr<ID3D11ShaderResourceView> GetSRV() { return mSRV; }
 
 	private:
 		ScratchImage mImage;
-		Microsoft::WRL::ComPtr<ID3D11Texture2D> mTexture;
-		Microsoft::WRL::ComPtr<ID3D11DepthStencilView> mDSV;
-		Microsoft::WRL::ComPtr<ID3D11RenderTargetView> mRTV;
-		Microsoft::WRL::ComPtr<ID3D11UnorderedAccessView> mUAV;
-		Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> mSRV;
+		ComPtr<ID3D11Texture2D> mTexture;
+		ComPtr<ID3D11DepthStencilView> mDSV;
+		ComPtr<ID3D11RenderTargetView> mRTV;
+		ComPtr<ID3D11UnorderedAccessView> mUAV;
+		ComPtr<ID3D11ShaderResourceView> mSRV;
 		D3D11_TEXTURE2D_DESC mDesc;
 	};
 

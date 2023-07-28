@@ -102,7 +102,7 @@ namespace gui
 			listUI->SetState(eState::Active);
 			//모든 메쉬의 리소스를 가져와야한다.
 			const auto& materials
-				= mh::ResMgr::GetInst()->GetResources<mh::GPU::Material>();
+				= mh::ResMgr::GetInst()->GetResources<mh::Material>();
 
 			std::vector<std::string> Name;
 			for (const auto& material : materials)
@@ -131,7 +131,7 @@ namespace gui
 
 	void guiCom_Renderer_Mesh::SetMaterial(const std::string& _strKey)
 	{
-		std::shared_ptr<mh::GPU::Material> material = mh::ResMgr::GetInst()->Find<mh::GPU::Material>(_strKey);
+		std::shared_ptr<mh::Material> material = mh::ResMgr::GetInst()->Find<mh::Material>(_strKey);
 
 		Inspector* inspector = editor.GetWidget<Inspector>("Inspector");
 		inspector->GetTargetGameObject()->GetComponent<mh::Com_Renderer_Mesh>()->SetMaterial(material);

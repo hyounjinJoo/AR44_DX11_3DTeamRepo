@@ -3,7 +3,7 @@
 #include "Material.h"
 #include "ConstBuffer.h"
 
-namespace mh::GPU
+namespace mh
 {
     using namespace mh::math;
 
@@ -28,22 +28,22 @@ namespace mh::GPU
     {
         /*switch (_param)
         {
-        case mh::GPU::eGPUParam::Int:
+        case mh::eGPUParam::Int:
             mCB.iData = *static_cast<int*>(_data);
             break;
-        case mh::GPU::eGPUParam::Float:
+        case mh::eGPUParam::Float:
             mCB.fData = *static_cast<float*>(_data);
             break;
-        case mh::GPU::eGPUParam::Vector2:
+        case mh::eGPUParam::Vector2:
             mCB.XY = *static_cast<Vector2*>(_data);
             break;
-        case mh::GPU::eGPUParam::Vector3:
+        case mh::eGPUParam::Vector3:
             mCB.XYZ = *static_cast<Vector3*>(_data);
             break;
-        case mh::GPU::eGPUParam::Vector4:
+        case mh::eGPUParam::Vector4:
             mCB.XYZW = *static_cast<Vector4*>(_data);
             break;
-        case mh::GPU::eGPUParam::Matrix:
+        case mh::eGPUParam::Matrix:
             mCB.Matrix = *static_cast<Matrix*>(_data);
             break;
         default:

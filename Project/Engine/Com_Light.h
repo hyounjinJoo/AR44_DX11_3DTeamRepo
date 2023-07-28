@@ -18,7 +18,7 @@ namespace mh
 		virtual void FixedUpdate() override;
 		virtual void Render() override;
 
-		GPU::tLightAttribute GetLightAttribute() { return mAttribute; }
+		tLightAttribute GetLightAttribute() { return mAttribute; }
 
 		void SetDiffuse(const Vector4& diffuse) { mAttribute.diffuse = diffuse; }
 		void SetSpecular(const Vector4& spec) { mAttribute.specular = spec; }
@@ -32,6 +32,6 @@ namespace mh
 		float GetAngle() { mAttribute.angle; }
 
 	private:
-		GPU::tLightAttribute mAttribute;
+		tLightAttribute mAttribute;
 	};
 }

@@ -1,7 +1,7 @@
 #pragma once
 #include "EnginePCH.h"
 #include "define_GPU.h"
-#include "GraphicDevice_DX11.h"
+#include "GPUMgr.h"
 
 namespace mh
 {
@@ -31,7 +31,7 @@ namespace mh
 
 	private:
 		bool bInitialized = false;
-		std::unique_ptr<GPU::GraphicDevice_DX11> graphicDevice;
+		GPUMgr* mGraphicDevice;
 
 		HWND mHwnd;
 		HDC mHdc;

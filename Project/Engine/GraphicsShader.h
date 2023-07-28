@@ -2,7 +2,7 @@
 #include "IShader.h"
 #include "define_GPU.h"
 
-namespace mh::GPU
+namespace mh
 {
 	using Microsoft::WRL::ComPtr;
 	namespace stdfs = std::filesystem;
@@ -21,11 +21,11 @@ namespace mh::GPU
 
 		virtual HRESULT Load(const std::filesystem::path& _path) override;
 
-		eResult CreateByCompile(GPU::eGSStage _stage, const stdfs::path& _FullPath, const std::string_view _funcName);
+		eResult CreateByCompile(eGSStage _stage, const stdfs::path& _FullPath, const std::string_view _funcName);
 		
-		eResult CreateByHeader(GPU::eGSStage _stage, const unsigned char* _pByteCode, size_t _ByteCodeSize);
+		eResult CreateByHeader(eGSStage _stage, const unsigned char* _pByteCode, size_t _ByteCodeSize);
 
-		eResult CreateByCSO(GPU::eGSStage _stage, const stdfs::path& _FileName);
+		eResult CreateByCSO(eGSStage _stage, const stdfs::path& _FileName);
 
 		eResult CreateInputLayout(const std::vector<D3D11_INPUT_ELEMENT_DESC>& _VecLayoutDesc);
 
@@ -35,20 +35,20 @@ namespace mh::GPU
 		ID3D11InputLayout** GetInputLayoutAddressOf() { return mInputLayout.GetAddressOf(); }
 
 		void SetTopology(D3D11_PRIMITIVE_TOPOLOGY _topology) { mTopology = _topology; }
-		void SetRSState(GPU::eRSType _state) { mRSType = _state; }
-		void SetDSState(GPU::eDSType _state) { mDSType = _state; }
-		void SetBSState(GPU::eBSType _state) { mBSType = _state; }
+		void SetRSState(eRSType _state) { mRSType = _state; }
+		void SetDSState(eDSType _state) { mDSType = _state; }
+		void SetBSState(eBSType _state) { mBSType = _state; }
 
 	private:
-		eResult CreateShader(GPU::eGSStage _stage, const void* _pByteCode, size_t _ByteCodeSize);
+		eResult CreateShader(eGSStage _stage, const void* _pByteCode, size_t _ByteCodeSize);
 
 	private:
 		std::vector<D3D11_INPUT_ELEMENT_DESC> mVecInputLayoutDesc;
 		ComPtr<ID3D11InputLayout> mInputLayout;
 		D3D11_PRIMITIVE_TOPOLOGY mTopology;
-		GPU::eGSStage mStage;
+		eGSStage mStage;
 
-		tShaderCode mArrShaderCode[(int)GPU::eGSStage::END];
+		tShaderCode mArrShaderCode[(int)eGSStage::END];
 
 		ComPtr<ID3D11VertexShader>		mVS;
 		ComPtr<ID3D11HullShader>		mHS;
@@ -56,9 +56,9 @@ namespace mh::GPU
 		ComPtr<ID3D11GeometryShader>	mGS;
 		ComPtr<ID3D11PixelShader>		mPS;
 
-		GPU::eRSType mRSType;
-		GPU::eDSType mDSType;
-		GPU::eBSType mBSType;
+		eRSType mRSType;
+		eDSType mDSType;
+		eBSType mBSType;
 
 		ComPtr<ID3DBlob> mErrorBlob;
 	};

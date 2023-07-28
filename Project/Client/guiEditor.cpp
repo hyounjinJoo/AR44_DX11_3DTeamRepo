@@ -9,7 +9,7 @@
 #include <Engine/GridScript.h>
 #include <Engine/Object.h>
 #include <Engine/Application.h>
-#include <Engine/GraphicDevice_DX11.h>
+#include <Engine/GPUMgr.h>
 
 #include "imgui.h"
 #include "imgui_impl_win32.h"
@@ -40,7 +40,7 @@ namespace gui
 		mDebugObjects.resize((UINT)eColliderType::End);
 
 		std::shared_ptr<mh::Mesh> rectMesh = mh::ResMgr::GetInst()->Find<mh::Mesh>(mh::strKey::Default::mesh::DebugRectMesh);
-		std::shared_ptr<mh::Material> material = mh::ResMgr::GetInst()->Find<mh::GPU::Material>(mh::strKey::Default::material::DebugMaterial);
+		std::shared_ptr<mh::Material> material = mh::ResMgr::GetInst()->Find<mh::Material>(mh::strKey::Default::material::DebugMaterial);
 
 		mDebugObjects[(UINT)eColliderType::Rect] = new DebugObject();
 		mh::Com_Renderer_Mesh* renderer
@@ -132,7 +132,7 @@ namespace gui
 		}
 
 		auto& DebugMeshes = mh::RenderMgr::GetInst()->GetDebugMeshes();
-		for ( mh::GPU::tDebugMesh& mesh : DebugMeshes)
+		for ( mh::tDebugMesh& mesh : DebugMeshes)
 		{
 			DebugRender(mesh);
 		}
@@ -166,7 +166,7 @@ namespace gui
 		delete mDebugObjects[(UINT)eColliderType::Circle];
 	}
 
-	void Editor::DebugRender(mh::GPU::tDebugMesh& mesh)
+	void Editor::DebugRender(mh::tDebugMesh& mesh)
 	{
 		DebugObject* debugObj = mDebugObjects[(UINT)mesh.type];
 		
@@ -225,8 +225,8 @@ namespace gui
 
 		// Setup Platform/Renderer backends
 		ImGui_ImplWin32_Init(application.GetHwnd());
-		ImGui_ImplDX11_Init(mh::GPU::GetDevice()->GetID3D11Device()
-			, mh::GPU::GetDevice()->GetID3D11DeviceContext());
+		ImGui_ImplDX11_Init(mh::GetDevice()->GetID3D11Device()
+			, mh::GetDevice()->GetID3D11DeviceContext());
 
 		// Load Fonts
 		// - If no fonts are loaded, dear imgui will use the default font. You can also load multiple fonts and use ImGui::PushFont()/PopFont() to select them.

@@ -2,7 +2,7 @@
 #include "define_GPU.h"
 #include "IShader.h"
 
-namespace mh::GPU
+namespace mh
 {
 	using namespace mh::define;
 

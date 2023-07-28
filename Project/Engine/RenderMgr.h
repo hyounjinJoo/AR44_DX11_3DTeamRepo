@@ -7,18 +7,14 @@
 
 namespace mh
 {
-	namespace GPU
-	{
-		class ConstBuffer;
-		class StructBuffer;
-		class Texture;
-	}
+	class ConstBuffer;
+	class StructBuffer;
+	class Texture;
 	
 	class Com_Camera;
 	class GameObject;
 	
 	using namespace math;
-	using namespace GPU;
 	using namespace Microsoft::WRL;
 
 
@@ -119,7 +115,7 @@ namespace mh
 
 
 		//Renderer
-		void PushLightAttribute(const GPU::tLightAttribute& lightAttribute) { mLights.push_back(lightAttribute); }
+		void PushLightAttribute(const tLightAttribute& lightAttribute) { mLights.push_back(lightAttribute); }
 
 
 		void BindLights();
@@ -146,7 +142,7 @@ namespace mh
 		std::vector<Com_Camera*>			mCameras[(UINT)eSceneType::End];
 		std::vector<tDebugMesh>				mDebugMeshes;
 		std::vector<tLightAttribute>		mLights;
-		StructBuffer*						mLightsBuffer;
+		std::unique_ptr<StructBuffer>		mLightsBuffer;
 
 		std::shared_ptr<Texture>			mPostProcessTexture;
 

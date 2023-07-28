@@ -22,7 +22,7 @@
 #define CBSLOT_PARTICLESYSTEM	5
 #define CBSLOT_NOISE			6
 
-namespace mh::GPU
+namespace mh
 {
 	using namespace mh::define;
 	using namespace mh::math;

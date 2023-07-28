@@ -15,7 +15,7 @@
 
 namespace mh
 {
-	using namespace mh::GPU;
+	using namespace mh;
 
 	Com_Renderer_ParticleSystem::Com_Renderer_ParticleSystem()
 		: mMaxParticles(100)
@@ -71,10 +71,10 @@ namespace mh
 			particles[i].speed = 100.0f;
 		}
 
-		mBuffer = new GPU::StructBuffer();
+		mBuffer = new StructBuffer();
 		mBuffer->Create(sizeof(tParticle), mMaxParticles, eSRVType::UAV, particles);
 
-		mSharedBuffer = new GPU::StructBuffer();
+		mSharedBuffer = new StructBuffer();
 		mSharedBuffer->Create(sizeof(tParticleShared), 1, eSRVType::UAV, nullptr, true);
 	}
 

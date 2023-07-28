@@ -3,7 +3,7 @@
 
 #include "define_GPU.h"
 
-namespace mh::GPU
+namespace mh
 {
 	class GPUBuffer
 		: public Entity

@@ -1,9 +1,9 @@
 #include "EnginePCH.h"
 #include "StructBuffer.h"
 
-#include "GraphicDevice_DX11.h"
+#include "GPUMgr.h"
 
-namespace mh::GPU
+namespace mh
 {
 	StructBuffer::StructBuffer()
 		: mSRV(nullptr)

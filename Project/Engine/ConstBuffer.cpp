@@ -1,9 +1,9 @@
 #include "EnginePCH.h"
 
 #include "ConstBuffer.h"
-#include "GraphicDevice_DX11.h"
+#include "GPUMgr.h"
 
-namespace mh::GPU
+namespace mh
 {
 	ConstBuffer::ConstBuffer(eCBType _type)
 		: mType(_type)

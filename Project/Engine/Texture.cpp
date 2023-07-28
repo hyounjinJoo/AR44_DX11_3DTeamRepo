@@ -14,7 +14,7 @@
 
 
 
-namespace mh::GPU
+namespace mh
 {
 	namespace stdfs = std::filesystem;
 
@@ -138,7 +138,6 @@ namespace mh::GPU
 		return true;
 	}
 
-	
 	HRESULT Texture::Load(const std::filesystem::path& _FileName)
 	{
 		stdfs::path FullPath = PathMgr::GetInst()->GetRelativeResourcePath(GetResType());

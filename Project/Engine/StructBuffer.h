@@ -2,7 +2,7 @@
 
 #include "GPUBuffer.h"
 
-namespace mh::GPU
+namespace mh
 {
 	class StructBuffer 
 		: public GPUBuffer

@@ -106,9 +106,6 @@
     <Filter Include="GPU\Buffer">
       <UniqueIdentifier>{b9697f64-adc5-45fb-b641-4131688e3073}</UniqueIdentifier>
     </Filter>
-    <Filter Include="GPU\API">
-      <UniqueIdentifier>{afdf7dd2-7ae1-4a73-be9e-835569536d5a}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Resource\Shaders">
       <UniqueIdentifier>{dce3eb15-75d6-4644-8a32-cf9d11564bb1}</UniqueIdentifier>
     </Filter>
@@ -261,9 +258,6 @@
     <ClCompile Include="StructBuffer.cpp">
       <Filter>GPU\Buffer</Filter>
     </ClCompile>
-    <ClCompile Include="GPUMgr.cpp">
-      <Filter>GPU\API</Filter>
-    </ClCompile>
     <ClCompile Include="ParticleShader.cpp" />
     <ClCompile Include="Com_AudioListener.cpp">
       <Filter>GameObject\Component\Audio</Filter>
@@ -332,6 +326,9 @@
     </ClCompile>
     <ClCompile Include="CollisionMgr.cpp" />
     <ClCompile Include="RenderMgr.cpp">
+      <Filter>Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="GPUMgr.cpp">
       <Filter>Manager</Filter>
     </ClCompile>
   </ItemGroup>
@@ -447,9 +444,6 @@
     <ClInclude Include="StructBuffer.h">
       <Filter>GPU\Buffer</Filter>
     </ClInclude>
-    <ClInclude Include="GPUMgr.h">
-      <Filter>GPU\API</Filter>
-    </ClInclude>
     <ClInclude Include="ParticleShader.h" />
     <ClInclude Include="Com_AudioListener.h">
       <Filter>GameObject\Component\Audio</Filter>
@@ -547,6 +541,9 @@
     <ClInclude Include="RenderMgr.h">
       <Filter>Manager</Filter>
     </ClInclude>
+    <ClInclude Include="GPUMgr.h">
+      <Filter>Manager</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="SimpleMath.inl">
@@ -578,6 +575,9 @@
     </None>
     <None Include="Default_HLSL\SH_Common.hlsli">
       <Filter>Default HLSL</Filter>
+    </None>
+    <None Include="GPUMgr.inl">
+      <Filter>Manager</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>

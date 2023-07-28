@@ -4,7 +4,7 @@
 
 #include <Engine/ResMgr.h>
 #include <Engine/Texture.h>
-#include <Engine/GraphicDevice_DX11.h>
+#include <Engine/GPUMgr.h>
 
 namespace gui
 {
@@ -23,20 +23,20 @@ namespace gui
 
 	void Game::Update()
 	{
-		std::shared_ptr<mh::GPU::Texture> renderTarget
-			= mh::ResMgr::GetInst()->Find<mh::GPU::Texture>(mh::strKey::Default::texture::RenderTarget);
+		std::shared_ptr<mh::Texture> renderTarget
+			= mh::ResMgr::GetInst()->Find<mh::Texture>(mh::strKey::Default::texture::RenderTarget);
 
-		std::shared_ptr<mh::GPU::Texture> gameTex
-			= std::make_shared<mh::GPU::Texture>();
+		std::shared_ptr<mh::Texture> gameTex
+			= std::make_shared<mh::Texture>();
 		gameTex->Create(1600, 900, DXGI_FORMAT_R8G8B8A8_UNORM, D3D11_BIND_SHADER_RESOURCE);
 		
 		//61 번 셰이더 리소스 뷰 null초기화
 		ID3D11ShaderResourceView* gameSRV = nullptr;
-		mh::GPU::GetDevice()->BindShaderResource(mh::GPU::eShaderStage::PS, 61, &gameSRV);
-		mh::GPU::GetDevice()->CopyResource(gameTex->GetTexture().Get()
+		mh::GetDevice()->BindShaderResource(mh::eShaderStage::PS, 61, &gameSRV);
+		mh::GetDevice()->CopyResource(gameTex->GetTexture().Get()
 			, renderTarget->GetTexture().Get());
 
-		gameTex->BindShaderResource(mh::GPU::eShaderStage::PS, 61);
+		gameTex->BindShaderResource(mh::eShaderStage::PS, 61);
 
 		ImGuiIO io = ImGui::GetIO();
 		ImVec2 panelSize = ImGui::GetWindowSize();

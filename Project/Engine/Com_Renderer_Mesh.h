@@ -7,7 +7,7 @@
 
 namespace mh
 {
-	using namespace mh::GPU;
+	using namespace mh;
 
 	class Com_Renderer_Mesh : public IRenderer
 	{

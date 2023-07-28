@@ -4,7 +4,7 @@
 
 namespace mh
 {
-	using mh::GPU::Texture;
+	using mh::Texture;
 
 	class Animation : public Entity
 	{

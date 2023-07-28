@@ -20,13 +20,12 @@ namespace mh
 		, mHdc(nullptr)
 		, mHeight(1600)//화면 해상도 몰라서 0말고 1600/900사이즈로 일단 초기화
 		, mWidth(900)
+		, mGraphicDevice()
 	{
-
 	}
 
 	Application::~Application()
 	{
-
 	}
 
 	void Application::Initialize()
@@ -68,8 +67,8 @@ namespace mh
 	{
 		TimeMgr::Render(mHdc);
 
-		graphicDevice->Clear();
-		graphicDevice->AdjustViewPorts();
+		mGraphicDevice->Clear();
+		mGraphicDevice->AdjustViewPorts(mHwnd);
 
 		RenderMgr::GetInst()->Render();
 	}
@@ -90,7 +89,7 @@ namespace mh
 
 	void Application::Present()
 	{
-		graphicDevice->Present();
+		mGraphicDevice->Present();
 	}
 
 	void Application::Release()
@@ -101,7 +100,7 @@ namespace mh
 
 	void Application::SetWindow(HWND _hwnd, UINT _width, UINT _height)
 	{
-		if (graphicDevice == nullptr)
+		if (mGraphicDevice == nullptr)
 		{
 			mHwnd = _hwnd;
 			mHdc = GetDC(mHwnd);
@@ -109,9 +108,15 @@ namespace mh
 			mHeight = _height;
 
 
-			GPU::eValidationMode vaildationMode = GPU::eValidationMode::Disabled;
-			graphicDevice = std::make_unique<GPU::GraphicDevice_DX11>();
-			//GPU::GetDevice() = graphicDevice.get();
+			//eValidationMode vaildationMode = eValidationMode::Disabled;
+			
+			mGraphicDevice = GPUMgr::GetInst();
+			if (false == mGraphicDevice->Initialize(mHwnd, mWidth, mHeight))
+			{
+				ERROR_MESSAGE_W(L"Graphics Device 초기화에 실패했습니다.");
+				std::abort();
+			}
+			//GetDevice() = mGraphicDevice.get();
 		}
 
 		RECT rt = { 0, 0, (LONG)_width , (LONG)_height };

@@ -391,6 +391,7 @@ call DLLCopy.bat $(Configuration)</Command>
     <None Include="Default_HLSL\SH_Particle.hlsli" />
     <None Include="Default_HLSL\SH_Resource.hlsli" />
     <None Include="Default_HLSL\SH_Sampler.hlsli" />
+    <None Include="GPUMgr.inl" />
     <None Include="SimpleMath.inl" />
   </ItemGroup>
   <ItemGroup>

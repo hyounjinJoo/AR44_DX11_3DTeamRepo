@@ -1,7 +1,7 @@
 #pragma once
 #include "GPUBuffer.h"
 
-namespace mh::GPU
+namespace mh
 {
 	class ConstBuffer 
 		: public GPUBuffer

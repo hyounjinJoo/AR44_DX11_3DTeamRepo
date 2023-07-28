@@ -4,7 +4,7 @@
 #include "Texture.h"
 #include "RenderMgr.h"
 
-namespace mh::GPU
+namespace mh
 {
 	class Material : public IRes
 	{

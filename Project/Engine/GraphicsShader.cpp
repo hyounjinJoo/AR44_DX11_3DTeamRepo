@@ -1,12 +1,12 @@
 #include "EnginePCH.h"
 
 #include "GraphicsShader.h"
-#include "GraphicDevice_DX11.h"
+#include "GPUMgr.h"
 #include "RenderMgr.h"
 
 #include "PathMgr.h"
 
-namespace mh::GPU
+namespace mh
 {
 	namespace stdfs = std::filesystem;
 	using namespace mh::define;
@@ -33,7 +33,7 @@ namespace mh::GPU
 		return E_NOTIMPL;
 	}
 
-	eResult GraphicsShader::CreateByCompile(GPU::eGSStage _stage, const stdfs::path& _FullPath, const std::string_view _funcName)
+	eResult GraphicsShader::CreateByCompile(eGSStage _stage, const stdfs::path& _FullPath, const std::string_view _funcName)
 	{
 		mArrShaderCode[(int)_stage] = {};
 
@@ -42,7 +42,7 @@ namespace mh::GPU
 			nullptr,
 			D3D_COMPILE_STANDARD_FILE_INCLUDE,
 			std::string(_funcName).c_str(),
-			GPU::SHADER_VERSION::GS[(int)_stage],
+			SHADER_VERSION::GS[(int)_stage],
 			0u,
 			0u,
 			mArrShaderCode[(int)_stage].blob.ReleaseAndGetAddressOf(),
@@ -99,7 +99,7 @@ namespace mh::GPU
 
 	eResult GraphicsShader::CreateInputLayout(const std::vector<D3D11_INPUT_ELEMENT_DESC>& _VecLayoutDesc)
 	{
-		ID3DBlob* VSBlobData = mArrShaderCode[(int)GPU::eGSStage::VS].blob.Get();
+		ID3DBlob* VSBlobData = mArrShaderCode[(int)eGSStage::VS].blob.Get();
 
 		if (nullptr == VSBlobData)
 		{
@@ -145,13 +145,13 @@ namespace mh::GPU
 		GetDevice()->BindBlendState(bs.Get());
 	}
 
-	eResult GraphicsShader::CreateShader(GPU::eGSStage _stage, const void* _pByteCode, size_t _ByteCodeSize)
+	eResult GraphicsShader::CreateShader(eGSStage _stage, const void* _pByteCode, size_t _ByteCodeSize)
 	{
 		MH_ASSERT(_pByteCode && _ByteCodeSize);
 
 		switch (_stage)
 		{
-		case GPU::eGSStage::VS:
+		case eGSStage::VS:
 		{
 			if (false == GetDevice()->CreateVertexShader(_pByteCode, _ByteCodeSize, nullptr, mVS.ReleaseAndGetAddressOf()))
 			{
@@ -162,7 +162,7 @@ namespace mh::GPU
 			break;
 		}
 
-		case GPU::eGSStage::HS:
+		case eGSStage::HS:
 		{
 			if (false == GetDevice()->CreateHullShader(_pByteCode, _ByteCodeSize, nullptr, mHS.ReleaseAndGetAddressOf()))
 			{
@@ -174,7 +174,7 @@ namespace mh::GPU
 		}
 
 
-		case GPU::eGSStage::DS:
+		case eGSStage::DS:
 		{
 			if (false == GetDevice()->CreateDomainShader(_pByteCode, _ByteCodeSize, nullptr, mDS.ReleaseAndGetAddressOf()))
 			{
@@ -186,7 +186,7 @@ namespace mh::GPU
 		}
 
 
-		case GPU::eGSStage::GS:
+		case eGSStage::GS:
 		{
 			if (false == GetDevice()->CreateGeometryShader(_pByteCode, _ByteCodeSize, nullptr, mGS.ReleaseAndGetAddressOf()))
 			{
@@ -198,7 +198,7 @@ namespace mh::GPU
 		}
 
 
-		case GPU::eGSStage::PS:
+		case eGSStage::PS:
 		{
 			if (false == GetDevice()->CreatePixelShader(_pByteCode, _ByteCodeSize, nullptr, mPS.ReleaseAndGetAddressOf()))
 			{

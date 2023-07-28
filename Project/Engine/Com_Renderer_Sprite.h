@@ -5,7 +5,7 @@
 #include "Material.h"
 #include "IRenderer.h"
 
-using namespace mh::GPU;
+using namespace mh;
 namespace mh
 {
 	class Com_Renderer_Sprite : public IRenderer
