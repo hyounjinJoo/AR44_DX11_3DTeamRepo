@@ -4,6 +4,23 @@
 
 namespace mh
 {
+	using namespace mh::math;
+	struct Vertex2D
+	{
+		Vector4 Pos;
+		Vector4 Color;
+		Vector2 UV;
+	};
+	struct Vertex3D
+	{
+		Vector4 Pos;
+		Vector4 Color;
+		Vector2 UV;
+		Vector3 Tangent;
+		Vector3 BiNormal;
+		Vector3 Normal;
+	};
+
 	class Mesh : public IRes 
 	{
 	public:
@@ -28,6 +45,8 @@ namespace mh
 	private:
 		Microsoft::WRL::ComPtr<ID3D11Buffer> mVertexBuffer;
 		D3D11_BUFFER_DESC mVBDesc;
+		UINT mVertexByteStride;
+		UINT mVertexCount;
 
 		Microsoft::WRL::ComPtr<ID3D11Buffer> mIndexBuffer;
 		D3D11_BUFFER_DESC mIBDesc;

@@ -10,59 +10,123 @@
 #include "PaintShader.h"
 #include "ParticleShader.h"
 
+#include "SceneManager.h"
+
+#include "ResMgr.h"
+#include "TimeMgr.h"
 
 namespace mh
 {
-	using namespace mh::GPU;
-	using namespace mh::math;
-	using Microsoft::WRL::ComPtr;
+	using GPU::Texture;
 
 	RenderMgr::RenderMgr()
+		: mMainCamera{}
+		, mConstBuffers{}
+		, mSamplerStates{}
+		, mRasterizerStates{}
+		, mBlendStates{}
+		, mCameras{}
+		, mDebugMeshes{}
+		, mLights{}
+		, mLightsBuffer{}
+		, mPostProcessTexture{}
+		, mInspectorGameObject{}
 	{
+
 	}
 
 	RenderMgr::~RenderMgr()
 	{
+		for (int i = 0; i < (int)eCBType::End; ++i)
+		{
+			SAFE_DELETE(mConstBuffers[i]);
+		}
 	}
 	void RenderMgr::Initialize()
 	{
+		LoadMesh();
+		LoadShader();
+		SetupState();
+		LoadBuffer();
+		LoadTexture();
+		LoadMaterial();
 	}
 	void RenderMgr::Render()
 	{
+		BindNoiseTexture();
+		BindLights();
+
+		eSceneType type = SceneManager::GetActiveScene()->GetSceneType();
+		for (Com_Camera* cam : mCameras[(UINT)type])
+		{
+			if (cam == nullptr)
+				continue;
+
+			cam->Render();
+		}
+
+		mCameras[(UINT)type].clear();
+		mLights.clear();
 	}
-	void RenderMgr::Release()
-	{
-	}
-	void RenderMgr::PushLightAttribute(const GPU::tLightAttribute& lightAttribute)
-	{
-	}
+
+
 	void RenderMgr::BindLights()
 	{
+		mLightsBuffer->SetData(mLights.data(), mLights.size());
+		mLightsBuffer->BindSRV(eShaderStage::VS, 13);
+		mLightsBuffer->BindSRV(eShaderStage::PS, 13);
+
+		LightCB trCb = {};
+		trCb.NumberOfLight = (UINT)mLights.size();
+
+		ConstBuffer* cb = mConstBuffers[(UINT)eCBType::Light];
+		cb->SetData(&trCb);
+		cb->Bind(eShaderStage::VS);
+		cb->Bind(eShaderStage::PS);
 	}
 	void RenderMgr::BindNoiseTexture()
 	{
+		std::shared_ptr<Texture> noise = ResMgr::GetInst()->Find<Texture>(define::strKey::Default::texture::noise_03);
+		noise->BindShaderResource(eShaderStage::VS, 16);
+		noise->BindShaderResource(eShaderStage::HS, 16);
+		noise->BindShaderResource(eShaderStage::DS, 16);
+		noise->BindShaderResource(eShaderStage::GS, 16);
+		noise->BindShaderResource(eShaderStage::PS, 16);
+		noise->BindShaderResource(eShaderStage::CS, 16);
+
+		NoiseCB info = {};
+		info.NoiseSize.x = (float)noise->GetWidth();
+		info.NoiseSize.y = (float)noise->GetHeight();
+
+		static float noiseTime = 10.f;
+		noiseTime -= TimeMgr::DeltaTime();
+		info.NoiseTime = noiseTime;
+
+		ConstBuffer* cb = mConstBuffers[(UINT)eCBType::Noise];
+		cb->SetData(&info);
+		cb->Bind(eShaderStage::VS);
+		cb->Bind(eShaderStage::HS);
+		cb->Bind(eShaderStage::DS);
+		cb->Bind(eShaderStage::GS);
+		cb->Bind(eShaderStage::PS);
+		cb->Bind(eShaderStage::CS);
 	}
 	void RenderMgr::CopyRenderTarget()
 	{
+		std::shared_ptr<Texture> renderTarget = ResMgr::GetInst()->Find<Texture>(define::strKey::Default::texture::RenderTarget);
+
+		ID3D11ShaderResourceView* srv = nullptr;
+		GetDevice()->BindShaderResource(eShaderStage::PS, 60, &srv);
+
+		ID3D11Texture2D* dest = mPostProcessTexture->GetTexture().Get();
+		ID3D11Texture2D* source = renderTarget->GetTexture().Get();
+
+		GetDevice()->CopyResource(dest, source);
+
+		mPostProcessTexture->BindShaderResource(eShaderStage::PS, 60);
 	}
 	void RenderMgr::LoadMesh()
 	{
-		struct Vertex2D
-		{
-			Vector4 Pos;
-			Vector4 Color;
-			Vector2 UV;
-		};
-		struct Vertex3D
-		{
-			Vector4 Pos;
-			Vector4 Color;
-			Vector2 UV;
-			Vector3 Tangent;
-			Vector3 BiNormal;
-			Vector3 Normal;
-		};
-
 		using namespace mh::define;
 		
 
@@ -207,7 +271,9 @@ namespace mh
 #pragma region Cube Mesh
 		{
 			Vertex3D vtx3d;
-			std::vector<Vertex3D> VecVtx3D(24);
+			std::vector<Vertex3D> VecVtx3D;
+			VecVtx3D.reserve(24);
+
 			
 			// 윗면
 			vtx3d.Pos = Vector4(-0.5f, 0.5f, 0.5f, 1.0f);
@@ -423,6 +489,7 @@ namespace mh
 			vtx3d.Normal = Vector3(0.f, 0.f, -1.f);
 			vtx3d.Tangent = Vector3(1.0f, 0.0f, 0.0f);
 			vtx3d.BiNormal = Vector3(0.0f, 1.0f, 1.0f);
+			VecVtx3D.push_back(vtx3d);
 			vtx3d = {};
 
 			std::vector<UINT> indices;
@@ -920,11 +987,11 @@ namespace mh
 		mConstBuffers[(UINT)eCBType::Animation] = new ConstBuffer(eCBType::Animation);
 		mConstBuffers[(UINT)eCBType::Animation]->Create(sizeof(AnimationCB));
 
-		mConstBuffers[(UINT)eCBType::Com_Light] = new ConstBuffer(eCBType::Com_Light);
-		mConstBuffers[(UINT)eCBType::Com_Light]->Create(sizeof(LightCB));
+		mConstBuffers[(UINT)eCBType::Light] = new ConstBuffer(eCBType::Light);
+		mConstBuffers[(UINT)eCBType::Light]->Create(sizeof(LightCB));
 
-		mConstBuffers[(UINT)eCBType::Com_Renderer_ParticleSystem] = new ConstBuffer(eCBType::Com_Renderer_ParticleSystem);
-		mConstBuffers[(UINT)eCBType::Com_Renderer_ParticleSystem]->Create(sizeof(ParticleSystemCB));
+		mConstBuffers[(UINT)eCBType::ParticleSystem] = new ConstBuffer(eCBType::ParticleSystem);
+		mConstBuffers[(UINT)eCBType::ParticleSystem]->Create(sizeof(ParticleSystemCB));
 
 		mConstBuffers[(UINT)eCBType::Noise] = new ConstBuffer(eCBType::Noise);
 		mConstBuffers[(UINT)eCBType::Noise]->Create(sizeof(NoiseCB));

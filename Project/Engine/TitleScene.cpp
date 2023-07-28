@@ -45,7 +45,8 @@ namespace mh
 		//cameraComp->RegisterCameraInRenderer();
 		cameraComp->TurnLayerMask(eLayerType::UI, false);
 		cameraObj->AddComponent<Script_Camera>();
-		renderer::gMainCamera = cameraComp;
+
+		RenderMgr::GetInst()->SetMainCamera(cameraComp);
 
 
 		GameObject* player = object::Instantiate<GameObject>(eLayerType::Player);

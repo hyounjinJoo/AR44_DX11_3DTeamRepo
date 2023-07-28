@@ -5,6 +5,8 @@
 #include "RenderMgr.h"
 #include "Com_Camera.h"
 
+#include "ConstBuffer.h"
+
 namespace mh
 {
 	Com_Transform::Com_Transform()
@@ -67,12 +69,12 @@ namespace mh
 
 	void Com_Transform::SetConstBuffer()
 	{
-		renderer::TransformCB trCb = {};
+		TransformCB trCb = {};
 		trCb.World = mWorld;
 		trCb.View = Com_Camera::GetGpuViewMatrix();
 		trCb.Projection = Com_Camera::GetGpuProjectionMatrix();
 
-		GPU::ConstBuffer* cb = renderer::constantBuffers[(UINT)GPU::eCBType::Transform];
+		GPU::ConstBuffer* cb = RenderMgr::GetInst()->GetConstBuffer(GPU::eCBType::Transform);
 		cb->SetData(&trCb);
 		cb->Bind(GPU::eShaderStage::VS);
 		cb->Bind(GPU::eShaderStage::HS);

@@ -4,6 +4,8 @@
 
 namespace mh
 {
+	using mh::GPU::Texture;
+
 	class Animation : public Entity
 	{
 	public:
@@ -33,7 +35,7 @@ namespace mh
 		void FixedUpdate();
 		void Render();
 
-		void Create(const std::string_view _name, std::shared_ptr<GPU::Texture> _atlas
+		void Create(const std::string_view _name, std::shared_ptr<Texture> _atlas
 			, math::Vector2 _leftTop, math::Vector2 _size, math::Vector2 _offset
 			, UINT _spriteLegth, float _duration);
 
@@ -47,7 +49,7 @@ namespace mh
 	private:
 		class Com_Animator* mAnimator;
 		std::string mAnimationName;
-		std::shared_ptr<GPU::Texture> mAtlas;
+		std::shared_ptr<Texture> mAtlas;
 		std::vector<tSprite> mSpriteSheet;
 		int mIndex;
 		float mTime;

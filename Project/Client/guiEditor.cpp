@@ -131,11 +131,12 @@ namespace gui
 			obj->Render();
 		}
 
-		for ( mh::GPU::tDebugMesh& mesh : mh::renderer::gDebugMeshes)
+		auto& DebugMeshes = mh::RenderMgr::GetInst()->GetDebugMeshes();
+		for ( mh::GPU::tDebugMesh& mesh : DebugMeshes)
 		{
 			DebugRender(mesh);
 		}
-		mh::renderer::gDebugMeshes.clear();
+		DebugMeshes.clear();
 	}
 
 	void Editor::Release()
@@ -181,12 +182,13 @@ namespace gui
 
 
 		mh::IRenderer* renderer = debugObj->GetComponent<mh::IRenderer>();
-		mh::Com_Camera* camera = mh::renderer::gMainCamera;
+		mh::Com_Camera* mainCam = mh::RenderMgr::GetInst()->GetMainCam();
 
 		tr->FixedUpdate();
 
-		mh::Com_Camera::SetGpuViewMatrix(mh::renderer::gMainCamera->GetViewMatrix());
-		mh::Com_Camera::SetGpuProjectionMatrix(mh::renderer::gMainCamera->GetProjectionMatrix());
+		mh::Com_Camera::SetGpuViewMatrix(
+			mainCam->GetViewMatrix());
+		mh::Com_Camera::SetGpuProjectionMatrix(mainCam->GetProjectionMatrix());
 
 		debugObj->Render();
 	}

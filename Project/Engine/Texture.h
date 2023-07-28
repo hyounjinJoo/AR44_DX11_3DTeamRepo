@@ -3,13 +3,14 @@
 #include "IRes.h"
 #include "GraphicDevice_DX11.h"
 
-
 #include <DirectXTex/DirectXTex.h>
 
 
 namespace mh::GPU
 {
 	using namespace mh::define;
+	using namespace mh::GPU;
+
 	class Texture : public IRes
 	{
 	public:

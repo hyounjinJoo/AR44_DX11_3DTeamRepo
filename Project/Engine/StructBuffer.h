@@ -12,7 +12,7 @@ namespace mh::GPU
 		virtual ~StructBuffer();
 
 		bool Create(UINT _size, UINT _stride, eSRVType _type, void* _data, bool _cpuAccess = false);
-		void SetData(void* _data, UINT _bufferCount);
+		void SetData(void* _data, size_t _bufferCount);
 		void GetData(void* _data, UINT _size = 0);
 		void BindSRV(eShaderStage _stage, UINT _slot);
 		void BindUAV(eShaderStage _stage, UINT _slot);

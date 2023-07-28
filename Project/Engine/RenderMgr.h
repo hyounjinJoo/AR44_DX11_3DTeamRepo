@@ -7,6 +7,21 @@
 
 namespace mh
 {
+	namespace GPU
+	{
+		class ConstBuffer;
+		class StructBuffer;
+		class Texture;
+	}
+	
+	class Com_Camera;
+	class GameObject;
+	
+	using namespace math;
+	using namespace GPU;
+	using namespace Microsoft::WRL;
+
+
 	CBUFFER(TransformCB, CBSLOT_TRANSFORM)
 	{
 		Matrix World;
@@ -75,14 +90,7 @@ namespace mh
 	};
 
 
-	using namespace mh::math;
-	using namespace mh::GPU;
-	using namespace Microsoft::WRL;
 
-	class ConstBuffer;
-	class StructBuffer;
-	class Com_Camera;
-	class GameObject;
 	
 	class RenderMgr :
 		public Singleton<RenderMgr>
@@ -92,10 +100,26 @@ namespace mh
 	public:
 		void Initialize();
 		void Render();
-		void Release();
+
+		ConstBuffer* GetConstBuffer(eCBType _Type) { return mConstBuffers[(int)_Type]; }
+		inline Com_Camera* GetMainCam() { return mMainCamera; }
+		ComPtr<ID3D11RasterizerState>	GetRasterizerState(eRSType _Type) { return mRasterizerStates[(int)_Type]; }
+		ComPtr<ID3D11BlendState>		GetBlendState(eBSType _Type) { return mBlendStates[(int)_Type]; }
+		ComPtr<ID3D11DepthStencilState> GetDepthStencilState(eDSType _Type) { return mDepthStencilStates[(int)_Type]; }
+		
+		void SetMainCamera(Com_Camera* _pCam) { mMainCamera = _pCam; }
+		void RegisterCamera(eSceneType _Type, Com_Camera* _pCam) { mCameras[(int)_Type].push_back(_pCam); }
+		Com_Camera* GetCamera(eSceneType _Type, UINT _Idx);
+		void AddDebugMesh(const tDebugMesh& _DebugMesh) { mDebugMeshes.push_back(_DebugMesh); }
+
+		std::vector<tDebugMesh>& GetDebugMeshes() { return mDebugMeshes; }
+
+		void SetInspectorGameObject(GameObject* _pObj) { mInspectorGameObject = _pObj; }
+		GameObject* GetInspectorGameObject() const { return mInspectorGameObject; }
+
 
 		//Renderer
-		void PushLightAttribute(const GPU::tLightAttribute& lightAttribute);
+		void PushLightAttribute(const GPU::tLightAttribute& lightAttribute) { mLights.push_back(lightAttribute); }
 
 
 		void BindLights();
@@ -109,24 +133,35 @@ namespace mh
 		void SetupState();
 		void LoadBuffer();
 		void LoadTexture();
-		void LoadMaterial();
 
 	private:
 		Com_Camera* mMainCamera;
 
-		ConstBuffer*					mConstBuffers[(UINT)eCBType::End];
+		ConstBuffer*						mConstBuffers[(UINT)eCBType::End];
 		ComPtr<ID3D11SamplerState>			mSamplerStates[(UINT)eSamplerType::End];
 		ComPtr<ID3D11RasterizerState>		mRasterizerStates[(UINT)eRSType::End];
 		ComPtr<ID3D11DepthStencilState>		mDepthStencilStates[(UINT)eDSType::End];
 		ComPtr<ID3D11BlendState>			mBlendStates[(UINT)eBSType::End];
 		
-		std::vector<Com_Camera*>			mCameras;
+		std::vector<Com_Camera*>			mCameras[(UINT)eSceneType::End];
 		std::vector<tDebugMesh>				mDebugMeshes;
 		std::vector<tLightAttribute>		mLights;
-		StructBuffer*					mLightsBuffer;
+		StructBuffer*						mLightsBuffer;
+
+		std::shared_ptr<Texture>			mPostProcessTexture;
 
 		GameObject*							mInspectorGameObject;
 	};
+
+
+	inline Com_Camera* RenderMgr::GetCamera(eSceneType _Type, UINT _Idx)
+	{
+		Com_Camera* pCam = nullptr;
+		if (mCameras[(int)_Type].size() > (size_t)_Idx)
+			pCam = mCameras[(int)_Type][_Idx];
+
+		return pCam;
+	}
 }
 
 

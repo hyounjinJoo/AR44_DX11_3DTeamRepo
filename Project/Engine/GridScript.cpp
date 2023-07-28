@@ -27,7 +27,7 @@ namespace mh
 	void GridScript::Initialize()
 	{
 		eSceneType type = SceneManager::GetActiveScene()->GetSceneType();
-		mCamera = renderer::gCameras[(UINT)type][0];
+		mCamera = RenderMgr::GetInst()->GetCamera(type, 0);
 	}
 
 	void GridScript::Update()
@@ -52,8 +52,8 @@ namespace mh
 		Vector2 resolution(width, height);
 
 		// Constant buffer
-		GPU::ConstBuffer* CB = renderer::constantBuffers[(UINT)GPU::eCBType::Grid];
-		renderer::GridCB data;
+		GPU::ConstBuffer* CB = RenderMgr::GetInst()->GetConstBuffer(eCBType::Grid);
+		GridCB data;
 		data.CameraPosition = position;
 		data.CameraScale = Vector2(scale, scale);
 		data.Resolution = resolution;

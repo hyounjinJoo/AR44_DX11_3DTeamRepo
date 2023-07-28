@@ -6,7 +6,7 @@
 #include "imgui_impl_win32.h"
 #include "imgui_impl_dx11.h"
 
-#include <Engine/Renderer.h>
+#include <Engine/RenderMgr.h>
 
 #include "guiTransform.h"
 #include "guiCom_Renderer_Mesh.h"
@@ -21,7 +21,7 @@ namespace gui
 		SetSize(ImVec2(300.0f, 100.0f));
 		
 		mComponents.resize((UINT)eComponentType::END);
-		mTargetGameObject = mh::renderer::gInspectorGameObject;
+		mTargetGameObject = mh::RenderMgr::GetInst()->GetInspectorGameObject();
 
 		//TODO: 여기 작동 안함
 		//mTransform = new gui::Transform();

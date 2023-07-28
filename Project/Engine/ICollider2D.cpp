@@ -64,7 +64,7 @@ namespace mh
 		meshAttribute.scale = scale;
 		meshAttribute.type = mType;
 
-		renderer::gDebugMeshes.push_back(meshAttribute);
+		RenderMgr::GetInst()->AddDebugMesh(meshAttribute);
 	}
 
 	void ICollider2D::Render()

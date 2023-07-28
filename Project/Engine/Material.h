@@ -30,7 +30,9 @@ namespace mh::GPU
 	private:
 		std::shared_ptr<GraphicsShader> mShader;
 		std::shared_ptr<Texture> mTexture[(UINT)eTextureSlot::End];
-		renderer::MaterialCB mCB;
+
+		
+		MaterialCB mCB;
 		eRenderingMode mMode;
 	};
 }

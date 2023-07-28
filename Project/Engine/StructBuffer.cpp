@@ -43,15 +43,16 @@ namespace mh::GPU
 		return true;
 	}
 
-	void StructBuffer::SetData(void* data, UINT bufferCount)
+	void StructBuffer::SetData(void* data, size_t bufferCount)
 	{
-		if (mStride < bufferCount)
+		UINT count = (UINT)bufferCount;
+		if (mStride < count)
 		{
-			Create(mSize, bufferCount, eSRVType::SRV, data);
+			Create(mSize, count, eSRVType::SRV, data);
 		}
 		else
 		{
-			GetDevice()->SetData(mWriteBuffer.Get(), data, mSize * bufferCount);
+			GetDevice()->SetData(mWriteBuffer.Get(), data, mSize * count);
 		}
 		GetDevice()->CopyResource(buffer.Get(), mWriteBuffer.Get());
 	}

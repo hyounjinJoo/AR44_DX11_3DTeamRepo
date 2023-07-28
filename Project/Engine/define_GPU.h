@@ -133,8 +133,8 @@ namespace mh::GPU
 		Material,
 		Grid,
 		Animation,
-		Com_Light,
-		Com_Renderer_ParticleSystem,
+		Light,
+		ParticleSystem,
 		Noise,
 		End,
 	};

@@ -11,6 +11,8 @@
 #include "Texture.h"
 #include "TimeMgr.h"
 
+#include "ConstBuffer.h"
+
 namespace mh
 {
 	using namespace mh::GPU;
@@ -115,7 +117,7 @@ namespace mh
 		mCBData.DeltaTime = TimeMgr::DeltaTime();
 		mCBData.ElapsedTime += TimeMgr::DeltaTime();
 
-		ConstBuffer* cb = renderer::constantBuffers[(UINT)eCBType::Com_Renderer_ParticleSystem];
+		ConstBuffer* cb = RenderMgr::GetInst()->GetConstBuffer(eCBType::ParticleSystem);
 		cb->SetData(&mCBData);
 		cb->Bind(eShaderStage::ALL);
 

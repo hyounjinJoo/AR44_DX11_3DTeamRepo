@@ -16,7 +16,7 @@ namespace mh::GPU
 {
 	GraphicDevice_DX11::GraphicDevice_DX11(eValidationMode _validationMode)
 	{
-		GPU::GetDevice() = this;
+		GetDevice() = this;
 
 		/// 1. Device 와 SwapChain 생성한다.
 		/// 2. 백버퍼에 실제로 렌더링할 렌더타겟 뷰를 생성해야한다.
@@ -97,7 +97,7 @@ namespace mh::GPU
 
 	GraphicDevice_DX11::~GraphicDevice_DX11()
 	{
-		renderer::Release();
+		//renderer::Release();
 	}
 
 	bool GraphicDevice_DX11::CreateSwapChain(DXGI_SWAP_CHAIN_DESC* _desc)
@@ -368,22 +368,22 @@ namespace mh::GPU
 		switch (_stage)
 		{
 		case mh::GPU::eShaderStage::VS:
-			mContext->VSSetConstBuffers((UINT)_type, 1, &_buffer);
+			mContext->VSSetConstantBuffers((UINT)_type, 1, &_buffer);
 			break;
 		case mh::GPU::eShaderStage::HS:
-			mContext->HSSetConstBuffers((UINT)_type, 1, &_buffer);
+			mContext->HSSetConstantBuffers((UINT)_type, 1, &_buffer);
 			break;
 		case mh::GPU::eShaderStage::DS:
-			mContext->DSSetConstBuffers((UINT)_type, 1, &_buffer);
+			mContext->DSSetConstantBuffers((UINT)_type, 1, &_buffer);
 			break;
 		case mh::GPU::eShaderStage::GS:
-			mContext->GSSetConstBuffers((UINT)_type, 1, &_buffer);
+			mContext->GSSetConstantBuffers((UINT)_type, 1, &_buffer);
 			break;
 		case mh::GPU::eShaderStage::PS:
-			mContext->PSSetConstBuffers((UINT)_type, 1, &_buffer);
+			mContext->PSSetConstantBuffers((UINT)_type, 1, &_buffer);
 			break;
 		case mh::GPU::eShaderStage::CS:
-			mContext->CSSetConstBuffers((UINT)_type, 1, &_buffer);
+			mContext->CSSetConstantBuffers((UINT)_type, 1, &_buffer);
 			break;
 		default:
 			assert(true);
@@ -510,9 +510,10 @@ namespace mh::GPU
 
 	void GraphicDevice_DX11::OMSetRenderTarget()
 	{
-		mContext->OMSetRenderTargets(1
-			, mRenderTargetTexture->GetRTV().GetAddressOf()
-			, mDepthStencilBufferTexture->GetDSV().Get());
+		mContext->OMSetRenderTargets(
+			1, 
+			mRenderTargetTexture->GetRTV().GetAddressOf(), 
+			mDepthStencilBufferTexture->GetDSV().Get());
 	}
 
 	void GraphicDevice_DX11::Draw()

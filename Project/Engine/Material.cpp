@@ -1,6 +1,7 @@
 #include "EnginePCH.h"
 
 #include "Material.h"
+#include "ConstBuffer.h"
 
 namespace mh::GPU
 {
@@ -78,7 +79,7 @@ namespace mh::GPU
             mCB.UsedNormal = 1;
         }
 
-        ConstBuffer* CB = renderer::constantBuffers[(UINT)eCBType::Material];
+        ConstBuffer* CB = RenderMgr::GetInst()->GetConstBuffer(eCBType::Material);
         CB->SetData(&mCB);
         CB->Bind(eShaderStage::VS);
         CB->Bind(eShaderStage::GS);

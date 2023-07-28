@@ -136,9 +136,9 @@ namespace mh::GPU
 		GetDevice()->BindGeometryShader(mGS.Get(), nullptr, 0);
 		GetDevice()->BindPixelShader(mPS.Get(), nullptr, 0);
 
-		Microsoft::WRL::ComPtr<ID3D11RasterizerState> rs = renderer::gRasterizerStates[(UINT)mRSType];
-		Microsoft::WRL::ComPtr<ID3D11DepthStencilState> ds = renderer::gDepthStencilStates[(UINT)mDSType];
-		Microsoft::WRL::ComPtr<ID3D11BlendState> bs = renderer::gBlendStates[(UINT)mBSType];
+		Microsoft::WRL::ComPtr<ID3D11RasterizerState> rs = RenderMgr::GetInst()->GetRasterizerState(mRSType);
+		Microsoft::WRL::ComPtr<ID3D11DepthStencilState> ds = RenderMgr::GetInst()->GetDepthStencilState(mDSType);
+		Microsoft::WRL::ComPtr<ID3D11BlendState> bs = RenderMgr::GetInst()->GetBlendState(mBSType);
 
 		GetDevice()->BindRasterizerState(rs.Get());
 		GetDevice()->BindDepthStencilState(ds.Get());

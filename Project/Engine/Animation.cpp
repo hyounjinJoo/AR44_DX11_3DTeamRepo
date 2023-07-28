@@ -4,8 +4,13 @@
 #include "TimeMgr.h"
 #include "RenderMgr.h"
 
+#include "ConstBuffer.h"
+
 namespace mh
 {
+
+
+
 	Animation::Animation()
 		: mAnimator(nullptr)
 		, mAtlas(nullptr)
@@ -56,7 +61,7 @@ namespace mh
 	}
 
 	void Animation::Create(const std::string_view _name
-		, std::shared_ptr<GPU::Texture> _atlas
+		, std::shared_ptr<Texture> _atlas
 		, math::Vector2 _leftTop, math::Vector2 _size, math::Vector2 _offset
 		, UINT _spriteLegth, float _duration)
 	{
@@ -86,9 +91,9 @@ namespace mh
 	{
 		mAtlas->BindShaderResource(GPU::eShaderStage::PS, 12);
 
-		GPU::ConstBuffer* cb = renderer::constantBuffers[(UINT)GPU::eCBType::Animation];
+		GPU::ConstBuffer* cb = RenderMgr::GetInst()->GetConstBuffer(eCBType::Animation);
 
-		renderer::AnimationCB info = {};
+		AnimationCB info = {};
 		info.Type = (UINT)define::eAnimationType::SecondDimension;
 		info.LeftTop = mSpriteSheet[mIndex].LeftTop;
 		info.Offset = mSpriteSheet[mIndex].Offset;
@@ -109,10 +114,11 @@ namespace mh
 	void Animation::Clear()
 	{
 		//Texture clear
-		GPU::Texture::Clear(12);
+		Texture::Clear(12);
 
-		GPU::ConstBuffer* cb = renderer::constantBuffers[(UINT)GPU::eCBType::Animation];
-		renderer::AnimationCB info = {};
+		GPU::ConstBuffer* cb = RenderMgr::GetInst()->GetConstBuffer(eCBType::Animation);
+
+		AnimationCB info = {};
 		info.Type = (UINT)define::eAnimationType::None;
 
 		cb->SetData(&info);

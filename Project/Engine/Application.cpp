@@ -32,17 +32,18 @@ namespace mh
 	void Application::Initialize()
 	{
 		DefaultComInitializer::Init();
+		PathMgr::GetInst()->Init();
 
 		ResMgr::GetInst();
-
-		PathMgr::GetInst()->Init();
+		RenderMgr::GetInst()->Initialize();
+		
 		TimeMgr::Initialize();
 		Input::Initialize();
 		Fmod::Initialize();
 		FontWrapper::Initialize();
 
 		CollisionMgr::Initialize();
-		renderer::Initialize();
+		
 		SceneManager::Initialize();
 	}
 
@@ -70,7 +71,7 @@ namespace mh
 		graphicDevice->Clear();
 		graphicDevice->AdjustViewPorts();
 
-		renderer::Render();
+		RenderMgr::GetInst()->Render();
 	}
 
 	void Application::Destroy()

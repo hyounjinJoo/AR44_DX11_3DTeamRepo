@@ -116,7 +116,7 @@ namespace mh
 	void Com_Camera::RegisterCameraInRenderer()
 	{
 		define::eSceneType type = SceneManager::GetActiveScene()->GetSceneType();
-		renderer::gCameras[(UINT)type].push_back(this);
+		RenderMgr::GetInst()->RegisterCamera(type, this);
 	}
 
 	void Com_Camera::TurnLayerMask(define::eLayerType _layer, bool _enable)
@@ -189,7 +189,8 @@ namespace mh
 		{
 			if (obj == nullptr)
 				continue;
-			renderer::CopyRenderTarget();
+
+			RenderMgr::GetInst()->CopyRenderTarget();
 			obj->Render();
 		}
 	}
