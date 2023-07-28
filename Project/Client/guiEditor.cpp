@@ -225,8 +225,8 @@ namespace gui
 
 		// Setup Platform/Renderer backends
 		ImGui_ImplWin32_Init(application.GetHwnd());
-		ImGui_ImplDX11_Init(mh::GPUMgr::GetInst()->GetDevice()
-			, mh::GPUMgr::GetInst()->GetContext());
+		ImGui_ImplDX11_Init(mh::GPUMgr::GetInst()->GetDevice().Get()
+			, mh::GPUMgr::GetInst()->GetContext().Get());
 
 		// Load Fonts
 		// - If no fonts are loaded, dear imgui will use the default font. You can also load multiple fonts and use ImGui::PushFont()/PopFont() to select them.

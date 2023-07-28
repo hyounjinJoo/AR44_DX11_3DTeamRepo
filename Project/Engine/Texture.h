@@ -19,21 +19,26 @@ namespace mh
 
 		static void Clear(UINT _startSlot);
 
-		bool Create(UINT _width, UINT _height, DXGI_FORMAT _format, UINT _bindFlag);
+		//생성 관련 함수
+		bool Create(UINT _width, UINT _height, DXGI_FORMAT _format, UINT _D3D11_BIND_FLAG, D3D11_USAGE _Usage);
 		bool Create(Microsoft::WRL::ComPtr<ID3D11Texture2D> _texture);
+		bool Create(const D3D11_TEXTURE2D_DESC& _TexDesc);
+
+		//Save / Load
 		virtual HRESULT Load(const std::filesystem::path& _path) override;
 		HRESULT LoadFile(const std::filesystem::path& _fullPath);
 		void InitializeResource();
-		void BindShaderResource(eShaderStage _stage, UINT _slot);
-		void BindUnorderedAccessView(UINT _startSlot);
-		void ClearUnorderedAccessView(UINT _startSlot);
 
-		void Clear();
+
+		void BindDataSRV(UINT _SRVSlot, eShaderStageFlag_ _stageFlag);
+		void BindDataUAV(UINT _UAVSlot = 0u);
+		void UnBind();
+
 
 		void SetTexture(Microsoft::WRL::ComPtr<ID3D11Texture2D> _texture) { mTexture = _texture; }
 
-		size_t GetHeight() { return mDesc.Height; }
-		size_t GetWidth() { return mDesc.Width; }
+		UINT GetHeight() const { return mDesc.Height; }
+		UINT GetWidth() const { return mDesc.Width; }
 
 		ComPtr<ID3D11Texture2D> GetTexture() { return mTexture; }
 		ComPtr<ID3D11DepthStencilView> GetDSV() { return mDSV; }
@@ -42,13 +47,25 @@ namespace mh
 		ComPtr<ID3D11ShaderResourceView> GetSRV() { return mSRV; }
 
 	private:
-		ScratchImage mImage;
-		ComPtr<ID3D11Texture2D> mTexture;
-		ComPtr<ID3D11DepthStencilView> mDSV;
-		ComPtr<ID3D11RenderTargetView> mRTV;
-		ComPtr<ID3D11UnorderedAccessView> mUAV;
-		ComPtr<ID3D11ShaderResourceView> mSRV;
-		D3D11_TEXTURE2D_DESC mDesc;
+		bool CreateView();
+
+	private:
+		D3D11_TEXTURE2D_DESC					mDesc;
+		ComPtr<ID3D11Texture2D>					mTexture;
+		ScratchImage							mImage;
+		
+		//각종 View
+		//특정 버퍼와 연결하기 위한 통행증이라고 보면 됨
+		ComPtr<ID3D11ShaderResourceView>		mSRV;
+		ComPtr<ID3D11UnorderedAccessView>		mUAV;
+		ComPtr<ID3D11DepthStencilView>			mDSV;
+		ComPtr<ID3D11RenderTargetView>			mRTV;
+
+		
+		//현재 연결되어있는 버퍼 정보
+		eBufferViewType							mCurBoundView;
+		int										mCurBoundRegister;
+		eShaderStageFlag_						mCurBoundStage;
 	};
 
 }

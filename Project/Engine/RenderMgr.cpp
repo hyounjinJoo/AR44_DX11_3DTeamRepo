@@ -74,26 +74,23 @@ namespace mh
 	void RenderMgr::BindLights()
 	{
 		mLightsBuffer->SetData(mLights.data(), mLights.size());
-		mLightsBuffer->BindSRV(eShaderStage::VS, 13);
-		mLightsBuffer->BindSRV(eShaderStage::PS, 13);
+
+		eShaderStageFlag_ Flag = eShaderStageFlag::VS | eShaderStageFlag::PS;
+
+		mLightsBuffer->BindDataSRV(13, Flag);
 
 		LightCB trCb = {};
 		trCb.NumberOfLight = (UINT)mLights.size();
 
 		ConstBuffer* cb = mConstBuffers[(UINT)eCBType::Light];
 		cb->SetData(&trCb);
-		cb->Bind(eShaderStage::VS);
-		cb->Bind(eShaderStage::PS);
+		cb->BindData(eShaderStageFlag::VS);
+		cb->BindData(eShaderStageFlag::PS);
 	}
 	void RenderMgr::BindNoiseTexture()
 	{
 		std::shared_ptr<Texture> noise = ResMgr::GetInst()->Find<Texture>(define::strKey::Default::texture::noise_03);
-		noise->BindShaderResource(eShaderStage::VS, 16);
-		noise->BindShaderResource(eShaderStage::HS, 16);
-		noise->BindShaderResource(eShaderStage::DS, 16);
-		noise->BindShaderResource(eShaderStage::GS, 16);
-		noise->BindShaderResource(eShaderStage::PS, 16);
-		noise->BindShaderResource(eShaderStage::CS, 16);
+		noise->BindDataSRV(16u, eShaderStageFlag::ALL);
 
 		NoiseCB info = {};
 		info.NoiseSize.x = (float)noise->GetWidth();
@@ -105,26 +102,24 @@ namespace mh
 
 		ConstBuffer* cb = mConstBuffers[(UINT)eCBType::Noise];
 		cb->SetData(&info);
-		cb->Bind(eShaderStage::VS);
-		cb->Bind(eShaderStage::HS);
-		cb->Bind(eShaderStage::DS);
-		cb->Bind(eShaderStage::GS);
-		cb->Bind(eShaderStage::PS);
-		cb->Bind(eShaderStage::CS);
+		cb->BindData(eShaderStageFlag::ALL);
 	}
 	void RenderMgr::CopyRenderTarget()
 	{
 		std::shared_ptr<Texture> renderTarget = ResMgr::GetInst()->Find<Texture>(define::strKey::Default::texture::RenderTarget);
+			
+		//renderTarget->UnBind();
 
-		ID3D11ShaderResourceView* srv = nullptr;
-		GPUMgr::GetInst()->BindShaderResource(eShaderStage::PS, 60, &srv);
+		auto pContext = GPUMgr::GetInst()->GetContext();
+		//ID3D11ShaderResourceView* srv = nullptr;
+		//pContext->PSSetShaderResources()(eShaderStage::PS, 60, &srv);
 
 		ID3D11Texture2D* dest = mPostProcessTexture->GetTexture().Get();
 		ID3D11Texture2D* source = renderTarget->GetTexture().Get();
 
-		GPUMgr::GetInst()->CopyResource(dest, source);
+		GPUMgr::GetInst()->GetContext()->CopyResource(dest, source);
 
-		mPostProcessTexture->BindShaderResource(eShaderStage::PS, 60);
+		mPostProcessTexture->BindDataSRV(60u, eShaderStageFlag::PS);
 	}
 	void RenderMgr::LoadMesh()
 	{
@@ -753,6 +748,10 @@ namespace mh
 
 	void RenderMgr::SetupState()
 	{
+		auto pDevice = GPUMgr::GetInst()->GetDevice();
+		auto pContext = GPUMgr::GetInst()->GetContext();
+		auto* pResMgr = ResMgr::GetInst();
+
 #pragma region Input layout
 		std::vector<D3D11_INPUT_ELEMENT_DESC> vecLayoutDesc;
 		D3D11_INPUT_ELEMENT_DESC LayoutDesc{};
@@ -788,25 +787,25 @@ namespace mh
 		//Vector3 BiNormal;
 		//Vector3 Normal;
 		using namespace strKey::Default::shader;
-		std::shared_ptr<GraphicsShader> RectShader = ResMgr::GetInst()->Find<GraphicsShader>(graphics::RectShader);
+		std::shared_ptr<GraphicsShader> RectShader = pResMgr->Find<GraphicsShader>(graphics::RectShader);
 		RectShader->CreateInputLayout(vecLayoutDesc);
 
-		std::shared_ptr<GraphicsShader> spriteShader = ResMgr::GetInst()->Find<GraphicsShader>(graphics::SpriteShader);
+		std::shared_ptr<GraphicsShader> spriteShader = pResMgr->Find<GraphicsShader>(graphics::SpriteShader);
 		spriteShader->CreateInputLayout(vecLayoutDesc);
 
-		std::shared_ptr<GraphicsShader> uiShader = ResMgr::GetInst()->Find<GraphicsShader>(graphics::UIShader);
+		std::shared_ptr<GraphicsShader> uiShader = pResMgr->Find<GraphicsShader>(graphics::UIShader);
 		uiShader->CreateInputLayout(vecLayoutDesc);
 
-		std::shared_ptr<GraphicsShader> gridShader = ResMgr::GetInst()->Find<GraphicsShader>(graphics::GridShader);
+		std::shared_ptr<GraphicsShader> gridShader = pResMgr->Find<GraphicsShader>(graphics::GridShader);
 		uiShader->CreateInputLayout(vecLayoutDesc);
 
-		std::shared_ptr<GraphicsShader> debugShader = ResMgr::GetInst()->Find<GraphicsShader>(graphics::DebugShader);
+		std::shared_ptr<GraphicsShader> debugShader = pResMgr->Find<GraphicsShader>(graphics::DebugShader);
 		debugShader->CreateInputLayout(vecLayoutDesc);
 
-		std::shared_ptr<GraphicsShader> particleShader = ResMgr::GetInst()->Find<GraphicsShader>(graphics::ParticleShader);
+		std::shared_ptr<GraphicsShader> particleShader = pResMgr->Find<GraphicsShader>(graphics::ParticleShader);
 		particleShader->CreateInputLayout(vecLayoutDesc);
 
-		std::shared_ptr<GraphicsShader> postProcessShader = ResMgr::GetInst()->Find<GraphicsShader>(graphics::ParticleShader);
+		std::shared_ptr<GraphicsShader> postProcessShader = pResMgr->Find<GraphicsShader>(graphics::ParticleShader);
 		postProcessShader->CreateInputLayout(vecLayoutDesc);
 
 
@@ -838,7 +837,7 @@ namespace mh
 		LayoutDesc = D3D11_INPUT_ELEMENT_DESC{};
 
 
-		std::shared_ptr<GraphicsShader> basicShader = ResMgr::GetInst()->Find<GraphicsShader>(graphics::Basic3DShader);
+		std::shared_ptr<GraphicsShader> basicShader = pResMgr->Find<GraphicsShader>(graphics::Basic3DShader);
 		basicShader->CreateInputLayout(vecLayoutDesc);
 
 #pragma endregion
@@ -851,59 +850,62 @@ namespace mh
 		samplerDesc.AddressW = D3D11_TEXTURE_ADDRESS_MODE::D3D11_TEXTURE_ADDRESS_WRAP;
 		samplerDesc.Filter = D3D11_FILTER::D3D11_FILTER_MIN_LINEAR_MAG_MIP_POINT;
 
-		GPUMgr::GetInst()->CreateSamplerState
+
+		pDevice->CreateSamplerState
 		(
 			&samplerDesc
 			, mSamplerStates[(UINT)eSamplerType::Point].GetAddressOf()
 		);
 
 		samplerDesc.Filter = D3D11_FILTER::D3D11_FILTER_MIN_POINT_MAG_MIP_LINEAR;
-		GPUMgr::GetInst()->CreateSamplerState
+		pDevice->CreateSamplerState
 		(
 			&samplerDesc
 			, mSamplerStates[(UINT)eSamplerType::Linear].GetAddressOf()
 		);
 
 		samplerDesc.Filter = D3D11_FILTER::D3D11_FILTER_ANISOTROPIC;
-		GPUMgr::GetInst()->CreateSamplerState
+		pDevice->CreateSamplerState
 		(
 			&samplerDesc
 			, mSamplerStates[(UINT)eSamplerType::Anisotropic].GetAddressOf()
 		);
 
-		GPUMgr::GetInst()->BindsSamplers((UINT)eSamplerType::Point
+		
+		pContext->PSSetSamplers((UINT)eSamplerType::Point
 			, 1, mSamplerStates[(UINT)eSamplerType::Point].GetAddressOf());
 
-		GPUMgr::GetInst()->BindsSamplers((UINT)eSamplerType::Linear
+		pContext->PSSetSamplers((UINT)eSamplerType::Linear
 			, 1, mSamplerStates[(UINT)eSamplerType::Linear].GetAddressOf());
 
-		GPUMgr::GetInst()->BindsSamplers((UINT)eSamplerType::Anisotropic
+		pContext->PSSetSamplers((UINT)eSamplerType::Anisotropic
 			, 1, mSamplerStates[(UINT)eSamplerType::Anisotropic].GetAddressOf());
+
 #pragma endregion
 #pragma region Rasterizer state
 		D3D11_RASTERIZER_DESC rsDesc = {};
 		rsDesc.FillMode = D3D11_FILL_MODE::D3D11_FILL_SOLID;
 		rsDesc.CullMode = D3D11_CULL_MODE::D3D11_CULL_BACK;
 
-		GPUMgr::GetInst()->CreateRasterizerState(&rsDesc
+		pDevice->CreateRasterizerState(&rsDesc
 			, mRasterizerStates[(UINT)eRSType::SolidBack].GetAddressOf());
 
 		rsDesc.FillMode = D3D11_FILL_MODE::D3D11_FILL_SOLID;
 		rsDesc.CullMode = D3D11_CULL_MODE::D3D11_CULL_FRONT;
 
-		GPUMgr::GetInst()->CreateRasterizerState(&rsDesc
+		pDevice->CreateRasterizerState(&rsDesc
 			, mRasterizerStates[(UINT)eRSType::SolidFront].GetAddressOf());
 
 		rsDesc.FillMode = D3D11_FILL_MODE::D3D11_FILL_SOLID;
 		rsDesc.CullMode = D3D11_CULL_MODE::D3D11_CULL_NONE;
 
-		GPUMgr::GetInst()->CreateRasterizerState(&rsDesc
+		pDevice->CreateRasterizerState(&rsDesc
 			, mRasterizerStates[(UINT)eRSType::SolidNone].GetAddressOf());
 
 		rsDesc.FillMode = D3D11_FILL_MODE::D3D11_FILL_WIREFRAME;
 		rsDesc.CullMode = D3D11_CULL_MODE::D3D11_CULL_NONE;
 
-		GPUMgr::GetInst()->CreateRasterizerState(&rsDesc
+		pDevice->CreateRasterizerState(&rsDesc
 			, mRasterizerStates[(UINT)eRSType::WireframeNone].GetAddressOf());
 #pragma endregion
 #pragma region Depth Stencil State
@@ -913,7 +915,7 @@ namespace mh
 		dsDesc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK::D3D11_DEPTH_WRITE_MASK_ALL;
 		dsDesc.StencilEnable = false;
 
-		GPUMgr::GetInst()->CreateDepthStencilState(&dsDesc
+		pDevice->CreateDepthStencilState(&dsDesc
 			, mDepthStencilStates[(UINT)eDSType::Less].GetAddressOf());
 
 		dsDesc.DepthEnable = true;
@@ -921,7 +923,7 @@ namespace mh
 		dsDesc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK::D3D11_DEPTH_WRITE_MASK_ALL;
 		dsDesc.StencilEnable = false;
 
-		GPUMgr::GetInst()->CreateDepthStencilState(&dsDesc
+		pDevice->CreateDepthStencilState(&dsDesc
 			, mDepthStencilStates[(UINT)eDSType::Greater].GetAddressOf());
 
 		dsDesc.DepthEnable = true;
@@ -929,7 +931,7 @@ namespace mh
 		dsDesc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK::D3D11_DEPTH_WRITE_MASK_ZERO;
 		dsDesc.StencilEnable = false;
 
-		GPUMgr::GetInst()->CreateDepthStencilState(&dsDesc
+		pDevice->CreateDepthStencilState(&dsDesc
 			, mDepthStencilStates[(UINT)eDSType::NoWrite].GetAddressOf());
 
 		dsDesc.DepthEnable = false;
@@ -937,7 +939,7 @@ namespace mh
 		dsDesc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK::D3D11_DEPTH_WRITE_MASK_ZERO;
 		dsDesc.StencilEnable = false;
 
-		GPUMgr::GetInst()->CreateDepthStencilState(&dsDesc
+		pDevice->CreateDepthStencilState(&dsDesc
 			, mDepthStencilStates[(UINT)eDSType::None].GetAddressOf());
 #pragma endregion
 #pragma region Blend State
@@ -957,7 +959,7 @@ namespace mh
 
 		bsDesc.RenderTarget[0].RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
 
-		GPUMgr::GetInst()->CreateBlendState(&bsDesc, mBlendStates[(UINT)eBSType::AlphaBlend].GetAddressOf());
+		pDevice->CreateBlendState(&bsDesc, mBlendStates[(UINT)eBSType::AlphaBlend].GetAddressOf());
 
 		bsDesc.AlphaToCoverageEnable = false;
 		bsDesc.IndependentBlendEnable = false;
@@ -968,7 +970,7 @@ namespace mh
 		bsDesc.RenderTarget[0].DestBlend = D3D11_BLEND_ONE;
 		bsDesc.RenderTarget[0].RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
 
-		GPUMgr::GetInst()->CreateBlendState(&bsDesc, mBlendStates[(UINT)eBSType::OneOne].GetAddressOf());
+		pDevice->CreateBlendState(&bsDesc, mBlendStates[(UINT)eBSType::OneOne].GetAddressOf());
 
 #pragma endregion
 	}
@@ -997,10 +999,15 @@ namespace mh
 		mConstBuffers[(UINT)eCBType::Noise] = new ConstBuffer(eCBType::Noise);
 		mConstBuffers[(UINT)eCBType::Noise]->Create(sizeof(NoiseCB));
 
+		mConstBuffers[(UINT)eCBType::SBuffer] = new ConstBuffer(eCBType::SBuffer);
+		mConstBuffers[(UINT)eCBType::SBuffer]->Create<SBufferCB>();
+
 #pragma endregion
 #pragma region STRUCTED BUFFER
-		mLightsBuffer = std::make_unique<StructBuffer>();
-		mLightsBuffer->Create(sizeof(tLightAttribute), 128, eSRVType::SRV, nullptr, true);
+		tSBufferDesc SDesc{};
+		SDesc.eSBufferType = eStructBufferType::READ_ONLY;
+		mLightsBuffer = std::make_unique<StructBuffer>(SDesc);
+		mLightsBuffer->Create<tLightAttribute>(128u, nullptr, 0);
 #pragma endregion
 	}
 
@@ -1044,14 +1051,14 @@ namespace mh
 #pragma region DYNAMIC TEXTURE
 		std::shared_ptr<Texture> uavTexture = std::make_shared<Texture>();
 		uavTexture->Create(1024, 1024, DXGI_FORMAT_R8G8B8A8_UNORM, D3D11_BIND_SHADER_RESOURCE
-			| D3D11_BIND_UNORDERED_ACCESS);
+			| D3D11_BIND_UNORDERED_ACCESS, D3D11_USAGE_DEFAULT);
 		ResMgr::GetInst()->Add(texture::PaintTexture, uavTexture);
 #pragma endregion
 
 		//noise
 		std::shared_ptr<Texture> NoiseTex = std::make_shared<Texture>();
-		NoiseTex->Create(1600, 900, DXGI_FORMAT_R8G8B8A8_UNORM, D3D11_BIND_SHADER_RESOURCE);
-		NoiseTex->BindShaderResource(eShaderStage::PS, 60);
+		NoiseTex->Create(1600, 900, DXGI_FORMAT_R8G8B8A8_UNORM, D3D11_BIND_SHADER_RESOURCE, D3D11_USAGE_DEFAULT);
+		NoiseTex->BindDataSRV(eShaderStageFlag::PS, 60);
 	}
 
 	void RenderMgr::LoadMaterial()

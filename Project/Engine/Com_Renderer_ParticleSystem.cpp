@@ -71,11 +71,14 @@ namespace mh
 			particles[i].speed = 100.0f;
 		}
 
-		mBuffer = new StructBuffer();
-		mBuffer->Create(sizeof(tParticle), mMaxParticles, eSRVType::UAV, particles);
+		tSBufferDesc sDesc{};
+		sDesc.eSBufferType = eStructBufferType::READ_WRITE;
 
-		mSharedBuffer = new StructBuffer();
-		mSharedBuffer->Create(sizeof(tParticleShared), 1, eSRVType::UAV, nullptr, true);
+		mBuffer = new StructBuffer(sDesc);
+		mBuffer->Create<tParticle>(mMaxParticles, particles, 100u);
+
+		mSharedBuffer = new StructBuffer(sDesc);
+		mSharedBuffer->Create<tParticleShared>(1, nullptr, 0u);
 	}
 
 	void Com_Renderer_ParticleSystem::Update()
@@ -119,7 +122,7 @@ namespace mh
 
 		ConstBuffer* cb = RenderMgr::GetInst()->GetConstBuffer(eCBType::ParticleSystem);
 		cb->SetData(&mCBData);
-		cb->Bind(eShaderStage::ALL);
+		cb->BindData(eShaderStageFlag::ALL);
 
 		mCS->SetSharedStrutedBuffer(mSharedBuffer);
 		mCS->SetStrcutedBuffer(mBuffer);
@@ -129,11 +132,11 @@ namespace mh
 	void Com_Renderer_ParticleSystem::Render()
 	{
 		GetOwner()->GetTransform().SetConstBuffer();
-		mBuffer->BindSRV(eShaderStage::GS, 15);
+		mBuffer->BindDataSRV(15, eShaderStageFlag::GS);
 
 		GetMaterial()->Bind();
 		GetMesh()->RenderInstanced(mMaxParticles);
 
-		mBuffer->Clear();
+		mBuffer->UnBind();
 	}
 }

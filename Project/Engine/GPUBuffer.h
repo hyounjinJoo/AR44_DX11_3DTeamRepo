@@ -5,22 +5,26 @@
 
 namespace mh
 {
+	enum class eBufferType
+	{
+		Const,
+		Struct,
+		UnknownType,
+	};
+
 	class GPUBuffer
 		: public Entity
 	{
 	public:
-		GPUBuffer() = default;
+		GPUBuffer(eBufferType _Type);
 		virtual ~GPUBuffer() = default;
 
-		enum class eType
-		{
-			Buffer,
-			Texture,
-			UnknownType,
-		} type = eType::UnknownType;
+	protected:
+		ComPtr<ID3D11Buffer>	mBuffer;
+		D3D11_BUFFER_DESC		mBufferDesc;
 
-		D3D11_BUFFER_DESC desc;
-		Microsoft::WRL::ComPtr<ID3D11Buffer> buffer;
+	private:
+		eBufferType mBufferType;
 	};
 
 }

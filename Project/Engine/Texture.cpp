@@ -20,10 +20,19 @@ namespace mh
 
 	Texture::Texture()
 		: IRes(eResourceType::Texture)
-		, mDesc{}
-		, mTexture(nullptr)
-	{
+		, mDesc()
+		, mTexture()
+		, mImage()
+		, mSRV()
+		, mUAV()
 
+		, mDSV()
+		, mRTV()
+
+		, mCurBoundView()
+		, mCurBoundRegister(-1)
+		, mCurBoundStage(eShaderStageFlag::NONE)
+	{
 	}
 
 	Texture::~Texture()
@@ -35,64 +44,60 @@ namespace mh
 	{
 		ID3D11ShaderResourceView* srv = nullptr;
 
-		GPUMgr::GetInst()->BindShaderResource(eShaderStage::VS, _startSlot, &srv);
-		GPUMgr::GetInst()->BindShaderResource(eShaderStage::DS, _startSlot, &srv);
-		GPUMgr::GetInst()->BindShaderResource(eShaderStage::GS, _startSlot, &srv);
-		GPUMgr::GetInst()->BindShaderResource(eShaderStage::HS, _startSlot, &srv);
-		GPUMgr::GetInst()->BindShaderResource(eShaderStage::CS, _startSlot, &srv);
-		GPUMgr::GetInst()->BindShaderResource(eShaderStage::PS, _startSlot, &srv);
+		auto pContext = GPUMgr::GetInst()->GetContext();
+		pContext->VSSetShaderResources(_startSlot, 1u, &srv);
+		pContext->HSSetShaderResources(_startSlot, 1u, &srv);
+		pContext->DSSetShaderResources(_startSlot, 1u, &srv);
+		pContext->GSSetShaderResources(_startSlot, 1u, &srv);
+		pContext->PSSetShaderResources(_startSlot, 1u, &srv);
+		pContext->CSSetShaderResources(_startSlot, 1u, &srv);
 	}
 
-	bool Texture::Create(UINT _width, UINT _height, DXGI_FORMAT _format, UINT _bindFlag)
+	bool Texture::Create(UINT _width, UINT _height, DXGI_FORMAT _pixelFormat, UINT _D3D11_BIND_FLAG, D3D11_USAGE _Usage)
 	{
 		//Depth stencil _texture
-		mDesc.BindFlags = _bindFlag;
-		mDesc.Usage = D3D11_USAGE_DEFAULT;
-		mDesc.CPUAccessFlags = 0;
-		mDesc.Format = _format;
+		mDesc.BindFlags = _D3D11_BIND_FLAG;
+		mDesc.Usage = _Usage;
+
+		//CPU의 읽기/쓰기 가능 여부를 설정
+		if (D3D11_USAGE::D3D11_USAGE_DYNAMIC == _Usage)
+			mDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+		else if (D3D11_USAGE::D3D11_USAGE_STAGING == _Usage)
+			mDesc.CPUAccessFlags = D3D11_CPU_ACCESS_READ;
+		else
+			mDesc.CPUAccessFlags = 0;
+
+		mDesc.Format = _pixelFormat;
 		mDesc.Width = _width;
 		mDesc.Height = _height;
 		mDesc.ArraySize = 1;
-
-		mDesc.SampleDesc.Count = 1;
-		mDesc.SampleDesc.Quality = 0;
-
-		mDesc.MipLevels = 1;
 		mDesc.MiscFlags = 0;
 
-		if (!GPUMgr::GetInst()->CreateTexture(&mDesc, mTexture.GetAddressOf()))
+		//원본만 생성.(자세한 내용은 밉맵을 찾아볼 것)
+		mDesc.MipLevels = 1;
+		mDesc.SampleDesc.Count = 1;
+		mDesc.SampleDesc.Quality = 0;
+		
+
+		bool bResult = false;
+		auto pDevice = GPUMgr::GetInst()->GetDevice();
+		bResult = SUCCEEDED(pDevice->CreateTexture2D(&mDesc, nullptr, mTexture.GetAddressOf()));
+
+		if(false == bResult)
+		{
+			ERROR_MESSAGE_W(L"텍스처 생성에 실패 했습니다.");
+			mDesc = {};
 			return false;
-
-		if (_bindFlag & D3D11_BIND_FLAG::D3D11_BIND_DEPTH_STENCIL)
-		{
-			if (!GPUMgr::GetInst()->CreateDepthStencilView(mTexture.Get(), nullptr, mDSV.GetAddressOf()))
-				return false;
-		}
-
-		if (_bindFlag & D3D11_BIND_FLAG::D3D11_BIND_SHADER_RESOURCE)
-		{
-			D3D11_SHADER_RESOURCE_VIEW_DESC tSRVDesc = {};
-			tSRVDesc.Format = _format;
-			tSRVDesc.Texture2D.MipLevels = 1;
-			tSRVDesc.Texture2D.MostDetailedMip = 0;
-			tSRVDesc.ViewDimension = D3D11_SRV_DIMENSION::D3D11_SRV_DIMENSION_TEXTURE2D;
-			
-			if (!GPUMgr::GetInst()->CreateShaderResourceView(mTexture.Get(), nullptr, mSRV.GetAddressOf()))
-				return false;
 		}
 		
-		if (_bindFlag & D3D11_BIND_FLAG::D3D11_BIND_UNORDERED_ACCESS)
+		bResult = CreateView();
+		if (false == bResult)
 		{
-			D3D11_UNORDERED_ACCESS_VIEW_DESC tUAVDesc = {};
-			tUAVDesc.Format = _format;
-			tUAVDesc.Texture2D.MipSlice = 0;
-			tUAVDesc.ViewDimension = D3D11_UAV_DIMENSION::D3D11_UAV_DIMENSION_TEXTURE2D;
-
-			if (!GPUMgr::GetInst()->CreateUnorderedAccessView(mTexture.Get(), nullptr, mUAV.GetAddressOf()))
-				return false;
+			mTexture = nullptr;
+			mDesc = {};
 		}
 
-		return true;
+		return bResult;
 	}
 
 	bool Texture::Create(Microsoft::WRL::ComPtr<ID3D11Texture2D> _texture)
@@ -100,42 +105,38 @@ namespace mh
 		mTexture = _texture;
 		mTexture->GetDesc(&mDesc);
 
-		if (mDesc.BindFlags & D3D11_BIND_FLAG::D3D11_BIND_DEPTH_STENCIL)
+		bool Result = CreateView();
+		
+		if (false == Result)
 		{
-			if (!GPUMgr::GetInst()->CreateDepthStencilView(mTexture.Get(), nullptr, mDSV.GetAddressOf()))
-				return false;
+			mTexture = nullptr;
+			mDesc = {};
 		}
 
-		if (mDesc.BindFlags & D3D11_BIND_FLAG::D3D11_BIND_RENDER_TARGET)
+		return Result;
+	}
+
+	bool Texture::Create(const D3D11_TEXTURE2D_DESC& _TexDesc)
+	{
+		bool Result = false;
+		mDesc = _TexDesc;
+
+		Result = SUCCEEDED(GPUMgr::GetInst()->GetDevice()->CreateTexture2D(&mDesc, nullptr, mTexture.GetAddressOf()));
+		if (false == Result)
 		{
-			if (!GPUMgr::GetInst()->CreateRenderTargetView(mTexture.Get(), nullptr, mRTV.GetAddressOf()))
-				return false;
+			ERROR_MESSAGE_W(L"텍스처 생성에 실패 했습니다.");
+			mDesc = {};
+			return false;
 		}
 
-		if (mDesc.BindFlags & D3D11_BIND_FLAG::D3D11_BIND_SHADER_RESOURCE)
+		Result = CreateView();
+		if(false == Result)
 		{
-			D3D11_SHADER_RESOURCE_VIEW_DESC tSRVDesc = {};
-			tSRVDesc.Format = mDesc.Format;
-			tSRVDesc.Texture2D.MipLevels = 1;
-			tSRVDesc.Texture2D.MostDetailedMip = 0;
-			tSRVDesc.ViewDimension = D3D11_SRV_DIMENSION::D3D11_SRV_DIMENSION_TEXTURE2D;
-
-			if (!GPUMgr::GetInst()->CreateShaderResourceView(mTexture.Get(), nullptr, mSRV.GetAddressOf()))
-				return false;
+			mDesc = {};
+			Result = false;
 		}
-
-		if (mDesc.BindFlags & D3D11_BIND_FLAG::D3D11_BIND_UNORDERED_ACCESS)
-		{
-			D3D11_UNORDERED_ACCESS_VIEW_DESC tUAVDesc = {};
-			tUAVDesc.Format = mDesc.Format;
-			tUAVDesc.Texture2D.MipSlice = 0;
-			tUAVDesc.ViewDimension = D3D11_UAV_DIMENSION::D3D11_UAV_DIMENSION_TEXTURE2D;
-
-			if (!GPUMgr::GetInst()->CreateUnorderedAccessView(mTexture.Get(), nullptr, mUAV.GetAddressOf()))
-				return false;
-		}
-
-		return true;
+		
+		return Result;
 	}
 
 	HRESULT Texture::Load(const std::filesystem::path& _FileName)
@@ -179,7 +180,7 @@ namespace mh
 	{
 		CreateShaderResourceView
 		(
-			GPUMgr::GetInst()->GetDevice(),
+			GPUMgr::GetInst()->GetDevice().Get(),
 			mImage.GetImages(),
 			mImage.GetImageCount(),
 			mImage.GetMetadata(),
@@ -190,34 +191,177 @@ namespace mh
 		mTexture->GetDesc(&mDesc);
 	}
 
-	void Texture::BindShaderResource(eShaderStage _stage, UINT _slot)
+	void Texture::BindDataSRV(UINT _SRVSlot, eShaderStageFlag_ _stageFlag)
 	{
-		GPUMgr::GetInst()->BindShaderResource(_stage, _slot, mSRV.GetAddressOf());
+		UnBind();
+	
+		mCurBoundRegister = (int)_SRVSlot;
+		mCurBoundStage = _stageFlag;
+		mCurBoundView = eBufferViewType::SRV;
+
+		auto pContext = GPUMgr::GetInst()->GetContext();
+		if (eShaderStageFlag::VS & _stageFlag)
+		{
+			pContext->VSSetShaderResources(_SRVSlot, 1u, mSRV.GetAddressOf());
+		}
+		if (eShaderStageFlag::HS & _stageFlag)
+		{
+			pContext->HSSetShaderResources(_SRVSlot, 1u, mSRV.GetAddressOf());
+		}
+		if (eShaderStageFlag::DS & _stageFlag)
+		{
+			pContext->DSSetShaderResources(_SRVSlot, 1u, mSRV.GetAddressOf());
+		}
+		if (eShaderStageFlag::GS & _stageFlag)
+		{
+			pContext->GSSetShaderResources(_SRVSlot, 1u, mSRV.GetAddressOf());
+		}
+		if (eShaderStageFlag::PS & _stageFlag)
+		{
+			pContext->PSSetShaderResources(_SRVSlot, 1u, mSRV.GetAddressOf());
+		}
 	}
 
-	void Texture::BindUnorderedAccessView(UINT _startSlot)
+	void Texture::BindDataUAV(UINT _startSlot)
 	{
+		UnBind();
+
+		mCurBoundView = eBufferViewType::UAV;
+		mCurBoundRegister = (int)_startSlot;
+
 		UINT i = -1;
-		GPUMgr::GetInst()->BindUnorderdAccessView(_startSlot, 1, mUAV.GetAddressOf(), &i);
+		GPUMgr::GetInst()->GetContext()->CSSetUnorderedAccessViews(_startSlot, 1, mUAV.GetAddressOf(), &i);
 	}
 
-	void Texture::ClearUnorderedAccessView(UINT _startSlot)
+
+	void Texture::UnBind()
 	{
-		ID3D11UnorderedAccessView* p = nullptr;
-		UINT i = -1;
-		GPUMgr::GetInst()->BindUnorderdAccessView(_startSlot, 1, &p, &i);
+		switch (mCurBoundView)
+		{
+		case mh::eBufferViewType::NONE:
+			break;
+
+		case mh::eBufferViewType::SRV:
+		{
+			MH_ASSERT(0 <= mCurBoundRegister);
+			ID3D11ShaderResourceView* srv = nullptr;
+
+			auto pContext = GPUMgr::GetInst()->GetContext();
+
+			if (eShaderStageFlag::VS & mCurBoundStage)
+			{
+				pContext->VSSetShaderResources(mCurBoundRegister, 1u, &srv);
+			}
+			if (eShaderStageFlag::HS & mCurBoundStage)
+			{
+				pContext->HSSetShaderResources(mCurBoundRegister, 1u, &srv);
+			}
+			if (eShaderStageFlag::DS & mCurBoundStage)
+			{
+				pContext->DSSetShaderResources(mCurBoundRegister, 1u, &srv);
+			}
+			if (eShaderStageFlag::GS & mCurBoundStage)
+			{
+				pContext->GSSetShaderResources(mCurBoundRegister, 1u, &srv);
+			}
+			if (eShaderStageFlag::PS & mCurBoundStage)
+			{
+				pContext->PSSetShaderResources(mCurBoundRegister, 1u, &srv);
+			}
+			if (eShaderStageFlag::CS & mCurBoundStage)
+			{
+				pContext->CSSetShaderResources(mCurBoundRegister, 1u, &srv);
+			}
+
+			mCurBoundRegister = -1;
+			mCurBoundStage = eShaderStageFlag::NONE;
+			
+			break;
+		}
+		case mh::eBufferViewType::UAV:
+		{
+			ID3D11UnorderedAccessView* pUAV = nullptr;
+			UINT u = -1;
+
+			GPUMgr::GetInst()->GetContext()->CSSetUnorderedAccessViews(mCurBoundRegister, 1, &pUAV, &u);
+
+			//현재 연결된 레지스터 번호와 파이프라인을 초기화
+			mCurBoundRegister = -1;
+			mCurBoundStage = eShaderStageFlag::NONE;
+
+			break;
+		}
+			
+		case mh::eBufferViewType::RTV:
+			[[fallthrough]];
+		case mh::eBufferViewType::DSV:
+		{
+			ID3D11RenderTargetView* pRTV = nullptr;
+			ID3D11DepthStencilView* pDSV = nullptr;
+
+			GPUMgr::GetInst()->GetContext()->OMSetRenderTargets(1u, &pRTV, pDSV);
+			break;
+		}
+
+		default:
+			break;
+		}
+
+
+		mCurBoundView = eBufferViewType::NONE;
 	}
 
-	void Texture::Clear()
+	bool Texture::CreateView()
 	{
-		ID3D11ShaderResourceView* srv = nullptr;
+		auto pDevice = GPUMgr::GetInst()->GetDevice();
+		if (mDesc.BindFlags & D3D11_BIND_FLAG::D3D11_BIND_DEPTH_STENCIL)
+		{
+			if (FAILED(pDevice->CreateDepthStencilView(mTexture.Get(), nullptr, mDSV.GetAddressOf())))
+			{
+				ERROR_MESSAGE_W(L"Depth Stencil View 생성에 실패 했습니다.");
+				return false;
+			}
+		}
 
-		GPUMgr::GetInst()->BindShaderResource(eShaderStage::VS, 0, &srv);
-		GPUMgr::GetInst()->BindShaderResource(eShaderStage::DS, 0, &srv);
-		GPUMgr::GetInst()->BindShaderResource(eShaderStage::GS, 0, &srv);
-		GPUMgr::GetInst()->BindShaderResource(eShaderStage::HS, 0, &srv);
-		GPUMgr::GetInst()->BindShaderResource(eShaderStage::CS, 0, &srv);
-		GPUMgr::GetInst()->BindShaderResource(eShaderStage::PS, 0, &srv);
+		if (mDesc.BindFlags & D3D11_BIND_FLAG::D3D11_BIND_RENDER_TARGET)
+		{
+			if (FAILED(pDevice->CreateRenderTargetView(mTexture.Get(), nullptr, mRTV.GetAddressOf())))
+			{
+				ERROR_MESSAGE_W(L"Render Target View 생성에 실패 했습니다.");
+				return false;
+			}
+		}
+
+		if (mDesc.BindFlags & D3D11_BIND_FLAG::D3D11_BIND_SHADER_RESOURCE)
+		{
+			D3D11_SHADER_RESOURCE_VIEW_DESC tSRVDesc = {};
+			tSRVDesc.Format = mDesc.Format;
+			tSRVDesc.Texture2D.MipLevels = 1;
+			tSRVDesc.Texture2D.MostDetailedMip = 0;
+			tSRVDesc.ViewDimension = D3D11_SRV_DIMENSION::D3D11_SRV_DIMENSION_TEXTURE2D;
+
+			if (FAILED(pDevice->CreateShaderResourceView(mTexture.Get(), nullptr, mSRV.GetAddressOf())))
+			{
+				ERROR_MESSAGE_W(L"Shader Resource View 생성에 실패 했습니다.");
+				return false;
+			}
+		}
+
+		if (mDesc.BindFlags & D3D11_BIND_FLAG::D3D11_BIND_UNORDERED_ACCESS)
+		{
+			D3D11_UNORDERED_ACCESS_VIEW_DESC tUAVDesc = {};
+			tUAVDesc.Format = mDesc.Format;
+			tUAVDesc.Texture2D.MipSlice = 0;
+			tUAVDesc.ViewDimension = D3D11_UAV_DIMENSION::D3D11_UAV_DIMENSION_TEXTURE2D;
+
+			if (FAILED(pDevice->CreateUnorderedAccessView(mTexture.Get(), nullptr, mUAV.GetAddressOf())))
+			{
+				ERROR_MESSAGE_W(L"Unordered Access View 생성에 실패 했습니다.");
+				return false;
+			}
+		}
+
+		return true;
 	}
 
 

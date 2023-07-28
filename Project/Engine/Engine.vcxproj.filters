@@ -576,9 +576,6 @@
     <None Include="Default_HLSL\SH_Common.hlsli">
       <Filter>Default HLSL</Filter>
     </None>
-    <None Include="GPUMgr.inl">
-      <Filter>Manager</Filter>
-    </None>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Default_HLSL\PS_Basic.hlsl">
