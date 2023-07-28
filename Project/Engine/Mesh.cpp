@@ -41,7 +41,7 @@ namespace mh
 		D3D11_SUBRESOURCE_DATA subData = {};
 		subData.pSysMem = _data;
 
-		bool Result = GetDevice()->CreateBuffer(&mVBDesc, &subData, mVertexBuffer.GetAddressOf());
+		bool Result = GPUMgr::GetInst()->CreateBuffer(&mVBDesc, &subData, mVertexBuffer.GetAddressOf());
 
 		if(false == Result)
 		{
@@ -65,7 +65,7 @@ namespace mh
 		D3D11_SUBRESOURCE_DATA subData = {};
 		subData.pSysMem = _data;
 
-		bool bResult = GetDevice()->CreateBuffer(&mIBDesc, &subData, mIndexBuffer.GetAddressOf());
+		bool bResult = GPUMgr::GetInst()->CreateBuffer(&mIBDesc, &subData, mIndexBuffer.GetAddressOf());
 
 		if (false == bResult)
 		{
@@ -82,17 +82,17 @@ namespace mh
 		// Input Assembeler 단계에 버텍스버퍼 정보 지정
 		UINT offset = 0;
 
-		GetDevice()->BindVertexBuffer(0, 1, mVertexBuffer.GetAddressOf(), &mVertexByteStride, &offset);
-		GetDevice()->BindIndexBuffer(mIndexBuffer.Get(), DXGI_FORMAT_R32_UINT, 0);
+		GPUMgr::GetInst()->BindVertexBuffer(0, 1, mVertexBuffer.GetAddressOf(), &mVertexByteStride, &offset);
+		GPUMgr::GetInst()->BindIndexBuffer(mIndexBuffer.Get(), DXGI_FORMAT_R32_UINT, 0);
 	}
 
 	void Mesh::Render() const
 	{
-		GetDevice()->DrawIndexed(mIndexCount, 0, 0);
+		GPUMgr::GetInst()->DrawIndexed(mIndexCount, 0, 0);
 	}
 	
 	void Mesh::RenderInstanced(UINT _count) const
 	{
-		GetDevice()->DrawIndexedInstanced(mIndexCount, _count, 0, 0, 0);
+		GPUMgr::GetInst()->DrawIndexedInstanced(mIndexCount, _count, 0, 0, 0);
 	}
 }

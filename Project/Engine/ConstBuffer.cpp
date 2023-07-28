@@ -25,7 +25,7 @@ namespace mh
 		desc.MiscFlags = 0;
 		desc.StructureByteStride = 0;
 
-		if (!GetDevice()->CreateBuffer(&desc, nullptr, buffer.GetAddressOf()))
+		if (!GPUMgr::GetInst()->CreateBuffer(&desc, nullptr, buffer.GetAddressOf()))
 			return false;
 
 		return true;
@@ -33,23 +33,23 @@ namespace mh
 
 	void ConstBuffer::SetData(void* _data)
 	{
-		GetDevice()->SetData(buffer.Get(), _data, desc.ByteWidth);
+		GPUMgr::GetInst()->SetData(buffer.Get(), _data, desc.ByteWidth);
 	}
 
 	void ConstBuffer::Bind(eShaderStage _stage)
 	{
 		if (_stage == eShaderStage::ALL)
 		{
-			GetDevice()->BindConstBuffer(eShaderStage::VS, mType, buffer.Get());
-			GetDevice()->BindConstBuffer(eShaderStage::HS, mType, buffer.Get());
-			GetDevice()->BindConstBuffer(eShaderStage::DS, mType, buffer.Get());
-			GetDevice()->BindConstBuffer(eShaderStage::GS, mType, buffer.Get());
-			GetDevice()->BindConstBuffer(eShaderStage::PS, mType, buffer.Get());
-			GetDevice()->BindConstBuffer(eShaderStage::CS, mType, buffer.Get());
+			GPUMgr::GetInst()->BindConstBuffer(eShaderStage::VS, mType, buffer.Get());
+			GPUMgr::GetInst()->BindConstBuffer(eShaderStage::HS, mType, buffer.Get());
+			GPUMgr::GetInst()->BindConstBuffer(eShaderStage::DS, mType, buffer.Get());
+			GPUMgr::GetInst()->BindConstBuffer(eShaderStage::GS, mType, buffer.Get());
+			GPUMgr::GetInst()->BindConstBuffer(eShaderStage::PS, mType, buffer.Get());
+			GPUMgr::GetInst()->BindConstBuffer(eShaderStage::CS, mType, buffer.Get());
 		}
 		else
 		{
-			GetDevice()->BindConstBuffer(_stage, mType, buffer.Get());
+			GPUMgr::GetInst()->BindConstBuffer(_stage, mType, buffer.Get());
 		}
 	}
 }

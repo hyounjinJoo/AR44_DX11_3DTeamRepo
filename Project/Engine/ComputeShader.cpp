@@ -108,8 +108,8 @@ namespace mh
 	{
 		Binds();
 
-		GetDevice()->BindComputeShader(mCS.Get(), nullptr, 0);
-		GetDevice()->Dispatch(mGroupX, mGroupY, mGroupZ);
+		GPUMgr::GetInst()->BindComputeShader(mCS.Get(), nullptr, 0);
+		GPUMgr::GetInst()->Dispatch(mGroupX, mGroupY, mGroupZ);
 
 		Clear();
 	}
@@ -124,7 +124,7 @@ namespace mh
 	{
 		eResult result = eResult::Fail_Create;
 
-		if (GetDevice()->CreateComputeShader(
+		if (GPUMgr::GetInst()->CreateComputeShader(
 			_pByteCode,
 			_ByteCodeSize,
 			nullptr,

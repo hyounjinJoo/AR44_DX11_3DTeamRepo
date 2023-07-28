@@ -116,7 +116,7 @@ namespace mh
 				ERROR_MESSAGE_W(L"Graphics Device 초기화에 실패했습니다.");
 				std::abort();
 			}
-			//GetDevice() = mGraphicDevice.get();
+			//GPUMgr::GetInst() = mGraphicDevice.get();
 		}
 
 		RECT rt = { 0, 0, (LONG)_width , (LONG)_height };

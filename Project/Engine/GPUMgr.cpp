@@ -21,7 +21,6 @@ namespace mh
 		, mSwapChain()
 		, mViewPort()
 	{
-		GetDevice() = this;
 	}
 
 	GPUMgr::~GPUMgr()

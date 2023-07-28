@@ -52,23 +52,23 @@ namespace mh
 		}
 		else
 		{
-			GetDevice()->SetData(mWriteBuffer.Get(), data, mSize * count);
+			GPUMgr::GetInst()->SetData(mWriteBuffer.Get(), data, mSize * count);
 		}
-		GetDevice()->CopyResource(buffer.Get(), mWriteBuffer.Get());
+		GPUMgr::GetInst()->CopyResource(buffer.Get(), mWriteBuffer.Get());
 	}
 
 	void StructBuffer::GetData(void* data, UINT size)
 	{
-		GetDevice()->CopyResource(mReadBuffer.Get(), buffer.Get());
+		GPUMgr::GetInst()->CopyResource(mReadBuffer.Get(), buffer.Get());
 
 		//read buffer -> systemmemory
 		if (size == 0)
 		{
-			GetDevice()->SetData(mReadBuffer.Get(), data, mSize * mStride);
+			GPUMgr::GetInst()->SetData(mReadBuffer.Get(), data, mSize * mStride);
 		}
 		else
 		{
-			GetDevice()->SetData(mReadBuffer.Get(), data, size);
+			GPUMgr::GetInst()->SetData(mReadBuffer.Get(), data, size);
 		}
 	}
 
@@ -76,29 +76,29 @@ namespace mh
 	{
 		mSRVSlot = slot;
 
-		GetDevice()->BindShaderResource(stage, slot, mSRV.GetAddressOf());
+		GPUMgr::GetInst()->BindShaderResource(stage, slot, mSRV.GetAddressOf());
 	}
 
 	void StructBuffer::BindUAV(eShaderStage stage, UINT slot)
 	{
 		mUAVSlot = slot;
 		UINT i = -1;
-		GetDevice()->BindUnorderdAccessView(slot, 1, mUAV.GetAddressOf(), &i);
+		GPUMgr::GetInst()->BindUnorderdAccessView(slot, 1, mUAV.GetAddressOf(), &i);
 	}
 
 	void StructBuffer::Clear()
 	{
 		ID3D11ShaderResourceView* srv = nullptr;
-		GetDevice()->BindShaderResource(eShaderStage::VS, mSRVSlot, &srv);
-		GetDevice()->BindShaderResource(eShaderStage::HS, mSRVSlot, &srv);
-		GetDevice()->BindShaderResource(eShaderStage::DS, mSRVSlot, &srv);
-		GetDevice()->BindShaderResource(eShaderStage::GS, mSRVSlot, &srv);
-		GetDevice()->BindShaderResource(eShaderStage::PS, mSRVSlot, &srv);
-		GetDevice()->BindShaderResource(eShaderStage::CS, mSRVSlot, &srv);
+		GPUMgr::GetInst()->BindShaderResource(eShaderStage::VS, mSRVSlot, &srv);
+		GPUMgr::GetInst()->BindShaderResource(eShaderStage::HS, mSRVSlot, &srv);
+		GPUMgr::GetInst()->BindShaderResource(eShaderStage::DS, mSRVSlot, &srv);
+		GPUMgr::GetInst()->BindShaderResource(eShaderStage::GS, mSRVSlot, &srv);
+		GPUMgr::GetInst()->BindShaderResource(eShaderStage::PS, mSRVSlot, &srv);
+		GPUMgr::GetInst()->BindShaderResource(eShaderStage::CS, mSRVSlot, &srv);
 
 		ID3D11UnorderedAccessView* uav = nullptr;
 		UINT i = -1;
-		GetDevice()->BindUnorderdAccessView(mUAVSlot, 1, &uav, &i);
+		GPUMgr::GetInst()->BindUnorderdAccessView(mUAVSlot, 1, &uav, &i);
 	}
 
 	void StructBuffer::setDiscription()
@@ -128,12 +128,12 @@ namespace mh
 			D3D11_SUBRESOURCE_DATA tSub = {};
 			tSub.pSysMem = data;
 
-			if (!(GetDevice()->CreateBuffer(&desc, &tSub, buffer.GetAddressOf())))
+			if (!(GPUMgr::GetInst()->CreateBuffer(&desc, &tSub, buffer.GetAddressOf())))
 				return false;
 		}
 		else
 		{
-			if (!(GetDevice()->CreateBuffer(&desc, nullptr, buffer.GetAddressOf())))
+			if (!(GPUMgr::GetInst()->CreateBuffer(&desc, nullptr, buffer.GetAddressOf())))
 				return false;
 		}
 
@@ -146,7 +146,7 @@ namespace mh
 		srvDesc.BufferEx.NumElements = mStride;
 		srvDesc.ViewDimension = D3D_SRV_DIMENSION_BUFFEREX;
 
-		if (!(GetDevice()->CreateShaderResourceView(buffer.Get(), &srvDesc, mSRV.GetAddressOf())))
+		if (!(GPUMgr::GetInst()->CreateShaderResourceView(buffer.Get(), &srvDesc, mSRV.GetAddressOf())))
 			return false;
 
 		if (mType == eSRVType::UAV)
@@ -155,7 +155,7 @@ namespace mh
 			uavDesc.Buffer.NumElements = mStride;
 			uavDesc.ViewDimension = D3D11_UAV_DIMENSION_BUFFER;
 
-			if (!(GetDevice()->CreateUnorderedAccessView(buffer.Get(), &uavDesc, mUAV.GetAddressOf())))
+			if (!(GPUMgr::GetInst()->CreateUnorderedAccessView(buffer.Get(), &uavDesc, mUAV.GetAddressOf())))
 				return false;
 		}
 
@@ -173,7 +173,7 @@ namespace mh
 		wDesc.Usage = D3D11_USAGE_DYNAMIC;
 		wDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
 
-		if (!(GetDevice()->CreateBuffer(&wDesc, nullptr, mWriteBuffer.GetAddressOf())))
+		if (!(GPUMgr::GetInst()->CreateBuffer(&wDesc, nullptr, mWriteBuffer.GetAddressOf())))
 			return false;
 
 		D3D11_BUFFER_DESC rDesc = { desc };
@@ -182,7 +182,7 @@ namespace mh
 		rDesc.Usage = D3D11_USAGE_DEFAULT;
 		rDesc.CPUAccessFlags = D3D11_CPU_ACCESS_READ;
 
-		if (!(GetDevice()->CreateBuffer(&rDesc, nullptr, mReadBuffer.GetAddressOf())))
+		if (!(GPUMgr::GetInst()->CreateBuffer(&rDesc, nullptr, mReadBuffer.GetAddressOf())))
 			return false;
 
 		return true;

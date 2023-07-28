@@ -35,12 +35,12 @@ namespace mh
 	{
 		ID3D11ShaderResourceView* srv = nullptr;
 
-		GetDevice()->BindShaderResource(eShaderStage::VS, _startSlot, &srv);
-		GetDevice()->BindShaderResource(eShaderStage::DS, _startSlot, &srv);
-		GetDevice()->BindShaderResource(eShaderStage::GS, _startSlot, &srv);
-		GetDevice()->BindShaderResource(eShaderStage::HS, _startSlot, &srv);
-		GetDevice()->BindShaderResource(eShaderStage::CS, _startSlot, &srv);
-		GetDevice()->BindShaderResource(eShaderStage::PS, _startSlot, &srv);
+		GPUMgr::GetInst()->BindShaderResource(eShaderStage::VS, _startSlot, &srv);
+		GPUMgr::GetInst()->BindShaderResource(eShaderStage::DS, _startSlot, &srv);
+		GPUMgr::GetInst()->BindShaderResource(eShaderStage::GS, _startSlot, &srv);
+		GPUMgr::GetInst()->BindShaderResource(eShaderStage::HS, _startSlot, &srv);
+		GPUMgr::GetInst()->BindShaderResource(eShaderStage::CS, _startSlot, &srv);
+		GPUMgr::GetInst()->BindShaderResource(eShaderStage::PS, _startSlot, &srv);
 	}
 
 	bool Texture::Create(UINT _width, UINT _height, DXGI_FORMAT _format, UINT _bindFlag)
@@ -60,12 +60,12 @@ namespace mh
 		mDesc.MipLevels = 1;
 		mDesc.MiscFlags = 0;
 
-		if (!GetDevice()->CreateTexture(&mDesc, mTexture.GetAddressOf()))
+		if (!GPUMgr::GetInst()->CreateTexture(&mDesc, mTexture.GetAddressOf()))
 			return false;
 
 		if (_bindFlag & D3D11_BIND_FLAG::D3D11_BIND_DEPTH_STENCIL)
 		{
-			if (!GetDevice()->CreateDepthStencilView(mTexture.Get(), nullptr, mDSV.GetAddressOf()))
+			if (!GPUMgr::GetInst()->CreateDepthStencilView(mTexture.Get(), nullptr, mDSV.GetAddressOf()))
 				return false;
 		}
 
@@ -77,7 +77,7 @@ namespace mh
 			tSRVDesc.Texture2D.MostDetailedMip = 0;
 			tSRVDesc.ViewDimension = D3D11_SRV_DIMENSION::D3D11_SRV_DIMENSION_TEXTURE2D;
 			
-			if (!GetDevice()->CreateShaderResourceView(mTexture.Get(), nullptr, mSRV.GetAddressOf()))
+			if (!GPUMgr::GetInst()->CreateShaderResourceView(mTexture.Get(), nullptr, mSRV.GetAddressOf()))
 				return false;
 		}
 		
@@ -88,7 +88,7 @@ namespace mh
 			tUAVDesc.Texture2D.MipSlice = 0;
 			tUAVDesc.ViewDimension = D3D11_UAV_DIMENSION::D3D11_UAV_DIMENSION_TEXTURE2D;
 
-			if (!GetDevice()->CreateUnorderedAccessView(mTexture.Get(), nullptr, mUAV.GetAddressOf()))
+			if (!GPUMgr::GetInst()->CreateUnorderedAccessView(mTexture.Get(), nullptr, mUAV.GetAddressOf()))
 				return false;
 		}
 
@@ -102,13 +102,13 @@ namespace mh
 
 		if (mDesc.BindFlags & D3D11_BIND_FLAG::D3D11_BIND_DEPTH_STENCIL)
 		{
-			if (!GetDevice()->CreateDepthStencilView(mTexture.Get(), nullptr, mDSV.GetAddressOf()))
+			if (!GPUMgr::GetInst()->CreateDepthStencilView(mTexture.Get(), nullptr, mDSV.GetAddressOf()))
 				return false;
 		}
 
 		if (mDesc.BindFlags & D3D11_BIND_FLAG::D3D11_BIND_RENDER_TARGET)
 		{
-			if (!GetDevice()->CreateRenderTargetView(mTexture.Get(), nullptr, mRTV.GetAddressOf()))
+			if (!GPUMgr::GetInst()->CreateRenderTargetView(mTexture.Get(), nullptr, mRTV.GetAddressOf()))
 				return false;
 		}
 
@@ -120,7 +120,7 @@ namespace mh
 			tSRVDesc.Texture2D.MostDetailedMip = 0;
 			tSRVDesc.ViewDimension = D3D11_SRV_DIMENSION::D3D11_SRV_DIMENSION_TEXTURE2D;
 
-			if (!GetDevice()->CreateShaderResourceView(mTexture.Get(), nullptr, mSRV.GetAddressOf()))
+			if (!GPUMgr::GetInst()->CreateShaderResourceView(mTexture.Get(), nullptr, mSRV.GetAddressOf()))
 				return false;
 		}
 
@@ -131,7 +131,7 @@ namespace mh
 			tUAVDesc.Texture2D.MipSlice = 0;
 			tUAVDesc.ViewDimension = D3D11_UAV_DIMENSION::D3D11_UAV_DIMENSION_TEXTURE2D;
 
-			if (!GetDevice()->CreateUnorderedAccessView(mTexture.Get(), nullptr, mUAV.GetAddressOf()))
+			if (!GPUMgr::GetInst()->CreateUnorderedAccessView(mTexture.Get(), nullptr, mUAV.GetAddressOf()))
 				return false;
 		}
 
@@ -179,7 +179,7 @@ namespace mh
 	{
 		CreateShaderResourceView
 		(
-			GetDevice()->GetID3D11Device(),
+			GPUMgr::GetInst()->GetDevice(),
 			mImage.GetImages(),
 			mImage.GetImageCount(),
 			mImage.GetMetadata(),
@@ -192,32 +192,32 @@ namespace mh
 
 	void Texture::BindShaderResource(eShaderStage _stage, UINT _slot)
 	{
-		GetDevice()->BindShaderResource(_stage, _slot, mSRV.GetAddressOf());
+		GPUMgr::GetInst()->BindShaderResource(_stage, _slot, mSRV.GetAddressOf());
 	}
 
 	void Texture::BindUnorderedAccessView(UINT _startSlot)
 	{
 		UINT i = -1;
-		GetDevice()->BindUnorderdAccessView(_startSlot, 1, mUAV.GetAddressOf(), &i);
+		GPUMgr::GetInst()->BindUnorderdAccessView(_startSlot, 1, mUAV.GetAddressOf(), &i);
 	}
 
 	void Texture::ClearUnorderedAccessView(UINT _startSlot)
 	{
 		ID3D11UnorderedAccessView* p = nullptr;
 		UINT i = -1;
-		GetDevice()->BindUnorderdAccessView(_startSlot, 1, &p, &i);
+		GPUMgr::GetInst()->BindUnorderdAccessView(_startSlot, 1, &p, &i);
 	}
 
 	void Texture::Clear()
 	{
 		ID3D11ShaderResourceView* srv = nullptr;
 
-		GetDevice()->BindShaderResource(eShaderStage::VS, 0, &srv);
-		GetDevice()->BindShaderResource(eShaderStage::DS, 0, &srv);
-		GetDevice()->BindShaderResource(eShaderStage::GS, 0, &srv);
-		GetDevice()->BindShaderResource(eShaderStage::HS, 0, &srv);
-		GetDevice()->BindShaderResource(eShaderStage::CS, 0, &srv);
-		GetDevice()->BindShaderResource(eShaderStage::PS, 0, &srv);
+		GPUMgr::GetInst()->BindShaderResource(eShaderStage::VS, 0, &srv);
+		GPUMgr::GetInst()->BindShaderResource(eShaderStage::DS, 0, &srv);
+		GPUMgr::GetInst()->BindShaderResource(eShaderStage::GS, 0, &srv);
+		GPUMgr::GetInst()->BindShaderResource(eShaderStage::HS, 0, &srv);
+		GPUMgr::GetInst()->BindShaderResource(eShaderStage::CS, 0, &srv);
+		GPUMgr::GetInst()->BindShaderResource(eShaderStage::PS, 0, &srv);
 	}
 
 

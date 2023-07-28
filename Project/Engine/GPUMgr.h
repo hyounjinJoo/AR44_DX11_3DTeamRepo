@@ -18,8 +18,8 @@ namespace mh
 
 	public:
 		bool Initialize(HWND _hwnd, UINT _Width, UINT _Height);
-		ID3D11Device* GetID3D11Device() { return mDevice.Get(); }
-		ID3D11DeviceContext* GetID3D11DeviceContext() { return mContext.Get(); }
+		ID3D11Device* GetDevice() { return mDevice.Get(); }
+		ID3D11DeviceContext* GetContext() { return mContext.Get(); }
 
 		//================================ INLINE WRAPPER ====================================
 	public:
@@ -102,12 +102,6 @@ namespace mh
 
 		D3D11_VIEWPORT mViewPort;
 	};
-
-	inline GPUMgr*& GetDevice()
-	{
-		static GPUMgr* device = nullptr;
-		return device;
-	}
 }
 
 #include "GPUMgr.inl"

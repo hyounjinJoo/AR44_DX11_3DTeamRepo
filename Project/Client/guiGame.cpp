@@ -32,8 +32,8 @@ namespace gui
 		
 		//61 번 셰이더 리소스 뷰 null초기화
 		ID3D11ShaderResourceView* gameSRV = nullptr;
-		mh::GetDevice()->BindShaderResource(mh::eShaderStage::PS, 61, &gameSRV);
-		mh::GetDevice()->CopyResource(gameTex->GetTexture().Get()
+		mh::GPUMgr::GetInst()->BindShaderResource(mh::eShaderStage::PS, 61, &gameSRV);
+		mh::GPUMgr::GetInst()->CopyResource(gameTex->GetTexture().Get()
 			, renderTarget->GetTexture().Get());
 
 		gameTex->BindShaderResource(mh::eShaderStage::PS, 61);
