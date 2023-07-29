@@ -36,7 +36,7 @@ namespace mh
 		ResMgr::GetInst();
 		RenderMgr::GetInst()->Initialize();
 		
-		TimeMgr::Initialize();
+		TimeMgr::GetInst()->Initialize();
 		Input::Initialize();
 		Fmod::Initialize();
 		FontWrapper::Initialize();
@@ -50,7 +50,7 @@ namespace mh
 	// CPU UPDATE
 	void Application::Update()
 	{
-		TimeMgr::Update();
+		TimeMgr::GetInst()->Update();
 		Input::Update();
 		CollisionMgr::Update();
 		SceneManager::Update();
@@ -65,7 +65,7 @@ namespace mh
 
 	void Application::Render()
 	{
-		TimeMgr::Render(mHdc);
+		TimeMgr::GetInst()->Render(mHdc);
 
 		mGraphicDevice->Clear();
 		mGraphicDevice->AdjustViewPorts(mHwnd);

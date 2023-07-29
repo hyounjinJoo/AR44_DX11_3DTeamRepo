@@ -1,4 +1,4 @@
-﻿#include "EnginePCH.h"
+#include "EnginePCH.h"
 
 #include "TimeMgr.h"
 #include "Application.h"
@@ -7,12 +7,19 @@ extern mh::Application application;
 
 namespace mh
 {
-    
-    LARGE_INTEGER	TimeMgr::mCpuFrequency = {};
-    LARGE_INTEGER   TimeMgr::mPrevFrequency = {};
-    LARGE_INTEGER	TimeMgr::mCurFrequency = {};
     float			TimeMgr::mDeltaTime = 0.0f;
-    float			TimeMgr::mOneSecond = 0.0f;
+
+    TimeMgr::TimeMgr()
+        : mCpuFrequency()
+        , mPrevFrequency()
+        , mCurFrequency()
+        , mOneSecond()
+    {
+    }
+
+    TimeMgr::~TimeMgr()
+    {
+    }
 
     void TimeMgr::Initialize()
     {

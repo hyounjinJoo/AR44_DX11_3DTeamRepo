@@ -1,24 +1,26 @@
 #pragma once
-#include "EnginePCH.h"
+#include "Singleton.h"
 
 namespace mh
 {
 	class TimeMgr
+		: public Singleton<TimeMgr>
 	{
+		SINGLETON(TimeMgr);
 	public:
 		static __forceinline float DeltaTime() { return mDeltaTime; }
 
-		static void Initialize();
-		static void Update();
-		static void Render(HDC _hdc);
+		void Initialize();
+		void Update();
+		void Render(HDC _hdc);
 
 	private:
-		static LARGE_INTEGER	mCpuFrequency;
-		static LARGE_INTEGER    mPrevFrequency;
-		static LARGE_INTEGER	mCurFrequency;
+		static float	mDeltaTime;
 
-		static float			mDeltaTime;
-		static float			mOneSecond;
+		LARGE_INTEGER	mCpuFrequency;
+		LARGE_INTEGER    mPrevFrequency;
+		LARGE_INTEGER	mCurFrequency;
+		float			mOneSecond;
 	};
 }
 
