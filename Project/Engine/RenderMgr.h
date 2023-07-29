@@ -90,8 +90,6 @@ namespace mh
 		UINT SBufferDataCount;
 	};
 
-
-
 	
 	class RenderMgr :
 		public Singleton<RenderMgr>
@@ -109,8 +107,10 @@ namespace mh
 		ComPtr<ID3D11DepthStencilState> GetDepthStencilState(eDSType _Type) { return mDepthStencilStates[(int)_Type]; }
 		
 		void SetMainCamera(Com_Camera* _pCam) { mMainCamera = _pCam; }
+		inline Com_Camera* GetCamera(eSceneType _Type, UINT _Idx);
+
 		void RegisterCamera(eSceneType _Type, Com_Camera* _pCam) { mCameras[(int)_Type].push_back(_pCam); }
-		Com_Camera* GetCamera(eSceneType _Type, UINT _Idx);
+		
 		void AddDebugMesh(const tDebugMesh& _DebugMesh) { mDebugMeshes.push_back(_DebugMesh); }
 
 		std::vector<tDebugMesh>& GetDebugMeshes() { return mDebugMeshes; }
@@ -128,12 +128,18 @@ namespace mh
 		void CopyRenderTarget();
 
 	private:
-		void LoadMesh();
-		void LoadMaterial();
-		void LoadShader();
-		void SetupState();
+		void LoadDefaultMesh();
+		void LoadDefaultMaterial();
+		void LoadDefaultShader();
+		void LoadDefaultTexture();
+
+		void CreateSamplerStates();
+		void CreateRasterizerStates();
+		void CreateDepthStencilStates();
+		void CreateBlendStates();
+		
 		void LoadBuffer();
-		void LoadTexture();
+		
 
 	private:
 		Com_Camera* mMainCamera;
@@ -146,6 +152,7 @@ namespace mh
 		
 		std::vector<Com_Camera*>			mCameras[(UINT)eSceneType::End];
 		std::vector<tDebugMesh>				mDebugMeshes;
+
 		std::vector<tLightAttribute>		mLights;
 		std::unique_ptr<StructBuffer>		mLightsBuffer;
 

@@ -45,12 +45,17 @@ namespace mh
 	}
 	void RenderMgr::Initialize()
 	{
-		LoadMesh();
-		LoadShader();
-		SetupState();
+		LoadDefaultMesh();
+		LoadDefaultShader();
+		
+		CreateSamplerStates();
+		CreateRasterizerStates();
+		CreateDepthStencilStates();
+		CreateBlendStates();
+
 		LoadBuffer();
-		LoadTexture();
-		LoadMaterial();
+		LoadDefaultTexture();
+		LoadDefaultMaterial();
 	}
 	void RenderMgr::Render()
 	{
@@ -121,7 +126,7 @@ namespace mh
 
 		mPostProcessTexture->BindDataSRV(60u, eShaderStageFlag::PS);
 	}
-	void RenderMgr::LoadMesh()
+	void RenderMgr::LoadDefaultMesh()
 	{
 		using namespace mh::define;
 		
@@ -624,135 +629,9 @@ namespace mh
 #pragma endregion
 	}
 
-	void RenderMgr::LoadShader()
+	void RenderMgr::LoadDefaultShader()
 	{
-#pragma region DEFAULT TRIANGLE SHADER
-		{
-			std::shared_ptr<GraphicsShader> TriangleShader = std::make_shared<GraphicsShader>();
-			TriangleShader->CreateByHeader(eGSStage::VS, VS_Triangle, sizeof(VS_Triangle));
-			TriangleShader->CreateByHeader(eGSStage::PS, PS_Triangle, sizeof(PS_Triangle));
-			//shader->Create(eShaderStage::VS, "TriangleVS.hlsl", "main");
-			//shader->Create(eShaderStage::PS, "TrianglePS.hlsl", "main");
-
-			ResMgr::GetInst()->Add(strKey::Default::shader::graphics::RectShader, TriangleShader);
-		}
-#pragma endregion
-#pragma region SPRITE SHADER
-		{
-			std::shared_ptr<GraphicsShader> spriteShader = std::make_shared<GraphicsShader>();
-			spriteShader->CreateByHeader(eGSStage::VS, VS_Sprite, sizeof(VS_Sprite));
-			spriteShader->CreateByHeader(eGSStage::PS, PS_Sprite, sizeof(PS_Sprite));
-			//spriteShader->Create(eShaderStage::VS, "SpriteVS.hlsl", "main");
-			//spriteShader->Create(eShaderStage::PS, "SpritePS.hlsl", "main");
-			spriteShader->SetRSState(eRSType::SolidNone);
-			ResMgr::GetInst()->Add(strKey::Default::shader::graphics::SpriteShader, spriteShader);
-		}
-
-#pragma endregion
-#pragma region UI SHADER
-		{
-			std::shared_ptr<GraphicsShader> uiShader = std::make_shared<GraphicsShader>();
-			uiShader->CreateByHeader(eGSStage::VS, VS_UserInterface, sizeof(VS_UserInterface));
-			uiShader->CreateByHeader(eGSStage::PS, PS_UserInterface, sizeof(PS_UserInterface));
-			//uiShader->Create(eShaderStage::VS, "UserInterfaceVS.hlsl", "main");
-			//uiShader->Create(eShaderStage::PS, "UserInterfacePS.hlsl", "main");
-
-			ResMgr::GetInst()->Add(strKey::Default::shader::graphics::UIShader, uiShader);
-		}
-
-#pragma endregion
-#pragma region GRID SHADER
-		{
-			std::shared_ptr<GraphicsShader> gridShader = std::make_shared<GraphicsShader>();
-			gridShader->CreateByHeader(eGSStage::VS, VS_Grid, sizeof(VS_Grid));
-			gridShader->CreateByHeader(eGSStage::PS, PS_Grid, sizeof(PS_Grid));
-
-			//gridShader->Create(eShaderStage::VS, "GridVS.hlsl", "main");
-			//gridShader->Create(eShaderStage::PS, "GridPS.hlsl", "main");
-			gridShader->SetRSState(eRSType::SolidNone);
-			gridShader->SetDSState(eDSType::NoWrite);
-			gridShader->SetBSState(eBSType::AlphaBlend);
-
-			ResMgr::GetInst()->Add(strKey::Default::shader::graphics::GridShader, gridShader);
-		}
-
-#pragma endregion
-#pragma region DEBUG SHADER
-		{
-			std::shared_ptr<GraphicsShader> debugShader = std::make_shared<GraphicsShader>();
-			debugShader->CreateByHeader(eGSStage::VS, VS_Debug, sizeof(VS_Debug));
-			debugShader->CreateByHeader(eGSStage::PS, PS_Debug, sizeof(PS_Debug));
-
-			//debugShader->Create(eShaderStage::VS, "DebugVS.hlsl", "main");
-			//debugShader->Create(eShaderStage::PS, "DebugPS.hlsl", "main");
-			debugShader->SetRSState(eRSType::SolidNone);
-			debugShader->SetDSState(eDSType::NoWrite);
-			debugShader->SetBSState(eBSType::AlphaBlend);
-			debugShader->SetTopology(D3D11_PRIMITIVE_TOPOLOGY::D3D11_PRIMITIVE_TOPOLOGY_LINESTRIP);
-
-			ResMgr::GetInst()->Add(strKey::Default::shader::graphics::DebugShader, debugShader);
-		}
-
-#pragma endregion
-#pragma region PAINT SHADER
-		{
-			std::shared_ptr<PaintShader> paintShader = std::make_shared<PaintShader>();
-			paintShader->CreateByHeader(CS_Paint, sizeof(CS_Paint));
-			//paintShader->Create("PaintCS.hlsl", "main");
-			ResMgr::GetInst()->Add(strKey::Default::shader::graphics::PaintShader, paintShader);
-		}
-
-#pragma endregion
-#pragma region PARTICLE SHADER
-		{
-			std::shared_ptr<GraphicsShader> particleShader = std::make_shared<GraphicsShader>();
-
-			particleShader->CreateByHeader(eGSStage::VS, VS_Particle, sizeof(VS_Particle));
-			particleShader->CreateByHeader(eGSStage::GS, GS_Particle, sizeof(GS_Particle));
-			particleShader->CreateByHeader(eGSStage::PS, PS_Particle, sizeof(PS_Particle));
-			//particleShader->Create(eShaderStage::VS, "ParticleVS.hlsl", "main");
-			//particleShader->Create(eShaderStage::GS, "ParticleGS.hlsl", "main");
-			//particleShader->Create(eShaderStage::PS, "ParticlePS.hlsl", "main");
-			particleShader->SetRSState(eRSType::SolidNone);
-			particleShader->SetDSState(eDSType::NoWrite);
-			particleShader->SetBSState(eBSType::AlphaBlend);
-			particleShader->SetTopology(D3D11_PRIMITIVE_TOPOLOGY::D3D11_PRIMITIVE_TOPOLOGY_POINTLIST);
-			ResMgr::GetInst()->Add(strKey::Default::shader::graphics::ParticleShader, particleShader);
-
-			std::shared_ptr<ParticleShader> particleCS = std::make_shared<ParticleShader>();
-			ResMgr::GetInst()->Add(strKey::Default::shader::compute::ParticleCS, particleCS);
-			particleCS->CreateByHeader(CS_Particle, sizeof(CS_Particle));
-		}
-#pragma endregion
-#pragma region POST PROCESS SHADER
-		{
-			std::shared_ptr<GraphicsShader> postProcessShader = std::make_shared<GraphicsShader>();
-			postProcessShader->CreateByHeader(eGSStage::VS, VS_PostProcess, sizeof(VS_PostProcess));
-			postProcessShader->CreateByHeader(eGSStage::PS, PS_PostProcess, sizeof(PS_PostProcess));
-			//postProcessShader->Create(eShaderStage::VS, "PostProcessVS.hlsl", "main");
-			//postProcessShader->Create(eShaderStage::PS, "PostProcessPS.hlsl", "main");
-			postProcessShader->SetDSState(eDSType::NoWrite);
-			ResMgr::GetInst()->Add(strKey::Default::shader::graphics::PostProcessShader, postProcessShader);
-		}
-
-#pragma endregion
-#pragma region BASIC 3D
-		{
-			std::shared_ptr<GraphicsShader> basic3DShader = std::make_shared<GraphicsShader>();
-			basic3DShader->CreateByHeader(eGSStage::VS, VS_Basic, sizeof(VS_Basic));
-			basic3DShader->CreateByHeader(eGSStage::PS, PS_Basic, sizeof(PS_Basic));
-			ResMgr::GetInst()->Add(strKey::Default::shader::graphics::Basic3DShader, basic3DShader);
-		}
-#pragma endregion
-	}
-
-	void RenderMgr::SetupState()
-	{
-		auto pDevice = GPUMgr::GetInst()->GetDevice();
-		auto pContext = GPUMgr::GetInst()->GetContext();
-		auto* pResMgr = ResMgr::GetInst();
-
-#pragma region Input layout
+#pragma region 기본 입력 레이아웃
 		std::vector<D3D11_INPUT_ELEMENT_DESC> vecLayoutDesc;
 		D3D11_INPUT_ELEMENT_DESC LayoutDesc{};
 
@@ -782,33 +661,120 @@ namespace mh
 		LayoutDesc.SemanticIndex = 0;
 		vecLayoutDesc.push_back(LayoutDesc);
 		LayoutDesc = D3D11_INPUT_ELEMENT_DESC{};
-
-		//Vector3 Tangent;
-		//Vector3 BiNormal;
-		//Vector3 Normal;
-		using namespace strKey::Default::shader;
-		std::shared_ptr<GraphicsShader> RectShader = pResMgr->Find<GraphicsShader>(graphics::RectShader);
-		RectShader->CreateInputLayout(vecLayoutDesc);
-
-		std::shared_ptr<GraphicsShader> spriteShader = pResMgr->Find<GraphicsShader>(graphics::SpriteShader);
-		spriteShader->CreateInputLayout(vecLayoutDesc);
-
-		std::shared_ptr<GraphicsShader> uiShader = pResMgr->Find<GraphicsShader>(graphics::UIShader);
-		uiShader->CreateInputLayout(vecLayoutDesc);
-
-		std::shared_ptr<GraphicsShader> gridShader = pResMgr->Find<GraphicsShader>(graphics::GridShader);
-		uiShader->CreateInputLayout(vecLayoutDesc);
-
-		std::shared_ptr<GraphicsShader> debugShader = pResMgr->Find<GraphicsShader>(graphics::DebugShader);
-		debugShader->CreateInputLayout(vecLayoutDesc);
-
-		std::shared_ptr<GraphicsShader> particleShader = pResMgr->Find<GraphicsShader>(graphics::ParticleShader);
-		particleShader->CreateInputLayout(vecLayoutDesc);
-
-		std::shared_ptr<GraphicsShader> postProcessShader = pResMgr->Find<GraphicsShader>(graphics::ParticleShader);
-		postProcessShader->CreateInputLayout(vecLayoutDesc);
+#pragma endregion
 
 
+#pragma region DEFAULT TRIANGLE SHADER
+		{
+			std::shared_ptr<GraphicsShader> TriangleShader = std::make_shared<GraphicsShader>();
+			TriangleShader->CreateByHeader(eGSStage::VS, VS_Triangle, sizeof(VS_Triangle));
+			TriangleShader->CreateByHeader(eGSStage::PS, PS_Triangle, sizeof(PS_Triangle));
+			TriangleShader->CreateInputLayout(vecLayoutDesc);
+
+			ResMgr::GetInst()->Add(strKey::Default::shader::graphics::RectShader, TriangleShader);
+		}
+#pragma endregion
+#pragma region SPRITE SHADER
+		{
+			std::shared_ptr<GraphicsShader> spriteShader = std::make_shared<GraphicsShader>();
+			spriteShader->CreateByHeader(eGSStage::VS, VS_Sprite, sizeof(VS_Sprite));
+			spriteShader->CreateByHeader(eGSStage::PS, PS_Sprite, sizeof(PS_Sprite));
+			spriteShader->SetRSState(eRSType::SolidNone);
+			spriteShader->CreateInputLayout(vecLayoutDesc);
+
+
+			ResMgr::GetInst()->Add(strKey::Default::shader::graphics::SpriteShader, spriteShader);
+		}
+
+#pragma endregion
+#pragma region UI SHADER
+		{
+			std::shared_ptr<GraphicsShader> uiShader = std::make_shared<GraphicsShader>();
+			uiShader->CreateByHeader(eGSStage::VS, VS_UserInterface, sizeof(VS_UserInterface));
+			uiShader->CreateByHeader(eGSStage::PS, PS_UserInterface, sizeof(PS_UserInterface));
+			uiShader->CreateInputLayout(vecLayoutDesc);
+
+
+			ResMgr::GetInst()->Add(strKey::Default::shader::graphics::UIShader, uiShader);
+		}
+
+#pragma endregion
+#pragma region GRID SHADER
+		{
+			std::shared_ptr<GraphicsShader> gridShader = std::make_shared<GraphicsShader>();
+			gridShader->CreateByHeader(eGSStage::VS, VS_Grid, sizeof(VS_Grid));
+			gridShader->CreateByHeader(eGSStage::PS, PS_Grid, sizeof(PS_Grid));
+			gridShader->CreateInputLayout(vecLayoutDesc);
+
+			gridShader->SetRSState(eRSType::SolidNone);
+			gridShader->SetDSState(eDSType::NoWrite);
+			gridShader->SetBSState(eBSType::AlphaBlend);
+
+			ResMgr::GetInst()->Add(strKey::Default::shader::graphics::GridShader, gridShader);
+		}
+
+#pragma endregion
+#pragma region DEBUG SHADER
+		{
+			std::shared_ptr<GraphicsShader> debugShader = std::make_shared<GraphicsShader>();
+			debugShader->CreateByHeader(eGSStage::VS, VS_Debug, sizeof(VS_Debug));
+			debugShader->CreateByHeader(eGSStage::PS, PS_Debug, sizeof(PS_Debug));
+			debugShader->CreateInputLayout(vecLayoutDesc);
+
+			//debugShader->Create(eShaderStage::VS, "DebugVS.hlsl", "main");
+			//debugShader->Create(eShaderStage::PS, "DebugPS.hlsl", "main");
+			debugShader->SetRSState(eRSType::SolidNone);
+			debugShader->SetDSState(eDSType::NoWrite);
+			debugShader->SetBSState(eBSType::AlphaBlend);
+			debugShader->SetTopology(D3D11_PRIMITIVE_TOPOLOGY::D3D11_PRIMITIVE_TOPOLOGY_LINESTRIP);
+
+			ResMgr::GetInst()->Add(strKey::Default::shader::graphics::DebugShader, debugShader);
+		}
+
+#pragma endregion
+#pragma region PAINT SHADER
+		{
+			std::shared_ptr<PaintShader> paintShader = std::make_shared<PaintShader>();
+			paintShader->CreateByHeader(CS_Paint, sizeof(CS_Paint));
+			ResMgr::GetInst()->Add(strKey::Default::shader::graphics::PaintShader, paintShader);
+		}
+
+#pragma endregion
+#pragma region PARTICLE SHADER
+		{
+			std::shared_ptr<GraphicsShader> particleShader = std::make_shared<GraphicsShader>();
+
+			particleShader->CreateByHeader(eGSStage::VS, VS_Particle, sizeof(VS_Particle));
+			particleShader->CreateByHeader(eGSStage::GS, GS_Particle, sizeof(GS_Particle));
+			particleShader->CreateByHeader(eGSStage::PS, PS_Particle, sizeof(PS_Particle));
+			particleShader->CreateInputLayout(vecLayoutDesc);
+
+			particleShader->SetRSState(eRSType::SolidNone);
+			particleShader->SetDSState(eDSType::NoWrite);
+			particleShader->SetBSState(eBSType::AlphaBlend);
+			particleShader->SetTopology(D3D11_PRIMITIVE_TOPOLOGY::D3D11_PRIMITIVE_TOPOLOGY_POINTLIST);
+			ResMgr::GetInst()->Add(strKey::Default::shader::graphics::ParticleShader, particleShader);
+
+			std::shared_ptr<ParticleShader> particleCS = std::make_shared<ParticleShader>();
+			ResMgr::GetInst()->Add(strKey::Default::shader::compute::ParticleCS, particleCS);
+			particleCS->CreateByHeader(CS_Particle, sizeof(CS_Particle));
+		}
+#pragma endregion
+#pragma region POST PROCESS SHADER
+		{
+			std::shared_ptr<GraphicsShader> postProcessShader = std::make_shared<GraphicsShader>();
+			postProcessShader->CreateByHeader(eGSStage::VS, VS_PostProcess, sizeof(VS_PostProcess));
+			postProcessShader->CreateByHeader(eGSStage::PS, PS_PostProcess, sizeof(PS_PostProcess));
+			postProcessShader->CreateInputLayout(vecLayoutDesc);
+
+			postProcessShader->SetDSState(eDSType::NoWrite);
+			ResMgr::GetInst()->Add(strKey::Default::shader::graphics::PostProcessShader, postProcessShader);
+		}
+#pragma endregion
+
+#pragma region 3D 기본 입력 레이아웃
+
+		LayoutDesc = D3D11_INPUT_ELEMENT_DESC{};
 		LayoutDesc.AlignedByteOffset = 40;
 		LayoutDesc.Format = DXGI_FORMAT_R32G32B32_FLOAT;
 		LayoutDesc.InputSlot = 0;
@@ -816,8 +782,8 @@ namespace mh
 		LayoutDesc.SemanticName = "TANGENT";
 		LayoutDesc.SemanticIndex = 0;
 		vecLayoutDesc.push_back(LayoutDesc);
+		
 		LayoutDesc = D3D11_INPUT_ELEMENT_DESC{};
-
 		LayoutDesc.AlignedByteOffset = 52;
 		LayoutDesc.Format = DXGI_FORMAT_R32G32B32_FLOAT;
 		LayoutDesc.InputSlot = 0;
@@ -825,8 +791,8 @@ namespace mh
 		LayoutDesc.SemanticName = "BINORMAL";
 		LayoutDesc.SemanticIndex = 0;
 		vecLayoutDesc.push_back(LayoutDesc);
+		
 		LayoutDesc = D3D11_INPUT_ELEMENT_DESC{};
-
 		LayoutDesc.AlignedByteOffset = 64;
 		LayoutDesc.Format = DXGI_FORMAT_R32G32B32_FLOAT;
 		LayoutDesc.InputSlot = 0;
@@ -834,144 +800,18 @@ namespace mh
 		LayoutDesc.SemanticName = "NORMAL";
 		LayoutDesc.SemanticIndex = 0;
 		vecLayoutDesc.push_back(LayoutDesc);
-		LayoutDesc = D3D11_INPUT_ELEMENT_DESC{};
-
-
-		std::shared_ptr<GraphicsShader> basicShader = pResMgr->Find<GraphicsShader>(graphics::Basic3DShader);
-		basicShader->CreateInputLayout(vecLayoutDesc);
 
 #pragma endregion
 
+#pragma region BASIC 3D
+		{
+			std::shared_ptr<GraphicsShader> basic3DShader = std::make_shared<GraphicsShader>();
+			basic3DShader->CreateByHeader(eGSStage::VS, VS_Basic, sizeof(VS_Basic));
+			basic3DShader->CreateByHeader(eGSStage::PS, PS_Basic, sizeof(PS_Basic));
+			basic3DShader->CreateInputLayout(vecLayoutDesc);
 
-#pragma region sampler state
-		D3D11_SAMPLER_DESC samplerDesc = {};
-		samplerDesc.AddressU = D3D11_TEXTURE_ADDRESS_MODE::D3D11_TEXTURE_ADDRESS_WRAP;
-		samplerDesc.AddressV = D3D11_TEXTURE_ADDRESS_MODE::D3D11_TEXTURE_ADDRESS_WRAP;
-		samplerDesc.AddressW = D3D11_TEXTURE_ADDRESS_MODE::D3D11_TEXTURE_ADDRESS_WRAP;
-		samplerDesc.Filter = D3D11_FILTER::D3D11_FILTER_MIN_LINEAR_MAG_MIP_POINT;
-
-
-		pDevice->CreateSamplerState
-		(
-			&samplerDesc
-			, mSamplerStates[(UINT)eSamplerType::Point].GetAddressOf()
-		);
-
-		samplerDesc.Filter = D3D11_FILTER::D3D11_FILTER_MIN_POINT_MAG_MIP_LINEAR;
-		pDevice->CreateSamplerState
-		(
-			&samplerDesc
-			, mSamplerStates[(UINT)eSamplerType::Linear].GetAddressOf()
-		);
-
-		samplerDesc.Filter = D3D11_FILTER::D3D11_FILTER_ANISOTROPIC;
-		pDevice->CreateSamplerState
-		(
-			&samplerDesc
-			, mSamplerStates[(UINT)eSamplerType::Anisotropic].GetAddressOf()
-		);
-
-		
-		pContext->PSSetSamplers((UINT)eSamplerType::Point
-			, 1, mSamplerStates[(UINT)eSamplerType::Point].GetAddressOf());
-
-		pContext->PSSetSamplers((UINT)eSamplerType::Linear
-			, 1, mSamplerStates[(UINT)eSamplerType::Linear].GetAddressOf());
-
-		pContext->PSSetSamplers((UINT)eSamplerType::Anisotropic
-			, 1, mSamplerStates[(UINT)eSamplerType::Anisotropic].GetAddressOf());
-
-#pragma endregion
-#pragma region Rasterizer state
-		D3D11_RASTERIZER_DESC rsDesc = {};
-		rsDesc.FillMode = D3D11_FILL_MODE::D3D11_FILL_SOLID;
-		rsDesc.CullMode = D3D11_CULL_MODE::D3D11_CULL_BACK;
-
-		pDevice->CreateRasterizerState(&rsDesc
-			, mRasterizerStates[(UINT)eRSType::SolidBack].GetAddressOf());
-
-		rsDesc.FillMode = D3D11_FILL_MODE::D3D11_FILL_SOLID;
-		rsDesc.CullMode = D3D11_CULL_MODE::D3D11_CULL_FRONT;
-
-		pDevice->CreateRasterizerState(&rsDesc
-			, mRasterizerStates[(UINT)eRSType::SolidFront].GetAddressOf());
-
-		rsDesc.FillMode = D3D11_FILL_MODE::D3D11_FILL_SOLID;
-		rsDesc.CullMode = D3D11_CULL_MODE::D3D11_CULL_NONE;
-
-		pDevice->CreateRasterizerState(&rsDesc
-			, mRasterizerStates[(UINT)eRSType::SolidNone].GetAddressOf());
-
-		rsDesc.FillMode = D3D11_FILL_MODE::D3D11_FILL_WIREFRAME;
-		rsDesc.CullMode = D3D11_CULL_MODE::D3D11_CULL_NONE;
-
-		pDevice->CreateRasterizerState(&rsDesc
-			, mRasterizerStates[(UINT)eRSType::WireframeNone].GetAddressOf());
-#pragma endregion
-#pragma region Depth Stencil State
-		D3D11_DEPTH_STENCIL_DESC dsDesc = {};
-		dsDesc.DepthEnable = true;
-		dsDesc.DepthFunc = D3D11_COMPARISON_FUNC::D3D11_COMPARISON_LESS_EQUAL;
-		dsDesc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK::D3D11_DEPTH_WRITE_MASK_ALL;
-		dsDesc.StencilEnable = false;
-
-		pDevice->CreateDepthStencilState(&dsDesc
-			, mDepthStencilStates[(UINT)eDSType::Less].GetAddressOf());
-
-		dsDesc.DepthEnable = true;
-		dsDesc.DepthFunc = D3D11_COMPARISON_FUNC::D3D11_COMPARISON_GREATER;
-		dsDesc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK::D3D11_DEPTH_WRITE_MASK_ALL;
-		dsDesc.StencilEnable = false;
-
-		pDevice->CreateDepthStencilState(&dsDesc
-			, mDepthStencilStates[(UINT)eDSType::Greater].GetAddressOf());
-
-		dsDesc.DepthEnable = true;
-		dsDesc.DepthFunc = D3D11_COMPARISON_FUNC::D3D11_COMPARISON_LESS;
-		dsDesc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK::D3D11_DEPTH_WRITE_MASK_ZERO;
-		dsDesc.StencilEnable = false;
-
-		pDevice->CreateDepthStencilState(&dsDesc
-			, mDepthStencilStates[(UINT)eDSType::NoWrite].GetAddressOf());
-
-		dsDesc.DepthEnable = false;
-		dsDesc.DepthFunc = D3D11_COMPARISON_FUNC::D3D11_COMPARISON_LESS;
-		dsDesc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK::D3D11_DEPTH_WRITE_MASK_ZERO;
-		dsDesc.StencilEnable = false;
-
-		pDevice->CreateDepthStencilState(&dsDesc
-			, mDepthStencilStates[(UINT)eDSType::None].GetAddressOf());
-#pragma endregion
-#pragma region Blend State
-		//None
-		mBlendStates[(UINT)eBSType::Default] = nullptr;
-
-		D3D11_BLEND_DESC bsDesc = {};
-		bsDesc.AlphaToCoverageEnable = false;
-		bsDesc.IndependentBlendEnable = false;
-		bsDesc.RenderTarget[0].BlendEnable = true;
-		bsDesc.RenderTarget[0].BlendOp = D3D11_BLEND_OP::D3D11_BLEND_OP_ADD;
-		bsDesc.RenderTarget[0].SrcBlend = D3D11_BLEND_SRC_ALPHA;
-		bsDesc.RenderTarget[0].DestBlend = D3D11_BLEND_INV_SRC_ALPHA;
-		bsDesc.RenderTarget[0].BlendOpAlpha = D3D11_BLEND_OP::D3D11_BLEND_OP_ADD;
-		bsDesc.RenderTarget[0].SrcBlendAlpha = D3D11_BLEND_ONE;
-		bsDesc.RenderTarget[0].DestBlendAlpha = D3D11_BLEND_ZERO;
-
-		bsDesc.RenderTarget[0].RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
-
-		pDevice->CreateBlendState(&bsDesc, mBlendStates[(UINT)eBSType::AlphaBlend].GetAddressOf());
-
-		bsDesc.AlphaToCoverageEnable = false;
-		bsDesc.IndependentBlendEnable = false;
-
-		bsDesc.RenderTarget[0].BlendEnable = true;
-		bsDesc.RenderTarget[0].BlendOp = D3D11_BLEND_OP::D3D11_BLEND_OP_ADD;
-		bsDesc.RenderTarget[0].SrcBlend = D3D11_BLEND_ONE;
-		bsDesc.RenderTarget[0].DestBlend = D3D11_BLEND_ONE;
-		bsDesc.RenderTarget[0].RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
-
-		pDevice->CreateBlendState(&bsDesc, mBlendStates[(UINT)eBSType::OneOne].GetAddressOf());
-
+			ResMgr::GetInst()->Add(strKey::Default::shader::graphics::Basic3DShader, basic3DShader);
+		}
 #pragma endregion
 	}
 
@@ -1011,7 +851,7 @@ namespace mh
 #pragma endregion
 	}
 
-	void RenderMgr::LoadTexture()
+	void RenderMgr::LoadDefaultTexture()
 	{
 #pragma region STATIC TEXTURE
 		using namespace strKey::Default;
@@ -1061,7 +901,165 @@ namespace mh
 		NoiseTex->BindDataSRV(eShaderStageFlag::PS, 60);
 	}
 
-	void RenderMgr::LoadMaterial()
+
+	void RenderMgr::CreateSamplerStates()
+	{
+		auto pDevice = GPUMgr::GetInst()->GetDevice();
+		auto pContext = GPUMgr::GetInst()->GetContext();
+		auto* pResMgr = ResMgr::GetInst();
+
+#pragma region sampler state
+		D3D11_SAMPLER_DESC samplerDesc = {};
+		samplerDesc.AddressU = D3D11_TEXTURE_ADDRESS_MODE::D3D11_TEXTURE_ADDRESS_WRAP;
+		samplerDesc.AddressV = D3D11_TEXTURE_ADDRESS_MODE::D3D11_TEXTURE_ADDRESS_WRAP;
+		samplerDesc.AddressW = D3D11_TEXTURE_ADDRESS_MODE::D3D11_TEXTURE_ADDRESS_WRAP;
+		samplerDesc.Filter = D3D11_FILTER::D3D11_FILTER_MIN_LINEAR_MAG_MIP_POINT;
+
+
+		pDevice->CreateSamplerState
+		(
+			&samplerDesc
+			, mSamplerStates[(UINT)eSamplerType::Point].GetAddressOf()
+		);
+
+		samplerDesc.Filter = D3D11_FILTER::D3D11_FILTER_MIN_POINT_MAG_MIP_LINEAR;
+		pDevice->CreateSamplerState
+		(
+			&samplerDesc
+			, mSamplerStates[(UINT)eSamplerType::Linear].GetAddressOf()
+		);
+
+		samplerDesc.Filter = D3D11_FILTER::D3D11_FILTER_ANISOTROPIC;
+		pDevice->CreateSamplerState
+		(
+			&samplerDesc
+			, mSamplerStates[(UINT)eSamplerType::Anisotropic].GetAddressOf()
+		);
+
+
+		pContext->PSSetSamplers((UINT)eSamplerType::Point
+			, 1, mSamplerStates[(UINT)eSamplerType::Point].GetAddressOf());
+
+		pContext->PSSetSamplers((UINT)eSamplerType::Linear
+			, 1, mSamplerStates[(UINT)eSamplerType::Linear].GetAddressOf());
+
+		pContext->PSSetSamplers((UINT)eSamplerType::Anisotropic
+			, 1, mSamplerStates[(UINT)eSamplerType::Anisotropic].GetAddressOf());
+
+#pragma endregion
+	}
+
+	void RenderMgr::CreateRasterizerStates()
+	{
+		auto pDevice = GPUMgr::GetInst()->GetDevice();
+
+#pragma region Rasterizer state
+		D3D11_RASTERIZER_DESC rsDesc = {};
+		rsDesc.FillMode = D3D11_FILL_MODE::D3D11_FILL_SOLID;
+		rsDesc.CullMode = D3D11_CULL_MODE::D3D11_CULL_BACK;
+
+		pDevice->CreateRasterizerState(&rsDesc
+			, mRasterizerStates[(UINT)eRSType::SolidBack].GetAddressOf());
+
+		rsDesc.FillMode = D3D11_FILL_MODE::D3D11_FILL_SOLID;
+		rsDesc.CullMode = D3D11_CULL_MODE::D3D11_CULL_FRONT;
+
+		pDevice->CreateRasterizerState(&rsDesc
+			, mRasterizerStates[(UINT)eRSType::SolidFront].GetAddressOf());
+
+		rsDesc.FillMode = D3D11_FILL_MODE::D3D11_FILL_SOLID;
+		rsDesc.CullMode = D3D11_CULL_MODE::D3D11_CULL_NONE;
+
+		pDevice->CreateRasterizerState(&rsDesc
+			, mRasterizerStates[(UINT)eRSType::SolidNone].GetAddressOf());
+
+		rsDesc.FillMode = D3D11_FILL_MODE::D3D11_FILL_WIREFRAME;
+		rsDesc.CullMode = D3D11_CULL_MODE::D3D11_CULL_NONE;
+
+		pDevice->CreateRasterizerState(&rsDesc
+			, mRasterizerStates[(UINT)eRSType::WireframeNone].GetAddressOf());
+#pragma endregion
+	}
+
+	void RenderMgr::CreateBlendStates()
+	{
+		auto pDevice = GPUMgr::GetInst()->GetDevice();
+
+#pragma region Blend State
+		//None
+		mBlendStates[(UINT)eBSType::Default] = nullptr;
+
+		D3D11_BLEND_DESC bsDesc = {};
+		bsDesc.AlphaToCoverageEnable = false;
+		bsDesc.IndependentBlendEnable = false;
+		bsDesc.RenderTarget[0].BlendEnable = true;
+		bsDesc.RenderTarget[0].BlendOp = D3D11_BLEND_OP::D3D11_BLEND_OP_ADD;
+		bsDesc.RenderTarget[0].SrcBlend = D3D11_BLEND_SRC_ALPHA;
+		bsDesc.RenderTarget[0].DestBlend = D3D11_BLEND_INV_SRC_ALPHA;
+		bsDesc.RenderTarget[0].BlendOpAlpha = D3D11_BLEND_OP::D3D11_BLEND_OP_ADD;
+		bsDesc.RenderTarget[0].SrcBlendAlpha = D3D11_BLEND_ONE;
+		bsDesc.RenderTarget[0].DestBlendAlpha = D3D11_BLEND_ZERO;
+
+		bsDesc.RenderTarget[0].RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
+
+		pDevice->CreateBlendState(&bsDesc, mBlendStates[(UINT)eBSType::AlphaBlend].GetAddressOf());
+
+		bsDesc.AlphaToCoverageEnable = false;
+		bsDesc.IndependentBlendEnable = false;
+
+		bsDesc.RenderTarget[0].BlendEnable = true;
+		bsDesc.RenderTarget[0].BlendOp = D3D11_BLEND_OP::D3D11_BLEND_OP_ADD;
+		bsDesc.RenderTarget[0].SrcBlend = D3D11_BLEND_ONE;
+		bsDesc.RenderTarget[0].DestBlend = D3D11_BLEND_ONE;
+		bsDesc.RenderTarget[0].RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
+
+		pDevice->CreateBlendState(&bsDesc, mBlendStates[(UINT)eBSType::OneOne].GetAddressOf());
+
+#pragma endregion
+	}
+
+	void RenderMgr::CreateDepthStencilStates()
+	{
+		auto pDevice = GPUMgr::GetInst()->GetDevice();
+
+#pragma region Depth Stencil State
+		D3D11_DEPTH_STENCIL_DESC dsDesc = {};
+		dsDesc.DepthEnable = true;
+		dsDesc.DepthFunc = D3D11_COMPARISON_FUNC::D3D11_COMPARISON_LESS_EQUAL;
+		dsDesc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK::D3D11_DEPTH_WRITE_MASK_ALL;
+		dsDesc.StencilEnable = false;
+
+		pDevice->CreateDepthStencilState(&dsDesc
+			, mDepthStencilStates[(UINT)eDSType::Less].GetAddressOf());
+
+		dsDesc.DepthEnable = true;
+		dsDesc.DepthFunc = D3D11_COMPARISON_FUNC::D3D11_COMPARISON_GREATER;
+		dsDesc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK::D3D11_DEPTH_WRITE_MASK_ALL;
+		dsDesc.StencilEnable = false;
+
+		pDevice->CreateDepthStencilState(&dsDesc
+			, mDepthStencilStates[(UINT)eDSType::Greater].GetAddressOf());
+
+		dsDesc.DepthEnable = true;
+		dsDesc.DepthFunc = D3D11_COMPARISON_FUNC::D3D11_COMPARISON_LESS;
+		dsDesc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK::D3D11_DEPTH_WRITE_MASK_ZERO;
+		dsDesc.StencilEnable = false;
+
+		pDevice->CreateDepthStencilState(&dsDesc
+			, mDepthStencilStates[(UINT)eDSType::NoWrite].GetAddressOf());
+
+		dsDesc.DepthEnable = false;
+		dsDesc.DepthFunc = D3D11_COMPARISON_FUNC::D3D11_COMPARISON_LESS;
+		dsDesc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK::D3D11_DEPTH_WRITE_MASK_ZERO;
+		dsDesc.StencilEnable = false;
+
+		pDevice->CreateDepthStencilState(&dsDesc
+			, mDepthStencilStates[(UINT)eDSType::None].GetAddressOf());
+#pragma endregion
+	}
+
+
+	void RenderMgr::LoadDefaultMaterial()
 	{
 		using namespace strKey::Default;
 #pragma region DEFAULT
