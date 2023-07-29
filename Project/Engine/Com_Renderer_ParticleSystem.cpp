@@ -43,19 +43,19 @@ namespace mh
 		mSharedBuffer = nullptr;
 	}
 
-	void Com_Renderer_ParticleSystem::Initialize()
+	void Com_Renderer_ParticleSystem::Init()
 	{
 		using namespace strKey::Default;
-		mCS = ResMgr::GetInst()->Find<ParticleShader>(shader::compute::ParticleCS);
+		mCS = ResMgr::Find<ParticleShader>(shader::compute::ParticleCS);
 
-		std::shared_ptr<Mesh> point = ResMgr::GetInst()->Find<Mesh>(mesh::PointMesh);
+		std::shared_ptr<Mesh> point = ResMgr::Find<Mesh>(mesh::PointMesh);
 		SetMesh(point);
 
 		// Material 세팅
-		std::shared_ptr<Material> material = ResMgr::GetInst()->Find<Material>(material::ParticleMaterial);
+		std::shared_ptr<Material> material = ResMgr::Find<Material>(material::ParticleMaterial);
 		SetMaterial(material);
 
-		std::shared_ptr<Texture> tex = ResMgr::GetInst()->Find<Texture>(texture::CartoonSmoke);
+		std::shared_ptr<Texture> tex = ResMgr::Find<Texture>(texture::CartoonSmoke);
 		material->SetTexture(eTextureSlot::Albedo, tex);
 
 		tParticle particles[100] = {};
@@ -120,7 +120,7 @@ namespace mh
 		mCBData.DeltaTime = TimeMgr::DeltaTime();
 		mCBData.ElapsedTime += TimeMgr::DeltaTime();
 
-		ConstBuffer* cb = RenderMgr::GetInst()->GetConstBuffer(eCBType::ParticleSystem);
+		ConstBuffer* cb = RenderMgr::GetConstBuffer(eCBType::ParticleSystem);
 		cb->SetData(&mCBData);
 		cb->BindData(eShaderStageFlag::ALL);
 

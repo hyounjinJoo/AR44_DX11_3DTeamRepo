@@ -1,16 +1,28 @@
 #include "EnginePCH.h"
-
 #include "CollisionMgr.h"
+
 #include "Scene.h"
 #include "SceneManager.h"
+
+#include "AtExit.h"
 
 namespace mh
 {
 	std::bitset<(UINT)define::eLayerType::End> CollisionMgr::mLayerCollisionMatrix[(UINT)define::eLayerType::End] = {};
 	std::map<UINT64, bool> CollisionMgr::mCollisionMap;
 
-	void CollisionMgr::Initialize()
+	void CollisionMgr::Init()
 	{
+		AtExit::AddFunc(Release);
+	}
+	void CollisionMgr::Release()
+	{
+		for (int i = 0; i < (int)define::eLayerType::End; ++i)
+		{
+			mLayerCollisionMatrix[i].reset();
+		}
+
+		mCollisionMap.clear();
 	}
 	void CollisionMgr::Update()
 	{

@@ -24,7 +24,7 @@ namespace mh
 
 	HRESULT AudioClip::Load(const std::filesystem::path& _path)
 	{
-		if (!Fmod::CreateSound(_path.string(), &mSound))
+		if (false == AudioMgr::CreateSound(_path.string(), &mSound))
 			return S_FALSE;
 
 		mSound->set3DMinMaxDistance(mMinDistance, mMaxDistance);
@@ -39,7 +39,7 @@ namespace mh
 		else
 			mSound->setMode(FMOD_LOOP_OFF);
 
-		Fmod::SoundPlay(mSound, &mChannel);
+		AudioMgr::SoundPlay(mSound, &mChannel);
 	}
 
 	void AudioClip::Stop()

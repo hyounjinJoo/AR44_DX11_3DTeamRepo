@@ -1274,7 +1274,7 @@ ImGuiIO::ImGuiIO()
     ConfigDebugBeginReturnValueLoop = false;
 
     // Platform Functions
-    // Note: Initialize() will setup default clipboard/ime handlers.
+    // Note: Init() will setup default clipboard/ime handlers.
     BackendPlatformName = BackendRendererName = NULL;
     BackendPlatformUserData = BackendRendererUserData = BackendLanguageUserData = NULL;
 
@@ -3548,7 +3548,7 @@ ImGuiContext* ImGui::CreateContext(ImFontAtlas* shared_font_atlas)
     ImGuiContext* prev_ctx = GetCurrentContext();
     ImGuiContext* ctx = IM_NEW(ImGuiContext)(shared_font_atlas);
     SetCurrentContext(ctx);
-    Initialize();
+    Init();
     if (prev_ctx != NULL)
         SetCurrentContext(prev_ctx); // Restore previous context if any, else keep new one.
     return ctx;
@@ -3578,7 +3578,7 @@ static const ImGuiLocEntry GLocalizationEntriesEnUS[] =
     { ImGuiLocKey_DockingHideTabBar,    "Hide tab bar###HideTabBar"             },
 };
 
-void ImGui::Initialize()
+void ImGui::Init()
 {
     ImGuiContext& g = *GImGui;
     IM_ASSERT(!g.Initialized && !g.SettingsLoaded);
@@ -14647,7 +14647,7 @@ void ImGui::DestroyPlatformWindow(ImGuiViewportP* viewport)
             g.PlatformIO.Platform_DestroyWindow(viewport);
         IM_ASSERT(viewport->RendererUserData == NULL && viewport->PlatformUserData == NULL);
 
-        // Don't clear PlatformWindowCreated for the main viewport, as we initially set that up to true in Initialize()
+        // Don't clear PlatformWindowCreated for the main viewport, as we initially set that up to true in Init()
         // The righter way may be to leave it to the backend to set this flag all-together, and made the flag public.
         if (viewport->ID != IMGUI_VIEWPORT_DEFAULT_ID)
             viewport->PlatformWindowCreated = false;

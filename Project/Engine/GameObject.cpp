@@ -71,25 +71,25 @@ namespace mh
 		}
 	}
 	
-	void GameObject::Initialize()
+	void GameObject::Init()
 	{
 		for (size_t i = 0; i < mFixedComponents.size(); ++i)
 		{
 			if (nullptr == mFixedComponents[i])
 				continue;
-			mFixedComponents[i]->Initialize();
+			mFixedComponents[i]->Init();
 		}
 		for (size_t i = 0; i < mScripts.size(); ++i)
 		{
 			if (nullptr == mScripts[i])
 				continue;
-			mScripts[i]->Initialize();
+			mScripts[i]->Init();
 		}
 		for (size_t i = 0; i < mChilds.size(); ++i)
 		{
 			if (nullptr == mChilds[i])
 				continue;
-			mChilds[i]->Initialize();
+			mChilds[i]->Init();
 		}
 	}
 

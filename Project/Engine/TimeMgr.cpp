@@ -1,34 +1,40 @@
 #include "EnginePCH.h"
-
 #include "TimeMgr.h"
+
+#include "AtExit.h"
 #include "Application.h"
 
 extern mh::Application application;
 
 namespace mh
 {
-    float			TimeMgr::mDeltaTime = 0.0f;
+    float	            TimeMgr::mDeltaTime{};
+    LARGE_INTEGER	    TimeMgr::mCpuFrequency{};
+    LARGE_INTEGER       TimeMgr::mPrevFrequency{};
+    LARGE_INTEGER	    TimeMgr::mCurFrequency{};
+    float			    TimeMgr::mOneSecond{};
 
-    TimeMgr::TimeMgr()
-        : mCpuFrequency()
-        , mPrevFrequency()
-        , mCurFrequency()
-        , mOneSecond()
+    void TimeMgr::Init()
     {
-    }
+        AtExit::AddFunc(Release);
 
-    TimeMgr::~TimeMgr()
-    {
-    }
-
-    void TimeMgr::Initialize()
-    {
         //CPU 의 초당 반복되는 주파수를 얻어온다.
         QueryPerformanceFrequency(&mCpuFrequency);
 
         //프로그램을 시작했을때의 CPU 클럭 수
         QueryPerformanceCounter(&mPrevFrequency);
     }
+
+
+    void TimeMgr::Release()
+    {
+        mDeltaTime = {};
+        mCpuFrequency = {};
+        mPrevFrequency = {};
+        mCurFrequency = {};
+        mOneSecond = {};
+    }
+
 
     void TimeMgr::Update()
     {

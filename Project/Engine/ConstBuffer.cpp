@@ -32,7 +32,7 @@ namespace mh
 		mBufferDesc.MiscFlags = 0;
 		mBufferDesc.StructureByteStride = 0;
 
-		bool bResult = SUCCEEDED(GPUMgr::GetInst()->GetDevice()->CreateBuffer(&mBufferDesc, nullptr, mBuffer.GetAddressOf()));
+		bool bResult = SUCCEEDED(GPUMgr::Device()->CreateBuffer(&mBufferDesc, nullptr, mBuffer.GetAddressOf()));
 			
 		if (false == bResult)
 		{
@@ -48,7 +48,7 @@ namespace mh
 		MH_ASSERT(nullptr != _data && _dataCount <= mDataCount);
 	
 
-		auto pContext = GPUMgr::GetInst()->GetContext();
+		auto pContext = GPUMgr::Context();
 		D3D11_MAPPED_SUBRESOURCE tSubRes{};
 
 		if (SUCCEEDED(pContext->Map(mBuffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &tSubRes)))
@@ -65,7 +65,7 @@ namespace mh
 			_stageFlag = mPresetTargetStage;
 		}
 
-		auto pContext = GPUMgr::GetInst()->GetContext();
+		auto pContext = GPUMgr::Context();
 		if (eShaderStageFlag::VS & _stageFlag)
 		{
 			pContext->VSSetConstantBuffers((UINT)mType, 1u, mBuffer.GetAddressOf());

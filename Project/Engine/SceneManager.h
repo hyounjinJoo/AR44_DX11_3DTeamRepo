@@ -6,7 +6,7 @@ namespace mh
 	class SceneManager
 	{
 	public:
-		static void Initialize();
+		static void Init();
 		static void Update();
 		static void FixedUpdate();
 		static void Render();

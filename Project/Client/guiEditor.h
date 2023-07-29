@@ -9,7 +9,7 @@ namespace gui
 	class Editor
 	{
 	public:
-		void Initialize();
+		void Init();
 		void Run();
 
 		void Update();

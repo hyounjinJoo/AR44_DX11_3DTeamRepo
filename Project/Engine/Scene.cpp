@@ -16,11 +16,11 @@ namespace mh
 
 	}
 
-	void Scene::Initialize()
+	void Scene::Init()
 	{
 		for (Layer& layer : mLayers)
 		{
-			layer.Initialize();
+			layer.Init();
 		}
 	}
 	void Scene::Update()

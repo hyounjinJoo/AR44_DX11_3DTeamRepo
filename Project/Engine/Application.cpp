@@ -4,11 +4,11 @@
 #include "DefaultComInitializer.h"
 #include "RenderMgr.h"
 #include "TimeMgr.h"
-#include "Input.h"
+#include "InputMgr.h"
 #include "SceneManager.h"
 #include "ResMgr.h"
 #include "CollisionMgr.h"
-#include "Fmod.h"
+#include "AudioMgr.h"
 #include "FontWrapper.h"
 
 #include "PathMgr.h"
@@ -20,7 +20,6 @@ namespace mh
 		, mHdc(nullptr)
 		, mHeight(1600)//화면 해상도 몰라서 0말고 1600/900사이즈로 일단 초기화
 		, mWidth(900)
-		, mGraphicDevice()
 	{
 	}
 
@@ -28,30 +27,30 @@ namespace mh
 	{
 	}
 
-	void Application::Initialize()
+	void Application::Init()
 	{
 		DefaultComInitializer::Init();
-		PathMgr::GetInst()->Init();
+		PathMgr::Init();
+		ResMgr::Init();
 
-		ResMgr::GetInst();
-		RenderMgr::GetInst()->Initialize();
+		RenderMgr::Init();
 		
-		TimeMgr::GetInst()->Initialize();
-		Input::Initialize();
-		Fmod::Initialize();
-		FontWrapper::Initialize();
+		TimeMgr::Init();
+		InputMgr::Init();
+		AudioMgr::Init();
+		FontWrapper::Init();
 
-		CollisionMgr::Initialize();
+		CollisionMgr::Init();
 		
-		SceneManager::Initialize();
+		SceneManager::Init();
 	}
 
 	// 게임 로직 캐릭터 이동 등등 
 	// CPU UPDATE
 	void Application::Update()
 	{
-		TimeMgr::GetInst()->Update();
-		Input::Update();
+		TimeMgr::Update();
+		InputMgr::Update();
 		CollisionMgr::Update();
 		SceneManager::Update();
 	}
@@ -65,12 +64,12 @@ namespace mh
 
 	void Application::Render()
 	{
-		TimeMgr::GetInst()->Render(mHdc);
+		TimeMgr::Render(mHdc);
 
-		mGraphicDevice->Clear();
-		mGraphicDevice->AdjustViewPorts(mHwnd);
+		GPUMgr::Clear();
+		GPUMgr::AdjustViewPorts(mHwnd);
 
-		RenderMgr::GetInst()->Render();
+		RenderMgr::Render();
 	}
 
 	void Application::Destroy()
@@ -89,18 +88,17 @@ namespace mh
 
 	void Application::Present()
 	{
-		mGraphicDevice->Present();
+		GPUMgr::Present();
 	}
 
 	void Application::Release()
 	{
-		Fmod::Release();
-		FontWrapper::Release();
+		AtExit::CallAtExit();
 	}
 
 	void Application::SetWindow(HWND _hwnd, UINT _width, UINT _height)
 	{
-		if (mGraphicDevice == nullptr)
+		if (nullptr == GPUMgr::Device())
 		{
 			mHwnd = _hwnd;
 			mHdc = GetDC(mHwnd);
@@ -110,13 +108,11 @@ namespace mh
 
 			//eValidationMode vaildationMode = eValidationMode::Disabled;
 			
-			mGraphicDevice = GPUMgr::GetInst();
-			if (false == mGraphicDevice->Initialize(mHwnd, mWidth, mHeight))
+			if (false == GPUMgr::Init(mHwnd, mWidth, mHeight))
 			{
 				ERROR_MESSAGE_W(L"Graphics Device 초기화에 실패했습니다.");
 				std::abort();
 			}
-			//GPUMgr::GetInst() = mGraphicDevice.get();
 		}
 
 		RECT rt = { 0, 0, (LONG)_width , (LONG)_height };

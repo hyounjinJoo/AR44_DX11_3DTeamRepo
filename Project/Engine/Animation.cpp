@@ -91,7 +91,7 @@ namespace mh
 	{
 		mAtlas->BindDataSRV(12u, eShaderStageFlag::PS);
 
-		ConstBuffer* cb = RenderMgr::GetInst()->GetConstBuffer(eCBType::Animation);
+		ConstBuffer* cb = RenderMgr::GetConstBuffer(eCBType::Animation);
 
 		AnimationCB info = {};
 		info.Type = (UINT)define::eAnimationType::SecondDimension;
@@ -116,7 +116,7 @@ namespace mh
 		//Texture clear
 		Texture::Clear(12);
 
-		ConstBuffer* cb = RenderMgr::GetInst()->GetConstBuffer(eCBType::Animation);
+		ConstBuffer* cb = RenderMgr::GetConstBuffer(eCBType::Animation);
 
 		AnimationCB info = {};
 		info.Type = (UINT)define::eAnimationType::None;

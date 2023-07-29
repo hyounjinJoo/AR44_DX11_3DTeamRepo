@@ -1,13 +1,14 @@
 #include "EnginePCH.h"
 #include "AtExit.h"
 
-std::vector<std::function<void()>> AtExit::m_vecAtExit;
+std::stack<std::function<void()>> AtExit::mAtExitFuncs;
 
 void AtExit::CallAtExit()
 {
-	for (int i = (int)m_vecAtExit.size() - 1; i >= 0; --i)
+	while (false == mAtExitFuncs.empty())
 	{
-		m_vecAtExit[i]();
+		mAtExitFuncs.top()();
+		mAtExitFuncs.pop();
 	}
 }
 

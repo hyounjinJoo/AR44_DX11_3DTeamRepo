@@ -15,7 +15,7 @@
 #include "Com_Renderer_Sprite.h"
 #include "GridScript.h"
 #include "Object.h"
-#include "Input.h"
+#include "InputMgr.h"
 #include "ICollider2D.h"
 #include "Player.h"
 #include "Monster.h"
@@ -34,7 +34,7 @@ namespace mh
 	TitleScene::~TitleScene()
 	{
 	}
-	void TitleScene::Initialize()
+	void TitleScene::Init()
 	{
 		// Main Com_Camera Game Object
 		GameObject* cameraObj = object::Instantiate<GameObject>(eLayerType::Com_Camera);
@@ -46,7 +46,7 @@ namespace mh
 		cameraComp->TurnLayerMask(eLayerType::UI, false);
 		cameraObj->AddComponent<Script_Camera>();
 
-		RenderMgr::GetInst()->SetMainCamera(cameraComp);
+		RenderMgr::SetMainCamera(cameraComp);
 
 
 		GameObject* player = object::Instantiate<GameObject>(eLayerType::Player);
@@ -57,15 +57,15 @@ namespace mh
 		Com_Renderer_Mesh* mr = player->AddComponent<Com_Renderer_Mesh>();
 
 		
-		mr->SetMaterial(ResMgr::GetInst()->Find<Material>(strKey::Default::material::Basic3DMaterial));
-		mr->SetMesh(ResMgr::GetInst()->Find<Mesh>(strKey::Default::mesh::CubeMesh));
+		mr->SetMaterial(ResMgr::Find<Material>(strKey::Default::material::Basic3DMaterial));
+		mr->SetMesh(ResMgr::Find<Mesh>(strKey::Default::mesh::CubeMesh));
 		player->AddComponent<Script_Player>();
-		//mr->SetMesh(ResMgr::GetInst()->Find<Mesh>(L"SphereMesh"));
+		//mr->SetMesh(ResMgr::Find<Mesh>(L"SphereMesh"));
 
 		////paint shader
-		//std::shared_ptr<PaintShader> paintShader = ResMgr::GetInst()->Find<PaintShader>(L"PaintShader");
+		//std::shared_ptr<PaintShader> paintShader = ResMgr::Find<PaintShader>(L"PaintShader");
 		////L"SmileTexture"
-		//std::shared_ptr<Texture> paintTex = ResMgr::GetInst()->Find<Texture>(L"PaintTexture");
+		//std::shared_ptr<Texture> paintTex = ResMgr::Find<Texture>(L"PaintTexture");
 		//paintShader->SetTarget(paintTex);
 		//paintShader->OnExcute();
 
@@ -136,7 +136,7 @@ namespace mh
 		//	collider->SetSize(Vector2(1.5f, 0.5f));
 
 		//	Com_Animator* animator = obj->AddComponent<Com_Animator>();
-		//	std::shared_ptr<Texture> texture = ResMgr::GetInst()->Load<Texture>(L"Zelda", L"Zelda.png");
+		//	std::shared_ptr<Texture> texture = ResMgr::Load<Texture>(L"Zelda", L"Zelda.png");
 		//	animator->Create(L"Idle", texture, Vector2(0.0f, 0.0f), Vector2(120.0f, 130.0f), Vector2::Zero, 3, 0.1f);
 		//	animator->Create(L"MoveDown", texture, Vector2(0.0f, 520.0f), Vector2(120.0f, 130.0f), Vector2::Zero, 8, 0.1f);
 		//	animator->Create(L"MoveLeft", texture, Vector2(0.0f, 650.0f), Vector2(120.0f, 130.0f), Vector2::Zero, 10, 0.1f);
@@ -144,9 +144,9 @@ namespace mh
 		//	animator->Play(L"MoveLeft", true);
 
 		//	Com_Renderer_Mesh* mr = obj->AddComponent<Com_Renderer_Mesh>();
-		//	std::shared_ptr<Material> mateiral = ResMgr::GetInst()->Find<Material>(L"SpriteMaterial");
+		//	std::shared_ptr<Material> mateiral = ResMgr::Find<Material>(L"SpriteMaterial");
 		//	mr->SetMaterial(mateiral);
-		//	std::shared_ptr<Mesh> mesh = ResMgr::GetInst()->Find<Mesh>(L"RectMesh");
+		//	std::shared_ptr<Mesh> mesh = ResMgr::Find<Mesh>(L"RectMesh");
 		//	mr->SetMesh(mesh);
 		//	obj->AddComponent<Script_Player>();
 		//	object::DontDestroyOnLoad(obj);
@@ -169,9 +169,9 @@ namespace mh
 		//	//collider->SetSize(Vector2(1.5f, 1.5f));
 
 		//	Com_Renderer_Mesh* mr = obj->AddComponent<Com_Renderer_Mesh>();
-		//	std::shared_ptr<Material> mateiral = ResMgr::GetInst()->Find<Material>(L"RectMaterial");
+		//	std::shared_ptr<Material> mateiral = ResMgr::Find<Material>(L"RectMaterial");
 		//	mr->SetMaterial(mateiral);
-		//	std::shared_ptr<Mesh> mesh = ResMgr::GetInst()->Find<Mesh>(L"RectMesh");
+		//	std::shared_ptr<Mesh> mesh = ResMgr::Find<Mesh>(L"RectMesh");
 		//	mr->SetMesh(mesh);
 		//	object::DontDestroyOnLoad(obj);
 		//}
@@ -198,19 +198,19 @@ namespace mh
 		//	//collider->SetSize(Vector2(1.0f, 0.5f));
 
 		//	Com_Renderer_Mesh* mr = obj->AddComponent<Com_Renderer_Mesh>();
-		//	std::shared_ptr<Material> mateiral = ResMgr::GetInst()->Find<Material>(L"PostProcessMaterial");
+		//	std::shared_ptr<Material> mateiral = ResMgr::Find<Material>(L"PostProcessMaterial");
 		//	mr->SetMaterial(mateiral);
 
 
-		//	std::shared_ptr<Mesh> mesh = ResMgr::GetInst()->Find<Mesh>(L"RectMesh");
+		//	std::shared_ptr<Mesh> mesh = ResMgr::Find<Mesh>(L"RectMesh");
 		//	mr->SetMesh(mesh);
 		//}
 
-		Scene::Initialize();
+		Scene::Init();
 	}
 	void TitleScene::Update()
 	{
-		if (Input::GetKeyDown(eKeyCode::N))
+		if (InputMgr::GetKeyDown(eKeyCode::N))
 		{
 			SceneManager::LoadScene(eSceneType::Play);
 		}

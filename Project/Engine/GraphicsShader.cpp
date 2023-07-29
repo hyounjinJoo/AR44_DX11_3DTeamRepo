@@ -109,7 +109,7 @@ namespace mh
 
 		mVecInputLayoutDesc = _VecLayoutDesc;
 
-		if (FAILED(GPUMgr::GetInst()->GetDevice()->CreateInputLayout(
+		if (FAILED(GPUMgr::Device()->CreateInputLayout(
 			mVecInputLayoutDesc.data(),
 			(UINT)mVecInputLayoutDesc.size(),
 			VSBlobData->GetBufferPointer(),
@@ -127,7 +127,7 @@ namespace mh
 
 	void GraphicsShader::Binds()
 	{
-		auto pContext = GPUMgr::GetInst()->GetContext();
+		auto pContext = GPUMgr::Context();
 
 		pContext->IASetPrimitiveTopology(mTopology);
 		pContext->IASetInputLayout(mInputLayout.Get());
@@ -138,10 +138,9 @@ namespace mh
 		pContext->PSSetShader(mPS.Get(), nullptr, 0);
 
 		
-		RenderMgr* RenderMgr = RenderMgr::GetInst();
-		ID3D11RasterizerState*		rs = RenderMgr->GetRasterizerState(mRSType).Get();
-		ID3D11DepthStencilState*	ds = RenderMgr->GetDepthStencilState(mDSType).Get();
-		ID3D11BlendState*			bs = RenderMgr->GetBlendState(mBSType).Get();
+		ID3D11RasterizerState*		rs = RenderMgr::GetRasterizerState(mRSType).Get();
+		ID3D11DepthStencilState*	ds = RenderMgr::GetDepthStencilState(mDSType).Get();
+		ID3D11BlendState*			bs = RenderMgr::GetBlendState(mBSType).Get();
 
 		pContext->RSSetState(rs);
 		pContext->OMSetDepthStencilState(ds, 0u);
@@ -154,7 +153,7 @@ namespace mh
 	{
 		MH_ASSERT(_pByteCode && _ByteCodeSize);
 
-		auto pDevice = GPUMgr::GetInst()->GetDevice();
+		auto pDevice = GPUMgr::Device();
 		switch (_stage)
 		{
 		case eGSStage::VS:

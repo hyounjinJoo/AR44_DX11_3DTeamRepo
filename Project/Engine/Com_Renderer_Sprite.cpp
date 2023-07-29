@@ -15,7 +15,7 @@ namespace mh
 	{
 	}
 
-	void Com_Renderer_Sprite::Initialize()
+	void Com_Renderer_Sprite::Init()
 	{
 	}
 

@@ -26,7 +26,7 @@ namespace mh
 	{
 	}
 
-	void ICollider2D::Initialize()
+	void ICollider2D::Init()
 	{
 		mTransform = &(GetOwner()->GetTransform());
 	}
@@ -64,7 +64,7 @@ namespace mh
 		meshAttribute.scale = scale;
 		meshAttribute.type = mType;
 
-		RenderMgr::GetInst()->AddDebugMesh(meshAttribute);
+		RenderMgr::AddDebugMesh(meshAttribute);
 	}
 
 	void ICollider2D::Render()

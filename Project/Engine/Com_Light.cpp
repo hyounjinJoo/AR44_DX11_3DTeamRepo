@@ -18,7 +18,7 @@ namespace mh
 
 	}
 
-	void Com_Light::Initialize()
+	void Com_Light::Init()
 	{
 
 	}
@@ -36,7 +36,7 @@ namespace mh
 		mAttribute.direction = Vector4(tr.Foward().x, tr.Foward().y, tr.Foward().z, 0.0f);
 		//mAttribute.type = define::eLightType::Directional;
 
-		RenderMgr::GetInst()->PushLightAttribute(mAttribute);
+		RenderMgr::PushLightAttribute(mAttribute);
 	}
 
 	void Com_Light::Render()

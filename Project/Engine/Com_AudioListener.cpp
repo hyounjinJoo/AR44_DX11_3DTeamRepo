@@ -3,7 +3,7 @@
 #include "Com_AudioListener.h"
 #include "Com_Transform.h"
 #include "GameObject.h"
-#include "Fmod.h"
+#include "AudioMgr.h"
 
 namespace mh
 {
@@ -18,7 +18,7 @@ namespace mh
 
 	}
 
-	void Com_AudioListener::Initialize()
+	void Com_AudioListener::Init()
 	{
 
 	}
@@ -36,7 +36,7 @@ namespace mh
 		math::Vector3 up = tr.Up();
 
 		math::Vector3 vel = { 0.0f, 0.0f, 0.0f };
-		Fmod::Set3DListenerAttributes(&pos, &vel, &foward, &up);
+		AudioMgr::Set3DListenerAttributes(&pos, &vel, &foward, &up);
 	}
 
 	void Com_AudioListener::Render()

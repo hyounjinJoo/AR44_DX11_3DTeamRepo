@@ -15,7 +15,7 @@ namespace mh
 	{
 	}
 
-	void Com_Renderer_Mesh::Initialize()
+	void Com_Renderer_Mesh::Init()
 	{
 	}
 

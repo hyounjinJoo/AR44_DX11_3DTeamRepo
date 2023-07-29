@@ -74,7 +74,7 @@ namespace mh
 		trCb.View = Com_Camera::GetGpuViewMatrix();
 		trCb.Projection = Com_Camera::GetGpuProjectionMatrix();
 
-		ConstBuffer* cb = RenderMgr::GetInst()->GetConstBuffer(eCBType::Transform);
+		ConstBuffer* cb = RenderMgr::GetConstBuffer(eCBType::Transform);
 		cb->SetData(&trCb);
 		cb->BindData(eShaderStageFlag::ALL);
 	}

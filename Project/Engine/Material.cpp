@@ -74,7 +74,7 @@ namespace mh
             mCB.UsedNormal = 1;
         }
 
-        ConstBuffer* CB = RenderMgr::GetInst()->GetConstBuffer(eCBType::Material);
+        ConstBuffer* CB = RenderMgr::GetConstBuffer(eCBType::Material);
         CB->SetData(&mCB);
 
         eShaderStageFlag_ flag = eShaderStageFlag::VS | eShaderStageFlag::GS | eShaderStageFlag::PS;

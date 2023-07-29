@@ -21,7 +21,7 @@ namespace gui
 		SetSize(ImVec2(300.0f, 100.0f));
 		
 		mComponents.resize((UINT)eComponentType::END);
-		mTargetGameObject = mh::RenderMgr::GetInst()->GetInspectorGameObject();
+		mTargetGameObject = mh::RenderMgr::GetInspectorGameObject();
 
 		//TODO: 여기 작동 안함
 		//mTransform = new gui::Transform();

@@ -15,7 +15,7 @@ namespace mh
 		Com_Transform();
 		virtual ~Com_Transform();
 
-		virtual void Initialize() final {};
+		virtual void Init() final {};
 		virtual void Update() final {};
 		virtual void FixedUpdate();
 		virtual void Render() {};

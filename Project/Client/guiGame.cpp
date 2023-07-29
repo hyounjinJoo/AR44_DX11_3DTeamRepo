@@ -24,7 +24,7 @@ namespace gui
 	void Game::Update()
 	{
 		std::shared_ptr<mh::Texture> renderTarget
-			= mh::ResMgr::GetInst()->Find<mh::Texture>(mh::strKey::Default::texture::RenderTarget);
+			= mh::ResMgr::Find<mh::Texture>(mh::strKey::Default::texture::RenderTarget);
 
 		std::shared_ptr<mh::Texture> gameTex
 			= std::make_shared<mh::Texture>();
@@ -32,7 +32,7 @@ namespace gui
 		
 		//61 번 셰이더 리소스 뷰 null초기화
 		ID3D11ShaderResourceView* gameSRV = nullptr;
-		auto pContext = mh::GPUMgr::GetInst()->GetContext();
+		auto pContext = mh::GPUMgr::Context();
 		pContext->PSSetShaderResources(61, 1u, &gameSRV);
 		pContext->CopyResource(gameTex->GetTexture().Get()
 			, renderTarget->GetTexture().Get());

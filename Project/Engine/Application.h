@@ -11,7 +11,7 @@ namespace mh
 		Application();
 		~Application();
 
-		virtual void Initialize();
+		virtual void Init();
 		virtual void Update();
 		virtual void FixedUpdate();
 		virtual void Render();
@@ -31,7 +31,6 @@ namespace mh
 
 	private:
 		bool bInitialized = false;
-		GPUMgr* mGraphicDevice;
 
 		HWND mHwnd;
 		HDC mHdc;

@@ -11,7 +11,7 @@ namespace mh
 		IRenderer();
 		virtual ~IRenderer();
 
-		//virtual void Initialize() override {};
+		//virtual void Init() override {};
 		//virtual void Update() {};
 		//virtual void FixedUpdate() override;
 		virtual void Render() = 0;

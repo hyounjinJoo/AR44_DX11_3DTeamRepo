@@ -1,6 +1,4 @@
 #pragma once
-#include "Singleton.h"
-
 #include "define_GPU.h"
 #include "SimpleMath.h"
 
@@ -90,75 +88,74 @@ namespace mh
 		UINT SBufferDataCount;
 	};
 
-	
-	class RenderMgr :
-		public Singleton<RenderMgr>
+	class RenderMgr
 	{
-		SINGLETON(RenderMgr);
-
+		friend class Application;
 	public:
-		void Initialize();
-		void Render();
+		static void Render();
 
-		ConstBuffer* GetConstBuffer(eCBType _Type) { return mConstBuffers[(int)_Type]; }
-		inline Com_Camera* GetMainCam() { return mMainCamera; }
-		ComPtr<ID3D11RasterizerState>	GetRasterizerState(eRSType _Type) { return mRasterizerStates[(int)_Type]; }
-		ComPtr<ID3D11BlendState>		GetBlendState(eBSType _Type) { return mBlendStates[(int)_Type]; }
-		ComPtr<ID3D11DepthStencilState> GetDepthStencilState(eDSType _Type) { return mDepthStencilStates[(int)_Type]; }
+		static ConstBuffer* GetConstBuffer(eCBType _Type) { return mConstBuffers[(int)_Type].get(); }
+		static inline Com_Camera* GetMainCam() { return mMainCamera; }
+		static ComPtr<ID3D11RasterizerState>	GetRasterizerState(eRSType _Type) { return mRasterizerStates[(int)_Type]; }
+		static ComPtr<ID3D11BlendState>		GetBlendState(eBSType _Type) { return mBlendStates[(int)_Type]; }
+		static ComPtr<ID3D11DepthStencilState> GetDepthStencilState(eDSType _Type) { return mDepthStencilStates[(int)_Type]; }
 		
-		void SetMainCamera(Com_Camera* _pCam) { mMainCamera = _pCam; }
-		inline Com_Camera* GetCamera(eSceneType _Type, UINT _Idx);
+		static void SetMainCamera(Com_Camera* _pCam) { mMainCamera = _pCam; }
+		static inline Com_Camera* GetCamera(eSceneType _Type, UINT _Idx);
 
-		void RegisterCamera(eSceneType _Type, Com_Camera* _pCam) { mCameras[(int)_Type].push_back(_pCam); }
+		static void RegisterCamera(eSceneType _Type, Com_Camera* _pCam) { mCameras[(int)_Type].push_back(_pCam); }
 		
-		void AddDebugMesh(const tDebugMesh& _DebugMesh) { mDebugMeshes.push_back(_DebugMesh); }
+		static void AddDebugMesh(const tDebugMesh& _DebugMesh) { mDebugMeshes.push_back(_DebugMesh); }
 
-		std::vector<tDebugMesh>& GetDebugMeshes() { return mDebugMeshes; }
+		static std::vector<tDebugMesh>& GetDebugMeshes() { return mDebugMeshes; }
 
-		void SetInspectorGameObject(GameObject* _pObj) { mInspectorGameObject = _pObj; }
-		GameObject* GetInspectorGameObject() const { return mInspectorGameObject; }
+		static void SetInspectorGameObject(GameObject* _pObj) { mInspectorGameObject = _pObj; }
+		static GameObject* GetInspectorGameObject() { return mInspectorGameObject; }
 
 
 		//Renderer
-		void PushLightAttribute(const tLightAttribute& lightAttribute) { mLights.push_back(lightAttribute); }
+		static void PushLightAttribute(const tLightAttribute& lightAttribute) { mLights.push_back(lightAttribute); }
 
 
-		void BindLights();
-		void BindNoiseTexture();
-		void CopyRenderTarget();
-
-	private:
-		void LoadDefaultMesh();
-		void LoadDefaultMaterial();
-		void LoadDefaultShader();
-		void LoadDefaultTexture();
-
-		void CreateSamplerStates();
-		void CreateRasterizerStates();
-		void CreateDepthStencilStates();
-		void CreateBlendStates();
-		
-		void LoadBuffer();
-		
+		static void BindLights();
+		static void BindNoiseTexture();
+		static void CopyRenderTarget();
 
 	private:
-		Com_Camera* mMainCamera;
+		static void LoadDefaultMesh();
+		static void LoadDefaultMaterial();
+		static void LoadDefaultShader();
+		static void LoadDefaultTexture();
 
-		ConstBuffer*						mConstBuffers[(UINT)eCBType::End];
-		ComPtr<ID3D11SamplerState>			mSamplerStates[(UINT)eSamplerType::End];
-		ComPtr<ID3D11RasterizerState>		mRasterizerStates[(UINT)eRSType::End];
-		ComPtr<ID3D11DepthStencilState>		mDepthStencilStates[(UINT)eDSType::End];
-		ComPtr<ID3D11BlendState>			mBlendStates[(UINT)eBSType::End];
+		static void CreateSamplerStates();
+		static void CreateRasterizerStates();
+		static void CreateDepthStencilStates();
+		static void CreateBlendStates();
 		
-		std::vector<Com_Camera*>			mCameras[(UINT)eSceneType::End];
-		std::vector<tDebugMesh>				mDebugMeshes;
+		static void LoadBuffer();
 
-		std::vector<tLightAttribute>		mLights;
-		std::unique_ptr<StructBuffer>		mLightsBuffer;
+		static void Init();
+		static void Release();
 
-		std::shared_ptr<Texture>			mPostProcessTexture;
+	private:
+		static Com_Camera* mMainCamera;
+		static GameObject* mInspectorGameObject;
 
-		GameObject*							mInspectorGameObject;
+		static std::unique_ptr<ConstBuffer>		mConstBuffers[(UINT)eCBType::End];
+		static ComPtr<ID3D11SamplerState>		mSamplerStates[(UINT)eSamplerType::End];
+		static ComPtr<ID3D11RasterizerState>	mRasterizerStates[(UINT)eRSType::End];
+		static ComPtr<ID3D11DepthStencilState>	mDepthStencilStates[(UINT)eDSType::End];
+		static ComPtr<ID3D11BlendState>			mBlendStates[(UINT)eBSType::End];
+		
+		static std::vector<Com_Camera*>			mCameras[(UINT)eSceneType::End];
+		static std::vector<tDebugMesh>			mDebugMeshes;
+
+		static std::vector<tLightAttribute>		mLights;
+		static std::unique_ptr<StructBuffer>	mLightsBuffer;
+
+		static std::shared_ptr<Texture>			mPostProcessTexture;
+
+		
 	};
 
 

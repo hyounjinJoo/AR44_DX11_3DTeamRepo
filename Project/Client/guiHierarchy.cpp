@@ -54,10 +54,10 @@ namespace gui
 
 	void Hierarchy::InitializeInspector(void* data)
 	{
-		mh::RenderMgr::GetInst()->SetInspectorGameObject(static_cast<mh::GameObject*>(data));
+		mh::RenderMgr::SetInspectorGameObject(static_cast<mh::GameObject*>(data));
 
 		Inspector* inspector = editor.GetWidget<Inspector>("Inspector");
-		inspector->SetTargetGameObject(mh::RenderMgr::GetInst()->GetInspectorGameObject());
+		inspector->SetTargetGameObject(mh::RenderMgr::GetInspectorGameObject());
 		inspector->InitializeTargetGameObject();
 
 

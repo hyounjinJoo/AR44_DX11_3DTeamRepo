@@ -1,7 +1,7 @@
-
 #include "EnginePCH.h"
-
 #include "GPUMgr.h"
+
+#include "AtExit.h"
 
 #include "Application.h"
 #include "ConstBuffer.h"
@@ -13,24 +13,20 @@
 
 namespace mh
 {
+	ComPtr<ID3D11Device>			GPUMgr::mDevice;
+	ComPtr<ID3D11DeviceContext>		GPUMgr::mContext;
 
-	GPUMgr::GPUMgr()
-		: mDevice()
-		, mContext()
-		, mRenderTargetTexture()
-		, mDepthStencilBufferTexture()
-		, mSwapChain()
-		, mViewPort()
-	{
-	}
+	ComPtr<IDXGISwapChain>			GPUMgr::mSwapChain;
 
-	GPUMgr::~GPUMgr()
-	{
-		//renderer::Release();
-	}
+	std::shared_ptr<mh::Texture>	GPUMgr::mRenderTargetTexture;
+	std::shared_ptr<mh::Texture>	GPUMgr::mDepthStencilBufferTexture;
 
-	bool GPUMgr::Initialize(HWND _hwnd, UINT _Width, UINT _Height)
+	D3D11_VIEWPORT GPUMgr::mViewPort;
+
+	bool GPUMgr::Init(HWND _hwnd, UINT _Width, UINT _Height)
 	{
+		AtExit::AddFunc(GPUMgr::Release);
+
 		/// 1. Device 와 SwapChain 생성한다.
 		/// 2. 백버퍼에 실제로 렌더링할 렌더타겟 뷰를 생성해야한다.
 		/// 3. 화면을 클리어 해줘야한다. 뷰포트를 생성해줘야 한다.
@@ -77,7 +73,7 @@ namespace mh
 			return false;
 		}
 
-		//ResMgr::GetInst()->Add(strKey::Default::texture::RenderTarget, mRenderTargetTexture);
+		//ResMgr::Add(strKey::Default::texture::RenderTarget, mRenderTargetTexture);
 		mDepthStencilBufferTexture = CreateDepthStencil(_Width, _Height);
 		if (nullptr == mDepthStencilBufferTexture)
 		{
@@ -89,6 +85,11 @@ namespace mh
 		CreateViewPort(_hwnd);
 
 		return true;
+	}
+
+	void GPUMgr::Release()
+	{
+		Reset();
 	}
 
 	void GPUMgr::Reset()
@@ -223,7 +224,7 @@ namespace mh
 		mContext->Unmap(_buffer, 0);
 	}
 
-	void GPUMgr::Clear() const
+	void GPUMgr::Clear()
 	{
 		FLOAT backgroundColor[4] = { 0.2f, 0.2f, 0.2f, 1.0f };
 		mContext->ClearRenderTargetView(mRenderTargetTexture->GetRTV().Get(), backgroundColor);

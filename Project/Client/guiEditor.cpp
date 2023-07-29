@@ -29,7 +29,7 @@ namespace gui
 {
 	using namespace mh::define;
 	using namespace mh::math;
-	void Editor::Initialize()
+	void Editor::Init()
 	{
 		mbEnable = false;
 
@@ -39,8 +39,8 @@ namespace gui
 		// 충돌체의 종류 갯수만큼만 있으면 된다.
 		mDebugObjects.resize((UINT)eColliderType::End);
 
-		std::shared_ptr<mh::Mesh> rectMesh = mh::ResMgr::GetInst()->Find<mh::Mesh>(mh::strKey::Default::mesh::DebugRectMesh);
-		std::shared_ptr<mh::Material> material = mh::ResMgr::GetInst()->Find<mh::Material>(mh::strKey::Default::material::DebugMaterial);
+		std::shared_ptr<mh::Mesh> rectMesh = mh::ResMgr::Find<mh::Mesh>(mh::strKey::Default::mesh::DebugRectMesh);
+		std::shared_ptr<mh::Material> material = mh::ResMgr::Find<mh::Material>(mh::strKey::Default::material::DebugMaterial);
 
 		mDebugObjects[(UINT)eColliderType::Rect] = new DebugObject();
 		mh::Com_Renderer_Mesh* renderer
@@ -49,7 +49,7 @@ namespace gui
 		renderer->SetMaterial(material);
 		renderer->SetMesh(rectMesh);
 
-		std::shared_ptr<mh::Mesh> circleMesh = mh::ResMgr::GetInst()->Find<mh::Mesh>("CircleMesh");
+		std::shared_ptr<mh::Mesh> circleMesh = mh::ResMgr::Find<mh::Mesh>("CircleMesh");
 
 		mDebugObjects[(UINT)eColliderType::Circle] = new DebugObject();
 		renderer
@@ -62,8 +62,8 @@ namespace gui
 		// Grid Object
 		//EditorObject* gridObject = new EditorObject();
 		//mh::Com_Renderer_Mesh* gridMr = gridObject->AddComponent<mh::Com_Renderer_Mesh>();
-		//gridMr->SetMesh(mh::ResMgr::GetInst()->Find<mh::Mesh>(L"RectMesh"));
-		//gridMr->SetMaterial(mh::ResMgr::GetInst()->Find<Material>(L"GridMaterial"));
+		//gridMr->SetMesh(mh::ResMgr::Find<mh::Mesh>(L"RectMesh"));
+		//gridMr->SetMaterial(mh::ResMgr::Find<Material>(L"GridMaterial"));
 		//mh::GridScript* gridScript = gridObject->AddComponent<mh::GridScript>();
 		//gridScript->SetCamera(gMainCamera);
 
@@ -131,7 +131,7 @@ namespace gui
 			obj->Render();
 		}
 
-		auto& DebugMeshes = mh::RenderMgr::GetInst()->GetDebugMeshes();
+		auto& DebugMeshes = mh::RenderMgr::GetDebugMeshes();
 		for ( mh::tDebugMesh& mesh : DebugMeshes)
 		{
 			DebugRender(mesh);
@@ -182,7 +182,7 @@ namespace gui
 
 
 		mh::IRenderer* renderer = debugObj->GetComponent<mh::IRenderer>();
-		mh::Com_Camera* mainCam = mh::RenderMgr::GetInst()->GetMainCam();
+		mh::Com_Camera* mainCam = mh::RenderMgr::GetMainCam();
 
 		tr->FixedUpdate();
 
@@ -225,8 +225,8 @@ namespace gui
 
 		// Setup Platform/Renderer backends
 		ImGui_ImplWin32_Init(application.GetHwnd());
-		ImGui_ImplDX11_Init(mh::GPUMgr::GetInst()->GetDevice().Get()
-			, mh::GPUMgr::GetInst()->GetContext().Get());
+		ImGui_ImplDX11_Init(mh::GPUMgr::Device().Get()
+			, mh::GPUMgr::Context().Get());
 
 		// Load Fonts
 		// - If no fonts are loaded, dear imgui will use the default font. You can also load multiple fonts and use ImGui::PushFont()/PopFont() to select them.

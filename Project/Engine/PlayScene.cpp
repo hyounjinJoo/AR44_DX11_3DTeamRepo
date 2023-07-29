@@ -12,7 +12,7 @@
 #include "Com_Renderer_Sprite.h"
 #include "GridScript.h"
 #include "Object.h"
-#include "Input.h"
+#include "InputMgr.h"
 
 namespace mh
 {
@@ -26,19 +26,19 @@ namespace mh
 	{
 	}
 
-	void PlayScene::Initialize()
+	void PlayScene::Init()
 	{
 		GameObject* cameraObj = object::Instantiate<GameObject>(eLayerType::Com_Camera, this);
 		Com_Camera* cameraComp = cameraObj->AddComponent<Com_Camera>();
 		cameraComp->TurnLayerMask(eLayerType::UI, false);
 		cameraObj->AddComponent<Script_Camera>();
 
-		Scene::Initialize();
+		Scene::Init();
 	}
 
 	void PlayScene::Update()
 	{
-		if (Input::GetKeyDown(eKeyCode::N))
+		if (InputMgr::GetKeyDown(eKeyCode::N))
 		{
 			SceneManager::LoadScene(eSceneType::Tilte);
 		}

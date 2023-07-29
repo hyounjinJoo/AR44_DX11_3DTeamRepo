@@ -37,7 +37,7 @@ namespace mh
 		}
 	}
 
-	void Layer::Initialize()
+	void Layer::Init()
 	{
 		
 	}

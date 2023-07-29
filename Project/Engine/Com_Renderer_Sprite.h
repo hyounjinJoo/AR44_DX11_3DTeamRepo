@@ -14,7 +14,7 @@ namespace mh
 		Com_Renderer_Sprite();
 		virtual ~Com_Renderer_Sprite();
 
-		virtual void Initialize() override;
+		virtual void Init() override;
 		virtual void Update() override;
 		virtual void FixedUpdate() override;
 		virtual void Render() override;

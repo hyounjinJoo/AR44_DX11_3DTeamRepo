@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -272,13 +272,13 @@ call DLLCopy.bat $(Configuration)</Command>
     <ClInclude Include="EnginePCH.h" />
     <ClInclude Include="Entity.h" />
     <ClInclude Include="define_Enum.h" />
-    <ClInclude Include="Fmod.h" />
+    <ClInclude Include="AudioMgr.h" />
     <ClInclude Include="FontWrapper.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="GPUMgr.h" />
     <ClInclude Include="define_GPU.h" />
     <ClInclude Include="GridScript.h" />
-    <ClInclude Include="Input.h" />
+    <ClInclude Include="InputMgr.h" />
     <ClInclude Include="MeshData.h" />
     <ClInclude Include="IShader.h" />
     <ClInclude Include="Singleton.h" />
@@ -342,12 +342,12 @@ call DLLCopy.bat $(Configuration)</Command>
     <ClCompile Include="ComputeShader.cpp" />
     <ClCompile Include="ConstBuffer.cpp" />
     <ClCompile Include="Entity.cpp" />
-    <ClCompile Include="Fmod.cpp" />
+    <ClCompile Include="AudioMgr.cpp" />
     <ClCompile Include="FontWrapper.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="GPUMgr.cpp" />
     <ClCompile Include="GridScript.cpp" />
-    <ClCompile Include="Input.cpp" />
+    <ClCompile Include="InputMgr.cpp" />
     <ClCompile Include="json-cpp\jsoncpp.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>

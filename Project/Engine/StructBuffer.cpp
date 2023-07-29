@@ -123,7 +123,7 @@ namespace mh
 
 
 			//구조화버퍼 생성. ReleaseAndGetAddressOf() 함수를 통해서 기존 구조화 버퍼가 있다면 날려버리고 생성
-			if (FAILED(GPUMgr::GetInst()->GetDevice()->CreateBuffer(&mBufferDesc, pData, mBuffer.ReleaseAndGetAddressOf())))
+			if (FAILED(GPUMgr::Device()->CreateBuffer(&mBufferDesc, pData, mBuffer.ReleaseAndGetAddressOf())))
 			{
 				ERROR_MESSAGE_A("Failed to create Structured Buffer!");
 				return E_FAIL;
@@ -152,7 +152,7 @@ namespace mh
 			}
 
 			//구조화버퍼 생성
-			if (FAILED(GPUMgr::GetInst()->GetDevice()->CreateBuffer(&mBufferDesc, pData, mBuffer.ReleaseAndGetAddressOf())))
+			if (FAILED(GPUMgr::Device()->CreateBuffer(&mBufferDesc, pData, mBuffer.ReleaseAndGetAddressOf())))
 			{
 				ERROR_MESSAGE_A("Failed to create Structured Buffer!");
 				return E_FAIL;
@@ -190,7 +190,7 @@ namespace mh
 		}
 
 
-		auto pContext = GPUMgr::GetInst()->GetContext();
+		auto pContext = GPUMgr::Context();
 		switch (mSBufferDesc.eSBufferType)
 		{
 		case eStructBufferType::READ_ONLY:
@@ -241,7 +241,7 @@ namespace mh
 
 	void StructBuffer::GetData(void* _pDest, size_t _uDestByteCapacity)
 	{
-		auto pContext = GPUMgr::GetInst()->GetContext();
+		auto pContext = GPUMgr::Context();
 
 		switch (mSBufferDesc.eSBufferType)
 		{
@@ -317,7 +317,7 @@ namespace mh
 		//상수버퍼 바인딩
 		BindConstBuffer(_stageFlag);
 
-		auto pContext = GPUMgr::GetInst()->GetContext();
+		auto pContext = GPUMgr::Context();
 		if (eShaderStageFlag::VS & _stageFlag)
 		{
 			pContext->VSSetShaderResources(_SRVSlot, 1, mSRV.GetAddressOf());
@@ -368,7 +368,7 @@ namespace mh
 		BindConstBuffer(eShaderStageFlag::CS);
 
 		UINT Offset = -1;
-		GPUMgr::GetInst()->GetContext()->CSSetUnorderedAccessViews(_UAVSlot, 1, mUAV.GetAddressOf(), &Offset);
+		GPUMgr::Context()->CSSetUnorderedAccessViews(_UAVSlot, 1, mUAV.GetAddressOf(), &Offset);
 	}
 
 	void StructBuffer::SetDefaultDesc()
@@ -415,7 +415,7 @@ namespace mh
 	{
 		//구조체 정보를 담은 상수버퍼에 바인딩한 구조체 갯수를 넣어서 전달
 		//상수버퍼의 주소는 한번 실행되면 변하지 않으므로 static, const 형태로 선언.
-		static ConstBuffer* pStructCBuffer = RenderMgr::GetInst()->GetConstBuffer(eCBType::SBuffer);
+		static ConstBuffer* pStructCBuffer = RenderMgr::GetConstBuffer(eCBType::SBuffer);
 
 		SBufferCB cb = {};
 		cb.SBufferDataCount = mElementCount;
@@ -435,7 +435,7 @@ namespace mh
 		Desc.BindFlags = 0;
 		Desc.CPUAccessFlags = D3D11_CPU_ACCESS_READ | D3D11_CPU_ACCESS_WRITE;
 
-		bool bResult = SUCCEEDED(GPUMgr::GetInst()->GetDevice()->CreateBuffer(&Desc, nullptr, mStagingBuffer.ReleaseAndGetAddressOf()));
+		bool bResult = SUCCEEDED(GPUMgr::Device()->CreateBuffer(&Desc, nullptr, mStagingBuffer.ReleaseAndGetAddressOf()));
 
 		if(false == bResult)
 		{
@@ -452,7 +452,7 @@ namespace mh
 		SRVDesc.ViewDimension = D3D_SRV_DIMENSION_BUFFEREX;
 		SRVDesc.BufferEx.NumElements = mElementCapacity;
 
-		bool bResult = SUCCEEDED(GPUMgr::GetInst()->GetDevice()->CreateShaderResourceView(mBuffer.Get(), &SRVDesc, mSRV.ReleaseAndGetAddressOf()));
+		bool bResult = SUCCEEDED(GPUMgr::Device()->CreateShaderResourceView(mBuffer.Get(), &SRVDesc, mSRV.ReleaseAndGetAddressOf()));
 		
 		if (false == bResult)
 		{
@@ -469,7 +469,7 @@ namespace mh
 		UAVDesc.ViewDimension = D3D11_UAV_DIMENSION_BUFFER;
 		UAVDesc.Buffer.NumElements = mElementCapacity;
 
-		bool bResult = SUCCEEDED(GPUMgr::GetInst()->GetDevice()->CreateUnorderedAccessView(mBuffer.Get(), &UAVDesc, mUAV.ReleaseAndGetAddressOf()));
+		bool bResult = SUCCEEDED(GPUMgr::Device()->CreateUnorderedAccessView(mBuffer.Get(), &UAVDesc, mUAV.ReleaseAndGetAddressOf()));
 		if (false == bResult)
 		{
 			ERROR_MESSAGE_W(L"구조화 버퍼의 Unordered Access View 생성에 실패했습니다.");
@@ -487,7 +487,7 @@ namespace mh
 		case mh::eBufferViewType::SRV:
 		{
 
-			auto pContext = GPUMgr::GetInst()->GetContext();
+			auto pContext = GPUMgr::Context();
 
 			ID3D11ShaderResourceView* pView = nullptr;
 			if (eShaderStageFlag::VS & mSBufferDesc.TargetStage)
@@ -527,7 +527,7 @@ namespace mh
 		{
 			static const UINT v2_Offset = -1;
 			ID3D11UnorderedAccessView* pUAV = nullptr;
-			GPUMgr::GetInst()->GetContext()->CSSetUnorderedAccessViews(mCurBoundRegister, 1, &pUAV, &v2_Offset);
+			GPUMgr::Context()->CSSetUnorderedAccessViews(mCurBoundRegister, 1, &pUAV, &v2_Offset);
 			break;
 		}
 

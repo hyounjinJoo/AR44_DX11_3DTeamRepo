@@ -27,7 +27,7 @@ namespace mh
 			evt.second = nullptr;
 		}
 	}
-	void Com_Animator::Initialize()
+	void Com_Animator::Init()
 	{
 	}
 	void Com_Animator::Update()

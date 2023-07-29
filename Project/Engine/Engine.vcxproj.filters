@@ -165,9 +165,6 @@
     <ClCompile Include="SimpleMath.cpp">
       <Filter>Common\Math</Filter>
     </ClCompile>
-    <ClCompile Include="Input.cpp">
-      <Filter>Input</Filter>
-    </ClCompile>
     <ClCompile Include="Entity.cpp">
       <Filter>Common</Filter>
     </ClCompile>
@@ -262,9 +259,6 @@
     <ClCompile Include="Com_AudioListener.cpp">
       <Filter>GameObject\Component\Audio</Filter>
     </ClCompile>
-    <ClCompile Include="Fmod.cpp">
-      <Filter>GameObject\Component\Audio</Filter>
-    </ClCompile>
     <ClCompile Include="FontWrapper.cpp">
       <Filter>FontWrapper</Filter>
     </ClCompile>
@@ -331,6 +325,10 @@
     <ClCompile Include="GPUMgr.cpp">
       <Filter>Manager</Filter>
     </ClCompile>
+    <ClCompile Include="InputMgr.cpp" />
+    <ClCompile Include="AudioMgr.cpp">
+      <Filter>Manager</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application.h">
@@ -338,9 +336,6 @@
     </ClInclude>
     <ClInclude Include="SimpleMath.h">
       <Filter>Common\Math</Filter>
-    </ClInclude>
-    <ClInclude Include="Input.h">
-      <Filter>Input</Filter>
     </ClInclude>
     <ClInclude Include="Entity.h">
       <Filter>Common</Filter>
@@ -383,9 +378,6 @@
     </ClInclude>
     <ClInclude Include="Com_Renderer_Sprite.h">
       <Filter>GameObject\Component\Renderer</Filter>
-    </ClInclude>
-    <ClInclude Include="Object.h">
-      <Filter>GameObject</Filter>
     </ClInclude>
     <ClInclude Include="GridScript.h">
       <Filter>Resource\Script</Filter>
@@ -446,9 +438,6 @@
     </ClInclude>
     <ClInclude Include="ParticleShader.h" />
     <ClInclude Include="Com_AudioListener.h">
-      <Filter>GameObject\Component\Audio</Filter>
-    </ClInclude>
-    <ClInclude Include="Fmod.h">
       <Filter>GameObject\Component\Audio</Filter>
     </ClInclude>
     <ClInclude Include="FontWrapper.h">
@@ -542,6 +531,13 @@
       <Filter>Manager</Filter>
     </ClInclude>
     <ClInclude Include="GPUMgr.h">
+      <Filter>Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="InputMgr.h" />
+    <ClInclude Include="Object.h">
+      <Filter>Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="AudioMgr.h">
       <Filter>Manager</Filter>
     </ClInclude>
   </ItemGroup>

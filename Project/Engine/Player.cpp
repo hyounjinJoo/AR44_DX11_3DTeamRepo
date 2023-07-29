@@ -13,9 +13,9 @@ namespace mh
 	{
 	}
 
-	void Player::Initialize()
+	void Player::Init()
 	{
-		GameObject::Initialize();
+		GameObject::Init();
 	}
 
 	void Player::Update()

@@ -16,7 +16,7 @@ namespace mh
 	{
 	}
 
-	void IScript::Initialize()
+	void IScript::Init()
 	{
 	}
 

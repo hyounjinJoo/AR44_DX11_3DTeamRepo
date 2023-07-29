@@ -44,7 +44,7 @@ namespace mh
 	{
 		ID3D11ShaderResourceView* srv = nullptr;
 
-		auto pContext = GPUMgr::GetInst()->GetContext();
+		auto pContext = GPUMgr::Context();
 		pContext->VSSetShaderResources(_startSlot, 1u, &srv);
 		pContext->HSSetShaderResources(_startSlot, 1u, &srv);
 		pContext->DSSetShaderResources(_startSlot, 1u, &srv);
@@ -80,7 +80,7 @@ namespace mh
 		
 
 		bool bResult = false;
-		auto pDevice = GPUMgr::GetInst()->GetDevice();
+		auto pDevice = GPUMgr::Device();
 		bResult = SUCCEEDED(pDevice->CreateTexture2D(&mDesc, nullptr, mTexture.GetAddressOf()));
 
 		if(false == bResult)
@@ -121,7 +121,7 @@ namespace mh
 		bool Result = false;
 		mDesc = _TexDesc;
 
-		Result = SUCCEEDED(GPUMgr::GetInst()->GetDevice()->CreateTexture2D(&mDesc, nullptr, mTexture.GetAddressOf()));
+		Result = SUCCEEDED(GPUMgr::Device()->CreateTexture2D(&mDesc, nullptr, mTexture.GetAddressOf()));
 		if (false == Result)
 		{
 			ERROR_MESSAGE_W(L"텍스처 생성에 실패 했습니다.");
@@ -141,7 +141,7 @@ namespace mh
 
 	HRESULT Texture::Load(const std::filesystem::path& _FileName)
 	{
-		stdfs::path FullPath = PathMgr::GetInst()->GetRelativeResourcePath(GetResType());
+		stdfs::path FullPath = PathMgr::GetRelativeResourcePath(GetResType());
 
 		HRESULT hr = LoadFile(FullPath / _FileName);
 
@@ -180,7 +180,7 @@ namespace mh
 	{
 		CreateShaderResourceView
 		(
-			GPUMgr::GetInst()->GetDevice().Get(),
+			GPUMgr::Device().Get(),
 			mImage.GetImages(),
 			mImage.GetImageCount(),
 			mImage.GetMetadata(),
@@ -199,7 +199,7 @@ namespace mh
 		mCurBoundStage = _stageFlag;
 		mCurBoundView = eBufferViewType::SRV;
 
-		auto pContext = GPUMgr::GetInst()->GetContext();
+		auto pContext = GPUMgr::Context();
 		if (eShaderStageFlag::VS & _stageFlag)
 		{
 			pContext->VSSetShaderResources(_SRVSlot, 1u, mSRV.GetAddressOf());
@@ -230,7 +230,7 @@ namespace mh
 		mCurBoundRegister = (int)_startSlot;
 
 		UINT i = -1;
-		GPUMgr::GetInst()->GetContext()->CSSetUnorderedAccessViews(_startSlot, 1, mUAV.GetAddressOf(), &i);
+		GPUMgr::Context()->CSSetUnorderedAccessViews(_startSlot, 1, mUAV.GetAddressOf(), &i);
 	}
 
 
@@ -246,7 +246,7 @@ namespace mh
 			MH_ASSERT(0 <= mCurBoundRegister);
 			ID3D11ShaderResourceView* srv = nullptr;
 
-			auto pContext = GPUMgr::GetInst()->GetContext();
+			auto pContext = GPUMgr::Context();
 
 			if (eShaderStageFlag::VS & mCurBoundStage)
 			{
@@ -283,7 +283,7 @@ namespace mh
 			ID3D11UnorderedAccessView* pUAV = nullptr;
 			UINT u = -1;
 
-			GPUMgr::GetInst()->GetContext()->CSSetUnorderedAccessViews(mCurBoundRegister, 1, &pUAV, &u);
+			GPUMgr::Context()->CSSetUnorderedAccessViews(mCurBoundRegister, 1, &pUAV, &u);
 
 			//현재 연결된 레지스터 번호와 파이프라인을 초기화
 			mCurBoundRegister = -1;
@@ -299,7 +299,7 @@ namespace mh
 			ID3D11RenderTargetView* pRTV = nullptr;
 			ID3D11DepthStencilView* pDSV = nullptr;
 
-			GPUMgr::GetInst()->GetContext()->OMSetRenderTargets(1u, &pRTV, pDSV);
+			GPUMgr::Context()->OMSetRenderTargets(1u, &pRTV, pDSV);
 			break;
 		}
 
@@ -313,7 +313,7 @@ namespace mh
 
 	bool Texture::CreateView()
 	{
-		auto pDevice = GPUMgr::GetInst()->GetDevice();
+		auto pDevice = GPUMgr::Device();
 		if (mDesc.BindFlags & D3D11_BIND_FLAG::D3D11_BIND_DEPTH_STENCIL)
 		{
 			if (FAILED(pDevice->CreateDepthStencilView(mTexture.Get(), nullptr, mDSV.GetAddressOf())))
