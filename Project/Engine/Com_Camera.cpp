@@ -11,6 +11,9 @@
 #include "Material.h"
 #include "IRenderer.h"
 #include "SceneManager.h"
+#include "ResMgr.h"
+
+#include "MultiRenderTarget.h"
 
 extern mh::Application gApplication;
 
@@ -62,6 +65,30 @@ namespace mh
 
 		SortGameObjects();
 
+		//deffered opaque render
+		RenderMgr::GetMultiRenderTarget(eMRTType::Deffered)->SetMultiRenderTargets();
+		RenderDeffered();
+
+		//// deffered light 
+		RenderMgr::GetMultiRenderTarget(eMRTType::Light)->SetMultiRenderTargets();
+		// 여러개의 모든 빛을 미리 한장의 텍스처에다가 계산을 해두고
+		// 붙여버리자
+
+		const auto& Lights = RenderMgr::GetLights();
+		for (size_t i = 0; i < Lights.size(); ++i)
+		{
+			Lights[i]->Render();
+		}
+
+		//// defferd + swapchain merge
+		std::shared_ptr<Material> mergeMaterial = ResMgr::Find<Material>(strKey::Default::material::MergeMaterial);
+		std::shared_ptr<Mesh> rectMesh = ResMgr::Find<Mesh>(strKey::Default::mesh::RectMesh);
+		rectMesh->BindBuffer();
+		mergeMaterial->Bind();
+		rectMesh->Render();
+
+		// Foward render
+		RenderMgr::GetMultiRenderTarget(eMRTType::Swapchain)->SetMultiRenderTargets();
 		RenderOpaque();
 		RenderCutout();
 		RenderTransparent();
@@ -128,6 +155,7 @@ namespace mh
 
 	void Com_Camera::SortGameObjects()
 	{
+		mDefferedOpaqueGameObjects.clear();
 		mOpaqueGameObjects.clear();
 		mCutoutGameObjects.clear();
 		mTransparentGameObjects.clear();
@@ -147,6 +175,17 @@ namespace mh
 				{
 					PushGameObjectToRenderingModes(obj);
 				}
+			}
+		}
+	}
+
+	void Com_Camera::RenderDeffered()
+	{
+		for (size_t i = 0; i < mDefferedOpaqueGameObjects.size(); ++i)
+		{
+			if (mDefferedOpaqueGameObjects[i])
+			{
+				mDefferedOpaqueGameObjects[i]->Render();
 			}
 		}
 	}
@@ -212,6 +251,11 @@ namespace mh
 
 		switch (mode)
 		{
+		case eRenderingMode::DefferdOpaque:
+			[[fallthrough]];
+		case eRenderingMode::DefferdMask:
+			mDefferedOpaqueGameObjects.push_back(_gameObj);
+			break;
 		case eRenderingMode::Opaque:
 			mOpaqueGameObjects.push_back(_gameObj);
 			break;

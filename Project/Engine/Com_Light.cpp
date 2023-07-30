@@ -4,18 +4,20 @@
 #include "Com_Transform.h"
 #include "GameObject.h"
 #include "RenderMgr.h"
+#include "ResMgr.h"
+#include "Mesh.h"
 
 namespace mh
 {
 	Com_Light::Com_Light()
 		: IComponent(eComponentType::Light)
 	{
-
+		RenderMgr::AddLight(this);
 	}
 
 	Com_Light::~Com_Light()
 	{
-
+		RenderMgr::RemoveLight(this);
 	}
 
 	void Com_Light::Init()
@@ -41,6 +43,17 @@ namespace mh
 
 	void Com_Light::Render()
 	{
-
+		if (mAttribute.type == eLightType::Directional)
+		{
+			mVolumeMesh = ResMgr::Find<Mesh>(strKey::Default::mesh::RectMesh);
+		}
+		else if (mAttribute.type == eLightType::Point)
+		{
+			mVolumeMesh = ResMgr::Find<Mesh>(strKey::Default::mesh::CircleMesh);
+		}
+		else if (mAttribute.type == eLightType::Spot)
+		{
+			//
+		}
 	}
 }

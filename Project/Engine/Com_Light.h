@@ -7,11 +7,13 @@ namespace mh
 {
 	using namespace mh::math;
 	using namespace mh::define;
+
+	class Mesh;
 	class Com_Light : public IComponent
 	{
 	public:
 		Com_Light();
-		~Com_Light();
+		virtual ~Com_Light();
 
 		virtual void Init() override;
 		virtual void Update() override;
@@ -33,5 +35,6 @@ namespace mh
 
 	private:
 		tLightAttribute mAttribute;
+		std::shared_ptr<Mesh> mVolumeMesh; // 광원의 범위를 표현하는 메쉬
 	};
 }

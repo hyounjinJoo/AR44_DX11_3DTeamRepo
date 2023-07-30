@@ -8,7 +8,6 @@
 #include "ResMgr.h"
 
 #include "ConstBuffer.h"
-#include "DefaultShaders.h"
 #include "PaintShader.h"
 #include "ParticleShader.h"
 
@@ -19,6 +18,11 @@
 
 #include "MultiRenderTarget.h"
 #include "Application.h"
+
+#include "Com_Light.h"
+
+//컴파일된 쉐이더 헤더 모아놓은 헤더
+#include "DefaultShaders.h"
 
 extern mh::Application gApplication;
 
@@ -39,7 +43,8 @@ namespace mh
 
 	std::unique_ptr<MultiRenderTarget>	RenderMgr::mMultiRenderTargets[(UINT)eMRTType::End]{};
 
-	std::vector<tLightAttribute>		RenderMgr::mLights{};
+	std::vector<Com_Light*>				RenderMgr::mLights{};
+	std::vector<tLightAttribute>		RenderMgr::mLightAttributes{};
 	std::unique_ptr<StructBuffer>		RenderMgr::mLightsBuffer{};
 	std::shared_ptr<Texture>			RenderMgr::mPostProcessTexture{};
 	
@@ -99,7 +104,7 @@ namespace mh
 			}
 		}
 		mDebugMeshes.clear();
-		mLights.clear();
+		mLightAttributes.clear();
 		mLightsBuffer.reset();
 		mPostProcessTexture = nullptr;
 
@@ -125,25 +130,36 @@ namespace mh
 		}
 
 		mCameras[(UINT)type].clear();
-		mLights.clear();
+		mLightAttributes.clear();
 	}
 
 
+	void RenderMgr::RemoveLight(Com_Light* _pComLight)
+	{
+		for (auto iter = mLights.begin(); iter != mLights.end(); ++iter)
+		{
+			if (*iter == _pComLight)
+			{
+				mLights.erase(iter);
+				break;
+			}
+		}
+	}
+
 	void RenderMgr::BindLights()
 	{
-		mLightsBuffer->SetData(mLights.data(), mLights.size());
+		mLightsBuffer->SetData(mLightAttributes.data(), mLightAttributes.size());
 
 		eShaderStageFlag_ Flag = eShaderStageFlag::VS | eShaderStageFlag::PS;
 
 		mLightsBuffer->BindDataSRV(13, Flag);
 
 		LightCB trCb = {};
-		trCb.NumberOfLight = (UINT)mLights.size();
+		trCb.NumberOfLight = (UINT)mLightAttributes.size();
 
 		ConstBuffer* cb = mConstBuffers[(UINT)eCBType::Light].get();
 		cb->SetData(&trCb);
-		cb->BindData(eShaderStageFlag::VS);
-		cb->BindData(eShaderStageFlag::PS);
+		cb->BindData(eShaderStageFlag::VS | eShaderStageFlag::PS);
 	}
 	void RenderMgr::BindNoiseTexture()
 	{
@@ -178,6 +194,16 @@ namespace mh
 
 		mPostProcessTexture->BindDataSRV(60u, eShaderStageFlag::PS);
 	}
+
+	void RenderMgr::ClearMultiRenderTargets(const Vector4& _clearColor)
+	{
+		for (int i = 0; i < (int)eMRTType::End; ++i)
+		{
+			if (mMultiRenderTargets[i])
+				mMultiRenderTargets[i]->Clear(_clearColor);
+		}
+	}
+
 	bool RenderMgr::CreateMultiRenderTargets()
 	{
 		UINT width = gApplication.GetWidth();
@@ -203,7 +229,7 @@ namespace mh
 
 		// Deffered MRT
 		{
-			std::shared_ptr<Texture> arrRTTex[8] = {};
+			std::shared_ptr<Texture> arrRTTex[MRT_MAX] = {};
 			std::shared_ptr<Texture> dsTex = nullptr;
 
 			std::shared_ptr<Texture> pos = std::make_shared<Texture>();
@@ -211,10 +237,10 @@ namespace mh
 			std::shared_ptr<Texture> albedo = std::make_shared<Texture>();
 			std::shared_ptr<Texture> specular = std::make_shared<Texture>();
 
-			arrRTTex[0] = pos;
-			arrRTTex[1] = normal;
-			arrRTTex[2] = albedo;
-			arrRTTex[3] = specular;
+			arrRTTex[(UINT)eMRT_Defferd::Pos] = pos;
+			arrRTTex[(UINT)eMRT_Defferd::Normal] = normal;
+			arrRTTex[(UINT)eMRT_Defferd::Albedo] = albedo;
+			arrRTTex[(UINT)eMRT_Defferd::Specular] = specular;
 
 			arrRTTex[0]->Create(width, height, DXGI_FORMAT_R8G8B8A8_UNORM
 				, D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE);
@@ -236,6 +262,25 @@ namespace mh
 		}
 
 
+		// Light MRT
+		{
+			std::shared_ptr<Texture> arrRTTex[MRT_MAX] = { };
+			std::shared_ptr<Texture> diffuse = std::make_shared<Texture>();
+			std::shared_ptr<Texture> specular = std::make_shared<Texture>();
+
+			arrRTTex[(int)eMRT_Light::Diffuse] = diffuse;
+			arrRTTex[(int)eMRT_Light::Specular] = specular;
+
+			arrRTTex[0]->Create(width, height, DXGI_FORMAT_R8G8B8A8_UNORM
+				, D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE);
+			arrRTTex[1]->Create(width, height, DXGI_FORMAT_R8G8B8A8_UNORM
+				, D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE);
+
+			mMultiRenderTargets[(UINT)eMRTType::Light] = std::make_unique<MultiRenderTarget>();
+			mMultiRenderTargets[(UINT)eMRTType::Light]->Create(arrRTTex, nullptr);
+		}
+
+
 
 		return true;
 	}
@@ -250,7 +295,7 @@ namespace mh
 			Vertex2D vtx2d = {};
 			std::shared_ptr<Mesh> pointMesh = std::make_shared<Mesh>();
 			pointMesh->SetEngineDefaultRes(true);
-			ResMgr::Add(strKey::Default::mesh::PointMesh, pointMesh);
+			ResMgr::Insert(strKey::Default::mesh::PointMesh, pointMesh);
 
 			pointMesh->CreateVertexBuffer(&vtx2d, sizeof(Vertex2D), (size_t)1);
 			UINT pointIndex = 0;
@@ -291,7 +336,7 @@ namespace mh
 			// Crate Mesh
 			std::shared_ptr<Mesh> RectMesh = std::make_shared<Mesh>();
 			RectMesh->SetEngineDefaultRes(true);
-			ResMgr::Add(strKey::Default::mesh::RectMesh, RectMesh);
+			ResMgr::Insert(strKey::Default::mesh::RectMesh, RectMesh);
 			RectMesh->CreateVertexBuffer(VecVtx2D.data(), sizeof(vtx2d), VecVtx2D.size());
 
 			std::vector<UINT> indices = { 0u , 1u, 2u, 0u, 2u, 3u, 0u };
@@ -328,7 +373,7 @@ namespace mh
 			
 			// Create Mesh
 			std::shared_ptr<Mesh> debugmesh = std::make_shared<Mesh>();
-			ResMgr::Add(strKey::Default::mesh::DebugRectMesh, debugmesh);
+			ResMgr::Insert(strKey::Default::mesh::DebugRectMesh, debugmesh);
 			debugmesh->CreateVertexBuffer(VecVtx2D.data(), sizeof(Vertex2D), VecVtx2D.size());
 			debugmesh->CreateIndexBuffer(indices.data(), static_cast<UINT>(indices.size()));
 		}
@@ -377,7 +422,7 @@ namespace mh
 
 			// Crate Mesh
 			std::shared_ptr<Mesh> cirlceMesh = std::make_shared<Mesh>();
-			ResMgr::Add(strKey::Default::mesh::CircleMesh, cirlceMesh);
+			ResMgr::Insert(strKey::Default::mesh::CircleMesh, cirlceMesh);
 			cirlceMesh->CreateVertexBuffer(VecVtx2D.data(), sizeof(Vertex2D), VecVtx2D.size());
 			cirlceMesh->CreateIndexBuffer(VecIdx.data(), VecIdx.size());
 		}
@@ -620,7 +665,7 @@ namespace mh
 
 			// Crate Mesh
 			std::shared_ptr<Mesh> cubMesh = std::make_shared<Mesh>();
-			ResMgr::Add(strKey::Default::mesh::CubeMesh, cubMesh);
+			ResMgr::Insert(strKey::Default::mesh::CubeMesh, cubMesh);
 			cubMesh->Create<Vertex3D>(VecVtx3D, indices);
 		}
 
@@ -733,7 +778,7 @@ namespace mh
 			}
 
 			std::shared_ptr<Mesh> sphereMesh = std::make_shared<Mesh>();
-			ResMgr::Add(strKey::Default::mesh::SphereMesh, sphereMesh);
+			ResMgr::Insert(strKey::Default::mesh::SphereMesh, sphereMesh);
 
 			sphereMesh->Create<Vertex3D>(VecVtx3D, indices);
 		}
@@ -780,41 +825,45 @@ namespace mh
 #pragma region DEFAULT TRIANGLE SHADER
 		{
 			std::shared_ptr<GraphicsShader> TriangleShader = std::make_shared<GraphicsShader>();
+			TriangleShader->SetEngineDefaultRes(true);
 			TriangleShader->CreateByHeader(eGSStage::VS, VS_Triangle, sizeof(VS_Triangle));
 			TriangleShader->CreateByHeader(eGSStage::PS, PS_Triangle, sizeof(PS_Triangle));
 			TriangleShader->CreateInputLayout(vecLayoutDesc);
 
-			ResMgr::Add(strKey::Default::shader::graphics::RectShader, TriangleShader);
+			ResMgr::Insert(strKey::Default::shader::graphics::RectShader, TriangleShader);
 		}
 #pragma endregion
 #pragma region SPRITE SHADER
 		{
 			std::shared_ptr<GraphicsShader> spriteShader = std::make_shared<GraphicsShader>();
+			spriteShader->SetEngineDefaultRes(true);
 			spriteShader->CreateByHeader(eGSStage::VS, VS_Sprite, sizeof(VS_Sprite));
 			spriteShader->CreateByHeader(eGSStage::PS, PS_Sprite, sizeof(PS_Sprite));
 			spriteShader->SetRSState(eRSType::SolidNone);
 			spriteShader->CreateInputLayout(vecLayoutDesc);
 
 
-			ResMgr::Add(strKey::Default::shader::graphics::SpriteShader, spriteShader);
+			ResMgr::Insert(strKey::Default::shader::graphics::SpriteShader, spriteShader);
 		}
 
 #pragma endregion
 #pragma region UI SHADER
 		{
 			std::shared_ptr<GraphicsShader> uiShader = std::make_shared<GraphicsShader>();
+			uiShader->SetEngineDefaultRes(true);
 			uiShader->CreateByHeader(eGSStage::VS, VS_UserInterface, sizeof(VS_UserInterface));
 			uiShader->CreateByHeader(eGSStage::PS, PS_UserInterface, sizeof(PS_UserInterface));
 			uiShader->CreateInputLayout(vecLayoutDesc);
 
 
-			ResMgr::Add(strKey::Default::shader::graphics::UIShader, uiShader);
+			ResMgr::Insert(strKey::Default::shader::graphics::UIShader, uiShader);
 		}
 
 #pragma endregion
 #pragma region GRID SHADER
 		{
 			std::shared_ptr<GraphicsShader> gridShader = std::make_shared<GraphicsShader>();
+			gridShader->SetEngineDefaultRes(true);
 			gridShader->CreateByHeader(eGSStage::VS, VS_Grid, sizeof(VS_Grid));
 			gridShader->CreateByHeader(eGSStage::PS, PS_Grid, sizeof(PS_Grid));
 			gridShader->CreateInputLayout(vecLayoutDesc);
@@ -823,13 +872,14 @@ namespace mh
 			gridShader->SetDSState(eDSType::NoWrite);
 			gridShader->SetBSState(eBSType::AlphaBlend);
 
-			ResMgr::Add(strKey::Default::shader::graphics::GridShader, gridShader);
+			ResMgr::Insert(strKey::Default::shader::graphics::GridShader, gridShader);
 		}
 
 #pragma endregion
 #pragma region DEBUG SHADER
 		{
 			std::shared_ptr<GraphicsShader> debugShader = std::make_shared<GraphicsShader>();
+			debugShader->SetEngineDefaultRes(true);
 			debugShader->CreateByHeader(eGSStage::VS, VS_Debug, sizeof(VS_Debug));
 			debugShader->CreateByHeader(eGSStage::PS, PS_Debug, sizeof(PS_Debug));
 			debugShader->CreateInputLayout(vecLayoutDesc);
@@ -841,21 +891,23 @@ namespace mh
 			debugShader->SetBSState(eBSType::AlphaBlend);
 			debugShader->SetTopology(D3D11_PRIMITIVE_TOPOLOGY::D3D11_PRIMITIVE_TOPOLOGY_LINESTRIP);
 
-			ResMgr::Add(strKey::Default::shader::graphics::DebugShader, debugShader);
+			ResMgr::Insert(strKey::Default::shader::graphics::DebugShader, debugShader);
 		}
 
 #pragma endregion
 #pragma region PAINT SHADER
 		{
 			std::shared_ptr<PaintShader> paintShader = std::make_shared<PaintShader>();
+			paintShader->SetEngineDefaultRes(true);
 			paintShader->CreateByHeader(CS_Paint, sizeof(CS_Paint));
-			ResMgr::Add(strKey::Default::shader::graphics::PaintShader, paintShader);
+			ResMgr::Insert(strKey::Default::shader::graphics::PaintShader, paintShader);
 		}
 
 #pragma endregion
 #pragma region PARTICLE SHADER
 		{
 			std::shared_ptr<GraphicsShader> particleShader = std::make_shared<GraphicsShader>();
+			particleShader->SetEngineDefaultRes(true);
 
 			particleShader->CreateByHeader(eGSStage::VS, VS_Particle, sizeof(VS_Particle));
 			particleShader->CreateByHeader(eGSStage::GS, GS_Particle, sizeof(GS_Particle));
@@ -866,22 +918,24 @@ namespace mh
 			particleShader->SetDSState(eDSType::NoWrite);
 			particleShader->SetBSState(eBSType::AlphaBlend);
 			particleShader->SetTopology(D3D11_PRIMITIVE_TOPOLOGY::D3D11_PRIMITIVE_TOPOLOGY_POINTLIST);
-			ResMgr::Add(strKey::Default::shader::graphics::ParticleShader, particleShader);
+			ResMgr::Insert(strKey::Default::shader::graphics::ParticleShader, particleShader);
 
 			std::shared_ptr<ParticleShader> particleCS = std::make_shared<ParticleShader>();
-			ResMgr::Add(strKey::Default::shader::compute::ParticleCS, particleCS);
+			particleCS->SetEngineDefaultRes(true);
+			ResMgr::Insert(strKey::Default::shader::compute::ParticleCS, particleCS);
 			particleCS->CreateByHeader(CS_Particle, sizeof(CS_Particle));
 		}
 #pragma endregion
 #pragma region POST PROCESS SHADER
 		{
 			std::shared_ptr<GraphicsShader> postProcessShader = std::make_shared<GraphicsShader>();
+			postProcessShader->SetEngineDefaultRes(true);
 			postProcessShader->CreateByHeader(eGSStage::VS, VS_PostProcess, sizeof(VS_PostProcess));
 			postProcessShader->CreateByHeader(eGSStage::PS, PS_PostProcess, sizeof(PS_PostProcess));
 			postProcessShader->CreateInputLayout(vecLayoutDesc);
 
 			postProcessShader->SetDSState(eDSType::NoWrite);
-			ResMgr::Add(strKey::Default::shader::graphics::PostProcessShader, postProcessShader);
+			ResMgr::Insert(strKey::Default::shader::graphics::PostProcessShader, postProcessShader);
 		}
 #pragma endregion
 
@@ -919,12 +973,41 @@ namespace mh
 #pragma region BASIC 3D
 		{
 			std::shared_ptr<GraphicsShader> basic3DShader = std::make_shared<GraphicsShader>();
-			basic3DShader->CreateByHeader(eGSStage::VS, VS_Basic, sizeof(VS_Basic));
-			basic3DShader->CreateByHeader(eGSStage::PS, PS_Basic, sizeof(PS_Basic));
+			basic3DShader->SetEngineDefaultRes(true);
+
+			basic3DShader->CreateByHeader(eGSStage::VS, VS_Basic3D, sizeof(VS_Basic3D));
+			basic3DShader->CreateByHeader(eGSStage::PS, PS_Basic3D, sizeof(PS_Basic3D));
 			basic3DShader->CreateInputLayout(vecLayoutDesc);
 
-			ResMgr::Add(strKey::Default::shader::graphics::Basic3DShader, basic3DShader);
+			ResMgr::Insert(strKey::Default::shader::graphics::Basic3DShader, basic3DShader);
 		}
+#pragma endregion
+
+#pragma region DEFFERD
+		std::shared_ptr<GraphicsShader> defferedShader = std::make_shared<GraphicsShader>();
+		defferedShader->SetEngineDefaultRes(true);
+
+		defferedShader->CreateByHeader(eGSStage::VS, VS_Deffered, sizeof(VS_Deffered));
+		defferedShader->CreateByHeader(eGSStage::PS, PS_Deffered, sizeof(PS_Deffered));
+
+		defferedShader->CreateInputLayout(vecLayoutDesc);
+
+		ResMgr::Insert(strKey::Default::shader::graphics::DefferedShader, defferedShader);
+
+		//defferdShader->SetRSState();
+#pragma endregion
+#pragma region MERGE
+		std::shared_ptr<GraphicsShader> MergeShader = std::make_shared<GraphicsShader>();
+		MergeShader->CreateByHeader(eGSStage::VS, VS_Merge, sizeof(VS_Merge));
+		MergeShader->CreateByHeader(eGSStage::PS, PS_Merge, sizeof(PS_Merge));
+
+		MergeShader->CreateInputLayout(vecLayoutDesc);
+
+		MergeShader->SetRSState(eRSType::SolidBack);
+		MergeShader->SetDSState(eDSType::None);
+		MergeShader->SetBSState(eBSType::Default);
+
+		ResMgr::Insert(strKey::Default::shader::graphics::MergeShader, MergeShader);
 #pragma endregion
 	}
 
@@ -1007,7 +1090,7 @@ namespace mh
 		std::shared_ptr<Texture> uavTexture = std::make_shared<Texture>();
 		uavTexture->Create(1024, 1024, DXGI_FORMAT_R8G8B8A8_UNORM, D3D11_BIND_SHADER_RESOURCE
 			| D3D11_BIND_UNORDERED_ACCESS);
-		ResMgr::Add(texture::PaintTexture, uavTexture);
+		ResMgr::Insert(texture::PaintTexture, uavTexture);
 #pragma endregion
 
 		//noise
@@ -1176,7 +1259,7 @@ namespace mh
 		std::shared_ptr<Material> RectMaterial = std::make_shared<Material>();
 		RectMaterial->SetShader(shader);
 		RectMaterial->SetTexture(eTextureSlot::Albedo, texture);
-		ResMgr::Add(material::RectMaterial, RectMaterial);
+		ResMgr::Insert(material::RectMaterial, RectMaterial);
 #pragma endregion
 #pragma region SPRITE
 		std::shared_ptr <Texture> spriteTexture = ResMgr::Find<Texture>(texture::DefaultSprite);
@@ -1185,7 +1268,7 @@ namespace mh
 		spriteMaterial->SetRenderingMode(eRenderingMode::Transparent);
 		spriteMaterial->SetShader(spriteShader);
 		spriteMaterial->SetTexture(eTextureSlot::Albedo, spriteTexture);
-		ResMgr::Add(material::SpriteMaterial, spriteMaterial);
+		ResMgr::Insert(material::SpriteMaterial, spriteMaterial);
 #pragma endregion
 #pragma region UI
 		std::shared_ptr <Texture> uiTexture = ResMgr::Find<Texture>(texture::HPBarTexture);
@@ -1195,37 +1278,37 @@ namespace mh
 
 		uiMaterial->SetShader(uiShader);
 		uiMaterial->SetTexture(eTextureSlot::Albedo, uiTexture);
-		ResMgr::Add(material::UIMaterial, uiMaterial);
+		ResMgr::Insert(material::UIMaterial, uiMaterial);
 #pragma endregion
 #pragma region GRID
 		std::shared_ptr<GraphicsShader> gridShader = ResMgr::Find<GraphicsShader>(shader::graphics::GridShader);
 		std::shared_ptr<Material> gridMaterial = std::make_shared<Material>();
 		gridMaterial->SetShader(gridShader);
-		ResMgr::Add(material::GridMaterial, gridMaterial);
+		ResMgr::Insert(material::GridMaterial, gridMaterial);
 #pragma endregion
 #pragma region DEBUG
 		std::shared_ptr<GraphicsShader> debugShader = ResMgr::Find<GraphicsShader>(shader::graphics::DebugShader);
 		std::shared_ptr<Material> debugMaterial = std::make_shared<Material>();
 		debugMaterial->SetRenderingMode(eRenderingMode::Transparent);
 		debugMaterial->SetShader(debugShader);
-		ResMgr::Add(material::DebugMaterial, debugMaterial);
+		ResMgr::Insert(material::DebugMaterial, debugMaterial);
 #pragma endregion
 #pragma region PARTICLE
 		std::shared_ptr<GraphicsShader> particleShader = ResMgr::Find<GraphicsShader>(shader::graphics::ParticleShader);
 		std::shared_ptr<Material> particleMaterial = std::make_shared<Material>();
 		particleMaterial->SetRenderingMode(eRenderingMode::Transparent);
 		particleMaterial->SetShader(particleShader);
-		ResMgr::Add(material::ParticleMaterial, particleMaterial);
+		ResMgr::Insert(material::ParticleMaterial, particleMaterial);
 #pragma endregion
 #pragma region POSTPROCESS
 		std::shared_ptr<GraphicsShader> postProcessShader = ResMgr::Find<GraphicsShader>(shader::graphics::PostProcessShader);
 		std::shared_ptr<Material> postProcessMaterial = std::make_shared<Material>();
 		postProcessMaterial->SetRenderingMode(eRenderingMode::PostProcess);
 		postProcessMaterial->SetShader(postProcessShader);
-		ResMgr::Add(material::PostProcessMaterial, postProcessMaterial);
+		ResMgr::Insert(material::PostProcessMaterial, postProcessMaterial);
 #pragma endregion
 
-#pragma region BASIC
+#pragma region BASIC3D
 		std::shared_ptr<GraphicsShader> basic3DShader = ResMgr::Find<GraphicsShader>(shader::graphics::Basic3DShader);
 		std::shared_ptr<Material> basic3DMaterial = std::make_shared<Material>();
 		basic3DMaterial->SetRenderingMode(eRenderingMode::Transparent);
@@ -1235,9 +1318,52 @@ namespace mh
 		basic3DMaterial->SetTexture(eTextureSlot::Albedo, albedo);
 		albedo = ResMgr::Find<Texture>(texture::Brick_N);
 		basic3DMaterial->SetTexture(eTextureSlot::Normal, albedo);
-		ResMgr::Add(material::Basic3DMaterial, basic3DMaterial);
+		ResMgr::Insert(material::Basic3DMaterial, basic3DMaterial);
+#pragma endregion
 
+#pragma region DEFFERD
+		std::shared_ptr<GraphicsShader> defferdShader = ResMgr::Find<GraphicsShader>(strKey::Default::shader::graphics::DefferedShader);
 
+		std::shared_ptr<Material> defferdMaterial = std::make_shared<Material>();
+		defferdMaterial->SetRenderingMode(eRenderingMode::DefferdOpaque);
+		defferdMaterial->SetShader(defferdShader);
+
+		// specular map 추가 사용가능
+		albedo = ResMgr::Find<Texture>(strKey::Default::texture::Brick);
+		defferdMaterial->SetTexture(eTextureSlot::Albedo, albedo);
+		albedo = ResMgr::Find<Texture>(strKey::Default::texture::Brick_N);
+		defferdMaterial->SetTexture(eTextureSlot::Normal, albedo);
+		ResMgr::Insert(strKey::Default::material::DefferedMaterial, defferdMaterial);
+#pragma endregion
+
+#pragma region MERGE
+		std::shared_ptr<GraphicsShader> mergeShader = ResMgr::Find<GraphicsShader>(strKey::Default::shader::graphics::MergeShader);
+		std::shared_ptr<Material> mergeMaterial = std::make_shared<Material>();
+		mergeMaterial->SetRenderingMode(eRenderingMode::None);
+		mergeMaterial->SetShader(mergeShader);
+
+		MultiRenderTarget* DefferedMRT = mMultiRenderTargets[(UINT)eMRTType::Deffered].get();
+		{
+			std::shared_ptr<Texture> PosRenderTarget = DefferedMRT->GetRenderTarget((UINT)eMRT_Defferd::Pos);
+			mergeMaterial->SetTexture(eTextureSlot::PositionTarget, PosRenderTarget);
+		}
+
+		{
+			std::shared_ptr<Texture> NormalRenderTarget = DefferedMRT->GetRenderTarget((UINT)eMRT_Defferd::Normal);
+			mergeMaterial->SetTexture(eTextureSlot::NormalTarget, NormalRenderTarget);
+		}
+
+		{
+			std::shared_ptr<Texture> AlbedoRenderTarget = DefferedMRT->GetRenderTarget((UINT)eMRT_Defferd::Albedo);
+			mergeMaterial->SetTexture(eTextureSlot::AlbedoTarget, AlbedoRenderTarget);
+		}
+
+		{
+			std::shared_ptr<Texture> SpecularTarget = DefferedMRT->GetRenderTarget((UINT)eMRT_Defferd::Specular);
+			mergeMaterial->SetTexture(eTextureSlot::SpecularTarget, SpecularTarget);
+		}
+
+		ResMgr::Insert(strKey::Default::material::MergeMaterial, mergeMaterial);
 #pragma endregion
 
 	}

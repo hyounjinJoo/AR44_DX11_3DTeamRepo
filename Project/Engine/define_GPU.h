@@ -147,6 +147,7 @@ namespace mh
 		CutOut,
 		Transparent,
 		PostProcess,
+		None,
 		End,
 	};
 
@@ -163,6 +164,7 @@ namespace mh
 		SBuffer,
 		End,
 	};
+
 
 	enum class eGPUParam
 	{
@@ -185,20 +187,36 @@ namespace mh
 	{
 		Albedo,
 		Normal,
-		T2,
-		T3,
-		T4,
-		T5,
-		T6,
-		T7,
 
-		CubeT8,
-		CubeT9,
+		PositionTarget,
+		NormalTarget,
+		AlbedoTarget,
+		SpecularTarget,
+		DiffuseLightTarget,
+		SpecularLightTarget,
 
-		Array2DT10,
-		Array2DT11,
+		//CubeT8,
+		//CubeT9,
+
+		//Array2DT10,
+		//Array2DT11,
 
 		End,
+	};
+
+	enum class eMRT_Defferd
+	{
+		Pos,
+		Normal,
+		Albedo,
+		Specular,
+		End
+	};
+
+	enum class eMRT_Light
+	{
+		Diffuse,
+		Specular
 	};
 
 	enum class eBufferViewType

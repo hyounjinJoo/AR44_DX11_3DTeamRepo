@@ -2,8 +2,6 @@
 #include "define_GPU.h"
 #include "SimpleMath.h"
 
-
-
 namespace mh
 {
 	class ConstBuffer;
@@ -11,7 +9,10 @@ namespace mh
 	class Texture;
 	
 	class Com_Camera;
+
+	class Com_Light;
 	class GameObject;
+	
 	
 	using namespace math;
 	using namespace Microsoft::WRL;
@@ -114,14 +115,21 @@ namespace mh
 		static void SetInspectorGameObject(GameObject* _pObj) { mInspectorGameObject = _pObj; }
 		static GameObject* GetInspectorGameObject() { return mInspectorGameObject; }
 
+		inline static MultiRenderTarget* GetMultiRenderTarget(eMRTType _Type);
 
 		//Renderer
-		static void PushLightAttribute(const tLightAttribute& lightAttribute) { mLights.push_back(lightAttribute); }
+		static void PushLightAttribute(const tLightAttribute& lightAttribute) { mLightAttributes.push_back(lightAttribute); }
+		static void AddLight(Com_Light* _pComLight) { if (_pComLight) mLights.push_back(_pComLight); }
+		static void RemoveLight(Com_Light* _pComLight);
+
+		static const std::vector<Com_Light*>& GetLights() { return mLights; }
 
 
 		static void BindLights();
 		static void BindNoiseTexture();
 		static void CopyRenderTarget();
+
+		static void ClearMultiRenderTargets(const Vector4& _clearColor);
 
 	private:
 		static bool CreateMultiRenderTargets();
@@ -156,12 +164,11 @@ namespace mh
 
 		static std::unique_ptr<MultiRenderTarget> mMultiRenderTargets[(UINT)eMRTType::End];
 
-		static std::vector<tLightAttribute>		mLights;
+		static std::vector<Com_Light*>			mLights;
+		static std::vector<tLightAttribute>		mLightAttributes;
 		static std::unique_ptr<StructBuffer>	mLightsBuffer;
 
 		static std::shared_ptr<Texture>			mPostProcessTexture;
-
-		
 	};
 
 
@@ -172,6 +179,11 @@ namespace mh
 			pCam = mCameras[(int)_Type][_Idx];
 
 		return pCam;
+	}
+
+	inline MultiRenderTarget* RenderMgr::GetMultiRenderTarget(eMRTType _Type)
+	{
+		return mMultiRenderTargets[(int)_Type].get();
 	}
 }
 

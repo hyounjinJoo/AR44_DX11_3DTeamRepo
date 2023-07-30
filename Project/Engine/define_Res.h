@@ -86,6 +86,8 @@ namespace mh::define
 				STRKEY_DECLARE(ParticleMaterial);
 				STRKEY_DECLARE(Basic3DMaterial);
 				STRKEY_DECLARE(PostProcessMaterial);
+				STRKEY_DECLARE(DefferedMaterial);
+				STRKEY_DECLARE(MergeMaterial);
 			}
 
 			namespace texture
@@ -118,6 +120,8 @@ namespace mh::define
 					STRKEY_DECLARE(ParticleShader);
 					STRKEY_DECLARE(PostProcessShader);
 					STRKEY_DECLARE(Basic3DShader);
+					STRKEY_DECLARE(DefferedShader);
+					STRKEY_DECLARE(MergeShader);
 				}
 				namespace compute
 				{

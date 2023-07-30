@@ -69,6 +69,8 @@ namespace mh
 		GPUMgr::Clear();
 		GPUMgr::AdjustViewPorts(mHwnd);
 
+		RenderMgr::ClearMultiRenderTargets(Vector4(0.2f));
+
 		RenderMgr::Render();
 	}
 

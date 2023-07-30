@@ -47,7 +47,7 @@ namespace mh
 		static const std::unordered_map<std::string, std::shared_ptr<IRes>, tUmap_StringViewHasher, std::equal_to<>>&
 			GetResources();
 
-		static void Add(const std::string_view _strKey, std::shared_ptr<IRes> _Res);
+		static void Insert(const std::string_view _strKey, std::shared_ptr<IRes> _Res);
 		
 	private:
 		static void Init();
@@ -122,7 +122,7 @@ namespace mh
 		if (FAILED(pRes->Load(_fileName)))
 			return nullptr;
 
-		Add(strKey, pRes);
+		Insert(strKey, pRes);
 
 		return pRes;
 	}
@@ -167,7 +167,7 @@ namespace mh
 		return iter->second;
 	}
 
-	inline void ResMgr::Add(const std::string_view _strKey, std::shared_ptr<IRes> _Res)
+	inline void ResMgr::Insert(const std::string_view _strKey, std::shared_ptr<IRes> _Res)
 	{
 		eResourceType ResType = _Res->GetResType();
 

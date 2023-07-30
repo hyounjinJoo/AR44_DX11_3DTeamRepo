@@ -74,7 +74,7 @@ namespace mh
 			return false;
 		}
 
-		//ResMgr::Add(strKey::Default::texture::RenderTarget, mRenderTargetTexture);
+		//ResMgr::Insert(strKey::Default::texture::RenderTarget, mRenderTargetTexture);
 		mDepthStencilBufferTexture = CreateDepthStencil(_Width, _Height);
 		if (nullptr == mDepthStencilBufferTexture)
 		{

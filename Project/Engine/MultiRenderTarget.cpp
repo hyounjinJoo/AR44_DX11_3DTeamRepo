@@ -7,10 +7,10 @@
 namespace mh
 {
 	MultiRenderTarget::MultiRenderTarget()
-		: mMRTTextures{}
-		, mMRTViews{}
+		: mRenderTargetTextures{}
+		, mRenderTargetViews{}
 		, mDSTexture{}
-		, mRTCount{}
+		, mRenderTargetCount{}
 	{
 	}
 	MultiRenderTarget::~MultiRenderTarget()
@@ -30,12 +30,12 @@ namespace mh
 		{
 			if (_texture[i].get() == nullptr)
 			{
-				mRTCount = i;
+				mRenderTargetCount = i;
 				break;
 			}
 
-			mMRTTextures[i] = _texture[i];
-			mMRTViews[i] = _texture[i]->GetRTV().Get();
+			mRenderTargetTextures[i] = _texture[i];
+			mRenderTargetViews[i] = _texture[i]->GetRTV().Get();
 		}
 
 		mDSTexture = _dsTexture;
@@ -46,6 +46,32 @@ namespace mh
 
 	void MultiRenderTarget::SetMultiRenderTargets()
 	{
-		GPUMgr::Context()->OMSetRenderTargets(mRTCount, mMRTViews, mDSTexture->GetDSV().Get());
+		ID3D11DepthStencilView* pDSView = nullptr;
+		if (mDSTexture)
+		{
+			pDSView = mDSTexture->GetDSV().Get();
+		}
+
+		GPUMgr::Context()->OMSetRenderTargets(mRenderTargetCount, mRenderTargetViews, pDSView);
 	}
+
+
+
+	void MultiRenderTarget::Clear(const Vector4& _clearColor)
+	{
+		for (UINT i = 0u; i < mRenderTargetCount; ++i)
+		{
+			if (mRenderTargetViews[i])
+			{
+				GPUMgr::Context()->ClearRenderTargetView(mRenderTargetViews[i], (FLOAT*)&_clearColor);
+			}
+		}
+
+		if (mDSTexture)
+		{
+			constexpr UINT ClearFlag = D3D11_CLEAR_FLAG::D3D11_CLEAR_DEPTH | D3D11_CLEAR_FLAG::D3D11_CLEAR_STENCIL;
+			GPUMgr::Context()->ClearDepthStencilView(mDSTexture->GetDSV().Get(), ClearFlag, 1.f, (UINT8)0);
+		}
+	}
+
 }
