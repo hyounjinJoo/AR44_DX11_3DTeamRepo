@@ -22,14 +22,14 @@ namespace mh
 		mSound = nullptr;
 	}
 
-	HRESULT AudioClip::Load(const std::filesystem::path& _path)
+	eResult AudioClip::Load(const std::filesystem::path& _path)
 	{
 		if (false == AudioMgr::CreateSound(_path.string(), &mSound))
-			return S_FALSE;
+			return eResult::Fail_Create;
 
 		mSound->set3DMinMaxDistance(mMinDistance, mMaxDistance);
 
-		return S_OK;
+		return eResult::Success;
 	}
 
 	void AudioClip::Play()

@@ -12,7 +12,7 @@ namespace mh
 		Material();
 		virtual ~Material();
 
-		virtual HRESULT Load(const std::filesystem::path& _path) override;
+		virtual eResult Load(const std::filesystem::path& _path) override;
 
 		void SetData(eGPUParam _param, void* _data);
 		void Bind();

@@ -5,16 +5,27 @@ namespace mh::define
 {
 	enum class eResult
 	{
-		Success,
+		Fail_NotImplemented,
+
+		Fail,
+
 		Fail_OpenFile,
-		
-		
+
 		Fail_Compile,
 		Fail_Create,
 
-		Fail_NotImplemented
-	};
+		Fail_Nullptr,
 
+		Fail_MissingValue,
+
+		Fail_Json,
+		Fail_InValid,
+
+		//이 아래로 성공 관련 여부를 저장
+		Success
+	};
+	inline bool eResultSuccess(eResult _result) { return ((int)_result >= (int)eResult::Success); }
+	inline bool eResultFail(eResult _result) { return ((int)_result < (int)eResult::Success); }
 
 	enum class eSceneType
 	{

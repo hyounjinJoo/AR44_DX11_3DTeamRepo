@@ -20,8 +20,6 @@ namespace mh::define
 		
 		GraphicsShader,
 		ComputeShader,
-		
-		IScript,
 		End,
 	};
 
@@ -39,8 +37,6 @@ namespace mh::define
 
 		"GraphicsShader",
 		"ComputeShader",
-
-		"IScript"
 	};
 
 	namespace DirName
@@ -62,8 +58,7 @@ namespace mh::define
 			
 			"GraphicsShader/Graphics",
 			"GraphicsShader/Compute",
-			
-			"IScript"
+
 		};
 	}
 

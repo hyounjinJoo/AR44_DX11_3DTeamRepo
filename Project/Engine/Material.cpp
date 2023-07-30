@@ -19,9 +19,9 @@ namespace mh
 
     }
 
-    HRESULT Material::Load(const std::filesystem::path& _path)
+    eResult Material::Load(const std::filesystem::path& _path)
     {
-        return E_NOTIMPL;
+        return eResult::Fail_NotImplemented;
     }
 
     void Material::SetData(eGPUParam _param, void* _data)

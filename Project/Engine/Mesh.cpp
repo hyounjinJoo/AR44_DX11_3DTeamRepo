@@ -23,9 +23,9 @@ namespace mh
 
 	}
 
-	HRESULT Mesh::Load(const std::filesystem::path& _path)
+	eResult Mesh::Load(const std::filesystem::path& _path)
 	{
-		return E_NOTIMPL;
+		return eResult::Fail_NotImplemented;
 	}
 
 	bool Mesh::CreateVertexBuffer(void* _data, size_t _dataStride, size_t _count)

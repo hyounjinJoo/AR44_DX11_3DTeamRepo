@@ -13,7 +13,7 @@ namespace mh
 		ComputeShader();
 		~ComputeShader();
 
-		virtual HRESULT Load(const std::filesystem::path& _path) override;
+		virtual eResult Load(const std::filesystem::path& _path) override;
 
 		eResult CreateByCompile(const std::filesystem::path& _FullPath, const std::string_view _funcName);
 		eResult CreateByHeader(const unsigned char* _pByteCode, size_t _ByteCodeSize);

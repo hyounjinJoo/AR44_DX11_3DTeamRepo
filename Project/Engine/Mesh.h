@@ -27,7 +27,7 @@ namespace mh
 		Mesh();
 		virtual ~Mesh();
 
-		virtual HRESULT Load(const std::filesystem::path& _path) override;
+		virtual eResult Load(const std::filesystem::path& _path) override;
 
 		template <typename Vertex>
 		inline bool Create(const std::vector<Vertex>& _vecVtx, const std::vector<UINT>& _vecIdx);

@@ -10,9 +10,11 @@ namespace mh
 	{
 	public:
 		AudioClip();
-		~AudioClip();
+		virtual ~AudioClip();
 
-		virtual HRESULT Load(const std::filesystem::path& _path) override;
+		virtual eResult Load(const std::filesystem::path& _path) override;
+
+		
 
 		void Play();
 		void Stop();

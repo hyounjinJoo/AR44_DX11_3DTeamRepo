@@ -28,9 +28,9 @@ namespace mh
 
 	}
 
-	HRESULT GraphicsShader::Load(const std::filesystem::path& _path)
+	eResult GraphicsShader::Load(const std::filesystem::path& _path)
 	{
-		return E_NOTIMPL;
+		return eResult::Fail_NotImplemented;
 	}
 
 	eResult GraphicsShader::CreateByCompile(eGSStage _stage, const stdfs::path& _FullPath, const std::string_view _funcName)

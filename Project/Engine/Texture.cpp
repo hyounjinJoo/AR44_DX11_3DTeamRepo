@@ -139,20 +139,21 @@ namespace mh
 		return Result;
 	}
 
-	HRESULT Texture::Load(const std::filesystem::path& _FileName)
+	eResult Texture::Load(const std::filesystem::path& _FileName)
 	{
 		stdfs::path FullPath = PathMgr::GetRelativeResourcePath(GetResType());
 
-		HRESULT hr = LoadFile(FullPath / _FileName);
+		eResult result = LoadFile(FullPath / _FileName);
 
-		if (FAILED(hr))
-			return E_FAIL;
+		if (eResult::Success == result)
+		{
+			InitializeResource();
+		}
 
-		InitializeResource();
-		return S_OK;
+		return result;
 	}
 
-	HRESULT Texture::LoadFile(const std::filesystem::path& _fullPath)
+	eResult Texture::LoadFile(const std::filesystem::path& _fullPath)
 	{
 		std::wstring Extension = _fullPath.extension().wstring();
 		StringConv::UpperCase(Extension);
@@ -160,20 +161,20 @@ namespace mh
 		if (Extension == L".DDS")
 		{
 			if (FAILED(LoadFromDDSFile(_fullPath.c_str(), DDS_FLAGS::DDS_FLAGS_NONE, nullptr, mImage)))
-				return E_FAIL;
+				return eResult::Fail_OpenFile;
 		}
 		else if (Extension == L".TGA")
 		{
 			if (FAILED(LoadFromTGAFile(_fullPath.c_str(), nullptr, mImage)))
-				return E_FAIL;
+				return eResult::Fail_OpenFile;
 		}
 		else // WIC (png, jpg, jpeg, bmp )
 		{
 			if (FAILED(LoadFromWICFile(_fullPath.c_str(), WIC_FLAGS::WIC_FLAGS_NONE, nullptr, mImage)))
-				return E_FAIL;
+				return eResult::Fail_OpenFile;
 		}
 
-		return S_OK;
+		return eResult::Success;
 	}
 
 	void Texture::InitializeResource()

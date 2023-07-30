@@ -25,8 +25,7 @@ namespace mh
 		bool Create(const D3D11_TEXTURE2D_DESC& _TexDesc);
 
 		//Save / Load
-		virtual HRESULT Load(const std::filesystem::path& _path) override;
-		HRESULT LoadFile(const std::filesystem::path& _fullPath);
+		virtual eResult Load(const std::filesystem::path& _path) override;
 		void InitializeResource();
 
 
@@ -47,6 +46,7 @@ namespace mh
 		ComPtr<ID3D11ShaderResourceView> GetSRV() { return mSRV; }
 
 	private:
+		eResult LoadFile(const std::filesystem::path& _fullPath);
 		bool CreateView();
 
 	private:

@@ -1,6 +1,8 @@
 #pragma once
 #include "guiWidget.h"
 
+#include <functional>
+
 namespace gui
 {
 	class ListWidget : public Widget

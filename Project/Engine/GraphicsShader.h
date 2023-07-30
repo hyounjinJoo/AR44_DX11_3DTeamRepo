@@ -19,7 +19,7 @@ namespace mh
 		GraphicsShader();
 		virtual ~GraphicsShader();
 
-		virtual HRESULT Load(const std::filesystem::path& _path) override;
+		virtual eResult Load(const std::filesystem::path& _path) override;
 
 		eResult CreateByCompile(eGSStage _stage, const stdfs::path& _FullPath, const std::string_view _funcName);
 		

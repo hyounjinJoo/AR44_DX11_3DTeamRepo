@@ -1,6 +1,8 @@
 #pragma once
 #include "guiWidget.h"
 
+#include <functional>
+
 namespace gui
 {
 	class TreeWidget : public Widget
@@ -30,7 +32,7 @@ namespace gui
 		};
 
 		TreeWidget();
-		~TreeWidget();
+		virtual ~TreeWidget();
 
 		virtual void FixedUpdate() override;
 		virtual void Update() override;

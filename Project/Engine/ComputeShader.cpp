@@ -42,9 +42,9 @@ namespace mh
 	ComputeShader::~ComputeShader()
 	{
 	}
-	HRESULT ComputeShader::Load(const std::filesystem::path& _path)
+	eResult ComputeShader::Load(const std::filesystem::path& _path)
 	{
-		return E_NOTIMPL;
+		return eResult::Fail_NotImplemented;
 	}
 	eResult ComputeShader::CreateByCompile(const std::filesystem::path& _FullPath, const std::string_view _funcName)
 	{

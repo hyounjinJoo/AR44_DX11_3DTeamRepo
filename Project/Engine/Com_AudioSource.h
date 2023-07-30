@@ -8,7 +8,7 @@ namespace mh
 	{
 	public:
 		Com_AudioSource();
-		~Com_AudioSource();
+		virtual ~Com_AudioSource();
 
 		virtual void Init() override;
 		virtual void Update() override;

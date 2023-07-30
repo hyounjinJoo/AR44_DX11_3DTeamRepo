@@ -1,12 +1,14 @@
 #pragma once
 #include <Engine/Entity.h>
+
+#include <vector>
 #include "imgui.h"
 #include "imgui_impl_win32.h"
 #include "imgui_impl_dx11.h"
 
 namespace gui
 {
-	class Widget : public gui::Entity
+	class Widget : public Entity
 	{
 	public:
 		enum class eState
