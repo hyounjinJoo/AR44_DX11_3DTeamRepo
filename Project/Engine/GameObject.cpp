@@ -70,6 +70,16 @@ namespace mh
 			delete mChilds[i];
 		}
 	}
+
+	eResult GameObject::SaveJson(Json::Value* _pJson)
+	{
+		return eResult();
+	}
+
+	eResult GameObject::LoadJson(const Json::Value* _pJson)
+	{
+		return eResult();
+	}
 	
 	void GameObject::Init()
 	{

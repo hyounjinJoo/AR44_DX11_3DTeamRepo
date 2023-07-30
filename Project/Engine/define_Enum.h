@@ -7,7 +7,7 @@ namespace mh::define
 	{
 		Fail_NotImplemented,
 
-		Fail,
+		Fail = INT_MIN,
 
 		Fail_OpenFile,
 
@@ -21,8 +21,8 @@ namespace mh::define
 		Fail_Json,
 		Fail_InValid,
 
-		//이 아래로 성공 관련 여부를 저장
-		Success
+		//이 아래로 성공 관련 변수를 저장
+		Success = 1
 	};
 	inline bool eResultSuccess(eResult _result) { return ((int)_result >= (int)eResult::Success); }
 	inline bool eResultFail(eResult _result) { return ((int)_result < (int)eResult::Success); }

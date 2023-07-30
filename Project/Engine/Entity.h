@@ -11,10 +11,12 @@ namespace mh
 	{
 	public:
 		Entity();
+
+		Entity(const Entity& _other);
+		//TODO: Clone 함수 구현
+
 		virtual ~Entity();
 
-		//TODO: Clone 함수 추가
-		Entity(const Entity& _other);
 
 		virtual eResult SaveJson(Json::Value* _pJson);
 		virtual eResult LoadJson(const Json::Value* _pJson);
