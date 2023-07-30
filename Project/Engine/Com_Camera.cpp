@@ -12,10 +12,12 @@
 #include "IRenderer.h"
 #include "SceneManager.h"
 
-extern mh::Application application;
+extern mh::Application gApplication;
 
 namespace mh
 {
+	
+
 	math::Matrix Com_Camera::gView = math::Matrix::Identity;
 	math::Matrix Com_Camera::gProjection = math::Matrix::Identity;
 
@@ -91,7 +93,7 @@ namespace mh
 	void Com_Camera::CreateProjectionMatrix()
 	{
 		RECT winRect;
-		GetClientRect(application.GetHwnd(), &winRect);
+		GetClientRect(gApplication.GetHwnd(), &winRect);
 
 		float width = (winRect.right - winRect.left) * mScale;
 		float height = (winRect.bottom - winRect.top) * mScale;

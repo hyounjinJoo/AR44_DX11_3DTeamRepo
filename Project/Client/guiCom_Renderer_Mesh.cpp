@@ -12,7 +12,7 @@
 #include "guiInspector.h"
 
 
-extern gui::Editor editor;
+extern gui::Editor gEditor;
 
 namespace gui
 {
@@ -71,7 +71,7 @@ namespace gui
 		ImGui::SameLine();
 		if (ImGui::Button("##MeshBtn", ImVec2(15.0f, 15.0f)))
 		{
-			ListWidget* listUI = editor.GetWidget<ListWidget>("ListWidget");
+			ListWidget* listUI = gEditor.GetWidget<ListWidget>("ListWidget");
 			listUI->SetState(eState::Active);
 			
 
@@ -98,7 +98,7 @@ namespace gui
 		ImGui::SameLine();
 		if (ImGui::Button("##MaterialBtn", ImVec2(15.0f, 15.0f)))
 		{
-			ListWidget* listUI = editor.GetWidget<ListWidget>("ListWidget");
+			ListWidget* listUI = gEditor.GetWidget<ListWidget>("ListWidget");
 			listUI->SetState(eState::Active);
 			//모든 메쉬의 리소스를 가져와야한다.
 			const auto& materials
@@ -125,7 +125,7 @@ namespace gui
 	{
 		std::shared_ptr<mh::Mesh> mesh = mh::ResMgr::Find<mh::Mesh>(_strKey);
 
-		Inspector* inspector = editor.GetWidget<Inspector>("Inspector");
+		Inspector* inspector = gEditor.GetWidget<Inspector>("Inspector");
 		inspector->GetTargetGameObject()->GetComponent<mh::Com_Renderer_Mesh>()->SetMesh(mesh);
 	}
 
@@ -133,7 +133,7 @@ namespace gui
 	{
 		std::shared_ptr<mh::Material> material = mh::ResMgr::Find<mh::Material>(_strKey);
 
-		Inspector* inspector = editor.GetWidget<Inspector>("Inspector");
+		Inspector* inspector = gEditor.GetWidget<Inspector>("Inspector");
 		inspector->GetTargetGameObject()->GetComponent<mh::Com_Renderer_Mesh>()->SetMaterial(material);
 	}
 }

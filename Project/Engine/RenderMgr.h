@@ -3,6 +3,7 @@
 #include "SimpleMath.h"
 
 
+
 namespace mh
 {
 	class ConstBuffer;
@@ -88,6 +89,7 @@ namespace mh
 		UINT SBufferDataCount;
 	};
 
+	class MultiRenderTarget;
 	class RenderMgr
 	{
 		friend class Application;
@@ -122,6 +124,8 @@ namespace mh
 		static void CopyRenderTarget();
 
 	private:
+		static bool CreateMultiRenderTargets();
+
 		static void LoadDefaultMesh();
 		static void LoadDefaultMaterial();
 		static void LoadDefaultShader();
@@ -149,6 +153,8 @@ namespace mh
 		
 		static std::vector<Com_Camera*>			mCameras[(UINT)eSceneType::End];
 		static std::vector<tDebugMesh>			mDebugMeshes;
+
+		static std::unique_ptr<MultiRenderTarget> mMultiRenderTargets[(UINT)eMRTType::End];
 
 		static std::vector<tLightAttribute>		mLights;
 		static std::unique_ptr<StructBuffer>	mLightsBuffer;

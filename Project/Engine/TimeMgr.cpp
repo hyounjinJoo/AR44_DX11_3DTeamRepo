@@ -4,10 +4,12 @@
 #include "AtExit.h"
 #include "Application.h"
 
-extern mh::Application application;
+extern mh::Application gApplication;
 
 namespace mh
 {
+    
+
     float	            TimeMgr::mDeltaTime{};
     LARGE_INTEGER	    TimeMgr::mCpuFrequency{};
     LARGE_INTEGER       TimeMgr::mPrevFrequency{};
@@ -57,7 +59,7 @@ namespace mh
         mOneSecond += mDeltaTime;
         if (1.0f < mOneSecond)
         {
-            HWND hWnd = application.GetHwnd();
+            HWND hWnd = gApplication.GetHwnd();
 
             wchar_t szFloat[50] = {};
             float FPS = 1.f / mDeltaTime;

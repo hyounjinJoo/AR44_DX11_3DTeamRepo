@@ -14,7 +14,7 @@
 
 #include "guiEditor.h"
 
-extern gui::Editor editor;
+extern gui::Editor gEditor;
 
 namespace gui
 {
@@ -94,7 +94,7 @@ namespace gui
 	{
 		mh::IRes* resource = static_cast<mh::IRes*>(data);
 
-		Inspector* inspector = editor.GetWidget<Inspector>("Inspector");
+		Inspector* inspector = gEditor.GetWidget<Inspector>("Inspector");
 		inspector->SetTargetResource(resource);
 		inspector->InitializeTargetResource();
 	}

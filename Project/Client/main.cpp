@@ -27,9 +27,8 @@ HINSTANCE gInst;                                // 현재 인스턴스입니다.
 WCHAR gTitle[MAX_LOADSTRING];                  // 제목 표시줄 텍스트입니다.
 WCHAR gWindowClass[MAX_LOADSTRING];            // 기본 창 클래스 이름입니다.
 
-
-mh::Application application;
-gui::Editor editor;
+mh::Application     gApplication;
+gui::Editor         gEditor;
 
 // 이 코드 모듈에 포함된 함수의 선언을 전달합니다:
 ATOM                MyRegisterClass(HINSTANCE hInstance);
@@ -76,9 +75,9 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
         }
         else
         {
-            application.Run();
-            editor.Run();
-            application.Present();
+            gApplication.Run();
+            gEditor.Run();
+            gApplication.Present();
         }
     }
 
@@ -87,8 +86,8 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
     mh::SceneManager::Release();
 
     AtExit::CallAtExit();
-    application.Release();
-    editor.Release();
+    gApplication.Release();
+    gEditor.Release();
 
 
     return (int) msg.wParam;
@@ -148,9 +147,9 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
    ShowWindow(hWnd, nCmdShow);
    UpdateWindow(hWnd);
 
-   application.SetWindow(hWnd, 1600, 900);
-   application.Init();
-   editor.Init();
+   gApplication.SetWindow(hWnd, 1600, 900);
+   gApplication.Init();
+   gEditor.Init();
 
    return TRUE;
 }

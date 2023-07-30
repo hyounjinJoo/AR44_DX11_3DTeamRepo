@@ -23,10 +23,12 @@
 #include "guiConsole.h"
 #include "guiListWidget.h"
 
-extern mh::Application application;
+extern mh::Application gApplication;
 
 namespace gui
 {
+	
+
 	using namespace mh::define;
 	using namespace mh::math;
 	void Editor::Init()
@@ -224,7 +226,7 @@ namespace gui
 		}
 
 		// Setup Platform/Renderer backends
-		ImGui_ImplWin32_Init(application.GetHwnd());
+		ImGui_ImplWin32_Init(gApplication.GetHwnd());
 		ImGui_ImplDX11_Init(mh::GPUMgr::Device().Get()
 			, mh::GPUMgr::Context().Get());
 

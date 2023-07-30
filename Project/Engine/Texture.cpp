@@ -53,19 +53,24 @@ namespace mh
 		pContext->CSSetShaderResources(_startSlot, 1u, &srv);
 	}
 
-	bool Texture::Create(UINT _width, UINT _height, DXGI_FORMAT _pixelFormat, UINT _D3D11_BIND_FLAG, D3D11_USAGE _Usage)
+	bool Texture::Create(UINT _width, UINT _height, DXGI_FORMAT _pixelFormat, UINT _D3D11_BIND_FLAG, bool _bAllowCPURead)
 	{
-		//Depth stencil _texture
 		mDesc.BindFlags = _D3D11_BIND_FLAG;
-		mDesc.Usage = _Usage;
 
-		//CPU의 읽기/쓰기 가능 여부를 설정
-		if (D3D11_USAGE::D3D11_USAGE_DYNAMIC == _Usage)
-			mDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
-		else if (D3D11_USAGE::D3D11_USAGE_STAGING == _Usage)
-			mDesc.CPUAccessFlags = D3D11_CPU_ACCESS_READ;
+		////CPU의 읽기/쓰기 가능 여부를 설정
+		//텍스처는 CPU가 데이터를 쓸 일이 없다.
+		//포스트프로세싱, 컴퓨트쉐이더 작업의 경우는 
+		// GPU에서 쓰기 권한 허용(UAV)만 해주면 되는것임
+		if (_bAllowCPURead)
+		{
+			mDesc.CPUAccessFlags = D3D11_CPU_ACCESS_FLAG::D3D11_CPU_ACCESS_READ;
+			mDesc.Usage = D3D11_USAGE::D3D11_USAGE_DYNAMIC;
+		}
 		else
-			mDesc.CPUAccessFlags = 0;
+		{
+			mDesc.CPUAccessFlags = 0u;
+			mDesc.Usage = D3D11_USAGE::D3D11_USAGE_DEFAULT;
+		}
 
 		mDesc.Format = _pixelFormat;
 		mDesc.Width = _width;

@@ -11,8 +11,8 @@
 #include "guiEditor.h"
 #include "guiInspector.h"
 
-extern mh::Application application;
-extern gui::Editor editor;
+extern mh::Application gApplication;
+extern gui::Editor gEditor;
 
 namespace gui
 {
@@ -56,7 +56,7 @@ namespace gui
 	{
 		mh::RenderMgr::SetInspectorGameObject(static_cast<mh::GameObject*>(data));
 
-		Inspector* inspector = editor.GetWidget<Inspector>("Inspector");
+		Inspector* inspector = gEditor.GetWidget<Inspector>("Inspector");
 		inspector->SetTargetGameObject(mh::RenderMgr::GetInspectorGameObject());
 		inspector->InitializeTargetGameObject();
 

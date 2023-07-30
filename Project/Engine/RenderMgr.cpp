@@ -17,8 +17,15 @@
 #include "ResMgr.h"
 #include "TimeMgr.h"
 
+#include "MultiRenderTarget.h"
+#include "Application.h"
+
+extern mh::Application gApplication;
+
 namespace mh
 {
+	
+
 	Com_Camera*							RenderMgr::mMainCamera{};
 	GameObject*							RenderMgr::mInspectorGameObject{};
 
@@ -29,6 +36,9 @@ namespace mh
 	ComPtr<ID3D11BlendState>			RenderMgr::mBlendStates[(UINT)eBSType::End]{};
 	std::vector<Com_Camera*>			RenderMgr::mCameras[(UINT)eSceneType::End]{};
 	std::vector<tDebugMesh>				RenderMgr::mDebugMeshes{};
+
+	std::unique_ptr<MultiRenderTarget>	RenderMgr::mMultiRenderTargets[(UINT)eMRTType::End]{};
+
 	std::vector<tLightAttribute>		RenderMgr::mLights{};
 	std::unique_ptr<StructBuffer>		RenderMgr::mLightsBuffer{};
 	std::shared_ptr<Texture>			RenderMgr::mPostProcessTexture{};
@@ -37,6 +47,12 @@ namespace mh
 	void RenderMgr::Init()
 	{
 		AtExit::AddFunc(Release);
+
+		if (false == CreateMultiRenderTargets())
+		{
+			ERROR_MESSAGE_W(L"멀티 렌더타겟 생성 실패.");
+			std::abort();
+		}
 
 		LoadDefaultMesh();
 		LoadDefaultShader();
@@ -86,6 +102,12 @@ namespace mh
 		mLights.clear();
 		mLightsBuffer.reset();
 		mPostProcessTexture = nullptr;
+
+		for (int i = 0; i < (int)eMRTType::End; ++i)
+		{
+			mMultiRenderTargets[i].reset();
+		}
+		
 	}
 
 	void RenderMgr::Render()
@@ -155,6 +177,67 @@ namespace mh
 		GPUMgr::Context()->CopyResource(dest, source);
 
 		mPostProcessTexture->BindDataSRV(60u, eShaderStageFlag::PS);
+	}
+	bool RenderMgr::CreateMultiRenderTargets()
+	{
+		UINT width = gApplication.GetWidth();
+		UINT height = gApplication.GetHeight();
+
+		{
+			//Swapchain MRT
+			std::shared_ptr<Texture> arrRTTex[8] = {};
+			std::shared_ptr<Texture> dsTex = nullptr;
+
+			arrRTTex[0] = GPUMgr::GetRenderTargetTex();
+			dsTex = GPUMgr::GetDepthStencilBufferTex();
+
+			mMultiRenderTargets[(UINT)eMRTType::Swapchain] = std::make_unique< MultiRenderTarget>();
+
+			if (false == mMultiRenderTargets[(UINT)eMRTType::Swapchain]->Create(arrRTTex, dsTex))
+			{
+				ERROR_MESSAGE_W(L"Multi Render Target 생성 실패.");
+				return false;
+			}
+				
+		}
+
+		// Deffered MRT
+		{
+			std::shared_ptr<Texture> arrRTTex[8] = {};
+			std::shared_ptr<Texture> dsTex = nullptr;
+
+			std::shared_ptr<Texture> pos = std::make_shared<Texture>();
+			std::shared_ptr<Texture> normal = std::make_shared<Texture>();
+			std::shared_ptr<Texture> albedo = std::make_shared<Texture>();
+			std::shared_ptr<Texture> specular = std::make_shared<Texture>();
+
+			arrRTTex[0] = pos;
+			arrRTTex[1] = normal;
+			arrRTTex[2] = albedo;
+			arrRTTex[3] = specular;
+
+			arrRTTex[0]->Create(width, height, DXGI_FORMAT_R8G8B8A8_UNORM
+				, D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE);
+			arrRTTex[1]->Create(width, height, DXGI_FORMAT_R8G8B8A8_UNORM
+				, D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE);
+			arrRTTex[2]->Create(width, height, DXGI_FORMAT_R8G8B8A8_UNORM
+				, D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE);
+			arrRTTex[3]->Create(width, height, DXGI_FORMAT_R8G8B8A8_UNORM
+				, D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE);
+
+			dsTex = GPUMgr::GetDepthStencilBufferTex();
+
+			mMultiRenderTargets[(UINT)eMRTType::Deffered] = std::make_unique<MultiRenderTarget>();
+			if(false == mMultiRenderTargets[(UINT)eMRTType::Deffered]->Create(arrRTTex, dsTex))
+			{
+				ERROR_MESSAGE_W(L"Multi Render Target 생성 실패.");
+				return false;
+			}
+		}
+
+
+
+		return true;
 	}
 	void RenderMgr::LoadDefaultMesh()
 	{
@@ -923,13 +1006,13 @@ namespace mh
 #pragma region DYNAMIC TEXTURE
 		std::shared_ptr<Texture> uavTexture = std::make_shared<Texture>();
 		uavTexture->Create(1024, 1024, DXGI_FORMAT_R8G8B8A8_UNORM, D3D11_BIND_SHADER_RESOURCE
-			| D3D11_BIND_UNORDERED_ACCESS, D3D11_USAGE_DEFAULT);
+			| D3D11_BIND_UNORDERED_ACCESS);
 		ResMgr::Add(texture::PaintTexture, uavTexture);
 #pragma endregion
 
 		//noise
 		std::shared_ptr<Texture> NoiseTex = std::make_shared<Texture>();
-		NoiseTex->Create(1600, 900, DXGI_FORMAT_R8G8B8A8_UNORM, D3D11_BIND_SHADER_RESOURCE, D3D11_USAGE_DEFAULT);
+		NoiseTex->Create(1600, 900, DXGI_FORMAT_R8G8B8A8_UNORM, D3D11_BIND_SHADER_RESOURCE);
 		NoiseTex->BindDataSRV(eShaderStageFlag::PS, 60);
 	}
 

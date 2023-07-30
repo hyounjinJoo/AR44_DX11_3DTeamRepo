@@ -8,10 +8,12 @@
 #include "RenderMgr.h"
 #include "SceneManager.h"
 
-extern mh::Application application;
+extern mh::Application gApplication;
 
 namespace mh
 {
+	
+
 	GridScript::GridScript()
 		: IScript()
 		, mCamera(nullptr)
@@ -46,7 +48,7 @@ namespace mh
 		float scale = mCamera->GetScale();
 
 		RECT winRect;
-		GetClientRect(application.GetHwnd(), &winRect);
+		GetClientRect(gApplication.GetHwnd(), &winRect);
 		float width = static_cast<float>(winRect.right - winRect.left);
 		float height = static_cast<float>(winRect.bottom - winRect.top);
 		Vector2 resolution(width, height);

@@ -27,6 +27,8 @@ using Microsoft::WRL::ComPtr;
 
 namespace mh
 {
+	constexpr const int MRT_MAX = 8;
+
 	using namespace mh::define;
 	using namespace mh::math;
 	enum class eValidationMode
@@ -45,6 +47,16 @@ namespace mh
 		PS,
 		END
 	};
+
+	enum class eMRTType
+	{
+		Swapchain,
+		Deffered,
+		Light,
+		Shadow,
+		End,
+	};
+
 
 	enum class eShaderStage
 	{
@@ -123,6 +135,14 @@ namespace mh
 
 	enum class eRenderingMode
 	{
+		//Deffered
+		DefferdOpaque,
+		DefferdMask,
+
+		//광원처리
+		Light,
+
+		//Forward
 		Opaque,
 		CutOut,
 		Transparent,

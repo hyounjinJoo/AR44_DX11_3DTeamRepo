@@ -21,6 +21,7 @@ namespace mh
 	std::shared_ptr<mh::Texture>	GPUMgr::mRenderTargetTexture;
 	std::shared_ptr<mh::Texture>	GPUMgr::mDepthStencilBufferTexture;
 
+
 	D3D11_VIEWPORT GPUMgr::mViewPort;
 
 	bool GPUMgr::Init(HWND _hwnd, UINT _Width, UINT _Height)
@@ -197,7 +198,7 @@ namespace mh
 
 		std::shared_ptr<Texture> DSTex = std::make_shared<mh::Texture>();
 		
-		if (false == DSTex->Create(_Width, _Height, DXGI_FORMAT_D24_UNORM_S8_UINT, D3D11_BIND_FLAG::D3D11_BIND_DEPTH_STENCIL, D3D11_USAGE_DEFAULT))
+		if (false == DSTex->Create(_Width, _Height, DXGI_FORMAT_D24_UNORM_S8_UINT, D3D11_BIND_FLAG::D3D11_BIND_DEPTH_STENCIL))
 		{
 			ERROR_MESSAGE_W(L"Depth Stencil 버퍼 생성에 실패했습니다.");
 			return nullptr;
@@ -216,13 +217,6 @@ namespace mh
 	}
 
 
-	void GPUMgr::SetData(ID3D11Buffer* _buffer, void* _data, UINT _size)
-	{
-		D3D11_MAPPED_SUBRESOURCE sub = {};
-		mContext->Map(_buffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &sub);
-		memcpy(sub.pData, _data, _size);
-		mContext->Unmap(_buffer, 0);
-	}
 
 	void GPUMgr::Clear()
 	{
@@ -240,13 +234,6 @@ namespace mh
 		mContext->OMSetRenderTargets(1, mRenderTargetTexture->GetRTV().GetAddressOf(), mDepthStencilBufferTexture->GetDSV().Get());
 	}
 
-	void GPUMgr::OMSetRenderTarget()
-	{
-		mContext->OMSetRenderTargets(
-			1,
-			mRenderTargetTexture->GetRTV().GetAddressOf(),
-			mDepthStencilBufferTexture->GetDSV().Get());
-	}
 
 
 

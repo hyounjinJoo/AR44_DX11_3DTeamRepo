@@ -18,9 +18,8 @@ namespace mh
 		virtual ~Texture();
 
 		static void Clear(UINT _startSlot);
-
 		//생성 관련 함수
-		bool Create(UINT _width, UINT _height, DXGI_FORMAT _format, UINT _D3D11_BIND_FLAG, D3D11_USAGE _Usage);
+		bool Create(UINT _width, UINT _height, DXGI_FORMAT _format, UINT _D3D11_BIND_FLAG, bool _bAllowCPURead = false);
 		bool Create(Microsoft::WRL::ComPtr<ID3D11Texture2D> _texture);
 		bool Create(const D3D11_TEXTURE2D_DESC& _TexDesc);
 

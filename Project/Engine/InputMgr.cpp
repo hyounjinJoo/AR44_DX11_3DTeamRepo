@@ -5,10 +5,12 @@
 #include "Application.h"
 
 
-extern mh::Application application;
+extern mh::Application gApplication;
 
 namespace mh
 {
+	
+
 	std::vector<InputMgr::tKey> InputMgr::mKeys{};
 	math::Vector2 InputMgr::mMousPosition{};
 	int ASCII[(UINT)eKeyCode::END] =
@@ -81,7 +83,7 @@ namespace mh
 			
 			POINT mousePos = {};
 			GetCursorPos(&mousePos);
-			ScreenToClient(application.GetHwnd(), &mousePos);
+			ScreenToClient(gApplication.GetHwnd(), &mousePos);
 			mMousPosition.x = static_cast<float>(mousePos.x);
 			mMousPosition.y = static_cast<float>(mousePos.y);
 		}
