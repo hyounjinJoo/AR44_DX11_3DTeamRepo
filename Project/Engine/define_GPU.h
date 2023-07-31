@@ -206,17 +206,17 @@ namespace mh
 
 	enum class eMRT_Defferd
 	{
-		Pos,
-		Normal,
-		Albedo,
-		Specular,
+		PositionTarget,
+		NormalTarget,
+		AlbedoTarget,
+		SpecularTarget,
 		End
 	};
 
 	enum class eMRT_Light
 	{
-		Diffuse,
-		Specular
+		DiffuseLightTarget,
+		SpecularLightTarget
 	};
 
 	enum class eBufferViewType

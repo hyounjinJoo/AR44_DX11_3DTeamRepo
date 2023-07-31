@@ -7,6 +7,7 @@
 #include "SH_Sampler.hlsli"
 #include "SH_ConstBuffer.hlsli"
 #include "SH_Blur.hlsli"
+#include "SH_Func.hlsli"
 
 #endif
 

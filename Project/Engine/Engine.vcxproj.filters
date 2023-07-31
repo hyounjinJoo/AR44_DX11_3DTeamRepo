@@ -151,6 +151,9 @@
     <Filter Include="_DefaultShader\Deffered">
       <UniqueIdentifier>{96a011f5-ca86-4e20-8724-fb93161ac48a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="_DefaultShader\Light">
+      <UniqueIdentifier>{6d2d4c22-57c3-412a-b05f-e2076e189012}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Application.cpp">
@@ -312,19 +315,23 @@
     <ClCompile Include="AudioClip.cpp">
       <Filter>Resource\Audio</Filter>
     </ClCompile>
-    <ClCompile Include="CollisionMgr.cpp" />
     <ClCompile Include="RenderMgr.cpp">
       <Filter>Manager</Filter>
     </ClCompile>
     <ClCompile Include="GPUMgr.cpp">
       <Filter>Manager</Filter>
     </ClCompile>
-    <ClCompile Include="InputMgr.cpp" />
     <ClCompile Include="AudioMgr.cpp">
       <Filter>Manager</Filter>
     </ClCompile>
     <ClCompile Include="MultiRenderTarget.cpp">
       <Filter>GPU</Filter>
+    </ClCompile>
+    <ClCompile Include="CollisionMgr.cpp">
+      <Filter>Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="InputMgr.cpp">
+      <Filter>Manager</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -520,14 +527,12 @@
     <ClInclude Include="AudioClip.h">
       <Filter>Resource\Audio</Filter>
     </ClInclude>
-    <ClInclude Include="CollisionMgr.h" />
     <ClInclude Include="RenderMgr.h">
       <Filter>Manager</Filter>
     </ClInclude>
     <ClInclude Include="GPUMgr.h">
       <Filter>Manager</Filter>
     </ClInclude>
-    <ClInclude Include="InputMgr.h" />
     <ClInclude Include="Object.h">
       <Filter>Manager</Filter>
     </ClInclude>
@@ -539,6 +544,12 @@
     </ClInclude>
     <ClInclude Include="MultiRenderTarget.h">
       <Filter>GPU</Filter>
+    </ClInclude>
+    <ClInclude Include="CollisionMgr.h">
+      <Filter>Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="InputMgr.h">
+      <Filter>Manager</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -560,9 +571,6 @@
     <None Include="DefaultShader\SH_Globals.hlsli">
       <Filter>_DefaultShader</Filter>
     </None>
-    <None Include="DefaultShader\SH_Light.hlsli">
-      <Filter>_DefaultShader</Filter>
-    </None>
     <None Include="DefaultShader\SH_Resource.hlsli">
       <Filter>_DefaultShader</Filter>
     </None>
@@ -571,6 +579,12 @@
     </None>
     <None Include="DefaultShader\SH_Particle.hlsli">
       <Filter>_DefaultShader\Particle</Filter>
+    </None>
+    <None Include="DefaultShader\SH_Light.hlsli">
+      <Filter>_DefaultShader\Light</Filter>
+    </None>
+    <None Include="DefaultShader\SH_Func.hlsli">
+      <Filter>_DefaultShader</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
@@ -642,6 +656,18 @@
     </FxCompile>
     <FxCompile Include="DefaultShader\PS_Merge.hlsl">
       <Filter>_DefaultShader\Deffered</Filter>
+    </FxCompile>
+    <FxCompile Include="DefaultShader\PS_LightDir.hlsl">
+      <Filter>_DefaultShader\Light</Filter>
+    </FxCompile>
+    <FxCompile Include="DefaultShader\PS_Light.hlsl">
+      <Filter>_DefaultShader\Light</Filter>
+    </FxCompile>
+    <FxCompile Include="DefaultShader\VS_LightDir.hlsl">
+      <Filter>_DefaultShader\Light</Filter>
+    </FxCompile>
+    <FxCompile Include="DefaultShader\VS_Light.hlsl">
+      <Filter>_DefaultShader\Light</Filter>
     </FxCompile>
   </ItemGroup>
 </Project>

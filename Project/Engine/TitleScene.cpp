@@ -49,6 +49,7 @@ namespace mh
 
 		RenderMgr::SetMainCamera(cameraComp);
 
+		//포워드 렌더링으로 그려지는 오브젝트
 		{
 			GameObject* player = object::Instantiate<GameObject>(eLayerType::Player);
 			player->GetTransform().SetPosition(Vector3(0.0f, 0.0f, 10.0f));
@@ -61,6 +62,7 @@ namespace mh
 			player->AddComponent<Script_Player>();
 		}
 
+		//디퍼드 렌더링으로 그려지는 오브젝트
 		{
 			GameObject* player = object::Instantiate<GameObject>(eLayerType::Player);
 			player->GetComponent<Com_Transform>()->SetPosition(Vector3(-15.0f, 0.0f, 10.0f));
@@ -83,7 +85,7 @@ namespace mh
 
 			Com_Light* lightComp = directionalLight->AddComponent<Com_Light>();
 			lightComp->SetType(eLightType::Directional);
-			lightComp->SetDiffuse(Vector4(1.0f, 1.0f, 1.0f, 1.0f));
+			lightComp->SetDiffuse(Vector4(1.0f, 0.0f, 1.0f, 1.0f));
 			lightComp->SetSpecular(Vector4(1.0f, 1.0f, 1.0f, 1.0f));
 			lightComp->SetAmbient(Vector4(0.15f, 0.15f, 0.15f, 1.0f));
 		}

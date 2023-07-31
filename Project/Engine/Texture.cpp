@@ -53,6 +53,22 @@ namespace mh
 		pContext->CSSetShaderResources(_startSlot, 1u, &srv);
 	}
 
+	void Texture::ClearAll()
+	{
+		for (int i = 0; i < (int)eTextureSlot::End; ++i)
+		{
+			ID3D11ShaderResourceView* srv = nullptr;
+
+			auto pContext = GPUMgr::Context();
+			pContext->VSSetShaderResources(i, 1u, &srv);
+			pContext->HSSetShaderResources(i, 1u, &srv);
+			pContext->DSSetShaderResources(i, 1u, &srv);
+			pContext->GSSetShaderResources(i, 1u, &srv);
+			pContext->PSSetShaderResources(i, 1u, &srv);
+			pContext->CSSetShaderResources(i, 1u, &srv);
+		}
+	}
+
 	bool Texture::Create(UINT _width, UINT _height, DXGI_FORMAT _pixelFormat, UINT _D3D11_BIND_FLAG, bool _bAllowCPURead)
 	{
 		mDesc.BindFlags = _D3D11_BIND_FLAG;

@@ -6,6 +6,7 @@
 
 namespace mh
 {
+
 	MultiRenderTarget::MultiRenderTarget()
 		: mRenderTargetTextures{}
 		, mRenderTargetViews{}
@@ -44,8 +45,13 @@ namespace mh
 	}
 
 
-	void MultiRenderTarget::SetMultiRenderTargets()
+	void MultiRenderTarget::Bind()
 	{
+		for (UINT i = 0; i < mRenderTargetCount; ++i)
+		{
+			mRenderTargetTextures[i]->UnBind();
+		}
+
 		ID3D11DepthStencilView* pDSView = nullptr;
 		if (mDSTexture)
 		{
@@ -54,6 +60,7 @@ namespace mh
 
 		GPUMgr::Context()->OMSetRenderTargets(mRenderTargetCount, mRenderTargetViews, pDSView);
 	}
+
 
 
 

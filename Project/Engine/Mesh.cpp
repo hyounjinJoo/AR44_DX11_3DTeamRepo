@@ -82,9 +82,8 @@ namespace mh
 		// Input Assembeler 단계에 버텍스버퍼 정보 지정
 		UINT offset = 0;
 
-		auto pContext = GPUMgr::Context();
-		pContext->IASetVertexBuffers(0, 1, mVertexBuffer.GetAddressOf(), &mVertexByteStride, &offset);
-		pContext->IASetIndexBuffer(mIndexBuffer.Get(), DXGI_FORMAT_R32_UINT, 0);
+		GPUMgr::Context()->IASetVertexBuffers(0, 1, mVertexBuffer.GetAddressOf(), &mVertexByteStride, &offset);
+		GPUMgr::Context()->IASetIndexBuffer(mIndexBuffer.Get(), DXGI_FORMAT_R32_UINT, 0);
 	}
 
 	void Mesh::Render() const

@@ -173,6 +173,7 @@ namespace mh
 
 		assert(nullptr == Find(ResType, _strKey));
 
+		_Res->SetKey(_strKey);
 		mArrRes[(int)ResType].insert(std::make_pair(std::string(_strKey), _Res));
 	}
 

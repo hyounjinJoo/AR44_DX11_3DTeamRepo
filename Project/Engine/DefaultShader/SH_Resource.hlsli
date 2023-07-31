@@ -1,6 +1,7 @@
 #ifndef SH_RESOURCE
 #define SH_RESOURCE
 
+
 // Material Default Texture
 Texture2D albedoTexture : register(t0);
 Texture2D normalTexture : register(t1);
@@ -10,7 +11,9 @@ Texture2D positionTarget : register(t2);
 Texture2D normalTarget : register(t3);
 Texture2D albedoTarget : register(t4);
 Texture2D specularTarget : register(t5);
-//Texture2D colorTexture : register(t6);
+
+Texture2D diffuseLightTarget : register(t6);
+Texture2D specularLightTarget : register(t7);
 
 			//std::shared_ptr<Texture> pos = std::make_shared<Texture>();
 			//std::shared_ptr<Texture> normal = std::make_shared<Texture>();
@@ -43,5 +46,6 @@ Texture2D guiGameTexture : register(t61);
 //Texture2D 1 : register(t61);
 //Texture2D 2 : register(t60);
 //Texture2D 3 : register(t61);
+
 
 #endif

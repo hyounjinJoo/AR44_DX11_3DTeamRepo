@@ -66,11 +66,11 @@ namespace mh
 		SortGameObjects();
 
 		//deffered opaque render
-		RenderMgr::GetMultiRenderTarget(eMRTType::Deffered)->SetMultiRenderTargets();
+		RenderMgr::GetMultiRenderTarget(eMRTType::Deffered)->Bind();
 		RenderDeffered();
 
 		//// deffered light 
-		RenderMgr::GetMultiRenderTarget(eMRTType::Light)->SetMultiRenderTargets();
+		RenderMgr::GetMultiRenderTarget(eMRTType::Light)->Bind();
 		// 여러개의 모든 빛을 미리 한장의 텍스처에다가 계산을 해두고
 		// 붙여버리자
 
@@ -80,6 +80,8 @@ namespace mh
 			Lights[i]->Render();
 		}
 
+		// Foward render
+		RenderMgr::GetMultiRenderTarget(eMRTType::Swapchain)->Bind();
 		//// defferd + swapchain merge
 		std::shared_ptr<Material> mergeMaterial = ResMgr::Find<Material>(strKey::Default::material::MergeMaterial);
 		std::shared_ptr<Mesh> rectMesh = ResMgr::Find<Mesh>(strKey::Default::mesh::RectMesh);
@@ -87,8 +89,7 @@ namespace mh
 		mergeMaterial->Bind();
 		rectMesh->Render();
 
-		// Foward render
-		RenderMgr::GetMultiRenderTarget(eMRTType::Swapchain)->SetMultiRenderTargets();
+
 		RenderOpaque();
 		RenderCutout();
 		RenderTransparent();
