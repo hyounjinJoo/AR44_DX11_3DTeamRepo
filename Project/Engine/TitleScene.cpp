@@ -85,7 +85,36 @@ namespace mh
 
 			Com_Light* lightComp = directionalLight->AddComponent<Com_Light>();
 			lightComp->SetType(eLightType::Directional);
-			lightComp->SetDiffuse(Vector4(1.0f, 0.0f, 1.0f, 1.0f));
+			lightComp->SetDiffuse(Vector4(1.0f, 0.0f, 0.0f, 1.0f));
+			lightComp->SetSpecular(Vector4(1.0f, 1.0f, 1.0f, 1.0f));
+			lightComp->SetAmbient(Vector4(0.15f, 0.15f, 0.15f, 1.0f));
+		}
+
+
+		{
+			GameObject* directionalLight = object::Instantiate<GameObject>(eLayerType::Player);
+			directionalLight->SetName("PointLight1");
+
+			directionalLight->GetComponent<Com_Transform>()->SetPosition(Vector3(0.0f, 0.0f, 0.0f));
+
+			Com_Light* lightComp = directionalLight->AddComponent<Com_Light>();
+			lightComp->SetType(eLightType::Point);
+			lightComp->SetRadius(20.0f);
+			lightComp->SetDiffuse(Vector4(0.0f, 0.0f, 1.0f, 1.0f));
+			lightComp->SetSpecular(Vector4(1.0f, 1.0f, 1.0f, 1.0f));
+			lightComp->SetAmbient(Vector4(0.15f, 0.15f, 0.15f, 1.0f));
+		}
+
+		{
+			GameObject* directionalLight = object::Instantiate<GameObject>(eLayerType::Player);
+			directionalLight->SetName("PointLight2");
+
+			directionalLight->GetComponent<Com_Transform>()->SetPosition(Vector3(-15.0f, 0.0f, 0.0f));
+
+			Com_Light* lightComp = directionalLight->AddComponent<Com_Light>();
+			lightComp->SetType(eLightType::Point);
+			lightComp->SetRadius(30.0f);
+			lightComp->SetDiffuse(Vector4(0.0f, 1.0f, 0.0f, 1.0f));
 			lightComp->SetSpecular(Vector4(1.0f, 1.0f, 1.0f, 1.0f));
 			lightComp->SetAmbient(Vector4(0.15f, 0.15f, 0.15f, 1.0f));
 		}

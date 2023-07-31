@@ -6,11 +6,17 @@
 #include "RenderMgr.h"
 #include "ResMgr.h"
 #include "Mesh.h"
+#include "Material.h"
+
+#include "ConstBuffer.h"
 
 namespace mh
 {
 	Com_Light::Com_Light()
 		: IComponent(eComponentType::Light)
+		, mVolumeMesh()
+		, mLightMaterial()
+		, mIndex()
 	{
 		RenderMgr::AddLight(this);
 	}
@@ -36,7 +42,7 @@ namespace mh
 
 		if (eLightType::Point == mAttribute.type)
 		{
-			tr.SetScale(Vector3(mAttribute.radius * 2.f, mAttribute.radius * 2.f, mAttribute.radius * 2.f));
+			tr.SetScale(Vector3(mAttribute.radius * 5.f, mAttribute.radius * 5.f, mAttribute.radius * 5.f));
 		}
 
 		Vector3 position = tr.GetPosition();
@@ -48,16 +54,25 @@ namespace mh
 
 	void Com_Light::Render()
 	{
-		std::shared_ptr<Material> material
-			= ResMgr::Find<Material>(strKey::Default::material::LightMaterial);
-
-		if (material == nullptr)
+		if (nullptr == mLightMaterial)
 		{
 			return;
 		}
 
+		Com_Transform* tr = GetOwner()->GetComponent<Com_Transform>();
+		tr->SetConstBuffer();
+
+		ConstBuffer* cb = RenderMgr::GetConstBuffer(eCBType::Light);
+
+		LightCB data = {};
+		data.NumberOfLight = (UINT)RenderMgr::GetLights().size();
+		data.IndexOfLight = mIndex;
+
+		cb->SetData(&data);
+		cb->BindData(eShaderStageFlag::VS | eShaderStageFlag::PS);
+
 		mVolumeMesh->BindBuffer();
-		material->Bind();
+		mLightMaterial->Bind();
 		mVolumeMesh->Render();
 	}
 
@@ -68,14 +83,16 @@ namespace mh
 		if (mAttribute.type == eLightType::Directional)
 		{
 			mVolumeMesh = ResMgr::Find<Mesh>(strKey::Default::mesh::RectMesh);
+			mLightMaterial = ResMgr::Find<Material>(strKey::Default::material::LightDirMaterial);
 		}
 		else if (mAttribute.type == eLightType::Point)
 		{
-			mVolumeMesh = ResMgr::Find<Mesh>(strKey::Default::mesh::CircleMesh);
+			mVolumeMesh = ResMgr::Find<Mesh>(strKey::Default::mesh::SphereMesh);
+			mLightMaterial = ResMgr::Find<Material>(strKey::Default::material::LightPointMaterial);
 		}
 		else if (mAttribute.type == eLightType::Spot)
 		{
-			//
+			ERROR_MESSAGE_W(L"미구현");
 		}
 	}
 	

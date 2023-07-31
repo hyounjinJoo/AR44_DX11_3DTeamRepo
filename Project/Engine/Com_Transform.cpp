@@ -71,7 +71,9 @@ namespace mh
 	{
 		TransformCB trCb = {};
 		trCb.World = mWorld;
+		trCb.InverseWorld = mWorld.Invert();
 		trCb.View = Com_Camera::GetGpuViewMatrix();
+		trCb.InverseView = trCb.View.Invert();
 		trCb.Projection = Com_Camera::GetGpuProjectionMatrix();
 
 		ConstBuffer* cb = RenderMgr::GetConstBuffer(eCBType::Transform);

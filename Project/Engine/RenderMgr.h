@@ -21,7 +21,9 @@ namespace mh
 	CBUFFER(TransformCB, CBSLOT_TRANSFORM)
 	{
 		Matrix World;
+		Matrix InverseWorld;
 		Matrix View;
+		Matrix InverseView;
 		Matrix Projection;
 	};
 
@@ -60,6 +62,7 @@ namespace mh
 	CBUFFER(LightCB, CBSLOT_NUMBEROFLIGHT)
 	{
 		UINT NumberOfLight;
+		UINT IndexOfLight;
 	};
 
 	CBUFFER(ParticleSystemCB, CBSLOT_PARTICLESYSTEM)
@@ -98,6 +101,9 @@ namespace mh
 		static void Render();
 
 		static ConstBuffer* GetConstBuffer(eCBType _Type) { return mConstBuffers[(int)_Type].get(); }
+
+		//static void SetDataToConstBuffer(eCBType _Type, void* _pData, UINT _dataCount = 1u);
+
 		static inline Com_Camera* GetMainCam() { return mMainCamera; }
 		static ComPtr<ID3D11RasterizerState>	GetRasterizerState(eRSType _Type) { return mRasterizerStates[(int)_Type]; }
 		static ComPtr<ID3D11BlendState>		GetBlendState(eBSType _Type) { return mBlendStates[(int)_Type]; }
@@ -129,7 +135,7 @@ namespace mh
 		static void BindNoiseTexture();
 		static void CopyRenderTarget();
 
-		static void ClearMultiRenderTargets(const Vector4& _clearColor);
+		static void ClearMultiRenderTargets();
 
 	private:
 		static bool CreateMultiRenderTargets();

@@ -28,8 +28,6 @@ extern mh::Application gApplication;
 
 namespace mh
 {
-	
-
 	Com_Camera*							RenderMgr::mMainCamera{};
 	GameObject*							RenderMgr::mInspectorGameObject{};
 
@@ -157,9 +155,14 @@ namespace mh
 		LightCB trCb = {};
 		trCb.NumberOfLight = (UINT)mLightAttributes.size();
 
+		for (size_t i = 0; i < mLights.size(); i++)
+		{
+			mLights[i]->SetIndex((UINT)i);
+		}
+
 		ConstBuffer* cb = mConstBuffers[(UINT)eCBType::Light].get();
 		cb->SetData(&trCb);
-		cb->BindData(eShaderStageFlag::VS | eShaderStageFlag::PS);
+		cb->BindData(Flag);
 	}
 	void RenderMgr::BindNoiseTexture()
 	{
@@ -195,12 +198,22 @@ namespace mh
 		mPostProcessTexture->BindDataSRV(60u, eShaderStageFlag::PS);
 	}
 
-	void RenderMgr::ClearMultiRenderTargets(const Vector4& _clearColor)
+	void RenderMgr::ClearMultiRenderTargets()
 	{
 		for (int i = 0; i < (int)eMRTType::End; ++i)
 		{
 			if (mMultiRenderTargets[i])
-				mMultiRenderTargets[i]->Clear(_clearColor);
+			{
+				if ((int)eMRTType::Light == i)
+				{
+					mMultiRenderTargets[i]->Clear(Vector4(0.f));
+				}
+				else
+				{
+					mMultiRenderTargets[i]->Clear(Vector4(0.2f));
+				}
+			}
+				
 		}
 	}
 
@@ -674,7 +687,8 @@ namespace mh
 #pragma region Sphere Mesh
 		{
 			Vertex3D vtx3d;
-			std::vector<Vertex3D> VecVtx3D(2000);
+			std::vector<Vertex3D> VecVtx3D;
+			VecVtx3D.reserve(2000);
 
 			float fRadius = 0.5f;
 
@@ -740,7 +754,8 @@ namespace mh
 
 			// 인덱스
 			// 북극점
-			std::vector<UINT> indices(2000);
+			std::vector<UINT> indices;
+			indices.reserve(2000);
 			for (UINT i = 0; i < iSliceCount; ++i)
 			{
 				indices.push_back(0);
@@ -1000,18 +1015,35 @@ namespace mh
 
 
 #pragma region LIGHT
-		std::shared_ptr<GraphicsShader> lightShader = std::make_shared<GraphicsShader>();
-		lightShader->CreateByHeader(eGSStage::VS, VS_LightDir, sizeof(VS_LightDir));
-		lightShader->CreateByHeader(eGSStage::PS, PS_LightDir, sizeof(PS_LightDir));
+		{
+			std::shared_ptr<GraphicsShader> lightShader = std::make_shared<GraphicsShader>();
+			lightShader->CreateByHeader(eGSStage::VS, VS_LightDir, sizeof(VS_LightDir));
+			lightShader->CreateByHeader(eGSStage::PS, PS_LightDir, sizeof(PS_LightDir));
 
-		lightShader->CreateInputLayout(vecLayoutDesc);
+			lightShader->CreateInputLayout(vecLayoutDesc);
 
-		lightShader->SetRSState(eRSType::SolidBack);
-		lightShader->SetDSState(eDSType::None);
-		lightShader->SetBSState(eBSType::Default);
+			lightShader->SetRSState(eRSType::SolidBack);
+			lightShader->SetDSState(eDSType::None);
+			lightShader->SetBSState(eBSType::OneOne);
 
-		ResMgr::Insert(strKey::Default::shader::graphics::LightDirShader, lightShader);
+			ResMgr::Insert(strKey::Default::shader::graphics::LightDirShader, lightShader);
+		}
+
+		{
+			std::shared_ptr<GraphicsShader> lightShader = std::make_shared<GraphicsShader>();
+			lightShader->CreateByHeader(eGSStage::VS, VS_LightPoint, sizeof(VS_LightPoint));
+			lightShader->CreateByHeader(eGSStage::PS, PS_LightPoint, sizeof(PS_LightPoint));
+
+			lightShader->CreateInputLayout(vecLayoutDesc);
+
+			lightShader->SetRSState(eRSType::SolidFront);
+			lightShader->SetDSState(eDSType::None);
+			lightShader->SetBSState(eBSType::OneOne);
+
+			ResMgr::Insert(strKey::Default::shader::graphics::LightPointShader, lightShader);
+		}
 #pragma endregion
+
 
 
 #pragma region MERGE
@@ -1355,28 +1387,56 @@ namespace mh
 #pragma endregion
 
 #pragma region LIGHT
-		std::shared_ptr<GraphicsShader> lightShader = ResMgr::Find<GraphicsShader>(strKey::Default::shader::graphics::LightDirShader);
-		std::shared_ptr<Material> lightMaterial = std::make_shared<Material>();
-		lightMaterial->SetRenderingMode(eRenderingMode::None);
-		lightMaterial->SetShader(lightShader);
-
-		MultiRenderTarget* DefferedMRT = mMultiRenderTargets[(UINT)eMRTType::Deffered].get();
 		{
-			std::shared_ptr<Texture> PosRenderTarget = DefferedMRT->GetRenderTarget((UINT)eMRT_Defferd::PositionTarget);
-			lightMaterial->SetTexture(eTextureSlot::PositionTarget, PosRenderTarget);
+			std::shared_ptr<GraphicsShader> lightShader = ResMgr::Find<GraphicsShader>(strKey::Default::shader::graphics::LightDirShader);
+			std::shared_ptr<Material> lightMaterial = std::make_shared<Material>();
+			lightMaterial->SetRenderingMode(eRenderingMode::None);
+			lightMaterial->SetShader(lightShader);
+
+			MultiRenderTarget* DefferedMRT = mMultiRenderTargets[(UINT)eMRTType::Deffered].get();
+			{
+				std::shared_ptr<Texture> PosRenderTarget = DefferedMRT->GetRenderTarget((UINT)eMRT_Defferd::PositionTarget);
+				lightMaterial->SetTexture(eTextureSlot::PositionTarget, PosRenderTarget);
+			}
+
+			{
+				std::shared_ptr<Texture> NormalRenderTarget = DefferedMRT->GetRenderTarget((UINT)eMRT_Defferd::NormalTarget);
+				lightMaterial->SetTexture(eTextureSlot::NormalTarget, NormalRenderTarget);
+			}
+
+			{
+				std::shared_ptr<Texture> SpecularTarget = DefferedMRT->GetRenderTarget((UINT)eMRT_Defferd::SpecularTarget);
+				lightMaterial->SetTexture(eTextureSlot::SpecularTarget, SpecularTarget);
+			}
+			ResMgr::Insert(strKey::Default::material::LightDirMaterial, lightMaterial);
 		}
 
 		{
-			std::shared_ptr<Texture> NormalRenderTarget = DefferedMRT->GetRenderTarget((UINT)eMRT_Defferd::NormalTarget);
-			lightMaterial->SetTexture(eTextureSlot::NormalTarget, NormalRenderTarget);
+			std::shared_ptr<GraphicsShader> LightPointShader = ResMgr::Find<GraphicsShader>(strKey::Default::shader::graphics::LightPointShader);
+			std::shared_ptr<Material> lightMaterial = std::make_shared<Material>();
+			lightMaterial->SetRenderingMode(eRenderingMode::None);
+			lightMaterial->SetShader(LightPointShader);
+
+			MultiRenderTarget* DefferedMRT = mMultiRenderTargets[(UINT)eMRTType::Deffered].get();
+			{
+				std::shared_ptr<Texture> PositionTarget = DefferedMRT->GetRenderTarget((UINT)eMRT_Defferd::PositionTarget);
+				lightMaterial->SetTexture(eTextureSlot::PositionTarget, PositionTarget);
+			}
+			
+			{
+				std::shared_ptr<Texture> NormalTarget = DefferedMRT->GetRenderTarget((UINT)eMRT_Defferd::NormalTarget);
+				lightMaterial->SetTexture(eTextureSlot::NormalTarget, NormalTarget);
+			}
+
+			{
+				std::shared_ptr<Texture> SpecularTarget = DefferedMRT->GetRenderTarget((UINT)eMRT_Defferd::SpecularTarget);
+				lightMaterial->SetTexture(eTextureSlot::SpecularTarget, SpecularTarget);
+			}
+
+			ResMgr::Insert(strKey::Default::material::LightPointMaterial, lightMaterial);
 		}
 
-		{
-			std::shared_ptr<Texture> SpecularTarget = DefferedMRT->GetRenderTarget((UINT)eMRT_Defferd::SpecularTarget);
-			lightMaterial->SetTexture(eTextureSlot::SpecularTarget, SpecularTarget);
-		}
-
-		ResMgr::Insert(strKey::Default::material::LightMaterial, lightMaterial);
+#pragma endregion
 #pragma endregion
 
 #pragma region MERGE

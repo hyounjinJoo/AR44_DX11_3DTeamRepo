@@ -88,7 +88,8 @@ namespace mh::define
 				STRKEY_DECLARE(PostProcessMaterial);
 				STRKEY_DECLARE(DefferedMaterial);
 				STRKEY_DECLARE(MergeMaterial);
-				STRKEY_DECLARE(LightMaterial);
+				STRKEY_DECLARE(LightDirMaterial);
+				STRKEY_DECLARE(LightPointMaterial);
 			}
 
 			namespace texture
@@ -122,8 +123,9 @@ namespace mh::define
 					STRKEY_DECLARE(PostProcessShader);
 					STRKEY_DECLARE(Basic3DShader);
 					STRKEY_DECLARE(DefferedShader);
-					STRKEY_DECLARE(LightShader);
+					//STRKEY_DECLARE(LightShader);
 					STRKEY_DECLARE(LightDirShader);
+					STRKEY_DECLARE(LightPointShader);
 					STRKEY_DECLARE(MergeShader);
 				}
 				namespace compute

@@ -50,6 +50,7 @@ namespace  mh
 
 	private:
 		static math::Matrix gView;
+		static math::Matrix gInverseView;
 		static math::Matrix gProjection;
 
 		math::Matrix mView;

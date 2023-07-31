@@ -19,9 +19,8 @@ extern mh::Application gApplication;
 
 namespace mh
 {
-	
-
 	math::Matrix Com_Camera::gView = math::Matrix::Identity;
+	math::Matrix Com_Camera::gInverseView = Matrix::Identity;
 	math::Matrix Com_Camera::gProjection = math::Matrix::Identity;
 
 	Com_Camera::Com_Camera()
@@ -61,6 +60,7 @@ namespace mh
 	void Com_Camera::Render()
 	{
 		gView = mView;
+		gInverseView = mView.Invert();
 		gProjection = mProjection;
 
 		SortGameObjects();

@@ -13,7 +13,7 @@ namespace mh
 		template <typename T>
 		bool Create(UINT _dataCount = 1u);
 		bool Create(size_t _dataSize, UINT _dataCount = 1u);
-		void SetData(void* _data, UINT _dataSize = 1u);
+		void SetData(void* _data, UINT _dataCount = 1u);
 		void BindData(eShaderStageFlag_ _stageFlag = eShaderStageFlag::NONE);
 
 	private:

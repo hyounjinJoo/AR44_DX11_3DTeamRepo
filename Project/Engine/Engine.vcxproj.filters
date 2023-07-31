@@ -669,5 +669,11 @@
     <FxCompile Include="DefaultShader\VS_Light.hlsl">
       <Filter>_DefaultShader\Light</Filter>
     </FxCompile>
+    <FxCompile Include="DefaultShader\VS_LightPoint.hlsl">
+      <Filter>_DefaultShader\Light</Filter>
+    </FxCompile>
+    <FxCompile Include="DefaultShader\PS_LightPoint.hlsl">
+      <Filter>_DefaultShader\Light</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>
