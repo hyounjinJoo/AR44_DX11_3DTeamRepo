@@ -1,21 +1,25 @@
-﻿#include "EnginePCH.h"
+#include "EnginePCH.h"
+#include "TimeMgr.h"
 
-#include "TimeManager.h"
+#include "AtExit.h"
 #include "Application.h"
 
-extern mh::Application application;
+extern mh::Application gApplication;
 
 namespace mh
 {
     
-    LARGE_INTEGER	TimeManager::mCpuFrequency = {};
-    LARGE_INTEGER   TimeManager::mPrevFrequency = {};
-    LARGE_INTEGER	TimeManager::mCurFrequency = {};
-    float			TimeManager::mDeltaTime = 0.0f;
-    float			TimeManager::mOneSecond = 0.0f;
 
-    void TimeManager::Initialize()
+    float	            TimeMgr::mDeltaTime{};
+    LARGE_INTEGER	    TimeMgr::mCpuFrequency{};
+    LARGE_INTEGER       TimeMgr::mPrevFrequency{};
+    LARGE_INTEGER	    TimeMgr::mCurFrequency{};
+    float			    TimeMgr::mOneSecond{};
+
+    void TimeMgr::Init()
     {
+        AtExit::AddFunc(Release);
+
         //CPU 의 초당 반복되는 주파수를 얻어온다.
         QueryPerformanceFrequency(&mCpuFrequency);
 
@@ -23,7 +27,18 @@ namespace mh
         QueryPerformanceCounter(&mPrevFrequency);
     }
 
-    void TimeManager::Update()
+
+    void TimeMgr::Release()
+    {
+        mDeltaTime = {};
+        mCpuFrequency = {};
+        mPrevFrequency = {};
+        mCurFrequency = {};
+        mOneSecond = {};
+    }
+
+
+    void TimeMgr::Update()
     {
         QueryPerformanceCounter(&mCurFrequency);
 
@@ -34,7 +49,7 @@ namespace mh
         mPrevFrequency.QuadPart = mCurFrequency.QuadPart;
     }
 
-    void TimeManager::Render(HDC _hdc)
+    void TimeMgr::Render(HDC _hdc)
     {
         static int iCount = 0;
         ++iCount;
@@ -44,7 +59,7 @@ namespace mh
         mOneSecond += mDeltaTime;
         if (1.0f < mOneSecond)
         {
-            HWND hWnd = application.GetHwnd();
+            HWND hWnd = gApplication.GetHwnd();
 
             wchar_t szFloat[50] = {};
             float FPS = 1.f / mDeltaTime;

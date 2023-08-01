@@ -10,7 +10,7 @@ namespace mh
 		Script_Player();
 		virtual ~Script_Player();
 
-		virtual void Initialize() override;
+		virtual void Init() override;
 		virtual void Update() override;
 		virtual void Render() override;
 

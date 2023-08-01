@@ -10,7 +10,7 @@ namespace mh
 		World,
 	};
 
-	class StructedBuffer;
+	class StructBuffer;
 
 	class Com_Renderer_ParticleSystem : public IRenderer
 	{
@@ -18,19 +18,19 @@ namespace mh
 		Com_Renderer_ParticleSystem();
 		~Com_Renderer_ParticleSystem();
 
-		virtual void Initialize() override;
+		virtual void Init() override;
 		virtual void Update() override;
 		virtual void FixedUpdate() override;
 		virtual void Render() override;
 
 	private:
 #pragma region Buffer 선언
-		GPU::StructedBuffer* mBuffer;
-		GPU::StructedBuffer* mSharedBuffer;
+		StructBuffer* mBuffer;
+		StructBuffer* mSharedBuffer;
 #pragma endregion
 #pragma region tParticle GraphicsShader 관련 변수 선언
-		std::shared_ptr<GPU::ParticleShader> mCS;
-		renderer::ParticleSystemCB mCBData;
+		std::shared_ptr<ParticleShader> mCS;
+		ParticleSystemCB mCBData;
 #pragma endregion
 #pragma region tParticle System 관련 변수 선언
 		Vector4 mStartSize;

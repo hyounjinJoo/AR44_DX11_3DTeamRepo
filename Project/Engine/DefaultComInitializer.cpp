@@ -19,17 +19,15 @@ namespace mh
 	using namespace mh::define;
 	void DefaultComInitializer::Init()
 	{
-		ComMgr* pMgr = ComMgr::GetInst();
-		
-		pMgr->AddComConstructor<Com_Animator>(strKey::Default::com::Com_Animator);
-		pMgr->AddComConstructor<Com_AudioListener>(strKey::Default::com::Com_AudioListener);
-		pMgr->AddComConstructor<Com_AudioSource>(strKey::Default::com::Com_AudioSource);
-		pMgr->AddComConstructor<Com_Camera>(strKey::Default::com::Com_Camera);
-		pMgr->AddComConstructor<Com_Light>(strKey::Default::com::Com_Light);
-		pMgr->AddComConstructor<Com_Renderer_Mesh>(strKey::Default::com::Com_Renderer_Mesh);
-		pMgr->AddComConstructor<Com_Renderer_ParticleSystem>(strKey::Default::com::Com_Renderer_ParticleSystem);
-		pMgr->AddComConstructor<Com_Renderer_Sprite>(strKey::Default::com::Com_Renderer_Sprite);
-		pMgr->AddComConstructor<Com_Transform>(strKey::Default::com::Com_Transform);
+		ComMgr::AddComConstructor<Com_Animator>(strKey::Default::com::Com_Animator);
+		ComMgr::AddComConstructor<Com_AudioListener>(strKey::Default::com::Com_AudioListener);
+		ComMgr::AddComConstructor<Com_AudioSource>(strKey::Default::com::Com_AudioSource);
+		ComMgr::AddComConstructor<Com_Camera>(strKey::Default::com::Com_Camera);
+		ComMgr::AddComConstructor<Com_Light>(strKey::Default::com::Com_Light);
+		ComMgr::AddComConstructor<Com_Renderer_Mesh>(strKey::Default::com::Com_Renderer_Mesh);
+		ComMgr::AddComConstructor<Com_Renderer_ParticleSystem>(strKey::Default::com::Com_Renderer_ParticleSystem);
+		ComMgr::AddComConstructor<Com_Renderer_Sprite>(strKey::Default::com::Com_Renderer_Sprite);
+		ComMgr::AddComConstructor<Com_Transform>(strKey::Default::com::Com_Transform);
 	}
 }
 

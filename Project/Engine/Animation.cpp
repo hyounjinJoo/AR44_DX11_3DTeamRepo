@@ -1,11 +1,16 @@
 #include "EnginePCH.h"
 
 #include "Animation.h"
-#include "TimeManager.h"
-#include "Renderer.h"
+#include "TimeMgr.h"
+#include "RenderMgr.h"
+
+#include "ConstBuffer.h"
 
 namespace mh
 {
+
+
+
 	Animation::Animation()
 		: mAnimator(nullptr)
 		, mAtlas(nullptr)
@@ -27,7 +32,7 @@ namespace mh
 			return -1;
 
 		// 시간 체크
-		mTime += TimeManager::DeltaTime();
+		mTime += TimeMgr::DeltaTime();
 
 		// 누적 시간이 해당 프레임의 유지시간을 넘어서면 다음프레임으로 이동
 		if (mSpriteSheet[mIndex].Duration < mTime)
@@ -56,7 +61,7 @@ namespace mh
 	}
 
 	void Animation::Create(const std::string_view _name
-		, std::shared_ptr<GPU::Texture> _atlas
+		, std::shared_ptr<Texture> _atlas
 		, math::Vector2 _leftTop, math::Vector2 _size, math::Vector2 _offset
 		, UINT _spriteLegth, float _duration)
 	{
@@ -84,11 +89,11 @@ namespace mh
 
 	void Animation::BindShader()
 	{
-		mAtlas->BindShaderResource(GPU::eShaderStage::PS, 12);
+		mAtlas->BindDataSRV(12u, eShaderStageFlag::PS);
 
-		GPU::ConstantBuffer* cb = renderer::constantBuffers[(UINT)GPU::eCBType::Animation];
+		ConstBuffer* cb = RenderMgr::GetConstBuffer(eCBType::Animation);
 
-		renderer::AnimationCB info = {};
+		AnimationCB info = {};
 		info.Type = (UINT)define::eAnimationType::SecondDimension;
 		info.LeftTop = mSpriteSheet[mIndex].LeftTop;
 		info.Offset = mSpriteSheet[mIndex].Offset;
@@ -96,7 +101,7 @@ namespace mh
 		info.AtlasSize = mSpriteSheet[mIndex].AtlasSize;
 
 		cb->SetData(&info);
-		cb->Bind(GPU::eShaderStage::PS);
+		cb->BindData(eShaderStageFlag::PS);
 	}
 
 	void Animation::Reset()
@@ -109,14 +114,15 @@ namespace mh
 	void Animation::Clear()
 	{
 		//Texture clear
-		GPU::Texture::Clear(12);
+		Texture::Clear(12);
 
-		GPU::ConstantBuffer* cb = renderer::constantBuffers[(UINT)GPU::eCBType::Animation];
-		renderer::AnimationCB info = {};
+		ConstBuffer* cb = RenderMgr::GetConstBuffer(eCBType::Animation);
+
+		AnimationCB info = {};
 		info.Type = (UINT)define::eAnimationType::None;
 
 		cb->SetData(&info);
-		cb->Bind(GPU::eShaderStage::PS);
+		cb->BindData(eShaderStageFlag::PS);
 	}
 
 }

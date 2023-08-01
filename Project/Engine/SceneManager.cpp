@@ -11,7 +11,7 @@
 #include "Script_Player.h"
 #include "PlayScene.h"
 
-#include "Renderer.h"
+#include "RenderMgr.h"
 #include "ResMgr.h"
 
 #include "SceneManager.h"
@@ -27,7 +27,7 @@ namespace mh
 	std::vector<Scene*> SceneManager::mScenes = {};
 	Scene* SceneManager::mActiveScene = nullptr;
 
-	void SceneManager::Initialize()
+	void SceneManager::Init()
 	{
 		mScenes.resize((UINT)eSceneType::End);
 
@@ -41,7 +41,7 @@ namespace mh
 
 		for (Scene* scene : mScenes)
 		{
-			scene->Initialize();
+			scene->Init();
 		}
 	}
 

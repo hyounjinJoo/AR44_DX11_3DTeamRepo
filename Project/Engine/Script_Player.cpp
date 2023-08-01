@@ -3,8 +3,8 @@
 #include "Script_Player.h"
 #include "Com_Transform.h"
 #include "GameObject.h"
-#include "Input.h"
-#include "TimeManager.h"
+#include "InputMgr.h"
+#include "TimeMgr.h"
 #include "Com_Animator.h"
 
 namespace mh
@@ -18,7 +18,7 @@ namespace mh
 	{
 	}
 
-	void Script_Player::Initialize()
+	void Script_Player::Init()
 	{
 	}
 
@@ -26,34 +26,34 @@ namespace mh
 	{
 		Com_Transform& tr = GetOwner()->GetTransform();
 
-		if (Input::GetKey(eKeyCode::RIGHT))
+		if (InputMgr::GetKey(eKeyCode::RIGHT))
 		{
 			Vector3 pos = tr.GetPosition();
-			pos.x += 60.0f * TimeManager::DeltaTime();
+			pos.x += 60.0f * TimeMgr::DeltaTime();
 			tr.SetPosition(pos);
 		}
-		if (Input::GetKey(eKeyCode::LEFT))
+		if (InputMgr::GetKey(eKeyCode::LEFT))
 		{
 			Vector3 pos = tr.GetPosition();
-			pos.x -= 60.0f * TimeManager::DeltaTime();
+			pos.x -= 60.0f * TimeMgr::DeltaTime();
 			tr.SetPosition(pos);
 		}
 
-		if (Input::GetKey(eKeyCode::DOWN))
+		if (InputMgr::GetKey(eKeyCode::DOWN))
 		{
 			Vector3 pos = tr.GetRotation();
-			pos.y -= 60.0f * TimeManager::DeltaTime();
+			pos.y -= 60.0f * TimeMgr::DeltaTime();
 			tr.SetRotation(pos);
 		}
-		if (Input::GetKey(eKeyCode::UP))
+		if (InputMgr::GetKey(eKeyCode::UP))
 		{
 			Vector3 pos = tr.GetRotation();
-			pos.y += 60.0f * TimeManager::DeltaTime();
+			pos.y += 60.0f * TimeMgr::DeltaTime();
 			tr.SetRotation(pos);
 		}
 
 		Com_Animator* animator = GetOwner()->GetComponent<Com_Animator>();
-		if (Input::GetKey(eKeyCode::N_1))
+		if (InputMgr::GetKey(eKeyCode::N_1))
 		{
 			animator->Play("MoveDown");
 		}

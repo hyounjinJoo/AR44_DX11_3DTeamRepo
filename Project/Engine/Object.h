@@ -14,7 +14,7 @@ namespace mh::object
 		Scene* scene = SceneManager::GetActiveScene();
 		Layer& layer = scene->GetLayer(_type);
 		layer.AddGameObject(gameObject);
-		gameObject->Initialize();
+		gameObject->Init();
 
 
 		return gameObject;

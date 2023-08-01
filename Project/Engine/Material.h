@@ -2,9 +2,9 @@
 #include "IRes.h"
 #include "GraphicsShader.h"
 #include "Texture.h"
-#include "Renderer.h"
+#include "RenderMgr.h"
 
-namespace mh::GPU
+namespace mh
 {
 	class Material : public IRes
 	{
@@ -12,7 +12,7 @@ namespace mh::GPU
 		Material();
 		virtual ~Material();
 
-		virtual HRESULT Load(const std::filesystem::path& _path) override;
+		virtual eResult Load(const std::filesystem::path& _path) override;
 
 		void SetData(eGPUParam _param, void* _data);
 		void Bind();
@@ -30,7 +30,9 @@ namespace mh::GPU
 	private:
 		std::shared_ptr<GraphicsShader> mShader;
 		std::shared_ptr<Texture> mTexture[(UINT)eTextureSlot::End];
-		renderer::MaterialCB mCB;
+
+		
+		MaterialCB mCB;
 		eRenderingMode mMode;
 	};
 }

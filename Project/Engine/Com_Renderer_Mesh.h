@@ -7,7 +7,7 @@
 
 namespace mh
 {
-	using namespace mh::GPU;
+	using namespace mh;
 
 	class Com_Renderer_Mesh : public IRenderer
 	{
@@ -15,7 +15,7 @@ namespace mh
 		Com_Renderer_Mesh();
 		virtual ~Com_Renderer_Mesh();
 
-		virtual void Initialize() override;
+		virtual void Init() override;
 		virtual void Update() override;
 		virtual void FixedUpdate() override;
 		virtual void Render() override;

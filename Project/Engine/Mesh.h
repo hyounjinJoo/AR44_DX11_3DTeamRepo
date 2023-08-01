@@ -4,16 +4,39 @@
 
 namespace mh
 {
+	using namespace mh::math;
+	struct Vertex2D
+	{
+		Vector4 Pos;
+		Vector4 Color;
+		Vector2 UV;
+	};
+	struct Vertex3D
+	{
+		Vector4 Pos;
+		Vector4 Color;
+		Vector2 UV;
+		Vector3 Tangent;
+		Vector3 BiNormal;
+		Vector3 Normal;
+	};
+
 	class Mesh : public IRes 
 	{
 	public:
 		Mesh();
 		virtual ~Mesh();
 
-		virtual HRESULT Load(const std::filesystem::path& _path) override;
+		virtual eResult Load(const std::filesystem::path& _path) override;
 
-		bool CreateVertexBuffer(void* _data, UINT _count);
-		bool CreateIndexBuffer(void* _data, UINT _count);
+		template <typename Vertex>
+		inline bool Create(const std::vector<Vertex>& _vecVtx, const std::vector<UINT>& _vecIdx);
+
+		template <typename Vertex>
+		inline bool CreateVertexBuffer(const std::vector<Vertex>& _vecVtx);
+		bool CreateVertexBuffer(void* _data, size_t _dataStride, size_t _count);
+
+		bool CreateIndexBuffer(void* _data, size_t _count);
 
 		void BindBuffer() const;
 		void Render() const;
@@ -22,9 +45,33 @@ namespace mh
 	private:
 		Microsoft::WRL::ComPtr<ID3D11Buffer> mVertexBuffer;
 		D3D11_BUFFER_DESC mVBDesc;
+		UINT mVertexByteStride;
+		UINT mVertexCount;
 
 		Microsoft::WRL::ComPtr<ID3D11Buffer> mIndexBuffer;
 		D3D11_BUFFER_DESC mIBDesc;
 		UINT mIndexCount;
 	};
+
+
+	template<typename Vertex>
+	inline bool Mesh::Create(const std::vector<Vertex>& _vecVtx, const std::vector<UINT>& _vecIdx)
+	{
+		if (false == CreateVertexBuffer((void*)_vecVtx.data(), sizeof(Vertex), _vecVtx.size()))
+		{
+			return false;
+		}
+
+		if (false == CreateIndexBuffer((void*)_vecIdx.data(), _vecIdx.size()))
+		{
+			return false;
+		}
+		
+		return true;
+	}
+	template<typename Vertex>
+	inline bool Mesh::CreateVertexBuffer(const std::vector<Vertex>& _vecVtx)
+	{
+		return CreateVertexBuffer((void*)_vecVtx.data(), sizeof(Vertex), _vecVtx.size());
+	}
 }

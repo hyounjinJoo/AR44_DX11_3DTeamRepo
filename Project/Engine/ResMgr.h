@@ -25,34 +25,36 @@
 namespace mh
 {
 	using namespace mh::define;
-	using namespace mh::GPU;
+	using namespace mh;
 	namespace stdfs = std::filesystem;
 
-	class ResMgr 
-		: public Singleton<ResMgr>
+	class ResMgr
 	{
-		SINGLETON(ResMgr);
+		friend class Application;
 	public:
 		template <typename T>
-		eResourceType GetResType();
+		static eResourceType GetResType();
 
 		template <typename T>
-		std::shared_ptr<T> Load(const std::filesystem::path& _fileName, const std::string_view _strKey = "");
+		static std::shared_ptr<T> Load(const std::filesystem::path& _fileName, const std::string_view _strKey = "");
 
 		template <typename T>
-		std::shared_ptr<T> Find(const std::string_view _strKey);
+		static std::shared_ptr<T> Find(const std::string_view _strKey);
 
-		std::shared_ptr<IRes> Find(eResourceType _ResType, const std::string_view _strKey);
+		static std::shared_ptr<IRes> Find(eResourceType _ResType, const std::string_view _strKey);
 
 		template <typename T>
-		const std::unordered_map<std::string, std::shared_ptr<IRes>, tUmap_StringViewHasher, std::equal_to<>>&
+		static const std::unordered_map<std::string, std::shared_ptr<IRes>, tUmap_StringViewHasher, std::equal_to<>>&
 			GetResources();
 
-		void Add(const std::string_view _strKey, std::shared_ptr<IRes> _Res);
+		static void Insert(const std::string_view _strKey, std::shared_ptr<IRes> _Res);
 		
+	private:
+		static void Init();
+		static void Release();
 	
 	private:
-		std::unordered_map<std::string, std::shared_ptr<IRes>, tUmap_StringViewHasher, std::equal_to<>> mArrRes[(int)eResourceType::End];
+		static std::unordered_map<std::string, std::shared_ptr<IRes>, tUmap_StringViewHasher, std::equal_to<>> mArrRes[(int)eResourceType::End];
 	};
 
 
@@ -120,7 +122,7 @@ namespace mh
 		if (FAILED(pRes->Load(_fileName)))
 			return nullptr;
 
-		Add(strKey, pRes);
+		Insert(strKey, pRes);
 
 		return pRes;
 	}
@@ -150,6 +152,8 @@ namespace mh
 		return mArrRes[(int)Type];
 	}
 
+
+
 	inline std::shared_ptr<IRes> ResMgr::Find(eResourceType _ResType, const std::string_view _strKey)
 	{
 		if (eResourceType::UNKNOWN == _ResType)
@@ -163,31 +167,16 @@ namespace mh
 		return iter->second;
 	}
 
-	inline void ResMgr::Add(const std::string_view _strKey, std::shared_ptr<IRes> _Res)
+	inline void ResMgr::Insert(const std::string_view _strKey, std::shared_ptr<IRes> _Res)
 	{
 		eResourceType ResType = _Res->GetResType();
 
 		assert(nullptr == Find(ResType, _strKey));
 
+		_Res->SetKey(_strKey);
 		mArrRes[(int)ResType].insert(std::make_pair(std::string(_strKey), _Res));
 	}
 
+
+
 }
-
-
-
-//template <typename T>
-//std::vector<std::shared_ptr<T>> Finds()
-//{
-//	std::vector<std::shared_ptr<T>> resources = {};
-//	for (auto iter : mResources)
-//	{
-//		std::shared_ptr<T> resource 
-//			= std::dynamic_pointer_cast<T>(iter.second);
-
-//		if (nullptr != resource)
-//			resources.push_back(resource);
-//	}
-
-//	return resources;
-//}

@@ -1,8 +1,9 @@
 #include "EnginePCH.h"
 
 #include "Material.h"
+#include "ConstBuffer.h"
 
-namespace mh::GPU
+namespace mh
 {
     using namespace mh::math;
 
@@ -18,31 +19,31 @@ namespace mh::GPU
 
     }
 
-    HRESULT Material::Load(const std::filesystem::path& _path)
+    eResult Material::Load(const std::filesystem::path& _path)
     {
-        return E_NOTIMPL;
+        return eResult::Fail_NotImplemented;
     }
 
     void Material::SetData(eGPUParam _param, void* _data)
     {
         /*switch (_param)
         {
-        case mh::GPU::eGPUParam::Int:
+        case mh::eGPUParam::Int:
             mCB.iData = *static_cast<int*>(_data);
             break;
-        case mh::GPU::eGPUParam::Float:
+        case mh::eGPUParam::Float:
             mCB.fData = *static_cast<float*>(_data);
             break;
-        case mh::GPU::eGPUParam::Vector2:
+        case mh::eGPUParam::Vector2:
             mCB.XY = *static_cast<Vector2*>(_data);
             break;
-        case mh::GPU::eGPUParam::Vector3:
+        case mh::eGPUParam::Vector3:
             mCB.XYZ = *static_cast<Vector3*>(_data);
             break;
-        case mh::GPU::eGPUParam::Vector4:
+        case mh::eGPUParam::Vector4:
             mCB.XYZW = *static_cast<Vector4*>(_data);
             break;
-        case mh::GPU::eGPUParam::Matrix:
+        case mh::eGPUParam::Matrix:
             mCB.Matrix = *static_cast<Matrix*>(_data);
             break;
         default:
@@ -60,12 +61,7 @@ namespace mh::GPU
 				continue;
             }
 
-            mTexture[slotIndex]->BindShaderResource(eShaderStage::VS, static_cast<UINT>(slotIndex));
-            mTexture[slotIndex]->BindShaderResource(eShaderStage::HS, static_cast<UINT>(slotIndex));
-            mTexture[slotIndex]->BindShaderResource(eShaderStage::DS, static_cast<UINT>(slotIndex));
-            mTexture[slotIndex]->BindShaderResource(eShaderStage::GS, static_cast<UINT>(slotIndex));
-            mTexture[slotIndex]->BindShaderResource(eShaderStage::PS, static_cast<UINT>(slotIndex));
-            mTexture[slotIndex]->BindShaderResource(eShaderStage::CS, static_cast<UINT>(slotIndex));
+            mTexture[slotIndex]->BindDataSRV((UINT)slotIndex, eShaderStageFlag::ALL);
         }
 
         if (mTexture[(UINT)eTextureSlot::Albedo])
@@ -78,11 +74,11 @@ namespace mh::GPU
             mCB.UsedNormal = 1;
         }
 
-        ConstantBuffer* CB = renderer::constantBuffers[(UINT)eCBType::Material];
+        ConstBuffer* CB = RenderMgr::GetConstBuffer(eCBType::Material);
         CB->SetData(&mCB);
-        CB->Bind(eShaderStage::VS);
-        CB->Bind(eShaderStage::GS);
-        CB->Bind(eShaderStage::PS);
+
+        eShaderStageFlag_ flag = eShaderStageFlag::VS | eShaderStageFlag::GS | eShaderStageFlag::PS;
+        CB->BindData(flag);
 
         mShader->Binds();
     }
@@ -96,7 +92,7 @@ namespace mh::GPU
 				continue;
 			}
 
-            mTexture[slotIndex]->Clear();
+            mTexture[slotIndex]->UnBind();
         }
     }
 }

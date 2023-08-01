@@ -3,12 +3,12 @@
 #include "PathMgr.h"
 
 #include "ComputeShader.h"
-#include "GraphicDevice_DX11.h"
+#include "GPUMgr.h"
 
 #include "define_GPU.h"
 #include "define_Res.h"
 
-namespace mh::GPU
+namespace mh
 {
 	namespace stdfs = std::filesystem;
 
@@ -42,9 +42,9 @@ namespace mh::GPU
 	ComputeShader::~ComputeShader()
 	{
 	}
-	HRESULT ComputeShader::Load(const std::filesystem::path& _path)
+	eResult ComputeShader::Load(const std::filesystem::path& _path)
 	{
-		return E_NOTIMPL;
+		return eResult::Fail_NotImplemented;
 	}
 	eResult ComputeShader::CreateByCompile(const std::filesystem::path& _FullPath, const std::string_view _funcName)
 	{
@@ -55,7 +55,7 @@ namespace mh::GPU
 			nullptr, 
 			D3D_COMPILE_STANDARD_FILE_INCLUDE, 
 			std::string(_funcName).c_str(), 
-			mh::GPU::SHADER_VERSION::CS, 
+			mh::SHADER_VERSION::CS, 
 			0, 
 			0, 
 			mCSBlob.GetAddressOf(), 
@@ -108,8 +108,9 @@ namespace mh::GPU
 	{
 		Binds();
 
-		GetDevice()->BindComputeShader(mCS.Get(), nullptr, 0);
-		GetDevice()->Dispatch(mGroupX, mGroupY, mGroupZ);
+		auto pContext = GPUMgr::Context();
+		pContext->CSSetShader(mCS.Get(), nullptr, 0);
+		pContext->Dispatch(mGroupX, mGroupY, mGroupZ);
 
 		Clear();
 	}
@@ -124,11 +125,11 @@ namespace mh::GPU
 	{
 		eResult result = eResult::Fail_Create;
 
-		if (GetDevice()->CreateComputeShader(
+		if (SUCCEEDED(GPUMgr::Device()->CreateComputeShader(
 			_pByteCode,
 			_ByteCodeSize,
 			nullptr,
-			mCS.ReleaseAndGetAddressOf())
+			mCS.ReleaseAndGetAddressOf()))
 			)
 		{
 			result = eResult::Success;

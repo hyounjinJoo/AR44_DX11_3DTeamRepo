@@ -5,18 +5,22 @@
 #include "Com_Transform.h"
 #include "GameObject.h"
 #include "Application.h"
-#include "Renderer.h"
+#include "RenderMgr.h"
 #include "Scene.h"
 #include "SceneManager.h"
 #include "Material.h"
 #include "IRenderer.h"
 #include "SceneManager.h"
+#include "ResMgr.h"
 
-extern mh::Application application;
+#include "MultiRenderTarget.h"
+
+extern mh::Application gApplication;
 
 namespace mh
 {
 	math::Matrix Com_Camera::gView = math::Matrix::Identity;
+	math::Matrix Com_Camera::gInverseView = Matrix::Identity;
 	math::Matrix Com_Camera::gProjection = math::Matrix::Identity;
 
 	Com_Camera::Com_Camera()
@@ -34,7 +38,7 @@ namespace mh
 	{
 	}
 
-	void Com_Camera::Initialize()
+	void Com_Camera::Init()
 	{
 
 		RegisterCameraInRenderer();
@@ -56,9 +60,35 @@ namespace mh
 	void Com_Camera::Render()
 	{
 		gView = mView;
+		gInverseView = mView.Invert();
 		gProjection = mProjection;
 
 		SortGameObjects();
+
+		//deffered opaque render
+		RenderMgr::GetMultiRenderTarget(eMRTType::Deffered)->Bind();
+		RenderDeffered();
+
+		//// deffered light 
+		RenderMgr::GetMultiRenderTarget(eMRTType::Light)->Bind();
+		// 여러개의 모든 빛을 미리 한장의 텍스처에다가 계산을 해두고
+		// 붙여버리자
+
+		const auto& Lights = RenderMgr::GetLights();
+		for (size_t i = 0; i < Lights.size(); ++i)
+		{
+			Lights[i]->Render();
+		}
+
+		// Foward render
+		RenderMgr::GetMultiRenderTarget(eMRTType::Swapchain)->Bind();
+		//// defferd + swapchain merge
+		std::shared_ptr<Material> mergeMaterial = ResMgr::Find<Material>(strKey::Default::material::MergeMaterial);
+		std::shared_ptr<Mesh> rectMesh = ResMgr::Find<Mesh>(strKey::Default::mesh::RectMesh);
+		rectMesh->BindBuffer();
+		mergeMaterial->Bind();
+		rectMesh->Render();
+
 
 		RenderOpaque();
 		RenderCutout();
@@ -91,7 +121,7 @@ namespace mh
 	void Com_Camera::CreateProjectionMatrix()
 	{
 		RECT winRect;
-		GetClientRect(application.GetHwnd(), &winRect);
+		GetClientRect(gApplication.GetHwnd(), &winRect);
 
 		float width = (winRect.right - winRect.left) * mScale;
 		float height = (winRect.bottom - winRect.top) * mScale;
@@ -116,7 +146,7 @@ namespace mh
 	void Com_Camera::RegisterCameraInRenderer()
 	{
 		define::eSceneType type = SceneManager::GetActiveScene()->GetSceneType();
-		renderer::gCameras[(UINT)type].push_back(this);
+		RenderMgr::RegisterCamera(type, this);
 	}
 
 	void Com_Camera::TurnLayerMask(define::eLayerType _layer, bool _enable)
@@ -126,6 +156,7 @@ namespace mh
 
 	void Com_Camera::SortGameObjects()
 	{
+		mDefferedOpaqueGameObjects.clear();
 		mOpaqueGameObjects.clear();
 		mCutoutGameObjects.clear();
 		mTransparentGameObjects.clear();
@@ -145,6 +176,17 @@ namespace mh
 				{
 					PushGameObjectToRenderingModes(obj);
 				}
+			}
+		}
+	}
+
+	void Com_Camera::RenderDeffered()
+	{
+		for (size_t i = 0; i < mDefferedOpaqueGameObjects.size(); ++i)
+		{
+			if (mDefferedOpaqueGameObjects[i])
+			{
+				mDefferedOpaqueGameObjects[i]->Render();
 			}
 		}
 	}
@@ -189,7 +231,8 @@ namespace mh
 		{
 			if (obj == nullptr)
 				continue;
-			renderer::CopyRenderTarget();
+
+			RenderMgr::CopyRenderTarget();
 			obj->Render();
 		}
 	}
@@ -201,24 +244,29 @@ namespace mh
 		if (renderer == nullptr)
 			return;
 
-		std::shared_ptr<GPU::Material> material = renderer->GetMaterial();
+		std::shared_ptr<Material> material = renderer->GetMaterial();
 		//if (material == nullptr)
 		//	continue;
 
-		GPU::eRenderingMode mode = material->GetRenderingMode();
+		eRenderingMode mode = material->GetRenderingMode();
 
 		switch (mode)
 		{
-		case GPU::eRenderingMode::Opaque:
+		case eRenderingMode::DefferdOpaque:
+			[[fallthrough]];
+		case eRenderingMode::DefferdMask:
+			mDefferedOpaqueGameObjects.push_back(_gameObj);
+			break;
+		case eRenderingMode::Opaque:
 			mOpaqueGameObjects.push_back(_gameObj);
 			break;
-		case GPU::eRenderingMode::CutOut:
+		case eRenderingMode::CutOut:
 			mCutoutGameObjects.push_back(_gameObj);
 			break;
-		case GPU::eRenderingMode::Transparent:
+		case eRenderingMode::Transparent:
 			mTransparentGameObjects.push_back(_gameObj);
 			break;
-		case GPU::eRenderingMode::PostProcess:
+		case eRenderingMode::PostProcess:
 			mPostProcessGameObjects.push_back(_gameObj);
 			break;
 		default:

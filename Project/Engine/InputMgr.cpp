@@ -1,16 +1,18 @@
 
 #include "EnginePCH.h"
 
-#include "Input.h"
+#include "InputMgr.h"
 #include "Application.h"
 
 
-extern mh::Application application;
+extern mh::Application gApplication;
 
 namespace mh
 {
-	std::vector<Input::tKey> Input::mKeys;
-	math::Vector2 Input::mMousPosition;
+	
+
+	std::vector<InputMgr::tKey> InputMgr::mKeys{};
+	math::Vector2 InputMgr::mMousPosition{};
 	int ASCII[(UINT)eKeyCode::END] =
 	{
 		//Alphabet
@@ -35,7 +37,8 @@ namespace mh
 	};
 	
 
-	void Input::Initialize()
+
+	void InputMgr::Init()
 	{
 		for (UINT i = 0; i < (UINT)eKeyCode::END; i++)
 		{
@@ -48,7 +51,7 @@ namespace mh
 		}
 	}
 
-	void Input::Update()
+	void InputMgr::Update()
 	{
 		if (GetFocus())
 		{
@@ -80,7 +83,7 @@ namespace mh
 			
 			POINT mousePos = {};
 			GetCursorPos(&mousePos);
-			ScreenToClient(application.GetHwnd(), &mousePos);
+			ScreenToClient(gApplication.GetHwnd(), &mousePos);
 			mMousPosition.x = static_cast<float>(mousePos.x);
 			mMousPosition.y = static_cast<float>(mousePos.y);
 		}

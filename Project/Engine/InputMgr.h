@@ -1,5 +1,5 @@
-
 #pragma once
+
 #include "EnumFlags.h"
 #include "SimpleMath.h"
 
@@ -41,7 +41,7 @@ namespace mh
 
 
 
-	class Input
+	class InputMgr
 	{
 	public:
 		struct tKey
@@ -51,7 +51,8 @@ namespace mh
 			bool	  bPressed;
 		};
 
-		static void Initialize();
+	public:
+		static void Init();
 		static void Update();
 
 		static __forceinline eKeyState GetKeyState(eKeyCode keyCode) 
@@ -82,10 +83,6 @@ namespace mh
 		{
 			return mKeys[static_cast<UINT>(keyCode)].eState == eKeyState::UP;
 		}		
-
-	private:
-		Input() = delete;
-		~Input() = delete;
 
 	private:
 		static std::vector<tKey> mKeys;

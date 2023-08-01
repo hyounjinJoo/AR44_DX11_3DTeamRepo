@@ -1,7 +1,5 @@
 #include "EnginePCH.h"
-
-#include "Fmod.h"
-
+#include "AudioMgr.h"
 #ifdef _DEBUG
 #pragma comment(lib, "Fmod/Debug/fmodL_vc.lib")
 #pragma comment(lib, "Fmod/Debug/fmodstudioL_vc.lib")
@@ -10,13 +8,17 @@
 #pragma comment(lib, "Fmod/Release/fmodstudio_vc.lib")
 #endif
 
+#include "AtExit.h"
+
 namespace mh
 {
-	FMOD::Studio::System* Fmod::mSystem = nullptr;
-	FMOD::System* Fmod::mCoreSystem = nullptr;
+	FMOD::Studio::System* AudioMgr::mSystem = nullptr;
+	FMOD::System* AudioMgr::mCoreSystem = nullptr;
 
-	void Fmod::Initialize()
+	void AudioMgr::Init()
 	{
+		AtExit::AddFunc(Release);
+
 		void* extraDriverData = NULL;
 
 		FMOD::Studio::System::create(&mSystem);
@@ -28,7 +30,13 @@ namespace mh
 		mSystem->initialize(1024, FMOD_STUDIO_INIT_NORMAL, FMOD_INIT_NORMAL, extraDriverData);
 	}
 
-	bool Fmod::CreateSound(const std::string_view path,  FMOD::Sound** sound)
+	void AudioMgr::Release()
+	{
+		mSystem->release();
+		mSystem = nullptr;
+	}
+
+	bool AudioMgr::CreateSound(const std::string_view path,  FMOD::Sound** sound)
 	{
 		if (FMOD_OK != mCoreSystem->createSound(std::string(path).c_str(), FMOD_3D, 0, sound))
 			return false;
@@ -36,12 +44,12 @@ namespace mh
 		return true;
 	}
 
-	void Fmod::SoundPlay(FMOD::Sound* sound, FMOD::Channel** channel)
+	void AudioMgr::SoundPlay(FMOD::Sound* sound, FMOD::Channel** channel)
 	{
 		mCoreSystem->playSound(sound, 0, false, channel);
 	}
 
-	void Fmod::Set3DListenerAttributes(const math::Vector3* _position, const math::Vector3* _velocity,
+	void AudioMgr::Set3DListenerAttributes(const math::Vector3* _position, const math::Vector3* _velocity,
 									   const math::Vector3* _forward, const math::Vector3* _up)
 	{
 		FMOD_VECTOR fmodPosition(_position->x, _position->y, _position->z);
@@ -52,11 +60,7 @@ namespace mh
 		mCoreSystem->set3DListenerAttributes(0, &fmodPosition, &fmodVelocity, &fmodForward, &fmodUp);
 	}
 
-	void Fmod::Release()
-	{
-		mSystem->release();
-		mSystem = nullptr;
-	}
+
 
 
 }

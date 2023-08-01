@@ -12,9 +12,9 @@ namespace gui
 	{
 		
 	}
-	void EditorObject::Initialize()
+	void EditorObject::Init()
 	{
-		GameObject::Initialize();
+		GameObject::Init();
 	}
 	void EditorObject::Update()
 	{

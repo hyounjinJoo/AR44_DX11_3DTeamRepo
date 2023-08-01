@@ -19,7 +19,7 @@ namespace mh
 
 	}
 
-	void Com_AudioSource::Initialize()
+	void Com_AudioSource::Init()
 	{
 	}
 

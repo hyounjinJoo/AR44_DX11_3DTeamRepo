@@ -17,8 +17,8 @@ namespace gui
 
 	void Texture::Update()
 	{
-		mh::GPU::Texture* targetTex 
-			= dynamic_cast<mh::GPU::Texture*>(GetTarget());
+		mh::Texture* targetTex 
+			= dynamic_cast<mh::Texture*>(GetTarget());
 
 		if (targetTex == nullptr)
 			return;

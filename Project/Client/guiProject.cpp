@@ -14,7 +14,7 @@
 
 #include "guiEditor.h"
 
-extern gui::Editor editor;
+extern gui::Editor gEditor;
 
 namespace gui
 {
@@ -85,16 +85,16 @@ namespace gui
 		//	End,
 		//};
 		AddResources<mh::Mesh>(pRootNode, "Mesh");
-		AddResources<mh::GPU::Texture>(pRootNode, "Texture");
-		AddResources<mh::GPU::Material>(pRootNode, "Materials");
-		AddResources<mh::GPU::GraphicsShader>(pRootNode, "Shaders");
+		AddResources<mh::Texture>(pRootNode, "Texture");
+		AddResources<mh::Material>(pRootNode, "Materials");
+		AddResources<mh::GraphicsShader>(pRootNode, "Shaders");
 	}
 
 	void Project::toInspector(void* data)
 	{
 		mh::IRes* resource = static_cast<mh::IRes*>(data);
 
-		Inspector* inspector = editor.GetWidget<Inspector>("Inspector");
+		Inspector* inspector = gEditor.GetWidget<Inspector>("Inspector");
 		inspector->SetTargetResource(resource);
 		inspector->InitializeTargetResource();
 	}

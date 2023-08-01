@@ -24,7 +24,7 @@ namespace gui
 		void AddResources(TreeWidget::tNode* rootNode, const char* name)
 		{
 			const std::unordered_map<std::string, std::shared_ptr<mh::IRes>, mh::define::tUmap_StringViewHasher, std::equal_to<>>& resources
-				= mh::ResMgr::GetInst()->GetResources<T>();
+				= mh::ResMgr::GetResources<T>();
 
 			TreeWidget::tNode* stemNode
 				= mTreeWidget->AddNode(rootNode, name, 0, true);

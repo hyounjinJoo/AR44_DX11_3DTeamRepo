@@ -38,13 +38,13 @@ namespace mh
 		Com_Animator();
 		virtual ~Com_Animator();
 
-		virtual void Initialize() override;
+		virtual void Init() override;
 		virtual void Update() override;
 		virtual void FixedUpdate() override;
 		virtual void Render() override;
 
 		bool Create(const std::string_view _name
-			, std::shared_ptr<GPU::Texture> _atlas
+			, std::shared_ptr<Texture> _atlas
 			, Vector2 _leftTop, Vector2 _size
 			, Vector2 _offset
 			, UINT _spriteLength

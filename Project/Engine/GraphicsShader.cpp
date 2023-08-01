@@ -1,12 +1,12 @@
 #include "EnginePCH.h"
 
 #include "GraphicsShader.h"
-#include "GraphicDevice_DX11.h"
-#include "Renderer.h"
+#include "GPUMgr.h"
+#include "RenderMgr.h"
 
 #include "PathMgr.h"
 
-namespace mh::GPU
+namespace mh
 {
 	namespace stdfs = std::filesystem;
 	using namespace mh::define;
@@ -28,12 +28,12 @@ namespace mh::GPU
 
 	}
 
-	HRESULT GraphicsShader::Load(const std::filesystem::path& _path)
+	eResult GraphicsShader::Load(const std::filesystem::path& _path)
 	{
-		return E_NOTIMPL;
+		return eResult::Fail_NotImplemented;
 	}
 
-	eResult GraphicsShader::CreateByCompile(GPU::eGSStage _stage, const stdfs::path& _FullPath, const std::string_view _funcName)
+	eResult GraphicsShader::CreateByCompile(eGSStage _stage, const stdfs::path& _FullPath, const std::string_view _funcName)
 	{
 		mArrShaderCode[(int)_stage] = {};
 
@@ -42,7 +42,7 @@ namespace mh::GPU
 			nullptr,
 			D3D_COMPILE_STANDARD_FILE_INCLUDE,
 			std::string(_funcName).c_str(),
-			GPU::SHADER_VERSION::GS[(int)_stage],
+			SHADER_VERSION::GS[(int)_stage],
 			0u,
 			0u,
 			mArrShaderCode[(int)_stage].blob.ReleaseAndGetAddressOf(),
@@ -99,7 +99,7 @@ namespace mh::GPU
 
 	eResult GraphicsShader::CreateInputLayout(const std::vector<D3D11_INPUT_ELEMENT_DESC>& _VecLayoutDesc)
 	{
-		ID3DBlob* VSBlobData = mArrShaderCode[(int)GPU::eGSStage::VS].blob.Get();
+		ID3DBlob* VSBlobData = mArrShaderCode[(int)eGSStage::VS].blob.Get();
 
 		if (nullptr == VSBlobData)
 		{
@@ -109,13 +109,13 @@ namespace mh::GPU
 
 		mVecInputLayoutDesc = _VecLayoutDesc;
 
-		if (false == GetDevice()->CreateInputLayout(
+		if (FAILED(GPUMgr::Device()->CreateInputLayout(
 			mVecInputLayoutDesc.data(),
 			(UINT)mVecInputLayoutDesc.size(),
 			VSBlobData->GetBufferPointer(),
 			VSBlobData->GetBufferSize(),
 			mInputLayout.ReleaseAndGetAddressOf()
-		))
+		)))
 		{
 			ERROR_MESSAGE_W(L"Input Layout 생성에 실패했습니다.");
 			return eResult::Fail_Create;
@@ -127,33 +127,38 @@ namespace mh::GPU
 
 	void GraphicsShader::Binds()
 	{
-		GetDevice()->BindPrimitiveTopology(mTopology);
-		GetDevice()->BindInputLayout(mInputLayout.Get());
+		auto pContext = GPUMgr::Context();
 
-		GetDevice()->BindVertexShader(mVS.Get(), nullptr, 0);
-		GetDevice()->BindHullShader(mHS.Get(), nullptr, 0);
-		GetDevice()->BindDomainShader(mDS.Get(), nullptr, 0);
-		GetDevice()->BindGeometryShader(mGS.Get(), nullptr, 0);
-		GetDevice()->BindPixelShader(mPS.Get(), nullptr, 0);
+		pContext->IASetPrimitiveTopology(mTopology);
+		pContext->IASetInputLayout(mInputLayout.Get());
+		pContext->VSSetShader(mVS.Get(), nullptr, 0);
+		pContext->HSSetShader(mHS.Get(), nullptr, 0);
+		pContext->DSSetShader(mDS.Get(), nullptr, 0);
+		pContext->GSSetShader(mGS.Get(), nullptr, 0);
+		pContext->PSSetShader(mPS.Get(), nullptr, 0);
 
-		Microsoft::WRL::ComPtr<ID3D11RasterizerState> rs = renderer::gRasterizerStates[(UINT)mRSType];
-		Microsoft::WRL::ComPtr<ID3D11DepthStencilState> ds = renderer::gDepthStencilStates[(UINT)mDSType];
-		Microsoft::WRL::ComPtr<ID3D11BlendState> bs = renderer::gBlendStates[(UINT)mBSType];
+		
+		ID3D11RasterizerState*		rs = RenderMgr::GetRasterizerState(mRSType).Get();
+		ID3D11DepthStencilState*	ds = RenderMgr::GetDepthStencilState(mDSType).Get();
+		ID3D11BlendState*			bs = RenderMgr::GetBlendState(mBSType).Get();
 
-		GetDevice()->BindRasterizerState(rs.Get());
-		GetDevice()->BindDepthStencilState(ds.Get());
-		GetDevice()->BindBlendState(bs.Get());
+		pContext->RSSetState(rs);
+		pContext->OMSetDepthStencilState(ds, 0u);
+
+		constexpr float blendFactor[4] = { 0.f, 0.f, 0.f, 0.f };
+		pContext->OMSetBlendState(bs, blendFactor, UINT_MAX);
 	}
 
-	eResult GraphicsShader::CreateShader(GPU::eGSStage _stage, const void* _pByteCode, size_t _ByteCodeSize)
+	eResult GraphicsShader::CreateShader(eGSStage _stage, const void* _pByteCode, size_t _ByteCodeSize)
 	{
 		MH_ASSERT(_pByteCode && _ByteCodeSize);
 
+		auto pDevice = GPUMgr::Device();
 		switch (_stage)
 		{
-		case GPU::eGSStage::VS:
+		case eGSStage::VS:
 		{
-			if (false == GetDevice()->CreateVertexShader(_pByteCode, _ByteCodeSize, nullptr, mVS.ReleaseAndGetAddressOf()))
+			if (FAILED(pDevice->CreateVertexShader(_pByteCode, _ByteCodeSize, nullptr, mVS.ReleaseAndGetAddressOf())))
 			{
 				ERROR_MESSAGE_W(L"Vertex GraphicsShader 생성에 실패했습니다.");
 				return eResult::Fail_Create;
@@ -162,9 +167,9 @@ namespace mh::GPU
 			break;
 		}
 
-		case GPU::eGSStage::HS:
+		case eGSStage::HS:
 		{
-			if (false == GetDevice()->CreateHullShader(_pByteCode, _ByteCodeSize, nullptr, mHS.ReleaseAndGetAddressOf()))
+			if (FAILED(pDevice->CreateHullShader(_pByteCode, _ByteCodeSize, nullptr, mHS.ReleaseAndGetAddressOf())))
 			{
 				ERROR_MESSAGE_W(L"Hull GraphicsShader 생성에 실패했습니다.");
 				return eResult::Fail_Create;
@@ -174,9 +179,9 @@ namespace mh::GPU
 		}
 
 
-		case GPU::eGSStage::DS:
+		case eGSStage::DS:
 		{
-			if (false == GetDevice()->CreateDomainShader(_pByteCode, _ByteCodeSize, nullptr, mDS.ReleaseAndGetAddressOf()))
+			if (FAILED(pDevice->CreateDomainShader(_pByteCode, _ByteCodeSize, nullptr, mDS.ReleaseAndGetAddressOf())))
 			{
 				ERROR_MESSAGE_W(L"Domain GraphicsShader 생성에 실패했습니다.");
 				return eResult::Fail_Create;
@@ -186,9 +191,9 @@ namespace mh::GPU
 		}
 
 
-		case GPU::eGSStage::GS:
+		case eGSStage::GS:
 		{
-			if (false == GetDevice()->CreateGeometryShader(_pByteCode, _ByteCodeSize, nullptr, mGS.ReleaseAndGetAddressOf()))
+			if (FAILED(pDevice->CreateGeometryShader(_pByteCode, _ByteCodeSize, nullptr, mGS.ReleaseAndGetAddressOf())))
 			{
 				ERROR_MESSAGE_W(L"Geometry GraphicsShader 생성에 실패했습니다.");
 				return eResult::Fail_Create;
@@ -198,9 +203,9 @@ namespace mh::GPU
 		}
 
 
-		case GPU::eGSStage::PS:
+		case eGSStage::PS:
 		{
-			if (false == GetDevice()->CreatePixelShader(_pByteCode, _ByteCodeSize, nullptr, mPS.ReleaseAndGetAddressOf()))
+			if (FAILED(pDevice->CreatePixelShader(_pByteCode, _ByteCodeSize, nullptr, mPS.ReleaseAndGetAddressOf())))
 			{
 				ERROR_MESSAGE_W(L"Pixel GraphicsShader 생성에 실패했습니다.");
 				return eResult::Fail_Create;

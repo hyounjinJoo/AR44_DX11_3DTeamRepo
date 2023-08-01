@@ -2,7 +2,7 @@
 #include "EnginePCH.h"
 
 #include "Layer.h"
-#include "Renderer.h"
+#include "RenderMgr.h"
 #include "Com_Transform.h"
 
 namespace mh
@@ -37,7 +37,7 @@ namespace mh
 		}
 	}
 
-	void Layer::Initialize()
+	void Layer::Init()
 	{
 		
 	}

@@ -3,7 +3,7 @@
 
 #include "GameObject.h"
 
-#include "Renderer.h"
+#include "RenderMgr.h"
 #include "IScript.h"
 
 namespace mh
@@ -26,7 +26,7 @@ namespace mh
 	{
 	}
 
-	void ICollider2D::Initialize()
+	void ICollider2D::Init()
 	{
 		mTransform = &(GetOwner()->GetTransform());
 	}
@@ -57,14 +57,14 @@ namespace mh
 
 		math::Matrix worldMatrix = scaleMatrix * rotationMatrix * positionMatrix;
 
-		GPU::tDebugMesh meshAttribute = {};
+		tDebugMesh meshAttribute = {};
 		meshAttribute.position = math::Vector3(colliderPos.x, colliderPos.y, colliderPos.z);
 		meshAttribute.radius = mRadius;
 		meshAttribute.rotatation = rotation;
 		meshAttribute.scale = scale;
 		meshAttribute.type = mType;
 
-		renderer::gDebugMeshes.push_back(meshAttribute);
+		RenderMgr::AddDebugMesh(meshAttribute);
 	}
 
 	void ICollider2D::Render()

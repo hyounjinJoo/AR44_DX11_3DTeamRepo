@@ -7264,7 +7264,7 @@ static void ShowPlaceholderObject(const char* prefix, int uid)
     ImGui::PopID();
 }
 
-// Demonstrate create a simple property editor.
+// Demonstrate create a simple property gEditor.
 static void ShowExampleAppPropertyEditor(bool* p_open)
 {
     ImGui::SetNextWindowSize(ImVec2(430, 450), ImGuiCond_FirstUseEver);

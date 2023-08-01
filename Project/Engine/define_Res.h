@@ -20,8 +20,6 @@ namespace mh::define
 		
 		GraphicsShader,
 		ComputeShader,
-		
-		IScript,
 		End,
 	};
 
@@ -39,8 +37,6 @@ namespace mh::define
 
 		"GraphicsShader",
 		"ComputeShader",
-
-		"IScript"
 	};
 
 	namespace DirName
@@ -62,8 +58,7 @@ namespace mh::define
 			
 			"GraphicsShader/Graphics",
 			"GraphicsShader/Compute",
-			
-			"IScript"
+
 		};
 	}
 
@@ -91,6 +86,10 @@ namespace mh::define
 				STRKEY_DECLARE(ParticleMaterial);
 				STRKEY_DECLARE(Basic3DMaterial);
 				STRKEY_DECLARE(PostProcessMaterial);
+				STRKEY_DECLARE(DefferedMaterial);
+				STRKEY_DECLARE(MergeMaterial);
+				STRKEY_DECLARE(LightDirMaterial);
+				STRKEY_DECLARE(LightPointMaterial);
 			}
 
 			namespace texture
@@ -123,6 +122,11 @@ namespace mh::define
 					STRKEY_DECLARE(ParticleShader);
 					STRKEY_DECLARE(PostProcessShader);
 					STRKEY_DECLARE(Basic3DShader);
+					STRKEY_DECLARE(DefferedShader);
+					//STRKEY_DECLARE(LightShader);
+					STRKEY_DECLARE(LightDirShader);
+					STRKEY_DECLARE(LightPointShader);
+					STRKEY_DECLARE(MergeShader);
 				}
 				namespace compute
 				{
