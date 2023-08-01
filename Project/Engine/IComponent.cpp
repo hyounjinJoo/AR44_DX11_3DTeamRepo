@@ -9,6 +9,14 @@ namespace mh
 		, mOwner(nullptr)
 	{
 	}
+
+	IComponent::IComponent(const IComponent& _other)
+		: Entity(_other)
+		, mType(_other.mType)
+		, mOwner(nullptr)
+	{
+	}
+
 	IComponent::~IComponent()
 	{
 	}

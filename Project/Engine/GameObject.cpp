@@ -3,17 +3,31 @@
 #include "GameObject.h"
 #include "Com_Transform.h"
 
+#include "json-cpp/json.h"
+#include "Prefab.h"
+
 namespace mh
 {
+	namespace define::strKey::Json
+	{
+		namespace GameObject
+		{
+			STRKEY_DECLARE(mComponents);
+			STRKEY_DECLARE(mChilds);
+			//STRKEY_DECLARE(mScripts);
+		}
+	}
+
+
 	GameObject::GameObject()
 		: mTransform()
-		, mFixedComponents()
+		, mComponents()
 		, mState(eState::Active)
 		, mLayerType(define::eLayerType::None)
 		, mbDontDestroy()
 		, mName()
 	{
-		mFixedComponents.resize((int)eComponentType::Scripts);
+		mComponents.resize((int)eComponentType::Scripts);
 		AddComponent(&mTransform);
 	}
 
@@ -21,27 +35,27 @@ namespace mh
 	GameObject::GameObject(const GameObject& _other)
 		: Entity(_other)
 		, mTransform(_other.mTransform)
-		, mFixedComponents()
+		, mComponents()
 		, mState(_other.mState)
 		, mLayerType(_other.mLayerType)
 		, mbDontDestroy(_other.mbDontDestroy)
 		, mName(_other.mName)
 	{
-		mFixedComponents.resize((int)eComponentType::Scripts);
+		mComponents.resize((int)eComponentType::Scripts);
 		AddComponent(&mTransform);
 
 		//TODO: Clone
 		//1. 컴포넌트 목록 복사
-		for (size_t i = 0; i < _other.mFixedComponents.size(); ++i)
+		for (size_t i = 0; i < _other.mComponents.size(); ++i)
 		{
-			if (_other.mFixedComponents[i])
+			if (_other.mComponents[i])
 			{
 				//AddComponent(_other.mFixedComponents[i]->Clone());
 			}
 		}
 
 		//2. 자녀 오브젝트 복사
-		for (size_t i = 0; i < _other.mFixedComponents.size(); ++i)
+		for (size_t i = 0; i < _other.mComponents.size(); ++i)
 		{
 			//AddChildGameObj(_other.mFixedComponents[i]->Clone());
 		}
@@ -50,11 +64,11 @@ namespace mh
 	GameObject::~GameObject()
 	{
 		//Transform은 제거 X
-		for (size_t i = 1; i < mFixedComponents.size(); ++i)
+		for (size_t i = 1; i < mComponents.size(); ++i)
 		{
-			if (nullptr == mFixedComponents[i])
+			if (nullptr == mComponents[i])
 				continue;
-			delete mFixedComponents[i];
+			delete mComponents[i];
 		}
 
 		for (size_t i = 0; i < mScripts.size(); ++i)
@@ -73,28 +87,172 @@ namespace mh
 
 	eResult GameObject::SaveJson(Json::Value* _pJson)
 	{
-		return eResult();
+		eResult Result = Entity::SaveJson(_pJson);
+		if (eResultFail(Result))
+		{
+			return Result;
+		}
+
+		MHJSONSAVE(_pJson, mName);
+		MHJSONSAVE(_pJson, mState);
+		MHJSONSAVE(_pJson, mLayerType);
+		MHJSONSAVE(_pJson, mbDontDestroy);
+
+		{
+			(*_pJson)[strKey::Json::GameObject::mComponents] = Json::Value(Json::arrayValue);
+			Json::Value& arrComponent = (*_pJson)[strKey::Json::GameObject::mComponents];
+
+			//트랜스폼은 저장하지 않음
+			for (size_t i = (size_t)eComponentType::Transform + (size_t)1; i < mComponents.size(); ++i)
+			{
+				if (mComponents[i])
+				{
+					Json::Value ComJson = Json::Value(Json::objectValue);
+					
+					Result = mComponents[i]->SaveJson(&(ComJson));
+					if (eResultFail(Result))
+					{
+						return Result;
+					}
+					arrComponent.append(ComJson);
+				}
+				else
+				{
+					arrComponent.append(Json::Value(Json::nullValue));
+				}
+			}
+		}
+
+
+		//GameObject* mParent;
+		//부모 오브젝트가 있을 경우 재귀 구조로 부모 쪽에서 생성한 뒤 자식으로 등록할 것임
+
+		//child의 경우 별도의 프리팹으로 취급해서 새로운 파일을 생성
+		//std::vector<GameObject*> mChilds;
+		{
+			(*_pJson)[strKey::Json::GameObject::mChilds] = Json::Value(Json::arrayValue);
+			Json::Value& arrChilds = (*_pJson)[strKey::Json::GameObject::mChilds];
+			for (size_t i = 0; i < mChilds.size(); ++i)
+			{
+				if (mChilds[i])
+				{
+					//자식의 Key가 존재하지 않을 경우 자신의 Key에 숫자를 붙여서 생성
+					std::string childStrKey = mChilds[i]->GetKey();
+					if (childStrKey.empty())
+					{
+						childStrKey = GetKey() + "_";
+						childStrKey += std::to_string((int)i);
+						mChilds[i]->SetKey(childStrKey);
+					}
+
+					Prefab SavePrefab{};
+					SavePrefab.RegisterPrefab(mChilds[i], true);
+					eResult Result = SavePrefab.Save(childStrKey);
+					if (eResultFail(Result))
+					{
+						return Result;
+					}
+
+					//자식 프리팹 이름을 등록
+					arrChilds.append(childStrKey);
+				}
+			}
+		}
+
+
+		return eResult::Success;
 	}
 
 	eResult GameObject::LoadJson(const Json::Value* _pJson)
 	{
-		return eResult();
+		if (nullptr == _pJson)
+		{
+			return eResult::Fail_Nullptr;
+		}
+
+		eResult Result = Entity::LoadJson(_pJson);
+		if (eResultFail(Result))
+		{
+			return Result;
+		}
+
+		MHJSONLOAD(_pJson, mName);
+		MHJSONLOAD(_pJson, mState);
+		MHJSONLOAD(_pJson, mLayerType);
+		MHJSONLOAD(_pJson, mbDontDestroy);
+
+
+		//컴포넌트 추가
+		if (_pJson->isMember(strKey::Json::GameObject::mComponents))
+		{
+			const Json::Value& jValCom = (*_pJson)[strKey::Json::GameObject::mComponents];
+			if (jValCom.isArray())
+			{
+				for (Json::ValueConstIterator iter = jValCom.begin(); iter != jValCom.end(); ++iter)
+				{
+					if (iter->isNull())
+					{
+						continue;
+					}
+
+					if (false == iter->isMember(strKey::Json::Entity::mStrKey))
+					{
+						continue;
+					}
+
+					IComponent* pCom = ComMgr::GetNewCom((*iter)[strKey::Json::Entity::mStrKey].asString());
+					if (pCom)
+					{
+						AddComponent(pCom);
+					}
+				}
+			}
+		}
+
+		if (_pJson->isMember(strKey::Json::GameObject::mChilds))
+		{
+			const Json::Value& jValChilds = (*_pJson)[strKey::Json::GameObject::mChilds];
+			if (jValChilds.isArray())
+			{
+				for (Json::ValueConstIterator iter = jValChilds.begin(); iter != jValChilds.end(); ++iter)
+				{
+					if (iter->isNull())
+					{
+						continue;
+					}
+
+					if (false == iter->isMember(strKey::Json::Entity::mStrKey))
+					{
+						continue;
+					}
+
+					GameObject* child = new GameObject;
+					const Json::Value& childJson = *iter;
+					Result = child->LoadJson(&childJson);
+					if (eResultFail(Result))
+					{
+						ERROR_MESSAGE_W(L"Child 오브젝트 로드 실패.");
+						SAFE_DELETE(child);
+						return Result;
+					}
+
+					AddChild(child);
+				}
+			}
+		}
+
+		return eResult::Success;
 	}
 	
 	void GameObject::Init()
 	{
-		for (size_t i = 0; i < mFixedComponents.size(); ++i)
+		for (size_t i = 0; i < mComponents.size(); ++i)
 		{
-			if (nullptr == mFixedComponents[i])
+			if (nullptr == mComponents[i])
 				continue;
-			mFixedComponents[i]->Init();
+			mComponents[i]->Init();
 		}
-		for (size_t i = 0; i < mScripts.size(); ++i)
-		{
-			if (nullptr == mScripts[i])
-				continue;
-			mScripts[i]->Init();
-		}
+
 		for (size_t i = 0; i < mChilds.size(); ++i)
 		{
 			if (nullptr == mChilds[i])
@@ -105,18 +263,13 @@ namespace mh
 
 	void GameObject::Update()
 	{
-		for (size_t i = 0; i < mFixedComponents.size(); ++i)
+		for (size_t i = 0; i < mComponents.size(); ++i)
 		{
-			if (nullptr == mFixedComponents[i])
+			if (nullptr == mComponents[i])
 				continue;
-			mFixedComponents[i]->Update();
+			mComponents[i]->Update();
 		}
-		for (size_t i = 0; i < mScripts.size(); ++i)
-		{
-			if (nullptr == mScripts[i])
-				continue;
-			mScripts[i]->Update();
-		}
+
 		for (size_t i = 0; i < mChilds.size(); ++i)
 		{
 			if (nullptr == mChilds[i])
@@ -127,18 +280,13 @@ namespace mh
 
 	void GameObject::FixedUpdate()
 	{
-		for (size_t i = 0; i < mFixedComponents.size(); ++i)
+		for (size_t i = 0; i < mComponents.size(); ++i)
 		{
-			if (nullptr == mFixedComponents[i])
+			if (nullptr == mComponents[i])
 				continue;
-			mFixedComponents[i]->FixedUpdate();
+			mComponents[i]->FixedUpdate();
 		}
-		for (size_t i = 0; i < mScripts.size(); ++i)
-		{
-			if (nullptr == mScripts[i])
-				continue;
-			mScripts[i]->FixedUpdate();
-		}
+
 		for (size_t i = 0; i < mChilds.size(); ++i)
 		{
 			if (nullptr == mChilds[i])
@@ -149,18 +297,13 @@ namespace mh
 
 	void GameObject::Render()
 	{
-		for (size_t i = 0; i < mFixedComponents.size(); ++i)
+		for (size_t i = 0; i < mComponents.size(); ++i)
 		{
-			if (nullptr == mFixedComponents[i])
+			if (nullptr == mComponents[i])
 				continue;
-			mFixedComponents[i]->Render();
+			mComponents[i]->Render();
 		}
-		for (size_t i = 0; i < mScripts.size(); ++i)
-		{
-			if (nullptr == mScripts[i])
-				continue;
-			mScripts[i]->Render();
-		}
+
 		for (size_t i = 0; i < mChilds.size(); ++i)
 		{
 			if (nullptr == mChilds[i])
@@ -193,11 +336,12 @@ AddComponent<T> 또는 ComMgr::GetNewComponent()를 통해서 생성하세요.
 
 		if (eComponentType::Scripts == ComType)
 		{
+			mComponents.push_back(_pCom);
 			mScripts.push_back(static_cast<IScript*>(_pCom));
 		}
 		else
 		{
-			if (nullptr != mFixedComponents[(int)ComType])
+			if (nullptr != mComponents[(int)ComType])
 			{
 				SAFE_DELETE(_pCom);
 				ERROR_MESSAGE_W(L"이미 중복된 타입의 컴포넌트가 들어가 있습니다.");
@@ -205,7 +349,7 @@ AddComponent<T> 또는 ComMgr::GetNewComponent()를 통해서 생성하세요.
 				return nullptr;
 			}
 
-			mFixedComponents[(int)ComType] = _pCom;
+			mComponents[(int)ComType] = _pCom;
 		}
 
 

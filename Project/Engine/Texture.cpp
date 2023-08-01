@@ -8,7 +8,7 @@
 #endif
 
 
-#include "Func.h"
+#include "define_UtilFunc.h"
 #include "PathMgr.h"
 
 

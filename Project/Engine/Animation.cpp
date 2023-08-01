@@ -22,6 +22,18 @@ namespace mh
 
 	}
 
+	Animation::Animation(const Animation& _other)
+		: Entity(_other)
+		, mAnimator() //이건 이 애니메이션을 복사해서 가져가는 주인이 새로 설정해줘야함
+		, mAnimationName(_other.mAnimationName)
+		, mAtlas(_other.mAtlas) //Atlas == Texture -> 공유하는 리소스
+		, mSpriteSheet(_other.mSpriteSheet) //vector도 value를 담고 있는 경우에는 그냥 복사하면 됨
+		, mIndex(_other.mIndex)
+		, mTime(_other.mTime)
+		, mbComplete(_other.mbComplete)
+	{
+	}
+
 	Animation::~Animation()
 	{
 	}

@@ -7,6 +7,11 @@ namespace mh
 	{
 	public:
 		Com_AudioListener();
+
+		//복사할 변수가 없으므로 기본 복사생성자로 충분함
+		Com_AudioListener(const Com_AudioListener& _other) = default;
+		CLONE(Com_AudioListener);
+
 		virtual ~Com_AudioListener();
 
 		virtual void Init() override;

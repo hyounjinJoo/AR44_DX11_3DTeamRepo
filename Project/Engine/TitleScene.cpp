@@ -24,7 +24,7 @@
 #include "Com_Light.h"
 #include "PaintShader.h"
 #include "Com_Renderer_ParticleSystem.h"
-
+#include "Prefab.h"
 
 namespace mh
 {
@@ -60,6 +60,10 @@ namespace mh
 			mr->SetMaterial(ResMgr::Find<Material>(strKey::Default::material::Basic3DMaterial));
 			mr->SetMesh(ResMgr::Find<Mesh>(strKey::Default::mesh::CubeMesh));
 			player->AddComponent<Script_Player>();
+
+			Prefab forSave{};
+			forSave.RegisterPrefab(player, true);
+			forSave.Save("TestPrefab.json");
 		}
 
 		//디퍼드 렌더링으로 그려지는 오브젝트
