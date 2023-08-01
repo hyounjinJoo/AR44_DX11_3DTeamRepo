@@ -268,7 +268,6 @@
     <ClCompile Include="json-cpp\jsoncpp.cpp">
       <Filter>JsonCPP</Filter>
     </ClCompile>
-    <ClCompile Include="Func.cpp" />
     <ClCompile Include="AtExit.cpp">
       <Filter>Common</Filter>
     </ClCompile>
@@ -332,6 +331,9 @@
     </ClCompile>
     <ClCompile Include="InputMgr.cpp">
       <Filter>Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="define_UtilFunc.cpp">
+      <Filter>Common\define</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -453,7 +455,6 @@
     <ClInclude Include="json-cpp\json-forwards.h">
       <Filter>JsonCPP</Filter>
     </ClInclude>
-    <ClInclude Include="Func.h" />
     <ClInclude Include="AtExit.h">
       <Filter>Common</Filter>
     </ClInclude>
@@ -550,6 +551,12 @@
     </ClInclude>
     <ClInclude Include="InputMgr.h">
       <Filter>Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="json-cpp\jsonSaveLoad.h">
+      <Filter>JsonCPP</Filter>
+    </ClInclude>
+    <ClInclude Include="define_UtilFunc.h">
+      <Filter>Common\define</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

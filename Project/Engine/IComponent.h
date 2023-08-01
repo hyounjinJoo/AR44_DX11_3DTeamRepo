@@ -12,6 +12,9 @@ namespace mh
 	{
 	public:
 		IComponent(eComponentType _type);
+
+		IComponent(const IComponent& _other);
+
 		virtual ~IComponent();
 
 		virtual void Init() = 0;

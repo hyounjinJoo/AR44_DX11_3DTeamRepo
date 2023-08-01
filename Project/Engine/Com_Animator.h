@@ -36,6 +36,10 @@ namespace mh
 		};
 
 		Com_Animator();
+
+		Com_Animator(const Com_Animator& _other);
+		CLONE(Com_Animator);
+
 		virtual ~Com_Animator();
 
 		virtual void Init() override;
@@ -63,8 +67,8 @@ namespace mh
 		std::function<void()>& GetEvent(const std::string_view _name, UINT _index) const;
 
 	private:
-		std::unordered_map<std::string, Animation*, define::tUmap_StringViewHasher, std::equal_to<>> mAnimations;
-		std::unordered_map<std::string, tEvents*, define::tUmap_StringViewHasher, std::equal_to<>> mEvents;
+		std::unordered_map<std::string, Animation*, define::tUmap_StringViewHasher, std::equal_to<>>	mAnimations;
+		std::unordered_map<std::string, tEvents*, define::tUmap_StringViewHasher, std::equal_to<>>		mEvents;
 		Animation* mActiveAnimation;
 		bool mbLoop;
 	};
