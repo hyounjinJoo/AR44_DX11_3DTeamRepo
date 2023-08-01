@@ -61,53 +61,14 @@
     <Filter Include="JsonCPP">
       <UniqueIdentifier>{8999b6ba-42f6-4ffd-bf94-77b6220cb4dc}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Default HLSL">
-      <UniqueIdentifier>{1587745f-0e8d-4a49-99cd-34f3fcc7f1d8}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Manager">
       <UniqueIdentifier>{e30f37b2-b57a-4eaf-8f8e-4f5e39da69f2}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Default HLSL\Basic">
-      <UniqueIdentifier>{2adb82e1-5f22-46c3-a5da-0d7e5d44b3a9}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Default HLSL\Func">
-      <UniqueIdentifier>{1525a989-93b1-4230-8a73-19c8920caa61}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Default HLSL\Debug">
-      <UniqueIdentifier>{b39a4fae-8739-4b21-861f-f7c841a93a08}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Default HLSL\Grid">
-      <UniqueIdentifier>{e8e80722-fac3-4961-99e8-24d1cd7da7f7}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Default HLSL\Light">
-      <UniqueIdentifier>{1a4442f2-56d4-48ba-9103-265cb4de05f5}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Default HLSL\Particle">
-      <UniqueIdentifier>{0b66c208-bf9e-408d-99b7-e5669fc35533}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Default HLSL\PostProcess">
-      <UniqueIdentifier>{73d94a25-d679-4f51-9399-88f2843a4596}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Default HLSL\Triangle">
-      <UniqueIdentifier>{b5968184-c3cc-4eba-b9b7-6a870e58f633}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Default HLSL\Sprite">
-      <UniqueIdentifier>{5b1da4e4-3080-4a5f-b341-5cbc1034b747}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Default HLSL\UserInterface">
-      <UniqueIdentifier>{4cd66c69-9aa2-47f4-b155-83a9f01a43f6}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Default HLSL\ComputeShader">
-      <UniqueIdentifier>{245c7a15-9423-486f-941f-a4b3cf54ce3c}</UniqueIdentifier>
     </Filter>
     <Filter Include="GPU">
       <UniqueIdentifier>{84407bf0-b431-49e7-b0cd-167e818415ab}</UniqueIdentifier>
     </Filter>
     <Filter Include="GPU\Buffer">
       <UniqueIdentifier>{b9697f64-adc5-45fb-b641-4131688e3073}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="GPU\API">
-      <UniqueIdentifier>{afdf7dd2-7ae1-4a73-be9e-835569536d5a}</UniqueIdentifier>
     </Filter>
     <Filter Include="Resource\Shaders">
       <UniqueIdentifier>{dce3eb15-75d6-4644-8a32-cf9d11564bb1}</UniqueIdentifier>
@@ -160,6 +121,39 @@
     <Filter Include="GameObject\Component\0. Transform">
       <UniqueIdentifier>{62546181-5d07-413f-a9e5-329a0986165d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="_DefaultShader">
+      <UniqueIdentifier>{b0fbd2d2-908f-4ddd-9a83-bbf806ed6fd4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="_DefaultShader\Particle">
+      <UniqueIdentifier>{9a8e01a4-d785-4788-80da-28328a56008d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="_DefaultShader\Sprite">
+      <UniqueIdentifier>{e61cbeb7-973b-4379-9393-507cc37790fc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="_DefaultShader\Basic3D">
+      <UniqueIdentifier>{83616c8f-803e-441b-9f46-76e13f986545}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="_DefaultShader\Debug">
+      <UniqueIdentifier>{eb1f4426-7923-4010-9987-0a99235b5788}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="_DefaultShader\Grid">
+      <UniqueIdentifier>{0026d585-d7e2-4037-8901-848de0bcd329}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="_DefaultShader\PostProcess">
+      <UniqueIdentifier>{a6f6cd7d-303c-4cb2-9291-c031cc2b4538}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="_DefaultShader\Triangle">
+      <UniqueIdentifier>{28afc3e1-3508-40ea-8cf4-c095f344c7a8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="_DefaultShader\UI">
+      <UniqueIdentifier>{9ef6f139-805f-44fa-a3df-5d7311677c74}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="_DefaultShader\Deffered">
+      <UniqueIdentifier>{96a011f5-ca86-4e20-8724-fb93161ac48a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="_DefaultShader\Light">
+      <UniqueIdentifier>{6d2d4c22-57c3-412a-b05f-e2076e189012}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Application.cpp">
@@ -167,9 +161,6 @@
     </ClCompile>
     <ClCompile Include="SimpleMath.cpp">
       <Filter>Common\Math</Filter>
-    </ClCompile>
-    <ClCompile Include="Input.cpp">
-      <Filter>Input</Filter>
     </ClCompile>
     <ClCompile Include="Entity.cpp">
       <Filter>Common</Filter>
@@ -255,20 +246,14 @@
     <ClCompile Include="Com_Light.cpp">
       <Filter>GameObject\Component\Light</Filter>
     </ClCompile>
-    <ClCompile Include="ConstantBuffer.cpp">
+    <ClCompile Include="ConstBuffer.cpp">
       <Filter>GPU\Buffer</Filter>
     </ClCompile>
-    <ClCompile Include="StructedBuffer.cpp">
+    <ClCompile Include="StructBuffer.cpp">
       <Filter>GPU\Buffer</Filter>
-    </ClCompile>
-    <ClCompile Include="GraphicDevice_DX11.cpp">
-      <Filter>GPU\API</Filter>
     </ClCompile>
     <ClCompile Include="ParticleShader.cpp" />
     <ClCompile Include="Com_AudioListener.cpp">
-      <Filter>GameObject\Component\Audio</Filter>
-    </ClCompile>
-    <ClCompile Include="Fmod.cpp">
       <Filter>GameObject\Component\Audio</Filter>
     </ClCompile>
     <ClCompile Include="FontWrapper.cpp">
@@ -297,13 +282,10 @@
       <Filter>GameObject\Component</Filter>
     </ClCompile>
     <ClCompile Include="MeshData.cpp" />
-    <ClCompile Include="CollisionManager.cpp">
-      <Filter>Manager</Filter>
-    </ClCompile>
     <ClCompile Include="ResMgr.cpp">
       <Filter>Manager</Filter>
     </ClCompile>
-    <ClCompile Include="TimeManager.cpp">
+    <ClCompile Include="TimeMgr.cpp">
       <Filter>Manager</Filter>
     </ClCompile>
     <ClCompile Include="PathMgr.cpp">
@@ -317,9 +299,6 @@
     </ClCompile>
     <ClCompile Include="IRenderer.cpp">
       <Filter>GameObject\Component\Renderer</Filter>
-    </ClCompile>
-    <ClCompile Include="Renderer.cpp">
-      <Filter>Manager</Filter>
     </ClCompile>
     <ClCompile Include="ComMgr.cpp">
       <Filter>Manager</Filter>
@@ -336,6 +315,24 @@
     <ClCompile Include="AudioClip.cpp">
       <Filter>Resource\Audio</Filter>
     </ClCompile>
+    <ClCompile Include="RenderMgr.cpp">
+      <Filter>Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="GPUMgr.cpp">
+      <Filter>Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="AudioMgr.cpp">
+      <Filter>Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="MultiRenderTarget.cpp">
+      <Filter>GPU</Filter>
+    </ClCompile>
+    <ClCompile Include="CollisionMgr.cpp">
+      <Filter>Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="InputMgr.cpp">
+      <Filter>Manager</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application.h">
@@ -344,14 +341,8 @@
     <ClInclude Include="SimpleMath.h">
       <Filter>Common\Math</Filter>
     </ClInclude>
-    <ClInclude Include="Input.h">
-      <Filter>Input</Filter>
-    </ClInclude>
     <ClInclude Include="Entity.h">
       <Filter>Common</Filter>
-    </ClInclude>
-    <ClInclude Include="define_GPU.h">
-      <Filter>GPU</Filter>
     </ClInclude>
     <ClInclude Include="EnginePCH.h">
       <Filter>Common</Filter>
@@ -388,9 +379,6 @@
     </ClInclude>
     <ClInclude Include="Com_Renderer_Sprite.h">
       <Filter>GameObject\Component\Renderer</Filter>
-    </ClInclude>
-    <ClInclude Include="Object.h">
-      <Filter>GameObject</Filter>
     </ClInclude>
     <ClInclude Include="GridScript.h">
       <Filter>Resource\Script</Filter>
@@ -443,20 +431,14 @@
     <ClInclude Include="Com_Light.h">
       <Filter>GameObject\Component\Light</Filter>
     </ClInclude>
-    <ClInclude Include="ConstantBuffer.h">
+    <ClInclude Include="ConstBuffer.h">
       <Filter>GPU\Buffer</Filter>
     </ClInclude>
-    <ClInclude Include="StructedBuffer.h">
+    <ClInclude Include="StructBuffer.h">
       <Filter>GPU\Buffer</Filter>
-    </ClInclude>
-    <ClInclude Include="GraphicDevice_DX11.h">
-      <Filter>GPU\API</Filter>
     </ClInclude>
     <ClInclude Include="ParticleShader.h" />
     <ClInclude Include="Com_AudioListener.h">
-      <Filter>GameObject\Component\Audio</Filter>
-    </ClInclude>
-    <ClInclude Include="Fmod.h">
       <Filter>GameObject\Component\Audio</Filter>
     </ClInclude>
     <ClInclude Include="FontWrapper.h">
@@ -512,13 +494,10 @@
     <ClInclude Include="Components.h">
       <Filter>GameObject\Component</Filter>
     </ClInclude>
-    <ClInclude Include="CollisionManager.h">
-      <Filter>Manager</Filter>
-    </ClInclude>
     <ClInclude Include="ResMgr.h">
       <Filter>Manager</Filter>
     </ClInclude>
-    <ClInclude Include="TimeManager.h">
+    <ClInclude Include="TimeMgr.h">
       <Filter>Manager</Filter>
     </ClInclude>
     <ClInclude Include="PathMgr.h">
@@ -532,9 +511,6 @@
     </ClInclude>
     <ClInclude Include="IRenderer.h">
       <Filter>GameObject\Component\Renderer</Filter>
-    </ClInclude>
-    <ClInclude Include="Renderer.h">
-      <Filter>Manager</Filter>
     </ClInclude>
     <ClInclude Include="ComMgr.h">
       <Filter>Manager</Filter>
@@ -551,6 +527,30 @@
     <ClInclude Include="AudioClip.h">
       <Filter>Resource\Audio</Filter>
     </ClInclude>
+    <ClInclude Include="RenderMgr.h">
+      <Filter>Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="GPUMgr.h">
+      <Filter>Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="Object.h">
+      <Filter>Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="AudioMgr.h">
+      <Filter>Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="define_GPU.h">
+      <Filter>Common\define</Filter>
+    </ClInclude>
+    <ClInclude Include="MultiRenderTarget.h">
+      <Filter>GPU</Filter>
+    </ClInclude>
+    <ClInclude Include="CollisionMgr.h">
+      <Filter>Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="InputMgr.h">
+      <Filter>Manager</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="SimpleMath.inl">
@@ -559,85 +559,121 @@
     <None Include="cpp.hint">
       <Filter>Common</Filter>
     </None>
-    <None Include="Default_HLSL\SH_ConstantBuffer.hlsli">
-      <Filter>Default HLSL</Filter>
+    <None Include="DefaultShader\SH_Blur.hlsli">
+      <Filter>_DefaultShader</Filter>
     </None>
-    <None Include="Default_HLSL\SH_Globals.hlsli">
-      <Filter>Default HLSL</Filter>
+    <None Include="DefaultShader\SH_Common.hlsli">
+      <Filter>_DefaultShader</Filter>
     </None>
-    <None Include="Default_HLSL\SH_Particle.hlsli">
-      <Filter>Default HLSL</Filter>
+    <None Include="DefaultShader\SH_ConstBuffer.hlsli">
+      <Filter>_DefaultShader</Filter>
     </None>
-    <None Include="Default_HLSL\SH_Resource.hlsli">
-      <Filter>Default HLSL</Filter>
+    <None Include="DefaultShader\SH_Globals.hlsli">
+      <Filter>_DefaultShader</Filter>
     </None>
-    <None Include="Default_HLSL\SH_Sampler.hlsli">
-      <Filter>Default HLSL</Filter>
+    <None Include="DefaultShader\SH_Resource.hlsli">
+      <Filter>_DefaultShader</Filter>
     </None>
-    <None Include="Default_HLSL\SH_Blur.hlsli">
-      <Filter>Default HLSL\Func</Filter>
+    <None Include="DefaultShader\SH_Sampler.hlsli">
+      <Filter>_DefaultShader</Filter>
     </None>
-    <None Include="Default_HLSL\SH_Light.hlsli">
-      <Filter>Default HLSL\Light</Filter>
+    <None Include="DefaultShader\SH_Particle.hlsli">
+      <Filter>_DefaultShader\Particle</Filter>
+    </None>
+    <None Include="DefaultShader\SH_Light.hlsli">
+      <Filter>_DefaultShader\Light</Filter>
+    </None>
+    <None Include="DefaultShader\SH_Func.hlsli">
+      <Filter>_DefaultShader</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="Default_HLSL\PS_Basic.hlsl">
-      <Filter>Default HLSL\Basic</Filter>
+    <FxCompile Include="DefaultShader\CS_Paint.hlsl">
+      <Filter>_DefaultShader</Filter>
     </FxCompile>
-    <FxCompile Include="Default_HLSL\VS_Basic.hlsl">
-      <Filter>Default HLSL\Basic</Filter>
+    <FxCompile Include="DefaultShader\CS_Particle.hlsl">
+      <Filter>_DefaultShader\Particle</Filter>
     </FxCompile>
-    <FxCompile Include="Default_HLSL\PS_Debug.hlsl">
-      <Filter>Default HLSL\Debug</Filter>
+    <FxCompile Include="DefaultShader\GS_Particle.hlsl">
+      <Filter>_DefaultShader\Particle</Filter>
     </FxCompile>
-    <FxCompile Include="Default_HLSL\VS_Debug.hlsl">
-      <Filter>Default HLSL\Debug</Filter>
+    <FxCompile Include="DefaultShader\PS_Sprite.hlsl">
+      <Filter>_DefaultShader\Sprite</Filter>
     </FxCompile>
-    <FxCompile Include="Default_HLSL\PS_Grid.hlsl">
-      <Filter>Default HLSL\Grid</Filter>
+    <FxCompile Include="DefaultShader\VS_Sprite.hlsl">
+      <Filter>_DefaultShader\Sprite</Filter>
     </FxCompile>
-    <FxCompile Include="Default_HLSL\VS_Grid.hlsl">
-      <Filter>Default HLSL\Grid</Filter>
+    <FxCompile Include="DefaultShader\VS_Basic3D.hlsl">
+      <Filter>_DefaultShader\Basic3D</Filter>
     </FxCompile>
-    <FxCompile Include="Default_HLSL\CS_Particle.hlsl">
-      <Filter>Default HLSL\Particle</Filter>
+    <FxCompile Include="DefaultShader\PS_Basic3D.hlsl">
+      <Filter>_DefaultShader\Basic3D</Filter>
     </FxCompile>
-    <FxCompile Include="Default_HLSL\GS_Particle.hlsl">
-      <Filter>Default HLSL\Particle</Filter>
+    <FxCompile Include="DefaultShader\VS_Debug.hlsl">
+      <Filter>_DefaultShader\Debug</Filter>
     </FxCompile>
-    <FxCompile Include="Default_HLSL\PS_Particle.hlsl">
-      <Filter>Default HLSL\Particle</Filter>
+    <FxCompile Include="DefaultShader\PS_Debug.hlsl">
+      <Filter>_DefaultShader\Debug</Filter>
     </FxCompile>
-    <FxCompile Include="Default_HLSL\VS_Particle.hlsl">
-      <Filter>Default HLSL\Particle</Filter>
+    <FxCompile Include="DefaultShader\VS_Grid.hlsl">
+      <Filter>_DefaultShader\Grid</Filter>
     </FxCompile>
-    <FxCompile Include="Default_HLSL\VS_PostProcess.hlsl">
-      <Filter>Default HLSL\PostProcess</Filter>
+    <FxCompile Include="DefaultShader\PS_Grid.hlsl">
+      <Filter>_DefaultShader\Grid</Filter>
     </FxCompile>
-    <FxCompile Include="Default_HLSL\PS_PostProcess.hlsl">
-      <Filter>Default HLSL\PostProcess</Filter>
+    <FxCompile Include="DefaultShader\VS_PostProcess.hlsl">
+      <Filter>_DefaultShader\PostProcess</Filter>
     </FxCompile>
-    <FxCompile Include="Default_HLSL\VS_Triangle.hlsl">
-      <Filter>Default HLSL\Triangle</Filter>
+    <FxCompile Include="DefaultShader\PS_PostProcess.hlsl">
+      <Filter>_DefaultShader\PostProcess</Filter>
     </FxCompile>
-    <FxCompile Include="Default_HLSL\PS_Triangle.hlsl">
-      <Filter>Default HLSL\Triangle</Filter>
+    <FxCompile Include="DefaultShader\PS_Triangle.hlsl">
+      <Filter>_DefaultShader\Triangle</Filter>
     </FxCompile>
-    <FxCompile Include="Default_HLSL\VS_Sprite.hlsl">
-      <Filter>Default HLSL\Sprite</Filter>
+    <FxCompile Include="DefaultShader\VS_Triangle.hlsl">
+      <Filter>_DefaultShader\Triangle</Filter>
     </FxCompile>
-    <FxCompile Include="Default_HLSL\PS_Sprite.hlsl">
-      <Filter>Default HLSL\Sprite</Filter>
+    <FxCompile Include="DefaultShader\VS_UserInterface.hlsl">
+      <Filter>_DefaultShader\UI</Filter>
     </FxCompile>
-    <FxCompile Include="Default_HLSL\VS_UserInterface.hlsl">
-      <Filter>Default HLSL\UserInterface</Filter>
+    <FxCompile Include="DefaultShader\PS_UserInterface.hlsl">
+      <Filter>_DefaultShader\UI</Filter>
     </FxCompile>
-    <FxCompile Include="Default_HLSL\PS_UserInterface.hlsl">
-      <Filter>Default HLSL\UserInterface</Filter>
+    <FxCompile Include="DefaultShader\VS_Particle.hlsl">
+      <Filter>_DefaultShader\Particle</Filter>
     </FxCompile>
-    <FxCompile Include="Default_HLSL\CS_Paint.hlsl">
-      <Filter>Default HLSL\ComputeShader</Filter>
+    <FxCompile Include="DefaultShader\PS_Particle.hlsl">
+      <Filter>_DefaultShader\Particle</Filter>
+    </FxCompile>
+    <FxCompile Include="DefaultShader\VS_Deffered.hlsl">
+      <Filter>_DefaultShader\Deffered</Filter>
+    </FxCompile>
+    <FxCompile Include="DefaultShader\PS_Deffered.hlsl">
+      <Filter>_DefaultShader\Deffered</Filter>
+    </FxCompile>
+    <FxCompile Include="DefaultShader\VS_Merge.hlsl">
+      <Filter>_DefaultShader\Deffered</Filter>
+    </FxCompile>
+    <FxCompile Include="DefaultShader\PS_Merge.hlsl">
+      <Filter>_DefaultShader\Deffered</Filter>
+    </FxCompile>
+    <FxCompile Include="DefaultShader\PS_LightDir.hlsl">
+      <Filter>_DefaultShader\Light</Filter>
+    </FxCompile>
+    <FxCompile Include="DefaultShader\PS_Light.hlsl">
+      <Filter>_DefaultShader\Light</Filter>
+    </FxCompile>
+    <FxCompile Include="DefaultShader\VS_LightDir.hlsl">
+      <Filter>_DefaultShader\Light</Filter>
+    </FxCompile>
+    <FxCompile Include="DefaultShader\VS_Light.hlsl">
+      <Filter>_DefaultShader\Light</Filter>
+    </FxCompile>
+    <FxCompile Include="DefaultShader\VS_LightPoint.hlsl">
+      <Filter>_DefaultShader\Light</Filter>
+    </FxCompile>
+    <FxCompile Include="DefaultShader\PS_LightPoint.hlsl">
+      <Filter>_DefaultShader\Light</Filter>
     </FxCompile>
   </ItemGroup>
 </Project>

@@ -9,7 +9,7 @@ namespace mh
 		Script_Camera();
 		virtual ~Script_Camera();
 
-		virtual void Initialize() override;
+		virtual void Init() override;
 		virtual void Update() override;
 		virtual void Render() override;
 

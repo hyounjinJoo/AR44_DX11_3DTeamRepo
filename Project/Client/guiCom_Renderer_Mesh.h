@@ -19,7 +19,7 @@ namespace gui
 		void SetMaterial(const std::string& _strKey);
 
 	private:
-		std::shared_ptr<mh::GPU::Material> mMaterial;
+		std::shared_ptr<mh::Material> mMaterial;
 		std::shared_ptr<mh::Mesh> mMesh;
 	};
 }

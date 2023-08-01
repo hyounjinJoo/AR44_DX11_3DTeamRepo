@@ -1,5 +1,7 @@
 #pragma once
 #include <wrl.h>
+using Microsoft::WRL::ComPtr;
+
 #include <d3d11.h>
 #include <d3dcompiler.h>
 
@@ -21,9 +23,12 @@
 #define CBSLOT_NUMBEROFLIGHT	4
 #define CBSLOT_PARTICLESYSTEM	5
 #define CBSLOT_NOISE			6
+#define CBSLOT_SBUFFER			7
 
-namespace mh::GPU
+namespace mh
 {
+	constexpr const int MRT_MAX = 8;
+
 	using namespace mh::define;
 	using namespace mh::math;
 	enum class eValidationMode
@@ -43,6 +48,16 @@ namespace mh::GPU
 		END
 	};
 
+	enum class eMRTType
+	{
+		Swapchain,
+		Deffered,
+		Light,
+		Shadow,
+		End,
+	};
+
+
 	enum class eShaderStage
 	{
 		VS,
@@ -59,6 +74,7 @@ namespace mh::GPU
 	{
 		enum Flag
 		{
+			NONE = 0,
 			VS = BIT_MASK(0),
 			HS = BIT_MASK(1),
 			DS = BIT_MASK(2),
@@ -119,10 +135,19 @@ namespace mh::GPU
 
 	enum class eRenderingMode
 	{
+		//Deffered
+		DefferdOpaque,
+		DefferdMask,
+
+		//광원처리
+		Light,
+
+		//Forward
 		Opaque,
 		CutOut,
 		Transparent,
 		PostProcess,
+		None,
 		End,
 	};
 
@@ -133,11 +158,13 @@ namespace mh::GPU
 		Material,
 		Grid,
 		Animation,
-		Com_Light,
-		Com_Renderer_ParticleSystem,
+		Light,
+		ParticleSystem,
 		Noise,
+		SBuffer,
 		End,
 	};
+
 
 	enum class eGPUParam
 	{
@@ -160,20 +187,45 @@ namespace mh::GPU
 	{
 		Albedo,
 		Normal,
-		T2,
-		T3,
-		T4,
-		T5,
-		T6,
-		T7,
 
-		CubeT8,
-		CubeT9,
+		PositionTarget,
+		NormalTarget,
+		AlbedoTarget,
+		SpecularTarget,
+		DiffuseLightTarget,
+		SpecularLightTarget,
 
-		Array2DT10,
-		Array2DT11,
+		//CubeT8,
+		//CubeT9,
+
+		//Array2DT10,
+		//Array2DT11,
 
 		End,
+	};
+
+	enum class eMRT_Defferd
+	{
+		PositionTarget,
+		NormalTarget,
+		AlbedoTarget,
+		SpecularTarget,
+		End
+	};
+
+	enum class eMRT_Light
+	{
+		DiffuseLightTarget,
+		SpecularLightTarget
+	};
+
+	enum class eBufferViewType
+	{
+		NONE,
+		SRV,
+		UAV,
+		RTV,
+		DSV,
 	};
 
 	struct tDebugMesh
@@ -218,4 +270,6 @@ namespace mh::GPU
 	{
 		UINT activeCount;
 	};
+
+
 }

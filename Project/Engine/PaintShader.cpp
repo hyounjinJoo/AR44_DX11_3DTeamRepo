@@ -2,7 +2,7 @@
 
 #include "PaintShader.h"
 
-namespace mh::GPU
+namespace mh
 {
 	PaintShader::PaintShader()
 		: ComputeShader()
@@ -16,7 +16,7 @@ namespace mh::GPU
 
 	void PaintShader::Binds()
 	{
-		mTarget->BindUnorderedAccessView(0);
+		mTarget->BindDataUAV(0);
 
 		mGroupX = static_cast<UINT>(mTarget->GetWidth() / mThreadGroupCountX + 1);
 		mGroupY = static_cast<UINT>(mTarget->GetHeight() / mThreadGroupCountY + 1);
@@ -25,6 +25,6 @@ namespace mh::GPU
 
 	void PaintShader::Clear()
 	{
-		mTarget->ClearUnorderedAccessView(0);
+		mTarget->UnBind();
 	}
 }

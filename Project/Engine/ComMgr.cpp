@@ -1,17 +1,14 @@
 #include "EnginePCH.h"
 #include "ComMgr.h"
 
+#include "AtExit.h"
+
 #include "IComponent.h"
 
 namespace mh
 {
-    ComMgr::ComMgr()
-    {
-    }
-
-    ComMgr::~ComMgr()
-    {
-    }
+	std::unordered_map<std::string_view, std::function<IComponent* ()>> ComMgr::mUmapComConstructor;
+	std::unordered_map<std::type_index, const std::string_view>         ComMgr::mUmapComName;
 
 	IComponent* ComMgr::GetNewCom(const std::string_view _strKey)
 	{
@@ -30,6 +27,16 @@ namespace mh
 		if (iter == mUmapComName.end())
 			return "";
 		return iter->second;
+	}
+
+	void ComMgr::Init()
+	{
+		AtExit::AddFunc(std::bind(Release));
+	}
+	void ComMgr::Release()
+	{
+		mUmapComConstructor.clear();
+		mUmapComName.clear();
 	}
 }
 

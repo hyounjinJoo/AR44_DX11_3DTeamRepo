@@ -9,14 +9,14 @@ namespace gui
 	class Editor
 	{
 	public:
-		void Initialize();
+		void Init();
 		void Run();
 
 		void Update();
 		void FixedUpdate();
 		void Render();
 		void Release();
-		void DebugRender(mh::GPU::tDebugMesh& mesh);
+		void DebugRender(mh::tDebugMesh& mesh);
 
 		void ImGuiInitialize();
 		void ImGuiRun();

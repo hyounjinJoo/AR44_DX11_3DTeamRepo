@@ -2,13 +2,13 @@
 #include "Application.h"
 
 #include "DefaultComInitializer.h"
-#include "Renderer.h"
-#include "TimeManager.h"
-#include "Input.h"
+#include "RenderMgr.h"
+#include "TimeMgr.h"
+#include "InputMgr.h"
 #include "SceneManager.h"
 #include "ResMgr.h"
-#include "CollisionManager.h"
-#include "Fmod.h"
+#include "CollisionMgr.h"
+#include "AudioMgr.h"
 #include "FontWrapper.h"
 
 #include "PathMgr.h"
@@ -21,56 +21,57 @@ namespace mh
 		, mHeight(1600)//화면 해상도 몰라서 0말고 1600/900사이즈로 일단 초기화
 		, mWidth(900)
 	{
-
 	}
 
 	Application::~Application()
 	{
-
 	}
 
-	void Application::Initialize()
+	void Application::Init()
 	{
 		DefaultComInitializer::Init();
+		PathMgr::Init();
+		ResMgr::Init();
 
-		ResMgr::GetInst();
+		RenderMgr::Init();
+		
+		TimeMgr::Init();
+		InputMgr::Init();
+		AudioMgr::Init();
+		FontWrapper::Init();
 
-		PathMgr::GetInst()->Init();
-		TimeManager::Initialize();
-		Input::Initialize();
-		Fmod::Initialize();
-		FontWrapper::Initialize();
-
-		CollisionManager::Initialize();
-		renderer::Initialize();
-		SceneManager::Initialize();
+		CollisionMgr::Init();
+		
+		SceneManager::Init();
 	}
 
 	// 게임 로직 캐릭터 이동 등등 
 	// CPU UPDATE
 	void Application::Update()
 	{
-		TimeManager::Update();
-		Input::Update();
-		CollisionManager::Update();
+		TimeMgr::Update();
+		InputMgr::Update();
+		CollisionMgr::Update();
 		SceneManager::Update();
 	}
 
 	// GPU update
 	void Application::FixedUpdate()
 	{
-		CollisionManager::FixedUpdate();
+		CollisionMgr::FixedUpdate();
 		SceneManager::FixedUpdate();
 	}
 
 	void Application::Render()
 	{
-		TimeManager::Render(mHdc);
+		TimeMgr::Render(mHdc);
 
-		graphicDevice->Clear();
-		graphicDevice->AdjustViewPorts();
+		GPUMgr::Clear();
+		GPUMgr::AdjustViewPorts(mHwnd);
 
-		renderer::Render();
+		RenderMgr::ClearMultiRenderTargets();
+
+		RenderMgr::Render();
 	}
 
 	void Application::Destroy()
@@ -89,18 +90,17 @@ namespace mh
 
 	void Application::Present()
 	{
-		graphicDevice->Present();
+		GPUMgr::Present();
 	}
 
 	void Application::Release()
 	{
-		Fmod::Release();
-		FontWrapper::Release();
+		AtExit::CallAtExit();
 	}
 
 	void Application::SetWindow(HWND _hwnd, UINT _width, UINT _height)
 	{
-		if (graphicDevice == nullptr)
+		if (nullptr == GPUMgr::Device())
 		{
 			mHwnd = _hwnd;
 			mHdc = GetDC(mHwnd);
@@ -108,9 +108,13 @@ namespace mh
 			mHeight = _height;
 
 
-			GPU::eValidationMode vaildationMode = GPU::eValidationMode::Disabled;
-			graphicDevice = std::make_unique<GPU::GraphicDevice_DX11>();
-			//GPU::GetDevice() = graphicDevice.get();
+			//eValidationMode vaildationMode = eValidationMode::Disabled;
+			
+			if (false == GPUMgr::Init(mHwnd, mWidth, mHeight))
+			{
+				ERROR_MESSAGE_W(L"Graphics Device 초기화에 실패했습니다.");
+				std::abort();
+			}
 		}
 
 		RECT rt = { 0, 0, (LONG)_width , (LONG)_height };

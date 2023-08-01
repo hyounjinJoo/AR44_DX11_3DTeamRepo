@@ -12,7 +12,7 @@
 #include "guiInspector.h"
 
 
-extern gui::Editor editor;
+extern gui::Editor gEditor;
 
 namespace gui
 {
@@ -71,13 +71,13 @@ namespace gui
 		ImGui::SameLine();
 		if (ImGui::Button("##MeshBtn", ImVec2(15.0f, 15.0f)))
 		{
-			ListWidget* listUI = editor.GetWidget<ListWidget>("ListWidget");
+			ListWidget* listUI = gEditor.GetWidget<ListWidget>("ListWidget");
 			listUI->SetState(eState::Active);
 			
 
 			//모든 메쉬의 리소스를 가져와야한다.
 			const auto& meshes 
-				= mh::ResMgr::GetInst()->GetResources<mh::Mesh>();
+				= mh::ResMgr::GetResources<mh::Mesh>();
 
 			std::vector<std::string> name;
 			for (const auto& mesh : meshes)
@@ -98,11 +98,11 @@ namespace gui
 		ImGui::SameLine();
 		if (ImGui::Button("##MaterialBtn", ImVec2(15.0f, 15.0f)))
 		{
-			ListWidget* listUI = editor.GetWidget<ListWidget>("ListWidget");
+			ListWidget* listUI = gEditor.GetWidget<ListWidget>("ListWidget");
 			listUI->SetState(eState::Active);
 			//모든 메쉬의 리소스를 가져와야한다.
 			const auto& materials
-				= mh::ResMgr::GetInst()->GetResources<mh::GPU::Material>();
+				= mh::ResMgr::GetResources<mh::Material>();
 
 			std::vector<std::string> Name;
 			for (const auto& material : materials)
@@ -123,17 +123,17 @@ namespace gui
 
 	void guiCom_Renderer_Mesh::SetMesh(const std::string& _strKey)
 	{
-		std::shared_ptr<mh::Mesh> mesh = mh::ResMgr::GetInst()->Find<mh::Mesh>(_strKey);
+		std::shared_ptr<mh::Mesh> mesh = mh::ResMgr::Find<mh::Mesh>(_strKey);
 
-		Inspector* inspector = editor.GetWidget<Inspector>("Inspector");
+		Inspector* inspector = gEditor.GetWidget<Inspector>("Inspector");
 		inspector->GetTargetGameObject()->GetComponent<mh::Com_Renderer_Mesh>()->SetMesh(mesh);
 	}
 
 	void guiCom_Renderer_Mesh::SetMaterial(const std::string& _strKey)
 	{
-		std::shared_ptr<mh::GPU::Material> material = mh::ResMgr::GetInst()->Find<mh::GPU::Material>(_strKey);
+		std::shared_ptr<mh::Material> material = mh::ResMgr::Find<mh::Material>(_strKey);
 
-		Inspector* inspector = editor.GetWidget<Inspector>("Inspector");
+		Inspector* inspector = gEditor.GetWidget<Inspector>("Inspector");
 		inspector->GetTargetGameObject()->GetComponent<mh::Com_Renderer_Mesh>()->SetMaterial(material);
 	}
 }

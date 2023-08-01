@@ -1,26 +1,29 @@
 #include "EnginePCH.h"
-
 #include "FontWrapper.h"
-#include "GraphicDevice_DX11.h"
-
 #ifdef _DEBUG
 #pragma comment(lib, "FW1FontWrapper/Debug/FW1FontWrapperL.lib")
 #else
 #pragma comment(lib, "FW1FontWrapper/Release/FW1FontWrapper.lib")
 #endif
 
+#include "GPUMgr.h"
+
+#include "AtExit.h"
+
 namespace mh
 {
 	IFW1Factory* FontWrapper::mFW1Factory = nullptr;
 	IFW1FontWrapper* FontWrapper::mFontWrapper = nullptr;
 
-	bool FontWrapper::Initialize()
+	bool FontWrapper::Init()
 	{
+		AtExit::AddFunc(Release);
+
 		if (FAILED(FW1CreateFactory(FW1_VERSION, &mFW1Factory)))
 			return false;
 
-		ID3D11Device* pDevice = GPU::GetDevice()->GetID3D11Device();
-		if (FAILED(mFW1Factory->CreateFontWrapper(pDevice, L"Arial", &mFontWrapper)))
+		auto pDevice = GPUMgr::Device();
+		if (FAILED(mFW1Factory->CreateFontWrapper(pDevice.Get(), L"Arial", &mFontWrapper)))
 			return false;
 
 		return true;
@@ -28,8 +31,8 @@ namespace mh
 
 	void FontWrapper::DrawFont(const wchar_t* _string, float _x, float _y, float _size, UINT _rgb)
 	{
-		ID3D11DeviceContext* context = GPU::GetDevice()->GetID3D11DeviceContext();
-		mFontWrapper->DrawString(context,
+		auto context = GPUMgr::Context();
+		mFontWrapper->DrawString(context.Get(),
 								 _string, // String
 								 _size,// Font size
 								 _x,// X position

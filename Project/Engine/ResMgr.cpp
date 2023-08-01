@@ -1,16 +1,23 @@
 #include "EnginePCH.h"
-
 #include "ResMgr.h"
 
+#include "AtExit.h"
 
 namespace mh
 {
-	ResMgr::ResMgr()
+	std::unordered_map<std::string, std::shared_ptr<IRes>, tUmap_StringViewHasher, std::equal_to<>> ResMgr::mArrRes[(int)eResourceType::End]{};
+
+	void ResMgr::Init()
 	{
+		AtExit::AddFunc(Release);
 	}
 
-	ResMgr::~ResMgr()
+	void ResMgr::Release()
 	{
-	}
+		for (int i = 0; i < (int)eResourceType::End; ++i)
+		{
+			mArrRes[i].clear();
+		}
 
+	}
 }

@@ -5,8 +5,9 @@
 #include "SH_Particle.hlsli"
 #include "SH_Resource.hlsli"
 #include "SH_Sampler.hlsli"
-#include "SH_ConstantBuffer.hlsli"
+#include "SH_ConstBuffer.hlsli"
 #include "SH_Blur.hlsli"
+#include "SH_Func.hlsli"
 
 #endif
 

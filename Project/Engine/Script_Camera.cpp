@@ -3,8 +3,8 @@
 #include "Script_Camera.h"
 #include "Com_Transform.h"
 #include "GameObject.h"
-#include "Input.h"
-#include "TimeManager.h"
+#include "InputMgr.h"
+#include "TimeMgr.h"
 
 namespace mh
 {
@@ -17,7 +17,7 @@ namespace mh
 	{
 	}
 
-	void Script_Camera::Initialize()
+	void Script_Camera::Init()
 	{
 	}
 
@@ -27,29 +27,29 @@ namespace mh
 
 		Vector3 pos = tr.GetPosition();
 
-		if (Input::GetKeyState(eKeyCode::D) == eKeyState::PRESSED)
+		if (InputMgr::GetKeyState(eKeyCode::D) == eKeyState::PRESSED)
 		{
-			pos += 100.0f * tr.Right() * TimeManager::DeltaTime();
+			pos += 100.0f * tr.Right() * TimeMgr::DeltaTime();
 		}
-		else if (Input::GetKeyState(eKeyCode::A) == eKeyState::PRESSED)
+		else if (InputMgr::GetKeyState(eKeyCode::A) == eKeyState::PRESSED)
 		{
-			pos += 100.0f * -tr.Right() * TimeManager::DeltaTime();
+			pos += 100.0f * -tr.Right() * TimeMgr::DeltaTime();
 		}
-		else if (Input::GetKeyState(eKeyCode::W) == eKeyState::PRESSED)
+		else if (InputMgr::GetKeyState(eKeyCode::W) == eKeyState::PRESSED)
 		{
-			pos += 100.0f * tr.Foward() * TimeManager::DeltaTime();
+			pos += 100.0f * tr.Foward() * TimeMgr::DeltaTime();
 		}
-		else if (Input::GetKeyState(eKeyCode::S) == eKeyState::PRESSED)
+		else if (InputMgr::GetKeyState(eKeyCode::S) == eKeyState::PRESSED)
 		{
-			pos += 100.0f * -tr.Foward() * TimeManager::DeltaTime();
+			pos += 100.0f * -tr.Foward() * TimeMgr::DeltaTime();
 		}
-		else if (Input::GetKeyState(eKeyCode::Q) == eKeyState::PRESSED)
+		else if (InputMgr::GetKeyState(eKeyCode::Q) == eKeyState::PRESSED)
 		{
-			pos += 100.0f * tr.Up() * TimeManager::DeltaTime();
+			pos += 100.0f * tr.Up() * TimeMgr::DeltaTime();
 		}
-		else if (Input::GetKeyState(eKeyCode::E) == eKeyState::PRESSED)
+		else if (InputMgr::GetKeyState(eKeyCode::E) == eKeyState::PRESSED)
 		{
-			pos += 100.0f * -tr.Up() * TimeManager::DeltaTime();
+			pos += 100.0f * -tr.Up() * TimeMgr::DeltaTime();
 		}
 
 		tr.SetPosition(pos);

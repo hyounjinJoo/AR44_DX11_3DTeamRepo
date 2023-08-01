@@ -5,14 +5,14 @@
 #include <Engine/Scene.h>
 #include <Engine/Layer.h>
 #include <Engine/SceneManager.h>
-#include <Engine/Renderer.h>
+#include <Engine/RenderMgr.h>
 
 #include "guiInspector.h"
 #include "guiEditor.h"
 #include "guiInspector.h"
 
-extern mh::Application application;
-extern gui::Editor editor;
+extern mh::Application gApplication;
+extern gui::Editor gEditor;
 
 namespace gui
 {
@@ -54,11 +54,10 @@ namespace gui
 
 	void Hierarchy::InitializeInspector(void* data)
 	{
-		mh::renderer::gInspectorGameObject 
-			= static_cast<mh::GameObject*>(data);
+		mh::RenderMgr::SetInspectorGameObject(static_cast<mh::GameObject*>(data));
 
-		Inspector* inspector = editor.GetWidget<Inspector>("Inspector");
-		inspector->SetTargetGameObject(mh::renderer::gInspectorGameObject);
+		Inspector* inspector = gEditor.GetWidget<Inspector>("Inspector");
+		inspector->SetTargetGameObject(mh::RenderMgr::GetInspectorGameObject());
 		inspector->InitializeTargetGameObject();
 
 

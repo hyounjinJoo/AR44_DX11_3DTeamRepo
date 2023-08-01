@@ -15,10 +15,10 @@ namespace mh
 	};
 
 	//	class Scene;
-	class CollisionManager
+	class CollisionMgr
 	{
+		friend class Application;
 	public:
-		static void Initialize();
 		static void Update();
 		static void FixedUpdate();
 		static void Render();
@@ -27,6 +27,10 @@ namespace mh
 		static void LayerCollision(class Scene* _scene, define::eLayerType _left, define::eLayerType _right);
 		static void ColliderCollision(ICollider2D* _left, ICollider2D* _right);
 		static bool Intersect(ICollider2D* _left, ICollider2D* _right);
+
+	private:
+		static void Init();
+		static void Release();
 
 	private:
 		static std::bitset<(UINT)define::eLayerType::End> mLayerCollisionMatrix[(UINT)define::eLayerType::End];

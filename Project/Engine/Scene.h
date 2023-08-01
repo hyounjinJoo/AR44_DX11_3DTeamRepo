@@ -11,7 +11,7 @@ namespace mh
 		Scene(define::eSceneType type);
 		virtual ~Scene();
 
-		virtual void Initialize();
+		virtual void Init();
 		virtual void Update();
 		virtual void FixedUpdate();
 		virtual void Render();

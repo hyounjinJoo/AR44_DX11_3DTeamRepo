@@ -18,15 +18,15 @@ namespace mh
 
 	public:
 		GameObject();
-
 		GameObject(const GameObject& _other);
-
 		virtual ~GameObject();
 
+		virtual eResult SaveJson(Json::Value* _pJson) override;
+		virtual eResult LoadJson(const Json::Value* _pJson) override;
 		
 
 		//DebugObject에서 재정의해서 사용 중
-		virtual void Initialize();
+		virtual void Init();
 		virtual void Update();
 		virtual void FixedUpdate();
 		virtual void Render();
@@ -99,7 +99,7 @@ namespace mh
 		if constexpr (std::is_base_of_v<IScript, T>)
 		{
 			pCom = new T;
-			pCom->SetKey(ComMgr::GetInst()->GetComName<T>());
+			pCom->SetKey(ComMgr::GetComName<T>());
 			mScripts.push_back(pCom);
 		}
 		else
@@ -109,7 +109,7 @@ namespace mh
 				return nullptr;
 
 			pCom = new T;
-			pCom->SetKey(ComMgr::GetInst()->GetComName<T>());
+			pCom->SetKey(ComMgr::GetComName<T>());
 			mFixedComponents[(int)order] = pCom;
 		}
 
@@ -119,7 +119,7 @@ namespace mh
 
 	inline IComponent* GameObject::AddComponent(const std::string_view _strKey)
 	{
-		IComponent* pCom = ComMgr::GetInst()->GetNewCom(_strKey);
+		IComponent* pCom = ComMgr::GetNewCom(_strKey);
 
 		if (nullptr == pCom)
 		{
@@ -135,7 +135,7 @@ namespace mh
 	{
 		if constexpr (std::is_base_of_v<IScript, T>)
 		{
-			const std::string_view name = ComMgr::GetInst()->GetComName<T>();
+			const std::string_view name = ComMgr::GetComName<T>();
 			for (size_t i = 0; i < mScripts.size(); ++i)
 			{
 				if (name == mScripts[i]->GetKey())

@@ -4,6 +4,8 @@
 
 namespace mh::define
 {
+
+
 	struct tUmap_StringViewHasher
 	{
 		using hash_type = std::hash<std::string_view>;

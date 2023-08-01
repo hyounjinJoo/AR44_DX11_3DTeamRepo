@@ -6,6 +6,9 @@ namespace  mh
 	class Com_Camera : public IComponent
 	{
 	public:
+		Com_Camera();
+		virtual ~Com_Camera();
+
 		enum eProjectionType
 		{
 			Perspective,
@@ -17,10 +20,7 @@ namespace  mh
 		__forceinline static void SetGpuViewMatrix(math::Matrix _view) { gView = _view; }
 		__forceinline static void SetGpuProjectionMatrix(math::Matrix _projection) { gProjection = _projection; }
 
-		Com_Camera();
-		virtual ~Com_Camera();
-
-		virtual void Initialize() override;
+		virtual void Init() override;
 		virtual void Update() override;
 		virtual void FixedUpdate() override;
 		virtual void Render() override;
@@ -41,6 +41,7 @@ namespace  mh
 
 	private:
 		void SortGameObjects();
+		void RenderDeffered();
 		void RenderOpaque();
 		void RenderCutout();
 		void RenderTransparent();
@@ -49,6 +50,7 @@ namespace  mh
 
 	private:
 		static math::Matrix gView;
+		static math::Matrix gInverseView;
 		static math::Matrix gProjection;
 
 		math::Matrix mView;
@@ -62,6 +64,7 @@ namespace  mh
 		float mScale;
 
 		std::bitset<(UINT)define::eLayerType::End> mLayerMasks;
+		std::vector<GameObject*> mDefferedOpaqueGameObjects;
 		std::vector<GameObject*> mOpaqueGameObjects;
 		std::vector<GameObject*> mCutoutGameObjects;
 		std::vector<GameObject*> mTransparentGameObjects;

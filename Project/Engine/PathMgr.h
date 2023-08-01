@@ -1,6 +1,5 @@
 #pragma once
 
-#include "Singleton.h"
 #include <filesystem>
 
 
@@ -11,22 +10,24 @@ namespace mh
 {
 	using namespace mh::define;
 	class PathMgr
-		:public Singleton<PathMgr>
 	{
-		SINGLETON(PathMgr);
+		friend class Application;
+	public:
+		static void Init();
+		
+
+	public:
+		static const std::filesystem::path& GetAbsolutePath() { return mAbsolutePath; }
+		static const std::filesystem::path& GetRelativePath() { return mRelativePath; }
+		static const std::filesystem::path& GetRelativeResourcePath(eResourceType _eResType) { return mRelativePath_Res[(int)_eResType]; }
 
 	private:
-		std::filesystem::path mAbsolutePath;
-		std::filesystem::path mRelativePath;
-		std::filesystem::path mRelativePath_Res[(int)eResourceType::End];
+		static void Release();
 
-	public:
-		void Init();
-
-	public:
-		const std::filesystem::path& GetAbsolutePath() const { return mAbsolutePath; }
-		const std::filesystem::path& GetRelativePath() const { return mRelativePath; }
-		const std::filesystem::path& GetRelativeResourcePath(eResourceType _eResType) const { return mRelativePath_Res[(int)_eResType]; }
+	private:
+		static std::filesystem::path mAbsolutePath;
+		static std::filesystem::path mRelativePath;
+		static std::filesystem::path mRelativePath_Res[(int)eResourceType::End];
 	};
 
 }

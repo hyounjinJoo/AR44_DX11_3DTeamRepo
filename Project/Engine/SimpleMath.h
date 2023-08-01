@@ -211,6 +211,7 @@ namespace mh::math
         Vector3(FXMVECTOR V) noexcept { XMStoreFloat3(this, V); }
         Vector3(const XMFLOAT3& V) noexcept { this->x = V.x; this->y = V.y; this->z = V.z; }
         explicit Vector3(const XMVECTORF32& F) noexcept { this->x = F.f[0]; this->y = F.f[1]; this->z = F.f[2]; }
+        
 
         Vector3(const Vector3&) = default;
         Vector3& operator=(const Vector3&) = default;
@@ -371,6 +372,8 @@ namespace mh::math
 
         void Clamp(const Vector4& vmin, const Vector4& vmax) noexcept;
         void Clamp(const Vector4& vmin, const Vector4& vmax, Vector4& result) const noexcept;
+
+        Vector3 XYZ() { return Vector3(this->x, this->y, this->z); }
 
         // Static functions
         static float Distance(const Vector4& v1, const Vector4& v2) noexcept;

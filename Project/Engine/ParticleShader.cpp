@@ -1,11 +1,11 @@
 #include "EnginePCH.h"
 
 #include "ParticleShader.h"
-#include "Renderer.h"
-#include "ConstantBuffer.h"
-#include "TimeManager.h"
+#include "RenderMgr.h"
+#include "ConstBuffer.h"
+#include "TimeMgr.h"
 
-namespace mh::GPU
+namespace mh
 {
 	ParticleShader::ParticleShader()
 		: ComputeShader(128, 1, 1)
@@ -20,8 +20,8 @@ namespace mh::GPU
 
 	void ParticleShader::Binds()
 	{
-		mBuffer->BindUAV(eShaderStage::CS, 0);
-		mSharedBuffer->BindUAV(eShaderStage::CS, 1);
+		mBuffer->BindDataUAV(0);
+		mSharedBuffer->BindDataUAV(1);
 
 		mGroupX = mBuffer->GetStride() / mThreadGroupCountX + 1;
 		mGroupY = 1;
@@ -30,7 +30,7 @@ namespace mh::GPU
 
 	void ParticleShader::Clear()
 	{
-		mBuffer->Clear();
-		mSharedBuffer->Clear();
+		mBuffer->UnBind();
+		mSharedBuffer->UnBind();
 	}
 }

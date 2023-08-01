@@ -15,7 +15,7 @@ namespace mh
 	{
 	}
 
-	void Com_Renderer_Mesh::Initialize()
+	void Com_Renderer_Mesh::Init()
 	{
 	}
 
@@ -29,7 +29,7 @@ namespace mh
 
 	void Com_Renderer_Mesh::Render()
 	{
-		//GetOwner()->GetTransform().SetConstantBuffer();
+		//GetOwner()->GetTransform().SetConstBuffer();
 
 		//GetMaterial()->Bind();
 		//GetMesh()->BindBuffer();
@@ -37,7 +37,7 @@ namespace mh
 		//GetMesh()->Render();
 
 		//GetMaterial()->Clear();
-		GetOwner()->GetTransform().SetConstantBuffer();
+		GetOwner()->GetTransform().SetConstBuffer();
 
 		GetMesh()->BindBuffer();
 		GetMaterial()->Bind();

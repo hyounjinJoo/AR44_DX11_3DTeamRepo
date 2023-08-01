@@ -1,16 +1,25 @@
 #pragma once
-#include "EnginePCH.h"
+#include "define_Enum.h"
+#include "json-cpp/json-forwards.h"
+
+#include <filesystem>
 
 namespace mh
 {
+	using namespace define;
 	class Entity
 	{
 	public:
 		Entity();
+
+		Entity(const Entity& _other);
+		//TODO: Clone 함수 구현
+
 		virtual ~Entity();
 
-		//TODO: Clone 함수 추가
-		Entity(const Entity& _other);
+
+		virtual eResult SaveJson(Json::Value* _pJson);
+		virtual eResult LoadJson(const Json::Value* _pJson);
 
 		void SetKey(const std::string_view _strKey) { mStrKey = _strKey; }
 		const std::string& GetKey() const { return mStrKey; }

@@ -2,8 +2,10 @@
 #include "EnginePCH.h"
 
 #include "Com_Transform.h"
-#include "Renderer.h"
+#include "RenderMgr.h"
 #include "Com_Camera.h"
+
+#include "ConstBuffer.h"
 
 namespace mh
 {
@@ -65,20 +67,17 @@ namespace mh
 	}
 
 
-	void Com_Transform::SetConstantBuffer()
+	void Com_Transform::SetConstBuffer()
 	{
-		renderer::TransformCB trCb = {};
+		TransformCB trCb = {};
 		trCb.World = mWorld;
+		trCb.InverseWorld = mWorld.Invert();
 		trCb.View = Com_Camera::GetGpuViewMatrix();
+		trCb.InverseView = trCb.View.Invert();
 		trCb.Projection = Com_Camera::GetGpuProjectionMatrix();
 
-		GPU::ConstantBuffer* cb = renderer::constantBuffers[(UINT)GPU::eCBType::Transform];
+		ConstBuffer* cb = RenderMgr::GetConstBuffer(eCBType::Transform);
 		cb->SetData(&trCb);
-		cb->Bind(GPU::eShaderStage::VS);
-		cb->Bind(GPU::eShaderStage::HS);
-		cb->Bind(GPU::eShaderStage::DS);
-		cb->Bind(GPU::eShaderStage::GS);
-		cb->Bind(GPU::eShaderStage::PS);
-		cb->Bind(GPU::eShaderStage::CS);
+		cb->BindData(eShaderStageFlag::ALL);
 	}
 }
