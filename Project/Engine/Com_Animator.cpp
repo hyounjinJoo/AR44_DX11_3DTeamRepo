@@ -2,6 +2,8 @@
 
 #include "Com_Animator.h"
 
+#include "json-cpp\json.h"
+
 namespace mh
 {
 	Com_Animator::Com_Animator()
@@ -82,6 +84,17 @@ namespace mh
 			delete evt.second;
 			evt.second = nullptr;
 		}
+	}
+	eResult Com_Animator::SaveJson(Json::Value* _pJson)
+	{
+
+
+
+		return eResult::Success;
+	}
+	eResult Com_Animator::LoadJson(const Json::Value* _pJson)
+	{
+		return eResult();
 	}
 	void Com_Animator::Init()
 	{

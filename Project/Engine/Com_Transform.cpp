@@ -33,6 +33,7 @@ namespace mh
 
 	eResult Com_Transform::SaveJson(Json::Value* _pJVal)
 	{
+		//nullptr이면 그냥 취소
 		if (nullptr == _pJVal)
 		{
 			return eResult::Fail_Nullptr;
@@ -60,9 +61,9 @@ namespace mh
 		//int, UINT, UINT64 등등은 기본 지원
 		//우리가 직접 정의한 구조체나 float 타입은 StringConv::Convert_T_to_String 함수를 통해 변환해서 저장하면 됨
 		//이 때, mForward, mRight, mUp, mWorld는 업데이트 때 새로 계산되므로 가져올 필요가 없음
-		MHJSONSAVE(_pJVal, mPosition);
-		MHJSONSAVE(_pJVal, mRotation);
-		MHJSONSAVE(_pJVal, mScale);
+		MH_SAVE_VALUE(_pJVal, mPosition);
+		MH_SAVE_VALUE(_pJVal, mRotation);
+		MH_SAVE_VALUE(_pJVal, mScale);
 
 		return eResult::Success;
 	}
@@ -82,13 +83,12 @@ namespace mh
 			return result;
 		}
 
-		MHJSONLOAD(_pJVal, mPosition);
-		MHJSONLOAD(_pJVal, mRotation);
+		MH_LOAD_VALUE(_pJVal, mPosition);
+		MH_LOAD_VALUE(_pJVal, mRotation);
 
-		if (false == MHJSONLOAD(_pJVal, mScale))
-		{
-			mScale = Vector3::One;
-		}
+		MH_LOAD_VALUE(_pJVal, mScale);
+
+
 
 		return eResult::Success;
 	}

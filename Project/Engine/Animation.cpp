@@ -5,14 +5,20 @@
 #include "RenderMgr.h"
 
 #include "ConstBuffer.h"
+#include "json-cpp\json.h"
+
 
 namespace mh
 {
-
+	namespace define::strKey::Json::Animation
+	{
+		STRKEY_DECLARE(mSpriteSheet);
+	}
 
 
 	Animation::Animation()
-		: mAnimator(nullptr)
+		: IRes(eResourceType::Animation)
+		, mAnimator(nullptr)
 		, mAtlas(nullptr)
 		, mSpriteSheet{}
 		, mIndex(-1)
@@ -23,7 +29,7 @@ namespace mh
 	}
 
 	Animation::Animation(const Animation& _other)
-		: Entity(_other)
+		: IRes(_other)
 		, mAnimator() //이건 이 애니메이션을 복사해서 가져가는 주인이 새로 설정해줘야함
 		, mAnimationName(_other.mAnimationName)
 		, mAtlas(_other.mAtlas) //Atlas == Texture -> 공유하는 리소스
@@ -36,6 +42,71 @@ namespace mh
 
 	Animation::~Animation()
 	{
+	}
+
+	eResult Animation::Load(const std::filesystem::path& _fileName)
+	{
+		return eResult();
+	}
+
+	eResult Animation::SaveJson(Json::Value* _pJVal)
+	{
+		if (nullptr == _pJVal)
+		{
+			return eResult::Fail_Nullptr;
+		}
+		eResult result = IRes::SaveJson(_pJVal);
+		if (eResultFail(result))
+		{
+			return result;
+		}
+
+		//Value가 들어있는 vector 저장하는법
+		//1. json의 타입을 array value로 만들어준다.
+		(*_pJVal)[strKey::Json::Animation::mSpriteSheet] = Json::Value(Json::arrayValue);
+
+		//2. 만들어진 데이터 컨테이너를 레퍼런스로 받아온다.
+		Json::Value& jVal = (*_pJVal)[strKey::Json::Animation::mSpriteSheet];
+		for (size_t i = 0; i < mSpriteSheet.size(); ++i)
+		{
+			//3. 순회돌면서 하나씩 추가한다.
+			jVal.append(Json::MHConvertWrite(mSpriteSheet[i]));
+			
+		}
+
+
+		return eResult::Success;
+	}
+
+	eResult Animation::LoadJson(const Json::Value* _pJVal)
+	{
+		if (nullptr == _pJVal)
+		{
+			return eResult::Fail_Nullptr;
+		}
+		eResult result = IRes::LoadJson(_pJVal);
+		if (eResultFail(result))
+		{
+			return result;
+		}
+
+		//Value가 들어있는 vector 불러오는법
+		//1. 데이터 컨테이너를 레퍼런스로 받아온다.
+		const Json::Value& jVal = (*_pJVal)[strKey::Json::Animation::mSpriteSheet];
+
+		//2. json의 타입이 array Value 방식인지 확인해준다.
+		if (jVal.isArray())
+		{
+			//3. 순회돌면서 데이터를 가져온다.
+			//포인터 타입의 경우는 바로 push_back 하지 말고 string으로 받아와서 적용
+			for (Json::ValueConstIterator iter = jVal.begin(); iter != jVal.end(); ++iter)
+			{
+				mSpriteSheet.push_back(Json::MHConvertRead<tSprite>(*iter));
+				//std::string 
+			}
+		}
+
+		return eResult::Success;
 	}
 
 	UINT Animation::Update()

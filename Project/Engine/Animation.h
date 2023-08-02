@@ -6,7 +6,7 @@ namespace mh
 {
 	using mh::Texture;
 
-	class Animation : public Entity
+	class Animation : public IRes
 	{
 	public:
 		struct tSprite
@@ -34,6 +34,10 @@ namespace mh
 		CLONE(Animation);
 
 		virtual ~Animation();
+
+		virtual eResult Load(const std::filesystem::path& _fileName) override;
+		virtual eResult SaveJson(Json::Value* _pJVal) override;
+		virtual eResult LoadJson(const Json::Value* _pJVal) override;
 
 		UINT Update();
 		void FixedUpdate();

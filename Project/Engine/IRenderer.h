@@ -9,7 +9,14 @@ namespace mh
 	{
 	public:
 		IRenderer();
+
+		IRenderer(const IRenderer& _other) = default;
+
 		virtual ~IRenderer();
+
+		virtual eResult SaveJson(Json::Value* _pJson) override;
+		virtual eResult LoadJson(const Json::Value* _pJson) override;
+
 
 		//virtual void Init() override {};
 		//virtual void Update() {};
@@ -20,7 +27,7 @@ namespace mh
 		void SetMaterial(const std::shared_ptr <Material> _shader) { mMaterial = _shader; }
 		std::shared_ptr<Mesh> GetMesh() const { return mMesh; }
 		std::shared_ptr <Material> GetMaterial() const { return mMaterial; }
-		void Test();
+		
 	private:
 		std::shared_ptr <Mesh> mMesh;
 		std::shared_ptr <Material> mMaterial;

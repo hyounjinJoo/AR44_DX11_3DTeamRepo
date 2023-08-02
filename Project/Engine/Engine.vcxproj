@@ -314,7 +314,7 @@ call DLLCopy.bat $(Configuration)</Command>
     <ClInclude Include="TimeMgr.h" />
     <ClInclude Include="TitleScene.h" />
     <ClInclude Include="Com_Transform.h" />
-    <ClInclude Include="define_UtilFunc.h" />
+    <ClInclude Include="define_Util.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Animation.cpp" />
@@ -386,7 +386,7 @@ call DLLCopy.bat $(Configuration)</Command>
     <ClCompile Include="TimeMgr.cpp" />
     <ClCompile Include="TitleScene.cpp" />
     <ClCompile Include="Com_Transform.cpp" />
-    <ClCompile Include="define_UtilFunc.cpp" />
+    <ClCompile Include="define_Util.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="cpp.hint" />

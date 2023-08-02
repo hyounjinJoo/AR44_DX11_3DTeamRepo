@@ -92,6 +92,10 @@ license you like.
 #ifndef LIB_JSONCPP_JSON_TOOL_H_INCLUDED
 #define LIB_JSONCPP_JSON_TOOL_H_INCLUDED
 
+#ifdef max
+#undef max
+#endif
+
 #if !defined(JSON_IS_AMALGAMATION)
 #include <json/config.h>
 #endif
