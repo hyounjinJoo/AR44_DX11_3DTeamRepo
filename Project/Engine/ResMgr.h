@@ -111,6 +111,9 @@ namespace mh
 		if (strKey.empty())
 			strKey = _fileName.string();
 
+		//비어있을 경우 assert
+		MH_ASSERT(false == strKey.empty());
+
 		std::shared_ptr<T> pRes = Find<T>(strKey);
 
 		// 이미 해당 키로 리소스가 있다면, 반환

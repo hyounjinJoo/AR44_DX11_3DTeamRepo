@@ -332,7 +332,7 @@
     <ClCompile Include="InputMgr.cpp">
       <Filter>Manager</Filter>
     </ClCompile>
-    <ClCompile Include="define_UtilFunc.cpp">
+    <ClCompile Include="define_Util.cpp">
       <Filter>Common\define</Filter>
     </ClCompile>
   </ItemGroup>
@@ -555,9 +555,7 @@
     <ClInclude Include="json-cpp\jsonSaveLoad.h">
       <Filter>JsonCPP</Filter>
     </ClInclude>
-    <ClInclude Include="define_UtilFunc.h">
-      <Filter>Common\define</Filter>
-    </ClInclude>
+    <ClInclude Include="define_Util.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="SimpleMath.inl">

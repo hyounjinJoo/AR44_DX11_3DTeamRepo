@@ -61,6 +61,13 @@ namespace mh
 			mr->SetMesh(ResMgr::Find<Mesh>(strKey::Default::mesh::CubeMesh));
 			player->AddComponent<Script_Player>();
 
+			auto* AudioSource = player->AddComponent<Com_AudioSource>();
+			
+			auto TestClip = ResMgr::Load<AudioClip>("Test.mp3");
+			AudioSource->SetClip(TestClip);
+
+			auto* Animator = player->AddComponent<Com_Animator>();
+
 			Prefab forSave{};
 			forSave.RegisterPrefab(player, true);
 			forSave.Save("TestPrefab.json");

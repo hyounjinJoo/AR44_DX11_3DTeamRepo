@@ -14,6 +14,9 @@ namespace mh
 
 		virtual eResult Load(const std::filesystem::path& _path) override;
 
+		virtual eResult SaveJson(Json::Value* _pJVal) override;
+		virtual eResult LoadJson(const Json::Value* _pJVal) override;
+
 		void SetData(eGPUParam _param, void* _data);
 		void Bind();
 		void Clear();
@@ -31,7 +34,6 @@ namespace mh
 		std::shared_ptr<GraphicsShader> mShader;
 		std::shared_ptr<Texture> mTexture[(UINT)eTextureSlot::End];
 
-		
 		MaterialCB mCB;
 		eRenderingMode mMode;
 	};

@@ -15,12 +15,15 @@ namespace mh::define
 		Material,
 		//Sound,
 		/*Font,*/
+		Animation,
+
 		AudioClip,
 		Prefab,
 		
 		GraphicsShader,
 		ComputeShader,
 		End,
+
 	};
 
 	STRKEY ArrResName[(int)eResourceType::End] =
@@ -32,11 +35,14 @@ namespace mh::define
 		"Material",
 		//"Sound",
 		//"Font,",
+		"Animation",
+
 		"AudioClip",
 		"Prefab",
 
 		"GraphicsShader",
 		"ComputeShader",
+
 	};
 
 	namespace DirName

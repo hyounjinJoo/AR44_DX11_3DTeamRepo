@@ -93,10 +93,10 @@ namespace mh
 			return Result;
 		}
 
-		MHJSONSAVE(_pJson, mName);
-		MHJSONSAVE(_pJson, mState);
-		MHJSONSAVE(_pJson, mLayerType);
-		MHJSONSAVE(_pJson, mbDontDestroy);
+		MH_SAVE_VALUE(_pJson, mName);
+		MH_SAVE_VALUE(_pJson, mState);
+		MH_SAVE_VALUE(_pJson, mLayerType);
+		MH_SAVE_VALUE(_pJson, mbDontDestroy);
 
 		{
 			(*_pJson)[strKey::Json::GameObject::mComponents] = Json::Value(Json::arrayValue);
@@ -176,10 +176,10 @@ namespace mh
 			return Result;
 		}
 
-		MHJSONLOAD(_pJson, mName);
-		MHJSONLOAD(_pJson, mState);
-		MHJSONLOAD(_pJson, mLayerType);
-		MHJSONLOAD(_pJson, mbDontDestroy);
+		MH_LOAD_VALUE(_pJson, mName);
+		MH_LOAD_VALUE(_pJson, mState);
+		MH_LOAD_VALUE(_pJson, mLayerType);
+		MH_LOAD_VALUE(_pJson, mbDontDestroy);
 
 
 		//컴포넌트 추가

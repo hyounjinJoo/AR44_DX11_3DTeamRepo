@@ -12,10 +12,7 @@
 #define ERROR_MESSAGE_A(_aStrMessage) MessageBoxA(nullptr, _aStrMessage, NULL, MB_OK); DEBUG_BREAK
 #define ERROR_MESSAGE_W(_wStrMessage) MessageBoxW(nullptr, _wStrMessage, NULL, MB_OK); DEBUG_BREAK
 
-#define MH_ASSERT(expression) (void)(                                                       \
-            (!!(expression)) ||                                                              \
-            (_wassert(_CRT_WIDE(#expression), _CRT_WIDE(__FILE__), (unsigned)(__LINE__)), 0) \
-        )
+#define MH_ASSERT(expression) assert(expression)
 
 #define BIT_MASK(_MaskPos) 1<<_MaskPos
 
