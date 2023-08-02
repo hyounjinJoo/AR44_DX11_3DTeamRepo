@@ -10,10 +10,6 @@
 
 namespace mh
 {
-	namespace define::strKey::Json::Animation
-	{
-		STRKEY_DECLARE(mSpriteSheet);
-	}
 
 
 	Animation::Animation()
@@ -61,18 +57,17 @@ namespace mh
 			return result;
 		}
 
-		//Value가 들어있는 vector 저장하는법
-		//1. json의 타입을 array value로 만들어준다.
-		(*_pJVal)[strKey::Json::Animation::mSpriteSheet] = Json::Value(Json::arrayValue);
-
-		//2. 만들어진 데이터 컨테이너를 레퍼런스로 받아온다.
-		Json::Value& jVal = (*_pJVal)[strKey::Json::Animation::mSpriteSheet];
-		for (size_t i = 0; i < mSpriteSheet.size(); ++i)
-		{
-			//3. 순회돌면서 하나씩 추가한다.
-			jVal.append(Json::MHConvertWrite(mSpriteSheet[i]));
-			
-		}
+		////Value가 들어있는 vector 저장하는법
+		////1. json의 타입을 array value로 만들어준다.
+		//(*_pJVal)[JSONKEY(mSpriteSheet)] = Json::Value(Json::arrayValue);
+		////2. 만들어진 데이터 컨테이너를 레퍼런스로 받아온다.
+		//Json::Value& jVal = (*_pJVal)[JSONKEY(mSpriteSheet)];
+		//for (size_t i = 0; i < mSpriteSheet.size(); ++i)
+		//{
+		//	//3. 순회돌면서 하나씩 추가한다.
+		//	jVal.append(Json::MHConvertWrite(mSpriteSheet[i]));
+		//}
+		Json::MHSaveVector(_pJVal, JSONVAL(mSpriteSheet));
 
 
 		return eResult::Success;
@@ -89,22 +84,13 @@ namespace mh
 		{
 			return result;
 		}
+		const Json::Value& jVal = (*_pJVal);
 
-		//Value가 들어있는 vector 불러오는법
-		//1. 데이터 컨테이너를 레퍼런스로 받아온다.
-		const Json::Value& jVal = (*_pJVal)[strKey::Json::Animation::mSpriteSheet];
+		auto SpriteData = Json::MHGetJsonVector(_pJVal, JSONVAL(mSpriteSheet));
+		mSpriteSheet = std::move(SpriteData);
 
-		//2. json의 타입이 array Value 방식인지 확인해준다.
-		if (jVal.isArray())
-		{
-			//3. 순회돌면서 데이터를 가져온다.
-			//포인터 타입의 경우는 바로 push_back 하지 말고 string으로 받아와서 적용
-			for (Json::ValueConstIterator iter = jVal.begin(); iter != jVal.end(); ++iter)
-			{
-				mSpriteSheet.push_back(Json::MHConvertRead<tSprite>(*iter));
-				//std::string 
-			}
-		}
+		
+
 
 		return eResult::Success;
 	}

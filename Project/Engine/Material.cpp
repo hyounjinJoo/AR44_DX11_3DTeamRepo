@@ -18,6 +18,18 @@ namespace mh
 
     }
 
+    Material::Material(const Material& _other)
+        : IRes(_other)
+        , mCB(_other.mCB)
+        , mMode(_other.mMode)
+        , mShader(_other.mShader)
+    {
+        for (int i = 0; i < (int)eTextureSlot::End; ++i)
+        {
+            mTexture[i] = _other.mTexture[i];
+        }
+    }
+
     Material::~Material()
     {
 
@@ -52,22 +64,27 @@ namespace mh
             jVal[JSONKEY(mShader)] = mShader->GetKey();
         }
             
+
+        Json::MHSaveVectorPtr(_pJVal, JSONVAL(mTexture));
+
         //mTexture은 텍스처 배열이므로 Key를 가져와서 저장
-        for (int i = 0; i < (int)eTextureSlot::End; ++i)
-        {
-            if (mTexture[i])
-            {
-                jVal[JSONKEY(mTexture)].append(mTexture[i]->GetKey());
-            }
-            else
-            {
-                jVal[JSONKEY(mTexture)].append(Json::Value(Json::nullValue));
-            }
-        }
+        //for (int i = 0; i < mTexture.size(); ++i)
+        //{
+        //    Json::Value& TexJson = jVal[JSONKEY(mTexture)];
+        //    if (mTexture[i])
+        //    {
+        //        TexJson.append(mTexture[i]->GetKey());
+        //    }
+        //    else
+        //    {
+        //        TexJson.append(Json::Value(Json::nullValue));
+        //    }
+        //}
 
 
         //단순 Value의 경우에는 매크로로 바로 저장 가능
-        MH_SAVE_VALUE(_pJVal, mMode);
+        Json::MHSaveValue(_pJVal, JSONVAL(mCB));
+        Json::MHSaveValue(_pJVal, JSONVAL(mMode));
 
         return eResult::Success;
     }
@@ -92,20 +109,23 @@ namespace mh
         if (jVal.isMember(JSONKEY(mShader)))
         {
             //가져온 키값으로 쉐이더를 로드
-            ResMgr::Load<GraphicsShader>(jVal[JSONKEY(mShader)].asString());
+            std::string strKey = jVal[JSONKEY(mShader)].asString();
+            ResMgr::Load<GraphicsShader>(strKey);
         }
 
         
-        //포인터 배열은 MHGetJsonArrayPtr 함수를 통해서 Key값을 싹 받아올 수 있음.
-        const auto& vecLoad = Json::MHGetJsonArrayPtr(_pJVal, JSONKEY(mTexture));
+        //포인터 배열은 MHGetJsonVectorPtr 함수를 통해서 Key값을 싹 받아올 수 있음.
+        const auto& vecLoad = Json::MHGetJsonVectorPtr(_pJVal, JSONKEY(mTexture));
         for (size_t i = 0; i < vecLoad.size(); ++i)
         {
             mTexture[i] = ResMgr::Load<Texture>(vecLoad[i]);
         }
 
 
-        //단순 Value의 경우에는 매크로로 바로 저장 가능
-        MH_LOAD_VALUE(_pJVal, mMode);
+        //단순 Value의 경우에는 함수로 바로 불러오기 가능
+        Json::MHLoadValue(_pJVal, JSONVAL(mMode));
+        Json::MHLoadValue(_pJVal, JSONVAL(mCB));
+
 
         return eResult();
     }
