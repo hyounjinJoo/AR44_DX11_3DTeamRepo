@@ -27,8 +27,6 @@ namespace mh
 		virtual eResult SaveJson(Json::Value* _pJson) override;
 		virtual eResult LoadJson(const Json::Value* _pJson) override;
 		
-
-		//DebugObject에서 재정의해서 사용 중
 		virtual void Init();
 		virtual void Update();
 		virtual void FixedUpdate();

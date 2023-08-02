@@ -93,15 +93,15 @@ namespace mh
 			return Result;
 		}
 
-		MH_SAVE_VALUE(_pJson, mName);
-		MH_SAVE_VALUE(_pJson, mState);
-		MH_SAVE_VALUE(_pJson, mLayerType);
-		MH_SAVE_VALUE(_pJson, mbDontDestroy);
+		Json::MHSaveValue(_pJson, JSONVAL(mName));
+		Json::MHSaveValue(_pJson, JSONVAL(mState));
+		Json::MHSaveValue(_pJson, JSONVAL(mLayerType));
+		Json::MHSaveValue(_pJson, JSONVAL(mbDontDestroy));
 
 		{
 			(*_pJson)[strKey::Json::GameObject::mComponents] = Json::Value(Json::arrayValue);
 			Json::Value& arrComponent = (*_pJson)[strKey::Json::GameObject::mComponents];
-
+			
 			//트랜스폼은 저장하지 않음
 			for (size_t i = (size_t)eComponentType::Transform + (size_t)1; i < mComponents.size(); ++i)
 			{
@@ -176,11 +176,10 @@ namespace mh
 			return Result;
 		}
 
-		MH_LOAD_VALUE(_pJson, mName);
-		MH_LOAD_VALUE(_pJson, mState);
-		MH_LOAD_VALUE(_pJson, mLayerType);
-		MH_LOAD_VALUE(_pJson, mbDontDestroy);
-
+		Json::MHLoadValue(_pJson, JSONVAL(mName));
+		Json::MHLoadValue(_pJson, JSONVAL(mState));
+		Json::MHLoadValue(_pJson, JSONVAL(mLayerType));
+		Json::MHLoadValue(_pJson, JSONVAL(mbDontDestroy));
 
 		//컴포넌트 추가
 		if (_pJson->isMember(strKey::Json::GameObject::mComponents))

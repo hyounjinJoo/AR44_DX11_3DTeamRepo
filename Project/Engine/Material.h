@@ -10,6 +10,10 @@ namespace mh
 	{
 	public:
 		Material();
+
+		Material(const Material& _other);
+		CLONE(Material);
+
 		virtual ~Material();
 
 		virtual eResult Load(const std::filesystem::path& _path) override;
@@ -32,7 +36,7 @@ namespace mh
 
 	private:
 		std::shared_ptr<GraphicsShader> mShader;
-		std::shared_ptr<Texture> mTexture[(UINT)eTextureSlot::End];
+		std::array<std::shared_ptr<Texture>, (int)eTextureSlot::End> mTexture;
 
 		MaterialCB mCB;
 		eRenderingMode mMode;

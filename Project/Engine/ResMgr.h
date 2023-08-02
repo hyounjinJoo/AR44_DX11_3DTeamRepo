@@ -105,14 +105,20 @@ namespace mh
 		//IRes를 상속받는 클래스가 아닐 경우 컴파일 중지
 		static_assert(std::is_base_of<IRes, T>::value);
 
+		if (_fileName.empty())
+		{
+			return nullptr;
+		}
+
 		std::string strKey(_strKey);
 
 		//Key가 비어있을 경우 파일명을 키값으로 사용한다.
 		if (strKey.empty())
+		{
 			strKey = _fileName.string();
+		}
+			
 
-		//비어있을 경우 assert
-		MH_ASSERT(false == strKey.empty());
 
 		std::shared_ptr<T> pRes = Find<T>(strKey);
 
