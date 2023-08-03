@@ -11,6 +11,10 @@ namespace mh
 	{
 	public:
 		Com_Renderer_Mesh();
+
+		Com_Renderer_Mesh(const Com_Renderer_Mesh& _other) = default;
+		CLONE(Com_Renderer_Mesh);
+
 		virtual ~Com_Renderer_Mesh();
 
 		virtual void Init() override;

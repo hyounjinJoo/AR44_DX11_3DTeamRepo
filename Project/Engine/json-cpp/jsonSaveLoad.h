@@ -6,6 +6,7 @@
 #include "../define_Util.h"
 #include "../define_Enum.h"
 #include <wrl.h>
+#include <utility>
 
 namespace Microsoft::WRL
 {
