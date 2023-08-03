@@ -201,5 +201,7 @@ namespace std
 	template<class T, size_t N>
 	struct is_std_array<array<T, N>> :true_type {};
 
+
 	template <class T> inline constexpr bool is_std_array_v = is_std_array<T>::value;
+
 }

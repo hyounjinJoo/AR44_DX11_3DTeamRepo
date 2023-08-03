@@ -14,7 +14,14 @@ namespace mh
 	{
 	public:
 		Com_Light();
+
+		Com_Light(const Com_Light& _other);
+		CLONE(Com_Light);
+
 		virtual ~Com_Light();
+
+		virtual eResult SaveJson(Json::Value* _pJVal) override;
+		virtual eResult LoadJson(const Json::Value* _pJVal) override;
 
 		virtual void Init() override;
 		virtual void Update() override;
