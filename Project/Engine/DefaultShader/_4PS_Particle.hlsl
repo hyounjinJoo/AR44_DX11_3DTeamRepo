@@ -1,15 +1,5 @@
-#include "SH_Globals.hlsli"
+#include "SH_Particle.hlsli"
 
-struct GSOutput
-{
-    float4 Pos : SV_POSITION;
-    float2 UV : TEXCOORD;
-};
-
-struct VSOut
-{
-    float4 Pos : SV_Position;
-};
 
 float4 main(GSOutput In) : SV_TARGET
 {

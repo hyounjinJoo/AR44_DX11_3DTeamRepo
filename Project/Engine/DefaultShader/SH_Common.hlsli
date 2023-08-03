@@ -1,7 +1,6 @@
 #ifndef SH_COMMON
 #define SH_COMMON
 
-
 //C++
 #ifdef __cplusplus
 
@@ -15,9 +14,12 @@ using float4 = Vector2;
 
 using BOOL = int;
 //윈도우 쪽 헤더에 정의되어 있음
+#ifndef TRUE
 //constexpr const int TRUE = 1;
+#endif
+#ifndef FALSE
 //constexpr const int FALSE = 0;
-
+#endif
 
 struct int2 { int x; int y; };
 struct int3 { int x; int y; int z; };

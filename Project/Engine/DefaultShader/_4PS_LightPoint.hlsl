@@ -1,21 +1,4 @@
-#include "SH_Globals.hlsli"
-
-struct VSIn
-{
-	float4 Position : POSITION;
-};
-
-struct VSOut
-{
-	float4 Position : SV_Position;
-};
-
-
-struct PS_OUT
-{
-	float4 vDiffuse : SV_Target;
-	float4 vSpecular : SV_Target1;
-};
+#include "SH_LightPoint.hlsli"
 
 		//albedo = Resources::Find<Texture>(L"PositionTarget");
 		//lightMaterial->SetTexture(eTextureSlot::PositionTarget, albedo);

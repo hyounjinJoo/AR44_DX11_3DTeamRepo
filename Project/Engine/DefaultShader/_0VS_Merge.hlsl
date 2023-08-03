@@ -1,15 +1,4 @@
-#include "SH_Globals.hlsli"
-
-struct VSIn
-{
-	float4 Position : POSITION;
-};
-
-struct VSOut
-{
-	float4 Position : SV_Position;
-};
-
+#include "SH_Merge.hlsli"
 
 VSOut main(VSIn In)
 {

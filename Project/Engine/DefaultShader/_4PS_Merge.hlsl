@@ -1,14 +1,8 @@
-#include "SH_Globals.hlsli"
+#include "SH_Merge.hlsli"
 
-struct VSIn
-{
-	float4 Position : POSITION;
-};
 
-struct VSOut
-{
-	float4 Position : SV_Position;
-};
+
+
 
 //std::shared_ptr<Texture> pos = std::make_shared<Texture>();
 //std::shared_ptr<Texture> normal = std::make_shared<Texture>();

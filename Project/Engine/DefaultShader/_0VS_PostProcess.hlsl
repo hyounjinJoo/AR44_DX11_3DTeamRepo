@@ -1,17 +1,5 @@
-#include "SH_Globals.hlsli"
+#include "SH_PostProcess.hlsli"
 
-
-struct VSIn
-{
-    float4 Pos : POSITION;
-    float2 UV : TEXCOORD;
-};
-
-struct VSOut
-{
-    float4 Pos : SV_Position;
-    float2 UV : TEXCOORD;
-};
 
 VSOut main(VSIn _in)
 {

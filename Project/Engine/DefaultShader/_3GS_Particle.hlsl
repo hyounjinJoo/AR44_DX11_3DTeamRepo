@@ -1,18 +1,6 @@
-#include "SH_Globals.hlsli"
+#include "SH_Particle.hlsli"
 
 
-struct VSOut
-{
-    float4 Pos : SV_Position;
-    uint iInstance : SV_InstanceID;
-};
-
-struct GSOutput
-{
-	float4 Pos : SV_POSITION;
-    float2 UV : TEXCOORD;
-    uint iInstance : SV_InstanceID;
-};
 
 StructuredBuffer<tParticle> particleBuffer : register(t15);
 

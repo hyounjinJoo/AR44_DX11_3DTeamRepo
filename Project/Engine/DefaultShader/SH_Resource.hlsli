@@ -1,6 +1,7 @@
 #ifndef SH_RESOURCE
 #define SH_RESOURCE
 
+//t 버퍼
 
 // Material Default Texture
 Texture2D albedoTexture : register(t0);

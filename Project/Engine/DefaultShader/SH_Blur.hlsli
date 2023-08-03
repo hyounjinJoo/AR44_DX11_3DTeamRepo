@@ -1,7 +1,6 @@
 #ifndef SH_BLUR
 #define SH_BLUR
 
-
 Texture2D NoiseTexture : register(t16);
 
 cbuffer Noise : register(b6)

@@ -1,23 +1,11 @@
-#include "SH_Globals.hlsli"
+#include "SH_PostProcess.hlsli"
 
-
-struct VSIn
-{
-    float4 Pos : POSITION;
-    float2 UV : TEXCOORD;
-};
-
-struct VSOut
-{
-    float4 Pos : SV_Position;
-    float2 UV : TEXCOORD;
-};
 
 float4 main(VSOut _in) : SV_Target
 {
     float4 Color = (float4) 0.f;
         
-    // VS_OUT À¸·Î Àü´ŞÇÑ SV_Position °ªÀº PixelShader ¿¡ ÀÔ·ÂµÉ ¶§ ÇÈ¼¿ÁÂÇ¥·Î º¯È¯ÇØ¼­ ÀÔ·Â
+    // VS_OUT ìœ¼ë¡œ ì „ë‹¬í•œ SV_Position ê°’ì€ PixelShader ì— ì…ë ¥ë  ë•Œ í”½ì…€ì¢Œí‘œë¡œ ë³€í™˜í•´ì„œ ì…ë ¥
     float2 UV = _in.Pos.xy / resolution;
         
     float2 fAdd = float2(NoiseTexture.Sample(anisotropicSampler, _in.UV + elapsedTime * 0.2f).x

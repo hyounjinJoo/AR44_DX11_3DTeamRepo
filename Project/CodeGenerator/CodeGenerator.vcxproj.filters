@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Default">
+      <UniqueIdentifier>{fa432e91-8e0e-4f2b-8464-a17d380febfe}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GenCode">
+      <UniqueIdentifier>{98c7b025-6049-41ae-90c2-bb9ded8ded59}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="pch.cpp">
+      <Filter>Default</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp">
+      <Filter>Default</Filter>
+    </ClCompile>
+    <ClCompile Include="DirTreeNode.cpp" />
+    <ClCompile Include="DirTree.cpp" />
+    <ClCompile Include="define_CodeGen.cpp" />
+    <ClCompile Include="CodeWriter.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="pch.h">
+      <Filter>Default</Filter>
+    </ClInclude>
+    <ClInclude Include="CodeGenFunc.h">
+      <Filter>GenCode</Filter>
+    </ClInclude>
+    <ClInclude Include="DirTreeNode.h" />
+    <ClInclude Include="DirTree.h" />
+    <ClInclude Include="CodeWriter.h" />
+    <ClInclude Include="define_CodeGen.h">
+      <Filter>Default</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

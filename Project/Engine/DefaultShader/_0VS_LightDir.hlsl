@@ -1,14 +1,4 @@
-#include "SH_Globals.hlsli"
-
-struct VSIn
-{
-	float4 Position : POSITION;
-};
-
-struct VSOut
-{
-	float4 Position : SV_Position;
-};
+#include "SH_LightDir.hlsli"
 
 
 VSOut main(VSIn In)
