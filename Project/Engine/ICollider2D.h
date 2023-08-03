@@ -1,14 +1,17 @@
 #pragma once
-#include "IComponent.h"
+#include "ICollider.h"
 
 
 namespace mh
 {
 	class Com_Transform;
-	class ICollider2D : public IComponent
+	class ICollider2D : public ICollider
 	{
 	public:
 		ICollider2D();
+		ICollider2D(const ICollider2D& _collider);
+		CLONE(ICollider2D);
+
 		virtual ~ICollider2D();
 
 		virtual void Init() override;

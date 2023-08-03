@@ -10,14 +10,25 @@ namespace mh
 {
 	UINT ICollider2D::gColliderNumber = 0;
 	ICollider2D::ICollider2D()
-		: IComponent(define::eComponentType::Collider)
-		, mType(define::eColliderType::None)
+		: ICollider(define::eColliderType::None)
 		, mTransform(nullptr)
 		, mSize(math::Vector2::One)
 		, mCenter(math::Vector2::Zero)
 		, mbTrigger(false)
 		, mID(0)
 		, mRadius(0.0f)
+	{
+		mID = gColliderNumber++;
+	}
+
+	ICollider2D::ICollider2D(const ICollider2D& _collider)
+		: ICollider(_collider.mType)
+		, mTransform(nullptr)
+		, mSize(_collider.mSize)
+		, mCenter(_collider.mCenter)
+		, mbTrigger(false)
+		, mID(0)
+		, mRadius(_collider.mRadius)
 	{
 		mID = gColliderNumber++;
 	}
