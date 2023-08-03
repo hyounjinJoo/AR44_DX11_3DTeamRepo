@@ -1,0 +1,142 @@
+
+#include "EnginePCH.h"
+
+#include "Com_Renderer_ParticleSystem.h"
+#include "Mesh.h"
+#include "ResMgr.h"
+#include "Material.h"
+#include "StructBuffer.h"
+#include "Com_Transform.h"
+#include "GameObject.h"
+#include "Texture.h"
+#include "TimeMgr.h"
+
+#include "ConstBuffer.h"
+
+namespace mh
+{
+	using namespace mh;
+
+	Com_Renderer_ParticleSystem::Com_Renderer_ParticleSystem()
+		: mMaxParticles(100)
+		, mStartSize(Vector4(50.0f, 50.0f, 1.0f, 1.0f))
+		, mStartColor(Vector4(1.0f, 0.2f, 0.2f, 1.0f))
+		, mStartLifeTime(3.0f)
+		, mFrequency(1.0f)
+		, mTime(0.0f)
+		, mCBData{}
+		, mSimulationSpace(eSimulationSpace::World)
+		, mRadius(500.0f)
+		, mStartSpeed(200.0f)
+		, mElapsedTime(0.0f)
+
+	{
+
+	}
+
+	Com_Renderer_ParticleSystem::~Com_Renderer_ParticleSystem()
+	{
+		delete mBuffer;
+		mBuffer = nullptr;
+
+		delete mSharedBuffer;
+		mSharedBuffer = nullptr;
+	}
+
+	void Com_Renderer_ParticleSystem::Init()
+	{
+		using namespace strKey::Default;
+		mCS = ResMgr::Find<ParticleShader>(shader::compute::ParticleCS);
+
+		std::shared_ptr<Mesh> point = ResMgr::Find<Mesh>(mesh::PointMesh);
+		SetMesh(point);
+
+		// Material 세팅
+		std::shared_ptr<Material> material = ResMgr::Find<Material>(material::ParticleMaterial);
+		SetMaterial(material);
+
+		std::shared_ptr<Texture> tex = ResMgr::Find<Texture>(texture::CartoonSmoke);
+		material->SetTexture(eTextureSlot::Albedo, tex);
+
+		tParticle particles[100] = {};
+		Vector4 startPos = Vector4(0.0f, 0.0f, 0.0f, 0.0f);
+		for (size_t i = 0; i < mMaxParticles; i++)
+		{
+			particles[i].position = Vector4(0.0f, 0.0f, 20.0f, 1.0f);
+			particles[i].active = 0;
+			particles[i].direction =
+				Vector4(cosf( (float)i * (XM_2PI / (float)mMaxParticles) )
+					, sin( (float)i * (XM_2PI / (float)mMaxParticles)), 0.0f, 1.0f );
+
+			particles[i].speed = 100.0f;
+		}
+
+		tSBufferDesc sDesc{};
+		sDesc.eSBufferType = eStructBufferType::READ_WRITE;
+
+		mBuffer = new StructBuffer(sDesc);
+		mBuffer->Create<tParticle>(mMaxParticles, particles, 100u);
+
+		mSharedBuffer = new StructBuffer(sDesc);
+		mSharedBuffer->Create<tParticleShared>(1, nullptr, 0u);
+	}
+
+	void Com_Renderer_ParticleSystem::Update()
+	{
+	}
+
+	void Com_Renderer_ParticleSystem::FixedUpdate()
+	{
+		//파티클 생성 시간
+		float aliveTime = 1.0f / mFrequency;
+
+		//누적시간
+		mTime += TimeMgr::DeltaTime();
+		if (aliveTime < mTime)
+		{
+			float f = (mTime / aliveTime);
+			UINT iAliveCount = (UINT)f;
+			mTime = f - std::floor(f);
+
+			tParticleShared shared = { 5, };
+			mSharedBuffer->SetData(&shared, 1);
+		}
+		else
+		{
+			tParticleShared shared = {  };
+			mSharedBuffer->SetData(&shared, 1);
+		}
+
+		mMaxParticles = mBuffer->GetStride();
+		Vector3 pos = GetOwner()->GetTransform().GetPosition();
+		mCBData.WorldPosition = Vector4(pos.x, pos.y, pos.z, 1.0f);
+		mCBData.MaxParticles = mMaxParticles;
+		mCBData.Radius = mRadius;
+		mCBData.SimulationSpace = (UINT)mSimulationSpace;
+		mCBData.StartSpeed = mStartSpeed;
+		mCBData.StartSize = mStartSize;
+		mCBData.StartColor = mStartColor;
+		mCBData.StartLifeTime = mStartLifeTime;
+		mCBData.DeltaTime = TimeMgr::DeltaTime();
+		mCBData.ElapsedTime += TimeMgr::DeltaTime();
+
+		ConstBuffer* cb = RenderMgr::GetConstBuffer(eCBType::ParticleSystem);
+		cb->SetData(&mCBData);
+		cb->BindData(eShaderStageFlag::ALL);
+
+		mCS->SetSharedStrutedBuffer(mSharedBuffer);
+		mCS->SetStrcutedBuffer(mBuffer);
+		mCS->OnExcute();
+	}
+
+	void Com_Renderer_ParticleSystem::Render()
+	{
+		GetOwner()->GetTransform().SetConstBuffer();
+		mBuffer->BindDataSRV(15, eShaderStageFlag::GS);
+
+		GetMaterial()->Bind();
+		GetMesh()->RenderInstanced(mMaxParticles);
+
+		mBuffer->UnBind();
+	}
+}
