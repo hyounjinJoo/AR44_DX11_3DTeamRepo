@@ -10,6 +10,7 @@
 
 #include "ConstBuffer.h"
 
+
 namespace mh
 {
 	Com_Light::Com_Light()
@@ -19,6 +20,7 @@ namespace mh
 		, mIndex()
 	{
 		RenderMgr::AddLight(this);
+
 	}
 
 	Com_Light::~Com_Light()
