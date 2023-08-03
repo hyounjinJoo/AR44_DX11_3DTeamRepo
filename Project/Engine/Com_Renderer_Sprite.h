@@ -12,8 +12,11 @@ namespace mh
 	{
 	public:
 		Com_Renderer_Sprite();
-		virtual ~Com_Renderer_Sprite();
+		Com_Renderer_Sprite(const Com_Renderer_Sprite& _other) = default;
+		CLONE(Com_Renderer_Sprite);
 
+		virtual ~Com_Renderer_Sprite();
+		
 		virtual void Init() override;
 		virtual void Update() override;
 		virtual void FixedUpdate() override;

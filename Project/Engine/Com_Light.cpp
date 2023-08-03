@@ -10,7 +10,6 @@
 
 #include "ConstBuffer.h"
 
-#include "json-cpp/json.h"
 
 namespace mh
 {
@@ -21,6 +20,7 @@ namespace mh
 		, mIndex()
 	{
 		RenderMgr::AddLight(this);
+
 	}
 
 	Com_Light::Com_Light(const Com_Light& _other)
