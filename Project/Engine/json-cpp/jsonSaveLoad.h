@@ -123,7 +123,7 @@ namespace Json
 
 	template <typename T, typename std::enable_if_t<
 		(true == std::is_vector_v<T> ||
-		true == std::_Is_std_array_v<T>)
+		true == std::is_std_array_v<T>)
 		, int>* = nullptr>
 	void MHSaveVector(Json::Value* _pJson, const char* _strKey, const T& _srcT)
 	{
@@ -152,7 +152,7 @@ namespace Json
 	//GetKey()가 있는 클래스 포인터 한정으로 사용가능
 	template <typename T, typename std::enable_if_t<
 		(true == std::is_vector_v<T> ||
-		true == std::_Is_std_array_v<T>)
+		true == std::is_std_array_v<T>)
 		, int>* = nullptr>
 	void MHSaveVectorPtr(Json::Value* _pJson, const char* _strKey, const T& _srcT)
 	{

@@ -10,6 +10,8 @@
 
 #include "ConstBuffer.h"
 
+#include "json-cpp/json.h"
+
 namespace mh
 {
 	Com_Light::Com_Light()
@@ -21,9 +23,68 @@ namespace mh
 		RenderMgr::AddLight(this);
 	}
 
+	Com_Light::Com_Light(const Com_Light& _other)
+		:IComponent(eComponentType::Light)
+		, mIndex(_other.mIndex)
+		, mAttribute(_other.mAttribute)
+		, mVolumeMesh(_other.mVolumeMesh)
+		, mLightMaterial(_other.mLightMaterial)
+	{
+		RenderMgr::AddLight(this);
+	}
+
 	Com_Light::~Com_Light()
 	{
 		RenderMgr::RemoveLight(this);
+	}
+
+	eResult Com_Light::SaveJson(Json::Value* _pJVal)
+	{
+		if (nullptr == _pJVal)
+		{
+			return eResult::Fail_Nullptr;
+		}
+
+		eResult result = IComponent::SaveJson(_pJVal);
+		if (eResultFail(result))
+		{
+			return result;
+		}
+
+		Json::Value& jVal = *_pJVal;
+
+		Json::MHSaveValue(_pJVal, JSONVAL(mAttribute));
+
+		return eResult::Success;
+	}
+
+	eResult Com_Light::LoadJson(const Json::Value* _pJVal)
+	{
+
+		if (nullptr == _pJVal)
+		{
+			return eResult::Fail_Nullptr;
+		}
+
+		//부모클래스의 LoadJson()을 호출해서 부모클래스의 데이터를 저장
+		//실패시 실패결과를 리턴
+		eResult result = IComponent::LoadJson(_pJVal);
+		if (eResultFail(result))
+		{
+			return result;
+		}
+	
+		Json::MHLoadValue(_pJVal, JSONVAL(mAttribute));
+
+		SetType(mAttribute.type);
+
+		//불러오기 실패 시 기본값으로 적용
+		if (false == Json::MHLoadValue(_pJVal, JSONVAL(mAttribute.type)))
+		{
+			mAttribute.type = eLightType::Directional;
+		}
+
+		return eResult::Success;
 	}
 
 	void Com_Light::Init()
