@@ -196,8 +196,10 @@ namespace std
 
 	template <typename T> inline constexpr bool is_value_type_pointer_v = is_value_type_pointer<T>::value;
 
-	//template<class T>
-	//struct is_std_array : std::false_type {};
-	//template<class T, std::size_t N>
-	//struct is_std_array<std::array<T, N>> :std::true_type {};
+	template<class T>
+	struct is_std_array : false_type {};
+	template<class T, size_t N>
+	struct is_std_array<array<T, N>> :true_type {};
+
+	template <class T> inline constexpr bool is_std_array_v = is_std_array<T>::value;
 }

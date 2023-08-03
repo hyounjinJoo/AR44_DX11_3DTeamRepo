@@ -9,6 +9,7 @@ namespace mh
 	{
 	public:
 		IScript();
+		IScript(const IScript& _other) = default;
 		virtual ~IScript();
 
 		virtual void Init();

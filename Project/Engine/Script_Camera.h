@@ -7,6 +7,9 @@ namespace mh
 	{
 	public:
 		Script_Camera();
+		Script_Camera(const Script_Camera& _ohter) = default;
+		CLONE(Script_Camera);
+
 		virtual ~Script_Camera();
 
 		virtual void Init() override;
