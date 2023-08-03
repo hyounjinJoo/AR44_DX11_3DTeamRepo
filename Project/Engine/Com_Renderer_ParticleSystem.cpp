@@ -13,6 +13,8 @@
 
 #include "ConstBuffer.h"
 
+#include "json-cpp/json.h"
+
 namespace mh
 {
 	using namespace mh;
@@ -34,6 +36,32 @@ namespace mh
 
 	}
 
+	Com_Renderer_ParticleSystem::Com_Renderer_ParticleSystem(const Com_Renderer_ParticleSystem& _other)
+		: IRenderer(_other)
+		, mMaxParticles(_other.mMaxParticles)
+		, mStartSize(_other.mStartSize)
+		, mStartColor(_other.mStartColor)
+		, mStartLifeTime(_other.mStartLifeTime)
+		, mFrequency(_other.mFrequency)
+		, mTime(_other.mTime)
+		, mCBData{ _other.mCBData }
+		, mSimulationSpace(_other.mSimulationSpace)
+		, mRadius(_other.mRadius)
+		, mStartSpeed(_other.mStartSpeed)
+		, mElapsedTime(_other.mElapsedTime)
+	{
+		if (_other.mBuffer != nullptr)
+		{
+			//mBuffer = _other.mBuffer->Clone();
+		}
+		if (_other.mSharedBuffer != nullptr)
+		{
+			//mSharedBuffer = _other.mSharedBuffer->Clone();
+		}
+
+
+	}
+
 	Com_Renderer_ParticleSystem::~Com_Renderer_ParticleSystem()
 	{
 		delete mBuffer;
@@ -41,6 +69,85 @@ namespace mh
 
 		delete mSharedBuffer;
 		mSharedBuffer = nullptr;
+	}
+
+	eResult Com_Renderer_ParticleSystem::SaveJson(Json::Value* _pJVal)
+	{
+		if (nullptr == _pJVal)
+		{
+			return eResult::Fail_Nullptr;
+		}
+		eResult result = IRenderer::SaveJson(_pJVal);
+
+		if (eResultFail(result))
+		{
+			return result;
+		}
+
+		Json::Value& jVal = *_pJVal;
+
+
+		//Vector4 mStartSize;
+		//Vector4 mStartColor;
+
+		//eSimulationSpace mSimulationSpace;
+		//UINT mMaxParticles;  
+		//float mStartLifeTime;
+		//float mFrequency;
+		//float mRadius;
+
+		//float mStartSpeed;
+		//float mTime;
+
+		////누적시간
+		//float mElapsedTime;
+
+		Json::MHSaveValue(_pJVal, JSONVAL(mStartSize));
+		Json::MHSaveValue(_pJVal, JSONVAL(mStartColor));
+		Json::MHSaveValue(_pJVal, JSONVAL(mSimulationSpace));
+		Json::MHSaveValue(_pJVal, JSONVAL(mMaxParticles));
+		Json::MHSaveValue(_pJVal, JSONVAL(mStartLifeTime));
+		Json::MHSaveValue(_pJVal, JSONVAL(mFrequency));
+		Json::MHSaveValue(_pJVal, JSONVAL(mRadius));
+		Json::MHSaveValue(_pJVal, JSONVAL(mStartSpeed));
+		Json::MHSaveValue(_pJVal, JSONVAL(mTime));
+		Json::MHSaveValue(_pJVal, JSONVAL(mElapsedTime));
+
+		return eResult::Success;
+	}
+
+	eResult Com_Renderer_ParticleSystem::LoadJson(const Json::Value* _pJVal)
+	{
+		if (nullptr == _pJVal)
+		{
+			return eResult::Fail_Nullptr;
+		}
+
+		//부모클래스의 LoadJson()을 호출해서 부모클래스의 데이터를 저장
+		//실패시 실패결과를 리턴
+		eResult result = IRenderer::LoadJson(_pJVal);
+
+		if (eResultFail(result))
+		{
+			return result;
+		}
+
+		if (false == Json::MHLoadValue(_pJVal, JSONVAL(mStartSize)))
+		{
+			mStartSize = Vector4::One;
+		}
+
+		Json::MHLoadValue(_pJVal, JSONVAL(mStartColor));
+		Json::MHLoadValue(_pJVal, JSONVAL(mSimulationSpace));
+		Json::MHLoadValue(_pJVal, JSONVAL(mMaxParticles));
+		Json::MHLoadValue(_pJVal, JSONVAL(mStartLifeTime));
+		Json::MHLoadValue(_pJVal, JSONVAL(mFrequency));
+		Json::MHLoadValue(_pJVal, JSONVAL(mRadius));
+		Json::MHLoadValue(_pJVal, JSONVAL(mStartSpeed));
+		Json::MHLoadValue(_pJVal, JSONVAL(mTime));
+		Json::MHLoadValue(_pJVal, JSONVAL(mElapsedTime));
+
+		return eResult::Success;
 	}
 
 	void Com_Renderer_ParticleSystem::Init()
@@ -65,8 +172,8 @@ namespace mh
 			particles[i].position = Vector4(0.0f, 0.0f, 20.0f, 1.0f);
 			particles[i].active = 0;
 			particles[i].direction =
-				Vector4(cosf( (float)i * (XM_2PI / (float)mMaxParticles) )
-					, sin( (float)i * (XM_2PI / (float)mMaxParticles)), 0.0f, 1.0f );
+				Vector4(cosf((float)i * (XM_2PI / (float)mMaxParticles))
+					, sin((float)i * (XM_2PI / (float)mMaxParticles)), 0.0f, 1.0f);
 
 			particles[i].speed = 100.0f;
 		}
