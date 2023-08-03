@@ -26,6 +26,9 @@ namespace mh::define
 
 	};
 
+	STRKEY ResRootDirName = "Res";
+
+	//리소스 이름 겸 Res 폴더 내의 폴더명으로 사용
 	STRKEY ArrResName[(int)eResourceType::End] =
 	{
 		"Mesh",
@@ -40,33 +43,9 @@ namespace mh::define
 		"AudioClip",
 		"Prefab",
 
-		"GraphicsShader",
-		"ComputeShader",
-
+		"Shader/Graphics",
+		"Shader/Compute",
 	};
-
-	namespace DirName
-	{
-		STRKEY ResRootDirName = "Res";
-
-		
-		STRKEY ArrResPath[(int)eResourceType::End] =
-		{
-			"Mesh",
-			"MeshData",
-
-			"Texture",
-			"Material",
-			//"Sound",
-			//"Font",
-			"AudioClip",
-			"Prefab",
-			
-			"GraphicsShader/Graphics",
-			"GraphicsShader/Compute",
-
-		};
-	}
 
 	namespace strKey
 	{
