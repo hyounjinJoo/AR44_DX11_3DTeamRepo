@@ -26,7 +26,7 @@ namespace mh
     {
         for (int i = 0; i < (int)eTextureSlot::End; ++i)
         {
-            mTexture[i] = _other.mTexture[i];
+            mTextures[i] = _other.mTextures[i];
         }
     }
 
@@ -64,16 +64,19 @@ namespace mh
             jVal[JSONKEY(mShader)] = mShader->GetKey();
         }
             
+        std::is_array_v<std::array<std::shared_ptr<Texture>, (int)eTextureSlot::End>>;
 
-        Json::MHSaveVectorPtr(_pJVal, JSONVAL(mTexture));
+        Json::MHSaveVectorPtr(_pJVal, "mTextures", mTextures);
 
-        //mTexture은 텍스처 배열이므로 Key를 가져와서 저장
-        //for (int i = 0; i < mTexture.size(); ++i)
+        Json::MHSaveVectorPtr(_pJVal, JSONVAL(mTextures));
+
+        //mTextures은 텍스처 배열이므로 Key를 가져와서 저장
+        //for (int i = 0; i < mTextures.size(); ++i)
         //{
-        //    Json::Value& TexJson = jVal[JSONKEY(mTexture)];
-        //    if (mTexture[i])
+        //    Json::Value& TexJson = jVal[JSONKEY(mTextures)];
+        //    if (mTextures[i])
         //    {
-        //        TexJson.append(mTexture[i]->GetKey());
+        //        TexJson.append(mTextures[i]->GetKey());
         //    }
         //    else
         //    {
@@ -115,10 +118,10 @@ namespace mh
 
         
         //포인터 배열은 MHGetJsonVectorPtr 함수를 통해서 Key값을 싹 받아올 수 있음.
-        const auto& vecLoad = Json::MHGetJsonVectorPtr(_pJVal, JSONKEY(mTexture));
+        const auto& vecLoad = Json::MHGetJsonVectorPtr(_pJVal, JSONKEY(mTextures));
         for (size_t i = 0; i < vecLoad.size(); ++i)
         {
-            mTexture[i] = ResMgr::Load<Texture>(vecLoad[i]);
+            mTextures[i] = ResMgr::Load<Texture>(vecLoad[i]);
         }
 
 
@@ -162,20 +165,20 @@ namespace mh
     {
         for (size_t slotIndex = 0; slotIndex < (UINT)eTextureSlot::End; slotIndex++)
         {
-            if (mTexture[slotIndex] == nullptr)
+            if (mTextures[slotIndex] == nullptr)
             {
 				continue;
             }
 
-            mTexture[slotIndex]->BindDataSRV((UINT)slotIndex, eShaderStageFlag::ALL);
+            mTextures[slotIndex]->BindDataSRV((UINT)slotIndex, eShaderStageFlag::ALL);
         }
 
-        if (mTexture[(UINT)eTextureSlot::Albedo])
+        if (mTextures[(UINT)eTextureSlot::Albedo])
         {
             mCB.UsedAlbedo = 1;
         }
 
-        if (mTexture[(UINT)eTextureSlot::Normal])
+        if (mTextures[(UINT)eTextureSlot::Normal])
         {
             mCB.UsedNormal = 1;
         }
@@ -193,12 +196,12 @@ namespace mh
     {
         for (size_t slotIndex = 0; slotIndex < (UINT)eTextureSlot::End; slotIndex++)
         {
-            if (mTexture[slotIndex] == nullptr)
+            if (mTextures[slotIndex] == nullptr)
 			{
 				continue;
 			}
 
-            mTexture[slotIndex]->UnBind();
+            mTextures[slotIndex]->UnBind();
         }
     }
 }

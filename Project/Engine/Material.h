@@ -26,17 +26,17 @@ namespace mh
 		void Clear();
 
 		void SetShader(std::shared_ptr<GraphicsShader> _shader) { mShader = _shader; }
-		void SetTexture(eTextureSlot slot, std::shared_ptr<Texture> _texture) { mTexture[(UINT)slot] = _texture; }
+		void SetTexture(eTextureSlot slot, std::shared_ptr<Texture> _texture) { mTextures[(UINT)slot] = _texture; }
 
 		std::shared_ptr<GraphicsShader> GetShader() const { return mShader; }
-		std::shared_ptr<Texture> GetTexture(eTextureSlot _slot) const { return mTexture[(UINT)_slot]; }
+		std::shared_ptr<Texture> GetTexture(eTextureSlot _slot) const { return mTextures[(UINT)_slot]; }
 
 		eRenderingMode GetRenderingMode() const { return mMode; }
 		void SetRenderingMode(eRenderingMode _mode) { mMode = _mode; }
 
 	private:
 		std::shared_ptr<GraphicsShader> mShader;
-		std::array<std::shared_ptr<Texture>, (int)eTextureSlot::End> mTexture;
+		std::array<std::shared_ptr<Texture>, (int)eTextureSlot::End> mTextures;
 
 		MaterialCB mCB;
 		eRenderingMode mMode;

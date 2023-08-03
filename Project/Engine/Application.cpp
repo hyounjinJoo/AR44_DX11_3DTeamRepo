@@ -29,16 +29,18 @@ namespace mh
 
 	void Application::Init()
 	{
-		DefaultComInitializer::Init();
 		PathMgr::Init();
+
+		AudioMgr::Init();
+		FontWrapper::Init();
 		ResMgr::Init();
 
 		RenderMgr::Init();
+
+		DefaultComInitializer::Init();
 		
 		TimeMgr::Init();
 		InputMgr::Init();
-		AudioMgr::Init();
-		FontWrapper::Init();
 
 		CollisionMgr::Init();
 		

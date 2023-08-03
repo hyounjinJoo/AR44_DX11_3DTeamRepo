@@ -34,7 +34,7 @@ namespace mh
 			return result;
 		}
 
-		MH_SAVE_VALUE(_pJson, mType);
+		Json::MHSaveValue(_pJson, JSONVAL(mType));
 
 		return eResult::Success;
 	}

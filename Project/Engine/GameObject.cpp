@@ -71,12 +71,6 @@ namespace mh
 			delete mComponents[i];
 		}
 
-		for (size_t i = 0; i < mScripts.size(); ++i)
-		{
-			if (nullptr == mScripts[i])
-				continue;
-			delete mScripts[i];
-		}
 		for (size_t i = 0; i < mChilds.size(); ++i)
 		{
 			if (nullptr == mChilds[i])
