@@ -11,9 +11,6 @@
 #include "ConstBuffer.h"
 
 
-#include "json-cpp/json.h"
-
-
 namespace mh
 {
 	Com_Light::Com_Light()
