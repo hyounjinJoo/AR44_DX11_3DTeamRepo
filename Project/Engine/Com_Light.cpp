@@ -10,6 +10,7 @@
 
 #include "ConstBuffer.h"
 
+#include "json-cpp/json.h"
 
 namespace mh
 {
