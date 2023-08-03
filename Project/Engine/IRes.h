@@ -13,6 +13,9 @@ namespace mh
 	{
 	public:
 		IRes(eResourceType _type);
+
+		IRes(const IRes& _other) = default;
+
 		virtual ~IRes();
 
 		//일반적으로 리소스는 별도의 파일이 존재하고, 그것만 로드해주면 되기 때문에

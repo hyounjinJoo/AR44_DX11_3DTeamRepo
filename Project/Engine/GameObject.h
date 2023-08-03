@@ -18,14 +18,15 @@ namespace mh
 
 	public:
 		GameObject();
+
 		GameObject(const GameObject& _other);
+		CLONE(GameObject);
+
 		virtual ~GameObject();
 
 		virtual eResult SaveJson(Json::Value* _pJson) override;
 		virtual eResult LoadJson(const Json::Value* _pJson) override;
 		
-
-		//DebugObject에서 재정의해서 사용 중
 		virtual void Init();
 		virtual void Update();
 		virtual void FixedUpdate();
@@ -46,7 +47,7 @@ namespace mh
 		template <typename T>
 		inline eComponentType GetComponentType();
 
-		const std::vector<IComponent*>& GetComponents() { return mFixedComponents; }
+		const std::vector<IComponent*>& GetComponents() { return mComponents; }
 		const std::vector<IScript*>& GetScripts() { return mScripts; }
 
 		void SetName(const std::string_view _Name) { mName = _Name; }
@@ -70,20 +71,20 @@ namespace mh
 		define::eLayerType GetLayerType() { return mLayerType; }
 		void SetLayerType(define::eLayerType _type) { mLayerType = _type; }
 
+		void AddChild(GameObject* _pObj);
 
 	private:
-		Com_Transform mTransform;
-		std::vector<IComponent*> mFixedComponents;
-		std::vector<IScript*> mScripts;
-
-		GameObject* mParent;
-		std::vector<GameObject*> mChilds;
-
+		std::string mName;
 		eState mState;
 		define::eLayerType mLayerType;
 		bool mbDontDestroy;
 
-		std::string mName;
+		Com_Transform mTransform;
+		std::vector<IComponent*>	mComponents;
+		std::vector<IScript*>		mScripts;
+
+		GameObject* mParent;
+		std::vector<GameObject*> mChilds;
 	};
 
 
@@ -100,17 +101,18 @@ namespace mh
 		{
 			pCom = new T;
 			pCom->SetKey(ComMgr::GetComName<T>());
+			mComponents.push_back(pCom);
 			mScripts.push_back(pCom);
 		}
 		else
 		{
 			//타입을 알 수 없거나 이미 그쪽에 컴포넌트가 들어가 있을 경우 생성 불가
-			if (eComponentType::UNKNOWN == order || nullptr != mFixedComponents[(int)order])
+			if (eComponentType::UNKNOWN == order || nullptr != mComponents[(int)order])
 				return nullptr;
 
 			pCom = new T;
 			pCom->SetKey(ComMgr::GetComName<T>());
-			mFixedComponents[(int)order] = pCom;
+			mComponents[(int)order] = pCom;
 		}
 
 		pCom->SetOwner(this);
@@ -129,6 +131,11 @@ namespace mh
 		return AddComponent(pCom);
 	}
 
+	inline void GameObject::AddChild(GameObject* _pObj)
+	{
+		MH_ASSERT(false);
+	}
+
 
 	template <typename T>
 	T* GameObject::GetComponent()
@@ -145,7 +152,7 @@ namespace mh
 		else
 		{
 			eComponentType ComType = GetComponentType<T>();
-			return dynamic_cast<T*>(mFixedComponents[(int)ComType]);
+			return dynamic_cast<T*>(mComponents[(int)ComType]);
 		}
 
 		return nullptr;

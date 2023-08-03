@@ -2,6 +2,7 @@
 
 #include "AudioClip.h"
 #include "Com_Transform.h"
+#include "PathMgr.h"
 
 namespace mh
 {
@@ -24,7 +25,11 @@ namespace mh
 
 	eResult AudioClip::Load(const std::filesystem::path& _path)
 	{
-		if (false == AudioMgr::CreateSound(_path.string(), &mSound))
+		std::filesystem::path FullPath = PathMgr::GetRelativeResourcePath(GetResType());
+		FullPath /= _path;
+
+
+		if (false == AudioMgr::CreateSound(FullPath, &mSound))
 			return eResult::Fail_Create;
 
 		mSound->set3DMinMaxDistance(mMinDistance, mMaxDistance);

@@ -256,6 +256,7 @@ call DLLCopy.bat $(Configuration)</Command>
     <ClInclude Include="Application.h" />
     <ClInclude Include="IRenderer.h" />
     <ClInclude Include="Com_Camera.h" />
+    <ClInclude Include="json-cpp\jsonSaveLoad.h" />
     <ClInclude Include="MultiRenderTarget.h" />
     <ClInclude Include="RenderMgr.h" />
     <ClInclude Include="Script_Camera.h" />
@@ -313,7 +314,7 @@ call DLLCopy.bat $(Configuration)</Command>
     <ClInclude Include="TimeMgr.h" />
     <ClInclude Include="TitleScene.h" />
     <ClInclude Include="Com_Transform.h" />
-    <ClInclude Include="Func.h" />
+    <ClInclude Include="define_Util.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Animation.cpp" />
@@ -385,7 +386,7 @@ call DLLCopy.bat $(Configuration)</Command>
     <ClCompile Include="TimeMgr.cpp" />
     <ClCompile Include="TitleScene.cpp" />
     <ClCompile Include="Com_Transform.cpp" />
-    <ClCompile Include="Func.cpp" />
+    <ClCompile Include="define_Util.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="cpp.hint" />

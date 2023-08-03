@@ -12,7 +12,15 @@ namespace mh
 	{
 	public:
 		IComponent(eComponentType _type);
+
+		IComponent(const IComponent& _other);
+		CLONE_DISABLE(IComponent);
+
 		virtual ~IComponent();
+
+		virtual eResult SaveJson(Json::Value* _pJson) override;
+		virtual eResult LoadJson(const Json::Value* _pJson) override;
+
 
 		virtual void Init() = 0;
 		virtual void Update() = 0;

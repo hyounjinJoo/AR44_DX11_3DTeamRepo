@@ -7,10 +7,7 @@
 
 namespace mh
 {
-	namespace define::strKey::Json::Entity
-	{
-		STRKEY_DECLARE(mStrKey);
-	}
+
 
 
 	Entity::Entity()

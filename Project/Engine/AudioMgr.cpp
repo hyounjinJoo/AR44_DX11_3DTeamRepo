@@ -36,12 +36,15 @@ namespace mh
 		mSystem = nullptr;
 	}
 
-	bool AudioMgr::CreateSound(const std::string_view path,  FMOD::Sound** sound)
+	bool AudioMgr::CreateSound(const std::filesystem::path& _fullPath,  FMOD::Sound** sound)
 	{
-		if (FMOD_OK != mCoreSystem->createSound(std::string(path).c_str(), FMOD_3D, 0, sound))
-			return false;
+		bool bResult = false;
+		if (FMOD_OK == mCoreSystem->createSound(_fullPath.string().c_str(), FMOD_3D, 0, sound))
+		{
+			bResult = true;
+		}
 
-		return true;
+		return bResult;
 	}
 
 	void AudioMgr::SoundPlay(FMOD::Sound* sound, FMOD::Channel** channel)

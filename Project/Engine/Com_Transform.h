@@ -1,8 +1,8 @@
 #pragma once
-
 #include "IComponent.h"
-
 #include "SimpleMath.h"
+
+
 
 namespace mh
 {
@@ -13,7 +13,14 @@ namespace mh
 	{
 	public:
 		Com_Transform();
+
+		Com_Transform(const Com_Transform& _other) = default;
+		CLONE(Com_Transform);
+
 		virtual ~Com_Transform();
+
+		virtual eResult SaveJson(Json::Value* _pJVal) override;
+		virtual eResult LoadJson(const Json::Value* _pJVal) override;
 
 		virtual void Init() final {};
 		virtual void Update() final {};
@@ -31,14 +38,14 @@ namespace mh
 		void SetRotation(const Vector3& _degree) { mRotation = _degree; };
 		void SetScale(const Vector3& _scale) { mScale = _scale; };
 
-		Vector3 Foward() { return mFoward; }
+		Vector3 Foward() { return mForward; }
 		Vector3 Right() { return mRight; }
 		Vector3 Up() { return mUp; }
 
 		Matrix& GetWorldMatrix() { return mWorld; }
 
 	private:
-		Vector3 mFoward;
+		Vector3 mForward;
 		Vector3 mRight;
 		Vector3 mUp;
 		Vector3 mPosition;
