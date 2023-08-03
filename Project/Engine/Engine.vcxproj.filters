@@ -1,0 +1,686 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Common">
+      <UniqueIdentifier>{0bc27fa8-afac-4a02-8354-f8ac7e3056e0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="High Level Interface">
+      <UniqueIdentifier>{ef2cc17f-dc8c-4713-acb5-11a43c435929}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Common\Math">
+      <UniqueIdentifier>{8f5edaa5-ad5d-423a-bc41-5e68a8621da5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource">
+      <UniqueIdentifier>{767d4264-e56a-430c-8c2d-f49d85c35b59}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Time">
+      <UniqueIdentifier>{d5cea299-11de-49f8-9c0c-c110056dd303}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Input">
+      <UniqueIdentifier>{cd4b9eba-c6cf-46a9-a814-89a620c95213}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scene">
+      <UniqueIdentifier>{976687b1-0493-449e-87e3-f6bf27d49c71}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameObject">
+      <UniqueIdentifier>{68d11966-8044-4e2a-abef-cc0a1a1642f3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource\Mesh">
+      <UniqueIdentifier>{5ddde7d6-5dbf-4474-8ff2-f014eaefe47e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource\Manager">
+      <UniqueIdentifier>{566c056d-bc1c-4a66-9874-1eb8b38721ee}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource\Material">
+      <UniqueIdentifier>{b120460a-4944-428f-b9a0-e7253c288eab}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource\Texture">
+      <UniqueIdentifier>{2e19c4b5-25ef-434b-bb7c-23ab21873a44}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource\Script">
+      <UniqueIdentifier>{bd5eb4ff-9f54-4ada-b23b-dd4130c98faf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scene\Base">
+      <UniqueIdentifier>{2bf45b05-0f71-4108-ade3-0f445677916d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scene\Layer">
+      <UniqueIdentifier>{1e71bc42-a7cc-46d6-9577-a9d25d0f359c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scene\Manager">
+      <UniqueIdentifier>{ed02c5d8-b13c-4afe-85b6-3e56a722014f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource\Prefab">
+      <UniqueIdentifier>{b366b499-a62e-4505-9f52-19a691c5fba5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource\Audio">
+      <UniqueIdentifier>{13b8c314-e2ea-4ff9-835d-52a7f0aca2a5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="FontWrapper">
+      <UniqueIdentifier>{21b1b362-6e4d-4257-9449-c22529d2b35d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="JsonCPP">
+      <UniqueIdentifier>{8999b6ba-42f6-4ffd-bf94-77b6220cb4dc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Manager">
+      <UniqueIdentifier>{e30f37b2-b57a-4eaf-8f8e-4f5e39da69f2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GPU">
+      <UniqueIdentifier>{84407bf0-b431-49e7-b0cd-167e818415ab}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GPU\Buffer">
+      <UniqueIdentifier>{b9697f64-adc5-45fb-b641-4131688e3073}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource\Shaders">
+      <UniqueIdentifier>{dce3eb15-75d6-4644-8a32-cf9d11564bb1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource\Shaders\Compute">
+      <UniqueIdentifier>{107a3f26-c3c5-4ea8-a106-cdf993577762}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource\Shaders\Compute\Base">
+      <UniqueIdentifier>{82c69a64-ee51-4444-9a9e-4a866b36d916}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource\Shaders\Graphics">
+      <UniqueIdentifier>{f6d54454-faa4-4b11-8592-0408c79bef47}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Common\define">
+      <UniqueIdentifier>{db0f6041-2434-4f35-bd27-dbe1b692a9db}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameObject\Component">
+      <UniqueIdentifier>{d54e1d46-871f-40f8-ad58-0a2d4ec246e6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameObject\Component\Script">
+      <UniqueIdentifier>{5d1a9b1c-e367-41ff-827a-0670e743acf2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameObject\Component\Script\Contents">
+      <UniqueIdentifier>{0c9e0d2f-bd3f-44cc-a073-834f8bdf9d93}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameObject\Component\Renderer">
+      <UniqueIdentifier>{6cbbc9fb-29a5-4e89-a66a-edbeee8d0a1a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameObject\Component\Camera">
+      <UniqueIdentifier>{d5d09f34-c98b-40e4-9959-3f7e7df27f01}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameObject\Component\Collider">
+      <UniqueIdentifier>{92b865c2-1040-44bb-9ddb-b9ebff3bccbe}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameObject\Component\Collider\2D">
+      <UniqueIdentifier>{51ad1f08-b1a8-4cce-a84d-49b9b06e11a9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameObject\Component\Collider\3D">
+      <UniqueIdentifier>{6b267699-3830-4c57-89d0-68c916e6fb9a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameObject\Component\Animator">
+      <UniqueIdentifier>{5617f228-a6b1-4d89-8a60-2aea1ca48f8c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameObject\Component\Light">
+      <UniqueIdentifier>{8a4cefad-b3b9-4953-99ce-2821de45ba85}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameObject\Component\Audio">
+      <UniqueIdentifier>{326cbbf6-1cb8-4ba7-bc32-aa2759b923f9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameObject\Component\0. Transform">
+      <UniqueIdentifier>{62546181-5d07-413f-a9e5-329a0986165d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="_DefaultShader">
+      <UniqueIdentifier>{b0fbd2d2-908f-4ddd-9a83-bbf806ed6fd4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="_DefaultShader\Particle">
+      <UniqueIdentifier>{9a8e01a4-d785-4788-80da-28328a56008d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="_DefaultShader\Sprite">
+      <UniqueIdentifier>{e61cbeb7-973b-4379-9393-507cc37790fc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="_DefaultShader\Basic3D">
+      <UniqueIdentifier>{83616c8f-803e-441b-9f46-76e13f986545}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="_DefaultShader\Debug">
+      <UniqueIdentifier>{eb1f4426-7923-4010-9987-0a99235b5788}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="_DefaultShader\Grid">
+      <UniqueIdentifier>{0026d585-d7e2-4037-8901-848de0bcd329}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="_DefaultShader\PostProcess">
+      <UniqueIdentifier>{a6f6cd7d-303c-4cb2-9291-c031cc2b4538}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="_DefaultShader\Triangle">
+      <UniqueIdentifier>{28afc3e1-3508-40ea-8cf4-c095f344c7a8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="_DefaultShader\UI">
+      <UniqueIdentifier>{9ef6f139-805f-44fa-a3df-5d7311677c74}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="_DefaultShader\Deffered">
+      <UniqueIdentifier>{96a011f5-ca86-4e20-8724-fb93161ac48a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="_DefaultShader\Light">
+      <UniqueIdentifier>{6d2d4c22-57c3-412a-b05f-e2076e189012}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Application.cpp">
+      <Filter>High Level Interface</Filter>
+    </ClCompile>
+    <ClCompile Include="SimpleMath.cpp">
+      <Filter>Common\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="Entity.cpp">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="GameObject.cpp">
+      <Filter>GameObject</Filter>
+    </ClCompile>
+    <ClCompile Include="Mesh.cpp">
+      <Filter>Resource\Mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="Material.cpp">
+      <Filter>Resource\Material</Filter>
+    </ClCompile>
+    <ClCompile Include="Texture.cpp">
+      <Filter>Resource\Texture</Filter>
+    </ClCompile>
+    <ClCompile Include="IScript.cpp">
+      <Filter>GameObject\Component\Script</Filter>
+    </ClCompile>
+    <ClCompile Include="Com_Renderer_Mesh.cpp">
+      <Filter>GameObject\Component\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="Script_Player.cpp">
+      <Filter>GameObject\Component\Script\Contents</Filter>
+    </ClCompile>
+    <ClCompile Include="Com_Camera.cpp">
+      <Filter>GameObject\Component\Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="Script_Camera.cpp">
+      <Filter>GameObject\Component\Script</Filter>
+    </ClCompile>
+    <ClCompile Include="Com_Renderer_Sprite.cpp">
+      <Filter>GameObject\Component\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="GridScript.cpp">
+      <Filter>Resource\Script</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayScene.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="TitleScene.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Layer.cpp">
+      <Filter>Scene\Layer</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene.cpp">
+      <Filter>Scene\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="SceneManager.cpp">
+      <Filter>Scene\Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="Prefab.cpp">
+      <Filter>Resource\Prefab</Filter>
+    </ClCompile>
+    <ClCompile Include="ICollider2D.cpp">
+      <Filter>GameObject\Component\Collider\2D</Filter>
+    </ClCompile>
+    <ClCompile Include="ICollider3D.cpp">
+      <Filter>GameObject\Component\Collider\3D</Filter>
+    </ClCompile>
+    <ClCompile Include="ICollider.cpp">
+      <Filter>GameObject\Component\Collider</Filter>
+    </ClCompile>
+    <ClCompile Include="Player.cpp">
+      <Filter>GameObject\Component\Script\Contents</Filter>
+    </ClCompile>
+    <ClCompile Include="Monster.cpp">
+      <Filter>GameObject\Component\Script\Contents</Filter>
+    </ClCompile>
+    <ClCompile Include="Animation.cpp">
+      <Filter>GameObject\Component\Animator</Filter>
+    </ClCompile>
+    <ClCompile Include="Com_Animator.cpp">
+      <Filter>GameObject\Component\Animator</Filter>
+    </ClCompile>
+    <ClCompile Include="PaintShader.cpp">
+      <Filter>Resource\Shaders\Compute</Filter>
+    </ClCompile>
+    <ClCompile Include="ComputeShader.cpp">
+      <Filter>Resource\Shaders\Compute\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="Com_Light.cpp">
+      <Filter>GameObject\Component\Light</Filter>
+    </ClCompile>
+    <ClCompile Include="ConstBuffer.cpp">
+      <Filter>GPU\Buffer</Filter>
+    </ClCompile>
+    <ClCompile Include="StructBuffer.cpp">
+      <Filter>GPU\Buffer</Filter>
+    </ClCompile>
+    <ClCompile Include="ParticleShader.cpp" />
+    <ClCompile Include="Com_AudioListener.cpp">
+      <Filter>GameObject\Component\Audio</Filter>
+    </ClCompile>
+    <ClCompile Include="FontWrapper.cpp">
+      <Filter>FontWrapper</Filter>
+    </ClCompile>
+    <ClCompile Include="GPUBuffer.cpp">
+      <Filter>GPU\Buffer</Filter>
+    </ClCompile>
+    <ClCompile Include="EnginePCH.cpp">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="json-cpp\jsoncpp.cpp">
+      <Filter>JsonCPP</Filter>
+    </ClCompile>
+    <ClCompile Include="AtExit.cpp">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="IShader.cpp">
+      <Filter>Resource\Shaders</Filter>
+    </ClCompile>
+    <ClCompile Include="GraphicsShader.cpp">
+      <Filter>Resource\Shaders\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="IComponent.cpp">
+      <Filter>GameObject\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="MeshData.cpp" />
+    <ClCompile Include="ResMgr.cpp">
+      <Filter>Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="TimeMgr.cpp">
+      <Filter>Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="PathMgr.cpp">
+      <Filter>Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="Com_Renderer_ParticleSystem.cpp">
+      <Filter>GameObject\Component\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="IRes.cpp">
+      <Filter>Resource</Filter>
+    </ClCompile>
+    <ClCompile Include="IRenderer.cpp">
+      <Filter>GameObject\Component\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="ComMgr.cpp">
+      <Filter>Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="DefaultComInitializer.cpp">
+      <Filter>GameObject\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="Com_Transform.cpp">
+      <Filter>GameObject\Component\0. Transform</Filter>
+    </ClCompile>
+    <ClCompile Include="Com_AudioSource.cpp">
+      <Filter>GameObject\Component\Audio</Filter>
+    </ClCompile>
+    <ClCompile Include="AudioClip.cpp">
+      <Filter>Resource\Audio</Filter>
+    </ClCompile>
+    <ClCompile Include="RenderMgr.cpp">
+      <Filter>Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="GPUMgr.cpp">
+      <Filter>Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="AudioMgr.cpp">
+      <Filter>Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="MultiRenderTarget.cpp">
+      <Filter>GPU</Filter>
+    </ClCompile>
+    <ClCompile Include="CollisionMgr.cpp">
+      <Filter>Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="InputMgr.cpp">
+      <Filter>Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="define_Util.cpp">
+      <Filter>Common\define</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Application.h">
+      <Filter>High Level Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="SimpleMath.h">
+      <Filter>Common\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Entity.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="EnginePCH.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObject.h">
+      <Filter>GameObject</Filter>
+    </ClInclude>
+    <ClInclude Include="Mesh.h">
+      <Filter>Resource\Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="IComponent.h">
+      <Filter>GameObject\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="Material.h">
+      <Filter>Resource\Material</Filter>
+    </ClInclude>
+    <ClInclude Include="Texture.h">
+      <Filter>Resource\Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="IScript.h">
+      <Filter>GameObject\Component\Script</Filter>
+    </ClInclude>
+    <ClInclude Include="Com_Renderer_Mesh.h">
+      <Filter>GameObject\Component\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="Script_Player.h">
+      <Filter>GameObject\Component\Script\Contents</Filter>
+    </ClInclude>
+    <ClInclude Include="Com_Camera.h">
+      <Filter>GameObject\Component\Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="Script_Camera.h">
+      <Filter>GameObject\Component\Script</Filter>
+    </ClInclude>
+    <ClInclude Include="Com_Renderer_Sprite.h">
+      <Filter>GameObject\Component\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="GridScript.h">
+      <Filter>Resource\Script</Filter>
+    </ClInclude>
+    <ClInclude Include="TitleScene.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayScene.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Layer.h">
+      <Filter>Scene\Layer</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene.h">
+      <Filter>Scene\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="SceneManager.h">
+      <Filter>Scene\Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="Prefab.h">
+      <Filter>Resource\Prefab</Filter>
+    </ClInclude>
+    <ClInclude Include="ICollider2D.h">
+      <Filter>GameObject\Component\Collider\2D</Filter>
+    </ClInclude>
+    <ClInclude Include="ICollider3D.h">
+      <Filter>GameObject\Component\Collider\3D</Filter>
+    </ClInclude>
+    <ClInclude Include="ICollider.h">
+      <Filter>GameObject\Component\Collider</Filter>
+    </ClInclude>
+    <ClInclude Include="Player.h">
+      <Filter>GameObject\Component\Script\Contents</Filter>
+    </ClInclude>
+    <ClInclude Include="Monster.h">
+      <Filter>GameObject\Component\Script\Contents</Filter>
+    </ClInclude>
+    <ClInclude Include="Com_Animator.h">
+      <Filter>GameObject\Component\Animator</Filter>
+    </ClInclude>
+    <ClInclude Include="Animation.h">
+      <Filter>GameObject\Component\Animator</Filter>
+    </ClInclude>
+    <ClInclude Include="PaintShader.h">
+      <Filter>Resource\Shaders\Compute</Filter>
+    </ClInclude>
+    <ClInclude Include="ComputeShader.h">
+      <Filter>Resource\Shaders\Compute\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="Com_Light.h">
+      <Filter>GameObject\Component\Light</Filter>
+    </ClInclude>
+    <ClInclude Include="ConstBuffer.h">
+      <Filter>GPU\Buffer</Filter>
+    </ClInclude>
+    <ClInclude Include="StructBuffer.h">
+      <Filter>GPU\Buffer</Filter>
+    </ClInclude>
+    <ClInclude Include="ParticleShader.h" />
+    <ClInclude Include="Com_AudioListener.h">
+      <Filter>GameObject\Component\Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="FontWrapper.h">
+      <Filter>FontWrapper</Filter>
+    </ClInclude>
+    <ClInclude Include="GPUBuffer.h">
+      <Filter>GPU\Buffer</Filter>
+    </ClInclude>
+    <ClInclude Include="json-cpp\json.h">
+      <Filter>JsonCPP</Filter>
+    </ClInclude>
+    <ClInclude Include="json-cpp\json-forwards.h">
+      <Filter>JsonCPP</Filter>
+    </ClInclude>
+    <ClInclude Include="AtExit.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Singleton.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="DefaultShaders.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="IShader.h">
+      <Filter>Resource\Shaders</Filter>
+    </ClInclude>
+    <ClInclude Include="GraphicsShader.h">
+      <Filter>Resource\Shaders\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="define_Res.h">
+      <Filter>Common\define</Filter>
+    </ClInclude>
+    <ClInclude Include="define_Macro.h">
+      <Filter>Common\define</Filter>
+    </ClInclude>
+    <ClInclude Include="define_Struct.h">
+      <Filter>Common\define</Filter>
+    </ClInclude>
+    <ClInclude Include="define_Enum.h">
+      <Filter>Common\define</Filter>
+    </ClInclude>
+    <ClInclude Include="EnumFlags.h">
+      <Filter>Common\define</Filter>
+    </ClInclude>
+    <ClInclude Include="define_Component.h">
+      <Filter>Common\define</Filter>
+    </ClInclude>
+    <ClInclude Include="MeshData.h" />
+    <ClInclude Include="defines.h">
+      <Filter>Common\define</Filter>
+    </ClInclude>
+    <ClInclude Include="Components.h">
+      <Filter>GameObject\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="ResMgr.h">
+      <Filter>Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="TimeMgr.h">
+      <Filter>Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="PathMgr.h">
+      <Filter>Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="Com_Renderer_ParticleSystem.h">
+      <Filter>GameObject\Component\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="IRes.h">
+      <Filter>Resource</Filter>
+    </ClInclude>
+    <ClInclude Include="IRenderer.h">
+      <Filter>GameObject\Component\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="ComMgr.h">
+      <Filter>Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="DefaultComInitializer.h">
+      <Filter>GameObject\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="Com_Transform.h">
+      <Filter>GameObject\Component\0. Transform</Filter>
+    </ClInclude>
+    <ClInclude Include="Com_AudioSource.h">
+      <Filter>GameObject\Component\Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="AudioClip.h">
+      <Filter>Resource\Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="RenderMgr.h">
+      <Filter>Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="GPUMgr.h">
+      <Filter>Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="Object.h">
+      <Filter>Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="AudioMgr.h">
+      <Filter>Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="define_GPU.h">
+      <Filter>Common\define</Filter>
+    </ClInclude>
+    <ClInclude Include="MultiRenderTarget.h">
+      <Filter>GPU</Filter>
+    </ClInclude>
+    <ClInclude Include="CollisionMgr.h">
+      <Filter>Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="InputMgr.h">
+      <Filter>Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="json-cpp\jsonSaveLoad.h">
+      <Filter>JsonCPP</Filter>
+    </ClInclude>
+    <ClInclude Include="define_Util.h">
+      <Filter>Common\define</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="SimpleMath.inl">
+      <Filter>Common\Math</Filter>
+    </None>
+    <None Include="cpp.hint">
+      <Filter>Common</Filter>
+    </None>
+    <None Include="DefaultShader\SH_Blur.hlsli">
+      <Filter>_DefaultShader</Filter>
+    </None>
+    <None Include="DefaultShader\SH_Common.hlsli">
+      <Filter>_DefaultShader</Filter>
+    </None>
+    <None Include="DefaultShader\SH_ConstBuffer.hlsli">
+      <Filter>_DefaultShader</Filter>
+    </None>
+    <None Include="DefaultShader\SH_Globals.hlsli">
+      <Filter>_DefaultShader</Filter>
+    </None>
+    <None Include="DefaultShader\SH_Resource.hlsli">
+      <Filter>_DefaultShader</Filter>
+    </None>
+    <None Include="DefaultShader\SH_Sampler.hlsli">
+      <Filter>_DefaultShader</Filter>
+    </None>
+    <None Include="DefaultShader\SH_Particle.hlsli">
+      <Filter>_DefaultShader\Particle</Filter>
+    </None>
+    <None Include="DefaultShader\SH_Light.hlsli">
+      <Filter>_DefaultShader\Light</Filter>
+    </None>
+    <None Include="DefaultShader\SH_Func.hlsli">
+      <Filter>_DefaultShader</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="DefaultShader\CS_Paint.hlsl">
+      <Filter>_DefaultShader</Filter>
+    </FxCompile>
+    <FxCompile Include="DefaultShader\CS_Particle.hlsl">
+      <Filter>_DefaultShader\Particle</Filter>
+    </FxCompile>
+    <FxCompile Include="DefaultShader\GS_Particle.hlsl">
+      <Filter>_DefaultShader\Particle</Filter>
+    </FxCompile>
+    <FxCompile Include="DefaultShader\PS_Sprite.hlsl">
+      <Filter>_DefaultShader\Sprite</Filter>
+    </FxCompile>
+    <FxCompile Include="DefaultShader\VS_Sprite.hlsl">
+      <Filter>_DefaultShader\Sprite</Filter>
+    </FxCompile>
+    <FxCompile Include="DefaultShader\VS_Basic3D.hlsl">
+      <Filter>_DefaultShader\Basic3D</Filter>
+    </FxCompile>
+    <FxCompile Include="DefaultShader\PS_Basic3D.hlsl">
+      <Filter>_DefaultShader\Basic3D</Filter>
+    </FxCompile>
+    <FxCompile Include="DefaultShader\VS_Debug.hlsl">
+      <Filter>_DefaultShader\Debug</Filter>
+    </FxCompile>
+    <FxCompile Include="DefaultShader\PS_Debug.hlsl">
+      <Filter>_DefaultShader\Debug</Filter>
+    </FxCompile>
+    <FxCompile Include="DefaultShader\VS_Grid.hlsl">
+      <Filter>_DefaultShader\Grid</Filter>
+    </FxCompile>
+    <FxCompile Include="DefaultShader\PS_Grid.hlsl">
+      <Filter>_DefaultShader\Grid</Filter>
+    </FxCompile>
+    <FxCompile Include="DefaultShader\VS_PostProcess.hlsl">
+      <Filter>_DefaultShader\PostProcess</Filter>
+    </FxCompile>
+    <FxCompile Include="DefaultShader\PS_PostProcess.hlsl">
+      <Filter>_DefaultShader\PostProcess</Filter>
+    </FxCompile>
+    <FxCompile Include="DefaultShader\PS_Triangle.hlsl">
+      <Filter>_DefaultShader\Triangle</Filter>
+    </FxCompile>
+    <FxCompile Include="DefaultShader\VS_Triangle.hlsl">
+      <Filter>_DefaultShader\Triangle</Filter>
+    </FxCompile>
+    <FxCompile Include="DefaultShader\VS_UserInterface.hlsl">
+      <Filter>_DefaultShader\UI</Filter>
+    </FxCompile>
+    <FxCompile Include="DefaultShader\PS_UserInterface.hlsl">
+      <Filter>_DefaultShader\UI</Filter>
+    </FxCompile>
+    <FxCompile Include="DefaultShader\VS_Particle.hlsl">
+      <Filter>_DefaultShader\Particle</Filter>
+    </FxCompile>
+    <FxCompile Include="DefaultShader\PS_Particle.hlsl">
+      <Filter>_DefaultShader\Particle</Filter>
+    </FxCompile>
+    <FxCompile Include="DefaultShader\VS_Deffered.hlsl">
+      <Filter>_DefaultShader\Deffered</Filter>
+    </FxCompile>
+    <FxCompile Include="DefaultShader\PS_Deffered.hlsl">
+      <Filter>_DefaultShader\Deffered</Filter>
+    </FxCompile>
+    <FxCompile Include="DefaultShader\VS_Merge.hlsl">
+      <Filter>_DefaultShader\Deffered</Filter>
+    </FxCompile>
+    <FxCompile Include="DefaultShader\PS_Merge.hlsl">
+      <Filter>_DefaultShader\Deffered</Filter>
+    </FxCompile>
+    <FxCompile Include="DefaultShader\PS_LightDir.hlsl">
+      <Filter>_DefaultShader\Light</Filter>
+    </FxCompile>
+    <FxCompile Include="DefaultShader\PS_Light.hlsl">
+      <Filter>_DefaultShader\Light</Filter>
+    </FxCompile>
+    <FxCompile Include="DefaultShader\VS_LightDir.hlsl">
+      <Filter>_DefaultShader\Light</Filter>
+    </FxCompile>
+    <FxCompile Include="DefaultShader\VS_Light.hlsl">
+      <Filter>_DefaultShader\Light</Filter>
+    </FxCompile>
+    <FxCompile Include="DefaultShader\VS_LightPoint.hlsl">
+      <Filter>_DefaultShader\Light</Filter>
+    </FxCompile>
+    <FxCompile Include="DefaultShader\PS_LightPoint.hlsl">
+      <Filter>_DefaultShader\Light</Filter>
+    </FxCompile>
+  </ItemGroup>
+</Project>

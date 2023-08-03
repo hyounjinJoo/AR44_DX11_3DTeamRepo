@@ -30,6 +30,7 @@ x86/
 bld/
 [Oo]bj/
 [Oo]ut/
+[Oo]utput/
 [Ll]og/
 [Ll]ogs/
 
@@ -382,3 +383,7 @@ FodyWeavers.xsd
 
 # Exclude Engine Lib
 !External/*
+External/Lib/Engine
+
+# Exclude Shader header
+CompiledShaderHeader/
