@@ -16,12 +16,12 @@ namespace mh
 		mAbsolutePath = std::filesystem::current_path();
 		
 		mRelativePath = ".";
-		mRelativePath /= mh::define::DirName::ResRootDirName;
+		mRelativePath /= mh::define::ResRootDirName;
 		
 		for (int i = 0; i < (int)eResourceType::End; ++i)
 		{
 			mRelativePath_Res[i] = mRelativePath;
-			mRelativePath_Res[i] /= mh::define::DirName::ArrResPath[i];
+			mRelativePath_Res[i] /= mh::define::ArrResName[i];
 		}
 	}
 	void PathMgr::Release()

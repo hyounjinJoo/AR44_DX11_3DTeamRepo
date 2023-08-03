@@ -34,6 +34,7 @@ namespace mh
     {
         mPrefab = _pPrefab;
         mbDontDelete = _bDontDelete;
+        
     }
 }
 

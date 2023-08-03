@@ -8,6 +8,15 @@ namespace mh
 	{
 	public:
 		Com_AudioSource();
+
+		//복사할 변수가 있지만,
+		//다 같이 공유하는 '리소스' 포인터이기 때문에 기본 복사 생성자로도 충분하다.
+		Com_AudioSource(const Com_AudioSource& _other) = default;
+		CLONE(Com_AudioSource);
+
+		virtual eResult SaveJson(Json::Value* _pJson) override;
+		virtual eResult LoadJson(const Json::Value* _pJson) override;
+
 		virtual ~Com_AudioSource();
 
 		virtual void Init() override;

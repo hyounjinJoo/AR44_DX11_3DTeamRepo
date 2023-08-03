@@ -5,14 +5,16 @@
 #include "RenderMgr.h"
 
 #include "ConstBuffer.h"
+#include "json-cpp\json.h"
+
 
 namespace mh
 {
 
 
-
 	Animation::Animation()
-		: mAnimator(nullptr)
+		: IRes(eResourceType::Animation)
+		, mAnimator(nullptr)
 		, mAtlas(nullptr)
 		, mSpriteSheet{}
 		, mIndex(-1)
@@ -22,8 +24,75 @@ namespace mh
 
 	}
 
+	Animation::Animation(const Animation& _other)
+		: IRes(_other)
+		, mAnimator() //이건 이 애니메이션을 복사해서 가져가는 주인이 새로 설정해줘야함
+		, mAnimationName(_other.mAnimationName)
+		, mAtlas(_other.mAtlas) //Atlas == Texture -> 공유하는 리소스
+		, mSpriteSheet(_other.mSpriteSheet) //vector도 value를 담고 있는 경우에는 그냥 복사하면 됨
+		, mIndex(_other.mIndex)
+		, mTime(_other.mTime)
+		, mbComplete(_other.mbComplete)
+	{
+	}
+
 	Animation::~Animation()
 	{
+	}
+
+	eResult Animation::Load(const std::filesystem::path& _fileName)
+	{
+		return eResult();
+	}
+
+	eResult Animation::SaveJson(Json::Value* _pJVal)
+	{
+		if (nullptr == _pJVal)
+		{
+			return eResult::Fail_Nullptr;
+		}
+		eResult result = IRes::SaveJson(_pJVal);
+		if (eResultFail(result))
+		{
+			return result;
+		}
+
+		////Value가 들어있는 vector 저장하는법
+		////1. json의 타입을 array value로 만들어준다.
+		//(*_pJVal)[JSONKEY(mSpriteSheet)] = Json::Value(Json::arrayValue);
+		////2. 만들어진 데이터 컨테이너를 레퍼런스로 받아온다.
+		//Json::Value& jVal = (*_pJVal)[JSONKEY(mSpriteSheet)];
+		//for (size_t i = 0; i < mSpriteSheet.size(); ++i)
+		//{
+		//	//3. 순회돌면서 하나씩 추가한다.
+		//	jVal.append(Json::MHConvertWrite(mSpriteSheet[i]));
+		//}
+		Json::MHSaveVector(_pJVal, JSONVAL(mSpriteSheet));
+
+
+		return eResult::Success;
+	}
+
+	eResult Animation::LoadJson(const Json::Value* _pJVal)
+	{
+		if (nullptr == _pJVal)
+		{
+			return eResult::Fail_Nullptr;
+		}
+		eResult result = IRes::LoadJson(_pJVal);
+		if (eResultFail(result))
+		{
+			return result;
+		}
+		const Json::Value& jVal = (*_pJVal);
+
+		auto SpriteData = Json::MHGetJsonVector(_pJVal, JSONVAL(mSpriteSheet));
+		mSpriteSheet = std::move(SpriteData);
+
+		
+
+
+		return eResult::Success;
 	}
 
 	UINT Animation::Update()

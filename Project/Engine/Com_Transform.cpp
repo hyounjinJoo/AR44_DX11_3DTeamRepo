@@ -7,22 +7,93 @@
 
 #include "ConstBuffer.h"
 
+#include "json-cpp/json.h"
+
 namespace mh
 {
+	using namespace math;
+
 	Com_Transform::Com_Transform()
 		: IComponent(eComponentType::Transform)
-		, mFoward(Vector3::Forward)
+		, mForward(Vector3::Forward)
 		, mRight(Vector3::Right)
 		, mUp(Vector3::Up)
 		, mScale(Vector3::One)
 		, mRotation(Vector3::Zero)
 		, mPosition(Vector3::One)
 	{
-		SetKey("Com_Transform");
+		//Transform은 기본적으로 생성되므로 생성자에서 Key를 지정
+		SetKey(strKey::Default::com::Com_Transform);
 	}
+
 
 	Com_Transform::~Com_Transform()
 	{
+	}
+
+	eResult Com_Transform::SaveJson(Json::Value* _pJVal)
+	{
+		//nullptr이면 그냥 취소
+		if (nullptr == _pJVal)
+		{
+			return eResult::Fail_Nullptr;
+		}
+
+		//부모클래스 데이터를 저장. 실패시 리턴
+		eResult result = IComponent::SaveJson(_pJVal);
+		if (eResultFail(result))
+		{
+			return result;
+		}
+
+		//다 성공하면 json 포인터를 레퍼런스 형태로 변경
+		Json::Value& jVal = *_pJVal;
+
+		// 내꺼 저장
+		//Vector3 mForward;
+		//Vector3 mRight;
+		//Vector3 mUp;
+		//Vector3 mPosition;
+		//Vector3 mRotation;
+		//Vector3 mScale;
+		//Matrix mWorld;
+		
+		//int, UINT, UINT64 등등은 기본 지원
+		//우리가 직접 정의한 구조체나 float 타입은 StringConv::Convert_T_to_String 함수를 통해 변환해서 저장하면 됨
+		//이 때, mForward, mRight, mUp, mWorld는 업데이트 때 새로 계산되므로 가져올 필요가 없음
+		Json::MHSaveValue(_pJVal, JSONVAL(mPosition));
+		Json::MHSaveValue(_pJVal, JSONVAL(mRotation));
+		Json::MHSaveValue(_pJVal, JSONVAL(mScale));
+
+		return eResult::Success;
+	}
+
+	eResult Com_Transform::LoadJson(const Json::Value* _pJVal)
+	{
+		if (nullptr == _pJVal)
+		{
+			return eResult::Fail_Nullptr;
+		}
+
+		//부모클래스의 LoadJson()을 호출해서 부모클래스의 데이터를 저장
+		//실패시 실패결과를 리턴
+		eResult result = IComponent::LoadJson(_pJVal);
+		if (eResultFail(result))
+		{
+			return result;
+		}
+
+		Json::MHLoadValue(_pJVal, JSONVAL(mPosition));
+		Json::MHLoadValue(_pJVal, JSONVAL(mRotation));
+
+		//불러오기 실패 시 기본값으로 적용
+		if (false == Json::MHLoadValue(_pJVal, JSONVAL(mScale)))
+		{
+			mScale = Vector3::One;
+		}
+
+
+		return eResult::Success;
 	}
 
 	void Com_Transform::FixedUpdate()
@@ -51,7 +122,7 @@ namespace mh
 
 		mWorld = scale * rotation * position;
 
-		mFoward = Vector3::TransformNormal(Vector3::Forward, rotation);
+		mForward = Vector3::TransformNormal(Vector3::Forward, rotation);
 		mRight = Vector3::TransformNormal(Vector3::Right, rotation);
 		mUp = Vector3::TransformNormal(Vector3::Up, rotation);
 		

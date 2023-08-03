@@ -39,7 +39,7 @@ namespace mh::object
 		layer.AddGameObject(gameObject);
 
 		Com_Transform& tr = gameObject->GameObject::GetTransform();
-		tr.SetParent(_parent);
+		tr.SetOwner(_parent);
 
 		return gameObject;
 	}
@@ -70,7 +70,7 @@ namespace mh::object
 		Com_Transform& tr = gameObject->GameObject::GetTransform();
 		tr.SetPosition(_position);
 		tr.SetRotation(_rotation);
-		tr.SetParent(_parent);
+		tr.SetOwner(_parent);
 
 		return gameObject;
 	}

@@ -5,6 +5,7 @@
 #include <Windows.h>
 #include <assert.h>
 
+#include <array>
 #include <vector>
 #include <list>
 #include <map>
@@ -21,6 +22,9 @@
 
 #include <combaseapi.h>
 #include "EnumFlags.h"
+
+
+
 
 #endif
 
