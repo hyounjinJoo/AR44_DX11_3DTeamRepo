@@ -6,6 +6,8 @@
 #include "RenderMgr.h"
 #include "IScript.h"
 
+#include "json-cpp/json.h"
+
 namespace mh
 {
 	UINT ICollider2D::gColliderNumber = 0;
@@ -35,6 +37,67 @@ namespace mh
 
 	ICollider2D::~ICollider2D()
 	{
+	}
+
+	eResult ICollider2D::SaveJson(Json::Value* _pJVal)
+	{
+		if (nullptr == _pJVal)
+		{
+			return eResult::Fail_Nullptr;
+		}
+
+		eResult result = ICollider::SaveJson(_pJVal);
+		if (eResultFail(result))
+		{
+			return result;
+		}
+
+		Json::Value& jVal = *_pJVal;
+
+		Json::MHSaveValue(_pJVal, JSONVAL(mType));
+		Json::MHSaveValue(_pJVal, JSONVAL(mSize));
+		Json::MHSaveValue(_pJVal, JSONVAL(mCenter));
+		Json::MHSaveValue(_pJVal, JSONVAL(mPosition));
+		Json::MHSaveValue(_pJVal, JSONVAL(mRadius));
+		Json::MHSaveValue(_pJVal, JSONVAL(mbTrigger));
+
+		return eResult::Success;
+	}
+
+	eResult ICollider2D::LoadJson(const Json::Value* _pJVal)
+	{
+		if (nullptr == _pJVal)
+		{
+			return eResult::Fail_Nullptr;
+		}
+
+		eResult result = ICollider::LoadJson(_pJVal);
+		if (eResultFail(result))
+		{
+			return result;
+		}
+
+		const Json::Value& jVal = (*_pJVal);
+
+		Json::MHLoadValue(_pJVal, JSONVAL(mType));
+		Json::MHLoadValue(_pJVal, JSONVAL(mSize));
+		Json::MHLoadValue(_pJVal, JSONVAL(mCenter));
+		Json::MHLoadValue(_pJVal, JSONVAL(mPosition));
+		Json::MHLoadValue(_pJVal, JSONVAL(mRadius));
+		Json::MHLoadValue(_pJVal, JSONVAL(mbTrigger));
+
+		mID = gColliderNumber++;
+
+		if (GetOwner() && nullptr == mTransform)
+		{
+			Com_Transform* ownerTransform = GetOwner()->GetComponent<Com_Transform>();
+			if (ownerTransform)
+			{
+				mTransform = ownerTransform;
+			}
+		}
+
+		return eResult::Success;
 	}
 
 	void ICollider2D::Init()
