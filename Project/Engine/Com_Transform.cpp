@@ -61,9 +61,9 @@ namespace mh
 		//int, UINT, UINT64 등등은 기본 지원
 		//우리가 직접 정의한 구조체나 float 타입은 StringConv::Convert_T_to_String 함수를 통해 변환해서 저장하면 됨
 		//이 때, mForward, mRight, mUp, mWorld는 업데이트 때 새로 계산되므로 가져올 필요가 없음
-		Json::MHSaveValue(_pJVal, JSONVAL(mPosition));
-		Json::MHSaveValue(_pJVal, JSONVAL(mRotation));
-		Json::MHSaveValue(_pJVal, JSONVAL(mScale));
+		Json::MHSaveValue(_pJVal, JSON_KEY_PAIR(mPosition));
+		Json::MHSaveValue(_pJVal, JSON_KEY_PAIR(mRotation));
+		Json::MHSaveValue(_pJVal, JSON_KEY_PAIR(mScale));
 
 		return eResult::Success;
 	}
@@ -83,11 +83,11 @@ namespace mh
 			return result;
 		}
 
-		Json::MHLoadValue(_pJVal, JSONVAL(mPosition));
-		Json::MHLoadValue(_pJVal, JSONVAL(mRotation));
+		Json::MHLoadValue(_pJVal, JSON_KEY_PAIR(mPosition));
+		Json::MHLoadValue(_pJVal, JSON_KEY_PAIR(mRotation));
 
 		//불러오기 실패 시 기본값으로 적용
-		if (false == Json::MHLoadValue(_pJVal, JSONVAL(mScale)))
+		if (false == Json::MHLoadValue(_pJVal, JSON_KEY_PAIR(mScale)))
 		{
 			mScale = Vector3::One;
 		}

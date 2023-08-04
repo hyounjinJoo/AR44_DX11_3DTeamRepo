@@ -32,7 +32,7 @@ namespace mh
 
 		if (mAudioClip)
 		{
-			jVal[JSONKEY(mAudioClip)] = mAudioClip->GetKey();
+			jVal[JSON_KEY(mAudioClip)] = mAudioClip->GetKey();
 		}
 
 		return eResult::Success;
@@ -51,9 +51,9 @@ namespace mh
 		}
 		const Json::Value& jVal = *_pJson;
 
-		if (jVal.isMember(JSONKEY(mAudioClip)))
+		if (jVal.isMember(JSON_KEY(mAudioClip)))
 		{
-			std::string strKey = jVal[JSONKEY(mAudilClip)].asString();
+			std::string strKey = jVal[JSON_KEY(mAudilClip)].asString();
 			mAudioClip = ResMgr::Load<AudioClip>(strKey);
 		}
 

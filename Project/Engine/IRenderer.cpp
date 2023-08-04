@@ -33,11 +33,11 @@ namespace mh
 		//포인터의 경우 키값을 저장
 		if (mMesh)
 		{
-			jVal[JSONKEY(mMesh)] = mMesh->GetKey();
+			jVal[JSON_KEY(mMesh)] = mMesh->GetKey();
 		}
 		if (mMaterial)
 		{
-			jVal[JSONKEY(mMaterial)] = mMaterial->GetKey();
+			jVal[JSON_KEY(mMaterial)] = mMaterial->GetKey();
 		}
 		
 		return eResult::Success;
@@ -56,14 +56,14 @@ namespace mh
 		}
 		const Json::Value& jVal = *_pJson;
 
-		if (jVal.isMember(JSONKEY(mMesh)))
+		if (jVal.isMember(JSON_KEY(mMesh)))
 		{
-			mMesh = ResMgr::Load<Mesh>(jVal[JSONKEY(mMesh)].asString());
+			mMesh = ResMgr::Load<Mesh>(jVal[JSON_KEY(mMesh)].asString());
 		}
 
-		if (jVal.isMember(JSONKEY(mMaterial)))
+		if (jVal.isMember(JSON_KEY(mMaterial)))
 		{
-			mMaterial = ResMgr::Load<Material>(jVal[JSONKEY(mMaterial)].asString());
+			mMaterial = ResMgr::Load<Material>(jVal[JSON_KEY(mMaterial)].asString());
 		}
 
 		return eResult::Success;
