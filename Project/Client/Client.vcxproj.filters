@@ -1,10 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="리소스 파일">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
-    </Filter>
     <Filter Include="main">
       <UniqueIdentifier>{9173a508-0e8e-47c5-a538-a4b61db55c55}</UniqueIdentifier>
     </Filter>
@@ -41,11 +37,12 @@
     <Filter Include="Widget\Resource">
       <UniqueIdentifier>{2971fcbf-c7ab-4fa6-9712-1caa790fe73a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="main\WindowRes">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Resource.h">
-      <Filter>main</Filter>
-    </ClInclude>
     <ClInclude Include="targetver.h">
       <Filter>main</Filter>
     </ClInclude>
@@ -131,6 +128,12 @@
       <Filter>Widget\Resource</Filter>
     </ClInclude>
     <ClInclude Include="PCH_Client.h" />
+    <ClInclude Include="ClientWindow.h">
+      <Filter>main</Filter>
+    </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>main\WindowRes</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -215,18 +218,18 @@
       <Filter>Widget\Resource</Filter>
     </ClCompile>
     <ClCompile Include="PCH_Client.cpp" />
+    <ClCompile Include="ClientWindow.cpp">
+      <Filter>main</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="MHW.ico">
+      <Filter>main\WindowRes</Filter>
+    </Image>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Client.rc">
-      <Filter>리소스 파일</Filter>
+      <Filter>main\WindowRes</Filter>
     </ResourceCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <Image Include="Client.ico">
-      <Filter>리소스 파일</Filter>
-    </Image>
-    <Image Include="small.ico">
-      <Filter>리소스 파일</Filter>
-    </Image>
   </ItemGroup>
 </Project>

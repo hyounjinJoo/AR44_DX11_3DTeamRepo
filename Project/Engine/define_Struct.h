@@ -5,6 +5,21 @@
 namespace mh::define
 {
 
+	struct tUmap_LightHashFunc32
+	{
+		UINT64 operator()(const UINT32& _ukey) const
+		{
+			return static_cast<UINT64>(_ukey);
+		}
+	};
+
+	struct tUmap_LightHashFunc64
+	{
+		UINT64 operator()(const UINT64& _ukey) const
+		{
+			return static_cast<UINT64>(_ukey);
+		}
+	};
 
 	struct tUmap_StringViewHasher
 	{

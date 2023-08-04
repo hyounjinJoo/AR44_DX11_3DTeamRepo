@@ -218,12 +218,13 @@ call Copy_DLL.bat $(Configuration)</Command>
     <ClInclude Include="imstb_textedit.h" />
     <ClInclude Include="imstb_truetype.h" />
     <ClInclude Include="guiListWidget.h" />
-    <ClInclude Include="Resource.h" />
+    <ClInclude Include="resource.h" />
     <ClInclude Include="targetver.h" />
     <ClInclude Include="guiDebugObject.h" />
     <ClInclude Include="guiEditor.h" />
     <ClInclude Include="guiEditorObject.h" />
     <ClInclude Include="guiWidget.h" />
+    <ClInclude Include="ClientWindow.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="PCH_Client.cpp">
@@ -280,13 +281,13 @@ call Copy_DLL.bat $(Configuration)</Command>
     <ClCompile Include="guiEditor.cpp" />
     <ClCompile Include="guiEditorObject.cpp" />
     <ClCompile Include="guiWidget.cpp" />
+    <ClCompile Include="ClientWindow.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="MHW.ico" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Client.rc" />
-  </ItemGroup>
-  <ItemGroup>
-    <Image Include="Client.ico" />
-    <Image Include="small.ico" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
