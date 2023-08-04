@@ -1,6 +1,14 @@
 
-#ifndef ClientPCH
-#define ClientPCH
+#ifndef PCH_CLIENT
+#define PCH_CLIENT
+
+#include <Contents/PCH_Contents.h>
+
+#ifdef _DEBUG
+#pragma comment(lib, "Contents/Debug/Contents.lib")
+#else 
+#pragma comment(lib, "Engine/Release/Engine.lib")
+#endif
 
 #include "targetver.h"
 #define WIN32_LEAN_AND_MEAN             // 거의 사용되지 않는 내용을 Windows 헤더에서 제외합니다.
@@ -12,7 +20,6 @@
 #include <memory.h>
 #include <tchar.h>
 #include "Resource.h"
-
 
 
 #endif

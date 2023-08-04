@@ -59,7 +59,7 @@ namespace Json
 	{
 		//컨테이너는 변환 불가
 		static_assert(false == std::is_container_v<T>);
-		return mh::StringConv::Convert_T_to_String(_srcT);
+		return StringConv::Convert_T_to_String(_srcT);
 	}
 
 
@@ -94,7 +94,7 @@ namespace Json
 	{
 		//컨테이너는 변환 불가
 		static_assert(false == std::is_container_v<T>);
-		return mh::StringConv::Convert_String_to_T<T>(_jVal.asString());
+		return StringConv::Convert_String_to_T<T>(_jVal.asString());
 	}
 
 	template <typename T>
@@ -298,6 +298,6 @@ namespace Json
 }
 
 #define JSONKEY(_varName) #_varName
-#define JSONVAL(_varName) #_varName, _varName
+#define JSON_KEY_PAIR(_varName) #_varName, _varName
 
 

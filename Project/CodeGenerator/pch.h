@@ -1,5 +1,5 @@
-#ifndef PCH_H
-#define PCH_H
+#ifndef PRE_COMPILED_HEADER
+#define PRE_COMPILED_HEADER
 
 // 여기에 미리 컴파일하려는 헤더 추가
 #include <windows.h>
@@ -15,6 +15,7 @@
 #include <map>
 #include <set>
 #include <regex>
+#include "json-cpp/json.h"
 
 namespace stdfs = std::filesystem;
 

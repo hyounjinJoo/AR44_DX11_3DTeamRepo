@@ -2345,7 +2345,4 @@ JSON_API OStream& operator<<(OStream&, const Value& root);
 // //////////////////////////////////////////////////////////////////////
 
 
-//저장/불러오기 매크로 함수
-#include "jsonSaveLoad.h"
-
 #endif //ifndef JSON_AMALGAMATED_H_INCLUDED

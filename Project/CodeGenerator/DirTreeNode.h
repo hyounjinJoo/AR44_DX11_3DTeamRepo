@@ -1,6 +1,6 @@
 #pragma once
 
-#include "pch.h"
+#include "PCH.h"
 #include "CodeWriter.h"
 #include <Engine/define_GPU.h>
 
@@ -11,14 +11,14 @@ struct tShaderGroup
 };
 
 
-class cDirTreeNode
+class DirTreeNode
 {
 	friend class DirTree;
-	friend class cDirTreeNode;
+	friend class DirTreeNode;
 private:
-	cDirTreeNode();
-	cDirTreeNode(cDirTreeNode* _pParent);
-	~cDirTreeNode();
+	DirTreeNode();
+	DirTreeNode(DirTreeNode* _pParent);
+	~DirTreeNode();
 
 public:
 	HRESULT SearchRecursive(stdfs::path const& _rootPath, stdfs::path const& _path, std::regex const& _regex);
@@ -28,12 +28,12 @@ public:
 	HRESULT WriteStrKeyTree(CodeWriter& _CodeWriter, bool _bEraseExtension);
 
 private:
-	cDirTreeNode* m_pParent;
-	std::vector<cDirTreeNode*> m_vecChild;
+	DirTreeNode* m_pParent;
+	std::vector<DirTreeNode*> m_vecChild;
 
 public:
-	void SetParent(cDirTreeNode* _pNode) { assert(_pNode); m_pParent = _pNode; }
-	void AddChild(cDirTreeNode* _pNode) { assert(_pNode); m_vecChild.push_back(_pNode); }
+	void SetParent(DirTreeNode* _pNode) { assert(_pNode); m_pParent = _pNode; }
+	void AddChild(DirTreeNode* _pNode) { assert(_pNode); m_vecChild.push_back(_pNode); }
 
 	bool IsRoot() const { return (nullptr == m_pParent); }
 	bool IsLeaf() const { return m_vecChild.empty(); }

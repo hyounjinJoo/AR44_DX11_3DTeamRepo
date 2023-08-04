@@ -1,4 +1,6 @@
 #pragma once
+#include "define_Enum.h"
+
 #include "IRes.h"
 #include "GraphicsShader.h"
 #include "Texture.h"
@@ -6,6 +8,7 @@
 
 namespace mh
 {
+	using namespace mh::define;
 	class Material : public IRes
 	{
 	public:

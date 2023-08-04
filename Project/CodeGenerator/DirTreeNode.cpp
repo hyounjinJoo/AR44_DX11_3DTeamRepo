@@ -1,11 +1,11 @@
-#include "pch.h"
+#include "PCH.h"
 
 #include "DirTreeNode.h"
-#include <Engine/define_Util.h>
+#include "define_Util.h"
 #include "define_CodeGen.h"
 #include "CodeWriter.h"
 
-cDirTreeNode::cDirTreeNode()
+DirTreeNode::DirTreeNode()
 	: m_pParent()
 	, m_vecChild()
 	, m_DirName()
@@ -13,7 +13,7 @@ cDirTreeNode::cDirTreeNode()
 {
 }
 
-cDirTreeNode::cDirTreeNode(cDirTreeNode* _pParent)
+DirTreeNode::DirTreeNode(DirTreeNode* _pParent)
 	: m_pParent(_pParent)
 	, m_vecChild()
 	, m_DirName()
@@ -22,7 +22,7 @@ cDirTreeNode::cDirTreeNode(cDirTreeNode* _pParent)
 	assert(_pParent);
 }
 
-cDirTreeNode::~cDirTreeNode()
+DirTreeNode::~DirTreeNode()
 {
 	size_t size = m_vecChild.size();
 	for (size_t i = (size_t)0; i < size; ++i)
@@ -31,7 +31,7 @@ cDirTreeNode::~cDirTreeNode()
 	}
 }
 
-void cDirTreeNode::Clear()
+void DirTreeNode::Clear()
 {
 	size_t size = m_vecChild.size();
 	for (size_t i = (size_t)0; i < size; ++i)
@@ -43,7 +43,7 @@ void cDirTreeNode::Clear()
 	m_pParent = nullptr;
 }
 
-HRESULT cDirTreeNode::SearchRecursive(stdfs::path const& _rootPath, stdfs::path const& _path, std::regex const& _regex)
+HRESULT DirTreeNode::SearchRecursive(stdfs::path const& _rootPath, stdfs::path const& _path, std::regex const& _regex)
 {
 	//들어온 Path 자체가 폴더 경로가 아닐 경우에는 실패 반환
 	if (false == stdfs::is_directory(_path))
@@ -74,7 +74,7 @@ HRESULT cDirTreeNode::SearchRecursive(stdfs::path const& _rootPath, stdfs::path 
 			else
 			{
 				//폴더를 발견했을 경우 새 노드를 생성 후 재귀호출
-				cDirTreeNode* pNode = new cDirTreeNode(this);
+				DirTreeNode* pNode = new DirTreeNode(this);
 				HRESULT hr = pNode->SearchRecursive(_rootPath, dirIter.path(), _regex);
 				
 				if (ERROR_EMPTY == hr)
@@ -109,7 +109,7 @@ HRESULT cDirTreeNode::SearchRecursive(stdfs::path const& _rootPath, stdfs::path 
 
 
 
-HRESULT cDirTreeNode::GetAllFiles(__out std::vector<stdfs::path>& _vecFile, bool _bAddRelativeDir)
+HRESULT DirTreeNode::GetAllFiles(__out std::vector<stdfs::path>& _vecFile, bool _bAddRelativeDir)
 {
 	_vecFile.clear();
 
@@ -139,7 +139,7 @@ HRESULT cDirTreeNode::GetAllFiles(__out std::vector<stdfs::path>& _vecFile, bool
 }
 
 
-HRESULT cDirTreeNode::WriteStrKeyTree(CodeWriter& _CodeWriter, bool _bEraseExtension)
+HRESULT DirTreeNode::WriteStrKeyTree(CodeWriter& _CodeWriter, bool _bEraseExtension)
 {
 	if (false == IsRoot())
 	{

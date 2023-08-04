@@ -1,11 +1,14 @@
 #pragma once
 
+#include <limits.h>
+
 namespace mh::define
 {
 	enum class eResult
 	{
-		Fail_NotImplemented,
+		Fail_NotImplemented = 0,
 
+		//음수 ~ 0 = 실패
 		Fail = INT_MIN,
 
 		Fail_OpenFile,
@@ -20,6 +23,9 @@ namespace mh::define
 		Fail_Json,
 		Fail_InValid,
 
+		Fail_PathNotExist,
+
+		//양수 = 성공
 		//이 아래로 성공 관련 변수를 저장
 		Success = 1
 	};

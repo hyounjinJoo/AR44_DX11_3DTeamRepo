@@ -1,4 +1,4 @@
-#include "EnginePCH.h"
+#include "PCH_Engine.h"
 
 #include "Com_Light.h"
 #include "Com_Transform.h"
@@ -54,7 +54,7 @@ namespace mh
 
 		Json::Value& jVal = *_pJVal;
 
-		Json::MHSaveValue(_pJVal, JSONVAL(mAttribute));
+		Json::MHSaveValue(_pJVal, JSON_KEY_PAIR(mAttribute));
 
 		return eResult::Success;
 	}
@@ -75,12 +75,12 @@ namespace mh
 			return result;
 		}
 	
-		Json::MHLoadValue(_pJVal, JSONVAL(mAttribute));
+		Json::MHLoadValue(_pJVal, JSON_KEY_PAIR(mAttribute));
 
 		SetType(mAttribute.type);
 
 		//불러오기 실패 시 기본값으로 적용
-		if (false == Json::MHLoadValue(_pJVal, JSONVAL(mAttribute.type)))
+		if (false == Json::MHLoadValue(_pJVal, JSON_KEY_PAIR(mAttribute.type)))
 		{
 			mAttribute.type = eLightType::Directional;
 		}

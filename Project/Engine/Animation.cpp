@@ -1,4 +1,4 @@
-#include "EnginePCH.h"
+#include "PCH_Engine.h"
 
 #include "Animation.h"
 #include "TimeMgr.h"
@@ -67,7 +67,7 @@ namespace mh
 		//	//3. 순회돌면서 하나씩 추가한다.
 		//	jVal.append(Json::MHConvertWrite(mSpriteSheet[i]));
 		//}
-		Json::MHSaveVector(_pJVal, JSONVAL(mSpriteSheet));
+		Json::MHSaveVector(_pJVal, JSON_KEY_PAIR(mSpriteSheet));
 
 
 		return eResult::Success;
@@ -86,7 +86,7 @@ namespace mh
 		}
 		const Json::Value& jVal = (*_pJVal);
 
-		auto SpriteData = Json::MHGetJsonVector(_pJVal, JSONVAL(mSpriteSheet));
+		auto SpriteData = Json::MHGetJsonVector(_pJVal, JSON_KEY_PAIR(mSpriteSheet));
 		mSpriteSheet = std::move(SpriteData);
 
 		

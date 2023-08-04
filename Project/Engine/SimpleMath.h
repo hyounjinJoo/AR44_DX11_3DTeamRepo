@@ -1,5 +1,4 @@
 #pragma once
-#include "EnginePCH.h"
 
 #if __has_include("DirectXMath.h")
 // In this case, DirectXMath is coming from Windows SDK.
@@ -12,7 +11,6 @@
 
 using namespace DirectX;
 using namespace DirectX::PackedVector;
-
 
 
 namespace mh::math

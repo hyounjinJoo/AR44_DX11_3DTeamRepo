@@ -253,7 +253,7 @@
     <ClCompile Include="GPUBuffer.cpp">
       <Filter>GPU\Buffer</Filter>
     </ClCompile>
-    <ClCompile Include="EnginePCH.cpp">
+    <ClCompile Include="PCH_Engine.cpp">
       <Filter>Common</Filter>
     </ClCompile>
     <ClCompile Include="json-cpp\jsoncpp.cpp">
@@ -271,7 +271,6 @@
     <ClCompile Include="IComponent.cpp">
       <Filter>GameObject\Component</Filter>
     </ClCompile>
-    <ClCompile Include="MeshData.cpp" />
     <ClCompile Include="ResMgr.cpp">
       <Filter>Manager</Filter>
     </ClCompile>
@@ -329,6 +328,9 @@
     <ClCompile Include="SimpleMath.cpp">
       <Filter>Common\Math</Filter>
     </ClCompile>
+    <ClCompile Include="MeshData.cpp">
+      <Filter>Resource\Mesh</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application.h">
@@ -337,7 +339,7 @@
     <ClInclude Include="Entity.h">
       <Filter>Common</Filter>
     </ClInclude>
-    <ClInclude Include="EnginePCH.h">
+    <ClInclude Include="PCH_Engine.h">
       <Filter>Common</Filter>
     </ClInclude>
     <ClInclude Include="GameObject.h">
@@ -479,7 +481,6 @@
     <ClInclude Include="define_Component.h">
       <Filter>Common\define</Filter>
     </ClInclude>
-    <ClInclude Include="MeshData.h" />
     <ClInclude Include="defines.h">
       <Filter>Common\define</Filter>
     </ClInclude>
@@ -551,6 +552,9 @@
     </ClInclude>
     <ClInclude Include="SimpleMath.h">
       <Filter>Common\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="MeshData.h">
+      <Filter>Resource\Mesh</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

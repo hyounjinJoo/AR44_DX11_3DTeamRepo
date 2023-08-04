@@ -130,7 +130,7 @@
     <ClInclude Include="guiTexture.h">
       <Filter>Widget\Resource</Filter>
     </ClInclude>
-    <ClInclude Include="ClientPCH.h" />
+    <ClInclude Include="PCH_Client.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -214,7 +214,7 @@
     <ClCompile Include="guiTexture.cpp">
       <Filter>Widget\Resource</Filter>
     </ClCompile>
-    <ClCompile Include="ClientPCH.cpp" />
+    <ClCompile Include="PCH_Client.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Client.rc">

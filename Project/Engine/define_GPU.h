@@ -59,6 +59,8 @@ namespace mh::define
 			"_4PS_",
 		};
 		STRKEY CSPrefix = "CS_";
+
+		STRKEY Ext_ShaderSetting = ".json";
 	}
 
 

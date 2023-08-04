@@ -1,8 +1,9 @@
 #pragma once
-#include "Singleton.h"
 
 #include <unordered_map>
 #include <typeindex>
+#include <string>
+#include <functional>
 
 namespace mh
 {

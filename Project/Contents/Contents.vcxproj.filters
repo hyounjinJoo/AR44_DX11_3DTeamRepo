@@ -1,17 +1,53 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="소스 파일">
-      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    <ClInclude Include="strKey_Texture.h">
+      <Filter>Auto Generated</Filter>
+    </ClInclude>
+    <ClInclude Include="strKey_Shader.h">
+      <Filter>Auto Generated</Filter>
+    </ClInclude>
+    <ClInclude Include="Com_MyRenderer.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="strKey_Component.h">
+      <Filter>Auto Generated</Filter>
+    </ClInclude>
+    <ClInclude Include="ContentsClassInitializer.h">
+      <Filter>Auto Generated</Filter>
+    </ClInclude>
+    <ClInclude Include="PCH_Contents.h">
+      <Filter>Default</Filter>
+    </ClInclude>
+    <ClInclude Include="Script_TestScript.h" />
+    <ClInclude Include="strKey_Script.h">
+      <Filter>Auto Generated</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Components">
+      <UniqueIdentifier>{4605011f-85fc-490d-9c1a-69f988c87559}</UniqueIdentifier>
     </Filter>
-    <Filter Include="헤더 파일">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    <Filter Include="Default">
+      <UniqueIdentifier>{3c4f380d-6193-4cf5-bef9-8b384328509e}</UniqueIdentifier>
     </Filter>
-    <Filter Include="리소스 파일">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    <Filter Include="Auto Generated">
+      <UniqueIdentifier>{7c248a7a-737e-4d75-90e4-cef79c81fcbd}</UniqueIdentifier>
     </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Com_MyRenderer.cpp">
+      <Filter>Components</Filter>
+    </ClCompile>
+    <ClCompile Include="ContentsClassInitializer_Component.cpp">
+      <Filter>Auto Generated</Filter>
+    </ClCompile>
+    <ClCompile Include="PCH_Contents.cpp">
+      <Filter>Default</Filter>
+    </ClCompile>
+    <ClCompile Include="ContentsClassInitializer_Script.cpp">
+      <Filter>Auto Generated</Filter>
+    </ClCompile>
+    <ClCompile Include="Script_TestScript.cpp" />
   </ItemGroup>
 </Project>

@@ -1,5 +1,5 @@
-#ifndef ENGINE_PCH
-#define ENGINE_PCH
+#ifndef PCH_ENGINE
+#define PCH_ENGINE
 
 #include <string>
 #include <Windows.h>
@@ -22,8 +22,6 @@
 
 #include <combaseapi.h>
 #include "EnumFlags.h"
-
-
 
 
 #endif

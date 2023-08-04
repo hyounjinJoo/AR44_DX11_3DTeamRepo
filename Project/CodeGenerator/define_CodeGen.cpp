@@ -1,7 +1,7 @@
-#include "pch.h"
+#include "PCH.h"
 #include "define_CodeGen.h"
 
-#include <Engine/define_Util.h>
+#include "define_Util.h"
 
 std::regex define_Preset::Regex::g_VarForbiddenChars::A;
 std::wregex define_Preset::Regex::g_VarForbiddenChars::W;
@@ -20,6 +20,6 @@ void define_Preset::Regex::g_VarForbiddenChars::CreateVarForbiddenRegex()
 	strBase += ']';
 
 	g_VarForbiddenChars::A = std::regex(strBase);
-	g_VarForbiddenChars::W = std::wregex(mh::StringConv::ConvertUTF8ToUnicode(strBase));
+	g_VarForbiddenChars::W = std::wregex(StringConv::ConvertUTF8ToUnicode(strBase));
 }
 

@@ -1,6 +1,5 @@
 #pragma once
 #include "define_GPU.h"
-
 #include "define_Enum.h"
 
 
@@ -19,8 +18,8 @@ namespace mh
 		static void AdjustViewPorts(HWND _hWnd);
 		static inline void Present(bool _bVSync = false);
 
-		static inline std::shared_ptr<mh::Texture> GetRenderTargetTex();
-		static inline std::shared_ptr<mh::Texture> GetDepthStencilBufferTex();
+		static inline std::shared_ptr<Texture> GetRenderTargetTex();
+		static inline std::shared_ptr<Texture> GetDepthStencilBufferTex();
 
 	private:
 		static bool Init(HWND _hwnd, uint _Width, uint _Height);

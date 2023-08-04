@@ -1,4 +1,4 @@
-#include "EnginePCH.h"
+#include "PCH_Engine.h"
 
 #include "Material.h"
 #include "ConstBuffer.h"
@@ -68,7 +68,7 @@ namespace mh
 
         Json::MHSaveVectorPtr(_pJVal, "mTextures", mTextures);
 
-        Json::MHSaveVectorPtr(_pJVal, JSONVAL(mTextures));
+        Json::MHSaveVectorPtr(_pJVal, JSON_KEY_PAIR(mTextures));
 
         //mTextures은 텍스처 배열이므로 Key를 가져와서 저장
         //for (int i = 0; i < mTextures.size(); ++i)
@@ -86,8 +86,8 @@ namespace mh
 
 
         //단순 Value의 경우에는 매크로로 바로 저장 가능
-        Json::MHSaveValue(_pJVal, JSONVAL(mCB));
-        Json::MHSaveValue(_pJVal, JSONVAL(mMode));
+        Json::MHSaveValue(_pJVal, JSON_KEY_PAIR(mCB));
+        Json::MHSaveValue(_pJVal, JSON_KEY_PAIR(mMode));
 
         return eResult::Success;
     }
@@ -126,8 +126,8 @@ namespace mh
 
 
         //단순 Value의 경우에는 함수로 바로 불러오기 가능
-        Json::MHLoadValue(_pJVal, JSONVAL(mMode));
-        Json::MHLoadValue(_pJVal, JSONVAL(mCB));
+        Json::MHLoadValue(_pJVal, JSON_KEY_PAIR(mMode));
+        Json::MHLoadValue(_pJVal, JSON_KEY_PAIR(mCB));
 
 
         return eResult();

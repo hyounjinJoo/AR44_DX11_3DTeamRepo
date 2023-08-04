@@ -1,4 +1,4 @@
-#include "EnginePCH.h"
+#include "PCH_Engine.h"
 #include "AudioClip.h"
 
 #include "Com_Transform.h"
@@ -30,7 +30,7 @@ namespace mh
 
 	eResult AudioClip::Load(const std::filesystem::path& _path)
 	{
-		std::filesystem::path FullPath = PathMgr::GetRelativeResourcePath(GetResType());
+		std::filesystem::path FullPath = PathMgr::GetRelResourcePath(GetResType());
 		FullPath /= _path;
 
 

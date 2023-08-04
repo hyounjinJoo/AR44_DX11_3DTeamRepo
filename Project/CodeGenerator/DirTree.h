@@ -2,6 +2,9 @@
 //트리 관리자 클래스
 #include "DirTreeNode.h"
 
+#include <Engine/define_Enum.h>
+#include "json-cpp/json-forwards.h"
+
 struct tAddBaseClassDesc
 {
 	stdfs::path _FilePath;
@@ -12,6 +15,8 @@ struct tAddBaseClassDesc
 	std::string IncludeStrKeyHeaderName;
 	std::string IncludeBaseTypeHeader;
 	std::string Constructor_T_MacroDefine;
+	std::string MasterNamespace;
+	std::string UsingNamespace;
 	std::string UserClassMgr_InitFuncName;
 };
 
@@ -35,14 +40,8 @@ public:
 
 
 private:
-	cDirTreeNode m_RootDir;
-
-private:
-	HRESULT DetectNewGraphicsShader(std::unordered_map<stdfs::path, tShaderGroup> const& _umapGSGroup);
-	HRESULT DetectNewComputeShader(std::vector<stdfs::path> const& _vecCShader);
+	DirTreeNode m_RootDir;
 };
-
-
 
 
 

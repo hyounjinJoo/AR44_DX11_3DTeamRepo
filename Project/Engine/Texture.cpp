@@ -1,4 +1,4 @@
-#include "EnginePCH.h"
+#include "PCH_Engine.h"
 #include "Texture.h"
 
 #ifdef _DEBUG
@@ -162,7 +162,7 @@ namespace mh
 
 	eResult Texture::Load(const std::filesystem::path& _FileName)
 	{
-		stdfs::path FullPath = PathMgr::GetRelativeResourcePath(GetResType());
+		stdfs::path FullPath = PathMgr::GetRelResourcePath(GetResType());
 
 		eResult result = LoadFile(FullPath / _FileName);
 

@@ -1,4 +1,4 @@
-#include "pch.h"
+#include "PCH.h"
 
 #include "CodeWriter.h"
 
@@ -10,8 +10,6 @@ CodeWriter::CodeWriter()
 CodeWriter::~CodeWriter()
 {
 }
-
-
 
 void CodeWriter::WriteCode(UINT _BufferIdx, const std::string_view _strCode)
 {

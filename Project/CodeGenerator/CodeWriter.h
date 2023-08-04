@@ -1,7 +1,7 @@
 #pragma once
 
 #include "define_CodeGen.h"
-#include <Engine/define_Util.h>
+#include "define_Util.h"
 
 class CodeWriter
 {
@@ -48,7 +48,7 @@ private:
 
 inline void CodeWriter::WriteCode(UINT _BufferIdx, const std::wstring_view _wstrCode)
 {
-	std::string converted = mh::StringConv::ConvertUnicodeToUTF8(_wstrCode);
+	std::string converted = StringConv::ConvertUnicodeToUTF8(_wstrCode);
 	WriteCode(_BufferIdx, converted);
 }
 
@@ -105,7 +105,7 @@ inline void CodeWriter::IncludeFile(UINT _BufferIdx, const std::string_view _str
 
 inline void CodeWriter::IncludeFile(UINT _BufferIdx, const std::wstring_view _wstrIncludeFileName)
 {
-	std::string converted = mh::StringConv::ConvertUnicodeToUTF8(_wstrIncludeFileName);
+	std::string converted = StringConv::ConvertUnicodeToUTF8(_wstrIncludeFileName);
 	IncludeFile(_BufferIdx, converted);
 }
 
@@ -166,7 +166,7 @@ inline HRESULT CodeWriter::Save(UINT _BufferIdx, std::basic_ofstream<T>& _ofstre
 	if constexpr (std::is_same_v<wchar_t, T>)
 	{
 		const std::string_view srcStr = m_vecBuffer[_BufferIdx].Buffer;
-		std::wstring converted = mh::StringConv::ConvertUTF8ToUnicode(srcStr);
+		std::wstring converted = StringConv::ConvertUTF8ToUnicode(srcStr);
 
 		_ofstream << converted;
 	}
