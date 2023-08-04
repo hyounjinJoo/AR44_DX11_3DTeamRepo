@@ -54,12 +54,12 @@ namespace mh
 
 		Json::Value& jVal = *_pJVal;
 
-		Json::MHSaveValue(_pJVal, JSONVAL(mType));
-		Json::MHSaveValue(_pJVal, JSONVAL(mSize));
-		Json::MHSaveValue(_pJVal, JSONVAL(mCenter));
-		Json::MHSaveValue(_pJVal, JSONVAL(mPosition));
-		Json::MHSaveValue(_pJVal, JSONVAL(mRadius));
-		Json::MHSaveValue(_pJVal, JSONVAL(mbTrigger));
+		Json::MHSaveValue(_pJVal, JSON_KEY_PAIR(mType));
+		Json::MHSaveValue(_pJVal, JSON_KEY_PAIR(mSize));
+		Json::MHSaveValue(_pJVal, JSON_KEY_PAIR(mCenter));
+		Json::MHSaveValue(_pJVal, JSON_KEY_PAIR(mPosition));
+		Json::MHSaveValue(_pJVal, JSON_KEY_PAIR(mRadius));
+		Json::MHSaveValue(_pJVal, JSON_KEY_PAIR(mbTrigger));
 
 		return eResult::Success;
 	}
@@ -79,12 +79,12 @@ namespace mh
 
 		const Json::Value& jVal = (*_pJVal);
 
-		Json::MHLoadValue(_pJVal, JSONVAL(mType));
-		Json::MHLoadValue(_pJVal, JSONVAL(mSize));
-		Json::MHLoadValue(_pJVal, JSONVAL(mCenter));
-		Json::MHLoadValue(_pJVal, JSONVAL(mPosition));
-		Json::MHLoadValue(_pJVal, JSONVAL(mRadius));
-		Json::MHLoadValue(_pJVal, JSONVAL(mbTrigger));
+		Json::MHLoadValue(_pJVal, JSON_KEY_PAIR(mType));
+		Json::MHLoadValue(_pJVal, JSON_KEY_PAIR(mSize));
+		Json::MHLoadValue(_pJVal, JSON_KEY_PAIR(mCenter));
+		Json::MHLoadValue(_pJVal, JSON_KEY_PAIR(mPosition));
+		Json::MHLoadValue(_pJVal, JSON_KEY_PAIR(mRadius));
+		Json::MHLoadValue(_pJVal, JSON_KEY_PAIR(mbTrigger));
 
 		mID = gColliderNumber++;
 
