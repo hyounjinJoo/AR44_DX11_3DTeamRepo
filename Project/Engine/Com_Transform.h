@@ -6,7 +6,7 @@
 
 namespace mh
 {
-	using namespace mh::math;
+	
 
 	class GameObject;
 	class Com_Transform : public IComponent
@@ -30,27 +30,27 @@ namespace mh
 		void SetConstBuffer();
 		
 
-		Vector3 GetPosition() { return mPosition; };
-		Vector3 GetRotation() { return mRotation; };
-		Vector3 GetScale() { return mScale; };
+		float3 GetPosition() { return mPosition; };
+		float3 GetRotation() { return mRotation; };
+		float3 GetScale() { return mScale; };
 
-		void SetPosition(const Vector3& _position) { mPosition = _position; };
-		void SetRotation(const Vector3& _degree) { mRotation = _degree; };
-		void SetScale(const Vector3& _scale) { mScale = _scale; };
+		void SetPosition(const float3& _position) { mPosition = _position; };
+		void SetRotation(const float3& _degree) { mRotation = _degree; };
+		void SetScale(const float3& _scale) { mScale = _scale; };
 
-		Vector3 Foward() { return mForward; }
-		Vector3 Right() { return mRight; }
-		Vector3 Up() { return mUp; }
+		float3 Foward() { return mForward; }
+		float3 Right() { return mRight; }
+		float3 Up() { return mUp; }
 
-		Matrix& GetWorldMatrix() { return mWorld; }
+		MATRIX& GetWorldMatrix() { return mWorld; }
 
 	private:
-		Vector3 mForward;
-		Vector3 mRight;
-		Vector3 mUp;
-		Vector3 mPosition;
-		Vector3 mRotation;
-		Vector3 mScale;
-		Matrix mWorld;
+		float3 mForward;
+		float3 mRight;
+		float3 mUp;
+		float3 mPosition;
+		float3 mRotation;
+		float3 mScale;
+		MATRIX mWorld;
 	};
 }

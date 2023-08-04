@@ -8,8 +8,15 @@
 #include "json-cpp/json.h"
 #include "ResMgr.h"
 
+#include <Fmod/fmod.hpp>
+#include <Fmod/fmod_studio.hpp>
+#include <Fmod/fmod_common.h>
+#include <Fmod/fmod_codec.h>
+
 namespace mh
 {
+	using namespace math;
+
 	Com_AudioSource::Com_AudioSource()
 		: IComponent(define::eComponentType::AudioSource)
 		, mAudioClip(nullptr)
@@ -76,8 +83,8 @@ namespace mh
 	void Com_AudioSource::FixedUpdate()
 	{
 		Com_Transform& tr = GetOwner()->GetTransform();
-		math::Vector3 pos = tr.GetPosition();
-		math::Vector3 foward = tr.Foward();
+		float3 pos = tr.GetPosition();
+		float3 foward = tr.Foward();
 
 		mAudioClip->Set3DAttributes(pos, foward);
 	}

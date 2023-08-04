@@ -19,6 +19,9 @@
     <ClCompile Include="DirTree.cpp" />
     <ClCompile Include="define_CodeGen.cpp" />
     <ClCompile Include="CodeWriter.cpp" />
+    <ClCompile Include="json-cpp\jsoncpp.cpp">
+      <Filter>Default</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
@@ -31,6 +34,12 @@
     <ClInclude Include="DirTree.h" />
     <ClInclude Include="CodeWriter.h" />
     <ClInclude Include="define_CodeGen.h">
+      <Filter>Default</Filter>
+    </ClInclude>
+    <ClInclude Include="json-cpp\json.h">
+      <Filter>Default</Filter>
+    </ClInclude>
+    <ClInclude Include="json-cpp\json-forwards.h">
       <Filter>Default</Filter>
     </ClInclude>
   </ItemGroup>

@@ -15,10 +15,10 @@ namespace  mh
 			Orthographic,
 		};
 
-		__forceinline static math::Matrix& GetGpuViewMatrix() { return gView; }
-		__forceinline static math::Matrix& GetGpuProjectionMatrix() { return gProjection; }
-		__forceinline static void SetGpuViewMatrix(math::Matrix _view) { gView = _view; }
-		__forceinline static void SetGpuProjectionMatrix(math::Matrix _projection) { gProjection = _projection; }
+		__forceinline static MATRIX& GetGpuViewMatrix() { return gView; }
+		__forceinline static MATRIX& GetGpuProjectionMatrix() { return gProjection; }
+		__forceinline static void SetGpuViewMatrix(MATRIX _view) { gView = _view; }
+		__forceinline static void SetGpuProjectionMatrix(MATRIX _projection) { gProjection = _projection; }
 
 		virtual void Init() override;
 		virtual void Update() override;
@@ -36,8 +36,8 @@ namespace  mh
 		void SetProjectionType(eProjectionType _type) { mType = _type; }
 
 		float GetScale() const { return mScale; }
-		const math::Matrix& GetViewMatrix() const { return mView; }
-		const math::Matrix& GetProjectionMatrix() const { return mProjection; }
+		const MATRIX& GetViewMatrix() const { return mView; }
+		const MATRIX& GetProjectionMatrix() const { return mProjection; }
 
 	private:
 		void SortGameObjects();
@@ -49,12 +49,12 @@ namespace  mh
 		void PushGameObjectToRenderingModes(GameObject* _gameObj);
 
 	private:
-		static math::Matrix gView;
-		static math::Matrix gInverseView;
-		static math::Matrix gProjection;
+		static MATRIX gView;
+		static MATRIX gInverseView;
+		static MATRIX gProjection;
 
-		math::Matrix mView;
-		math::Matrix mProjection;
+		MATRIX mView;
+		MATRIX mProjection;
 
 		eProjectionType mType;
 		float mAspectRatio;
@@ -63,7 +63,7 @@ namespace  mh
 		float mFar;
 		float mScale;
 
-		std::bitset<(UINT)define::eLayerType::End> mLayerMasks;
+		std::bitset<(uint)define::eLayerType::End> mLayerMasks;
 		std::vector<GameObject*> mDefferedOpaqueGameObjects;
 		std::vector<GameObject*> mOpaqueGameObjects;
 		std::vector<GameObject*> mCutoutGameObjects;

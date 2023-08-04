@@ -111,7 +111,7 @@ namespace mh
 
 		if (FAILED(GPUMgr::Device()->CreateInputLayout(
 			mVecInputLayoutDesc.data(),
-			(UINT)mVecInputLayoutDesc.size(),
+			(uint)mVecInputLayoutDesc.size(),
 			VSBlobData->GetBufferPointer(),
 			VSBlobData->GetBufferSize(),
 			mInputLayout.ReleaseAndGetAddressOf()

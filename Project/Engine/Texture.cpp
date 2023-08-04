@@ -40,7 +40,7 @@ namespace mh
 
 	}
 
-	void Texture::Clear(UINT _startSlot)
+	void Texture::Clear(uint _startSlot)
 	{
 		ID3D11ShaderResourceView* srv = nullptr;
 
@@ -69,7 +69,7 @@ namespace mh
 		}
 	}
 
-	bool Texture::Create(UINT _width, UINT _height, DXGI_FORMAT _pixelFormat, UINT _D3D11_BIND_FLAG, bool _bAllowCPURead)
+	bool Texture::Create(uint _width, uint _height, DXGI_FORMAT _pixelFormat, uint _D3D11_BIND_FLAG, bool _bAllowCPURead)
 	{
 		mDesc.BindFlags = _D3D11_BIND_FLAG;
 
@@ -213,7 +213,7 @@ namespace mh
 		mTexture->GetDesc(&mDesc);
 	}
 
-	void Texture::BindDataSRV(UINT _SRVSlot, eShaderStageFlag_ _stageFlag)
+	void Texture::BindDataSRV(uint _SRVSlot, eShaderStageFlag_ _stageFlag)
 	{
 		UnBind();
 	
@@ -244,14 +244,14 @@ namespace mh
 		}
 	}
 
-	void Texture::BindDataUAV(UINT _startSlot)
+	void Texture::BindDataUAV(uint _startSlot)
 	{
 		UnBind();
 
 		mCurBoundView = eBufferViewType::UAV;
 		mCurBoundRegister = (int)_startSlot;
 
-		UINT i = -1;
+		uint i = -1;
 		GPUMgr::Context()->CSSetUnorderedAccessViews(_startSlot, 1, mUAV.GetAddressOf(), &i);
 	}
 
@@ -303,7 +303,7 @@ namespace mh
 		case mh::eBufferViewType::UAV:
 		{
 			ID3D11UnorderedAccessView* pUAV = nullptr;
-			UINT u = -1;
+			uint u = -1;
 
 			GPUMgr::Context()->CSSetUnorderedAccessViews(mCurBoundRegister, 1, &pUAV, &u);
 

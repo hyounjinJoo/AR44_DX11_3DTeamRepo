@@ -8,7 +8,7 @@
 
 namespace mh
 {
-	std::bitset<(UINT)define::eLayerType::End> CollisionMgr::mLayerCollisionMatrix[(UINT)define::eLayerType::End] = {};
+	std::bitset<(uint)define::eLayerType::End> CollisionMgr::mLayerCollisionMatrix[(uint)define::eLayerType::End] = {};
 	std::map<UINT64, bool> CollisionMgr::mCollisionMap;
 
 	void CollisionMgr::Init()
@@ -27,9 +27,9 @@ namespace mh
 	void CollisionMgr::Update()
 	{
 		Scene* scene = SceneManager::GetActiveScene();
-		for (UINT row = 0; row < (UINT)define::eLayerType::End; row++)
+		for (uint row = 0; row < (uint)define::eLayerType::End; row++)
 		{
-			for (UINT column = 0; column < (UINT)define::eLayerType::End; column++)
+			for (uint column = 0; column < (uint)define::eLayerType::End; column++)
 			{
 				if (mLayerCollisionMatrix[row][column])
 				{
@@ -49,15 +49,15 @@ namespace mh
 		int row = 0;
 		int column = 0;
 
-		if ((UINT)_left <= (UINT)_right)
+		if ((uint)_left <= (uint)_right)
 		{
-			row = (UINT)_left;
-			column = (UINT)_right;
+			row = (uint)_left;
+			column = (uint)_right;
 		}
 		else
 		{
-			row = (UINT)_right;
-			column = (UINT)_left;
+			row = (uint)_right;
+			column = (uint)_left;
 		}
 
 		mLayerCollisionMatrix[row][column] = _enable;
@@ -86,7 +86,7 @@ namespace mh
 				ColliderCollision(left->GetComponent<ICollider2D>(), right->GetComponent<ICollider2D>());
 			}
 
-			/*if ((UINT)left == (UINT)right)  
+			/*if ((uint)left == (uint)right)  
 				break;*/
 		}
 
@@ -96,8 +96,8 @@ namespace mh
 	{
 		// 두 충돌체 레이어로 구성된 ID 확인
 		union_ColliderID colliderID;
-		colliderID.Left = (UINT)_left->GetID();
-		colliderID.Right = (UINT)_right->GetID();
+		colliderID.Left = (uint)_left->GetID();
+		colliderID.Right = (uint)_right->GetID();
 
 		// 이전 충돌 정보를 검색한다.
 		// 만약에 충돌정보가 없는 상태라면
@@ -166,54 +166,54 @@ namespace mh
 		// 0 --- 1
 		// |     |
 		// 3 --- 2
-		math::Vector3 arrLocalPos[4] =
+		float3 arrLocalPos[4] =
 		{
-			math::Vector3{-0.5f, 0.5f, 0.0f}
-			,math::Vector3{0.5f, 0.5f, 0.0f}
-			,math::Vector3{0.5f, -0.5f, 0.0f}
-			,math::Vector3{-0.5f, -0.5f, 0.0f}
+			float3{-0.5f, 0.5f, 0.0f}
+			,float3{0.5f, 0.5f, 0.0f}
+			,float3{0.5f, -0.5f, 0.0f}
+			,float3{-0.5f, -0.5f, 0.0f}
 		};
 
 		Com_Transform& leftTr = _left->GetOwner()->GetTransform();
 		Com_Transform& rightTr = _right->GetOwner()->GetTransform();
 
-		math::Matrix leftMat = leftTr.GetWorldMatrix();
-		math::Matrix rightMat = rightTr.GetWorldMatrix();
+		MATRIX leftMat = leftTr.GetWorldMatrix();
+		MATRIX rightMat = rightTr.GetWorldMatrix();
 
 
 
 		// 분리축 벡터 4개 구하기
-		math::Vector3 Axis[4] = {};
+		float3 Axis[4] = {};
 
-		math::Vector3 leftScale = math::Vector3(_left->GetSize().x, _left->GetSize().y, 1.0f);
+		float3 leftScale = float3(_left->GetSize().x, _left->GetSize().y, 1.0f);
 
-		math::Matrix finalLeft = math::Matrix::CreateScale(leftScale);
+		MATRIX finalLeft = MATRIX::CreateScale(leftScale);
 		finalLeft *= leftMat;
 
-		math::Vector3 rightScale = math::Vector3(_right->GetSize().x, _right->GetSize().y, 1.0f);
-		math::Matrix finalRight = math::Matrix::CreateScale(rightScale);
+		float3 rightScale = float3(_right->GetSize().x, _right->GetSize().y, 1.0f);
+		MATRIX finalRight = MATRIX::CreateScale(rightScale);
 		finalRight *= rightMat;
 
-		Axis[0] = math::Vector3::Transform(arrLocalPos[1], finalLeft);
-		Axis[1] = math::Vector3::Transform(arrLocalPos[3], finalLeft);
-		Axis[2] = math::Vector3::Transform(arrLocalPos[1], finalRight);
-		Axis[3] = math::Vector3::Transform(arrLocalPos[3], finalRight);
+		Axis[0] = float3::Transform(arrLocalPos[1], finalLeft);
+		Axis[1] = float3::Transform(arrLocalPos[3], finalLeft);
+		Axis[2] = float3::Transform(arrLocalPos[1], finalRight);
+		Axis[3] = float3::Transform(arrLocalPos[3], finalRight);
 
-		Axis[0] -= math::Vector3::Transform(arrLocalPos[0], finalLeft);
-		Axis[1] -= math::Vector3::Transform(arrLocalPos[0], finalLeft);
-		Axis[2] -= math::Vector3::Transform(arrLocalPos[0], finalRight);
-		Axis[3] -= math::Vector3::Transform(arrLocalPos[0], finalRight);
+		Axis[0] -= float3::Transform(arrLocalPos[0], finalLeft);
+		Axis[1] -= float3::Transform(arrLocalPos[0], finalLeft);
+		Axis[2] -= float3::Transform(arrLocalPos[0], finalRight);
+		Axis[3] -= float3::Transform(arrLocalPos[0], finalRight);
 
 		for (int index = 0; index < 4; index++)
 			Axis[index].z = 0.0f;
 
-		math::Vector3 vc = leftTr.GetPosition() - rightTr.GetPosition();
+		float3 vc = leftTr.GetPosition() - rightTr.GetPosition();
 		vc.z = 0.0f;
 
-		math::Vector3 centerDir = vc;
+		float3 centerDir = vc;
 		for (int index = 0; index < 4; index++)
 		{
-			math::Vector3 vA = Axis[index];
+			float3 vA = Axis[index];
 			//vA.Normalize();
 
 			float projDist = 0.0f;

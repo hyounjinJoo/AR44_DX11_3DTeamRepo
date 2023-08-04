@@ -23,18 +23,18 @@ namespace mh
 		void Release();
 
 
-		void SetWindow(HWND _hwnd, UINT _width, UINT _height);
+		void SetWindow(HWND _hwnd, uint _width, uint _height);
 		void SetHwnd(HWND _hwnd) { mHwnd = _hwnd; }
 		HWND GetHwnd() const { return mHwnd; }
-		UINT GetWidth() const { return mWidth; }
-		UINT GetHeight() const { return mHeight; }
+		uint GetWidth() const { return mWidth; }
+		uint GetHeight() const { return mHeight; }
 
 	private:
 		bool bInitialized = false;
 
 		HWND mHwnd;
 		HDC mHdc;
-		UINT mHeight;
-		UINT mWidth;
+		uint mHeight;
+		uint mWidth;
 	};
 }

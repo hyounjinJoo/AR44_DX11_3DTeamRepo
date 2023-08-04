@@ -24,7 +24,7 @@ namespace mh
 
 	D3D11_VIEWPORT GPUMgr::mViewPort;
 
-	bool GPUMgr::Init(HWND _hwnd, UINT _Width, UINT _Height)
+	bool GPUMgr::Init(HWND _hwnd, uint _Width, uint _Height)
 	{
 		AtExit::AddFunc(GPUMgr::Release);
 
@@ -107,7 +107,7 @@ namespace mh
 	{
 		bool Result = false;
 		// Device, Device Context
-		UINT DeviceFlag = D3D11_CREATE_DEVICE_DEBUG;
+		uint DeviceFlag = D3D11_CREATE_DEVICE_DEBUG;
 		D3D_FEATURE_LEVEL FeatureLevel = (D3D_FEATURE_LEVEL)0;
 
 		if (FAILED(D3D11CreateDevice(nullptr, D3D_DRIVER_TYPE_HARDWARE, nullptr
@@ -178,7 +178,7 @@ namespace mh
 		return ReturnTex;
 	}
 
-	std::shared_ptr<Texture> GPUMgr::CreateDepthStencil(UINT _Width, UINT _Height)
+	std::shared_ptr<Texture> GPUMgr::CreateDepthStencil(uint _Width, uint _Height)
 	{
 		//D3D11_TEXTURE2D_DESC depthBuffer = {};
 		//depthBuffer.BindFlags = D3D11_BIND_FLAG::D3D11_BIND_DEPTH_STENCIL;

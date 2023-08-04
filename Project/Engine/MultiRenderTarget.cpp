@@ -6,7 +6,6 @@
 
 namespace mh
 {
-
 	MultiRenderTarget::MultiRenderTarget()
 		: mRenderTargetTextures{}
 		, mRenderTargetViews{}
@@ -48,7 +47,7 @@ namespace mh
 	void MultiRenderTarget::Bind()
 	{
 
-		for (UINT i = 0; i < mRenderTargetCount; ++i)
+		for (uint i = 0; i < mRenderTargetCount; ++i)
 		{
 			mRenderTargetTextures[i]->UnBind();
 		}
@@ -65,9 +64,9 @@ namespace mh
 
 
 
-	void MultiRenderTarget::Clear(const Vector4& _clearColor)
+	void MultiRenderTarget::Clear(const float4& _clearColor)
 	{
-		for (UINT i = 0u; i < mRenderTargetCount; ++i)
+		for (uint i = 0u; i < mRenderTargetCount; ++i)
 		{
 			if (mRenderTargetViews[i])
 			{
@@ -77,7 +76,7 @@ namespace mh
 
 		if (mDSTexture)
 		{
-			constexpr UINT ClearFlag = D3D11_CLEAR_FLAG::D3D11_CLEAR_DEPTH | D3D11_CLEAR_FLAG::D3D11_CLEAR_STENCIL;
+			constexpr uint ClearFlag = D3D11_CLEAR_FLAG::D3D11_CLEAR_DEPTH | D3D11_CLEAR_FLAG::D3D11_CLEAR_STENCIL;
 			GPUMgr::Context()->ClearDepthStencilView(mDSTexture->GetDSV().Get(), ClearFlag, 1.f, (UINT8)0);
 		}
 	}

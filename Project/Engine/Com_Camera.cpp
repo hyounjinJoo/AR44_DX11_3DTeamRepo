@@ -19,9 +19,9 @@ extern mh::Application gApplication;
 
 namespace mh
 {
-	math::Matrix Com_Camera::gView = math::Matrix::Identity;
-	math::Matrix Com_Camera::gInverseView = Matrix::Identity;
-	math::Matrix Com_Camera::gProjection = math::Matrix::Identity;
+	MATRIX Com_Camera::gView = MATRIX::Identity;
+	MATRIX Com_Camera::gInverseView = MATRIX::Identity;
+	MATRIX Com_Camera::gProjection = MATRIX::Identity;
 
 	Com_Camera::Com_Camera()
 		: IComponent(define::eComponentType::Camera)
@@ -99,18 +99,18 @@ namespace mh
 	void Com_Camera::CreateViewMatrix()
 	{
 		Com_Transform& tr = GetOwner()->GetTransform();
-		math::Vector3 pos = tr.GetPosition();
+		float3 pos = tr.GetPosition();
 
 		// Crate Translate view matrix
-		mView = math::Matrix::Identity;
-		mView *= math::Matrix::CreateTranslation(-pos);
+		mView = MATRIX::Identity;
+		mView *= MATRIX::CreateTranslation(-pos);
 		//회전 정보
 
-		math::Vector3 up = tr.Up();
-		math::Vector3 right = tr.Right();
-		math::Vector3 foward = tr.Foward();
+		float3 up = tr.Up();
+		float3 right = tr.Right();
+		float3 foward = tr.Foward();
 
-		math::Matrix viewRotate;
+		MATRIX viewRotate;
 		viewRotate._11 = right.x; viewRotate._12 = up.x; viewRotate._13 = foward.x;
 		viewRotate._21 = right.y; viewRotate._22 = up.y; viewRotate._23 = foward.y;
 		viewRotate._31 = right.z; viewRotate._32 = up.z; viewRotate._33 = foward.z;
@@ -129,7 +129,7 @@ namespace mh
 
 		if (mType == eProjectionType::Perspective)
 		{
-			mProjection = math::Matrix::CreatePerspectiveFieldOfViewLH
+			mProjection = MATRIX::CreatePerspectiveFieldOfViewLH
 			(
 				XM_2PI / 6.0f
 				, mAspectRatio
@@ -139,7 +139,7 @@ namespace mh
 		}
 		else
 		{
-			mProjection = math::Matrix::CreateOrthographicLH(width /*/ 100.0f*/, height /*/ 100.0f*/, mNear, mFar);
+			mProjection = MATRIX::CreateOrthographicLH(width /*/ 100.0f*/, height /*/ 100.0f*/, mNear, mFar);
 		}
 	}
 
@@ -151,7 +151,7 @@ namespace mh
 
 	void Com_Camera::TurnLayerMask(define::eLayerType _layer, bool _enable)
 	{
-		mLayerMasks.set((UINT)_layer, _enable);
+		mLayerMasks.set((uint)_layer, _enable);
 	}
 
 	void Com_Camera::SortGameObjects()
@@ -163,7 +163,7 @@ namespace mh
 		mPostProcessGameObjects.clear();
 
 		Scene* scene = SceneManager::GetActiveScene();
-		for (int index = 0; index < (UINT)define::eLayerType::End; index++)
+		for (int index = 0; index < (uint)define::eLayerType::End; index++)
 		{
 			if (mLayerMasks[index] == true)
 			{

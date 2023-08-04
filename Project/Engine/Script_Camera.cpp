@@ -25,7 +25,7 @@ namespace mh
 	{
 		Com_Transform& tr = GetOwner()->GetTransform();
 
-		Vector3 pos = tr.GetPosition();
+		float3 pos = tr.GetPosition();
 
 		if (InputMgr::GetKeyState(eKeyCode::D) == eKeyState::PRESSED)
 		{

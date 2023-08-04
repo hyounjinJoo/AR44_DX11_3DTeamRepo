@@ -17,11 +17,11 @@ namespace mh
 		Texture();
 		virtual ~Texture();
 
-		static void Clear(UINT _startSlot);
+		static void Clear(uint _startSlot);
 		static void ClearAll();
 
 		//생성 관련 함수
-		bool Create(UINT _width, UINT _height, DXGI_FORMAT _format, UINT _D3D11_BIND_FLAG, bool _bAllowCPURead = false);
+		bool Create(uint _width, uint _height, DXGI_FORMAT _format, uint _D3D11_BIND_FLAG, bool _bAllowCPURead = false);
 		bool Create(Microsoft::WRL::ComPtr<ID3D11Texture2D> _texture);
 		bool Create(const D3D11_TEXTURE2D_DESC& _TexDesc);
 
@@ -30,15 +30,15 @@ namespace mh
 		void InitializeResource();
 
 
-		void BindDataSRV(UINT _SRVSlot, eShaderStageFlag_ _stageFlag);
-		void BindDataUAV(UINT _UAVSlot = 0u);
+		void BindDataSRV(uint _SRVSlot, eShaderStageFlag_ _stageFlag);
+		void BindDataUAV(uint _UAVSlot = 0u);
 		void UnBind();
 
 
 		void SetTexture(Microsoft::WRL::ComPtr<ID3D11Texture2D> _texture) { mTexture = _texture; }
 
-		UINT GetHeight() const { return mDesc.Height; }
-		UINT GetWidth() const { return mDesc.Width; }
+		uint GetHeight() const { return mDesc.Height; }
+		uint GetWidth() const { return mDesc.Width; }
 
 		ComPtr<ID3D11Texture2D> GetTexture() { return mTexture; }
 		ComPtr<ID3D11DepthStencilView> GetDSV() { return mDSV; }

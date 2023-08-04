@@ -30,8 +30,8 @@ namespace mh
 
 	bool Mesh::CreateVertexBuffer(void* _data, size_t _dataStride, size_t _count)
 	{
-		mVertexByteStride = (UINT)_dataStride;
-		mVertexCount = (UINT)_count;
+		mVertexByteStride = (uint)_dataStride;
+		mVertexCount = (uint)_count;
 		// 버텍스 버퍼
 		mVBDesc.ByteWidth = mVertexByteStride * mVertexCount;
 		mVBDesc.BindFlags = D3D11_BIND_FLAG::D3D11_BIND_VERTEX_BUFFER;
@@ -56,8 +56,8 @@ namespace mh
 
 	bool Mesh::CreateIndexBuffer(void* _data, size_t _count)
 	{
-		mIndexCount = (UINT)_count;
-		mIBDesc.ByteWidth = (UINT)(sizeof(UINT) * _count);
+		mIndexCount = (uint)_count;
+		mIBDesc.ByteWidth = (uint)(sizeof(uint) * _count);
 		mIBDesc.BindFlags = D3D11_BIND_FLAG::D3D11_BIND_INDEX_BUFFER;
 		mIBDesc.Usage = D3D11_USAGE::D3D11_USAGE_DEFAULT;
 		mIBDesc.CPUAccessFlags = 0;
@@ -80,7 +80,7 @@ namespace mh
 	void Mesh::BindBuffer() const
 	{
 		// Input Assembeler 단계에 버텍스버퍼 정보 지정
-		UINT offset = 0;
+		uint offset = 0;
 
 		GPUMgr::Context()->IASetVertexBuffers(0, 1, mVertexBuffer.GetAddressOf(), &mVertexByteStride, &offset);
 		GPUMgr::Context()->IASetIndexBuffer(mIndexBuffer.Get(), DXGI_FORMAT_R32_UINT, 0);
@@ -91,7 +91,7 @@ namespace mh
 		GPUMgr::Context()->DrawIndexed(mIndexCount, 0, 0);
 	}
 	
-	void Mesh::RenderInstanced(UINT _count) const
+	void Mesh::RenderInstanced(uint _count) const
 	{
 		GPUMgr::Context()->DrawIndexedInstanced(mIndexCount, _count, 0, 0, 0);
 	}

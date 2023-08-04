@@ -29,7 +29,7 @@ namespace mh
 		return true;
 	}
 
-	void FontWrapper::DrawFont(const wchar_t* _string, float _x, float _y, float _size, UINT _rgb)
+	void FontWrapper::DrawFont(const wchar_t* _string, float _x, float _y, float _size, uint _rgb)
 	{
 		auto context = GPUMgr::Context();
 		mFontWrapper->DrawString(context.Get(),

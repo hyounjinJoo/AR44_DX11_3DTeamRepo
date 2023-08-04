@@ -1,8 +1,13 @@
 #include "EnginePCH.h"
-
 #include "AudioClip.h"
+
 #include "Com_Transform.h"
 #include "PathMgr.h"
+
+#include <Fmod/fmod.hpp>
+#include <Fmod/fmod_studio.hpp>
+#include <Fmod/fmod_common.h>
+#include <Fmod/fmod_codec.h>
 
 namespace mh
 {
@@ -52,7 +57,7 @@ namespace mh
 		mChannel->stop();
 	}
 
-	void AudioClip::Set3DAttributes(const math::Vector3 _pos, const math::Vector3 _vel)
+	void AudioClip::Set3DAttributes(const float3 _pos, const float3 _vel)
 	{
 		FMOD_VECTOR fmodPos(_pos.x, _pos.y, _pos.z);
 		FMOD_VECTOR fmodVel(_vel.x, _vel.y, _vel.z);

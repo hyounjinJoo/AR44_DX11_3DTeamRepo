@@ -23,13 +23,13 @@ namespace mh
 		static inline std::shared_ptr<mh::Texture> GetDepthStencilBufferTex();
 
 	private:
-		static bool Init(HWND _hwnd, UINT _Width, UINT _Height);
+		static bool Init(HWND _hwnd, uint _Width, uint _Height);
 		static void Release();
 		static void Reset();
 		static bool CreateDevice(ID3D11Device** _ppDevice, ID3D11DeviceContext** _ppContext);
 		static bool CreateSwapChain(DXGI_SWAP_CHAIN_DESC* _desc);
 		static std::shared_ptr<Texture> CreateRenderTarget();
-		static std::shared_ptr<Texture> CreateDepthStencil(UINT _Width, UINT _Height);
+		static std::shared_ptr<Texture> CreateDepthStencil(uint _Width, uint _Height);
 
 		
 

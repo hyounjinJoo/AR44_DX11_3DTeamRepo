@@ -12,8 +12,8 @@ namespace mh
 	
 
 	std::vector<InputMgr::tKey> InputMgr::mKeys{};
-	math::Vector2 InputMgr::mMousPosition{};
-	int ASCII[(UINT)eKeyCode::END] =
+	float2 InputMgr::mMousPosition{};
+	int ASCII[(uint)eKeyCode::END] =
 	{
 		//Alphabet
 		'Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P',
@@ -40,7 +40,7 @@ namespace mh
 
 	void InputMgr::Init()
 	{
-		for (UINT i = 0; i < (UINT)eKeyCode::END; i++)
+		for (uint i = 0; i < (uint)eKeyCode::END; i++)
 		{
 			tKey key;
 			key.eType = (eKeyCode)i;
@@ -56,7 +56,7 @@ namespace mh
 		if (GetFocus())
 		{
 			//KEY
-			for (UINT i = 0; i < (UINT)eKeyCode::END; ++i)
+			for (uint i = 0; i < (uint)eKeyCode::END; ++i)
 			{
 				// 해당키가 현재 눌려있다.
 				if (GetAsyncKeyState(ASCII[i]) & 0x8000)
@@ -89,7 +89,7 @@ namespace mh
 		}
 		else
 		{
-			for (UINT i = 0; i < (UINT)eKeyCode::END; ++i)
+			for (uint i = 0; i < (uint)eKeyCode::END; ++i)
 			{
 				if (eKeyState::DOWN == mKeys[i].eState || eKeyState::PRESSED == mKeys[i].eState)
 					mKeys[i].eState = eKeyState::UP;

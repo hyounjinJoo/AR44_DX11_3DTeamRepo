@@ -45,7 +45,7 @@ namespace mh::object
 	}
 
 	template <typename T>
-	static T* Instantiate(define::eLayerType _type, Vector3 _position, Vector3 _rotation)
+	static T* Instantiate(define::eLayerType _type, float3 _position, float3 _rotation)
 	{
 		T* gameObject = new T();
 		Scene* scene = SceneManager::GetActiveScene();
@@ -60,7 +60,7 @@ namespace mh::object
 	}
 
 	template <typename T>
-	static T* Instantiate(define::eLayerType _type, Vector3 _position, Vector3 _rotation, Com_Transform* _parent)
+	static T* Instantiate(define::eLayerType _type, float3 _position, float3 _rotation, Com_Transform* _parent)
 	{
 		T* gameObject = new T();
 		Scene* scene = SceneManager::GetActiveScene();

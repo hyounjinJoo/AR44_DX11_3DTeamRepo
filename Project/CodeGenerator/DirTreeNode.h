@@ -2,7 +2,7 @@
 
 #include "pch.h"
 #include "CodeWriter.h"
-#include <Engine/define_Util.h>
+#include <Engine/define_GPU.h>
 
 
 struct tShaderGroup

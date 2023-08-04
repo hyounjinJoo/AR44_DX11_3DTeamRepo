@@ -57,10 +57,10 @@ namespace mh
 
 		static __forceinline eKeyState GetKeyState(eKeyCode keyCode) 
 		{ 
-			return mKeys[static_cast<UINT>(keyCode)].eState; 
+			return mKeys[static_cast<uint>(keyCode)].eState; 
 		}
 
-		static __forceinline math::Vector2 GetMousPosition()
+		static __forceinline float2 GetMousPosition()
 		{
 			return mMousPosition;
 		}
@@ -71,21 +71,21 @@ namespace mh
 
 		static __forceinline bool GetKey(eKeyCode keyCode)
 		{
-			return mKeys[static_cast<UINT>(keyCode)].eState == eKeyState::PRESSED;
+			return mKeys[static_cast<uint>(keyCode)].eState == eKeyState::PRESSED;
 		}
 
 		static __forceinline bool GetKeyDown(eKeyCode keyCode)
 		{
-			return mKeys[static_cast<UINT>(keyCode)].eState == eKeyState::DOWN;
+			return mKeys[static_cast<uint>(keyCode)].eState == eKeyState::DOWN;
 		}
 
 		static __forceinline bool GetKeyUp(eKeyCode keyCode)
 		{
-			return mKeys[static_cast<UINT>(keyCode)].eState == eKeyState::UP;
+			return mKeys[static_cast<uint>(keyCode)].eState == eKeyState::UP;
 		}		
 
 	private:
 		static std::vector<tKey> mKeys;
-		static math::Vector2 mMousPosition;
+		static float2 mMousPosition;
 	};
 }

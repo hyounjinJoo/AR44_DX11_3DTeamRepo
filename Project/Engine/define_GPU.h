@@ -25,12 +25,12 @@ using Microsoft::WRL::ComPtr;
 #define CBSLOT_NOISE			6
 #define CBSLOT_SBUFFER			7
 
-namespace mh
+namespace mh::define
 {
 	constexpr const int MRT_MAX = 8;
 
 	using namespace mh::define;
-	using namespace mh::math;
+	
 	enum class eValidationMode
 	{
 		Disabled,
@@ -47,6 +47,20 @@ namespace mh
 		PS,
 		END
 	};
+
+	namespace strKey
+	{
+		STRKEY ArrGSPrefix[(int)eGSStage::END] =
+		{
+			"_0VS_",
+			"_1HS_",
+			"_2DS_",
+			"_3GS_",
+			"_4PS_",
+		};
+		STRKEY CSPrefix = "CS_";
+	}
+
 
 	enum class eMRTType
 	{
@@ -170,10 +184,10 @@ namespace mh
 	{
 		Int,
 		Float,
-		Vector2,
-		Vector3,
-		Vector4,
-		Matrix,
+		float2,
+		float3,
+		float4,
+		MATRIX,
 	};
 
 	enum class eSRVType
@@ -231,9 +245,9 @@ namespace mh
 	struct tDebugMesh
 	{
 		define::eColliderType type;
-		math::Vector3 position;
-		math::Vector3 rotatation;
-		math::Vector3 scale;
+		float3 position;
+		float3 rotatation;
+		float3 scale;
 		
 		float radius;
 		float duration;
@@ -242,12 +256,12 @@ namespace mh
 
 	struct tLightAttribute
 	{
-		Vector4 diffuse;
-		Vector4 specular;
-		Vector4 ambient;
+		float4 diffuse;
+		float4 specular;
+		float4 ambient;
 
-		Vector4 position;
-		Vector4 direction;
+		float4 position;
+		float4 direction;
 
 		define::eLightType type;
 		float radius;
@@ -257,18 +271,18 @@ namespace mh
 
 	struct tParticle
 	{
-		Vector4 position;
-		Vector4 direction;
+		float4 position;
+		float4 direction;
 
 		float lifeTime;
 		float time;
 		float speed;
-		UINT active;
+		uint active;
 	};
 
 	struct tParticleShared
 	{
-		UINT activeCount;
+		uint activeCount;
 	};
 
 

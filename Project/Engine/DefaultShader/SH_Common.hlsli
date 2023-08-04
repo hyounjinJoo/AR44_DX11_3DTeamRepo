@@ -6,11 +6,11 @@
 
 #include "../SimpleMath.h"
 
-namespace mh::math
+namespace mh
 {
-using float2 = Vector2;
-using float3 = Vector2;
-using float4 = Vector2;
+using float2 = float2;
+using float3 = float2;
+using float4 = float2;
 
 using BOOL = int;
 //윈도우 쪽 헤더에 정의되어 있음
@@ -25,13 +25,13 @@ struct int2 { int x; int y; };
 struct int3 { int x; int y; int z; };
 struct int4 { int x; int y; int z; int w; };
 
-using uint = UINT;
+using uint = uint;
 struct uint2 { uint x; uint y; };
 struct uint3 { uint x; uint y; uint z; };
 struct uint4 { uint x; uint y; uint z; uint w; };
 }
 
-using MATRIX = Matrix;
+using MATRIX = MATRIX;
 
 #define SEMANTIC(_Type)
 

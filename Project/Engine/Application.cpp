@@ -100,7 +100,7 @@ namespace mh
 		AtExit::CallAtExit();
 	}
 
-	void Application::SetWindow(HWND _hwnd, UINT _width, UINT _height)
+	void Application::SetWindow(HWND _hwnd, uint _width, uint _height)
 	{
 		if (nullptr == GPUMgr::Device())
 		{

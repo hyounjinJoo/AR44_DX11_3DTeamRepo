@@ -29,15 +29,15 @@ namespace mh
 
 	void SceneManager::Init()
 	{
-		mScenes.resize((UINT)eSceneType::End);
+		mScenes.resize((uint)eSceneType::End);
 
-		mScenes[(UINT)eSceneType::Tilte] = new TitleScene();
-		mScenes[(UINT)eSceneType::Tilte]->SetKey("TitleScene");
+		mScenes[(uint)eSceneType::Tilte] = new TitleScene();
+		mScenes[(uint)eSceneType::Tilte]->SetKey("TitleScene");
 
-		mScenes[(UINT)eSceneType::Play] = new PlayScene();
-		mScenes[(UINT)eSceneType::Play]->SetKey("PlayScene");
+		mScenes[(uint)eSceneType::Play] = new PlayScene();
+		mScenes[(uint)eSceneType::Play]->SetKey("PlayScene");
 
-		mActiveScene = mScenes[(UINT)eSceneType::Tilte];
+		mActiveScene = mScenes[(uint)eSceneType::Tilte];
 
 		for (Scene* scene : mScenes)
 		{
@@ -81,7 +81,7 @@ namespace mh
 		// 바뀔때 dontDestory 오브젝트는 다음씬으로 같이 넘겨줘야한다.
 		std::vector<GameObject*> gameObjs 
 			= mActiveScene->GetDontDestroyGameObjects();
-		mActiveScene = mScenes[(UINT)_Type];
+		mActiveScene = mScenes[(uint)_Type];
 		
 		for (GameObject* obj : gameObjs)
 		{

@@ -94,10 +94,10 @@ namespace mh
 		UnBind();
 
 		//상수버퍼와는 다르게 버퍼 재할당이 가능함. 먼저 기존 버퍼의 할당을 해제한다.(ComPtr을 통해 관리가 이루어지므로 nullptr로 바꿔주면 됨.)
-		mElementStride = (UINT)_uElemStride;
-		mElementCount = (UINT)_uElemCount;
+		mElementStride = (uint)_uElemStride;
+		mElementCount = (uint)_uElemCount;
 
-		mElementCapacity = (UINT)_uElemCapacity;
+		mElementCapacity = (uint)_uElemCapacity;
 
 		mBufferDesc.StructureByteStride = mElementStride;
 		mBufferDesc.ByteWidth = mElementStride * mElementCapacity;
@@ -115,7 +115,7 @@ namespace mh
 				Data.pSysMem = _pInitialData;
 
 				//이 값은 무시됨. BufferDesc.ByteWidth 값만 영향을 미치는 것을 확인함.
-				Data.SysMemPitch = mElementStride * (UINT)_uElemCount;
+				Data.SysMemPitch = mElementStride * (uint)_uElemCount;
 				Data.SysMemSlicePitch = mBufferDesc.StructureByteStride;
 				pData = &Data;
 				mCurBoundView = eBufferViewType::SRV;
@@ -145,7 +145,7 @@ namespace mh
 			if (nullptr != _pInitialData)
 			{
 				Data.pSysMem = _pInitialData;
-				Data.SysMemPitch = mElementStride * (UINT)_uElemCount;
+				Data.SysMemPitch = mElementStride * (uint)_uElemCount;
 				Data.SysMemSlicePitch = mBufferDesc.StructureByteStride;
 				pData = &Data;
 				mCurBoundView = eBufferViewType::UAV;
@@ -172,7 +172,7 @@ namespace mh
 
 	void StructBuffer::SetData(void* _pData, size_t _uCount)
 	{
-		mElementCount = (UINT)_uCount;
+		mElementCount = (uint)_uCount;
 
 		//g_arrSBufferShareData의 자신의 인덱스에 해당하는 위치에 이번에 업데이트된 구조체의 갯수를 삽입
 		//상수 버퍼의 바인딩은 BindData()를 하는 시점에 해준다.
@@ -367,7 +367,7 @@ namespace mh
 		//mSBufferDesc.TargetStage |= eShaderStageFlag::CS;
 		BindConstBuffer(eShaderStageFlag::CS);
 
-		UINT Offset = -1;
+		uint Offset = -1;
 		GPUMgr::Context()->CSSetUnorderedAccessViews(_UAVSlot, 1, mUAV.GetAddressOf(), &Offset);
 	}
 
@@ -525,7 +525,7 @@ namespace mh
 
 		case mh::eBufferViewType::UAV:
 		{
-			static const UINT v2_Offset = -1;
+			static const uint v2_Offset = -1;
 			ID3D11UnorderedAccessView* pUAV = nullptr;
 			GPUMgr::Context()->CSSetUnorderedAccessViews(mCurBoundRegister, 1, &pUAV, &v2_Offset);
 			break;

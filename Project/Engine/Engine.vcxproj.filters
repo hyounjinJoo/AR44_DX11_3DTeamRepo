@@ -13,12 +13,6 @@
     <Filter Include="Resource">
       <UniqueIdentifier>{767d4264-e56a-430c-8c2d-f49d85c35b59}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Time">
-      <UniqueIdentifier>{d5cea299-11de-49f8-9c0c-c110056dd303}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Input">
-      <UniqueIdentifier>{cd4b9eba-c6cf-46a9-a814-89a620c95213}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Scene">
       <UniqueIdentifier>{976687b1-0493-449e-87e3-f6bf27d49c71}</UniqueIdentifier>
     </Filter>
@@ -158,9 +152,6 @@
   <ItemGroup>
     <ClCompile Include="Application.cpp">
       <Filter>High Level Interface</Filter>
-    </ClCompile>
-    <ClCompile Include="SimpleMath.cpp">
-      <Filter>Common\Math</Filter>
     </ClCompile>
     <ClCompile Include="Entity.cpp">
       <Filter>Common</Filter>
@@ -335,13 +326,13 @@
     <ClCompile Include="define_Util.cpp">
       <Filter>Common\define</Filter>
     </ClCompile>
+    <ClCompile Include="SimpleMath.cpp">
+      <Filter>Common\Math</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application.h">
       <Filter>High Level Interface</Filter>
-    </ClInclude>
-    <ClInclude Include="SimpleMath.h">
-      <Filter>Common\Math</Filter>
     </ClInclude>
     <ClInclude Include="Entity.h">
       <Filter>Common</Filter>
@@ -558,11 +549,11 @@
     <ClInclude Include="define_Util.h">
       <Filter>Common\define</Filter>
     </ClInclude>
+    <ClInclude Include="SimpleMath.h">
+      <Filter>Common\Math</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="SimpleMath.inl">
-      <Filter>Common\Math</Filter>
-    </None>
     <None Include="cpp.hint">
       <Filter>Common</Filter>
     </None>
@@ -613,6 +604,9 @@
     </None>
     <None Include="DefaultShader\SH_Basic3D.hlsli">
       <Filter>_DefaultShader\Basic3D</Filter>
+    </None>
+    <None Include="SimpleMath.inl">
+      <Filter>Common\Math</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>

@@ -8,7 +8,7 @@
 
 namespace mh
 {
-    using namespace mh::math;
+    using namespace mh;
 
     Material::Material()
         : IRes(eResourceType::Material)
@@ -143,17 +143,17 @@ namespace mh
         case mh::eGPUParam::Float:
             mCB.fData = *static_cast<float*>(_data);
             break;
-        case mh::eGPUParam::Vector2:
-            mCB.XY = *static_cast<Vector2*>(_data);
+        case mh::eGPUParam::float2:
+            mCB.XY = *static_cast<float2*>(_data);
             break;
-        case mh::eGPUParam::Vector3:
-            mCB.XYZ = *static_cast<Vector3*>(_data);
+        case mh::eGPUParam::float3:
+            mCB.XYZ = *static_cast<float3*>(_data);
             break;
-        case mh::eGPUParam::Vector4:
-            mCB.XYZW = *static_cast<Vector4*>(_data);
+        case mh::eGPUParam::float4:
+            mCB.XYZW = *static_cast<float4*>(_data);
             break;
-        case mh::eGPUParam::Matrix:
-            mCB.Matrix = *static_cast<Matrix*>(_data);
+        case mh::eGPUParam::MATRIX:
+            mCB.MATRIX = *static_cast<MATRIX*>(_data);
             break;
         default:
             break;
@@ -163,22 +163,22 @@ namespace mh
 
     void Material::Bind()
     {
-        for (size_t slotIndex = 0; slotIndex < (UINT)eTextureSlot::End; slotIndex++)
+        for (size_t slotIndex = 0; slotIndex < (uint)eTextureSlot::End; slotIndex++)
         {
             if (mTextures[slotIndex] == nullptr)
             {
 				continue;
             }
 
-            mTextures[slotIndex]->BindDataSRV((UINT)slotIndex, eShaderStageFlag::ALL);
+            mTextures[slotIndex]->BindDataSRV((uint)slotIndex, eShaderStageFlag::ALL);
         }
 
-        if (mTextures[(UINT)eTextureSlot::Albedo])
+        if (mTextures[(uint)eTextureSlot::Albedo])
         {
             mCB.UsedAlbedo = 1;
         }
 
-        if (mTextures[(UINT)eTextureSlot::Normal])
+        if (mTextures[(uint)eTextureSlot::Normal])
         {
             mCB.UsedNormal = 1;
         }
@@ -194,7 +194,7 @@ namespace mh
 
     void Material::Clear()
     {
-        for (size_t slotIndex = 0; slotIndex < (UINT)eTextureSlot::End; slotIndex++)
+        for (size_t slotIndex = 0; slotIndex < (uint)eTextureSlot::End; slotIndex++)
         {
             if (mTextures[slotIndex] == nullptr)
 			{

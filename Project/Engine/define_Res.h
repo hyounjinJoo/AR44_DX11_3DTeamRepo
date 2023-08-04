@@ -46,6 +46,7 @@ namespace mh::define
 		"Shader/Graphics",
 		"Shader/Compute",
 	};
+	inline STRKEY GetResName(eResourceType _type) { return ArrResName[(int)_type]; }
 
 	namespace strKey
 	{

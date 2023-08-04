@@ -11,16 +11,16 @@
 
 namespace mh
 {
-	using namespace math;
+	
 
 	Com_Transform::Com_Transform()
 		: IComponent(eComponentType::Transform)
-		, mForward(Vector3::Forward)
-		, mRight(Vector3::Right)
-		, mUp(Vector3::Up)
-		, mScale(Vector3::One)
-		, mRotation(Vector3::Zero)
-		, mPosition(Vector3::One)
+		, mForward(float3::Forward)
+		, mRight(float3::Right)
+		, mUp(float3::Up)
+		, mScale(float3::One)
+		, mRotation(float3::Zero)
+		, mPosition(float3::One)
 	{
 		//Transform은 기본적으로 생성되므로 생성자에서 Key를 지정
 		SetKey(strKey::Default::com::Com_Transform);
@@ -50,15 +50,15 @@ namespace mh
 		Json::Value& jVal = *_pJVal;
 
 		// 내꺼 저장
-		//Vector3 mForward;
-		//Vector3 mRight;
-		//Vector3 mUp;
-		//Vector3 mPosition;
-		//Vector3 mRotation;
-		//Vector3 mScale;
-		//Matrix mWorld;
+		//float3 mForward;
+		//float3 mRight;
+		//float3 mUp;
+		//float3 mPosition;
+		//float3 mRotation;
+		//float3 mScale;
+		//MATRIX mWorld;
 		
-		//int, UINT, UINT64 등등은 기본 지원
+		//int, uint, UINT64 등등은 기본 지원
 		//우리가 직접 정의한 구조체나 float 타입은 StringConv::Convert_T_to_String 함수를 통해 변환해서 저장하면 됨
 		//이 때, mForward, mRight, mUp, mWorld는 업데이트 때 새로 계산되므로 가져올 필요가 없음
 		Json::MHSaveValue(_pJVal, JSONVAL(mPosition));
@@ -89,7 +89,7 @@ namespace mh
 		//불러오기 실패 시 기본값으로 적용
 		if (false == Json::MHLoadValue(_pJVal, JSONVAL(mScale)))
 		{
-			mScale = Vector3::One;
+			mScale = float3::One;
 		}
 
 
@@ -103,28 +103,28 @@ namespace mh
 		// 월드 행렬 생성
 		
 		// 크기 변환 행렬
-		Matrix scale = Matrix::CreateScale(mScale);
+		MATRIX scale = MATRIX::CreateScale(mScale);
 
 		// 회전 변환 행렬
-		Matrix rotation;
+		MATRIX rotation;
 
-		Vector3 radian(mRotation.x * (XM_PI / 180)
+		float3 radian(mRotation.x * (XM_PI / 180)
 			, mRotation.y * (XM_PI / 180)
 			, mRotation.z * (XM_PI / 180));
 
-		rotation = Matrix::CreateRotationX(radian.x);
-		rotation *= Matrix::CreateRotationY(radian.y);
-		rotation *= Matrix::CreateRotationZ(radian.z);
+		rotation = MATRIX::CreateRotationX(radian.x);
+		rotation *= MATRIX::CreateRotationY(radian.y);
+		rotation *= MATRIX::CreateRotationZ(radian.z);
 
 		// 이동 변환 행렬
-		Matrix position;
+		MATRIX position;
 		position.Translation(mPosition);
 
 		mWorld = scale * rotation * position;
 
-		mForward = Vector3::TransformNormal(Vector3::Forward, rotation);
-		mRight = Vector3::TransformNormal(Vector3::Right, rotation);
-		mUp = Vector3::TransformNormal(Vector3::Up, rotation);
+		mForward = float3::TransformNormal(float3::Forward, rotation);
+		mRight = float3::TransformNormal(float3::Right, rotation);
+		mUp = float3::TransformNormal(float3::Up, rotation);
 		
 		// 카메라 컴포넌트에서 세팅해준다
 		// 뷰행렬 세팅

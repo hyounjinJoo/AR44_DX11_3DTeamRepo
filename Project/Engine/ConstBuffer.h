@@ -11,23 +11,23 @@ namespace mh
 		virtual ~ConstBuffer();
 
 		template <typename T>
-		bool Create(UINT _dataCount = 1u);
-		bool Create(size_t _dataSize, UINT _dataCount = 1u);
-		void SetData(void* _data, UINT _dataCount = 1u);
+		bool Create(uint _dataCount = 1u);
+		bool Create(size_t _dataSize, uint _dataCount = 1u);
+		void SetData(void* _data, uint _dataCount = 1u);
 		void BindData(eShaderStageFlag_ _stageFlag = eShaderStageFlag::NONE);
 
 	private:
 		const eCBType mType;
 
 
-		UINT				mDataSize;
-		UINT				mDataCount;
+		uint				mDataSize;
+		uint				mDataCount;
 		eShaderStageFlag_	mPresetTargetStage;
 	};
 
 
 	template<typename T>
-	inline bool ConstBuffer::Create(UINT _dataCount)
+	inline bool ConstBuffer::Create(uint _dataCount)
 	{
 		return Create(sizeof(T), _dataCount);
 	}

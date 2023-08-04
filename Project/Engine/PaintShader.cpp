@@ -18,8 +18,8 @@ namespace mh
 	{
 		mTarget->BindDataUAV(0);
 
-		mGroupX = static_cast<UINT>(mTarget->GetWidth() / mThreadGroupCountX + 1);
-		mGroupY = static_cast<UINT>(mTarget->GetHeight() / mThreadGroupCountY + 1);
+		mGroupX = static_cast<uint>(mTarget->GetWidth() / mThreadGroupCountX + 1);
+		mGroupY = static_cast<uint>(mTarget->GetHeight() / mThreadGroupCountY + 1);
 		mGroupZ = 1;
 	}
 

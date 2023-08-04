@@ -2,6 +2,7 @@
 #include "DirTree.h"
 
 #include <Engine/define_Util.h>
+#include <Engine/define_Res.h>
 #include <Engine/GraphicsShader.h>
 #include <Engine/ComputeShader.h>
 
@@ -12,7 +13,6 @@
 
 #include "CodeWriter.h"
 #include "DirTreeNode.h"
-
 
 DirTree::DirTree()
 	: m_RootDir()
@@ -68,7 +68,7 @@ HRESULT DirTree::DetectNewGraphicsShader(std::unordered_map<stdfs::path, tShader
 			//CS까지만 순회 돌아준다
 			for (int i = 0; i < (int)mh::define::eShaderStage::CS; ++i)
 			{
-				jVal[mh::define::strKey::ArrGSPrefix[i]] = iter.second.FileName[i].string();
+				jVal[mh::define::strKey:[i]] = iter.second.FileName[i].string();
 			}
 
 			ofs << jVal;

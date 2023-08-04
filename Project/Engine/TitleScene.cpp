@@ -40,7 +40,7 @@ namespace mh
 		// Main Com_Camera Game Object
 		GameObject* cameraObj = object::Instantiate<GameObject>(eLayerType::Com_Camera);
 		cameraObj->SetName("MainCamera");
-		cameraObj->GetTransform().SetPosition(Vector3(0.0f, 0.0f, -20.0f));
+		cameraObj->GetTransform().SetPosition(float3(0.0f, 0.0f, -20.0f));
 		Com_Camera* cameraComp = cameraObj->AddComponent<Com_Camera>();
 		cameraComp->SetProjectionType(Com_Camera::eProjectionType::Perspective);
 		//cameraComp->RegisterCameraInRenderer();
@@ -52,9 +52,9 @@ namespace mh
 		//포워드 렌더링으로 그려지는 오브젝트
 		{
 			GameObject* player = object::Instantiate<GameObject>(eLayerType::Player);
-			player->GetTransform().SetPosition(Vector3(0.0f, 0.0f, 10.0f));
-			player->GetTransform().SetScale(Vector3(5.0f, 5.0f, 5.0f));
-			//player->GetTransform().SetRotation(Vector3(15.0f, 45.0f, 0.0f));
+			player->GetTransform().SetPosition(float3(0.0f, 0.0f, 10.0f));
+			player->GetTransform().SetScale(float3(5.0f, 5.0f, 5.0f));
+			//player->GetTransform().SetRotation(float3(15.0f, 45.0f, 0.0f));
 			player->SetName("Player");
 			Com_Renderer_Mesh* mr = player->AddComponent<Com_Renderer_Mesh>();
 			mr->SetMaterial(ResMgr::Find<Material>(strKey::Default::material::Basic3DMaterial));
@@ -76,9 +76,9 @@ namespace mh
 		//디퍼드 렌더링으로 그려지는 오브젝트
 		{
 			GameObject* player = object::Instantiate<GameObject>(eLayerType::Player);
-			player->GetComponent<Com_Transform>()->SetPosition(Vector3(-15.0f, 0.0f, 10.0f));
-			player->GetComponent<Com_Transform>()->SetScale(Vector3(5.0f, 5.0f, 5.0f));
-			//player->GetComponent<Transform>()->SetRotation(Vector3(15.0f, 45.0f, 0.0f));
+			player->GetComponent<Com_Transform>()->SetPosition(float3(-15.0f, 0.0f, 10.0f));
+			player->GetComponent<Com_Transform>()->SetScale(float3(5.0f, 5.0f, 5.0f));
+			//player->GetComponent<Transform>()->SetRotation(float3(15.0f, 45.0f, 0.0f));
 			player->SetName("Player");
 			Com_Renderer_Mesh* mr = player->AddComponent<Com_Renderer_Mesh>();
 			mr->SetMaterial(ResMgr::Find<Material>(strKey::Default::material::DefferedMaterial));
@@ -91,14 +91,14 @@ namespace mh
 			GameObject* directionalLight = object::Instantiate<GameObject>(eLayerType::Player);
 			directionalLight->SetName("directionalLight");
 
-			directionalLight->GetComponent<Com_Transform>()->SetPosition(Vector3(0.0f, 100.0f, 0.0f));
-			directionalLight->GetComponent<Com_Transform>()->SetRotation(Vector3(45.0f, 0.0f, 0.0f));
+			directionalLight->GetComponent<Com_Transform>()->SetPosition(float3(0.0f, 100.0f, 0.0f));
+			directionalLight->GetComponent<Com_Transform>()->SetRotation(float3(45.0f, 0.0f, 0.0f));
 
 			Com_Light* lightComp = directionalLight->AddComponent<Com_Light>();
 			lightComp->SetType(eLightType::Directional);
-			lightComp->SetDiffuse(Vector4(1.0f, 0.0f, 0.0f, 1.0f));
-			lightComp->SetSpecular(Vector4(1.0f, 1.0f, 1.0f, 1.0f));
-			lightComp->SetAmbient(Vector4(0.15f, 0.15f, 0.15f, 1.0f));
+			lightComp->SetDiffuse(float4(1.0f, 0.0f, 0.0f, 1.0f));
+			lightComp->SetSpecular(float4(1.0f, 1.0f, 1.0f, 1.0f));
+			lightComp->SetAmbient(float4(0.15f, 0.15f, 0.15f, 1.0f));
 		}
 
 
@@ -106,28 +106,28 @@ namespace mh
 			GameObject* directionalLight = object::Instantiate<GameObject>(eLayerType::Player);
 			directionalLight->SetName("PointLight1");
 
-			directionalLight->GetComponent<Com_Transform>()->SetPosition(Vector3(0.0f, 0.0f, 0.0f));
+			directionalLight->GetComponent<Com_Transform>()->SetPosition(float3(0.0f, 0.0f, 0.0f));
 
 			Com_Light* lightComp = directionalLight->AddComponent<Com_Light>();
 			lightComp->SetType(eLightType::Point);
 			lightComp->SetRadius(20.0f);
-			lightComp->SetDiffuse(Vector4(0.0f, 0.0f, 1.0f, 1.0f));
-			lightComp->SetSpecular(Vector4(1.0f, 1.0f, 1.0f, 1.0f));
-			lightComp->SetAmbient(Vector4(0.15f, 0.15f, 0.15f, 1.0f));
+			lightComp->SetDiffuse(float4(0.0f, 0.0f, 1.0f, 1.0f));
+			lightComp->SetSpecular(float4(1.0f, 1.0f, 1.0f, 1.0f));
+			lightComp->SetAmbient(float4(0.15f, 0.15f, 0.15f, 1.0f));
 		}
 
 		{
 			GameObject* directionalLight = object::Instantiate<GameObject>(eLayerType::Player);
 			directionalLight->SetName("PointLight2");
 
-			directionalLight->GetComponent<Com_Transform>()->SetPosition(Vector3(-15.0f, 0.0f, 0.0f));
+			directionalLight->GetComponent<Com_Transform>()->SetPosition(float3(-15.0f, 0.0f, 0.0f));
 
 			Com_Light* lightComp = directionalLight->AddComponent<Com_Light>();
 			lightComp->SetType(eLightType::Point);
 			lightComp->SetRadius(30.0f);
-			lightComp->SetDiffuse(Vector4(0.0f, 1.0f, 0.0f, 1.0f));
-			lightComp->SetSpecular(Vector4(1.0f, 1.0f, 1.0f, 1.0f));
-			lightComp->SetAmbient(Vector4(0.15f, 0.15f, 0.15f, 1.0f));
+			lightComp->SetDiffuse(float4(0.0f, 1.0f, 0.0f, 1.0f));
+			lightComp->SetSpecular(float4(1.0f, 1.0f, 1.0f, 1.0f));
+			lightComp->SetAmbient(float4(0.15f, 0.15f, 0.15f, 1.0f));
 		}
 
 
