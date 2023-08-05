@@ -14,7 +14,7 @@
 
 #include "guiEditor.h"
 
-extern gui::Editor gEditor;
+extern gui::EditorMgr gEditor;
 
 namespace gui
 {

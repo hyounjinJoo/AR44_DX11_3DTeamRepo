@@ -12,7 +12,7 @@
 #include "guiInspector.h"
 
 
-extern gui::Editor gEditor;
+extern gui::EditorMgr gEditor;
 
 namespace gui
 {

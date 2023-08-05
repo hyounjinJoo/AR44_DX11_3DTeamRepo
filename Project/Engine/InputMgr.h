@@ -3,7 +3,6 @@
 #include "EnumFlags.h"
 #include "SimpleMath.h"
 
-
 namespace mh
 {
 	enum class eKeyCode
@@ -43,6 +42,7 @@ namespace mh
 
 	class InputMgr
 	{
+		friend class Application;
 	public:
 		struct tKey
 		{
@@ -50,10 +50,6 @@ namespace mh
 			eKeyState eState;
 			bool	  bPressed;
 		};
-
-	public:
-		static void Init();
-		static void Update();
 
 		static __forceinline eKeyState GetKeyState(eKeyCode keyCode) 
 		{ 
@@ -82,7 +78,12 @@ namespace mh
 		static __forceinline bool GetKeyUp(eKeyCode keyCode)
 		{
 			return mKeys[static_cast<uint>(keyCode)].eState == eKeyState::UP;
-		}		
+		}	
+
+	private:
+		static void Init();
+		static void Update();
+		static void Release();
 
 	private:
 		static std::vector<tKey> mKeys;

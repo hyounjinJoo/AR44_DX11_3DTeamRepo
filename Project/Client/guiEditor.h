@@ -6,38 +6,67 @@
 
 namespace gui
 {
-	class Editor
+	class EditorMgr
 	{
+		friend class GameClient;
 	public:
-		void Init();
-		void Run();
+		static void Run();
 
-		void Update();
-		void FixedUpdate();
-		void Render();
-		void Release();
-		void DebugRender(mh::tDebugMesh& mesh);
-
-		void ImGuiInitialize();
-		void ImGuiRun();
-		void ImGuiRelease();
+		static inline void SetEnable(bool _bEnable);
+		static inline bool GetEnable() { return mbEnable; }
 
 		template<typename T>
-		T* GetWidget(const std::string& name)
-		{
-			auto iter = mWidgets.find(name);
-			if (iter == mWidgets.end())
-				return nullptr;
+		T* GetWidget(const std::string& name);
 
-			return dynamic_cast<T*>(iter->second);
-		}
 
 	private:
-		std::map<std::string, Widget*> mWidgets;
-		std::vector<EditorObject*> mEditorObjects;
-		std::vector<DebugObject*> mDebugObjects;
+		static void Init();
+		static void Release();
 
-		class YamYamEditor* mYamYamEditor;
-		bool mbEnable = true;
+		static void Update();
+		static void FixedUpdate();
+		static void Render();
+		
+		static void DebugRender(mh::tDebugMesh& mesh);
+
+		static void ImGuiInitialize();
+		static void ImGuiRun();
+		static void ImGuiRelease();
+
+
+
+	private:
+		static std::map<std::string, Widget*> mWidgets;
+		static std::vector<EditorObject*> mEditorObjects;
+		static std::vector<DebugObject*> mDebugObjects;
+
+		static class YamYamEditor* mYamYamEditor;
+		static bool mbEnable;
+		static bool mbInitialized;
+
 	};
+
+
+
+	inline void EditorMgr::SetEnable(bool _bEnable)
+	{
+		mbEnable = _bEnable;
+
+		if (mbEnable && (false == mbInitialized))
+		{
+			mbInitialized = true;
+			EditorMgr::Init();
+		}
+	}
+
+	template<typename T>
+	inline T* EditorMgr::GetWidget(const std::string& name)
+	{
+		auto iter = mWidgets.find(name);
+		if (iter == mWidgets.end())
+			return nullptr;
+
+		return dynamic_cast<T*>(iter->second);
+	}
 }
+

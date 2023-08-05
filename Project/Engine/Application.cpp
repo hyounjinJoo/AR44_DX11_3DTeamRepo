@@ -1,6 +1,8 @@
 #include "PCH_Engine.h"
 #include "Application.h"
 
+#include "AtExit.h"
+
 #include "DefaultComInitializer.h"
 #include "RenderMgr.h"
 #include "TimeMgr.h"
@@ -10,29 +12,40 @@
 #include "CollisionMgr.h"
 #include "AudioMgr.h"
 #include "FontWrapper.h"
-
 #include "PathMgr.h"
 
 namespace mh
 {
-	Application::Application()
-		: mHwnd(nullptr)
-		, mHdc(nullptr)
-		, mHeight(1600)//화면 해상도 몰라서 0말고 1600/900사이즈로 일단 초기화
-		, mWidth(900)
-	{
-	}
+	using namespace mh::define;
+	tDesc_Application Application::mAppDesc{};
+	HDC				Application::mHdc;
+	bool			Application::mbInitialized;
 
-	Application::~Application()
+	BOOL Application::Init(const tDesc_Application& _AppDesc)
 	{
-	}
+		AtExit::AddFunc(Release);
 
-	void Application::Init()
-	{
+		mAppDesc = _AppDesc;
+		if (nullptr == _AppDesc.Hwnd)
+		{
+			return FALSE;
+		}
+		SetWindowPos(mAppDesc.LeftWindowPos, mAppDesc.TopWindowPos);
+		SetWindowSize(mAppDesc.Width, mAppDesc.Height);
+
+		if (false == GPUMgr::Init(_AppDesc.GPUDesc))
+		{
+			mHdc = GetDC(mAppDesc.Hwnd);
+			ERROR_MESSAGE_W(L"Graphics Device 초기화 실패");
+			return FALSE;
+		}
+
+
 		PathMgr::Init();
 
 		AudioMgr::Init();
 		FontWrapper::Init();
+
 		ResMgr::Init();
 
 		RenderMgr::Init();
@@ -45,6 +58,8 @@ namespace mh
 		CollisionMgr::Init();
 		
 		SceneManager::Init();
+
+		return TRUE;
 	}
 
 	// 게임 로직 캐릭터 이동 등등 
@@ -69,8 +84,7 @@ namespace mh
 		TimeMgr::Render(mHdc);
 
 		GPUMgr::Clear();
-		GPUMgr::AdjustViewPorts(mHwnd);
-
+	
 		RenderMgr::ClearMultiRenderTargets();
 
 		RenderMgr::Render();
@@ -78,16 +92,19 @@ namespace mh
 
 	void Application::Destroy()
 	{
-
 	}
 
 	// Running main engine loop
-	void Application::Run()
+	bool Application::Run()
 	{
 		Update();
 		FixedUpdate();
 		Render();
 		Destroy();
+		
+		//TODO: Engine 내부에서 종료할 방법 만들기
+		//이걸 false로 반환하면 꺼지도록 짜놓음
+		return true;
 	}
 
 	void Application::Present()
@@ -97,33 +114,39 @@ namespace mh
 
 	void Application::Release()
 	{
-		AtExit::CallAtExit();
+		ReleaseDC(mAppDesc.Hwnd, mHdc);
 	}
 
-	void Application::SetWindow(HWND _hwnd, uint _width, uint _height)
+	void Application::SetWindowPos(int _LeftWindowPos, int _TopWindowPos)
 	{
-		if (nullptr == GPUMgr::Device())
+		//가로세로 길이는 유지하고 위치만 변경
+		UINT flag = SWP_NOSIZE | SWP_NOZORDER;
+		if (::SetWindowPos(mAppDesc.Hwnd, nullptr, _LeftWindowPos, _TopWindowPos, 0, 0, flag))
 		{
-			mHwnd = _hwnd;
-			mHdc = GetDC(mHwnd);
-			mWidth = _width;
-			mHeight = _height;
+			mAppDesc.LeftWindowPos = _LeftWindowPos;
+			mAppDesc.TopWindowPos = _TopWindowPos;
+		}
+	}
+	void Application::SetWindowSize(int _width, int _height)
+	{
+		//클라이언트 영역과 윈도우 영역의 차이를 구해서 정확한 창 크기를 설정(해상도가 조금이라도 차이나면 문제 발생함)
+		RECT rc, rcClient;
+		GetWindowRect(mAppDesc.Hwnd, &rc);
+		GetClientRect(mAppDesc.Hwnd, &rcClient);
 
+		// calculate size of non-client area
+		int xExtra = rc.right - rc.left - rcClient.right;
+		int yExtra = rc.bottom - rc.top - rcClient.bottom;
 
-			//eValidationMode vaildationMode = eValidationMode::Disabled;
-			
-			if (false == GPUMgr::Init(mHwnd, mWidth, mHeight))
-			{
-				ERROR_MESSAGE_W(L"Graphics Device 초기화에 실패했습니다.");
-				std::abort();
-			}
+		// now resize based on desired client size
+		if (TRUE == ::SetWindowPos(mAppDesc.Hwnd, 0, 0u, 0u, _width + xExtra, _height + yExtra, SWP_NOMOVE | SWP_NOZORDER | SWP_NOACTIVATE))
+		{
+			mAppDesc.Width = _width;
+			mAppDesc.Height = _height;
 		}
 
-		RECT rt = { 0, 0, (LONG)_width , (LONG)_height };
-		AdjustWindowRect(&rt, WS_OVERLAPPEDWINDOW, false);
-		SetWindowPos(mHwnd, nullptr, 0, 0, rt.right - rt.left, rt.bottom - rt.top, 0);
-		ShowWindow(mHwnd, true);
-		UpdateWindow(mHwnd);
+		::ShowWindow(mAppDesc.Hwnd, true);
+		::UpdateWindow(mAppDesc.Hwnd);
 	}
 
 }

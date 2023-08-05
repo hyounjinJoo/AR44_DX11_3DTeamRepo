@@ -1,5 +1,5 @@
-#ifndef PRE_COMPILED_HEADER
-#define PRE_COMPILED_HEADER
+#ifndef PCH_CODEGEN
+#define PCH_CODEGEN
 
 // 여기에 미리 컴파일하려는 헤더 추가
 #include <windows.h>

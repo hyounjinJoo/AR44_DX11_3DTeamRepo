@@ -27,7 +27,7 @@
     <ClCompile Include="main.cpp">
       <Filter>Default</Filter>
     </ClCompile>
-    <ClCompile Include="PCH.cpp">
+    <ClCompile Include="PCH_CodeGenerator.cpp">
       <Filter>Default</Filter>
     </ClCompile>
   </ItemGroup>
@@ -47,7 +47,7 @@
     <ClInclude Include="json-cpp\json-forwards.h">
       <Filter>JsonCPP</Filter>
     </ClInclude>
-    <ClInclude Include="PCH.h">
+    <ClInclude Include="PCH_CodeGenerator.h">
       <Filter>Default</Filter>
     </ClInclude>
   </ItemGroup>

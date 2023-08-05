@@ -102,10 +102,11 @@
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>PCH_Client.h</PrecompiledHeaderFile>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -125,10 +126,11 @@ call Copy_DLL.bat $(Configuration)</Command>
       <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>PCH_Client.h</PrecompiledHeaderFile>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -224,7 +226,7 @@ call Copy_DLL.bat $(Configuration)</Command>
     <ClInclude Include="guiEditor.h" />
     <ClInclude Include="guiEditorObject.h" />
     <ClInclude Include="guiWidget.h" />
-    <ClInclude Include="ClientWindow.h" />
+    <ClInclude Include="GameClient.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="PCH_Client.cpp">
@@ -281,7 +283,7 @@ call Copy_DLL.bat $(Configuration)</Command>
     <ClCompile Include="guiEditor.cpp" />
     <ClCompile Include="guiEditorObject.cpp" />
     <ClCompile Include="guiWidget.cpp" />
-    <ClCompile Include="ClientWindow.cpp" />
+    <ClCompile Include="GameClient.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="MHW.ico" />

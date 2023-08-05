@@ -21,7 +21,7 @@
 #include "TitleScene.h"
 #include "Texture.h"
 
-
+#include "AtExit.h"
 namespace mh
 {
 	std::vector<Scene*> SceneManager::mScenes = {};
@@ -29,6 +29,8 @@ namespace mh
 
 	void SceneManager::Init()
 	{
+		AtExit::AddFunc(Release);
+
 		mScenes.resize((uint)eSceneType::End);
 
 		mScenes[(uint)eSceneType::Tilte] = new TitleScene();

@@ -4,6 +4,22 @@
 
 namespace mh::define
 {
+	struct tDesc_GPUMgr
+	{
+		UINT ResolutionX;
+		UINT ResolutionY;
+		UINT RefreshRate;
+	};
+
+	struct tDesc_Application
+	{
+		HWND Hwnd;
+		int  LeftWindowPos;
+		int	 TopWindowPos;
+		int  Width;
+		int  Height;
+		tDesc_GPUMgr GPUDesc;
+	};
 
 	struct tUmap_LightHashFunc32
 	{

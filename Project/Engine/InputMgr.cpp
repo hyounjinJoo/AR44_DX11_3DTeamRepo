@@ -3,7 +3,7 @@
 
 #include "InputMgr.h"
 #include "Application.h"
-
+#include "AtExit.h"
 
 extern mh::Application gApplication;
 
@@ -40,6 +40,8 @@ namespace mh
 
 	void InputMgr::Init()
 	{
+		AtExit::AddFunc(InputMgr::Release);
+
 		for (uint i = 0; i < (uint)eKeyCode::END; i++)
 		{
 			tKey key;
@@ -99,5 +101,10 @@ namespace mh
 				mKeys[i].bPressed = false;
 			}
 		}
+	}
+	void InputMgr::Release()
+	{
+		mKeys.clear();
+		mMousPosition = {};
 	}
 }

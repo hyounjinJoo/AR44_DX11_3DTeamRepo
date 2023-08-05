@@ -1,6 +1,6 @@
 // CodeGenerator.cpp : 이 파일에는 'main' 함수가 포함됩니다. 거기서 프로그램 실행이 시작되고 종료됩니다.
 //
-#include "PCH.h"
+#include "PCH_CodeGenerator.h"
 #include "DirTree.h"
 
 #include <Engine/define_Res.h>
@@ -82,7 +82,7 @@ int main(int argc, char* argv[])
         
         tAddBaseClassDesc Desc = {};
         Desc.BaseType = "IComponent";
-        Desc.IncludePCH = R"(#include "PCH.h")";
+        Desc.IncludePCH = R"(#include "PCH_CodeGenerator.h")";
         Desc.IncludeMasterHeader = R"(#include "ContentsClassInitializer.h")";
         Desc.IncludeStrKeyHeaderName = R"(#include "strKey_Component.h")";
         Desc.IncludeManagerHeader = "#include <Engine/ComMgr.h>";
@@ -108,7 +108,7 @@ int main(int argc, char* argv[])
 
         tAddBaseClassDesc Desc = {};
         Desc.BaseType = "IScript";
-        Desc.IncludePCH = R"(#include "PCH.h")";
+        Desc.IncludePCH = R"(#include "PCH_CodeGenerator.h")";
         Desc.IncludeMasterHeader = R"(#include "ContentsClassInitializer.h")";
         Desc.IncludeStrKeyHeaderName = R"(#include "strKey_Script.h")";
         Desc.IncludeManagerHeader = "#include <Engine/ComMgr.h>";

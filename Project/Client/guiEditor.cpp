@@ -23,20 +23,29 @@
 #include "guiConsole.h"
 #include "guiListWidget.h"
 
-extern mh::Application gApplication;
+#include <Engine/AtExit.h>
+#include "GameClient.h"
 
+extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 namespace gui
 {
-	
+	std::map<std::string, Widget*> EditorMgr::mWidgets{};
+	std::vector<EditorObject*> EditorMgr::mEditorObjects{};
+	std::vector<DebugObject*> EditorMgr::mDebugObjects{};
+
+	YamYamEditor* EditorMgr::mYamYamEditor{};
+	bool EditorMgr::mbEnable{};
+	bool EditorMgr::mbInitialized;
 
 	using namespace mh::define;
 	using namespace mh::math;
-	void Editor::Init()
-	{
-		mbEnable = false;
 
-		if (mbEnable == false)
-			return;
+	
+	void EditorMgr::Init()
+	{
+		AtExit::AddFunc(EditorMgr::Release);
+
+		::GameClient::RegisterImGuiWndProc(ImGui_ImplWin32_WndProcHandler);
 
 		// 충돌체의 종류 갯수만큼만 있으면 된다.
 		mDebugObjects.resize((UINT)eColliderType::End);
@@ -97,11 +106,10 @@ namespace gui
 
 	}
 
-	void Editor::Run()
+	void EditorMgr::Run()
 	{
-		if (mbEnable == false)
+		if (false == mbEnable)
 			return;
-
 
 		Update();
 		FixedUpdate();
@@ -110,7 +118,8 @@ namespace gui
 		ImGuiRun();
 	}
 
-	void Editor::Update()
+
+	void EditorMgr::Update()
 	{
 		for (EditorObject* obj : mEditorObjects)
 		{
@@ -118,7 +127,7 @@ namespace gui
 		}
 	}
 
-	void Editor::FixedUpdate()
+	void EditorMgr::FixedUpdate()
 	{
 		for (EditorObject* obj : mEditorObjects)
 		{
@@ -126,7 +135,7 @@ namespace gui
 		}
 	}
 
-	void Editor::Render()
+	void EditorMgr::Render()
 	{
 		for (EditorObject* obj : mEditorObjects)
 		{
@@ -141,7 +150,7 @@ namespace gui
 		DebugMeshes.clear();
 	}
 
-	void Editor::Release()
+	void EditorMgr::Release()
 	{
 		if (mbEnable == false)
 			return;
@@ -168,7 +177,7 @@ namespace gui
 		delete mDebugObjects[(UINT)eColliderType::Circle];
 	}
 
-	void Editor::DebugRender(mh::tDebugMesh& mesh)
+	void EditorMgr::DebugRender(mh::tDebugMesh& mesh)
 	{
 		DebugObject* debugObj = mDebugObjects[(UINT)mesh.type];
 		
@@ -195,7 +204,7 @@ namespace gui
 		debugObj->Render();
 	}
 
-	void Editor::ImGuiInitialize()
+	void EditorMgr::ImGuiInitialize()
 	{
 		// Setup Dear ImGui context
 		IMGUI_CHECKVERSION();
@@ -226,7 +235,7 @@ namespace gui
 		}
 
 		// Setup Platform/Renderer backends
-		ImGui_ImplWin32_Init(gApplication.GetHwnd());
+		ImGui_ImplWin32_Init(mh::Application::GetHwnd());
 		ImGui_ImplDX11_Init(mh::GPUMgr::Device().Get()
 			, mh::GPUMgr::Context().Get());
 
@@ -250,7 +259,7 @@ namespace gui
 
 	}
 
-	void Editor::ImGuiRun()
+	void EditorMgr::ImGuiRun()
 	{
 		bool show_demo_window = true;
 		bool show_another_window = false;
@@ -325,7 +334,7 @@ namespace gui
 		}
 	}
 
-	void Editor::ImGuiRelease()
+	void EditorMgr::ImGuiRelease()
 	{
 		// Cleanup
 		ImGui_ImplDX11_Shutdown();
