@@ -242,7 +242,7 @@ namespace mh
 		mBuffer->BindDataSRV(15, eShaderStageFlag::GS);
 
 		GetMaterial()->Bind();
-		GetMesh()->RenderInstanced(mMaxParticles);
+		GetMesh()->RenderInstanced(0u, mMaxParticles);
 
 		mBuffer->UnBind();
 	}

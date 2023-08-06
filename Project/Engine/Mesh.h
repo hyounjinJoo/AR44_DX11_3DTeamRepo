@@ -21,11 +21,22 @@ namespace mh
 		float3 Normal;
 	};
 
+	struct tIndexInfo
+	{
+		ComPtr<ID3D11Buffer>    IndexBuffer;
+		D3D11_BUFFER_DESC       tIBDesc;
+		UINT				    IdxCount;
+		void*					 pIdxSysMem;
+	};
+
+	class FBXLoader;
 	class Mesh : public IRes 
 	{
 	public:
 		Mesh();
 		virtual ~Mesh();
+
+		static std::shared_ptr<Mesh> CreateFromContainer(FBXLoader* _loader);
 
 		virtual eResult Load(const std::filesystem::path& _path) override;
 
@@ -38,19 +49,23 @@ namespace mh
 
 		bool CreateIndexBuffer(void* _data, size_t _count);
 
-		void BindBuffer() const;
-		void Render() const;
-		void RenderInstanced(uint _count) const;
+		void BindBuffer(UINT _subSet = 0u) const;
+		void Render(UINT _subSet = 0u) const;
+		
+		void RenderInstanced(UINT _subSet, UINT _instanceCount) const;
+
+		Vertex3D* GetVtxSysMem() { return (Vertex3D*)mVertexSysMem; }
+		UINT GetSubsetCount() { return (UINT)mIndexInfos.size(); }
 
 	private:
 		Microsoft::WRL::ComPtr<ID3D11Buffer> mVertexBuffer;
 		D3D11_BUFFER_DESC mVBDesc;
 		uint mVertexByteStride;
 		uint mVertexCount;
+		void* mVertexSysMem;
 
-		Microsoft::WRL::ComPtr<ID3D11Buffer> mIndexBuffer;
-		D3D11_BUFFER_DESC mIBDesc;
-		uint mIndexCount;
+		std::vector<tIndexInfo>		mIndexInfos;
+
 	};
 
 

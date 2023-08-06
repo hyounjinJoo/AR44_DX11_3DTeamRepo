@@ -228,6 +228,7 @@ namespace mh::math
 
         // Assignment operators
         Vector3& operator= (const XMVECTORF32& F) noexcept { x = F.f[0]; y = F.f[1]; z = F.f[2]; return *this; }
+
         Vector3& operator+= (const Vector3& V) noexcept;
         Vector3& operator-= (const Vector3& V) noexcept;
         Vector3& operator*= (const Vector3& V) noexcept;
@@ -335,6 +336,7 @@ namespace mh::math
         explicit Vector4(const XMVECTORF32& F) noexcept { this->x = F.f[0]; this->y = F.f[1]; this->z = F.f[2]; this->w = F.f[3]; }
 
         Vector4(const Vector4&) = default;
+        Vector4(const Vector3& _v3, float _w) { this->x = _v3.x; this->y = _v3.y; this->z = _v3.z; this->w = _w; }
         Vector4& operator=(const Vector4&) = default;
 
         Vector4(Vector4&&) = default;
@@ -347,7 +349,8 @@ namespace mh::math
         bool operator != (const Vector4& V) const noexcept;
 
         // Assignment operators
-        Vector4& operator= (const XMVECTORF32& F) noexcept { x = F.f[0]; y = F.f[1]; z = F.f[2]; w = F.f[3]; return *this; }
+        Vector4& operator= (const XMVECTORF32& F) noexcept { x = F.f[0]; y = F.f[1]; z = F.f[2]; w = F.f[3]; return *this; };
+        
         Vector4& operator+= (const Vector4& V) noexcept;
         Vector4& operator-= (const Vector4& V) noexcept;
         Vector4& operator*= (const Vector4& V) noexcept;
