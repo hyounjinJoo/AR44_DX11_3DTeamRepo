@@ -6,15 +6,17 @@
 // Material Default Texture
 Texture2D albedoTexture : register(t0);
 Texture2D normalTexture : register(t1);
+Texture2D specularTexture : register(t2);
+Texture2D emissiveTexture : register(t3);
 
 // defferd
-Texture2D positionTarget : register(t2);
-Texture2D normalTarget : register(t3);
-Texture2D albedoTarget : register(t4);
-Texture2D specularTarget : register(t5);
+Texture2D positionTarget : register(t4);
+Texture2D normalTarget : register(t5);
+Texture2D albedoTarget : register(t6);
+Texture2D specularTarget : register(t7);
 
-Texture2D diffuseLightTarget : register(t6);
-Texture2D specularLightTarget : register(t7);
+Texture2D diffuseLightTarget : register(t8);
+Texture2D specularLightTarget : register(t9);
 
 			//std::shared_ptr<Texture> pos = std::make_shared<Texture>();
 			//std::shared_ptr<Texture> normal = std::make_shared<Texture>();

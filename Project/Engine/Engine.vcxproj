@@ -76,28 +76,28 @@
     <OutDir>$(SolutionDir)External\Lib\$(ProjectName)\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)Output\Obj\$(Configuration)\$(ProjectName)\</IntDir>
     <MultiProcFXC>true</MultiProcFXC>
-    <ExternalIncludePath>$(SolutionDir)External\Include;$(VC_IncludePath);$(WindowsSDK_IncludePath);</ExternalIncludePath>
+    <ExternalIncludePath>$(SolutionDir)External\Include\;$(VC_IncludePath);$(WindowsSDK_IncludePath);$(ExternalIncludePath)</ExternalIncludePath>
     <LibraryPath>$(SolutionDir)External\Lib\;$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <OutDir>$(SolutionDir)External\Lib\$(ProjectName)\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)Output\Obj\$(Configuration)\$(ProjectName)\</IntDir>
     <MultiProcFXC>true</MultiProcFXC>
-    <ExternalIncludePath>$(SolutionDir)External\Include;$(VC_IncludePath);$(WindowsSDK_IncludePath);</ExternalIncludePath>
+    <ExternalIncludePath>$(SolutionDir)External\Include\;$(VC_IncludePath);$(WindowsSDK_IncludePath);$(ExternalIncludePath)</ExternalIncludePath>
     <LibraryPath>$(SolutionDir)External\Lib\;$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <OutDir>$(SolutionDir)External\Lib\$(ProjectName)\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)Output\Obj\$(Configuration)\$(ProjectName)\</IntDir>
     <MultiProcFXC>true</MultiProcFXC>
-    <ExternalIncludePath>$(SolutionDir)External\Include;$(VC_IncludePath);$(WindowsSDK_IncludePath);</ExternalIncludePath>
+    <ExternalIncludePath>$(SolutionDir)External\Include\FBXLoader;$(SolutionDir)External\Include;$(VC_IncludePath);$(WindowsSDK_IncludePath);$(ExternalIncludePath)</ExternalIncludePath>
     <LibraryPath>$(SolutionDir)External\Lib\;$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <OutDir>$(SolutionDir)External\Lib\$(ProjectName)\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)Output\Obj\$(Configuration)\$(ProjectName)\</IntDir>
     <MultiProcFXC>true</MultiProcFXC>
-    <ExternalIncludePath>$(SolutionDir)External\Include;$(VC_IncludePath);$(WindowsSDK_IncludePath);</ExternalIncludePath>
+    <ExternalIncludePath>$(SolutionDir)External\Include\FBXLoader;$(SolutionDir)External\Include;$(VC_IncludePath);$(WindowsSDK_IncludePath);$(ExternalIncludePath)</ExternalIncludePath>
     <LibraryPath>$(SolutionDir)External\Lib\;$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -250,6 +250,7 @@ call Copy_DLL.bat $(Configuration)</Command>
     <ClInclude Include="Com_AudioListener.h" />
     <ClInclude Include="Com_AudioSource.h" />
     <ClInclude Include="DefaultComInitializer.h" />
+    <ClInclude Include="FBXLoader.h" />
     <ClInclude Include="ICollider3D.h" />
     <ClInclude Include="ICollider2D.h" />
     <ClInclude Include="CollisionMgr.h" />
@@ -325,6 +326,7 @@ call Copy_DLL.bat $(Configuration)</Command>
     <ClCompile Include="Com_AudioListener.cpp" />
     <ClCompile Include="Com_AudioSource.cpp" />
     <ClCompile Include="DefaultComInitializer.cpp" />
+    <ClCompile Include="FBXLoader.cpp" />
     <ClCompile Include="ICollider3D.cpp" />
     <ClCompile Include="ICollider2D.cpp" />
     <ClCompile Include="CollisionMgr.cpp" />

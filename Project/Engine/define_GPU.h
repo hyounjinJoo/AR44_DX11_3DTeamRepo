@@ -205,6 +205,8 @@ namespace mh::define
 	{
 		Albedo,
 		Normal,
+		Specular,
+		Emissive,
 
 		PositionTarget,
 		NormalTarget,

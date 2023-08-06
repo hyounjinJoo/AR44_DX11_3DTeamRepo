@@ -7,16 +7,15 @@
 
 namespace mh
 {
-
-
+	UINT32 Entity::gNextID{};
 
 	Entity::Entity()
-		: mID(PtrToUint(this))
+		: mID(++gNextID)
 		, mStrKey()
 	{
 	}
 	Entity::Entity(const Entity& _other)
-		: mID(PtrToUint(this))
+		: mID(++gNextID)
 		, mStrKey(_other.mStrKey)
 	{
 	}
