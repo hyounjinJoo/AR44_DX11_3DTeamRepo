@@ -69,7 +69,7 @@ namespace mh
 		}
 	}
 
-	bool Texture::Create(uint _width, uint _height, DXGI_FORMAT _pixelFormat, uint _D3D11_BIND_FLAG, bool _bAllowCPURead)
+	bool Texture::Create(UINT _width, UINT _height, DXGI_FORMAT _pixelFormat, uint _D3D11_BIND_FLAG, bool _bAllowCPURead)
 	{
 		mDesc.BindFlags = _D3D11_BIND_FLAG;
 

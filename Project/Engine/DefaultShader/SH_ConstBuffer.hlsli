@@ -1,7 +1,14 @@
 #ifndef SH_CONST_BUFFER
 #define SH_CONST_BUFFER
 
-cbuffer Transform : register(b0)
+cbuffer Global : register(b0)
+{
+	uint2  guResolution;
+	float2 gfResolution;
+	float  gDeltaTime;
+}
+
+cbuffer Transform : register(b1)
 {
 	row_major matrix world;
 	row_major matrix inverseWorld;
@@ -9,7 +16,7 @@ cbuffer Transform : register(b0)
 	row_major matrix inverseView;
 	row_major matrix projection;
 }
-cbuffer MaterialData : register(b1)
+cbuffer MaterialData : register(b2)
 {
     uint usedAlbedo;
     uint usedNormal;
@@ -17,14 +24,14 @@ cbuffer MaterialData : register(b1)
     uint padd2;
 }
 
-cbuffer Grid : register(b2)
+cbuffer Grid : register(b3)
 {
     float4 cameraPosition;
     float2 cameraScale;
     float2 resolution;
 }
 
-cbuffer Animation : register(b3)
+cbuffer Animation : register(b4)
 {
     float2 leftTop;
     float2 spriteSize;
@@ -34,13 +41,13 @@ cbuffer Animation : register(b3)
     uint animationType;
 }
 
-cbuffer NumberOfLight : register(b4)
+cbuffer NumberOfLight : register(b5)
 {
 	uint numberOfLight;
 	uint indexOfLight;
 }
 
-cbuffer ParticleSystem : register(b5)
+cbuffer ParticleSystem : register(b6)
 {
     float4 worldPosition;
     float4 startColor;
@@ -57,10 +64,11 @@ cbuffer ParticleSystem : register(b5)
     int padding;
 }
 
-//cbuffer Noise : register(b6)
-//{
-//    float4 NoiseSize;
-//}
+cbuffer Noise : register(b7)
+{
+	float4 NoiseSize;
+	float NoiseTime;
+}
 
 
 #endif

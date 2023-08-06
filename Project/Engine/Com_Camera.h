@@ -1,6 +1,8 @@
 #pragma once
 #include "IComponent.h"
 
+#include "define_Enum.h"
+
 namespace  mh
 {
 	class Com_Camera : public IComponent
@@ -8,12 +10,6 @@ namespace  mh
 	public:
 		Com_Camera();
 		virtual ~Com_Camera();
-
-		enum eProjectionType
-		{
-			Perspective,
-			Orthographic,
-		};
 
 		__forceinline static MATRIX& GetGpuViewMatrix() { return gView; }
 		__forceinline static MATRIX& GetGpuProjectionMatrix() { return gProjection; }
@@ -26,20 +22,25 @@ namespace  mh
 		virtual void Render() override;
 
 		void CreateViewMatrix();
-		void CreateProjectionMatrix();
+		
 		void RegisterCameraInRenderer();
 
 		void TurnLayerMask(define::eLayerType _layer, bool _enable = true);
 		void EnableLayerMasks() { mLayerMasks.set(); }
 		void DisableLayerMasks() { mLayerMasks.reset(); }
 
-		void SetProjectionType(eProjectionType _type) { mType = _type; }
+		void SetProjectionType(define::eProjectionType _type) { mProjType = _type; CreateProjectionMatrix(); }
+
+		void CreateProjectionMatrix();
+		void CreateProjectionMatrix(uint ResolutionX, uint ResolutionY);
+		
 
 		float GetScale() const { return mScale; }
 		const MATRIX& GetViewMatrix() const { return mView; }
 		const MATRIX& GetProjectionMatrix() const { return mProjection; }
 
 	private:
+		
 		void SortGameObjects();
 		void RenderDeffered();
 		void RenderOpaque();
@@ -56,7 +57,7 @@ namespace  mh
 		MATRIX mView;
 		MATRIX mProjection;
 
-		eProjectionType mType;
+		define::eProjectionType mProjType;
 		float mAspectRatio;
 
 		float mNear;
@@ -70,4 +71,7 @@ namespace  mh
 		std::vector<GameObject*> mTransparentGameObjects;
 		std::vector<GameObject*> mPostProcessGameObjects;
 	};
+
+
+
 }

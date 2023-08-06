@@ -7,7 +7,7 @@
 #ifdef _DEBUG
 #pragma comment(lib, "Contents/Debug/Contents.lib")
 #else 
-#pragma comment(lib, "Engine/Release/Engine.lib")
+#pragma comment(lib, "Contents/Release/Contents.lib")
 #endif
 
 #include "targetver.h"

@@ -3,12 +3,11 @@
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 
+#include "SimpleMath.h"
 #include "define_Struct.h"
 
 namespace mh
 {
-
-
 	class Application
 	{
 	public:
@@ -33,14 +32,14 @@ namespace mh
 		static void Present();
 		static void Release();
 
+		//사이즈를 입력하면 조절
 		static void SetWindowPos(int _LeftWindowPos, int _TopWindowPos);
 		static void SetWindowSize(int _Width, int _Height);
-		static HWND GetHwnd() { return mAppDesc.Hwnd; }
-		static UINT GetWidth() { return mAppDesc.Width; }
-		static UINT GetHeight() { return mAppDesc.Height; }
+		static int2 GetWIndowSize();
 
+		static HWND GetHwnd() { return mHwnd; }
 	private:
-		static mh::define::tDesc_Application mAppDesc;
+		static HWND mHwnd;
 		static HDC  mHdc;
 		static bool mbInitialized;
 

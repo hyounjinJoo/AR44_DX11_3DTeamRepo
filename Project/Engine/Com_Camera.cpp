@@ -19,13 +19,15 @@ extern mh::Application gApplication;
 
 namespace mh
 {
+	using namespace mh::define;
+
 	MATRIX Com_Camera::gView = MATRIX::Identity;
 	MATRIX Com_Camera::gInverseView = MATRIX::Identity;
 	MATRIX Com_Camera::gProjection = MATRIX::Identity;
 
 	Com_Camera::Com_Camera()
 		: IComponent(define::eComponentType::Camera)
-		, mType(eProjectionType::Orthographic)
+		, mProjType(eProjectionType::None)
 		, mAspectRatio(1.0f)
 		, mNear(1.0f)
 		, mFar(1000.0f)
@@ -40,19 +42,24 @@ namespace mh
 
 	void Com_Camera::Init()
 	{
-
 		RegisterCameraInRenderer();
 	}
 
 	void Com_Camera::Update()
 	{
-
+		
 	}
 
 	void Com_Camera::FixedUpdate()
 	{
+		if (eProjectionType::None == mProjType)
+		{
+			ERROR_MESSAGE_W(L"카메라의 투영행렬 타입을 설정하지 않았습니다.");
+			MH_ASSERT(false);
+			return;
+		}
+
 		CreateViewMatrix();
-		CreateProjectionMatrix();
 
 		RegisterCameraInRenderer();
 	}
@@ -120,15 +127,19 @@ namespace mh
 
 	void Com_Camera::CreateProjectionMatrix()
 	{
-		RECT winRect;
-		GetClientRect(gApplication.GetHwnd(), &winRect);
+		uint2 resolution = GPUMgr::GetResolution();
+		CreateProjectionMatrix(resolution.x, resolution.y);
+	}
 
-		float width = (winRect.right - winRect.left) * mScale;
-		float height = (winRect.bottom - winRect.top) * mScale;
+	void Com_Camera::CreateProjectionMatrix(uint ResolutionX, uint ResolutionY)
+	{
+		float width = (float)ResolutionX * mScale;
+		float height = (float)ResolutionY * mScale;
 		mAspectRatio = width / height;
 
-		if (mType == eProjectionType::Perspective)
+		switch (mProjType)
 		{
+		case eProjectionType::Perspective:
 			mProjection = MATRIX::CreatePerspectiveFieldOfViewLH
 			(
 				XM_2PI / 6.0f
@@ -136,10 +147,13 @@ namespace mh
 				, mNear
 				, mFar
 			);
-		}
-		else
-		{
+			break;
+		case eProjectionType::Orthographic:
 			mProjection = MATRIX::CreateOrthographicLH(width /*/ 100.0f*/, height /*/ 100.0f*/, mNear, mFar);
+			break;
+		default:
+			MH_ASSERT(false);
+			break;
 		}
 	}
 
@@ -153,6 +167,7 @@ namespace mh
 	{
 		mLayerMasks.set((uint)_layer, _enable);
 	}
+
 
 	void Com_Camera::SortGameObjects()
 	{

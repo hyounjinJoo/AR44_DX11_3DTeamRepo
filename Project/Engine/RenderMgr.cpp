@@ -53,11 +53,12 @@ namespace mh
 	{
 		AtExit::AddFunc(Release);
 
-		if (false == CreateMultiRenderTargets())
-		{
-			ERROR_MESSAGE_W(L"멀티 렌더타겟 생성 실패.");
-			std::abort();
-		}
+		//GPUMgr에서 담당
+		//if (false == CreateMultiRenderTargets())
+		//{
+		//	ERROR_MESSAGE_W(L"멀티 렌더타겟 생성 실패.");
+		//	std::abort();
+		//}
 
 		LoadDefaultMesh();
 		LoadDefaultShader();
@@ -117,6 +118,8 @@ namespace mh
 
 	void RenderMgr::Render()
 	{
+		UpdateGlobalCBuffer();
+
 		BindNoiseTexture();
 		BindLights();
 
@@ -219,11 +222,44 @@ namespace mh
 		}
 	}
 
-	bool RenderMgr::CreateMultiRenderTargets()
+	void RenderMgr::UpdateGlobalCBuffer()
 	{
-		uint width = gApplication.GetWidth();
-		uint height = gApplication.GetHeight();
+		GlobalCB cb{};
+		cb.uResolution.x = GPUMgr::GetResolutionX();
+		cb.uResolution.y = GPUMgr::GetResolutionY();
+		cb.fResolution.x = (float)cb.uResolution.x;
+		cb.fResolution.y = (float)cb.uResolution.y;
+		cb.DeltaTime = TimeMgr::DeltaTime();
+		ConstBuffer* global = GetConstBuffer(eCBType::Global);
+		global->SetData(&cb);
+		global->BindData();
+	}
 
+	bool RenderMgr::SetResolution(UINT _ResolutionX, UINT _ResolutionY)
+	{
+		if (false == CreateMultiRenderTargets(_ResolutionX, _ResolutionY))
+		{
+			ERROR_MESSAGE_W(L"해상도 변경 실패");
+			return false;
+		}
+
+		for (int i = 0; i < (int)eSceneType::End; ++i)
+		{
+			for (auto* iter : mCameras[i])
+			{
+				if (iter)
+				{
+					iter->CreateProjectionMatrix(_ResolutionX, _ResolutionY);
+				}
+			}
+		}
+
+
+		return true;
+	}
+
+	bool RenderMgr::CreateMultiRenderTargets(UINT _ResolutionX, UINT _ResolutionY)
+	{
 		{
 			//Swapchain MRT
 			std::shared_ptr<Texture> arrRTTex[8] = {};
@@ -232,14 +268,13 @@ namespace mh
 			arrRTTex[0] = GPUMgr::GetRenderTargetTex();
 			dsTex = GPUMgr::GetDepthStencilBufferTex();
 
-			mMultiRenderTargets[(uint)eMRTType::Swapchain] = std::make_unique< MultiRenderTarget>();
+			mMultiRenderTargets[(UINT)eMRTType::Swapchain] = std::make_unique<MultiRenderTarget>();
 
-			if (false == mMultiRenderTargets[(uint)eMRTType::Swapchain]->Create(arrRTTex, dsTex))
+			if (false == mMultiRenderTargets[(UINT)eMRTType::Swapchain]->Create(arrRTTex, dsTex))
 			{
 				ERROR_MESSAGE_W(L"Multi Render Target 생성 실패.");
 				return false;
 			}
-				
 		}
 
 		// Deffered MRT
@@ -252,24 +287,24 @@ namespace mh
 			std::shared_ptr<Texture> albedo = std::make_shared<Texture>();
 			std::shared_ptr<Texture> specular = std::make_shared<Texture>();
 
-			arrRTTex[(uint)eMRT_Defferd::PositionTarget] = pos;
-			arrRTTex[(uint)eMRT_Defferd::NormalTarget] = normal;
-			arrRTTex[(uint)eMRT_Defferd::AlbedoTarget] = albedo;
-			arrRTTex[(uint)eMRT_Defferd::SpecularTarget] = specular;
+			arrRTTex[(int)eMRT_Defferd::PositionTarget] = pos;
+			arrRTTex[(int)eMRT_Defferd::NormalTarget] = normal;
+			arrRTTex[(int)eMRT_Defferd::AlbedoTarget] = albedo;
+			arrRTTex[(int)eMRT_Defferd::SpecularTarget] = specular;
 
-			arrRTTex[0]->Create(width, height, DXGI_FORMAT_R32G32B32A32_FLOAT
+			arrRTTex[0]->Create(_ResolutionX, _ResolutionY, DXGI_FORMAT_R32G32B32A32_FLOAT
 				, D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE);
-			arrRTTex[1]->Create(width, height, DXGI_FORMAT_R32G32B32A32_FLOAT
+			arrRTTex[1]->Create(_ResolutionX, _ResolutionY, DXGI_FORMAT_R32G32B32A32_FLOAT
 				, D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE);
-			arrRTTex[2]->Create(width, height, DXGI_FORMAT_R32G32B32A32_FLOAT
+			arrRTTex[2]->Create(_ResolutionX, _ResolutionY, DXGI_FORMAT_R32G32B32A32_FLOAT
 				, D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE);
-			arrRTTex[3]->Create(width, height, DXGI_FORMAT_R32G32B32A32_FLOAT
+			arrRTTex[3]->Create(_ResolutionX, _ResolutionY, DXGI_FORMAT_R32G32B32A32_FLOAT
 				, D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE);
 
 			dsTex = GPUMgr::GetDepthStencilBufferTex();
 
-			mMultiRenderTargets[(uint)eMRTType::Deffered] = std::make_unique<MultiRenderTarget>();
-			if(false == mMultiRenderTargets[(uint)eMRTType::Deffered]->Create(arrRTTex, dsTex))
+			mMultiRenderTargets[(int)eMRTType::Deffered] = std::make_unique<MultiRenderTarget>();
+			if(false == mMultiRenderTargets[(int)eMRTType::Deffered]->Create(arrRTTex, dsTex))
 			{
 				ERROR_MESSAGE_W(L"Multi Render Target 생성 실패.");
 				return false;
@@ -286,19 +321,19 @@ namespace mh
 			arrRTTex[(int)eMRT_Light::DiffuseLightTarget] = diffuse;
 			arrRTTex[(int)eMRT_Light::SpecularLightTarget] = specular;
 
-			arrRTTex[0]->Create(width, height, DXGI_FORMAT_R32G32B32A32_FLOAT
+			arrRTTex[0]->Create(_ResolutionX, _ResolutionY, DXGI_FORMAT_R32G32B32A32_FLOAT
 				, D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE);
-			arrRTTex[1]->Create(width, height, DXGI_FORMAT_R32G32B32A32_FLOAT
+			arrRTTex[1]->Create(_ResolutionX, _ResolutionY, DXGI_FORMAT_R32G32B32A32_FLOAT
 				, D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE);
 
-			mMultiRenderTargets[(uint)eMRTType::Light] = std::make_unique<MultiRenderTarget>();
-			mMultiRenderTargets[(uint)eMRTType::Light]->Create(arrRTTex, nullptr);
+			mMultiRenderTargets[(int)eMRTType::Light] = std::make_unique<MultiRenderTarget>();
+			mMultiRenderTargets[(int)eMRTType::Light]->Create(arrRTTex, nullptr);
 		}
-
 
 
 		return true;
 	}
+
 	void RenderMgr::LoadDefaultMesh()
 	{
 		using namespace mh::define;
@@ -1066,6 +1101,12 @@ namespace mh
 	void RenderMgr::LoadBuffer()
 	{
 #pragma region CONSTANT BUFFER
+		mConstBuffers[(uint)eCBType::Global] = std::make_unique<ConstBuffer>(eCBType::Global);
+		mConstBuffers[(uint)eCBType::Global]->Create(sizeof(GlobalCB));
+		mConstBuffers[(uint)eCBType::Global]->SetPresetTargetStage(eShaderStageFlag::ALL);
+
+		UpdateGlobalCBuffer();
+
 		mConstBuffers[(uint)eCBType::Transform] = std::make_unique<ConstBuffer>(eCBType::Transform);
 		mConstBuffers[(uint)eCBType::Transform]->Create(sizeof(TransformCB));
 
@@ -1146,9 +1187,9 @@ namespace mh
 #pragma endregion
 
 		//noise
-		std::shared_ptr<Texture> NoiseTex = std::make_shared<Texture>();
-		NoiseTex->Create(1600, 900, DXGI_FORMAT_R8G8B8A8_UNORM, D3D11_BIND_SHADER_RESOURCE);
-		NoiseTex->BindDataSRV(eShaderStageFlag::PS, 60);
+		std::shared_ptr<Texture> mNoiseTex = std::make_shared<Texture>();
+		mNoiseTex->Create(GPUMgr::GetResolutionX(), GPUMgr::GetResolutionY(), DXGI_FORMAT_R8G8B8A8_UNORM, D3D11_BIND_SHADER_RESOURCE);
+		mNoiseTex->BindDataSRV(eShaderStageFlag::PS, 60);
 	}
 
 

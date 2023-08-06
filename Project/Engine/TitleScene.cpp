@@ -42,7 +42,7 @@ namespace mh
 		cameraObj->SetName("MainCamera");
 		cameraObj->GetTransform().SetPosition(float3(0.0f, 0.0f, -20.0f));
 		Com_Camera* cameraComp = cameraObj->AddComponent<Com_Camera>();
-		cameraComp->SetProjectionType(Com_Camera::eProjectionType::Perspective);
+		cameraComp->SetProjectionType(define::eProjectionType::Perspective);
 		//cameraComp->RegisterCameraInRenderer();
 		cameraComp->TurnLayerMask(eLayerType::UI, false);
 		cameraObj->AddComponent<Script_Camera>();

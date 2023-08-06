@@ -6,7 +6,7 @@
 
 namespace gui
 {
-	class EditorMgr
+	class ImGuiMgr
 	{
 		friend class GameClient;
 	public:
@@ -16,7 +16,7 @@ namespace gui
 		static inline bool GetEnable() { return mbEnable; }
 
 		template<typename T>
-		T* GetWidget(const std::string& name);
+		static T* GetWidget(const std::string& name);
 
 
 	private:
@@ -48,19 +48,19 @@ namespace gui
 
 
 
-	inline void EditorMgr::SetEnable(bool _bEnable)
+	inline void ImGuiMgr::SetEnable(bool _bEnable)
 	{
 		mbEnable = _bEnable;
 
 		if (mbEnable && (false == mbInitialized))
 		{
 			mbInitialized = true;
-			EditorMgr::Init();
+			ImGuiMgr::Init();
 		}
 	}
 
 	template<typename T>
-	inline T* EditorMgr::GetWidget(const std::string& name)
+	inline T* ImGuiMgr::GetWidget(const std::string& name)
 	{
 		auto iter = mWidgets.find(name);
 		if (iter == mWidgets.end())

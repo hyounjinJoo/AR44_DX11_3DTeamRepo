@@ -6,6 +6,7 @@ namespace mh
     class MeshData :
         public IRes
     {
+
         MeshData();
         virtual ~MeshData();
     };

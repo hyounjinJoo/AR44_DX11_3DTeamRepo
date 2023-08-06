@@ -21,7 +21,7 @@ namespace mh
 		static void ClearAll();
 
 		//생성 관련 함수
-		bool Create(uint _width, uint _height, DXGI_FORMAT _format, uint _D3D11_BIND_FLAG, bool _bAllowCPURead = false);
+		bool Create(UINT _width, UINT _height, DXGI_FORMAT _format, uint _D3D11_BIND_FLAG, bool _bAllowCPURead = false);
 		bool Create(Microsoft::WRL::ComPtr<ID3D11Texture2D> _texture);
 		bool Create(const D3D11_TEXTURE2D_DESC& _TexDesc);
 

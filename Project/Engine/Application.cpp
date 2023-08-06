@@ -17,25 +17,28 @@
 namespace mh
 {
 	using namespace mh::define;
-	tDesc_Application Application::mAppDesc{};
-	HDC				Application::mHdc;
-	bool			Application::mbInitialized;
+
+
+	HWND			Application::mHwnd{};
+	HDC				Application::mHdc{};
+	bool			Application::mbInitialized{};
 
 	BOOL Application::Init(const tDesc_Application& _AppDesc)
 	{
 		AtExit::AddFunc(Release);
 
-		mAppDesc = _AppDesc;
 		if (nullptr == _AppDesc.Hwnd)
 		{
 			return FALSE;
 		}
-		SetWindowPos(mAppDesc.LeftWindowPos, mAppDesc.TopWindowPos);
-		SetWindowSize(mAppDesc.Width, mAppDesc.Height);
+		mHwnd = _AppDesc.Hwnd;
+
+		SetWindowPos(_AppDesc.LeftWindowPos, _AppDesc.TopWindowPos);
+		SetWindowSize(_AppDesc.Width, _AppDesc.Height);
 
 		if (false == GPUMgr::Init(_AppDesc.GPUDesc))
 		{
-			mHdc = GetDC(mAppDesc.Hwnd);
+			mHdc = GetDC(_AppDesc.Hwnd);
 			ERROR_MESSAGE_W(L"Graphics Device 초기화 실패");
 			return FALSE;
 		}
@@ -114,39 +117,40 @@ namespace mh
 
 	void Application::Release()
 	{
-		ReleaseDC(mAppDesc.Hwnd, mHdc);
+		ReleaseDC(mHwnd, mHdc);
 	}
 
 	void Application::SetWindowPos(int _LeftWindowPos, int _TopWindowPos)
 	{
 		//가로세로 길이는 유지하고 위치만 변경
 		UINT flag = SWP_NOSIZE | SWP_NOZORDER;
-		if (::SetWindowPos(mAppDesc.Hwnd, nullptr, _LeftWindowPos, _TopWindowPos, 0, 0, flag))
-		{
-			mAppDesc.LeftWindowPos = _LeftWindowPos;
-			mAppDesc.TopWindowPos = _TopWindowPos;
-		}
+		::SetWindowPos(mHwnd, nullptr, _LeftWindowPos, _TopWindowPos, 0, 0, flag);
 	}
 	void Application::SetWindowSize(int _width, int _height)
 	{
 		//클라이언트 영역과 윈도우 영역의 차이를 구해서 정확한 창 크기를 설정(해상도가 조금이라도 차이나면 문제 발생함)
-		RECT rc, rcClient;
-		GetWindowRect(mAppDesc.Hwnd, &rc);
-		GetClientRect(mAppDesc.Hwnd, &rcClient);
+		RECT rcWindow, rcClient;
+		GetWindowRect(mHwnd, &rcWindow);
+		GetClientRect(mHwnd, &rcClient);
 
 		// calculate size of non-client area
-		int xExtra = rc.right - rc.left - rcClient.right;
-		int yExtra = rc.bottom - rc.top - rcClient.bottom;
+		int xExtra = rcWindow.right - rcWindow.left - rcClient.right;
+		int yExtra = rcWindow.bottom - rcWindow.top - rcClient.bottom;
 
 		// now resize based on desired client size
-		if (TRUE == ::SetWindowPos(mAppDesc.Hwnd, 0, 0u, 0u, _width + xExtra, _height + yExtra, SWP_NOMOVE | SWP_NOZORDER | SWP_NOACTIVATE))
-		{
-			mAppDesc.Width = _width;
-			mAppDesc.Height = _height;
-		}
+		::SetWindowPos(mHwnd, 0, 0u, 0u, _width + xExtra, _height + yExtra, SWP_NOMOVE | SWP_NOZORDER | SWP_NOACTIVATE);
 
-		::ShowWindow(mAppDesc.Hwnd, true);
-		::UpdateWindow(mAppDesc.Hwnd);
+		::ShowWindow(mHwnd, true);
+		::UpdateWindow(mHwnd);
+	}
+
+	int2 Application::GetWIndowSize()
+	{
+		//클라이언트 영역과 윈도우 영역의 차이를 구해서 정확한 창 크기를 설정(해상도가 조금이라도 차이나면 문제 발생함)
+		RECT rcClient{};
+		GetClientRect(mHwnd, &rcClient);
+
+		return int2{ rcClient.right, rcClient.bottom };
 	}
 
 }

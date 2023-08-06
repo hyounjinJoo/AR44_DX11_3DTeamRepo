@@ -16,6 +16,8 @@ namespace mh
 		void SetData(void* _data, uint _dataCount = 1u);
 		void BindData(eShaderStageFlag_ _stageFlag = eShaderStageFlag::NONE);
 
+		void SetPresetTargetStage(eShaderStageFlag_ _flag) { mPresetTargetStage = _flag; }
+
 	private:
 		const eCBType mType;
 

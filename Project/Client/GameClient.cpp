@@ -6,7 +6,7 @@
 
 #include <Engine/Application.h>
 
-#include "guiEditor.h"
+#include "ImGuiMgr.h"
 
 HINSTANCE GameClient::mInstance;
 HWND GameClient::mHwnd;
@@ -22,7 +22,7 @@ BOOL GameClient::Run(const GameClientDesc& _Desc)
     BOOL bResult = FALSE;
     bResult = Init(_Desc);
 
-    gui::EditorMgr::SetEnable(_Desc.RunEditor);
+    gui::ImGuiMgr::SetEnable(_Desc.RunEditor);
 
     while (bResult)
     {
@@ -97,7 +97,7 @@ BOOL GameClient::Loop()
         {
             bReturn = mh::Application::Run();
 
-            gui::EditorMgr::Run();
+            gui::ImGuiMgr::Run();
             
             mh::Application::Present();
         }
@@ -219,6 +219,7 @@ LRESULT __stdcall GameClient::Wm_Destroy(HWND hWnd, UINT message, WPARAM wParam,
     PostQuitMessage(0);
     return 1;
 }
+
 
 
 

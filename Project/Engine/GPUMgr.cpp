@@ -99,6 +99,8 @@ namespace mh
 
 	bool GPUMgr::SetResoulution(UINT _ResolutionX, UINT _ResolutionY)
 	{
+
+
 		bool bResult = false;
 		//1. 스왑체인 및 최종 렌더타겟 생성
 		std::shared_ptr<Texture> RenderTex = CreateSwapChain(_ResolutionX, _ResolutionY, mRefreshRate);
@@ -117,9 +119,13 @@ namespace mh
 			return false;
 		}
 		mDepthStencilBufferTexture = DSTex;
-		
-		mResolutionX = _ResolutionX;
-		mResolutionY = _ResolutionY;
+
+		//4. RenderMgr에서 해상도에 영향을 받는 요소들 값 변경
+		if (false == RenderMgr::SetResolution(_ResolutionX, _ResolutionY))
+		{
+			return false;
+		}
+
 		return true;
 	}
 
@@ -130,7 +136,8 @@ namespace mh
 		swapChainDesc.OutputWindow = Application::GetHwnd();
 		swapChainDesc.Windowed = true;
 		swapChainDesc.BufferCount = 2;
-		swapChainDesc.SwapEffect = DXGI_SWAP_EFFECT_DISCARD;
+		//DXGI WARNING: IDXGIFactory::CreateSwapChain: Blt-model swap effects (DXGI_SWAP_EFFECT_DISCARD and DXGI_SWAP_EFFECT_SEQUENTIAL) are legacy swap effects that are predominantly superceded by their flip-model counterparts (DXGI_SWAP_EFFECT_FLIP_SEQUENTIAL and DXGI_SWAP_EFFECT_FLIP_DISCARD)
+		swapChainDesc.SwapEffect = DXGI_SWAP_EFFECT_FLIP_DISCARD;
 
 		swapChainDesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
 		swapChainDesc.BufferDesc.Width = _ResolutionX;
@@ -169,7 +176,7 @@ namespace mh
 		}
 
 		
-		//렌더타겟 생성
+		//최종 렌더타겟 생성
 		std::shared_ptr<Texture> ReturnTex = std::make_shared<Texture>();
 		Microsoft::WRL::ComPtr<ID3D11Texture2D> renderTarget = nullptr;
 
@@ -187,6 +194,8 @@ namespace mh
 			return nullptr;
 		}
 
+		mResolutionX = _ResolutionX;
+		mResolutionY = _ResolutionY;
 		return ReturnTex;
 	}
 
@@ -211,8 +220,11 @@ namespace mh
 		mViewPort.TopLeftY = (FLOAT)0.f;
 		mViewPort.MinDepth = (FLOAT)0.f;
 		mViewPort.MaxDepth = (FLOAT)1.f;
-		mViewPort.Width = (FLOAT)Application::GetWidth();
-		mViewPort.Height = (FLOAT)Application::GetHeight();
+
+		int2 winSize = Application::GetWIndowSize();
+
+		mViewPort.Width = (FLOAT)winSize.x;
+		mViewPort.Height = (FLOAT)winSize.y;
 
 		mContext->RSSetViewports(1u, &mViewPort);
 	}

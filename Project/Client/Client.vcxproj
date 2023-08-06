@@ -223,7 +223,7 @@ call Copy_DLL.bat $(Configuration)</Command>
     <ClInclude Include="resource.h" />
     <ClInclude Include="targetver.h" />
     <ClInclude Include="guiDebugObject.h" />
-    <ClInclude Include="guiEditor.h" />
+    <ClInclude Include="ImGuiMgr.h" />
     <ClInclude Include="guiEditorObject.h" />
     <ClInclude Include="guiWidget.h" />
     <ClInclude Include="GameClient.h" />
@@ -280,7 +280,7 @@ call Copy_DLL.bat $(Configuration)</Command>
     <ClCompile Include="guiListWidget.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="guiDebugObject.cpp" />
-    <ClCompile Include="guiEditor.cpp" />
+    <ClCompile Include="ImGuiMgr.cpp" />
     <ClCompile Include="guiEditorObject.cpp" />
     <ClCompile Include="guiWidget.cpp" />
     <ClCompile Include="GameClient.cpp" />

@@ -21,8 +21,10 @@ namespace mh
 		static inline std::shared_ptr<Texture> GetRenderTargetTex();
 		static inline std::shared_ptr<Texture> GetDepthStencilBufferTex();
 
+		static bool SetResoulution(UINT _ResolutionX, UINT _ResolutionY);
 		static UINT GetResolutionX() { return mResolutionX; }
 		static UINT GetResolutionY() { return mResolutionY; }
+		static uint2 GetResolution() { return uint2{ mResolutionX, mResolutionY }; }
 
 		//struct tDesc_GPUMgr
 		//{
@@ -36,7 +38,7 @@ namespace mh
 		static void Reset();
 		static bool CreateDevice(ID3D11Device** _ppDevice, ID3D11DeviceContext** _ppContext);
 
-		static bool SetResoulution(UINT _ResolutionX, UINT _ResolutionY);
+		
 		
 		//스왑체인 + 렌더타겟 생성하여 반환
 		static std::shared_ptr<Texture> CreateSwapChain(UINT _ResolutionX, UINT _ResolutionY, UINT _RefreshRate);

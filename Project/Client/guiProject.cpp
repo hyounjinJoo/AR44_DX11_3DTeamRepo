@@ -12,9 +12,9 @@
 #include "guiInspector.h"
 #include "guiResource.h"
 
-#include "guiEditor.h"
+#include "ImGuiMgr.h"
 
-extern gui::EditorMgr gEditor;
+#include <Engine/Application.h>
 
 namespace gui
 {
@@ -24,10 +24,10 @@ namespace gui
 		: mTreeWidget(nullptr)
 	{
 		SetKey("Project");
-		UINT width = 1600;
-		UINT height = 900;
 
-		Vector2 size(width, height);
+		mh::int2 winSize = mh::Application::GetWIndowSize();
+
+		Vector2 size((float)winSize.x, (float)winSize.y);
 
 		SetSize(ImVec2((float)size.x / 2 + size.x / 5, size.y / 4));
 
@@ -94,7 +94,7 @@ namespace gui
 	{
 		mh::IRes* resource = static_cast<mh::IRes*>(data);
 
-		Inspector* inspector = gEditor.GetWidget<Inspector>("Inspector");
+		Inspector* inspector = ImGuiMgr::GetWidget<Inspector>("Inspector");
 		inspector->SetTargetResource(resource);
 		inspector->InitializeTargetResource();
 	}

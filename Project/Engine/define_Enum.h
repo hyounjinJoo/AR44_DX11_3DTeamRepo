@@ -53,6 +53,12 @@ namespace mh::define
 		End = 16,
 	};
 
+	enum class eProjectionType
+	{
+		None = -1,
+		Perspective,
+		Orthographic,
+	};
 
 	enum class eColliderType
 	{

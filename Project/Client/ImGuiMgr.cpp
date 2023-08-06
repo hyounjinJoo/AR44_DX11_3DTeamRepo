@@ -1,5 +1,5 @@
 #include "PCH_Client.h"
-#include "guiEditor.h"
+#include "ImGuiMgr.h"
 
 #include <Engine/Mesh.h>
 #include <Engine/ResMgr.h>
@@ -29,21 +29,21 @@
 extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 namespace gui
 {
-	std::map<std::string, Widget*> EditorMgr::mWidgets{};
-	std::vector<EditorObject*> EditorMgr::mEditorObjects{};
-	std::vector<DebugObject*> EditorMgr::mDebugObjects{};
+	std::map<std::string, Widget*> ImGuiMgr::mWidgets{};
+	std::vector<EditorObject*> ImGuiMgr::mEditorObjects{};
+	std::vector<DebugObject*> ImGuiMgr::mDebugObjects{};
 
-	YamYamEditor* EditorMgr::mYamYamEditor{};
-	bool EditorMgr::mbEnable{};
-	bool EditorMgr::mbInitialized;
+	YamYamEditor* ImGuiMgr::mYamYamEditor{};
+	bool ImGuiMgr::mbEnable{};
+	bool ImGuiMgr::mbInitialized;
 
 	using namespace mh::define;
 	using namespace mh::math;
 
 	
-	void EditorMgr::Init()
+	void ImGuiMgr::Init()
 	{
-		AtExit::AddFunc(EditorMgr::Release);
+		AtExit::AddFunc(ImGuiMgr::Release);
 
 		::GameClient::RegisterImGuiWndProc(ImGui_ImplWin32_WndProcHandler);
 
@@ -106,7 +106,7 @@ namespace gui
 
 	}
 
-	void EditorMgr::Run()
+	void ImGuiMgr::Run()
 	{
 		if (false == mbEnable)
 			return;
@@ -119,7 +119,7 @@ namespace gui
 	}
 
 
-	void EditorMgr::Update()
+	void ImGuiMgr::Update()
 	{
 		for (EditorObject* obj : mEditorObjects)
 		{
@@ -127,7 +127,7 @@ namespace gui
 		}
 	}
 
-	void EditorMgr::FixedUpdate()
+	void ImGuiMgr::FixedUpdate()
 	{
 		for (EditorObject* obj : mEditorObjects)
 		{
@@ -135,7 +135,7 @@ namespace gui
 		}
 	}
 
-	void EditorMgr::Render()
+	void ImGuiMgr::Render()
 	{
 		for (EditorObject* obj : mEditorObjects)
 		{
@@ -150,7 +150,7 @@ namespace gui
 		DebugMeshes.clear();
 	}
 
-	void EditorMgr::Release()
+	void ImGuiMgr::Release()
 	{
 		if (mbEnable == false)
 			return;
@@ -177,7 +177,7 @@ namespace gui
 		delete mDebugObjects[(UINT)eColliderType::Circle];
 	}
 
-	void EditorMgr::DebugRender(mh::tDebugMesh& mesh)
+	void ImGuiMgr::DebugRender(mh::tDebugMesh& mesh)
 	{
 		DebugObject* debugObj = mDebugObjects[(UINT)mesh.type];
 		
@@ -204,7 +204,7 @@ namespace gui
 		debugObj->Render();
 	}
 
-	void EditorMgr::ImGuiInitialize()
+	void ImGuiMgr::ImGuiInitialize()
 	{
 		// Setup Dear ImGui context
 		IMGUI_CHECKVERSION();
@@ -259,7 +259,7 @@ namespace gui
 
 	}
 
-	void EditorMgr::ImGuiRun()
+	void ImGuiMgr::ImGuiRun()
 	{
 		bool show_demo_window = true;
 		bool show_another_window = false;
@@ -334,7 +334,7 @@ namespace gui
 		}
 	}
 
-	void EditorMgr::ImGuiRelease()
+	void ImGuiMgr::ImGuiRelease()
 	{
 		// Cleanup
 		ImGui_ImplDX11_Shutdown();

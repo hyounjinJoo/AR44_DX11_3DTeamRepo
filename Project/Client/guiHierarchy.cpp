@@ -8,11 +8,10 @@
 #include <Engine/RenderMgr.h>
 
 #include "guiInspector.h"
-#include "guiEditor.h"
+#include "ImGuiMgr.h"
 #include "guiInspector.h"
 
-extern mh::Application gApplication;
-extern gui::EditorMgr gEditor;
+#include <Engine/Application.h>
 
 namespace gui
 {
@@ -20,7 +19,9 @@ namespace gui
 		: mTreeWidget(nullptr)
 	{
 		SetKey("Hierarchy");
-		SetSize(ImVec2(1600 / 2, 900 / 2));
+
+		mh::int2 winSize = mh::Application::GetWIndowSize();
+		SetSize(ImVec2((float)(winSize.x / 2), (float)(winSize.y / 2)));
 
 		mTreeWidget = new TreeWidget();
 		mTreeWidget->SetKey("Scenes");
@@ -56,7 +57,7 @@ namespace gui
 	{
 		mh::RenderMgr::SetInspectorGameObject(static_cast<mh::GameObject*>(data));
 
-		Inspector* inspector = gEditor.GetWidget<Inspector>("Inspector");
+		Inspector* inspector = ImGuiMgr::GetWidget<Inspector>("Inspector");
 		inspector->SetTargetGameObject(mh::RenderMgr::GetInspectorGameObject());
 		inspector->InitializeTargetGameObject();
 

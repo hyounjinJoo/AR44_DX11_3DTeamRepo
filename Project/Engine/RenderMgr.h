@@ -17,7 +17,12 @@ namespace mh
 	using namespace mh::define;
 	using namespace Microsoft::WRL;
 	
-
+	CBUFFER(GlobalCB, CBSLOT_GLOBAL)
+	{
+		uint2  uResolution;
+		float2 fResolution;
+		float DeltaTime;
+	};
 
 	CBUFFER(TransformCB, CBSLOT_TRANSFORM)
 	{
@@ -98,6 +103,7 @@ namespace mh
 	class RenderMgr
 	{
 		friend class Application;
+		friend class GPUMgr;
 	public:
 		static void Render();
 
@@ -139,7 +145,13 @@ namespace mh
 		static void ClearMultiRenderTargets();
 
 	private:
-		static bool CreateMultiRenderTargets();
+		static void UpdateGlobalCBuffer();
+
+		//해상도 변경 시 GPUMgr에서 호출
+		static bool SetResolution(UINT _ResolutionX, UINT _ResolutionY);
+
+		static bool CreateMultiRenderTargets(UINT _ResolutionX, UINT _ResolutionY);
+
 
 		static void LoadDefaultMesh();
 		static void LoadDefaultMaterial();
@@ -176,6 +188,7 @@ namespace mh
 		static std::unique_ptr<StructBuffer>	mLightsBuffer;
 
 		static std::shared_ptr<Texture>			mPostProcessTexture;
+		static std::shared_ptr<Texture>			mNoiseTex;
 	};
 
 
