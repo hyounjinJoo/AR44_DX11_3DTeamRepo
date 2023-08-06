@@ -160,7 +160,7 @@ namespace mh
 
 		// Material 세팅
 		std::shared_ptr<Material> material = ResMgr::Find<Material>(material::ParticleMaterial);
-		SetMaterial(material);
+		SetMaterial(material, 0);
 
 		std::shared_ptr<Texture> tex = ResMgr::Find<Texture>(texture::CartoonSmoke);
 		material->SetTexture(eTextureSlot::Albedo, tex);
@@ -241,7 +241,7 @@ namespace mh
 		GetOwner()->GetTransform().SetConstBuffer();
 		mBuffer->BindDataSRV(15, eShaderStageFlag::GS);
 
-		GetMaterial()->Bind();
+		GetMaterial(0)->Bind();
 		GetMesh()->RenderInstanced(0u, mMaxParticles);
 
 		mBuffer->UnBind();

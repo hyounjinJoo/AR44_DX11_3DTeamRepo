@@ -35,15 +35,15 @@ namespace mh
 
 	CBUFFER(MaterialCB, CBSLOT_MATERIAL)
 	{
-		/*MaterialCB()
-			: iData(0)
-			, fData(0.f)
-		{
-		}*/
+		float4 Diff;
+		float4 Spec;
+		float4 Amb;
+		float4 Emv;
+
 		uint UsedAlbedo;
 		uint UsedNormal;
+		uint UsedSpecular;
 
-		uint Padd0;
 		uint Padd1;
 	};
 

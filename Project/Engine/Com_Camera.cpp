@@ -259,7 +259,7 @@ namespace mh
 		if (renderer == nullptr)
 			return;
 
-		std::shared_ptr<Material> material = renderer->GetMaterial();
+		std::shared_ptr<Material> material = renderer->GetMaterial(0);
 		//if (material == nullptr)
 		//	continue;
 

@@ -54,7 +54,7 @@ namespace mh
 		
 		void RenderInstanced(UINT _subSet, UINT _instanceCount) const;
 
-		Vertex3D* GetVtxSysMem() { return (Vertex3D*)mVertexSysMem; }
+		const std::vector<Vertex3D> GetVertices() { return mVertices; }
 		UINT GetSubsetCount() { return (UINT)mIndexInfos.size(); }
 
 	private:
@@ -62,10 +62,9 @@ namespace mh
 		D3D11_BUFFER_DESC mVBDesc;
 		uint mVertexByteStride;
 		uint mVertexCount;
-		void* mVertexSysMem;
+		std::vector<Vertex3D> mVertices;
 
 		std::vector<tIndexInfo>		mIndexInfos;
-
 	};
 
 

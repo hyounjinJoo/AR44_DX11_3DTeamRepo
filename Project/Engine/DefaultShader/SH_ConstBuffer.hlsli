@@ -18,10 +18,15 @@ cbuffer Transform : register(b1)
 }
 cbuffer MaterialData : register(b2)
 {
-    uint usedAlbedo;
-    uint usedNormal;
-    uint padd1;
-    uint padd2;
+	float4 Diff;
+	float4 Spec;
+	float4 Amb;
+	float4 Emv;
+
+	uint usedAlbedo;
+	uint usedNormal;
+	uint usedSpecular;
+	uint Padd1;
 }
 
 cbuffer Grid : register(b3)

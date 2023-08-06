@@ -7,6 +7,14 @@
 
 namespace mh::object
 {
+	inline void Instantiate(define::eLayerType _type, GameObject* _pObj)
+	{
+		Scene* scene = SceneManager::GetActiveScene();
+		Layer& layer = scene->GetLayer(_type);
+		layer.AddGameObject(_pObj);
+		_pObj->Init();
+	}
+
 	template <typename T>
 	static T* Instantiate(define::eLayerType _type)
 	{

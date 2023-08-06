@@ -25,7 +25,7 @@ namespace mh
 			return false;
 		}
 
-		//렌더타겟의 갯수를 카운트(0번부터 채워야 하고, 실제 렌더링 시에는 역순으로 렌더링)
+		//렌더타겟의 갯수를 카운트
 		for (int i = 0; i < MRT_MAX; ++i)
 		{
 			if (_texture[i].get() == nullptr)

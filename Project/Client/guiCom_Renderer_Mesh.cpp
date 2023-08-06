@@ -45,7 +45,7 @@ namespace gui
 			//	return;
 
 
-			mMaterial = meshRenderer->GetMaterial();
+			mMaterial = meshRenderer->GetMaterial(0);
 			mMesh = meshRenderer->GetMesh();
 		}
 	}
@@ -132,6 +132,6 @@ namespace gui
 		std::shared_ptr<mh::Material> material = mh::ResMgr::Find<mh::Material>(_strKey);
 
 		Inspector* inspector = ImGuiMgr::GetWidget<Inspector>("Inspector");
-		inspector->GetTargetGameObject()->GetComponent<mh::Com_Renderer_Mesh>()->SetMaterial(material);
+		inspector->GetTargetGameObject()->GetComponent<mh::Com_Renderer_Mesh>()->SetMaterial(material, 0);
 	}
 }

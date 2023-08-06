@@ -22,7 +22,7 @@ namespace mh
 	{
 		for (size_t i = 0; i < mIndexInfos.size(); ++i)
 		{
-			if (nullptr != mIndexInfos[i].pIdxSysMem)
+			if (mIndexInfos[i].pIdxSysMem)
 				delete mIndexInfos[i].pIdxSysMem;
 		}
 	}
@@ -63,7 +63,7 @@ namespace mh
 	{
 		tIndexInfo indexInfo = {};
 		indexInfo.IdxCount = (UINT)_count;
-		indexInfo.tIBDesc.ByteWidth = sizeof(UINT) * _count;
+		indexInfo.tIBDesc.ByteWidth = (UINT)(sizeof(UINT) * _count);
 
 
 		indexInfo.tIBDesc.CPUAccessFlags = 0;
@@ -121,21 +121,28 @@ namespace mh
 		if (D3D11_USAGE_DYNAMIC == tVtxDesc.Usage)
 			tVtxDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
 
-		D3D11_SUBRESOURCE_DATA tSub = {};
-		tSub.pSysMem = malloc(tVtxDesc.ByteWidth);
-		Vertex3D* pSys = (Vertex3D*)tSub.pSysMem;
-		MH_ASSERT(pSys);
+		std::vector<Vertex3D> vecVtx3d(iVtxCount);
+		
+		//mVertices.resize(iVtxCount);
+
+		//tSub.pSysMem = malloc(tVtxDesc.ByteWidth);
+		//Vertex3D* pSys = (Vertex3D*)tSub.pSysMem;
+
+		//MH_ASSERT(pSys);
 		for (UINT i = 0; i < iVtxCount; ++i)
 		{
-			pSys[i].Pos = float4(container->vecPos[i], 1.f);
-			pSys[i].UV = container->vecUV[i];
-			pSys[i].Color = float4(1.f, 0.f, 1.f, 1.f);
-			pSys[i].Normal = container->vecNormal[i];
-			pSys[i].Tangent = container->vecTangent[i];
-			pSys[i].BiNormal = container->vecBinormal[i];
+			vecVtx3d[i].Pos = float4(container->vecPos[i], 1.f);
+			vecVtx3d[i].UV = container->vecUV[i];
+			vecVtx3d[i].Color = float4(1.f, 0.f, 1.f, 1.f);
+			vecVtx3d[i].Normal = container->vecNormal[i];
+			vecVtx3d[i].Tangent = container->vecTangent[i];
+			vecVtx3d[i].BiNormal = container->vecBinormal[i];
 			//pSys[i].vWeights = container->vecWeights[i];
 			//pSys[i].vIndices = container->vecIndices[i];
 		}
+
+		D3D11_SUBRESOURCE_DATA tSub = {};
+		tSub.pSysMem = vecVtx3d.data();
 
 		ComPtr<ID3D11Buffer> pVB = NULL;
 		if (FAILED(GPUMgr::Device()->CreateBuffer(&tVtxDesc, &tSub, pVB.GetAddressOf())))
@@ -146,7 +153,8 @@ namespace mh
 		std::shared_ptr<Mesh> pMesh = std::make_shared<Mesh>();
 		pMesh->mVertexBuffer = pVB;
 		pMesh->mVBDesc = tVtxDesc;
-		pMesh->mVertexSysMem = pSys;
+		pMesh->mVertices = vecVtx3d;
+		//pMesh->mVertexSysMem = pSys;
 
 		// 인덱스 정보
 		UINT iIdxBufferCount = (UINT)container->vecIdx.size();

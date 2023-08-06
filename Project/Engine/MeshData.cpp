@@ -5,6 +5,8 @@
 #include "PathMgr.h"
 #include "ResMgr.h"
 #include "FBXLoader.h"
+#include "GameObject.h"
+#include "Com_Renderer_Mesh.h"
 
 namespace mh
 {
@@ -35,13 +37,13 @@ namespace mh
 		// ResMgr 에 메쉬 등록
 		if (nullptr != pMesh)
 		{
-			std::string strMeshKey = "mesh\\";
-			strMeshKey += fullPath.replace_extension(".mesh").string();
-			
-			ResMgr::Insert(strMeshKey, pMesh);
+			stdfs::path strMeshKey = _path;
+			strMeshKey.replace_extension(".fbxMesh");
+		
+			ResMgr::Insert(strMeshKey.string(), pMesh);
 
 			// 메시를 실제 파일로 저장
-			pMesh->Save(strMeshKey);
+			//pMesh->Save(strMeshKey);
 		}
 
 		std::vector<std::shared_ptr<Material>> vecMtrl;
@@ -66,7 +68,27 @@ namespace mh
 
 	GameObject* MeshData::Instantiate()
 	{
-		return nullptr;
+		GameObject* pNewObj = new GameObject;
+		Com_Renderer_Mesh* Renderer = pNewObj->AddComponent<Com_Renderer_Mesh>();
+
+		Renderer->SetMesh(mMesh);
+
+		for (UINT i = 0; i < mMaterials.size(); ++i)
+		{
+			Renderer->SetMaterial(mMaterials[i], i);
+		}
+
+		//TODO: Animation 파트 추가
+		//if (false == m_pMesh->IsAnimMesh())
+		//	return pNewObj;
+
+		//CAnimator3D* pAnimator = new CAnimator3D;
+		//pNewObj->AddComponent(pAnimator);
+
+		//pAnimator->SetBones(m_pMesh->GetBones());
+		//pAnimator->SetAnimClip(m_pMesh->GetAnimClip());
+
+		return pNewObj;
 	}
 }
 

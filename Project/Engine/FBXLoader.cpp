@@ -395,9 +395,10 @@ namespace mh
 
 	void FBXLoader::LoadTexture()
 	{
-		stdfs::path path_content = PathMgr::GetRelContentPath();
+		const stdfs::path& path_content = PathMgr::GetRelResourcePath(eResourceType::Texture);
 
-		stdfs::path path_fbx_texture = path_content.wstring() + L"texture\\FBXTexture\\";
+		//Todo: FBXTex STRKEY로 변경
+		stdfs::path path_fbx_texture = path_content / "FBXTex";
 		if (false == exists(path_fbx_texture))
 		{
 			create_directory(path_fbx_texture);
@@ -424,14 +425,16 @@ namespace mh
 
 					path_origin = vecPath[k];
 					path_filename = vecPath[k].filename();
-					path_dest = path_fbx_texture.wstring() + path_filename.wstring();
+					path_dest = path_fbx_texture / path_filename.wstring();
 
 					if (false == exists(path_dest))
 					{
 						copy(path_origin, path_dest);
 					}
 
-					ResMgr::Load<Texture>(path_dest);
+					stdfs::path loadPath = "FBXTex";
+					loadPath /= path_filename;
+					ResMgr::Load<Texture>(loadPath);
 
 					switch (k)
 					{
@@ -479,42 +482,57 @@ namespace mh
 				// 상대경로가 곧 키
 				pMaterial->SetKey(strName);
 
+				pMaterial->SetRenderingMode(eRenderingMode::DefferdOpaque);
+
 				pMaterial->SetShader(ResMgr::Find<GraphicsShader>(strKey::Default::shader::graphics::DefferedShader));
 
-				std::string strTexKey = StringConv::ConvertUnicodeToUTF8(mContainers[i].vecMtrl[j].strDiff);
-
-				std::shared_ptr<Texture> pTex = ResMgr::Find<Texture>(strTexKey);
-				if (nullptr != pTex)
+				
+				const stdfs::path& TexPath = PathMgr::GetRelResourcePath(eResourceType::Texture);
 				{
-					pMaterial->SetTexture(eTextureSlot::Albedo, pTex);
+					stdfs::path strTexKey = StringConv::ConvertUnicodeToUTF8(mContainers[i].vecMtrl[j].strDiff);
+					std::string relPath = strTexKey.lexically_relative(TexPath).string();
+
+					//TODO: 여기 지저분한거 수정
+					std::shared_ptr<Texture> pTex = ResMgr::Find<Texture>(relPath);
+					if (nullptr != pTex)
+					{
+						pMaterial->SetTexture(eTextureSlot::Albedo, pTex);
+					}
 				}
+
 					
-
-				strTexKey = StringConv::ConvertUnicodeToUTF8(mContainers[i].vecMtrl[j].strNormal);
-				pTex = nullptr;
-				pTex = ResMgr::Find<Texture>(strTexKey);
-				if (nullptr != pTex)
 				{
-					pMaterial->SetTexture(eTextureSlot::Normal, pTex);
+					stdfs::path strTexKey = StringConv::ConvertUnicodeToUTF8(mContainers[i].vecMtrl[j].strNormal);
+					std::string relPath = strTexKey.lexically_relative(TexPath).string();
+					std::shared_ptr<Texture> pTex = ResMgr::Find<Texture>(relPath);
+					if (nullptr != pTex)
+					{
+						pMaterial->SetTexture(eTextureSlot::Normal, pTex);
 
+					}
 				}
 
-				strTexKey = StringConv::ConvertUnicodeToUTF8(mContainers[i].vecMtrl[j].strSpec);
-				pTex = nullptr;
-				pTex = ResMgr::Find<Texture>(strTexKey);
-				if (nullptr != pTex)
 				{
-					pMaterial->SetTexture(eTextureSlot::Specular, pTex);
+					stdfs::path strTexKey = StringConv::ConvertUnicodeToUTF8(mContainers[i].vecMtrl[j].strSpec);
+					std::string relPath = strTexKey.lexically_relative(TexPath).string();
+					std::shared_ptr<Texture> pTex = ResMgr::Find<Texture>(relPath);
+					if (nullptr != pTex)
+					{
+						pMaterial->SetTexture(eTextureSlot::Specular, pTex);
+					}
+				}
+
+				{
+					stdfs::path strTexKey = StringConv::ConvertUnicodeToUTF8(mContainers[i].vecMtrl[j].strEmis);
+					std::string relPath = strTexKey.lexically_relative(TexPath).string();
+					std::shared_ptr<Texture> pTex = ResMgr::Find<Texture>(relPath);
+					if (nullptr != pTex)
+					{
+						pMaterial->SetTexture(eTextureSlot::Emissive, pTex);
+					}
 				}
 
 
-				strTexKey = StringConv::ConvertUnicodeToUTF8(mContainers[i].vecMtrl[j].strEmis);
-				pTex = nullptr;
-				pTex = ResMgr::Find<Texture>(strTexKey);
-				if (nullptr != pTex)
-				{
-					pMaterial->SetTexture(eTextureSlot::Emissive, pTex);
-				}
 
 				pMaterial->SetMaterialCoefficient(
 					mContainers[i].vecMtrl[j].tMtrl.vDiff
@@ -523,7 +541,7 @@ namespace mh
 					, mContainers[i].vecMtrl[j].tMtrl.vEmv);
 
 				ResMgr::Insert(pMaterial->GetKey(), pMaterial);
-				pMaterial->Save(strPath);
+				//pMaterial->Save(strPath);
 			}
 		}
 	}

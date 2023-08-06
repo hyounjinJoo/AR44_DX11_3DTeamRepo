@@ -57,7 +57,7 @@ namespace gui
 		mh::Com_Renderer_Mesh* renderer
 			= mDebugObjects[(UINT)eColliderType::Rect]->AddComponent<mh::Com_Renderer_Mesh>();
 
-		renderer->SetMaterial(material);
+		renderer->SetMaterial(material, 0);
 		renderer->SetMesh(rectMesh);
 
 		std::shared_ptr<mh::Mesh> circleMesh = mh::ResMgr::Find<mh::Mesh>("CircleMesh");
@@ -66,7 +66,7 @@ namespace gui
 		renderer
 			= mDebugObjects[(UINT)eColliderType::Circle]->AddComponent<mh::Com_Renderer_Mesh>();
 
-		renderer->SetMaterial(material);
+		renderer->SetMaterial(material, 0);
 		renderer->SetMesh(circleMesh);
 
 		//그리드 이쪽으로 옮겨줘야 한다.
