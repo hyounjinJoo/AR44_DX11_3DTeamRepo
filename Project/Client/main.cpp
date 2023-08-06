@@ -38,12 +38,6 @@ BOOL APIENTRY wWinMain(_In_ HINSTANCE hInstance,
     Desc.GPUDesc.ResolutionY = (UINT)Desc.Height;
     Desc.GPUDesc.RefreshRate = 144u;
 
-    int a = 123;
-
     return GameClient::Run(Desc);
 }
-
-
-
-
 
