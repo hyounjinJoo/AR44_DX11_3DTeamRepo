@@ -82,7 +82,7 @@ int main(int argc, char* argv[])
         
         tAddBaseClassDesc Desc = {};
         Desc.BaseType = "IComponent";
-        Desc.IncludePCH = R"(#include "PCH_CodeGenerator.h")";
+        Desc.IncludePCH = R"(#include "PCH_Contents.h")";
         Desc.IncludeMasterHeader = R"(#include "ContentsClassInitializer.h")";
         Desc.IncludeStrKeyHeaderName = R"(#include "strKey_Component.h")";
         Desc.IncludeManagerHeader = "#include <Engine/ComMgr.h>";
@@ -108,7 +108,7 @@ int main(int argc, char* argv[])
 
         tAddBaseClassDesc Desc = {};
         Desc.BaseType = "IScript";
-        Desc.IncludePCH = R"(#include "PCH_CodeGenerator.h")";
+        Desc.IncludePCH = R"(#include "PCH_Contents.h")";
         Desc.IncludeMasterHeader = R"(#include "ContentsClassInitializer.h")";
         Desc.IncludeStrKeyHeaderName = R"(#include "strKey_Script.h")";
         Desc.IncludeManagerHeader = "#include <Engine/ComMgr.h>";

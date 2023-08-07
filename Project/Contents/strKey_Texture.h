@@ -1,5 +1,4 @@
 
-
 #pragma once
 
 
@@ -35,6 +34,16 @@ namespace mh::define::strKey::Texture
 		STRKEY TILE_ARR_dds = "Cube/TILE_ARR.dds";
 		STRKEY TILE_ARRR_dds = "Cube/TILE_ARRR.dds";
 		STRKEY TILE_ARR_N_dds = "Cube/TILE_ARR_N.dds";
+	}
+
+	namespace FBXTex
+	{
+		STRKEY SPR_Vill_Warehouse01_Diff_tga = "FBXTex/SPR_Vill_Warehouse01_Diff.tga";
+		STRKEY SPR_Vill_Warehouse01_Norm_tga = "FBXTex/SPR_Vill_Warehouse01_Norm.tga";
+		STRKEY SPR_Vill_Warehouse01_Spec_tga = "FBXTex/SPR_Vill_Warehouse01_Spec.tga";
+		STRKEY SPR_Vill_Warehouse02_Norm_tga = "FBXTex/SPR_Vill_Warehouse02_Norm.tga";
+		STRKEY SPR_Vill_Warehouse03_Diff_tga = "FBXTex/SPR_Vill_Warehouse03_Diff.tga";
+		STRKEY SPR_Vill_Warehouse03_Spec_tga = "FBXTex/SPR_Vill_Warehouse03_Spec.tga";
 	}
 
 	namespace noise

@@ -1,5 +1,4 @@
 
-
 #pragma once
 
 
@@ -16,5 +15,6 @@
 
 namespace mh::define::strKey::Script
 {
+	STRKEY Script_CameraMove = "Script_CameraMove";
 	STRKEY Script_TestScript = "Script_TestScript";
 }

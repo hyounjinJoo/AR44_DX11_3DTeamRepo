@@ -31,6 +31,7 @@ HRESULT DirTree::CreateStrKeyHeader(stdfs::path const& _FilePath, stdfs::path co
 {
 	CodeWriter Writer;
 
+	Writer.WriteCode(0, define_Preset::Keyword::PragmaOnce::A);
 	Writer.WriteCode(0, define_Preset::Keyword::Head::A);
 
 	Writer.WriteCode(0, define_Preset::Keyword::DefineSTRKEY::A);
@@ -210,6 +211,7 @@ HRESULT DirTree::CreateShaderStrKey(stdfs::path const& _FilePath)
 
 
 	//코드 작성 시작
+	Writer.WriteCode(0, define_Preset::Keyword::PragmaOnce::A);
 	Writer.WriteCode(0, define_Preset::Keyword::Head::A);
 	Writer.WriteCode(0, define_Preset::Keyword::DefineSTRKEY::A);
 

@@ -23,6 +23,7 @@ namespace gui
 
 	void Console::LateUpdate()
 	{
+
 	}
 
 }
