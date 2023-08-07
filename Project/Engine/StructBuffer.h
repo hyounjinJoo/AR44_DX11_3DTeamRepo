@@ -47,12 +47,12 @@ namespace mh
         void SetPipelineTarget(eShaderStageFlag_ _StageFlag) { mSBufferDesc.TargetStage = _StageFlag; }
         void AddPipelineTarget(eShaderStageFlag_ _StageFlag) { mSBufferDesc.TargetStage |= _StageFlag; }
 
-        UINT GetCapacity() const { return mElementCapacity; }
+        uint GetCapacity() const { return mElementCapacity; }
 
         //글로벌 변수에 있는거 리턴해주면 될듯
-        UINT GetElemCount() const { return mElementCount; }
+        uint GetElemCount() const { return mElementCount; }
 
-        UINT GetStride() const { return mElementStride; }
+        uint GetStride() const { return mElementStride; }
 
         template <typename T>
         HRESULT Create(size_t _ElementCapacity, void* _pInitialData, size_t _ElemCount);
@@ -87,9 +87,9 @@ namespace mh
         tSBufferDesc                mSBufferDesc;
         bool                        mbSBufferDescSet;
 
-        UINT                        mElementStride;   //구조체 하나 당 바이트 갯수
-        UINT                        mElementCount;    //현재 등록한 구조체의 갯수
-        UINT                        mElementCapacity; //현재 확보되어있는 구조체의 갯수
+        uint                        mElementStride;   //구조체 하나 당 바이트 갯수
+        uint                        mElementCount;    //현재 등록한 구조체의 갯수
+        uint                        mElementCapacity; //현재 확보되어있는 구조체의 갯수
 
         ComPtr<ID3D11ShaderResourceView> mSRV;
 

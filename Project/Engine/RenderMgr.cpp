@@ -1,4 +1,4 @@
-#include "EnginePCH.h"
+#include "PCH_Engine.h"
 #include "RenderMgr.h"
 
 #include "AtExit.h"
@@ -11,7 +11,7 @@
 #include "PaintShader.h"
 #include "ParticleShader.h"
 
-#include "SceneManager.h"
+#include "SceneMgr.h"
 
 #include "ResMgr.h"
 #include "TimeMgr.h"
@@ -28,18 +28,20 @@ extern mh::Application gApplication;
 
 namespace mh
 {
+	
+
 	Com_Camera*							RenderMgr::mMainCamera{};
 	GameObject*							RenderMgr::mInspectorGameObject{};
 
-	std::unique_ptr<ConstBuffer>		RenderMgr::mConstBuffers[(UINT)eCBType::End]{};
-	ComPtr<ID3D11SamplerState>			RenderMgr::mSamplerStates[(UINT)eSamplerType::End]{};
-	ComPtr<ID3D11RasterizerState>		RenderMgr::mRasterizerStates[(UINT)eRSType::End]{};
-	ComPtr<ID3D11DepthStencilState>		RenderMgr::mDepthStencilStates[(UINT)eDSType::End]{};
-	ComPtr<ID3D11BlendState>			RenderMgr::mBlendStates[(UINT)eBSType::End]{};
-	std::vector<Com_Camera*>			RenderMgr::mCameras[(UINT)eSceneType::End]{};
+	std::unique_ptr<ConstBuffer>		RenderMgr::mConstBuffers[(uint)eCBType::End]{};
+	ComPtr<ID3D11SamplerState>			RenderMgr::mSamplerStates[(uint)eSamplerType::End]{};
+	ComPtr<ID3D11RasterizerState>		RenderMgr::mRasterizerStates[(uint)eRSType::End]{};
+	ComPtr<ID3D11DepthStencilState>		RenderMgr::mDepthStencilStates[(uint)eDSType::End]{};
+	ComPtr<ID3D11BlendState>			RenderMgr::mBlendStates[(uint)eBSType::End]{};
+	std::vector<Com_Camera*>			RenderMgr::mCameras[(uint)eSceneType::End]{};
 	std::vector<tDebugMesh>				RenderMgr::mDebugMeshes{};
 
-	std::unique_ptr<MultiRenderTarget>	RenderMgr::mMultiRenderTargets[(UINT)eMRTType::End]{};
+	std::unique_ptr<MultiRenderTarget>	RenderMgr::mMultiRenderTargets[(uint)eMRTType::End]{};
 
 	std::vector<Com_Light*>				RenderMgr::mLights{};
 	std::vector<tLightAttribute>		RenderMgr::mLightAttributes{};
@@ -51,11 +53,12 @@ namespace mh
 	{
 		AtExit::AddFunc(Release);
 
-		if (false == CreateMultiRenderTargets())
-		{
-			ERROR_MESSAGE_W(L"멀티 렌더타겟 생성 실패.");
-			std::abort();
-		}
+		//GPUMgr에서 담당
+		//if (false == CreateMultiRenderTargets())
+		//{
+		//	ERROR_MESSAGE_W(L"멀티 렌더타겟 생성 실패.");
+		//	std::abort();
+		//}
 
 		LoadDefaultMesh();
 		LoadDefaultShader();
@@ -115,11 +118,13 @@ namespace mh
 
 	void RenderMgr::Render()
 	{
+		UpdateGlobalCBuffer();
+
 		BindNoiseTexture();
 		BindLights();
 
-		eSceneType type = SceneManager::GetActiveScene()->GetSceneType();
-		for (Com_Camera* cam : mCameras[(UINT)type])
+		eSceneType type = SceneMgr::GetActiveScene()->GetSceneType();
+		for (Com_Camera* cam : mCameras[(uint)type])
 		{
 			if (cam == nullptr)
 				continue;
@@ -127,7 +132,7 @@ namespace mh
 			cam->Render();
 		}
 
-		mCameras[(UINT)type].clear();
+		mCameras[(uint)type].clear();
 		mLightAttributes.clear();
 	}
 
@@ -153,14 +158,14 @@ namespace mh
 		mLightsBuffer->BindDataSRV(13, Flag);
 
 		LightCB trCb = {};
-		trCb.NumberOfLight = (UINT)mLightAttributes.size();
+		trCb.NumberOfLight = (uint)mLightAttributes.size();
 
 		for (size_t i = 0; i < mLights.size(); i++)
 		{
-			mLights[i]->SetIndex((UINT)i);
+			mLights[i]->SetIndex((uint)i);
 		}
 
-		ConstBuffer* cb = mConstBuffers[(UINT)eCBType::Light].get();
+		ConstBuffer* cb = mConstBuffers[(uint)eCBType::Light].get();
 		cb->SetData(&trCb);
 		cb->BindData(Flag);
 	}
@@ -177,7 +182,7 @@ namespace mh
 		noiseTime -= TimeMgr::DeltaTime();
 		info.NoiseTime = noiseTime;
 
-		ConstBuffer* cb = mConstBuffers[(UINT)eCBType::Noise].get();
+		ConstBuffer* cb = mConstBuffers[(uint)eCBType::Noise].get();
 		cb->SetData(&info);
 		cb->BindData(eShaderStageFlag::ALL);
 	}
@@ -206,22 +211,55 @@ namespace mh
 			{
 				if ((int)eMRTType::Light == i)
 				{
-					mMultiRenderTargets[i]->Clear(Vector4(0.f));
+					mMultiRenderTargets[i]->Clear(float4(0.f));
 				}
 				else
 				{
-					mMultiRenderTargets[i]->Clear(Vector4(0.2f));
+					mMultiRenderTargets[i]->Clear(float4(0.2f));
 				}
 			}
 				
 		}
 	}
 
-	bool RenderMgr::CreateMultiRenderTargets()
+	void RenderMgr::UpdateGlobalCBuffer()
 	{
-		UINT width = gApplication.GetWidth();
-		UINT height = gApplication.GetHeight();
+		GlobalCB cb{};
+		cb.uResolution.x = GPUMgr::GetResolutionX();
+		cb.uResolution.y = GPUMgr::GetResolutionY();
+		cb.fResolution.x = (float)cb.uResolution.x;
+		cb.fResolution.y = (float)cb.uResolution.y;
+		cb.DeltaTime = TimeMgr::DeltaTime();
+		ConstBuffer* global = GetConstBuffer(eCBType::Global);
+		global->SetData(&cb);
+		global->BindData();
+	}
 
+	bool RenderMgr::SetResolution(UINT _ResolutionX, UINT _ResolutionY)
+	{
+		if (false == CreateMultiRenderTargets(_ResolutionX, _ResolutionY))
+		{
+			ERROR_MESSAGE_W(L"해상도 변경 실패");
+			return false;
+		}
+
+		for (int i = 0; i < (int)eSceneType::End; ++i)
+		{
+			for (auto* iter : mCameras[i])
+			{
+				if (iter)
+				{
+					iter->CreateProjectionMatrix(_ResolutionX, _ResolutionY);
+				}
+			}
+		}
+
+
+		return true;
+	}
+
+	bool RenderMgr::CreateMultiRenderTargets(UINT _ResolutionX, UINT _ResolutionY)
+	{
 		{
 			//Swapchain MRT
 			std::shared_ptr<Texture> arrRTTex[8] = {};
@@ -230,14 +268,13 @@ namespace mh
 			arrRTTex[0] = GPUMgr::GetRenderTargetTex();
 			dsTex = GPUMgr::GetDepthStencilBufferTex();
 
-			mMultiRenderTargets[(UINT)eMRTType::Swapchain] = std::make_unique< MultiRenderTarget>();
+			mMultiRenderTargets[(UINT)eMRTType::Swapchain] = std::make_unique<MultiRenderTarget>();
 
 			if (false == mMultiRenderTargets[(UINT)eMRTType::Swapchain]->Create(arrRTTex, dsTex))
 			{
 				ERROR_MESSAGE_W(L"Multi Render Target 생성 실패.");
 				return false;
 			}
-				
 		}
 
 		// Deffered MRT
@@ -250,24 +287,24 @@ namespace mh
 			std::shared_ptr<Texture> albedo = std::make_shared<Texture>();
 			std::shared_ptr<Texture> specular = std::make_shared<Texture>();
 
-			arrRTTex[(UINT)eMRT_Defferd::PositionTarget] = pos;
-			arrRTTex[(UINT)eMRT_Defferd::NormalTarget] = normal;
-			arrRTTex[(UINT)eMRT_Defferd::AlbedoTarget] = albedo;
-			arrRTTex[(UINT)eMRT_Defferd::SpecularTarget] = specular;
+			arrRTTex[(int)eMRT_Defferd::PositionTarget] = pos;
+			arrRTTex[(int)eMRT_Defferd::NormalTarget] = normal;
+			arrRTTex[(int)eMRT_Defferd::AlbedoTarget] = albedo;
+			arrRTTex[(int)eMRT_Defferd::SpecularTarget] = specular;
 
-			arrRTTex[0]->Create(width, height, DXGI_FORMAT_R32G32B32A32_FLOAT
+			arrRTTex[0]->Create(_ResolutionX, _ResolutionY, DXGI_FORMAT_R32G32B32A32_FLOAT
 				, D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE);
-			arrRTTex[1]->Create(width, height, DXGI_FORMAT_R32G32B32A32_FLOAT
+			arrRTTex[1]->Create(_ResolutionX, _ResolutionY, DXGI_FORMAT_R32G32B32A32_FLOAT
 				, D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE);
-			arrRTTex[2]->Create(width, height, DXGI_FORMAT_R32G32B32A32_FLOAT
+			arrRTTex[2]->Create(_ResolutionX, _ResolutionY, DXGI_FORMAT_R32G32B32A32_FLOAT
 				, D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE);
-			arrRTTex[3]->Create(width, height, DXGI_FORMAT_R32G32B32A32_FLOAT
+			arrRTTex[3]->Create(_ResolutionX, _ResolutionY, DXGI_FORMAT_R32G32B32A32_FLOAT
 				, D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE);
 
 			dsTex = GPUMgr::GetDepthStencilBufferTex();
 
-			mMultiRenderTargets[(UINT)eMRTType::Deffered] = std::make_unique<MultiRenderTarget>();
-			if(false == mMultiRenderTargets[(UINT)eMRTType::Deffered]->Create(arrRTTex, dsTex))
+			mMultiRenderTargets[(int)eMRTType::Deffered] = std::make_unique<MultiRenderTarget>();
+			if(false == mMultiRenderTargets[(int)eMRTType::Deffered]->Create(arrRTTex, dsTex))
 			{
 				ERROR_MESSAGE_W(L"Multi Render Target 생성 실패.");
 				return false;
@@ -284,19 +321,19 @@ namespace mh
 			arrRTTex[(int)eMRT_Light::DiffuseLightTarget] = diffuse;
 			arrRTTex[(int)eMRT_Light::SpecularLightTarget] = specular;
 
-			arrRTTex[0]->Create(width, height, DXGI_FORMAT_R32G32B32A32_FLOAT
+			arrRTTex[0]->Create(_ResolutionX, _ResolutionY, DXGI_FORMAT_R32G32B32A32_FLOAT
 				, D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE);
-			arrRTTex[1]->Create(width, height, DXGI_FORMAT_R32G32B32A32_FLOAT
+			arrRTTex[1]->Create(_ResolutionX, _ResolutionY, DXGI_FORMAT_R32G32B32A32_FLOAT
 				, D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE);
 
-			mMultiRenderTargets[(UINT)eMRTType::Light] = std::make_unique<MultiRenderTarget>();
-			mMultiRenderTargets[(UINT)eMRTType::Light]->Create(arrRTTex, nullptr);
+			mMultiRenderTargets[(int)eMRTType::Light] = std::make_unique<MultiRenderTarget>();
+			mMultiRenderTargets[(int)eMRTType::Light]->Create(arrRTTex, nullptr);
 		}
-
 
 
 		return true;
 	}
+
 	void RenderMgr::LoadDefaultMesh()
 	{
 		using namespace mh::define;
@@ -311,7 +348,7 @@ namespace mh
 			ResMgr::Insert(strKey::Default::mesh::PointMesh, pointMesh);
 
 			pointMesh->CreateVertexBuffer(&vtx2d, sizeof(Vertex2D), (size_t)1);
-			UINT pointIndex = 0;
+			uint pointIndex = 0;
 			pointMesh->CreateIndexBuffer(&pointIndex, 1u);
 		}
 
@@ -322,27 +359,27 @@ namespace mh
 			Vertex2D vtx2d = {};
 
 			//RECT
-			vtx2d.Pos = Vector4(-0.5f, 0.5f, 0.0f, 1.0f);
-			vtx2d.Color = Vector4(0.f, 1.f, 0.f, 1.f);
-			vtx2d.UV = Vector2(0.f, 0.f);
+			vtx2d.Pos = float4(-0.5f, 0.5f, 0.0f, 1.0f);
+			vtx2d.Color = float4(0.f, 1.f, 0.f, 1.f);
+			vtx2d.UV = float2(0.f, 0.f);
 			VecVtx2D.push_back(vtx2d);
 			vtx2d = Vertex2D{};
 
-			vtx2d.Pos = Vector4(0.5f, 0.5f, 0.0f, 1.0f);
-			vtx2d.Color = Vector4(1.f, 1.f, 1.f, 1.f);
-			vtx2d.UV = Vector2(1.0f, 0.0f);
+			vtx2d.Pos = float4(0.5f, 0.5f, 0.0f, 1.0f);
+			vtx2d.Color = float4(1.f, 1.f, 1.f, 1.f);
+			vtx2d.UV = float2(1.0f, 0.0f);
 			VecVtx2D.push_back(vtx2d);
 			vtx2d = Vertex2D{};
 
-			vtx2d.Pos = Vector4(0.5f, -0.5f, 0.0f, 1.0f);
-			vtx2d.Color = Vector4(1.f, 0.f, 0.f, 1.f);
-			vtx2d.UV = Vector2(1.0f, 1.0f);
+			vtx2d.Pos = float4(0.5f, -0.5f, 0.0f, 1.0f);
+			vtx2d.Color = float4(1.f, 0.f, 0.f, 1.f);
+			vtx2d.UV = float2(1.0f, 1.0f);
 			VecVtx2D.push_back(vtx2d);
 			vtx2d = Vertex2D{};
 
-			vtx2d.Pos = Vector4(-0.5f, -0.5f, 0.0f, 1.0f);
-			vtx2d.Color = Vector4(0.f, 0.f, 1.f, 1.f);
-			vtx2d.UV = Vector2(0.0f, 1.0f);
+			vtx2d.Pos = float4(-0.5f, -0.5f, 0.0f, 1.0f);
+			vtx2d.Color = float4(0.f, 0.f, 1.f, 1.f);
+			vtx2d.UV = float2(0.0f, 1.0f);
 			VecVtx2D.push_back(vtx2d);
 			vtx2d = Vertex2D{};
 
@@ -353,35 +390,35 @@ namespace mh
 			RectMesh->CreateVertexBuffer(VecVtx2D.data(), sizeof(vtx2d), VecVtx2D.size());
 
 
-			std::vector<UINT> indices = { 0u , 1u, 2u, 0u, 2u, 3u, 0u };
-			RectMesh->CreateIndexBuffer(indices.data(), (UINT)indices.size());
+			std::vector<uint> indices = { 0u , 1u, 2u, 0u, 2u, 3u, 0u };
+			RectMesh->CreateIndexBuffer(indices.data(), (uint)indices.size());
 
 			VecVtx2D.clear();
 
 #pragma endregion
 #pragma region DEBUG RECTMESH
 
-			vtx2d.Pos = Vector4(-0.5f, 0.5f, -0.00001f, 1.0f);
-			vtx2d.Color = Vector4(0.f, 1.f, 0.f, 1.f);
-			vtx2d.UV = Vector2(0.f, 0.f);
+			vtx2d.Pos = float4(-0.5f, 0.5f, -0.00001f, 1.0f);
+			vtx2d.Color = float4(0.f, 1.f, 0.f, 1.f);
+			vtx2d.UV = float2(0.f, 0.f);
 			VecVtx2D.push_back(vtx2d);
 			vtx2d = Vertex2D{};
 
-			vtx2d.Pos = Vector4(0.5f, 0.5f, -0.00001f, 1.0f);
-			vtx2d.Color = Vector4(1.f, 1.f, 1.f, 1.f);
-			vtx2d.UV = Vector2(1.0f, 0.0f);
+			vtx2d.Pos = float4(0.5f, 0.5f, -0.00001f, 1.0f);
+			vtx2d.Color = float4(1.f, 1.f, 1.f, 1.f);
+			vtx2d.UV = float2(1.0f, 0.0f);
 			VecVtx2D.push_back(vtx2d);
 			vtx2d = Vertex2D{};
 
-			vtx2d.Pos = Vector4(0.5f, -0.5f, -0.00001f, 1.0f);
-			vtx2d.Color = Vector4(1.f, 0.f, 0.f, 1.f);
-			vtx2d.UV = Vector2(1.0f, 1.0f);
+			vtx2d.Pos = float4(0.5f, -0.5f, -0.00001f, 1.0f);
+			vtx2d.Color = float4(1.f, 0.f, 0.f, 1.f);
+			vtx2d.UV = float2(1.0f, 1.0f);
 			VecVtx2D.push_back(vtx2d);
 			vtx2d = Vertex2D{};
 
-			vtx2d.Pos = Vector4(-0.5f, -0.5f, -0.00001f, 1.0f);
-			vtx2d.Color = Vector4(0.f, 0.f, 1.f, 1.f);
-			vtx2d.UV = Vector2(0.0f, 1.0f);
+			vtx2d.Pos = float4(-0.5f, -0.5f, -0.00001f, 1.0f);
+			vtx2d.Color = float4(0.f, 0.f, 1.f, 1.f);
+			vtx2d.UV = float2(0.0f, 1.0f);
 			VecVtx2D.push_back(vtx2d);
 			vtx2d = Vertex2D{};
 			
@@ -389,18 +426,18 @@ namespace mh
 			std::shared_ptr<Mesh> debugmesh = std::make_shared<Mesh>();
 			ResMgr::Insert(strKey::Default::mesh::DebugRectMesh, debugmesh);
 			debugmesh->CreateVertexBuffer(VecVtx2D.data(), sizeof(Vertex2D), VecVtx2D.size());
-			debugmesh->CreateIndexBuffer(indices.data(), static_cast<UINT>(indices.size()));
+			debugmesh->CreateIndexBuffer(indices.data(), static_cast<uint>(indices.size()));
 		}
 #pragma endregion
 #pragma region CIRCLE MESH
 		{
 			std::vector<Vertex2D> VecVtx2D;
-			std::vector<UINT>     VecIdx;
+			std::vector<uint>     VecIdx;
 
 			Vertex2D center{};
-			center.Pos = Vector4(0.0f, 0.0f, 0.f, 1.0f);
-			center.Color = Vector4(0.0f, 0.0f, 0.0f, 1.0f);
-			center.UV = Vector2(0.5f, 0.5f);
+			center.Pos = float4(0.0f, 0.0f, 0.f, 1.0f);
+			center.Color = float4(0.0f, 0.0f, 0.0f, 1.0f);
+			center.UV = float2(0.5f, 0.5f);
 			VecVtx2D.push_back(center);
 
 			int iSlice = 40;
@@ -432,7 +469,7 @@ namespace mh
 
 			VecIdx.push_back(0);
 			VecIdx.push_back(1);
-			VecIdx.push_back((UINT)VecVtx2D.size() - 1u);
+			VecIdx.push_back((uint)VecVtx2D.size() - 1u);
 
 			// Crate Mesh
 			std::shared_ptr<Mesh> cirlceMesh = std::make_shared<Mesh>();
@@ -449,223 +486,223 @@ namespace mh
 
 			
 			// 윗면
-			vtx3d.Pos = Vector4(-0.5f, 0.5f, 0.5f, 1.0f);
-			vtx3d.Color = Vector4(1.f, 1.f, 1.f, 1.f);
-			vtx3d.UV = Vector2(0.f, 0.f);
-			vtx3d.Normal = Vector3(0.f, 1.f, 0.f);
-			vtx3d.Tangent = Vector3(1.0f, 0.0f, 0.0f);
-			vtx3d.BiNormal = Vector3(0.0f, 0.0f, 1.0f);
+			vtx3d.Pos = float4(-0.5f, 0.5f, 0.5f, 1.0f);
+			vtx3d.Color = float4(1.f, 1.f, 1.f, 1.f);
+			vtx3d.UV = float2(0.f, 0.f);
+			vtx3d.Normal = float3(0.f, 1.f, 0.f);
+			vtx3d.Tangent = float3(1.0f, 0.0f, 0.0f);
+			vtx3d.BiNormal = float3(0.0f, 0.0f, 1.0f);
 			VecVtx3D.push_back(vtx3d);
 			vtx3d = {};
 
-			vtx3d.Pos = Vector4(0.5f, 0.5f, 0.5f, 1.0f);
-			vtx3d.Color = Vector4(1.f, 1.f, 1.f, 1.f);
-			vtx3d.UV = Vector2(1.f, 0.f);
-			vtx3d.Normal = Vector3(0.f, 1.f, 0.f);
-			vtx3d.Tangent = Vector3(1.0f, 0.0f, 0.0f);
-			vtx3d.BiNormal = Vector3(0.0f, 0.0f, 1.0f);
+			vtx3d.Pos = float4(0.5f, 0.5f, 0.5f, 1.0f);
+			vtx3d.Color = float4(1.f, 1.f, 1.f, 1.f);
+			vtx3d.UV = float2(1.f, 0.f);
+			vtx3d.Normal = float3(0.f, 1.f, 0.f);
+			vtx3d.Tangent = float3(1.0f, 0.0f, 0.0f);
+			vtx3d.BiNormal = float3(0.0f, 0.0f, 1.0f);
 			VecVtx3D.push_back(vtx3d);
 			vtx3d = {};
 
-			vtx3d.Pos = Vector4(0.5f, 0.5f, -0.5f, 1.0f);
-			vtx3d.Color = Vector4(1.f, 1.f, 1.f, 1.f);
-			vtx3d.UV = Vector2(0.f, 1.f);
-			vtx3d.Normal = Vector3(0.f, 1.f, 0.f);
-			vtx3d.Tangent = Vector3(1.0f, 0.0f, 0.0f);
-			vtx3d.BiNormal = Vector3(0.0f, 0.0f, 1.0f);
+			vtx3d.Pos = float4(0.5f, 0.5f, -0.5f, 1.0f);
+			vtx3d.Color = float4(1.f, 1.f, 1.f, 1.f);
+			vtx3d.UV = float2(0.f, 1.f);
+			vtx3d.Normal = float3(0.f, 1.f, 0.f);
+			vtx3d.Tangent = float3(1.0f, 0.0f, 0.0f);
+			vtx3d.BiNormal = float3(0.0f, 0.0f, 1.0f);
 			VecVtx3D.push_back(vtx3d);
 			vtx3d = {};
 
-			vtx3d.Pos = Vector4(-0.5f, 0.5f, -0.5f, 1.0f);
-			vtx3d.Color = Vector4(1.f, 1.f, 1.f, 1.f);
-			vtx3d.UV = Vector2(1.f, 1.f);
-			vtx3d.Normal = Vector3(0.f, 1.f, 0.f);
-			vtx3d.Tangent = Vector3(1.0f, 0.0f, 0.0f);
-			vtx3d.BiNormal = Vector3(0.0f, 0.0f, 1.0f);
+			vtx3d.Pos = float4(-0.5f, 0.5f, -0.5f, 1.0f);
+			vtx3d.Color = float4(1.f, 1.f, 1.f, 1.f);
+			vtx3d.UV = float2(1.f, 1.f);
+			vtx3d.Normal = float3(0.f, 1.f, 0.f);
+			vtx3d.Tangent = float3(1.0f, 0.0f, 0.0f);
+			vtx3d.BiNormal = float3(0.0f, 0.0f, 1.0f);
 			VecVtx3D.push_back(vtx3d);
 			vtx3d = {};
 
-			vtx3d.Pos = Vector4(-0.5f, -0.5f, -0.5f, 1.0f);
-			vtx3d.Color = Vector4(1.f, 0.f, 0.f, 1.f);
-			vtx3d.UV = Vector2(0.f, 0.f);
-			vtx3d.Normal = Vector3(0.f, -1.f, 0.f);
-			vtx3d.Tangent = Vector3(-1.0f, 0.0f, 0.0f);
-			vtx3d.BiNormal = Vector3(0.0f, 0.0f, 1.0f);
+			vtx3d.Pos = float4(-0.5f, -0.5f, -0.5f, 1.0f);
+			vtx3d.Color = float4(1.f, 0.f, 0.f, 1.f);
+			vtx3d.UV = float2(0.f, 0.f);
+			vtx3d.Normal = float3(0.f, -1.f, 0.f);
+			vtx3d.Tangent = float3(-1.0f, 0.0f, 0.0f);
+			vtx3d.BiNormal = float3(0.0f, 0.0f, 1.0f);
 			VecVtx3D.push_back(vtx3d);
 			vtx3d = {};
 
-			vtx3d.Pos = Vector4(0.5f, -0.5f, -0.5f, 1.0f);
-			vtx3d.Color = Vector4(1.f, 0.f, 0.f, 1.f);
-			vtx3d.UV = Vector2(1.f, 0.f);
-			vtx3d.Normal = Vector3(0.f, -1.f, 0.f);
-			vtx3d.Tangent = Vector3(-1.0f, 0.0f, 0.0f);
-			vtx3d.BiNormal = Vector3(0.0f, 0.0f, 1.0f);
+			vtx3d.Pos = float4(0.5f, -0.5f, -0.5f, 1.0f);
+			vtx3d.Color = float4(1.f, 0.f, 0.f, 1.f);
+			vtx3d.UV = float2(1.f, 0.f);
+			vtx3d.Normal = float3(0.f, -1.f, 0.f);
+			vtx3d.Tangent = float3(-1.0f, 0.0f, 0.0f);
+			vtx3d.BiNormal = float3(0.0f, 0.0f, 1.0f);
 			VecVtx3D.push_back(vtx3d);
 			vtx3d = {};
 
-			vtx3d.Pos = Vector4(0.5f, -0.5f, 0.5f, 1.0f);
-			vtx3d.Color = Vector4(1.f, 0.f, 0.f, 1.f);
-			vtx3d.UV = Vector2(0.f, 1.f);
-			vtx3d.Normal = Vector3(0.f, -1.f, 0.f);
-			vtx3d.Tangent = Vector3(-1.0f, 0.0f, 0.0f);
-			vtx3d.BiNormal = Vector3(0.0f, 0.0f, 1.0f);
+			vtx3d.Pos = float4(0.5f, -0.5f, 0.5f, 1.0f);
+			vtx3d.Color = float4(1.f, 0.f, 0.f, 1.f);
+			vtx3d.UV = float2(0.f, 1.f);
+			vtx3d.Normal = float3(0.f, -1.f, 0.f);
+			vtx3d.Tangent = float3(-1.0f, 0.0f, 0.0f);
+			vtx3d.BiNormal = float3(0.0f, 0.0f, 1.0f);
 			VecVtx3D.push_back(vtx3d);
 			vtx3d = {};
 
-			vtx3d.Pos = Vector4(-0.5f, -0.5f, 0.5f, 1.0f);
-			vtx3d.Color = Vector4(1.f, 0.f, 0.f, 1.f);
-			vtx3d.UV = Vector2(1.f, 1.f);
-			vtx3d.Normal = Vector3(0.f, -1.f, 0.f);
-			vtx3d.Tangent = Vector3(-1.0f, 0.0f, 0.0f);
-			vtx3d.BiNormal = Vector3(0.0f, 0.0f, 1.0f);
+			vtx3d.Pos = float4(-0.5f, -0.5f, 0.5f, 1.0f);
+			vtx3d.Color = float4(1.f, 0.f, 0.f, 1.f);
+			vtx3d.UV = float2(1.f, 1.f);
+			vtx3d.Normal = float3(0.f, -1.f, 0.f);
+			vtx3d.Tangent = float3(-1.0f, 0.0f, 0.0f);
+			vtx3d.BiNormal = float3(0.0f, 0.0f, 1.0f);
 			VecVtx3D.push_back(vtx3d);
 			vtx3d = {};
 
-			vtx3d.Pos = Vector4(-0.5f, 0.5f, 0.5f, 1.0f);
-			vtx3d.Color = Vector4(0.f, 1.f, 0.f, 1.f);
-			vtx3d.UV = Vector2(0.f, 0.f);
-			vtx3d.Normal = Vector3(-1.f, 0.f, 0.f);
-			vtx3d.Tangent = Vector3(0.0f, 1.0f, 0.0f);
-			vtx3d.BiNormal = Vector3(0.0f, 0.0f, 1.0f);
+			vtx3d.Pos = float4(-0.5f, 0.5f, 0.5f, 1.0f);
+			vtx3d.Color = float4(0.f, 1.f, 0.f, 1.f);
+			vtx3d.UV = float2(0.f, 0.f);
+			vtx3d.Normal = float3(-1.f, 0.f, 0.f);
+			vtx3d.Tangent = float3(0.0f, 1.0f, 0.0f);
+			vtx3d.BiNormal = float3(0.0f, 0.0f, 1.0f);
 			VecVtx3D.push_back(vtx3d);
 			vtx3d = {};
 
-			vtx3d.Pos = Vector4(-0.5f, 0.5f, -0.5f, 1.0f);
-			vtx3d.Color = Vector4(0.f, 1.f, 0.f, 1.f);
-			vtx3d.UV = Vector2(1.f, 0.f);
-			vtx3d.Normal = Vector3(-1.f, 0.f, 0.f);
-			vtx3d.Tangent = Vector3(0.0f, 1.0f, 0.0f);
-			vtx3d.BiNormal = Vector3(0.0f, 0.0f, 1.0f);
+			vtx3d.Pos = float4(-0.5f, 0.5f, -0.5f, 1.0f);
+			vtx3d.Color = float4(0.f, 1.f, 0.f, 1.f);
+			vtx3d.UV = float2(1.f, 0.f);
+			vtx3d.Normal = float3(-1.f, 0.f, 0.f);
+			vtx3d.Tangent = float3(0.0f, 1.0f, 0.0f);
+			vtx3d.BiNormal = float3(0.0f, 0.0f, 1.0f);
 			VecVtx3D.push_back(vtx3d);
 			vtx3d = {};
 
-			vtx3d.Pos = Vector4(-0.5f, -0.5f, -0.5f, 1.0f);
-			vtx3d.Color = Vector4(0.f, 1.f, 0.f, 1.f);
-			vtx3d.UV = Vector2(0.f, 1.f);
-			vtx3d.Normal = Vector3(-1.f, 0.f, 0.f);
-			vtx3d.Tangent = Vector3(0.0f, 1.0f, 0.0f);
-			vtx3d.BiNormal = Vector3(0.0f, 0.0f, 1.0f);
+			vtx3d.Pos = float4(-0.5f, -0.5f, -0.5f, 1.0f);
+			vtx3d.Color = float4(0.f, 1.f, 0.f, 1.f);
+			vtx3d.UV = float2(0.f, 1.f);
+			vtx3d.Normal = float3(-1.f, 0.f, 0.f);
+			vtx3d.Tangent = float3(0.0f, 1.0f, 0.0f);
+			vtx3d.BiNormal = float3(0.0f, 0.0f, 1.0f);
 			VecVtx3D.push_back(vtx3d);
 			vtx3d = {};
 
-			vtx3d.Pos = Vector4(-0.5f, -0.5f, 0.5f, 1.0f);
-			vtx3d.Color = Vector4(0.f, 1.f, 0.f, 1.f);
-			vtx3d.UV = Vector2(1.f, 1.f);
-			vtx3d.Normal = Vector3(-1.f, 0.f, 0.f);
-			vtx3d.Tangent = Vector3(0.0f, 1.0f, 0.0f);
-			vtx3d.BiNormal = Vector3(0.0f, 0.0f, 1.0f);
+			vtx3d.Pos = float4(-0.5f, -0.5f, 0.5f, 1.0f);
+			vtx3d.Color = float4(0.f, 1.f, 0.f, 1.f);
+			vtx3d.UV = float2(1.f, 1.f);
+			vtx3d.Normal = float3(-1.f, 0.f, 0.f);
+			vtx3d.Tangent = float3(0.0f, 1.0f, 0.0f);
+			vtx3d.BiNormal = float3(0.0f, 0.0f, 1.0f);
 			VecVtx3D.push_back(vtx3d);
 			vtx3d = {};
 
-			vtx3d.Pos = Vector4(0.5f, 0.5f, -0.5f, 1.0f);
-			vtx3d.Color = Vector4(0.f, 0.f, 1.f, 1.f);
-			vtx3d.UV = Vector2(0.f, 0.f);
-			vtx3d.Normal = Vector3(1.f, 0.f, 0.f);
-			vtx3d.Tangent = Vector3(0.0f, -1.0f, 0.0f);
-			vtx3d.BiNormal = Vector3(0.0f, 0.0f, 1.0f);
+			vtx3d.Pos = float4(0.5f, 0.5f, -0.5f, 1.0f);
+			vtx3d.Color = float4(0.f, 0.f, 1.f, 1.f);
+			vtx3d.UV = float2(0.f, 0.f);
+			vtx3d.Normal = float3(1.f, 0.f, 0.f);
+			vtx3d.Tangent = float3(0.0f, -1.0f, 0.0f);
+			vtx3d.BiNormal = float3(0.0f, 0.0f, 1.0f);
 			VecVtx3D.push_back(vtx3d);
 			vtx3d = {};
 
-			vtx3d.Pos = Vector4(0.5f, 0.5f, 0.5f, 1.0f);
-			vtx3d.Color = Vector4(0.f, 0.f, 1.f, 1.f);
-			vtx3d.UV = Vector2(1.f, 0.f);
-			vtx3d.Normal = Vector3(1.f, 0.f, 0.f);
-			vtx3d.Tangent = Vector3(0.0f, -1.0f, 0.0f);
-			vtx3d.BiNormal = Vector3(0.0f, 0.0f, 1.0f);
+			vtx3d.Pos = float4(0.5f, 0.5f, 0.5f, 1.0f);
+			vtx3d.Color = float4(0.f, 0.f, 1.f, 1.f);
+			vtx3d.UV = float2(1.f, 0.f);
+			vtx3d.Normal = float3(1.f, 0.f, 0.f);
+			vtx3d.Tangent = float3(0.0f, -1.0f, 0.0f);
+			vtx3d.BiNormal = float3(0.0f, 0.0f, 1.0f);
 			VecVtx3D.push_back(vtx3d);
 			vtx3d = {};
 
-			vtx3d.Pos = Vector4(0.5f, -0.5f, 0.5f, 1.0f);
-			vtx3d.Color = Vector4(0.f, 0.f, 1.f, 1.f);
-			vtx3d.UV = Vector2(0.f, 1.f);
-			vtx3d.Normal = Vector3(1.f, 0.f, 0.f);
-			vtx3d.Tangent = Vector3(0.0f, -1.0f, 0.0f);
-			vtx3d.BiNormal = Vector3(0.0f, 0.0f, 1.0f);
+			vtx3d.Pos = float4(0.5f, -0.5f, 0.5f, 1.0f);
+			vtx3d.Color = float4(0.f, 0.f, 1.f, 1.f);
+			vtx3d.UV = float2(0.f, 1.f);
+			vtx3d.Normal = float3(1.f, 0.f, 0.f);
+			vtx3d.Tangent = float3(0.0f, -1.0f, 0.0f);
+			vtx3d.BiNormal = float3(0.0f, 0.0f, 1.0f);
 			VecVtx3D.push_back(vtx3d);
 			vtx3d = {};
 
-			vtx3d.Pos = Vector4(0.5f, -0.5f, -0.5f, 1.0f);
-			vtx3d.Color = Vector4(0.f, 0.f, 1.f, 1.f);
-			vtx3d.UV = Vector2(1.f, 1.f);
-			vtx3d.Normal = Vector3(1.f, 0.f, 0.f);
-			vtx3d.Tangent = Vector3(0.0f, -1.0f, 0.0f);
-			vtx3d.BiNormal = Vector3(0.0f, 0.0f, 1.0f);
+			vtx3d.Pos = float4(0.5f, -0.5f, -0.5f, 1.0f);
+			vtx3d.Color = float4(0.f, 0.f, 1.f, 1.f);
+			vtx3d.UV = float2(1.f, 1.f);
+			vtx3d.Normal = float3(1.f, 0.f, 0.f);
+			vtx3d.Tangent = float3(0.0f, -1.0f, 0.0f);
+			vtx3d.BiNormal = float3(0.0f, 0.0f, 1.0f);
 			VecVtx3D.push_back(vtx3d);
 			vtx3d = {};
 
-			vtx3d.Pos = Vector4(0.5f, 0.5f, 0.5f, 1.0f);
-			vtx3d.Color = Vector4(1.f, 1.f, 0.f, 1.f);
-			vtx3d.UV = Vector2(0.f, 0.f);
-			vtx3d.Normal = Vector3(0.f, 0.f, 1.f);
-			vtx3d.Tangent = Vector3(1.0f, 0.0f, 0.0f);
-			vtx3d.BiNormal = Vector3(0.0f, -1.0f, 1.0f);
+			vtx3d.Pos = float4(0.5f, 0.5f, 0.5f, 1.0f);
+			vtx3d.Color = float4(1.f, 1.f, 0.f, 1.f);
+			vtx3d.UV = float2(0.f, 0.f);
+			vtx3d.Normal = float3(0.f, 0.f, 1.f);
+			vtx3d.Tangent = float3(1.0f, 0.0f, 0.0f);
+			vtx3d.BiNormal = float3(0.0f, -1.0f, 1.0f);
 			VecVtx3D.push_back(vtx3d);
 			vtx3d = {};
 
-			vtx3d.Pos = Vector4(-0.5f, 0.5f, 0.5f, 1.0f);
-			vtx3d.Color = Vector4(1.f, 1.f, 0.f, 1.f);
-			vtx3d.UV = Vector2(1.f, 0.f);
-			vtx3d.Normal = Vector3(0.f, 0.f, 1.f);
-			vtx3d.Tangent = Vector3(1.0f, 0.0f, 0.0f);
-			vtx3d.BiNormal = Vector3(0.0f, -1.0f, 1.0f);
+			vtx3d.Pos = float4(-0.5f, 0.5f, 0.5f, 1.0f);
+			vtx3d.Color = float4(1.f, 1.f, 0.f, 1.f);
+			vtx3d.UV = float2(1.f, 0.f);
+			vtx3d.Normal = float3(0.f, 0.f, 1.f);
+			vtx3d.Tangent = float3(1.0f, 0.0f, 0.0f);
+			vtx3d.BiNormal = float3(0.0f, -1.0f, 1.0f);
 			VecVtx3D.push_back(vtx3d);
 			vtx3d = {};
 
-			vtx3d.Pos = Vector4(-0.5f, -0.5f, 0.5f, 1.0f);
-			vtx3d.Color = Vector4(1.f, 1.f, 0.f, 1.f);
-			vtx3d.UV = Vector2(0.f, 1.f);
-			vtx3d.Normal = Vector3(0.f, 0.f, 1.f);
-			vtx3d.Tangent = Vector3(1.0f, 0.0f, 0.0f);
-			vtx3d.BiNormal = Vector3(0.0f, -1.0f, 1.0f);
+			vtx3d.Pos = float4(-0.5f, -0.5f, 0.5f, 1.0f);
+			vtx3d.Color = float4(1.f, 1.f, 0.f, 1.f);
+			vtx3d.UV = float2(0.f, 1.f);
+			vtx3d.Normal = float3(0.f, 0.f, 1.f);
+			vtx3d.Tangent = float3(1.0f, 0.0f, 0.0f);
+			vtx3d.BiNormal = float3(0.0f, -1.0f, 1.0f);
 			VecVtx3D.push_back(vtx3d);
 			vtx3d = {};
 
-			vtx3d.Pos = Vector4(0.5f, -0.5f, 0.5f, 1.0f);
-			vtx3d.Color = Vector4(1.f, 1.f, 0.f, 1.f);
-			vtx3d.UV = Vector2(1.f, 1.f);
-			vtx3d.Normal = Vector3(0.f, 0.f, 1.f);
-			vtx3d.Tangent = Vector3(1.0f, 0.0f, 0.0f);
-			vtx3d.BiNormal = Vector3(0.0f, -1.0f, 1.0f);
+			vtx3d.Pos = float4(0.5f, -0.5f, 0.5f, 1.0f);
+			vtx3d.Color = float4(1.f, 1.f, 0.f, 1.f);
+			vtx3d.UV = float2(1.f, 1.f);
+			vtx3d.Normal = float3(0.f, 0.f, 1.f);
+			vtx3d.Tangent = float3(1.0f, 0.0f, 0.0f);
+			vtx3d.BiNormal = float3(0.0f, -1.0f, 1.0f);
 			VecVtx3D.push_back(vtx3d);
 			vtx3d = {};
 
-			vtx3d.Pos = Vector4(-0.5f, 0.5f, -0.5f, 1.0f);;
-			vtx3d.Color = Vector4(1.f, 0.f, 1.f, 1.f);
-			vtx3d.UV = Vector2(0.f, 0.f);
-			vtx3d.Normal = Vector3(0.f, 0.f, -1.f);
-			vtx3d.Tangent = Vector3(1.0f, 0.0f, 0.0f);
-			vtx3d.BiNormal = Vector3(0.0f, 1.0f, 1.0f);
+			vtx3d.Pos = float4(-0.5f, 0.5f, -0.5f, 1.0f);;
+			vtx3d.Color = float4(1.f, 0.f, 1.f, 1.f);
+			vtx3d.UV = float2(0.f, 0.f);
+			vtx3d.Normal = float3(0.f, 0.f, -1.f);
+			vtx3d.Tangent = float3(1.0f, 0.0f, 0.0f);
+			vtx3d.BiNormal = float3(0.0f, 1.0f, 1.0f);
 			VecVtx3D.push_back(vtx3d);
 			vtx3d = {};
 
-			vtx3d.Pos = Vector4(0.5f, 0.5f, -0.5f, 1.0f);
-			vtx3d.Color = Vector4(1.f, 0.f, 1.f, 1.f);
-			vtx3d.UV = Vector2(1.f, 0.f);
-			vtx3d.Normal = Vector3(0.f, 0.f, -1.f);
-			vtx3d.Tangent = Vector3(1.0f, 0.0f, 0.0f);
-			vtx3d.BiNormal = Vector3(0.0f, 1.0f, 1.0f);
+			vtx3d.Pos = float4(0.5f, 0.5f, -0.5f, 1.0f);
+			vtx3d.Color = float4(1.f, 0.f, 1.f, 1.f);
+			vtx3d.UV = float2(1.f, 0.f);
+			vtx3d.Normal = float3(0.f, 0.f, -1.f);
+			vtx3d.Tangent = float3(1.0f, 0.0f, 0.0f);
+			vtx3d.BiNormal = float3(0.0f, 1.0f, 1.0f);
 			VecVtx3D.push_back(vtx3d);
 			vtx3d = {};
 
-			vtx3d.Pos = Vector4(0.5f, -0.5f, -0.5f, 1.0f);
-			vtx3d.Color = Vector4(1.f, 0.f, 1.f, 1.f);
-			vtx3d.UV = Vector2(0.f, 1.f);
-			vtx3d.Normal = Vector3(0.f, 0.f, -1.f);
-			vtx3d.Tangent = Vector3(1.0f, 0.0f, 0.0f);
-			vtx3d.BiNormal = Vector3(0.0f, 1.0f, 1.0f);
+			vtx3d.Pos = float4(0.5f, -0.5f, -0.5f, 1.0f);
+			vtx3d.Color = float4(1.f, 0.f, 1.f, 1.f);
+			vtx3d.UV = float2(0.f, 1.f);
+			vtx3d.Normal = float3(0.f, 0.f, -1.f);
+			vtx3d.Tangent = float3(1.0f, 0.0f, 0.0f);
+			vtx3d.BiNormal = float3(0.0f, 1.0f, 1.0f);
 			VecVtx3D.push_back(vtx3d);
 			vtx3d = {};
 
-			vtx3d.Pos = Vector4(-0.5f, -0.5f, -0.5f, 1.0f);
-			vtx3d.Color = Vector4(1.f, 0.f, 1.f, 1.f);
-			vtx3d.UV = Vector2(1.f, 1.f);
-			vtx3d.Normal = Vector3(0.f, 0.f, -1.f);
-			vtx3d.Tangent = Vector3(1.0f, 0.0f, 0.0f);
-			vtx3d.BiNormal = Vector3(0.0f, 1.0f, 1.0f);
+			vtx3d.Pos = float4(-0.5f, -0.5f, -0.5f, 1.0f);
+			vtx3d.Color = float4(1.f, 0.f, 1.f, 1.f);
+			vtx3d.UV = float2(1.f, 1.f);
+			vtx3d.Normal = float3(0.f, 0.f, -1.f);
+			vtx3d.Tangent = float3(1.0f, 0.0f, 0.0f);
+			vtx3d.BiNormal = float3(0.0f, 1.0f, 1.0f);
 			VecVtx3D.push_back(vtx3d);
 			vtx3d = {};
 
-			std::vector<UINT> indices;
+			std::vector<uint> indices;
 			for (size_t i = 0; i < 6; i++)
 			{
 				indices.push_back(static_cast<int>(i) * 4);
@@ -693,18 +730,18 @@ namespace mh
 			float fRadius = 0.5f;
 
 			// Top
-			vtx3d.Pos = Vector4(0.0f, fRadius, 0.0f, 1.0f);
-			vtx3d.UV = Vector2(0.5f, 0.f);
-			vtx3d.Color = Vector4(1.f, 1.f, 1.f, 1.f);
-			vtx3d.Normal = Vector3(0.0f, fRadius, 0.0f);
+			vtx3d.Pos = float4(0.0f, fRadius, 0.0f, 1.0f);
+			vtx3d.UV = float2(0.5f, 0.f);
+			vtx3d.Color = float4(1.f, 1.f, 1.f, 1.f);
+			vtx3d.Normal = float3(0.0f, fRadius, 0.0f);
 			vtx3d.Normal.Normalize();
-			vtx3d.Tangent = Vector3(1.f, 0.f, 0.f);
-			vtx3d.BiNormal = Vector3(0.f, 0.f, 1.f);
+			vtx3d.Tangent = float3(1.f, 0.f, 0.f);
+			vtx3d.BiNormal = float3(0.f, 0.f, 1.f);
 			VecVtx3D.push_back(vtx3d);
 
 			// Body
-			UINT iStackCount = 40; // 가로 분할 개수
-			UINT iSliceCount = 40; // 세로 분할 개수
+			uint iStackCount = 40; // 가로 분할 개수
+			uint iSliceCount = 40; // 세로 분할 개수
 
 			float fStackAngle = XM_PI / iStackCount;
 			float fSliceAngle = XM_2PI / iSliceCount;
@@ -712,20 +749,20 @@ namespace mh
 			float fUVXStep = 1.f / (float)iSliceCount;
 			float fUVYStep = 1.f / (float)iStackCount;
 
-			for (UINT i = 1; i < iStackCount; ++i)
+			for (uint i = 1; i < iStackCount; ++i)
 			{
 				float phi = i * fStackAngle;
 
-				for (UINT j = 0; j <= iSliceCount; ++j)
+				for (uint j = 0; j <= iSliceCount; ++j)
 				{
 					float theta = j * fSliceAngle;
 
-					vtx3d.Pos = Vector4(fRadius * sinf(i * fStackAngle) * cosf(j * fSliceAngle)
+					vtx3d.Pos = float4(fRadius * sinf(i * fStackAngle) * cosf(j * fSliceAngle)
 						, fRadius * cosf(i * fStackAngle)
 						, fRadius * sinf(i * fStackAngle) * sinf(j * fSliceAngle), 1.0f);
-					vtx3d.UV = Vector2(fUVXStep * j, fUVYStep * i);
-					vtx3d.Color = Vector4(1.f, 1.f, 1.f, 1.f);
-					vtx3d.Normal = Vector3(vtx3d.Pos);
+					vtx3d.UV = float2(fUVXStep * j, fUVYStep * i);
+					vtx3d.Color = float4(1.f, 1.f, 1.f, 1.f);
+					vtx3d.Normal = float3(vtx3d.Pos);
 					//v.Normal.Normalize();
 
 					vtx3d.Tangent.x = -fRadius * sinf(phi) * sinf(theta);
@@ -742,21 +779,21 @@ namespace mh
 			}
 
 			// Bottom
-			vtx3d.Pos = Vector4(0.f, -fRadius, 0.f, 1.0f);
-			vtx3d.UV = Vector2(0.5f, 1.f);
-			vtx3d.Color = Vector4(1.f, 1.f, 1.f, 1.f);
-			vtx3d.Normal = Vector3(vtx3d.Pos.x, vtx3d.Pos.y, vtx3d.Pos.z);
+			vtx3d.Pos = float4(0.f, -fRadius, 0.f, 1.0f);
+			vtx3d.UV = float2(0.5f, 1.f);
+			vtx3d.Color = float4(1.f, 1.f, 1.f, 1.f);
+			vtx3d.Normal = float3(vtx3d.Pos.x, vtx3d.Pos.y, vtx3d.Pos.z);
 			vtx3d.Normal.Normalize();
 
-			vtx3d.Tangent = Vector3(1.f, 0.f, 0.f);
-			vtx3d.BiNormal = Vector3(0.f, 0.f, -1.f);
+			vtx3d.Tangent = float3(1.f, 0.f, 0.f);
+			vtx3d.BiNormal = float3(0.f, 0.f, -1.f);
 			VecVtx3D.push_back(vtx3d);
 
 			// 인덱스
 			// 북극점
-			std::vector<UINT> indices;
+			std::vector<uint> indices;
 			indices.reserve(2000);
-			for (UINT i = 0; i < iSliceCount; ++i)
+			for (uint i = 0; i < iSliceCount; ++i)
 			{
 				indices.push_back(0);
 				indices.push_back(i + 2);
@@ -764,9 +801,9 @@ namespace mh
 			}
 
 			// 몸통
-			for (UINT i = 0; i < iStackCount - 2; ++i)
+			for (uint i = 0; i < iStackCount - 2; ++i)
 			{
-				for (UINT j = 0; j < iSliceCount; ++j)
+				for (uint j = 0; j < iSliceCount; ++j)
 				{
 					// + 
 					// | \
@@ -785,8 +822,8 @@ namespace mh
 			}
 
 			// 남극점
-			UINT iBottomIdx = (UINT)VecVtx3D.size() - 1;
-			for (UINT i = 0; i < iSliceCount; ++i)
+			uint iBottomIdx = (uint)VecVtx3D.size() - 1;
+			for (uint i = 0; i < iSliceCount; ++i)
 			{
 				indices.push_back(iBottomIdx);
 				indices.push_back(iBottomIdx - (i + 2));
@@ -842,8 +879,8 @@ namespace mh
 		{
 			std::shared_ptr<GraphicsShader> TriangleShader = std::make_shared<GraphicsShader>();
 			TriangleShader->SetEngineDefaultRes(true);
-			TriangleShader->CreateByHeader(eGSStage::VS, VS_Triangle, sizeof(VS_Triangle));
-			TriangleShader->CreateByHeader(eGSStage::PS, PS_Triangle, sizeof(PS_Triangle));
+			TriangleShader->CreateByHeader(eGSStage::VS, _0VS_Triangle, sizeof(_0VS_Triangle));
+			TriangleShader->CreateByHeader(eGSStage::PS, _4PS_Triangle, sizeof(_4PS_Triangle));
 			TriangleShader->CreateInputLayout(vecLayoutDesc);
 
 			ResMgr::Insert(strKey::Default::shader::graphics::RectShader, TriangleShader);
@@ -853,8 +890,8 @@ namespace mh
 		{
 			std::shared_ptr<GraphicsShader> spriteShader = std::make_shared<GraphicsShader>();
 			spriteShader->SetEngineDefaultRes(true);
-			spriteShader->CreateByHeader(eGSStage::VS, VS_Sprite, sizeof(VS_Sprite));
-			spriteShader->CreateByHeader(eGSStage::PS, PS_Sprite, sizeof(PS_Sprite));
+			spriteShader->CreateByHeader(eGSStage::VS, _0VS_Sprite, sizeof(_0VS_Sprite));
+			spriteShader->CreateByHeader(eGSStage::PS, _4PS_Sprite, sizeof(_4PS_Sprite));
 			spriteShader->SetRSState(eRSType::SolidNone);
 			spriteShader->CreateInputLayout(vecLayoutDesc);
 
@@ -867,8 +904,8 @@ namespace mh
 		{
 			std::shared_ptr<GraphicsShader> uiShader = std::make_shared<GraphicsShader>();
 			uiShader->SetEngineDefaultRes(true);
-			uiShader->CreateByHeader(eGSStage::VS, VS_UserInterface, sizeof(VS_UserInterface));
-			uiShader->CreateByHeader(eGSStage::PS, PS_UserInterface, sizeof(PS_UserInterface));
+			uiShader->CreateByHeader(eGSStage::VS, _0VS_UserInterface, sizeof(_0VS_UserInterface));
+			uiShader->CreateByHeader(eGSStage::PS, _4PS_UserInterface, sizeof(_4PS_UserInterface));
 			uiShader->CreateInputLayout(vecLayoutDesc);
 
 
@@ -880,8 +917,8 @@ namespace mh
 		{
 			std::shared_ptr<GraphicsShader> gridShader = std::make_shared<GraphicsShader>();
 			gridShader->SetEngineDefaultRes(true);
-			gridShader->CreateByHeader(eGSStage::VS, VS_Grid, sizeof(VS_Grid));
-			gridShader->CreateByHeader(eGSStage::PS, PS_Grid, sizeof(PS_Grid));
+			gridShader->CreateByHeader(eGSStage::VS, _0VS_Grid, sizeof(_0VS_Grid));
+			gridShader->CreateByHeader(eGSStage::PS, _4PS_Grid, sizeof(_4PS_Grid));
 			gridShader->CreateInputLayout(vecLayoutDesc);
 
 			gridShader->SetRSState(eRSType::SolidNone);
@@ -896,8 +933,8 @@ namespace mh
 		{
 			std::shared_ptr<GraphicsShader> debugShader = std::make_shared<GraphicsShader>();
 			debugShader->SetEngineDefaultRes(true);
-			debugShader->CreateByHeader(eGSStage::VS, VS_Debug, sizeof(VS_Debug));
-			debugShader->CreateByHeader(eGSStage::PS, PS_Debug, sizeof(PS_Debug));
+			debugShader->CreateByHeader(eGSStage::VS, _0VS_Debug, sizeof(_0VS_Debug));
+			debugShader->CreateByHeader(eGSStage::PS, _4PS_Debug, sizeof(_4PS_Debug));
 			debugShader->CreateInputLayout(vecLayoutDesc);
 
 			//debugShader->Create(eShaderStage::VS, "DebugVS.hlsl", "main");
@@ -925,9 +962,9 @@ namespace mh
 			std::shared_ptr<GraphicsShader> particleShader = std::make_shared<GraphicsShader>();
 			particleShader->SetEngineDefaultRes(true);
 
-			particleShader->CreateByHeader(eGSStage::VS, VS_Particle, sizeof(VS_Particle));
-			particleShader->CreateByHeader(eGSStage::GS, GS_Particle, sizeof(GS_Particle));
-			particleShader->CreateByHeader(eGSStage::PS, PS_Particle, sizeof(PS_Particle));
+			particleShader->CreateByHeader(eGSStage::VS, _0VS_Particle, sizeof(_0VS_Particle));
+			particleShader->CreateByHeader(eGSStage::GS, _3GS_Particle, sizeof(_3GS_Particle));
+			particleShader->CreateByHeader(eGSStage::PS, _4PS_Particle, sizeof(_4PS_Particle));
 			particleShader->CreateInputLayout(vecLayoutDesc);
 
 			particleShader->SetRSState(eRSType::SolidNone);
@@ -946,8 +983,8 @@ namespace mh
 		{
 			std::shared_ptr<GraphicsShader> postProcessShader = std::make_shared<GraphicsShader>();
 			postProcessShader->SetEngineDefaultRes(true);
-			postProcessShader->CreateByHeader(eGSStage::VS, VS_PostProcess, sizeof(VS_PostProcess));
-			postProcessShader->CreateByHeader(eGSStage::PS, PS_PostProcess, sizeof(PS_PostProcess));
+			postProcessShader->CreateByHeader(eGSStage::VS, _0VS_PostProcess, sizeof(_0VS_PostProcess));
+			postProcessShader->CreateByHeader(eGSStage::PS, _4PS_PostProcess, sizeof(_4PS_PostProcess));
 			postProcessShader->CreateInputLayout(vecLayoutDesc);
 
 			postProcessShader->SetDSState(eDSType::NoWrite);
@@ -991,8 +1028,8 @@ namespace mh
 			std::shared_ptr<GraphicsShader> basic3DShader = std::make_shared<GraphicsShader>();
 			basic3DShader->SetEngineDefaultRes(true);
 
-			basic3DShader->CreateByHeader(eGSStage::VS, VS_Basic3D, sizeof(VS_Basic3D));
-			basic3DShader->CreateByHeader(eGSStage::PS, PS_Basic3D, sizeof(PS_Basic3D));
+			basic3DShader->CreateByHeader(eGSStage::VS, _0VS_Basic3D, sizeof(_0VS_Basic3D));
+			basic3DShader->CreateByHeader(eGSStage::PS, _4PS_Basic3D, sizeof(_4PS_Basic3D));
 			basic3DShader->CreateInputLayout(vecLayoutDesc);
 
 			ResMgr::Insert(strKey::Default::shader::graphics::Basic3DShader, basic3DShader);
@@ -1003,8 +1040,8 @@ namespace mh
 		std::shared_ptr<GraphicsShader> defferedShader = std::make_shared<GraphicsShader>();
 		defferedShader->SetEngineDefaultRes(true);
 
-		defferedShader->CreateByHeader(eGSStage::VS, VS_Deffered, sizeof(VS_Deffered));
-		defferedShader->CreateByHeader(eGSStage::PS, PS_Deffered, sizeof(PS_Deffered));
+		defferedShader->CreateByHeader(eGSStage::VS, _0VS_Deffered, sizeof(_0VS_Deffered));
+		defferedShader->CreateByHeader(eGSStage::PS, _4PS_Deffered, sizeof(_4PS_Deffered));
 
 		defferedShader->CreateInputLayout(vecLayoutDesc);
 
@@ -1017,8 +1054,8 @@ namespace mh
 #pragma region LIGHT
 		{
 			std::shared_ptr<GraphicsShader> lightShader = std::make_shared<GraphicsShader>();
-			lightShader->CreateByHeader(eGSStage::VS, VS_LightDir, sizeof(VS_LightDir));
-			lightShader->CreateByHeader(eGSStage::PS, PS_LightDir, sizeof(PS_LightDir));
+			lightShader->CreateByHeader(eGSStage::VS, _0VS_LightDir, sizeof(_0VS_LightDir));
+			lightShader->CreateByHeader(eGSStage::PS, _4PS_LightDir, sizeof(_4PS_LightDir));
 
 			lightShader->CreateInputLayout(vecLayoutDesc);
 
@@ -1031,8 +1068,8 @@ namespace mh
 
 		{
 			std::shared_ptr<GraphicsShader> lightShader = std::make_shared<GraphicsShader>();
-			lightShader->CreateByHeader(eGSStage::VS, VS_LightPoint, sizeof(VS_LightPoint));
-			lightShader->CreateByHeader(eGSStage::PS, PS_LightPoint, sizeof(PS_LightPoint));
+			lightShader->CreateByHeader(eGSStage::VS, _0VS_LightPoint, sizeof(_0VS_LightPoint));
+			lightShader->CreateByHeader(eGSStage::PS, _4PS_LightPoint, sizeof(_4PS_LightPoint));
 
 			lightShader->CreateInputLayout(vecLayoutDesc);
 
@@ -1048,8 +1085,8 @@ namespace mh
 
 #pragma region MERGE
 		std::shared_ptr<GraphicsShader> MergeShader = std::make_shared<GraphicsShader>();
-		MergeShader->CreateByHeader(eGSStage::VS, VS_Merge, sizeof(VS_Merge));
-		MergeShader->CreateByHeader(eGSStage::PS, PS_Merge, sizeof(PS_Merge));
+		MergeShader->CreateByHeader(eGSStage::VS, _0VS_Merge, sizeof(_0VS_Merge));
+		MergeShader->CreateByHeader(eGSStage::PS, _4PS_Merge, sizeof(_4PS_Merge));
 
 		MergeShader->CreateInputLayout(vecLayoutDesc);
 
@@ -1064,29 +1101,35 @@ namespace mh
 	void RenderMgr::LoadBuffer()
 	{
 #pragma region CONSTANT BUFFER
-		mConstBuffers[(UINT)eCBType::Transform] = std::make_unique<ConstBuffer>(eCBType::Transform);
-		mConstBuffers[(UINT)eCBType::Transform]->Create(sizeof(TransformCB));
+		mConstBuffers[(uint)eCBType::Global] = std::make_unique<ConstBuffer>(eCBType::Global);
+		mConstBuffers[(uint)eCBType::Global]->Create(sizeof(GlobalCB));
+		mConstBuffers[(uint)eCBType::Global]->SetPresetTargetStage(eShaderStageFlag::ALL);
 
-		mConstBuffers[(UINT)eCBType::Material] = std::make_unique<ConstBuffer>(eCBType::Material);
-		mConstBuffers[(UINT)eCBType::Material]->Create(sizeof(MaterialCB));
+		UpdateGlobalCBuffer();
 
-		mConstBuffers[(UINT)eCBType::Grid] = std::make_unique<ConstBuffer>(eCBType::Grid);
-		mConstBuffers[(UINT)eCBType::Grid]->Create(sizeof(GridCB));
+		mConstBuffers[(uint)eCBType::Transform] = std::make_unique<ConstBuffer>(eCBType::Transform);
+		mConstBuffers[(uint)eCBType::Transform]->Create(sizeof(TransformCB));
 
-		mConstBuffers[(UINT)eCBType::Animation] = std::make_unique<ConstBuffer>(eCBType::Animation);
-		mConstBuffers[(UINT)eCBType::Animation]->Create(sizeof(AnimationCB));
+		mConstBuffers[(uint)eCBType::Material] = std::make_unique<ConstBuffer>(eCBType::Material);
+		mConstBuffers[(uint)eCBType::Material]->Create(sizeof(MaterialCB));
 
-		mConstBuffers[(UINT)eCBType::Light] = std::make_unique<ConstBuffer>(eCBType::Light);
-		mConstBuffers[(UINT)eCBType::Light]->Create(sizeof(LightCB));
+		mConstBuffers[(uint)eCBType::Grid] = std::make_unique<ConstBuffer>(eCBType::Grid);
+		mConstBuffers[(uint)eCBType::Grid]->Create(sizeof(GridCB));
 
-		mConstBuffers[(UINT)eCBType::ParticleSystem] = std::make_unique<ConstBuffer>(eCBType::ParticleSystem);
-		mConstBuffers[(UINT)eCBType::ParticleSystem]->Create(sizeof(ParticleSystemCB));
+		mConstBuffers[(uint)eCBType::Animation] = std::make_unique<ConstBuffer>(eCBType::Animation);
+		mConstBuffers[(uint)eCBType::Animation]->Create(sizeof(AnimationCB));
 
-		mConstBuffers[(UINT)eCBType::Noise] = std::make_unique<ConstBuffer>(eCBType::Noise);
-		mConstBuffers[(UINT)eCBType::Noise]->Create(sizeof(NoiseCB));
+		mConstBuffers[(uint)eCBType::Light] = std::make_unique<ConstBuffer>(eCBType::Light);
+		mConstBuffers[(uint)eCBType::Light]->Create(sizeof(LightCB));
 
-		mConstBuffers[(UINT)eCBType::SBuffer] = std::make_unique<ConstBuffer>(eCBType::SBuffer);
-		mConstBuffers[(UINT)eCBType::SBuffer]->Create<SBufferCB>();
+		mConstBuffers[(uint)eCBType::ParticleSystem] = std::make_unique<ConstBuffer>(eCBType::ParticleSystem);
+		mConstBuffers[(uint)eCBType::ParticleSystem]->Create(sizeof(ParticleSystemCB));
+
+		mConstBuffers[(uint)eCBType::Noise] = std::make_unique<ConstBuffer>(eCBType::Noise);
+		mConstBuffers[(uint)eCBType::Noise]->Create(sizeof(NoiseCB));
+
+		mConstBuffers[(uint)eCBType::SBuffer] = std::make_unique<ConstBuffer>(eCBType::SBuffer);
+		mConstBuffers[(uint)eCBType::SBuffer]->Create<SBufferCB>();
 
 #pragma endregion
 #pragma region STRUCTED BUFFER
@@ -1144,9 +1187,9 @@ namespace mh
 #pragma endregion
 
 		//noise
-		std::shared_ptr<Texture> NoiseTex = std::make_shared<Texture>();
-		NoiseTex->Create(1600, 900, DXGI_FORMAT_R8G8B8A8_UNORM, D3D11_BIND_SHADER_RESOURCE);
-		NoiseTex->BindDataSRV(eShaderStageFlag::PS, 60);
+		std::shared_ptr<Texture> mNoiseTex = std::make_shared<Texture>();
+		mNoiseTex->Create(GPUMgr::GetResolutionX(), GPUMgr::GetResolutionY(), DXGI_FORMAT_R8G8B8A8_UNORM, D3D11_BIND_SHADER_RESOURCE);
+		mNoiseTex->BindDataSRV(eShaderStageFlag::PS, 60);
 	}
 
 
@@ -1164,32 +1207,32 @@ namespace mh
 		GPUMgr::Device()->CreateSamplerState
 		(
 			&samplerDesc
-			, mSamplerStates[(UINT)eSamplerType::Point].GetAddressOf()
+			, mSamplerStates[(uint)eSamplerType::Point].GetAddressOf()
 		);
 
 		samplerDesc.Filter = D3D11_FILTER::D3D11_FILTER_MIN_POINT_MAG_MIP_LINEAR;
 		GPUMgr::Device()->CreateSamplerState
 		(
 			&samplerDesc
-			, mSamplerStates[(UINT)eSamplerType::Linear].GetAddressOf()
+			, mSamplerStates[(uint)eSamplerType::Linear].GetAddressOf()
 		);
 
 		samplerDesc.Filter = D3D11_FILTER::D3D11_FILTER_ANISOTROPIC;
 		GPUMgr::Device()->CreateSamplerState
 		(
 			&samplerDesc
-			, mSamplerStates[(UINT)eSamplerType::Anisotropic].GetAddressOf()
+			, mSamplerStates[(uint)eSamplerType::Anisotropic].GetAddressOf()
 		);
 
 
-		GPUMgr::Context()->PSSetSamplers((UINT)eSamplerType::Point
-			, 1, mSamplerStates[(UINT)eSamplerType::Point].GetAddressOf());
+		GPUMgr::Context()->PSSetSamplers((uint)eSamplerType::Point
+			, 1, mSamplerStates[(uint)eSamplerType::Point].GetAddressOf());
 
-		GPUMgr::Context()->PSSetSamplers((UINT)eSamplerType::Linear
-			, 1, mSamplerStates[(UINT)eSamplerType::Linear].GetAddressOf());
+		GPUMgr::Context()->PSSetSamplers((uint)eSamplerType::Linear
+			, 1, mSamplerStates[(uint)eSamplerType::Linear].GetAddressOf());
 
-		GPUMgr::Context()->PSSetSamplers((UINT)eSamplerType::Anisotropic
-			, 1, mSamplerStates[(UINT)eSamplerType::Anisotropic].GetAddressOf());
+		GPUMgr::Context()->PSSetSamplers((uint)eSamplerType::Anisotropic
+			, 1, mSamplerStates[(uint)eSamplerType::Anisotropic].GetAddressOf());
 
 #pragma endregion
 	}
@@ -1202,25 +1245,25 @@ namespace mh
 		rsDesc.CullMode = D3D11_CULL_MODE::D3D11_CULL_BACK;
 
 		GPUMgr::Device()->CreateRasterizerState(&rsDesc
-			, mRasterizerStates[(UINT)eRSType::SolidBack].GetAddressOf());
+			, mRasterizerStates[(uint)eRSType::SolidBack].GetAddressOf());
 
 		rsDesc.FillMode = D3D11_FILL_MODE::D3D11_FILL_SOLID;
 		rsDesc.CullMode = D3D11_CULL_MODE::D3D11_CULL_FRONT;
 
 		GPUMgr::Device()->CreateRasterizerState(&rsDesc
-			, mRasterizerStates[(UINT)eRSType::SolidFront].GetAddressOf());
+			, mRasterizerStates[(uint)eRSType::SolidFront].GetAddressOf());
 
 		rsDesc.FillMode = D3D11_FILL_MODE::D3D11_FILL_SOLID;
 		rsDesc.CullMode = D3D11_CULL_MODE::D3D11_CULL_NONE;
 
 		GPUMgr::Device()->CreateRasterizerState(&rsDesc
-			, mRasterizerStates[(UINT)eRSType::SolidNone].GetAddressOf());
+			, mRasterizerStates[(uint)eRSType::SolidNone].GetAddressOf());
 
 		rsDesc.FillMode = D3D11_FILL_MODE::D3D11_FILL_WIREFRAME;
 		rsDesc.CullMode = D3D11_CULL_MODE::D3D11_CULL_NONE;
 
 		GPUMgr::Device()->CreateRasterizerState(&rsDesc
-			, mRasterizerStates[(UINT)eRSType::WireframeNone].GetAddressOf());
+			, mRasterizerStates[(uint)eRSType::WireframeNone].GetAddressOf());
 #pragma endregion
 	}
 
@@ -1229,7 +1272,7 @@ namespace mh
 
 #pragma region Blend State
 		//None
-		mBlendStates[(UINT)eBSType::Default] = nullptr;
+		mBlendStates[(uint)eBSType::Default] = nullptr;
 
 		D3D11_BLEND_DESC bsDesc = {};
 		bsDesc.AlphaToCoverageEnable = false;
@@ -1244,7 +1287,7 @@ namespace mh
 
 		bsDesc.RenderTarget[0].RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
 
-		GPUMgr::Device()->CreateBlendState(&bsDesc, mBlendStates[(UINT)eBSType::AlphaBlend].GetAddressOf());
+		GPUMgr::Device()->CreateBlendState(&bsDesc, mBlendStates[(uint)eBSType::AlphaBlend].GetAddressOf());
 
 		bsDesc.AlphaToCoverageEnable = false;
 		bsDesc.IndependentBlendEnable = false;
@@ -1255,7 +1298,7 @@ namespace mh
 		bsDesc.RenderTarget[0].DestBlend = D3D11_BLEND_ONE;
 		bsDesc.RenderTarget[0].RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
 
-		GPUMgr::Device()->CreateBlendState(&bsDesc, mBlendStates[(UINT)eBSType::OneOne].GetAddressOf());
+		GPUMgr::Device()->CreateBlendState(&bsDesc, mBlendStates[(uint)eBSType::OneOne].GetAddressOf());
 
 #pragma endregion
 	}
@@ -1270,7 +1313,7 @@ namespace mh
 		dsDesc.StencilEnable = false;
 
 		GPUMgr::Device()->CreateDepthStencilState(&dsDesc
-			, mDepthStencilStates[(UINT)eDSType::Less].GetAddressOf());
+			, mDepthStencilStates[(uint)eDSType::Less].GetAddressOf());
 
 		dsDesc.DepthEnable = true;
 		dsDesc.DepthFunc = D3D11_COMPARISON_FUNC::D3D11_COMPARISON_GREATER;
@@ -1278,7 +1321,7 @@ namespace mh
 		dsDesc.StencilEnable = false;
 
 		GPUMgr::Device()->CreateDepthStencilState(&dsDesc
-			, mDepthStencilStates[(UINT)eDSType::Greater].GetAddressOf());
+			, mDepthStencilStates[(uint)eDSType::Greater].GetAddressOf());
 
 		dsDesc.DepthEnable = true;
 		dsDesc.DepthFunc = D3D11_COMPARISON_FUNC::D3D11_COMPARISON_LESS;
@@ -1286,7 +1329,7 @@ namespace mh
 		dsDesc.StencilEnable = false;
 
 		GPUMgr::Device()->CreateDepthStencilState(&dsDesc
-			, mDepthStencilStates[(UINT)eDSType::NoWrite].GetAddressOf());
+			, mDepthStencilStates[(uint)eDSType::NoWrite].GetAddressOf());
 
 		dsDesc.DepthEnable = false;
 		dsDesc.DepthFunc = D3D11_COMPARISON_FUNC::D3D11_COMPARISON_LESS;
@@ -1294,7 +1337,7 @@ namespace mh
 		dsDesc.StencilEnable = false;
 
 		GPUMgr::Device()->CreateDepthStencilState(&dsDesc
-			, mDepthStencilStates[(UINT)eDSType::None].GetAddressOf());
+			, mDepthStencilStates[(uint)eDSType::None].GetAddressOf());
 #pragma endregion
 	}
 
@@ -1393,19 +1436,19 @@ namespace mh
 			lightMaterial->SetRenderingMode(eRenderingMode::None);
 			lightMaterial->SetShader(lightShader);
 
-			MultiRenderTarget* DefferedMRT = mMultiRenderTargets[(UINT)eMRTType::Deffered].get();
+			MultiRenderTarget* DefferedMRT = mMultiRenderTargets[(uint)eMRTType::Deffered].get();
 			{
-				std::shared_ptr<Texture> PosRenderTarget = DefferedMRT->GetRenderTarget((UINT)eMRT_Defferd::PositionTarget);
+				std::shared_ptr<Texture> PosRenderTarget = DefferedMRT->GetRenderTarget((uint)eMRT_Defferd::PositionTarget);
 				lightMaterial->SetTexture(eTextureSlot::PositionTarget, PosRenderTarget);
 			}
 
 			{
-				std::shared_ptr<Texture> NormalRenderTarget = DefferedMRT->GetRenderTarget((UINT)eMRT_Defferd::NormalTarget);
+				std::shared_ptr<Texture> NormalRenderTarget = DefferedMRT->GetRenderTarget((uint)eMRT_Defferd::NormalTarget);
 				lightMaterial->SetTexture(eTextureSlot::NormalTarget, NormalRenderTarget);
 			}
 
 			{
-				std::shared_ptr<Texture> SpecularTarget = DefferedMRT->GetRenderTarget((UINT)eMRT_Defferd::SpecularTarget);
+				std::shared_ptr<Texture> SpecularTarget = DefferedMRT->GetRenderTarget((uint)eMRT_Defferd::SpecularTarget);
 				lightMaterial->SetTexture(eTextureSlot::SpecularTarget, SpecularTarget);
 			}
 			ResMgr::Insert(strKey::Default::material::LightDirMaterial, lightMaterial);
@@ -1417,19 +1460,19 @@ namespace mh
 			lightMaterial->SetRenderingMode(eRenderingMode::None);
 			lightMaterial->SetShader(LightPointShader);
 
-			MultiRenderTarget* DefferedMRT = mMultiRenderTargets[(UINT)eMRTType::Deffered].get();
+			MultiRenderTarget* DefferedMRT = mMultiRenderTargets[(uint)eMRTType::Deffered].get();
 			{
-				std::shared_ptr<Texture> PositionTarget = DefferedMRT->GetRenderTarget((UINT)eMRT_Defferd::PositionTarget);
+				std::shared_ptr<Texture> PositionTarget = DefferedMRT->GetRenderTarget((uint)eMRT_Defferd::PositionTarget);
 				lightMaterial->SetTexture(eTextureSlot::PositionTarget, PositionTarget);
 			}
 			
 			{
-				std::shared_ptr<Texture> NormalTarget = DefferedMRT->GetRenderTarget((UINT)eMRT_Defferd::NormalTarget);
+				std::shared_ptr<Texture> NormalTarget = DefferedMRT->GetRenderTarget((uint)eMRT_Defferd::NormalTarget);
 				lightMaterial->SetTexture(eTextureSlot::NormalTarget, NormalTarget);
 			}
 
 			{
-				std::shared_ptr<Texture> SpecularTarget = DefferedMRT->GetRenderTarget((UINT)eMRT_Defferd::SpecularTarget);
+				std::shared_ptr<Texture> SpecularTarget = DefferedMRT->GetRenderTarget((uint)eMRT_Defferd::SpecularTarget);
 				lightMaterial->SetTexture(eTextureSlot::SpecularTarget, SpecularTarget);
 			}
 
@@ -1446,26 +1489,26 @@ namespace mh
 		mergeMaterial->SetShader(mergeShader);
 
 		{
-			MultiRenderTarget* DefferedMRT = mMultiRenderTargets[(UINT)eMRTType::Deffered].get();
+			MultiRenderTarget* DefferedMRT = mMultiRenderTargets[(uint)eMRTType::Deffered].get();
 			{
-				std::shared_ptr<Texture> PosRenderTarget = DefferedMRT->GetRenderTarget((UINT)eMRT_Defferd::PositionTarget);
+				std::shared_ptr<Texture> PosRenderTarget = DefferedMRT->GetRenderTarget((uint)eMRT_Defferd::PositionTarget);
 				mergeMaterial->SetTexture(eTextureSlot::PositionTarget, PosRenderTarget);
 			}
 
 			{
-				std::shared_ptr<Texture> AlbedoRenderTarget = DefferedMRT->GetRenderTarget((UINT)eMRT_Defferd::AlbedoTarget);
+				std::shared_ptr<Texture> AlbedoRenderTarget = DefferedMRT->GetRenderTarget((uint)eMRT_Defferd::AlbedoTarget);
 				mergeMaterial->SetTexture(eTextureSlot::AlbedoTarget, AlbedoRenderTarget);
 			}
 		}
 
 		{
-			MultiRenderTarget* LightMRT = mMultiRenderTargets[(UINT)eMRTType::Light].get();
+			MultiRenderTarget* LightMRT = mMultiRenderTargets[(uint)eMRTType::Light].get();
 			{
-				std::shared_ptr<Texture> DiffuseLightTarget = LightMRT->GetRenderTarget((UINT)eMRT_Light::DiffuseLightTarget);
+				std::shared_ptr<Texture> DiffuseLightTarget = LightMRT->GetRenderTarget((uint)eMRT_Light::DiffuseLightTarget);
 				mergeMaterial->SetTexture(eTextureSlot::DiffuseLightTarget, DiffuseLightTarget);
 			}
 			{
-				std::shared_ptr<Texture> SpecularLightTarget = LightMRT->GetRenderTarget((UINT)eMRT_Light::SpecularLightTarget);
+				std::shared_ptr<Texture> SpecularLightTarget = LightMRT->GetRenderTarget((uint)eMRT_Light::SpecularLightTarget);
 				mergeMaterial->SetTexture(eTextureSlot::SpecularLightTarget, SpecularLightTarget);
 			}
 		}

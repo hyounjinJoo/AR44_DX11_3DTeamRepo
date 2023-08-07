@@ -19,12 +19,14 @@ namespace mh
 		GraphicsShader();
 		virtual ~GraphicsShader();
 
+		//여기 수정할 경우 CodeGenerator의 함수도 수정해 줄것
+		virtual eResult SaveJson(Json::Value* _pJVal) override;
+		virtual eResult LoadJson(const Json::Value* _pJVal) override;
+
 		virtual eResult Load(const std::filesystem::path& _path) override;
 
 		eResult CreateByCompile(eGSStage _stage, const stdfs::path& _FullPath, const std::string_view _funcName);
-		
 		eResult CreateByHeader(eGSStage _stage, const unsigned char* _pByteCode, size_t _ByteCodeSize);
-
 		eResult CreateByCSO(eGSStage _stage, const stdfs::path& _FileName);
 
 		eResult CreateInputLayout(const std::vector<D3D11_INPUT_ELEMENT_DESC>& _VecLayoutDesc);
@@ -46,7 +48,6 @@ namespace mh
 		std::vector<D3D11_INPUT_ELEMENT_DESC> mVecInputLayoutDesc;
 		ComPtr<ID3D11InputLayout> mInputLayout;
 		D3D11_PRIMITIVE_TOPOLOGY mTopology;
-		eGSStage mStage;
 
 		tShaderCode mArrShaderCode[(int)eGSStage::END];
 

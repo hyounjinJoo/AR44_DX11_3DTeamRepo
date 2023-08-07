@@ -1,5 +1,5 @@
 
-#include "EnginePCH.h"
+#include "PCH_Engine.h"
 
 #include "Com_Renderer_ParticleSystem.h"
 #include "Mesh.h"
@@ -21,8 +21,8 @@ namespace mh
 
 	Com_Renderer_ParticleSystem::Com_Renderer_ParticleSystem()
 		: mMaxParticles(100)
-		, mStartSize(Vector4(50.0f, 50.0f, 1.0f, 1.0f))
-		, mStartColor(Vector4(1.0f, 0.2f, 0.2f, 1.0f))
+		, mStartSize(float4(50.0f, 50.0f, 1.0f, 1.0f))
+		, mStartColor(float4(1.0f, 0.2f, 0.2f, 1.0f))
 		, mStartLifeTime(3.0f)
 		, mFrequency(1.0f)
 		, mTime(0.0f)
@@ -87,11 +87,11 @@ namespace mh
 		Json::Value& jVal = *_pJVal;
 
 
-		//Vector4 mStartSize;
-		//Vector4 mStartColor;
+		//float4 mStartSize;
+		//float4 mStartColor;
 
 		//eSimulationSpace mSimulationSpace;
-		//UINT mMaxParticles;  
+		//uint mMaxParticles;  
 		//float mStartLifeTime;
 		//float mFrequency;
 		//float mRadius;
@@ -134,7 +134,7 @@ namespace mh
 
 		if (false == Json::MHLoadValue(_pJVal, JSON_KEY_PAIR(mStartSize)))
 		{
-			mStartSize = Vector4::One;
+			mStartSize = float4::One;
 		}
 
 		Json::MHLoadValue(_pJVal, JSON_KEY_PAIR(mStartColor));
@@ -160,19 +160,19 @@ namespace mh
 
 		// Material 세팅
 		std::shared_ptr<Material> material = ResMgr::Find<Material>(material::ParticleMaterial);
-		SetMaterial(material);
+		SetMaterial(material, 0);
 
 		std::shared_ptr<Texture> tex = ResMgr::Find<Texture>(texture::CartoonSmoke);
 		material->SetTexture(eTextureSlot::Albedo, tex);
 
 		tParticle particles[100] = {};
-		Vector4 startPos = Vector4(0.0f, 0.0f, 0.0f, 0.0f);
+		float4 startPos = float4(0.0f, 0.0f, 0.0f, 0.0f);
 		for (size_t i = 0; i < mMaxParticles; i++)
 		{
-			particles[i].position = Vector4(0.0f, 0.0f, 20.0f, 1.0f);
+			particles[i].position = float4(0.0f, 0.0f, 20.0f, 1.0f);
 			particles[i].active = 0;
 			particles[i].direction =
-				Vector4(cosf((float)i * (XM_2PI / (float)mMaxParticles))
+				float4(cosf((float)i * (XM_2PI / (float)mMaxParticles))
 					, sin((float)i * (XM_2PI / (float)mMaxParticles)), 0.0f, 1.0f);
 
 			particles[i].speed = 100.0f;
@@ -202,7 +202,7 @@ namespace mh
 		if (aliveTime < mTime)
 		{
 			float f = (mTime / aliveTime);
-			UINT iAliveCount = (UINT)f;
+			uint iAliveCount = (uint)f;
 			mTime = f - std::floor(f);
 
 			tParticleShared shared = { 5, };
@@ -215,11 +215,11 @@ namespace mh
 		}
 
 		mMaxParticles = mBuffer->GetStride();
-		Vector3 pos = GetOwner()->GetTransform().GetPosition();
-		mCBData.WorldPosition = Vector4(pos.x, pos.y, pos.z, 1.0f);
+		float3 pos = GetOwner()->GetTransform().GetPosition();
+		mCBData.WorldPosition = float4(pos.x, pos.y, pos.z, 1.0f);
 		mCBData.MaxParticles = mMaxParticles;
 		mCBData.Radius = mRadius;
-		mCBData.SimulationSpace = (UINT)mSimulationSpace;
+		mCBData.SimulationSpace = (uint)mSimulationSpace;
 		mCBData.StartSpeed = mStartSpeed;
 		mCBData.StartSize = mStartSize;
 		mCBData.StartColor = mStartColor;
@@ -241,8 +241,8 @@ namespace mh
 		GetOwner()->GetTransform().SetConstBuffer();
 		mBuffer->BindDataSRV(15, eShaderStageFlag::GS);
 
-		GetMaterial()->Bind();
-		GetMesh()->RenderInstanced(mMaxParticles);
+		GetMaterial(0)->Bind();
+		GetMesh()->RenderInstanced(0u, mMaxParticles);
 
 		mBuffer->UnBind();
 	}

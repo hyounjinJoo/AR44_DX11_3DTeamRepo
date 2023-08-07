@@ -16,21 +16,22 @@ using Microsoft::WRL::ComPtr;
 #define CB_GETBINDSLOT(name) __CBUFFERBINDSLOT__##name##__
 #define CBUFFER(name, slot) static const int CB_GETBINDSLOT(name) = slot; struct alignas(16) name
 
-#define CBSLOT_TRANSFORM		0
-#define CBSLOT_MATERIAL			1
-#define CBSLOT_GRID				2
-#define CBSLOT_ANIMATION		3
-#define CBSLOT_NUMBEROFLIGHT	4
-#define CBSLOT_PARTICLESYSTEM	5
-#define CBSLOT_NOISE			6
-#define CBSLOT_SBUFFER			7
+#define CBSLOT_GLOBAL			0
+#define CBSLOT_TRANSFORM		1
+#define CBSLOT_MATERIAL			2
+#define CBSLOT_GRID				3
+#define CBSLOT_ANIMATION		4
+#define CBSLOT_NUMBEROFLIGHT	5
+#define CBSLOT_PARTICLESYSTEM	6
+#define CBSLOT_NOISE			7
+#define CBSLOT_SBUFFER			8
 
-namespace mh
+namespace mh::define
 {
 	constexpr const int MRT_MAX = 8;
 
 	using namespace mh::define;
-	using namespace mh::math;
+	
 	enum class eValidationMode
 	{
 		Disabled,
@@ -47,6 +48,22 @@ namespace mh
 		PS,
 		END
 	};
+
+	namespace strKey
+	{
+		STRKEY ArrGSPrefix[(int)eGSStage::END] =
+		{
+			"_0VS_",
+			"_1HS_",
+			"_2DS_",
+			"_3GS_",
+			"_4PS_",
+		};
+		STRKEY CSPrefix = "CS_";
+
+		STRKEY Ext_ShaderSetting = ".json";
+	}
+
 
 	enum class eMRTType
 	{
@@ -154,6 +171,7 @@ namespace mh
 
 	enum class eCBType
 	{
+		Global,
 		Transform,
 		Material,
 		Grid,
@@ -170,10 +188,10 @@ namespace mh
 	{
 		Int,
 		Float,
-		Vector2,
-		Vector3,
-		Vector4,
-		Matrix,
+		float2,
+		float3,
+		float4,
+		MATRIX,
 	};
 
 	enum class eSRVType
@@ -187,6 +205,8 @@ namespace mh
 	{
 		Albedo,
 		Normal,
+		Specular,
+		Emissive,
 
 		PositionTarget,
 		NormalTarget,
@@ -231,9 +251,9 @@ namespace mh
 	struct tDebugMesh
 	{
 		define::eColliderType type;
-		math::Vector3 position;
-		math::Vector3 rotatation;
-		math::Vector3 scale;
+		float3 position;
+		float3 rotatation;
+		float3 scale;
 		
 		float radius;
 		float duration;
@@ -242,12 +262,12 @@ namespace mh
 
 	struct tLightAttribute
 	{
-		Vector4 diffuse;
-		Vector4 specular;
-		Vector4 ambient;
+		float4 diffuse;
+		float4 specular;
+		float4 ambient;
 
-		Vector4 position;
-		Vector4 direction;
+		float4 position;
+		float4 direction;
 
 		define::eLightType type;
 		float radius;
@@ -257,18 +277,18 @@ namespace mh
 
 	struct tParticle
 	{
-		Vector4 position;
-		Vector4 direction;
+		float4 position;
+		float4 direction;
 
 		float lifeTime;
 		float time;
 		float speed;
-		UINT active;
+		uint active;
 	};
 
 	struct tParticleShared
 	{
-		UINT activeCount;
+		uint activeCount;
 	};
 
 

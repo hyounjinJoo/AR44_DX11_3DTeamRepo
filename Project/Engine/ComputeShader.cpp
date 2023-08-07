@@ -1,4 +1,4 @@
-#include "EnginePCH.h"
+#include "PCH_Engine.h"
 
 #include "PathMgr.h"
 
@@ -12,7 +12,7 @@ namespace mh
 {
 	namespace stdfs = std::filesystem;
 
-	ComputeShader::ComputeShader(UINT _threadGroupX, UINT _threadGroupY, UINT _threadGroupZ)
+	ComputeShader::ComputeShader(uint _threadGroupX, uint _threadGroupY, uint _threadGroupZ)
 		: IShader(define::eResourceType::ComputeShader)
 		, mCSBlob(nullptr)
 		, mCS(nullptr)

@@ -1,4 +1,4 @@
-#include "EnginePCH.h"
+#include "PCH_Engine.h"
 #include "ICollider2D.h"
 
 #include "GameObject.h"
@@ -10,12 +10,12 @@
 
 namespace mh
 {
-	UINT ICollider2D::gColliderNumber = 0;
+	uint ICollider2D::gColliderNumber = 0;
 	ICollider2D::ICollider2D()
 		: ICollider(define::eColliderType::None)
 		, mTransform(nullptr)
-		, mSize(math::Vector2::One)
-		, mCenter(math::Vector2::Zero)
+		, mSize(float2::One)
+		, mCenter(float2::Zero)
 		, mbTrigger(false)
 		, mID(0)
 		, mRadius(0.0f)
@@ -111,28 +111,28 @@ namespace mh
 
 	void ICollider2D::FixedUpdate()
 	{
-		math::Vector3 scale = mTransform->GetScale();
-		scale *= math::Vector3(mSize.x, mSize.y, 1.0f);
+		float3 scale = mTransform->GetScale();
+		scale *= float3(mSize.x, mSize.y, 1.0f);
 
-		math::Vector3 rotation = mTransform->GetRotation();
+		float3 rotation = mTransform->GetRotation();
 
-		math::Vector3 position = mTransform->GetPosition();
-		math::Vector3 colliderPos = position + math::Vector3(mCenter.x, mCenter.y, 0.0f);
+		float3 position = mTransform->GetPosition();
+		float3 colliderPos = position + float3(mCenter.x, mCenter.y, 0.0f);
 		mPosition = colliderPos;
 
-		math::Matrix scaleMatrix = math::Matrix::CreateScale(scale);
-		math::Matrix rotationMatrix;
-		rotationMatrix = math::Matrix::CreateRotationX(rotation.x);
-		rotationMatrix *= math::Matrix::CreateRotationY(rotation.y);
-		rotationMatrix *= math::Matrix::CreateRotationZ(rotation.z);
+		MATRIX scaleMatrix = MATRIX::CreateScale(scale);
+		MATRIX rotationMatrix;
+		rotationMatrix = MATRIX::CreateRotationX(rotation.x);
+		rotationMatrix *= MATRIX::CreateRotationY(rotation.y);
+		rotationMatrix *= MATRIX::CreateRotationZ(rotation.z);
 
-		math::Matrix positionMatrix;
-		positionMatrix.Translation(math::Vector3(colliderPos.x, colliderPos.y, colliderPos.z));
+		MATRIX positionMatrix;
+		positionMatrix.Translation(float3(colliderPos.x, colliderPos.y, colliderPos.z));
 
-		math::Matrix worldMatrix = scaleMatrix * rotationMatrix * positionMatrix;
+		MATRIX worldMatrix = scaleMatrix * rotationMatrix * positionMatrix;
 
 		tDebugMesh meshAttribute = {};
-		meshAttribute.position = math::Vector3(colliderPos.x, colliderPos.y, colliderPos.z);
+		meshAttribute.position = float3(colliderPos.x, colliderPos.y, colliderPos.z);
 		meshAttribute.radius = mRadius;
 		meshAttribute.rotatation = rotation;
 		meshAttribute.scale = scale;

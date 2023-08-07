@@ -1,4 +1,4 @@
-#include "EnginePCH.h"
+#include "PCH_Engine.h"
 #include "IRes.h"
 
 #include "PathMgr.h"
@@ -25,7 +25,7 @@ namespace mh
 
 	//eResult IRes::Save(const std::filesystem::path& _path)
 	//{
-	//	stdfs::path FullPath = PathMgr::GetRelativeResourcePath(mType);
+	//	stdfs::path FullPath = PathMgr::GetRelResourcePath(mType);
 	//	if (false == stdfs::exists(FullPath))
 	//	{
 	//		if (false == stdfs::create_directories(FullPath))
@@ -77,7 +77,7 @@ namespace mh
 		Json::Value& Jval = *(_pJVal);
 
 		//리소스 타입을 문자열 형태로 가져와서 저장
-		Jval[strKey::Json::IRes::mType] = ArrResName[(int)mType];
+		Jval[strKey::Json::IRes::mType] = strKey::ArrResName[(int)mType];
 
 
 		return eResult::Success;
@@ -101,7 +101,7 @@ namespace mh
 		if (Jval.isMember(strKey::Json::IRes::mType))
 		{
 			std::string ResourceName = Jval[strKey::Json::IRes::mType].asString();
-			if (ArrResName[(int)mType] != ResourceName)
+			if (strKey::ArrResName[(int)mType] != ResourceName)
 			{
 				ERROR_MESSAGE_W(L"읽어들인 json 파일이 리소스 타입과 일치하지 않습니다.");
 				return eResult::Fail_InValid;

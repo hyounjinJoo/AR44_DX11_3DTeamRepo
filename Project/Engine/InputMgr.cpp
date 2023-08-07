@@ -1,19 +1,21 @@
 
-#include "EnginePCH.h"
+#include "PCH_Engine.h"
 
 #include "InputMgr.h"
 #include "Application.h"
+#include "AtExit.h"
 
 
-extern mh::Application gApplication;
 
 namespace mh
 {
 	
 
 	std::vector<InputMgr::tKey> InputMgr::mKeys{};
-	math::Vector2 InputMgr::mMousPosition{};
-	int ASCII[(UINT)eKeyCode::END] =
+	float2 InputMgr::mMousePos{};
+	float2 InputMgr::mMousePosPrev{};
+	float2 InputMgr::mMouseDir{};
+	int ASCII[(uint)eKeyCode::END] =
 	{
 		//Alphabet
 		'Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P',
@@ -40,7 +42,9 @@ namespace mh
 
 	void InputMgr::Init()
 	{
-		for (UINT i = 0; i < (UINT)eKeyCode::END; i++)
+		AtExit::AddFunc(InputMgr::Release);
+
+		for (uint i = 0; i < (uint)eKeyCode::END; i++)
 		{
 			tKey key;
 			key.eType = (eKeyCode)i;
@@ -56,7 +60,7 @@ namespace mh
 		if (GetFocus())
 		{
 			//KEY
-			for (UINT i = 0; i < (UINT)eKeyCode::END; ++i)
+			for (uint i = 0; i < (uint)eKeyCode::END; ++i)
 			{
 				// 해당키가 현재 눌려있다.
 				if (GetAsyncKeyState(ASCII[i]) & 0x8000)
@@ -81,15 +85,21 @@ namespace mh
 				}
 			}
 			
+			//Mouse 위치 갱신
+			mMousePosPrev = mMousePos;
+
 			POINT mousePos = {};
 			GetCursorPos(&mousePos);
-			ScreenToClient(gApplication.GetHwnd(), &mousePos);
-			mMousPosition.x = static_cast<float>(mousePos.x);
-			mMousPosition.y = static_cast<float>(mousePos.y);
+			ScreenToClient(Application::GetHwnd(), &mousePos);
+			mMousePos.x = static_cast<float>(mousePos.x);
+			mMousePos.y = static_cast<float>(mousePos.y);
+
+			mMouseDir = mMousePos - mMousePosPrev;
+			mMouseDir.y *= -1.f;
 		}
 		else
 		{
-			for (UINT i = 0; i < (UINT)eKeyCode::END; ++i)
+			for (uint i = 0; i < (uint)eKeyCode::END; ++i)
 			{
 				if (eKeyState::DOWN == mKeys[i].eState || eKeyState::PRESSED == mKeys[i].eState)
 					mKeys[i].eState = eKeyState::UP;
@@ -99,5 +109,11 @@ namespace mh
 				mKeys[i].bPressed = false;
 			}
 		}
+	}
+	void InputMgr::Release()
+	{
+		mKeys.clear();
+		mMousePos = {};
+		mMouseDir = {};
 	}
 }

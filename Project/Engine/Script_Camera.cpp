@@ -1,4 +1,4 @@
-#include "EnginePCH.h"
+#include "PCH_Engine.h"
 
 #include "Script_Camera.h"
 #include "Com_Transform.h"
@@ -25,7 +25,7 @@ namespace mh
 	{
 		Com_Transform& tr = GetOwner()->GetTransform();
 
-		Vector3 pos = tr.GetPosition();
+		float3 pos = tr.GetPosition();
 
 		if (InputMgr::GetKeyState(eKeyCode::D) == eKeyState::PRESSED)
 		{
@@ -37,11 +37,11 @@ namespace mh
 		}
 		else if (InputMgr::GetKeyState(eKeyCode::W) == eKeyState::PRESSED)
 		{
-			pos += 100.0f * tr.Foward() * TimeMgr::DeltaTime();
+			pos += 100.0f * tr.Forward() * TimeMgr::DeltaTime();
 		}
 		else if (InputMgr::GetKeyState(eKeyCode::S) == eKeyState::PRESSED)
 		{
-			pos += 100.0f * -tr.Foward() * TimeMgr::DeltaTime();
+			pos += 100.0f * -tr.Forward() * TimeMgr::DeltaTime();
 		}
 		else if (InputMgr::GetKeyState(eKeyCode::Q) == eKeyState::PRESSED)
 		{

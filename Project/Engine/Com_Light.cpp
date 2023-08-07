@@ -1,4 +1,4 @@
-#include "EnginePCH.h"
+#include "PCH_Engine.h"
 
 #include "Com_Light.h"
 #include "Com_Transform.h"
@@ -104,12 +104,12 @@ namespace mh
 
 		if (eLightType::Point == mAttribute.type)
 		{
-			tr.SetScale(Vector3(mAttribute.radius * 5.f, mAttribute.radius * 5.f, mAttribute.radius * 5.f));
+			tr.SetScale(float3(mAttribute.radius * 5.f, mAttribute.radius * 5.f, mAttribute.radius * 5.f));
 		}
 
-		Vector3 position = tr.GetPosition();
-		mAttribute.position = Vector4(position.x, position.y, position.z, 1.0f);
-		mAttribute.direction = Vector4(tr.Foward().x, tr.Foward().y, tr.Foward().z, 0.0f);
+		float3 position = tr.GetPosition();
+		mAttribute.position = float4(position.x, position.y, position.z, 1.0f);
+		mAttribute.direction = float4(tr.Forward().x, tr.Forward().y, tr.Forward().z, 0.0f);
 
 		RenderMgr::PushLightAttribute(mAttribute);
 	}
@@ -127,7 +127,7 @@ namespace mh
 		ConstBuffer* cb = RenderMgr::GetConstBuffer(eCBType::Light);
 
 		LightCB data = {};
-		data.NumberOfLight = (UINT)RenderMgr::GetLights().size();
+		data.NumberOfLight = (uint)RenderMgr::GetLights().size();
 		data.IndexOfLight = mIndex;
 
 		cb->SetData(&data);

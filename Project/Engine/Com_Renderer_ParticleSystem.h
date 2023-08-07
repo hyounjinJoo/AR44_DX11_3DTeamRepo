@@ -39,11 +39,11 @@ namespace mh
 		ParticleSystemCB mCBData;
 #pragma endregion
 #pragma region tParticle System 관련 변수 선언
-		Vector4 mStartSize;
-		Vector4 mStartColor;
+		float4 mStartSize;
+		float4 mStartColor;
 
 		eSimulationSpace mSimulationSpace;
-		UINT mMaxParticles;
+		uint mMaxParticles;
 		float mStartLifeTime;
 		float mFrequency;
 		float mRadius;

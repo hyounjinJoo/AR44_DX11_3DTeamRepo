@@ -3,7 +3,6 @@
 #include "EnumFlags.h"
 #include "SimpleMath.h"
 
-
 namespace mh
 {
 	enum class eKeyCode
@@ -43,6 +42,7 @@ namespace mh
 
 	class InputMgr
 	{
+		friend class Application;
 	public:
 		struct tKey
 		{
@@ -51,19 +51,9 @@ namespace mh
 			bool	  bPressed;
 		};
 
-	public:
-		static void Init();
-		static void Update();
-
-		static __forceinline eKeyState GetKeyState(eKeyCode keyCode) 
-		{ 
-			return mKeys[static_cast<UINT>(keyCode)].eState; 
-		}
-
-		static __forceinline math::Vector2 GetMousPosition()
-		{
-			return mMousPosition;
-		}
+		static __forceinline eKeyState GetKeyState(eKeyCode keyCode) { return mKeys[static_cast<uint>(keyCode)].eState; }
+		static __forceinline float2 GetMousePos() { return mMousePos; }
+		static __forceinline float2 GetMouseDir() { return mMouseDir; }
 
 		//GetKey()		키를 누르는 시간만큼 true를 반환
 		//GetKeyDown()	키를 눌렀을 때, 딱 한번 true를 반환
@@ -71,21 +61,28 @@ namespace mh
 
 		static __forceinline bool GetKey(eKeyCode keyCode)
 		{
-			return mKeys[static_cast<UINT>(keyCode)].eState == eKeyState::PRESSED;
+			return mKeys[static_cast<uint>(keyCode)].eState == eKeyState::PRESSED;
 		}
 
 		static __forceinline bool GetKeyDown(eKeyCode keyCode)
 		{
-			return mKeys[static_cast<UINT>(keyCode)].eState == eKeyState::DOWN;
+			return mKeys[static_cast<uint>(keyCode)].eState == eKeyState::DOWN;
 		}
 
 		static __forceinline bool GetKeyUp(eKeyCode keyCode)
 		{
-			return mKeys[static_cast<UINT>(keyCode)].eState == eKeyState::UP;
-		}		
+			return mKeys[static_cast<uint>(keyCode)].eState == eKeyState::UP;
+		}	
+
+	private:
+		static void Init();
+		static void Update();
+		static void Release();
 
 	private:
 		static std::vector<tKey> mKeys;
-		static math::Vector2 mMousPosition;
+		static float2 mMousePos;
+		static float2 mMousePosPrev;
+		static float2 mMouseDir;
 	};
 }

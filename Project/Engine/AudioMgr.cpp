@@ -1,5 +1,10 @@
-#include "EnginePCH.h"
+#include "PCH_Engine.h"
 #include "AudioMgr.h"
+
+#include <Fmod/fmod.hpp>
+#include <Fmod/fmod_studio.hpp>
+#include <Fmod/fmod_common.h>
+#include <Fmod/fmod_codec.h>
 #ifdef _DEBUG
 #pragma comment(lib, "Fmod/Debug/fmodL_vc.lib")
 #pragma comment(lib, "Fmod/Debug/fmodstudioL_vc.lib")
@@ -12,6 +17,8 @@
 
 namespace mh
 {
+	
+
 	FMOD::Studio::System* AudioMgr::mSystem = nullptr;
 	FMOD::System* AudioMgr::mCoreSystem = nullptr;
 
@@ -52,8 +59,8 @@ namespace mh
 		mCoreSystem->playSound(sound, 0, false, channel);
 	}
 
-	void AudioMgr::Set3DListenerAttributes(const math::Vector3* _position, const math::Vector3* _velocity,
-									   const math::Vector3* _forward, const math::Vector3* _up)
+	void AudioMgr::Set3DListenerAttributes(const float3* _position, const float3* _velocity,
+									   const float3* _forward, const float3* _up)
 	{
 		FMOD_VECTOR fmodPosition(_position->x, _position->y, _position->z);
 		FMOD_VECTOR fmodVelocity(_velocity->x, _velocity->y, _velocity->z);

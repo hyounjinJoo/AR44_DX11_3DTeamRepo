@@ -1,0 +1,55 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClInclude Include="strKey_Texture.h">
+      <Filter>Auto Generated</Filter>
+    </ClInclude>
+    <ClInclude Include="strKey_Shader.h">
+      <Filter>Auto Generated</Filter>
+    </ClInclude>
+    <ClInclude Include="Com_MyRenderer.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="strKey_Component.h">
+      <Filter>Auto Generated</Filter>
+    </ClInclude>
+    <ClInclude Include="ContentsClassInitializer.h">
+      <Filter>Auto Generated</Filter>
+    </ClInclude>
+    <ClInclude Include="PCH_Contents.h">
+      <Filter>Default</Filter>
+    </ClInclude>
+    <ClInclude Include="Script_TestScript.h" />
+    <ClInclude Include="strKey_Script.h">
+      <Filter>Auto Generated</Filter>
+    </ClInclude>
+    <ClInclude Include="Script_CameraMove.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Components">
+      <UniqueIdentifier>{4605011f-85fc-490d-9c1a-69f988c87559}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Default">
+      <UniqueIdentifier>{3c4f380d-6193-4cf5-bef9-8b384328509e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Auto Generated">
+      <UniqueIdentifier>{7c248a7a-737e-4d75-90e4-cef79c81fcbd}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Com_MyRenderer.cpp">
+      <Filter>Components</Filter>
+    </ClCompile>
+    <ClCompile Include="ContentsClassInitializer_Component.cpp">
+      <Filter>Auto Generated</Filter>
+    </ClCompile>
+    <ClCompile Include="PCH_Contents.cpp">
+      <Filter>Default</Filter>
+    </ClCompile>
+    <ClCompile Include="ContentsClassInitializer_Script.cpp">
+      <Filter>Auto Generated</Filter>
+    </ClCompile>
+    <ClCompile Include="Script_TestScript.cpp" />
+    <ClCompile Include="Script_CameraMove.cpp" />
+  </ItemGroup>
+</Project>

@@ -2,6 +2,8 @@
 #include "IRes.h"
 #include "AudioMgr.h"
 
+
+
 namespace mh
 {
 	namespace stdfs = std::filesystem;
@@ -18,7 +20,7 @@ namespace mh
 
 		void Play();
 		void Stop();
-		void Set3DAttributes(const math::Vector3 _pos, const math::Vector3 _vel);
+		void Set3DAttributes(const float3 _pos, const float3 _vel);
 		void SetLoop(bool _loop) { mbLoop = _loop; }
 
 	private:

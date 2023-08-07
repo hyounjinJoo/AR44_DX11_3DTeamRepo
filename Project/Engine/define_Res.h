@@ -26,29 +26,32 @@ namespace mh::define
 
 	};
 
-	STRKEY ResRootDirName = "Res";
-
-	//리소스 이름 겸 Res 폴더 내의 폴더명으로 사용
-	STRKEY ArrResName[(int)eResourceType::End] =
-	{
-		"Mesh",
-		"MeshData",
-
-		"Texture",
-		"Material",
-		//"Sound",
-		//"Font,",
-		"Animation",
-
-		"AudioClip",
-		"Prefab",
-
-		"Shader/Graphics",
-		"Shader/Compute",
-	};
-
 	namespace strKey
 	{
+		STRKEY DirName_Content = "Res";
+		//리소스 이름 겸 Res 폴더 내의 폴더명으로 사용
+		STRKEY ArrResName[(int)eResourceType::End] =
+		{
+			"Mesh",
+			"MeshData",
+
+			"Texture",
+			"Material",
+			//"Sound",
+			//"Font,",
+			"Animation",
+
+			"AudioClip",
+			"Prefab",
+
+			"Shader/Graphics",
+			"Shader/Compute",
+		};
+		inline STRKEY GetResName(eResourceType _type) { return ArrResName[(int)_type]; }
+
+		STRKEY DirName_ShaderBin = "ShaderBin";
+		STRKEY Ext_ShaderBin = ".cso";
+
 		namespace Default
 		{
 			namespace mesh
