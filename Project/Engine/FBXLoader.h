@@ -20,7 +20,7 @@ namespace mh
 
 	struct tFbxMaterial
 	{
-		tMtrlData	tMtrl;
+		tMtrlData			tMtrl;
 		std::wstring		strMtrlName;
 		std::wstring		strDiff;
 		std::wstring		strNormal;

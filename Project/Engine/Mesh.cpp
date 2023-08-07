@@ -153,7 +153,10 @@ namespace mh
 		std::shared_ptr<Mesh> pMesh = std::make_shared<Mesh>();
 		pMesh->mVertexBuffer = pVB;
 		pMesh->mVBDesc = tVtxDesc;
-		pMesh->mVertices = vecVtx3d;
+		pMesh->mVertices = std::move(vecVtx3d);
+		pMesh->mVertexByteStride = sizeof(Vertex3D);
+		pMesh->mVertexCount = pMesh->mVertices.size();
+
 		//pMesh->mVertexSysMem = pSys;
 
 		// 인덱스 정보

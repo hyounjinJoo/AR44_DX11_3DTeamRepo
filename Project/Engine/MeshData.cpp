@@ -38,7 +38,7 @@ namespace mh
 		if (nullptr != pMesh)
 		{
 			stdfs::path strMeshKey = _path;
-			strMeshKey.replace_extension(".fbxMesh");
+			strMeshKey.replace_extension(".fbx");
 		
 			ResMgr::Insert(strMeshKey.string(), pMesh);
 
