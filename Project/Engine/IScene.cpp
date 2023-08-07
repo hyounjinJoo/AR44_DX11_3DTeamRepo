@@ -1,69 +1,67 @@
 #include "PCH_Engine.h"
 
-#include "Scene.h"
+#include "IScene.h"
 
 
 namespace mh
 {
-	Scene::Scene(define::eSceneType _type)
-		: mType(_type)
+	IScene::IScene()
 	{
 		mLayers.resize((uint)define::eLayerType::End);
 	}
 
-	Scene::~Scene()
+	IScene::~IScene()
 	{
 
 	}
 
-	void Scene::Init()
+	void IScene::Init()
 	{
 		for (Layer& layer : mLayers)
 		{
 			layer.Init();
 		}
 	}
-	void Scene::Update()
+	void IScene::Update()
 	{
 		for (Layer& layer : mLayers)
 		{
 			layer.Update();
 		}
 	}
-	void Scene::FixedUpdate()
+	void IScene::FixedUpdate()
 	{
 		for (Layer& layer : mLayers)
 		{
 			layer.FixedUpdate();
 		}
 	}
-	void Scene::Render()
+	void IScene::Render()
 	{
 		for (Layer& layer : mLayers)
 		{
 			layer.Render();
 		}
 	}
-	void Scene::Destroy()
+	void IScene::Destroy()
 	{
 		for (Layer& layer : mLayers)
 		{
 			layer.Destroy();
 		}
 	}
-	void Scene::OnEnter()
+
+	void IScene::OnExit()
 	{
 	}
-	void Scene::OnExit()
-	{
-	}
-	void Scene::AddGameObject(GameObject* _gameObj, const define::eLayerType _type)
+
+	void IScene::AddGameObject(GameObject* _gameObj, const define::eLayerType _type)
 	{
 		mLayers[(uint)_type].AddGameObject(_gameObj);
 		_gameObj->SetLayerType(_type);
 	}
 	
-	std::vector<GameObject*> Scene::GetDontDestroyGameObjects()
+	std::vector<GameObject*> IScene::GetDontDestroyGameObjects()
 	{
 		std::vector<GameObject*> gameObjects;
 		for (Layer& layer : mLayers)
@@ -78,7 +76,7 @@ namespace mh
 
 		return gameObjects;
 	}
-	const std::vector<GameObject*>& Scene::GetGameObjects(const define::eLayerType _type)
+	const std::vector<GameObject*>& IScene::GetGameObjects(const define::eLayerType _type)
 	{
 		return mLayers[(uint)_type].GetGameObjects();
 	}

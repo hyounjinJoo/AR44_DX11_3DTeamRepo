@@ -301,11 +301,10 @@ call Copy_DLL.bat $(Configuration)</Command>
     <ClInclude Include="Com_Renderer_ParticleSystem.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Script_Player.h" />
-    <ClInclude Include="PlayScene.h" />
     <ClInclude Include="Prefab.h" />
     <ClInclude Include="IRes.h" />
     <ClInclude Include="ResMgr.h" />
-    <ClInclude Include="Scene.h" />
+    <ClInclude Include="IScene.h" />
     <ClInclude Include="SceneMgr.h" />
     <ClInclude Include="IScript.h" />
     <ClInclude Include="GraphicsShader.h" />
@@ -313,7 +312,6 @@ call Copy_DLL.bat $(Configuration)</Command>
     <ClInclude Include="StructBuffer.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="TimeMgr.h" />
-    <ClInclude Include="TitleScene.h" />
     <ClInclude Include="Com_Transform.h" />
     <ClInclude Include="define_Util.h" />
   </ItemGroup>
@@ -375,11 +373,10 @@ call Copy_DLL.bat $(Configuration)</Command>
     <ClCompile Include="Com_Renderer_ParticleSystem.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Script_Player.cpp" />
-    <ClCompile Include="PlayScene.cpp" />
     <ClCompile Include="Prefab.cpp" />
     <ClCompile Include="IRes.cpp" />
     <ClCompile Include="ResMgr.cpp" />
-    <ClCompile Include="Scene.cpp" />
+    <ClCompile Include="IScene.cpp" />
     <ClCompile Include="SceneMgr.cpp" />
     <ClCompile Include="IScript.cpp" />
     <ClCompile Include="GraphicsShader.cpp" />
@@ -388,7 +385,6 @@ call Copy_DLL.bat $(Configuration)</Command>
     <ClCompile Include="StructBuffer.cpp" />
     <ClCompile Include="Texture.cpp" />
     <ClCompile Include="TimeMgr.cpp" />
-    <ClCompile Include="TitleScene.cpp" />
     <ClCompile Include="Com_Transform.cpp" />
     <ClCompile Include="define_Util.cpp" />
   </ItemGroup>

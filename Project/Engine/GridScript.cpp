@@ -28,8 +28,8 @@ namespace mh
 
 	void GridScript::Init()
 	{
-		eSceneType type = SceneMgr::GetActiveScene()->GetSceneType();
-		mCamera = RenderMgr::GetCamera(type, 0);
+		//eSceneType type = SceneMgr::GetActiveScene()->GetSceneType();
+		mCamera = RenderMgr::GetCamera(0);
 	}
 
 	void GridScript::Update()

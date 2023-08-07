@@ -6,7 +6,7 @@
 #include "GameObject.h"
 #include "Application.h"
 #include "RenderMgr.h"
-#include "Scene.h"
+#include "IScene.h"
 #include "SceneMgr.h"
 #include "Material.h"
 #include "IRenderer.h"
@@ -168,8 +168,8 @@ namespace mh
 
 	void Com_Camera::RegisterCameraInRenderer()
 	{
-		define::eSceneType type = SceneMgr::GetActiveScene()->GetSceneType();
-		RenderMgr::RegisterCamera(type, this);
+		//define::eSceneType type = SceneMgr::GetActiveScene()->GetSceneType();
+		RenderMgr::RegisterCamera(this);
 	}
 
 	void Com_Camera::TurnLayerMask(define::eLayerType _layer, bool _enable)
@@ -186,7 +186,7 @@ namespace mh
 		mTransparentGameObjects.clear();
 		mPostProcessGameObjects.clear();
 
-		Scene* scene = SceneMgr::GetActiveScene();
+		IScene* scene = SceneMgr::GetActiveScene();
 		for (int index = 0; index < (uint)define::eLayerType::End; index++)
 		{
 			if (mLayerMasks[index] == true)

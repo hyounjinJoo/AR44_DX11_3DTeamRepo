@@ -7,6 +7,7 @@
 
 #include "PCH_Contents.h"
 
+#include <string_view>
 #include "ContentsClassInitializer.h"
 #include <Engine/ComMgr.h>
 #include "strKey_Component.h"
@@ -21,6 +22,7 @@ namespace mh
 	using namespace mh::define;
 	void ContentsClassInitializer::InitCom()
 	{
-		CONSTRUCTOR_T(Com_MyRenderer);
+		ComMgr::AddComConstructor<Com_MyRenderer>(strKey::Com::Com_MyRenderer);
+		//CONSTRUCTOR_T(Com_MyRenderer);
 	}
 }

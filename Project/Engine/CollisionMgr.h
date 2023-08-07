@@ -24,7 +24,7 @@ namespace mh
 		static void Render();
 
 		static void CollisionLayerCheck(define::eLayerType _left, define::eLayerType _right, bool _enable = true);
-		static void LayerCollision(class Scene* _scene, define::eLayerType _left, define::eLayerType _right);
+		static void LayerCollision(class IScene* _scene, define::eLayerType _left, define::eLayerType _right);
 		static void ColliderCollision(ICollider2D* _left, ICollider2D* _right);
 		static bool Intersect(ICollider2D* _left, ICollider2D* _right);
 

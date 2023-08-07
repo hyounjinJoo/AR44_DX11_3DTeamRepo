@@ -1,5 +1,5 @@
 #pragma once
-#include "Scene.h"
+#include "IScene.h"
 
 namespace mh
 {
@@ -13,11 +13,29 @@ namespace mh
 		static void Destroy();
 		static void Release();
 
-		static void		LoadScene(define::eSceneType _Type);
-		static Scene*	GetActiveScene() { return mActiveScene; }
+		static void		LoadScene(const std::string_view _strKey);
+		static IScene*	GetActiveScene() { return mActiveScene.get(); }
+
+		template <typename T>
+		static void AddSceneConstructor(const std::string_view _strKey);
+		
 
 	private:
-		static std::vector<Scene*>	mScenes;
-		static Scene*				mActiveScene;
+		static std::unique_ptr<IScene>				mActiveScene;
+
+
+		static std::unordered_map<std::string_view, std::function<IScene* ()>> mUmapSceneConstructor;
 	};
+
+	template<typename T>
+	inline void SceneMgr::AddSceneConstructor(const std::string_view _strKey)
+	{
+		static_assert(std::is_base_of_v<IScene, T>);
+		mUmapSceneConstructor.insert(std::make_pair(_strKey,
+			[]()->T*
+			{
+				return new T;
+			}
+		));
+	}
 }

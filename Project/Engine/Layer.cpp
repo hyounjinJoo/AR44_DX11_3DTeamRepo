@@ -133,20 +133,26 @@ namespace mh
 	std::vector<GameObject*> Layer::GetDontDestroyGameObjects()
 	{
 		std::vector<GameObject*> donts;
-		for (GameObjectIter iter = mGameObjects.begin()
-			; iter != mGameObjects.end()
-			; )
-		{
-			if ( (*iter)->IsDontDestroy() == true )
-			{
-				donts.push_back((*iter));
-				iter = mGameObjects.erase(iter);
-			}
-			else
-			{
-				iter++;
-			}
-		}
+
+		//mGameObjects에서 삭제 안할 게임오브젝트들을 제거하고 
+		//그걸 donts 벡터에 추가
+		//나머지는 냄겨둠
+		mGameObjects.erase
+		(
+			std::remove_if(mGameObjects.begin(), mGameObjects.end(), 
+				[&](GameObject* _obj)
+				{
+					bool result = false;
+					if (_obj && _obj->IsDontDestroy())
+					{
+						donts.push_back(_obj);
+						result = true;
+					}
+
+					return result;
+				})
+			, mGameObjects.end()
+		);
 
 		return donts;
 	}
