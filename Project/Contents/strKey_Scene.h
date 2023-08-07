@@ -1,3 +1,4 @@
+
 #pragma once
 
 
@@ -14,6 +15,10 @@
 
 namespace mh::define::strKey::Scene
 {
-	STRKEY Scene_Title = "Scene_Title";
 	STRKEY Scene_Play = "Scene_Play";
+	STRKEY Scene_TestCH = "Scene_TestCH";
+	STRKEY Scene_TestHJ = "Scene_TestHJ";
+	STRKEY Scene_TestJH = "Scene_TestJH";
+	STRKEY Scene_TestSB = "Scene_TestSB";
+	STRKEY Scene_Title = "Scene_Title";
 }

@@ -155,7 +155,7 @@ namespace mh
 		pMesh->mVBDesc = tVtxDesc;
 		pMesh->mVertices = std::move(vecVtx3d);
 		pMesh->mVertexByteStride = sizeof(Vertex3D);
-		pMesh->mVertexCount = pMesh->mVertices.size();
+		pMesh->mVertexCount = (UINT)pMesh->mVertices.size();
 
 		//pMesh->mVertexSysMem = pSys;
 
