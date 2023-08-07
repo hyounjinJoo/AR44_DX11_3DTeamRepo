@@ -6,6 +6,7 @@
 namespace mh
 {
 	IScene::IScene()
+		: mbInitialized()
 	{
 		mLayers.resize((uint)define::eLayerType::End);
 	}
@@ -17,6 +18,7 @@ namespace mh
 
 	void IScene::Init()
 	{
+		mbInitialized = true;
 		for (Layer& layer : mLayers)
 		{
 			layer.Init();
@@ -57,7 +59,7 @@ namespace mh
 
 	void IScene::AddGameObject(GameObject* _gameObj, const define::eLayerType _type)
 	{
-		mLayers[(uint)_type].AddGameObject(_gameObj);
+		mLayers[(uint)_type].AddGameObject(_gameObj, mbInitialized);
 		_gameObj->SetLayerType(_type);
 	}
 	

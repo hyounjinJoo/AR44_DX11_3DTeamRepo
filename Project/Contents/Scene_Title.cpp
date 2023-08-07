@@ -23,6 +23,8 @@
 #include <Engine/Com_Renderer_ParticleSystem.h>
 #include <Engine/Prefab.h>
 
+#include "strKey_Script.h"
+
 namespace mh
 {
 	Scene_Title::Scene_Title()
@@ -62,7 +64,7 @@ namespace mh
 		cameraComp->SetProjectionType(define::eProjectionType::Perspective);
 		//cameraComp->RegisterCameraInRenderer();
 		cameraComp->TurnLayerMask(eLayerType::UI, false);
-		cameraObj->AddComponent<Script_Camera>();
+		cameraObj->AddComponent(strKey::Script::Script_CameraMove);
 		//cameraObj->AddComponent()
 
 		RenderMgr::SetMainCamera(cameraComp);

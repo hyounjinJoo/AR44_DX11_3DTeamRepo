@@ -27,8 +27,10 @@ namespace mh
 		std::vector<GameObject*>		GetDontDestroyGameObjects();
 		const std::vector<GameObject*>& GetGameObjects(const define::eLayerType _type);
 
+		bool	IsInitialized() const { return mbInitialized; }
 
 	private:
 		std::vector<Layer> mLayers;
+		bool mbInitialized;
 	};
 }

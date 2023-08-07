@@ -5,6 +5,7 @@
 #include "RenderMgr.h"
 #include "Com_Transform.h"
 
+
 namespace mh
 {
 	// z값 정렬 작성중
@@ -39,7 +40,13 @@ namespace mh
 
 	void Layer::Init()
 	{
-		
+		for (GameObject* obj : mGameObjects)
+		{
+			if (obj == nullptr)
+				continue;
+
+			obj->Init();
+		}
 	}
 
 	void Layer::Update()
@@ -123,12 +130,15 @@ namespace mh
 		}
 	}
 
-	void Layer::AddGameObject(GameObject* gameObject)
+	void Layer::AddGameObject(GameObject* gameObject, bool _bNeedInit)
 	{
 		if (gameObject == nullptr)
 			return;
 
 		mGameObjects.push_back(gameObject);
+
+		if (_bNeedInit)
+			gameObject->Init();
 	}
 	std::vector<GameObject*> Layer::GetDontDestroyGameObjects()
 	{
