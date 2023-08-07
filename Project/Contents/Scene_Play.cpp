@@ -28,6 +28,7 @@ namespace mh
 
 	void Scene_Play::Init()
 	{
+
 		GameObject* cameraObj = object::Instantiate<GameObject>(eLayerType::Com_Camera, this);
 		Com_Camera* cameraComp = cameraObj->AddComponent<Com_Camera>();
 		cameraComp->TurnLayerMask(eLayerType::UI, false);

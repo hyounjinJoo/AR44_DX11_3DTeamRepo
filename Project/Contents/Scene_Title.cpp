@@ -33,6 +33,27 @@ namespace mh
 	}
 	void Scene_Title::Init()
 	{
+		IScene::Init();
+	}
+	void Scene_Title::Update()
+	{
+		if (InputMgr::GetKeyDown(eKeyCode::N))
+		{
+			//SceneMgr::LoadScene(eSceneType::Play);
+		}
+
+		IScene::Update();
+	}
+	void Scene_Title::FixedUpdate()
+	{
+		IScene::FixedUpdate();
+	}
+	void Scene_Title::Render()
+	{
+		IScene::Render();
+	}
+	void Scene_Title::OnEnter()
+	{
 		// Main Com_Camera Game Object
 		GameObject* cameraObj = object::Instantiate<GameObject>(eLayerType::Com_Camera);
 		cameraObj->SetName("MainCamera");
@@ -148,29 +169,6 @@ namespace mh
 			lightComp->SetSpecular(float4(1.0f, 1.0f, 1.0f, 1.0f));
 			lightComp->SetAmbient(float4(0.15f, 0.15f, 0.15f, 1.0f));
 		}
-
-
-		IScene::Init();
-	}
-	void Scene_Title::Update()
-	{
-		if (InputMgr::GetKeyDown(eKeyCode::N))
-		{
-			//SceneMgr::LoadScene(eSceneType::Play);
-		}
-
-		IScene::Update();
-	}
-	void Scene_Title::FixedUpdate()
-	{
-		IScene::FixedUpdate();
-	}
-	void Scene_Title::Render()
-	{
-		IScene::Render();
-	}
-	void Scene_Title::OnEnter()
-	{
 	}
 	void Scene_Title::OnExit()
 	{

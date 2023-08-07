@@ -46,9 +46,6 @@
     <ClInclude Include="targetver.h">
       <Filter>main</Filter>
     </ClInclude>
-    <ClInclude Include="guiEditor.h">
-      <Filter>Editor</Filter>
-    </ClInclude>
     <ClInclude Include="imconfig.h">
       <Filter>ImGui</Filter>
     </ClInclude>
@@ -134,13 +131,11 @@
     <ClInclude Include="resource.h">
       <Filter>main\WindowRes</Filter>
     </ClInclude>
+    <ClInclude Include="ImGuiMgr.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
       <Filter>main</Filter>
-    </ClCompile>
-    <ClCompile Include="guiEditor.cpp">
-      <Filter>Editor</Filter>
     </ClCompile>
     <ClCompile Include="imgui.cpp">
       <Filter>ImGui</Filter>
@@ -221,6 +216,7 @@
     <ClCompile Include="GameClient.cpp">
       <Filter>main</Filter>
     </ClCompile>
+    <ClCompile Include="ImGuiMgr.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="MHW.ico">
