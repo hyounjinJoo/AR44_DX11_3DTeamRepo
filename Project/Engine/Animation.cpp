@@ -59,9 +59,9 @@ namespace mh
 
 		////Value가 들어있는 vector 저장하는법
 		////1. json의 타입을 array value로 만들어준다.
-		//(*_pJVal)[JSONKEY(mSpriteSheet)] = Json::Value(Json::arrayValue);
+		//(*_pJVal)[JSON_KEY(mSpriteSheet)] = Json::Value(Json::arrayValue);
 		////2. 만들어진 데이터 컨테이너를 레퍼런스로 받아온다.
-		//Json::Value& jVal = (*_pJVal)[JSONKEY(mSpriteSheet)];
+		//Json::Value& jVal = (*_pJVal)[JSON_KEY(mSpriteSheet)];
 		//for (size_t i = 0; i < mSpriteSheet.size(); ++i)
 		//{
 		//	//3. 순회돌면서 하나씩 추가한다.

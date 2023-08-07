@@ -39,7 +39,7 @@ namespace mh
 		//TODO: FBX 로드를 위해 주석 처리
 		//if (mMaterial)
 		//{
-		//	jVal[JSONKEY(mMaterial)] = mMaterial->GetKey();
+		//	jVal[JSON_KEY(mMaterial)] = mMaterial->GetKey();
 		//}
 		
 		return eResult::Success;
@@ -64,9 +64,9 @@ namespace mh
 		}
 
 		//TODO: FBX 로드를 위해 주석 처리
-		//if (jVal.isMember(JSONKEY(mMaterial)))
+		//if (jVal.isMember(JSON_KEY(mMaterial)))
 		//{
-		//	mMaterial = ResMgr::Load<Material>(jVal[JSONKEY(mMaterial)].asString());
+		//	mMaterial = ResMgr::Load<Material>(jVal[JSON_KEY(mMaterial)].asString());
 		//}
 
 		return eResult::Success;
