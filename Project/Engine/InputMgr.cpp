@@ -3,16 +3,18 @@
 
 #include "InputMgr.h"
 #include "Application.h"
+#include "Joystick.h"
 
 
 extern mh::Application gApplication;
 
 namespace mh
 {
-	
-
 	std::vector<InputMgr::tKey> InputMgr::mKeys{};
 	math::Vector2 InputMgr::mMousPosition{};
+
+
+	std::vector<std::unique_ptr<Joystick>> InputMgr::mJoysticks;
 	int ASCII[(UINT)eKeyCode::END] =
 	{
 		//Alphabet
@@ -98,6 +100,39 @@ namespace mh
 
 				mKeys[i].bPressed = false;
 			}
+		}
+	}
+
+	void InputMgr::Release()
+	{
+		mJoysticks.clear();
+	}
+
+	void InputMgr::InitializeGamePad()
+	{
+		auto hr = RoInitialize(RO_INIT_MULTITHREADED);
+		assert(SUCCEEDED(hr));
+				
+		Microsoft::WRL::ComPtr<ABI::Windows::Gaming::Input::IGamepadStatics> gamepadStatics;
+		hr = RoGetActivationFactory(Microsoft::WRL::Wrappers::HStringReference(L"Windows.Gaming.Input.Gamepad").Get()
+			, __uuidof(Microsoft::WRL::ComPtr<ABI::Windows::Gaming::Input::IGamepadStatics>), &gamepadStatics);
+		assert(SUCCEEDED(hr));
+
+		Microsoft::WRL::ComPtr<ABI::Windows::Foundation::Collections::IVectorView<ABI::Windows::Gaming::Input::Gamepad*>> gamepads;
+		hr = gamepadStatics->get_Gamepads(&gamepads);
+		assert(SUCCEEDED(hr));
+
+		uint32_t gamepadCount;
+		hr = gamepads->get_Size(&gamepadCount);
+		assert(SUCCEEDED(hr));
+
+		for (uint32_t i = 0; i < gamepadCount; i++) {
+			Microsoft::WRL::ComPtr<ABI::Windows::Gaming::Input::IGamepad> gamepad;
+			hr = gamepads->GetAt(i, &gamepad);
+			assert(SUCCEEDED(hr));
+
+			// Joystick를 생성하고 gamepad를 전달.
+			mJoysticks.push_back(std::make_unique<Joystick>(gamepad));
 		}
 	}
 }

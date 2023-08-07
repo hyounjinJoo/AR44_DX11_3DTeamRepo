@@ -256,6 +256,10 @@ call DLLCopy.bat $(Configuration)</Command>
     <ClInclude Include="Application.h" />
     <ClInclude Include="IRenderer.h" />
     <ClInclude Include="Com_Camera.h" />
+    <ClInclude Include="Joystick.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
     <ClInclude Include="json-cpp\jsonSaveLoad.h" />
     <ClInclude Include="MultiRenderTarget.h" />
     <ClInclude Include="RenderMgr.h" />
@@ -331,6 +335,10 @@ call DLLCopy.bat $(Configuration)</Command>
     <ClCompile Include="Application.cpp" />
     <ClCompile Include="IRenderer.cpp" />
     <ClCompile Include="Com_Camera.cpp" />
+    <ClCompile Include="Joystick.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
     <ClCompile Include="MultiRenderTarget.cpp" />
     <ClCompile Include="RenderMgr.cpp" />
     <ClCompile Include="Script_Camera.cpp" />

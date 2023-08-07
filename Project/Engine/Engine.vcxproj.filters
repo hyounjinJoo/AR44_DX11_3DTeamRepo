@@ -154,6 +154,9 @@
     <Filter Include="_DefaultShader\Light">
       <UniqueIdentifier>{6d2d4c22-57c3-412a-b05f-e2076e189012}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Input\Joystick">
+      <UniqueIdentifier>{01f559a1-774b-4837-b125-b970bc0e9180}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Application.cpp">
@@ -334,6 +337,9 @@
     </ClCompile>
     <ClCompile Include="define_Util.cpp">
       <Filter>Common\define</Filter>
+    </ClCompile>
+    <ClCompile Include="Joystick.cpp">
+      <Filter>Input\Joystick</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -557,6 +563,9 @@
     </ClInclude>
     <ClInclude Include="define_Util.h">
       <Filter>Common\define</Filter>
+    </ClInclude>
+    <ClInclude Include="Joystick.h">
+      <Filter>Input\Joystick</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
