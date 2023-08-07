@@ -61,7 +61,7 @@ namespace mh
         //포인터의 경우에는 포인터 자체를 저장하는게 아니라 Key를 저장
         if (mShader)
         {
-            jVal[JSONKEY(mShader)] = mShader->GetKey();
+            jVal[JSON_KEY(mShader)] = mShader->GetKey();
         }
             
         std::is_array_v<std::array<std::shared_ptr<Texture>, (int)eTextureSlot::End>>;
@@ -109,16 +109,16 @@ namespace mh
         const Json::Value& jVal = *_pJVal;
 
         //쉐이더 데이터가 있는지 확인하고
-        if (jVal.isMember(JSONKEY(mShader)))
+        if (jVal.isMember(JSON_KEY(mShader)))
         {
             //가져온 키값으로 쉐이더를 로드
-            std::string strKey = jVal[JSONKEY(mShader)].asString();
+            std::string strKey = jVal[JSON_KEY(mShader)].asString();
             ResMgr::Load<GraphicsShader>(strKey);
         }
 
         
         //포인터 배열은 MHGetJsonVectorPtr 함수를 통해서 Key값을 싹 받아올 수 있음.
-        const auto& vecLoad = Json::MHGetJsonVectorPtr(_pJVal, JSONKEY(mTextures));
+        const auto& vecLoad = Json::MHGetJsonVectorPtr(_pJVal, JSON_KEY(mTextures));
         for (size_t i = 0; i < vecLoad.size(); ++i)
         {
             mTextures[i] = ResMgr::Load<Texture>(vecLoad[i]);

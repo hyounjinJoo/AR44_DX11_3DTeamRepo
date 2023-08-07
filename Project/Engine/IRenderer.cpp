@@ -33,7 +33,7 @@ namespace mh
 		//포인터의 경우 키값을 저장
 		if (mMesh)
 		{
-			jVal[JSONKEY(mMesh)] = mMesh->GetKey();
+			jVal[JSON_KEY(mMesh)] = mMesh->GetKey();
 		}
 
 		//TODO: FBX 로드를 위해 주석 처리
@@ -58,9 +58,9 @@ namespace mh
 		}
 		const Json::Value& jVal = *_pJson;
 
-		if (jVal.isMember(JSONKEY(mMesh)))
+		if (jVal.isMember(JSON_KEY(mMesh)))
 		{
-			mMesh = ResMgr::Load<Mesh>(jVal[JSONKEY(mMesh)].asString());
+			mMesh = ResMgr::Load<Mesh>(jVal[JSON_KEY(mMesh)].asString());
 		}
 
 		//TODO: FBX 로드를 위해 주석 처리
