@@ -1,4 +1,4 @@
-#include "EnginePCH.h"
+#include "PCH_Engine.h"
 
 #include "IComponent.h"
 
@@ -34,7 +34,7 @@ namespace mh
 			return result;
 		}
 
-		Json::MHSaveValue(_pJson, JSONVAL(mType));
+		Json::MHSaveValue(_pJson, JSON_KEY_PAIR(mType));
 
 		return eResult::Success;
 	}

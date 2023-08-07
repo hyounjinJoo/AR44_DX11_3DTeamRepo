@@ -1,3 +1,4 @@
+
 #pragma once
 #include "IComponent.h"
 #include "ICollider2D.h"
@@ -9,6 +10,7 @@ namespace mh
 	{
 	public:
 		IScript();
+		IScript(const IScript& _other) = default;
 		virtual ~IScript();
 
 		virtual void Init();

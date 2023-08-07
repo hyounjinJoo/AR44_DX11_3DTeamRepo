@@ -1,4 +1,4 @@
-#include "EnginePCH.h"
+#include "PCH_Engine.h"
 
 #include "Com_Animator.h"
 
@@ -116,7 +116,7 @@ namespace mh
 		
 		if (events) 
 		{
-			UINT spriteIndex = mActiveAnimation->Update();
+			uint spriteIndex = mActiveAnimation->Update();
 			if (spriteIndex != -1
 				&& spriteIndex < events->Events.size()
 				&& events->Events[spriteIndex].Event)
@@ -134,8 +134,8 @@ namespace mh
 	}
 
 	bool Com_Animator::Create(const std::string_view _name, std::shared_ptr<Texture> _atlas
-		, math::Vector2 _leftTop, math::Vector2 _size, math::Vector2 _offset
-		, UINT _spriteLegth, float _duration)
+		, float2 _leftTop, float2 _size, float2 _offset
+		, uint _spriteLegth, float _duration)
 	{
 		if (_atlas == nullptr)
 			return false;
@@ -236,7 +236,7 @@ namespace mh
 
 		return events->EndEvent.Event;
 	}
-	std::function<void()>& Com_Animator::GetEvent(const std::string_view _name, UINT _index) const
+	std::function<void()>& Com_Animator::GetEvent(const std::string_view _name, uint _index) const
 	{
 		tEvents* events = FindEvents(_name);
 

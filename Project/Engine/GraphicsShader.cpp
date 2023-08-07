@@ -1,10 +1,11 @@
-#include "EnginePCH.h"
+#include "PCH_Engine.h"
 
 #include "GraphicsShader.h"
 #include "GPUMgr.h"
 #include "RenderMgr.h"
 
 #include "PathMgr.h"
+#include "json-cpp/jsonSaveLoad.h"
 
 namespace mh
 {
@@ -18,7 +19,6 @@ namespace mh
 		, mRSType(eRSType::SolidBack)
 		, mDSType(eDSType::Less)
 		, mBSType(eBSType::AlphaBlend)
-		, mStage()
 		, mErrorBlob()
 	{
 	}
@@ -26,6 +26,80 @@ namespace mh
 	GraphicsShader::~GraphicsShader()
 	{
 
+	}
+
+	eResult GraphicsShader::SaveJson(Json::Value* _pJVal)
+	{
+		if (nullptr == _pJVal)
+		{
+			return eResult::Fail_Nullptr;
+		}
+		eResult result = IShader::SaveJson(_pJVal);
+		if (eResultFail(result))
+		{
+			return result;
+		}
+		Json::Value& jVal = *_pJVal;
+
+		//Input Layout Desc
+		Json::MHSaveVector(_pJVal, JSON_KEY_PAIR(mVecInputLayoutDesc));
+
+		//토폴로지
+		Json::MHSaveValue(_pJVal, JSON_KEY_PAIR(mTopology));
+
+		//쉐이더 파일명
+		{
+			Json::Value& ShaderFileName = jVal[JSONKEY(mArrShaderCode)];
+			for (int i = 0; i < (int)eGSStage::END; ++i)
+			{
+				ShaderFileName.append(mArrShaderCode[i].strKey);
+			}
+		}
+
+		//래스터라이저 상태
+		Json::MHSaveValue(_pJVal, JSON_KEY_PAIR(mRSType));
+		Json::MHSaveValue(_pJVal, JSON_KEY_PAIR(mDSType));
+		Json::MHSaveValue(_pJVal, JSON_KEY_PAIR(mBSType));
+
+		return eResult::Success;
+	}
+
+	eResult GraphicsShader::LoadJson(const Json::Value* _pJVal)
+	{
+		if (nullptr == _pJVal)
+		{
+			return eResult::Fail_Nullptr;
+		}
+		eResult result = IShader::LoadJson(_pJVal);
+		if (eResultFail(result))
+		{
+			return result;
+		}
+		const Json::Value& jVal = *_pJVal;
+
+		//Input Layout Desc
+		mVecInputLayoutDesc = Json::MHGetJsonVector(_pJVal, JSON_KEY_PAIR(mVecInputLayoutDesc));
+
+		//토폴로지
+		Json::MHLoadValue(_pJVal, JSON_KEY_PAIR(mTopology));
+
+		//쉐이더
+		{
+			const std::vector<std::string>& vecStrKey = Json::MHGetJsonVectorPtr(_pJVal, JSONKEY(mArrShaderCode));
+			for (size_t i = 0; i < vecStrKey.size(); ++i)
+			{
+				CreateByCSO((eGSStage)i, vecStrKey[i]);
+				if ((size_t)eGSStage::END == i)
+					break;
+			}
+		}
+
+		//RS, DS, BS
+		Json::MHLoadValue(_pJVal, JSON_KEY_PAIR(mRSType));
+		Json::MHLoadValue(_pJVal, JSON_KEY_PAIR(mDSType));
+		Json::MHLoadValue(_pJVal, JSON_KEY_PAIR(mBSType));
+
+		return eResult::Success;
 	}
 
 	eResult GraphicsShader::Load(const std::filesystem::path& _path)
@@ -94,7 +168,53 @@ namespace mh
 
 	eResult GraphicsShader::CreateByCSO(eGSStage _stage, const stdfs::path& _FileName)
 	{
-		return eResult::Fail_NotImplemented;
+		//CSO 파일이 있는 폴더에 접근
+		std::filesystem::path shaderBinPath = stdfs::current_path();
+		shaderBinPath /= strKey::DirName_ShaderBin;
+		shaderBinPath /= _FileName;
+
+		if (false == stdfs::exists(shaderBinPath))
+		{
+			return eResult::Fail_PathNotExist;
+		}
+
+		//위에서 만든 파일명을 토대로 디스크에서 파일을 열어준다.
+		std::ios_base::openmode openFlag = std::ios_base::ate | std::ios_base::binary; std::ios_base::in;
+		std::ifstream sFile(shaderBinPath, openFlag);
+
+		if (false == sFile.is_open())
+		{
+			std::wstring msg = L"Failed to open File.\n";
+			msg += shaderBinPath.wstring();
+			ERROR_MESSAGE_W(msg.c_str());
+		}
+
+		//파일이 열리면 지역변수 Blob을 만들어서 데이터를 옮긴다.
+		tShaderCode sCode = {};
+		sCode.strKey = _FileName.string();
+
+		//Blob 내부에 공간을 할당.
+		if (FAILED(D3DCreateBlob(sFile.tellg(), sCode.blob.GetAddressOf())))
+		{
+			ERROR_MESSAGE_W(L"쉐이더를 저장할 공간 할당에 실패했습니다.");
+			return eResult::Fail_Create;
+		}
+
+		//커서를 처음으로 돌린 후 파일을 읽어준다.
+		sFile.seekg(0, std::ios_base::beg);
+		sFile.read((char*)sCode.blob->GetBufferPointer(), sCode.blob->GetBufferSize());
+		sFile.close();
+
+		//읽어온 바이트 코드로부터 쉐이더를 로딩해준다.
+		//실패시 동적할당 해제하고 오류 발생
+		eResult Result = CreateShader(_stage, sCode.blob->GetBufferPointer(), sCode.blob->GetBufferSize());
+		if (eResultFail(Result))
+		{
+			ERROR_MESSAGE_W(L"쉐이더 생성 실패.");
+			return Result;
+		}
+
+		return Result;
 	}
 
 	eResult GraphicsShader::CreateInputLayout(const std::vector<D3D11_INPUT_ELEMENT_DESC>& _VecLayoutDesc)
@@ -111,7 +231,7 @@ namespace mh
 
 		if (FAILED(GPUMgr::Device()->CreateInputLayout(
 			mVecInputLayoutDesc.data(),
-			(UINT)mVecInputLayoutDesc.size(),
+			(uint)mVecInputLayoutDesc.size(),
 			VSBlobData->GetBufferPointer(),
 			VSBlobData->GetBufferSize(),
 			mInputLayout.ReleaseAndGetAddressOf()

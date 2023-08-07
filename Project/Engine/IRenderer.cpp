@@ -1,4 +1,4 @@
-#include "EnginePCH.h"
+#include "PCH_Engine.h"
 
 #include "IRenderer.h"
 #include "json-cpp\json.h"
@@ -9,7 +9,7 @@ namespace mh
 	IRenderer::IRenderer()
 		: IComponent(define::eComponentType::Renderer)
 		, mMesh(nullptr)
-		, mMaterial(nullptr)
+		, mMaterials(1)
 	{
 	}
 
@@ -35,10 +35,12 @@ namespace mh
 		{
 			jVal[JSONKEY(mMesh)] = mMesh->GetKey();
 		}
-		if (mMaterial)
-		{
-			jVal[JSONKEY(mMaterial)] = mMaterial->GetKey();
-		}
+
+		//TODO: FBX 로드를 위해 주석 처리
+		//if (mMaterial)
+		//{
+		//	jVal[JSONKEY(mMaterial)] = mMaterial->GetKey();
+		//}
 		
 		return eResult::Success;
 	}
@@ -61,13 +63,30 @@ namespace mh
 			mMesh = ResMgr::Load<Mesh>(jVal[JSONKEY(mMesh)].asString());
 		}
 
-		if (jVal.isMember(JSONKEY(mMaterial)))
-		{
-			mMaterial = ResMgr::Load<Material>(jVal[JSONKEY(mMaterial)].asString());
-		}
+		//TODO: FBX 로드를 위해 주석 처리
+		//if (jVal.isMember(JSONKEY(mMaterial)))
+		//{
+		//	mMaterial = ResMgr::Load<Material>(jVal[JSONKEY(mMaterial)].asString());
+		//}
 
 		return eResult::Success;
 	}
+
+	void IRenderer::SetMesh(const std::shared_ptr<Mesh> _mesh)
+	{
+		mMesh = _mesh;
+
+		//if (false == mMaterials.empty())
+		//{
+		//	mMaterials.clear();
+		//	std::vector<tMaterialSet> materials;
+		//	mMaterials.swap(materials);
+		//}
+
+		if (nullptr != mMesh)
+			mMaterials.resize(mMesh->GetSubsetCount());
+	}
+
 
 }
 

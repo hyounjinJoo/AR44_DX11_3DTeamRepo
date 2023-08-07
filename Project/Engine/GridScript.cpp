@@ -1,4 +1,4 @@
-#include "EnginePCH.h"
+#include "PCH_Engine.h"
 
 #include "GridScript.h"
 #include "Com_Transform.h"
@@ -6,7 +6,7 @@
 #include "Application.h"
 #include "ConstBuffer.h"
 #include "RenderMgr.h"
-#include "SceneManager.h"
+#include "SceneMgr.h"
 
 extern mh::Application gApplication;
 
@@ -28,7 +28,7 @@ namespace mh
 
 	void GridScript::Init()
 	{
-		eSceneType type = SceneManager::GetActiveScene()->GetSceneType();
+		eSceneType type = SceneMgr::GetActiveScene()->GetSceneType();
 		mCamera = RenderMgr::GetCamera(type, 0);
 	}
 
@@ -42,8 +42,8 @@ namespace mh
 		GameObject* gameObj = mCamera->GetOwner();
 		Com_Transform& TR = gameObj->GetTransform();
 		
-		Vector3 cameraPosition = TR.GetPosition();
-		Vector4 position = Vector4(cameraPosition.x, cameraPosition.y, cameraPosition.z, 1.0f);
+		float3 cameraPosition = TR.GetPosition();
+		float4 position = float4(cameraPosition.x, cameraPosition.y, cameraPosition.z, 1.0f);
 
 		float scale = mCamera->GetScale();
 
@@ -51,13 +51,13 @@ namespace mh
 		GetClientRect(gApplication.GetHwnd(), &winRect);
 		float width = static_cast<float>(winRect.right - winRect.left);
 		float height = static_cast<float>(winRect.bottom - winRect.top);
-		Vector2 resolution(width, height);
+		float2 resolution(width, height);
 
 		// Constant buffer
 		ConstBuffer* CB = RenderMgr::GetConstBuffer(eCBType::Grid);
 		GridCB data;
 		data.CameraPosition = position;
-		data.CameraScale = Vector2(scale, scale);
+		data.CameraScale = float2(scale, scale);
 		data.Resolution = resolution;
 		
 		CB->SetData(&data);

@@ -1,4 +1,4 @@
-#include "EnginePCH.h"
+#include "PCH_Engine.h"
 
 #include "Com_Renderer_Sprite.h"
 #include "GameObject.h"
@@ -32,7 +32,7 @@ namespace mh
 		GetOwner()->GetTransform().SetConstBuffer();
 
 		GetMesh()->BindBuffer();
-		GetMaterial()->Bind();
+		GetMaterial(0)->Bind();
 
 		Com_Animator* animator = GetOwner()->GetComponent<Com_Animator>();
 		if (animator)
@@ -41,7 +41,7 @@ namespace mh
 		}
 
 		GetMesh()->Render();
-		GetMaterial()->Clear();
+		GetMaterial(0)->Clear();
 
 		if (animator)
 		{

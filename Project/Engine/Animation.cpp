@@ -1,4 +1,4 @@
-#include "EnginePCH.h"
+#include "PCH_Engine.h"
 
 #include "Animation.h"
 #include "TimeMgr.h"
@@ -67,7 +67,7 @@ namespace mh
 		//	//3. 순회돌면서 하나씩 추가한다.
 		//	jVal.append(Json::MHConvertWrite(mSpriteSheet[i]));
 		//}
-		Json::MHSaveVector(_pJVal, JSONVAL(mSpriteSheet));
+		Json::MHSaveVector(_pJVal, JSON_KEY_PAIR(mSpriteSheet));
 
 
 		return eResult::Success;
@@ -86,7 +86,7 @@ namespace mh
 		}
 		const Json::Value& jVal = (*_pJVal);
 
-		auto SpriteData = Json::MHGetJsonVector(_pJVal, JSONVAL(mSpriteSheet));
+		auto SpriteData = Json::MHGetJsonVector(_pJVal, JSON_KEY_PAIR(mSpriteSheet));
 		mSpriteSheet = std::move(SpriteData);
 
 		
@@ -95,7 +95,7 @@ namespace mh
 		return eResult::Success;
 	}
 
-	UINT Animation::Update()
+	uint Animation::Update()
 	{
 		if (mbComplete)
 			return -1;
@@ -131,8 +131,8 @@ namespace mh
 
 	void Animation::Create(const std::string_view _name
 		, std::shared_ptr<Texture> _atlas
-		, math::Vector2 _leftTop, math::Vector2 _size, math::Vector2 _offset
-		, UINT _spriteLegth, float _duration)
+		, float2 _leftTop, float2 _size, float2 _offset
+		, uint _spriteLegth, float _duration)
 	{
 		mAnimationName = _name;
 
@@ -144,12 +144,12 @@ namespace mh
 		{
 			// API 와는 다르게 0~1 사이의 비율좌표로 위치를 표현해야한다.
 			tSprite sprite = {};
-			sprite.LeftTop = math::Vector2((_leftTop.x + (_size.x * static_cast<float>(index))) / width
+			sprite.LeftTop = float2((_leftTop.x + (_size.x * static_cast<float>(index))) / width
 				, (_leftTop.y) / height);
-			sprite.Size = math::Vector2(_size.x / width, _size.y / height);
+			sprite.Size = float2(_size.x / width, _size.y / height);
 			sprite.Offset = _offset;
 			sprite.Duration = _duration;
-			sprite.AtlasSize = math::Vector2(200.0f / width, 200.0f / height);
+			sprite.AtlasSize = float2(200.0f / width, 200.0f / height);
 
 			mSpriteSheet.push_back(sprite);
 		}
@@ -163,7 +163,7 @@ namespace mh
 		ConstBuffer* cb = RenderMgr::GetConstBuffer(eCBType::Animation);
 
 		AnimationCB info = {};
-		info.Type = (UINT)define::eAnimationType::SecondDimension;
+		info.Type = (uint)define::eAnimationType::SecondDimension;
 		info.LeftTop = mSpriteSheet[mIndex].LeftTop;
 		info.Offset = mSpriteSheet[mIndex].Offset;
 		info.Size = mSpriteSheet[mIndex].Size;
@@ -188,7 +188,7 @@ namespace mh
 		ConstBuffer* cb = RenderMgr::GetConstBuffer(eCBType::Animation);
 
 		AnimationCB info = {};
-		info.Type = (UINT)define::eAnimationType::None;
+		info.Type = (uint)define::eAnimationType::None;
 
 		cb->SetData(&info);
 		cb->BindData(eShaderStageFlag::PS);

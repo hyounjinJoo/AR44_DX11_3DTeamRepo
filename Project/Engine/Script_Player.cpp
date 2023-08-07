@@ -1,4 +1,4 @@
-#include "EnginePCH.h"
+#include "PCH_Engine.h"
 
 #include "Script_Player.h"
 #include "Com_Transform.h"
@@ -28,26 +28,26 @@ namespace mh
 
 		if (InputMgr::GetKey(eKeyCode::RIGHT))
 		{
-			Vector3 pos = tr.GetPosition();
+			float3 pos = tr.GetPosition();
 			pos.x += 60.0f * TimeMgr::DeltaTime();
 			tr.SetPosition(pos);
 		}
 		if (InputMgr::GetKey(eKeyCode::LEFT))
 		{
-			Vector3 pos = tr.GetPosition();
+			float3 pos = tr.GetPosition();
 			pos.x -= 60.0f * TimeMgr::DeltaTime();
 			tr.SetPosition(pos);
 		}
 
 		if (InputMgr::GetKey(eKeyCode::DOWN))
 		{
-			Vector3 pos = tr.GetRotation();
+			float3 pos = tr.GetRotation();
 			pos.y -= 60.0f * TimeMgr::DeltaTime();
 			tr.SetRotation(pos);
 		}
 		if (InputMgr::GetKey(eKeyCode::UP))
 		{
-			Vector3 pos = tr.GetRotation();
+			float3 pos = tr.GetRotation();
 			pos.y += 60.0f * TimeMgr::DeltaTime();
 			tr.SetRotation(pos);
 		}

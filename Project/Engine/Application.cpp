@@ -1,38 +1,54 @@
-#include "EnginePCH.h"
+#include "PCH_Engine.h"
 #include "Application.h"
+
+#include "AtExit.h"
 
 #include "DefaultComInitializer.h"
 #include "RenderMgr.h"
 #include "TimeMgr.h"
 #include "InputMgr.h"
-#include "SceneManager.h"
+#include "SceneMgr.h"
 #include "ResMgr.h"
 #include "CollisionMgr.h"
 #include "AudioMgr.h"
 #include "FontWrapper.h"
-
 #include "PathMgr.h"
 
 namespace mh
 {
-	Application::Application()
-		: mHwnd(nullptr)
-		, mHdc(nullptr)
-		, mHeight(1600)//화면 해상도 몰라서 0말고 1600/900사이즈로 일단 초기화
-		, mWidth(900)
-	{
-	}
+	using namespace mh::define;
 
-	Application::~Application()
-	{
-	}
 
-	void Application::Init()
+	HWND			Application::mHwnd{};
+	HDC				Application::mHdc{};
+	bool			Application::mbInitialized{};
+
+	BOOL Application::Init(const tDesc_Application& _AppDesc)
 	{
+		AtExit::AddFunc(Release);
+
+		if (nullptr == _AppDesc.Hwnd)
+		{
+			return FALSE;
+		}
+		mHwnd = _AppDesc.Hwnd;
+
+		SetWindowPos(_AppDesc.LeftWindowPos, _AppDesc.TopWindowPos);
+		SetWindowSize(_AppDesc.Width, _AppDesc.Height);
+
+		if (false == GPUMgr::Init(_AppDesc.GPUDesc))
+		{
+			mHdc = GetDC(_AppDesc.Hwnd);
+			ERROR_MESSAGE_W(L"Graphics Device 초기화 실패");
+			return FALSE;
+		}
+
+
 		PathMgr::Init();
 
 		AudioMgr::Init();
 		FontWrapper::Init();
+
 		ResMgr::Init();
 
 		RenderMgr::Init();
@@ -44,7 +60,9 @@ namespace mh
 
 		CollisionMgr::Init();
 		
-		SceneManager::Init();
+		SceneMgr::Init();
+
+		return TRUE;
 	}
 
 	// 게임 로직 캐릭터 이동 등등 
@@ -54,14 +72,14 @@ namespace mh
 		TimeMgr::Update();
 		InputMgr::Update();
 		CollisionMgr::Update();
-		SceneManager::Update();
+		SceneMgr::Update();
 	}
 
 	// GPU update
 	void Application::FixedUpdate()
 	{
 		CollisionMgr::FixedUpdate();
-		SceneManager::FixedUpdate();
+		SceneMgr::FixedUpdate();
 	}
 
 	void Application::Render()
@@ -69,8 +87,7 @@ namespace mh
 		TimeMgr::Render(mHdc);
 
 		GPUMgr::Clear();
-		GPUMgr::AdjustViewPorts(mHwnd);
-
+	
 		RenderMgr::ClearMultiRenderTargets();
 
 		RenderMgr::Render();
@@ -78,16 +95,19 @@ namespace mh
 
 	void Application::Destroy()
 	{
-
 	}
 
 	// Running main engine loop
-	void Application::Run()
+	bool Application::Run()
 	{
 		Update();
 		FixedUpdate();
 		Render();
 		Destroy();
+		
+		//TODO: Engine 내부에서 종료할 방법 만들기
+		//이걸 false로 반환하면 꺼지도록 짜놓음
+		return true;
 	}
 
 	void Application::Present()
@@ -97,33 +117,40 @@ namespace mh
 
 	void Application::Release()
 	{
-		AtExit::CallAtExit();
+		ReleaseDC(mHwnd, mHdc);
 	}
 
-	void Application::SetWindow(HWND _hwnd, UINT _width, UINT _height)
+	void Application::SetWindowPos(int _LeftWindowPos, int _TopWindowPos)
 	{
-		if (nullptr == GPUMgr::Device())
-		{
-			mHwnd = _hwnd;
-			mHdc = GetDC(mHwnd);
-			mWidth = _width;
-			mHeight = _height;
+		//가로세로 길이는 유지하고 위치만 변경
+		UINT flag = SWP_NOSIZE | SWP_NOZORDER;
+		::SetWindowPos(mHwnd, nullptr, _LeftWindowPos, _TopWindowPos, 0, 0, flag);
+	}
+	void Application::SetWindowSize(int _width, int _height)
+	{
+		//클라이언트 영역과 윈도우 영역의 차이를 구해서 정확한 창 크기를 설정(해상도가 조금이라도 차이나면 문제 발생함)
+		RECT rcWindow, rcClient;
+		GetWindowRect(mHwnd, &rcWindow);
+		GetClientRect(mHwnd, &rcClient);
 
+		// calculate size of non-client area
+		int xExtra = rcWindow.right - rcWindow.left - rcClient.right;
+		int yExtra = rcWindow.bottom - rcWindow.top - rcClient.bottom;
 
-			//eValidationMode vaildationMode = eValidationMode::Disabled;
-			
-			if (false == GPUMgr::Init(mHwnd, mWidth, mHeight))
-			{
-				ERROR_MESSAGE_W(L"Graphics Device 초기화에 실패했습니다.");
-				std::abort();
-			}
-		}
+		// now resize based on desired client size
+		::SetWindowPos(mHwnd, 0, 0u, 0u, _width + xExtra, _height + yExtra, SWP_NOMOVE | SWP_NOZORDER | SWP_NOACTIVATE);
 
-		RECT rt = { 0, 0, (LONG)_width , (LONG)_height };
-		AdjustWindowRect(&rt, WS_OVERLAPPEDWINDOW, false);
-		SetWindowPos(mHwnd, nullptr, 0, 0, rt.right - rt.left, rt.bottom - rt.top, 0);
-		ShowWindow(mHwnd, true);
-		UpdateWindow(mHwnd);
+		::ShowWindow(mHwnd, true);
+		::UpdateWindow(mHwnd);
+	}
+
+	int2 Application::GetWIndowSize()
+	{
+		//클라이언트 영역과 윈도우 영역의 차이를 구해서 정확한 창 크기를 설정(해상도가 조금이라도 차이나면 문제 발생함)
+		RECT rcClient{};
+		GetClientRect(mHwnd, &rcClient);
+
+		return int2{ rcClient.right, rcClient.bottom };
 	}
 
 }

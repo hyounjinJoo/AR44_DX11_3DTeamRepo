@@ -6,7 +6,7 @@
 
 namespace mh
 {
-	using namespace mh::math;
+	using namespace mh;
 
 	class Com_Animator : public IComponent
 	{
@@ -52,9 +52,9 @@ namespace mh
 
 		bool Create(const std::string_view _name
 			, std::shared_ptr<Texture> _atlas
-			, Vector2 _leftTop, Vector2 _size
-			, Vector2 _offset
-			, UINT _spriteLength
+			, float2 _leftTop, float2 _size
+			, float2 _offset
+			, uint _spriteLength
 			, float _duration);
 
 		Animation* FindAnimation(const std::string_view _name) const;
@@ -67,7 +67,7 @@ namespace mh
 		std::function<void()>& GetStartEvent(const std::string_view _name) const;
 		std::function<void()>& GetCompleteEvent(const std::string_view _name) const;
 		std::function<void()>& GetEndEvent(const std::string_view _name) const;
-		std::function<void()>& GetEvent(const std::string_view _name, UINT _index) const;
+		std::function<void()>& GetEvent(const std::string_view _name, uint _index) const;
 
 	private:
 		std::unordered_map<std::string, Animation*, define::tUmap_StringViewHasher, std::equal_to<>>	mAnimations;

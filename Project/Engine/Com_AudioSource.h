@@ -1,9 +1,9 @@
 #pragma once
 #include "IComponent.h"
-#include "AudioClip.h"
 
 namespace mh
 {
+	class AudioClip;
 	class Com_AudioSource : public IComponent
 	{
 	public:
