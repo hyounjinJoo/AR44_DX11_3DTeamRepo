@@ -73,7 +73,7 @@ namespace mh
         //mTextures은 텍스처 배열이므로 Key를 가져와서 저장
         //for (int i = 0; i < mTextures.size(); ++i)
         //{
-        //    Json::Value& TexJson = jVal[JSONKEY(mTextures)];
+        //    Json::Value& TexJson = jVal[JSON_KEY(mTextures)];
         //    if (mTextures[i])
         //    {
         //        TexJson.append(mTextures[i]->GetKey());

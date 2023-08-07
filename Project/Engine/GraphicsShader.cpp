@@ -49,7 +49,7 @@ namespace mh
 
 		//쉐이더 파일명
 		{
-			Json::Value& ShaderFileName = jVal[JSONKEY(mArrShaderCode)];
+			Json::Value& ShaderFileName = jVal[JSON_KEY(mArrShaderCode)];
 			for (int i = 0; i < (int)eGSStage::END; ++i)
 			{
 				ShaderFileName.append(mArrShaderCode[i].strKey);
@@ -85,7 +85,7 @@ namespace mh
 
 		//쉐이더
 		{
-			const std::vector<std::string>& vecStrKey = Json::MHGetJsonVectorPtr(_pJVal, JSONKEY(mArrShaderCode));
+			const std::vector<std::string>& vecStrKey = Json::MHGetJsonVectorPtr(_pJVal, JSON_KEY(mArrShaderCode));
 			for (size_t i = 0; i < vecStrKey.size(); ++i)
 			{
 				CreateByCSO((eGSStage)i, vecStrKey[i]);
