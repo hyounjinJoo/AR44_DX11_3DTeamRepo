@@ -11,7 +11,7 @@
 #include "PaintShader.h"
 #include "ParticleShader.h"
 
-#include "SceneManager.h"
+#include "SceneMgr.h"
 
 #include "ResMgr.h"
 #include "TimeMgr.h"
@@ -123,7 +123,7 @@ namespace mh
 		BindNoiseTexture();
 		BindLights();
 
-		eSceneType type = SceneManager::GetActiveScene()->GetSceneType();
+		eSceneType type = SceneMgr::GetActiveScene()->GetSceneType();
 		for (Com_Camera* cam : mCameras[(uint)type])
 		{
 			if (cam == nullptr)

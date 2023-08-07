@@ -37,11 +37,11 @@ namespace mh
 		}
 		else if (InputMgr::GetKeyState(eKeyCode::W) == eKeyState::PRESSED)
 		{
-			pos += 100.0f * tr.Foward() * TimeMgr::DeltaTime();
+			pos += 100.0f * tr.Forward() * TimeMgr::DeltaTime();
 		}
 		else if (InputMgr::GetKeyState(eKeyCode::S) == eKeyState::PRESSED)
 		{
-			pos += 100.0f * -tr.Foward() * TimeMgr::DeltaTime();
+			pos += 100.0f * -tr.Forward() * TimeMgr::DeltaTime();
 		}
 		else if (InputMgr::GetKeyState(eKeyCode::Q) == eKeyState::PRESSED)
 		{

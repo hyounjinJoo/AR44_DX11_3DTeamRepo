@@ -109,7 +109,7 @@ namespace mh
 
 		float3 position = tr.GetPosition();
 		mAttribute.position = float4(position.x, position.y, position.z, 1.0f);
-		mAttribute.direction = float4(tr.Foward().x, tr.Foward().y, tr.Foward().z, 0.0f);
+		mAttribute.direction = float4(tr.Forward().x, tr.Forward().y, tr.Forward().z, 0.0f);
 
 		RenderMgr::PushLightAttribute(mAttribute);
 	}

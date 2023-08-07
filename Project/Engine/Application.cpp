@@ -7,7 +7,7 @@
 #include "RenderMgr.h"
 #include "TimeMgr.h"
 #include "InputMgr.h"
-#include "SceneManager.h"
+#include "SceneMgr.h"
 #include "ResMgr.h"
 #include "CollisionMgr.h"
 #include "AudioMgr.h"
@@ -60,7 +60,7 @@ namespace mh
 
 		CollisionMgr::Init();
 		
-		SceneManager::Init();
+		SceneMgr::Init();
 
 		return TRUE;
 	}
@@ -72,14 +72,14 @@ namespace mh
 		TimeMgr::Update();
 		InputMgr::Update();
 		CollisionMgr::Update();
-		SceneManager::Update();
+		SceneMgr::Update();
 	}
 
 	// GPU update
 	void Application::FixedUpdate()
 	{
 		CollisionMgr::FixedUpdate();
-		SceneManager::FixedUpdate();
+		SceneMgr::FixedUpdate();
 	}
 
 	void Application::Render()

@@ -7,10 +7,10 @@
 #include "Application.h"
 #include "RenderMgr.h"
 #include "Scene.h"
-#include "SceneManager.h"
+#include "SceneMgr.h"
 #include "Material.h"
 #include "IRenderer.h"
-#include "SceneManager.h"
+#include "SceneMgr.h"
 #include "ResMgr.h"
 
 #include "MultiRenderTarget.h"
@@ -87,7 +87,7 @@ namespace mh
 			Lights[i]->Render();
 		}
 
-		// Foward render
+		// Forward render
 		RenderMgr::GetMultiRenderTarget(eMRTType::Swapchain)->Bind();
 		//// defferd + swapchain merge
 		std::shared_ptr<Material> mergeMaterial = ResMgr::Find<Material>(strKey::Default::material::MergeMaterial);
@@ -115,7 +115,7 @@ namespace mh
 
 		float3 up = tr.Up();
 		float3 right = tr.Right();
-		float3 foward = tr.Foward();
+		float3 foward = tr.Forward();
 
 		MATRIX viewRotate;
 		viewRotate._11 = right.x; viewRotate._12 = up.x; viewRotate._13 = foward.x;
@@ -157,9 +157,18 @@ namespace mh
 		}
 	}
 
+	void Com_Camera::SetScale(float _scale)
+	{
+		if (_scale < 0.f)
+			return;
+
+		mScale = _scale;
+		CreateProjectionMatrix();
+	}
+
 	void Com_Camera::RegisterCameraInRenderer()
 	{
-		define::eSceneType type = SceneManager::GetActiveScene()->GetSceneType();
+		define::eSceneType type = SceneMgr::GetActiveScene()->GetSceneType();
 		RenderMgr::RegisterCamera(type, this);
 	}
 
@@ -177,7 +186,7 @@ namespace mh
 		mTransparentGameObjects.clear();
 		mPostProcessGameObjects.clear();
 
-		Scene* scene = SceneManager::GetActiveScene();
+		Scene* scene = SceneMgr::GetActiveScene();
 		for (int index = 0; index < (uint)define::eLayerType::End; index++)
 		{
 			if (mLayerMasks[index] == true)

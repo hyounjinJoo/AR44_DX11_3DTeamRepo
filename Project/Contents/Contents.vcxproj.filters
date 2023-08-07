@@ -23,6 +23,7 @@
     <ClInclude Include="strKey_Script.h">
       <Filter>Auto Generated</Filter>
     </ClInclude>
+    <ClInclude Include="Script_CameraMove.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Components">
@@ -49,5 +50,6 @@
       <Filter>Auto Generated</Filter>
     </ClCompile>
     <ClCompile Include="Script_TestScript.cpp" />
+    <ClCompile Include="Script_CameraMove.cpp" />
   </ItemGroup>
 </Project>

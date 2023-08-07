@@ -14,7 +14,7 @@
 #include "RenderMgr.h"
 #include "ResMgr.h"
 
-#include "SceneManager.h"
+#include "SceneMgr.h"
 #include "Com_Renderer_Sprite.h"
 
 #include "Com_Transform.h"
@@ -24,10 +24,10 @@
 #include "AtExit.h"
 namespace mh
 {
-	std::vector<Scene*> SceneManager::mScenes = {};
-	Scene* SceneManager::mActiveScene = nullptr;
+	std::vector<Scene*> SceneMgr::mScenes = {};
+	Scene* SceneMgr::mActiveScene = nullptr;
 
-	void SceneManager::Init()
+	void SceneMgr::Init()
 	{
 		AtExit::AddFunc(Release);
 
@@ -47,27 +47,27 @@ namespace mh
 		}
 	}
 
-	void SceneManager::Update()
+	void SceneMgr::Update()
 	{
 		mActiveScene->Update();
 	}
 
-	void SceneManager::FixedUpdate()
+	void SceneMgr::FixedUpdate()
 	{
 		mActiveScene->FixedUpdate();
 	}
 
-	void SceneManager::Render()
+	void SceneMgr::Render()
 	{
 		mActiveScene->Render();
 	}
 	
-	void SceneManager::Destroy()
+	void SceneMgr::Destroy()
 	{
 		mActiveScene->Destroy();
 	}
 
-	void SceneManager::Release()
+	void SceneMgr::Release()
 	{
 		for (Scene* scene : mScenes)
 		{
@@ -75,7 +75,7 @@ namespace mh
 			scene = nullptr;
 		}
 	}
-	void SceneManager::LoadScene(eSceneType _Type)
+	void SceneMgr::LoadScene(eSceneType _Type)
 	{
 		if (mActiveScene)
 			mActiveScene->OnExit();

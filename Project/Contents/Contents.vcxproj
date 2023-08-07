@@ -183,6 +183,7 @@
     <ClInclude Include="Com_MyRenderer.h" />
     <ClInclude Include="ContentsClassInitializer.h" />
     <ClInclude Include="PCH_Contents.h" />
+    <ClInclude Include="Script_CameraMove.h" />
     <ClInclude Include="Script_TestScript.h" />
     <ClInclude Include="strKey_Component.h" />
     <ClInclude Include="strKey_Script.h" />
@@ -199,6 +200,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="Script_CameraMove.cpp" />
     <ClCompile Include="Script_TestScript.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

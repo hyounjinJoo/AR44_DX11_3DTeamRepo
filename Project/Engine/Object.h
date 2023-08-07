@@ -2,14 +2,14 @@
 #include "Scene.h"
 #include "Layer.h"
 #include "GameObject.h"
-#include "SceneManager.h"
+#include "SceneMgr.h"
 #include "Com_Transform.h"
 
 namespace mh::object
 {
 	inline void Instantiate(define::eLayerType _type, GameObject* _pObj)
 	{
-		Scene* scene = SceneManager::GetActiveScene();
+		Scene* scene = SceneMgr::GetActiveScene();
 		Layer& layer = scene->GetLayer(_type);
 		layer.AddGameObject(_pObj);
 		_pObj->Init();
@@ -19,7 +19,7 @@ namespace mh::object
 	static T* Instantiate(define::eLayerType _type)
 	{
 		T* gameObject = new T();
-		Scene* scene = SceneManager::GetActiveScene();
+		Scene* scene = SceneMgr::GetActiveScene();
 		Layer& layer = scene->GetLayer(_type);
 		layer.AddGameObject(gameObject);
 		gameObject->Init();
@@ -42,7 +42,7 @@ namespace mh::object
 	static T* Instantiate(define::eLayerType _type, Com_Transform* _parent)
 	{
 		T* gameObject = new T();
-		Scene* scene = SceneManager::GetActiveScene();
+		Scene* scene = SceneMgr::GetActiveScene();
 		Layer& layer = scene->GetLayer(_type);
 		layer.AddGameObject(gameObject);
 
@@ -56,7 +56,7 @@ namespace mh::object
 	static T* Instantiate(define::eLayerType _type, float3 _position, float3 _rotation)
 	{
 		T* gameObject = new T();
-		Scene* scene = SceneManager::GetActiveScene();
+		Scene* scene = SceneMgr::GetActiveScene();
 		Layer& layer = scene->GetLayer(_type);
 		layer.AddGameObject(gameObject);
 
@@ -71,7 +71,7 @@ namespace mh::object
 	static T* Instantiate(define::eLayerType _type, float3 _position, float3 _rotation, Com_Transform* _parent)
 	{
 		T* gameObject = new T();
-		Scene* scene = SceneManager::GetActiveScene();
+		Scene* scene = SceneMgr::GetActiveScene();
 		Layer& layer = scene->GetLayer(_type);
 		layer.AddGameObject(gameObject);
 

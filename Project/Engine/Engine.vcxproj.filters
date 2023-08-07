@@ -40,9 +40,6 @@
     <Filter Include="Scene\Layer">
       <UniqueIdentifier>{1e71bc42-a7cc-46d6-9577-a9d25d0f359c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Scene\Manager">
-      <UniqueIdentifier>{ed02c5d8-b13c-4afe-85b6-3e56a722014f}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Resource\Prefab">
       <UniqueIdentifier>{b366b499-a62e-4505-9f52-19a691c5fba5}</UniqueIdentifier>
     </Filter>
@@ -201,9 +198,6 @@
     <ClCompile Include="Scene.cpp">
       <Filter>Scene\Base</Filter>
     </ClCompile>
-    <ClCompile Include="SceneManager.cpp">
-      <Filter>Scene\Manager</Filter>
-    </ClCompile>
     <ClCompile Include="Prefab.cpp">
       <Filter>Resource\Prefab</Filter>
     </ClCompile>
@@ -332,6 +326,9 @@
       <Filter>Resource\Mesh</Filter>
     </ClCompile>
     <ClCompile Include="FBXLoader.cpp" />
+    <ClCompile Include="SceneMgr.cpp">
+      <Filter>Manager</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application.h">
@@ -390,9 +387,6 @@
     </ClInclude>
     <ClInclude Include="Scene.h">
       <Filter>Scene\Base</Filter>
-    </ClInclude>
-    <ClInclude Include="SceneManager.h">
-      <Filter>Scene\Manager</Filter>
     </ClInclude>
     <ClInclude Include="Prefab.h">
       <Filter>Resource\Prefab</Filter>
@@ -558,6 +552,9 @@
       <Filter>Resource\Mesh</Filter>
     </ClInclude>
     <ClInclude Include="FBXLoader.h" />
+    <ClInclude Include="SceneMgr.h">
+      <Filter>Manager</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="cpp.hint">

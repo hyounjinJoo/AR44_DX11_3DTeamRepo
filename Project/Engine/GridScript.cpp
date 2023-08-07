@@ -6,7 +6,7 @@
 #include "Application.h"
 #include "ConstBuffer.h"
 #include "RenderMgr.h"
-#include "SceneManager.h"
+#include "SceneMgr.h"
 
 extern mh::Application gApplication;
 
@@ -28,7 +28,7 @@ namespace mh
 
 	void GridScript::Init()
 	{
-		eSceneType type = SceneManager::GetActiveScene()->GetSceneType();
+		eSceneType type = SceneMgr::GetActiveScene()->GetSceneType();
 		mCamera = RenderMgr::GetCamera(type, 0);
 	}
 

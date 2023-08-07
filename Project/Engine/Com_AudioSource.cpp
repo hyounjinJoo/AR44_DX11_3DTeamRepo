@@ -84,7 +84,7 @@ namespace mh
 	{
 		Com_Transform& tr = GetOwner()->GetTransform();
 		float3 pos = tr.GetPosition();
-		float3 foward = tr.Foward();
+		float3 foward = tr.Forward();
 
 		mAudioClip->Set3DAttributes(pos, foward);
 	}

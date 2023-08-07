@@ -5,14 +5,16 @@
 #include "Application.h"
 #include "AtExit.h"
 
-extern mh::Application gApplication;
+
 
 namespace mh
 {
 	
 
 	std::vector<InputMgr::tKey> InputMgr::mKeys{};
-	float2 InputMgr::mMousPosition{};
+	float2 InputMgr::mMousePos{};
+	float2 InputMgr::mMousePosPrev{};
+	float2 InputMgr::mMouseDir{};
 	int ASCII[(uint)eKeyCode::END] =
 	{
 		//Alphabet
@@ -83,11 +85,17 @@ namespace mh
 				}
 			}
 			
+			//Mouse 위치 갱신
+			mMousePosPrev = mMousePos;
+
 			POINT mousePos = {};
 			GetCursorPos(&mousePos);
-			ScreenToClient(gApplication.GetHwnd(), &mousePos);
-			mMousPosition.x = static_cast<float>(mousePos.x);
-			mMousPosition.y = static_cast<float>(mousePos.y);
+			ScreenToClient(Application::GetHwnd(), &mousePos);
+			mMousePos.x = static_cast<float>(mousePos.x);
+			mMousePos.y = static_cast<float>(mousePos.y);
+
+			mMouseDir = mMousePos - mMousePosPrev;
+			mMouseDir.y *= -1.f;
 		}
 		else
 		{
@@ -105,6 +113,7 @@ namespace mh
 	void InputMgr::Release()
 	{
 		mKeys.clear();
-		mMousPosition = {};
+		mMousePos = {};
+		mMouseDir = {};
 	}
 }

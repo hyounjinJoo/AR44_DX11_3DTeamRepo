@@ -3,7 +3,7 @@
 
 namespace mh
 {
-	class SceneManager
+	class SceneMgr
 	{
 	public:
 		static void Init();

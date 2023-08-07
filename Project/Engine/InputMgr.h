@@ -51,15 +51,9 @@ namespace mh
 			bool	  bPressed;
 		};
 
-		static __forceinline eKeyState GetKeyState(eKeyCode keyCode) 
-		{ 
-			return mKeys[static_cast<uint>(keyCode)].eState; 
-		}
-
-		static __forceinline float2 GetMousPosition()
-		{
-			return mMousPosition;
-		}
+		static __forceinline eKeyState GetKeyState(eKeyCode keyCode) { return mKeys[static_cast<uint>(keyCode)].eState; }
+		static __forceinline float2 GetMousePos() { return mMousePos; }
+		static __forceinline float2 GetMouseDir() { return mMouseDir; }
 
 		//GetKey()		키를 누르는 시간만큼 true를 반환
 		//GetKeyDown()	키를 눌렀을 때, 딱 한번 true를 반환
@@ -87,6 +81,8 @@ namespace mh
 
 	private:
 		static std::vector<tKey> mKeys;
-		static float2 mMousPosition;
+		static float2 mMousePos;
+		static float2 mMousePosPrev;
+		static float2 mMouseDir;
 	};
 }

@@ -30,11 +30,12 @@ namespace  mh
 		void DisableLayerMasks() { mLayerMasks.reset(); }
 
 		void SetProjectionType(define::eProjectionType _type) { mProjType = _type; CreateProjectionMatrix(); }
+		define::eProjectionType GetProjectionType() const { return mProjType; }
 
 		void CreateProjectionMatrix();
 		void CreateProjectionMatrix(uint ResolutionX, uint ResolutionY);
 		
-
+		void SetScale(float _scale);
 		float GetScale() const { return mScale; }
 		const MATRIX& GetViewMatrix() const { return mView; }
 		const MATRIX& GetProjectionMatrix() const { return mProjection; }

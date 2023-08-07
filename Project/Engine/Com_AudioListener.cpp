@@ -39,7 +39,7 @@ namespace mh
 	{
 		Com_Transform& tr = GetOwner()->GetTransform();
 		float3 pos = tr.GetPosition();
-		float3 foward = tr.Foward();
+		float3 foward = tr.Forward();
 		float3 up = tr.Up();
 
 		float3 vel = { 0.0f, 0.0f, 0.0f };

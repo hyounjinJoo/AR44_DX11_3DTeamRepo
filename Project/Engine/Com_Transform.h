@@ -38,7 +38,7 @@ namespace mh
 		void SetRotation(const float3& _degree) { mRotation = _degree; };
 		void SetScale(const float3& _scale) { mScale = _scale; };
 
-		float3 Foward() { return mForward; }
+		float3 Forward() { return mForward; }
 		float3 Right() { return mRight; }
 		float3 Up() { return mUp; }
 

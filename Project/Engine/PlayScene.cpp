@@ -40,7 +40,7 @@ namespace mh
 	{
 		if (InputMgr::GetKeyDown(eKeyCode::N))
 		{
-			SceneManager::LoadScene(eSceneType::Tilte);
+			SceneMgr::LoadScene(eSceneType::Tilte);
 		}
 
 		Scene::Update();
