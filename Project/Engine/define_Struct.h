@@ -4,7 +4,38 @@
 
 namespace mh::define
 {
+	struct tDesc_GPUMgr
+	{
+		UINT ResolutionX;
+		UINT ResolutionY;
+		UINT RefreshRate;
+	};
 
+	struct tDesc_Application
+	{
+		HWND Hwnd;
+		int  LeftWindowPos;
+		int	 TopWindowPos;
+		int  Width;
+		int  Height;
+		tDesc_GPUMgr GPUDesc;
+	};
+
+	struct tUmap_LightHashFunc32
+	{
+		UINT64 operator()(const UINT32& _ukey) const
+		{
+			return static_cast<UINT64>(_ukey);
+		}
+	};
+
+	struct tUmap_LightHashFunc64
+	{
+		UINT64 operator()(const UINT64& _ukey) const
+		{
+			return static_cast<UINT64>(_ukey);
+		}
+	};
 
 	struct tUmap_StringViewHasher
 	{

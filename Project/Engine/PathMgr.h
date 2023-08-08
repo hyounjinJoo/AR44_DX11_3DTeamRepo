@@ -15,11 +15,10 @@ namespace mh
 	public:
 		static void Init();
 		
-
 	public:
-		static const std::filesystem::path& GetAbsolutePath() { return mAbsolutePath; }
-		static const std::filesystem::path& GetRelativePath() { return mRelativePath; }
-		static const std::filesystem::path& GetRelativeResourcePath(eResourceType _eResType) { return mRelativePath_Res[(int)_eResType]; }
+		static const std::filesystem::path& GetAbsContentPath() { return mAbsolutePath; }
+		static const std::filesystem::path& GetRelContentPath() { return mRelativePath; }
+		static const std::filesystem::path& GetRelResourcePath(eResourceType _eResType) { return mRelativePath_Res[(int)_eResType]; }
 
 	private:
 		static void Release();

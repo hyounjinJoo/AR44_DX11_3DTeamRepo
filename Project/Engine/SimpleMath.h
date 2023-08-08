@@ -1,5 +1,4 @@
 #pragma once
-#include "EnginePCH.h"
 
 #if __has_include("DirectXMath.h")
 // In this case, DirectXMath is coming from Windows SDK.
@@ -13,9 +12,11 @@
 using namespace DirectX;
 using namespace DirectX::PackedVector;
 
+
 namespace mh::math
 {
     struct Vector2;
+    struct Vector3;
     struct Vector4;
     struct Matrix;
     struct Quaternion;
@@ -227,6 +228,7 @@ namespace mh::math
 
         // Assignment operators
         Vector3& operator= (const XMVECTORF32& F) noexcept { x = F.f[0]; y = F.f[1]; z = F.f[2]; return *this; }
+
         Vector3& operator+= (const Vector3& V) noexcept;
         Vector3& operator-= (const Vector3& V) noexcept;
         Vector3& operator*= (const Vector3& V) noexcept;
@@ -334,6 +336,7 @@ namespace mh::math
         explicit Vector4(const XMVECTORF32& F) noexcept { this->x = F.f[0]; this->y = F.f[1]; this->z = F.f[2]; this->w = F.f[3]; }
 
         Vector4(const Vector4&) = default;
+        Vector4(const Vector3& _v3, float _w) { this->x = _v3.x; this->y = _v3.y; this->z = _v3.z; this->w = _w; }
         Vector4& operator=(const Vector4&) = default;
 
         Vector4(Vector4&&) = default;
@@ -346,7 +349,8 @@ namespace mh::math
         bool operator != (const Vector4& V) const noexcept;
 
         // Assignment operators
-        Vector4& operator= (const XMVECTORF32& F) noexcept { x = F.f[0]; y = F.f[1]; z = F.f[2]; w = F.f[3]; return *this; }
+        Vector4& operator= (const XMVECTORF32& F) noexcept { x = F.f[0]; y = F.f[1]; z = F.f[2]; w = F.f[3]; return *this; };
+        
         Vector4& operator+= (const Vector4& V) noexcept;
         Vector4& operator-= (const Vector4& V) noexcept;
         Vector4& operator*= (const Vector4& V) noexcept;
@@ -981,3 +985,49 @@ namespace mh::math
 
 #include "SimpleMath.inl"
 }
+
+namespace mh
+{
+    using float2 = math::Vector2;
+    using float3 = math::Vector3;
+    using float4 = math::Vector4;
+    using MATRIX = math::Matrix;
+    using uint = UINT;
+    struct uint2
+    {
+        uint x;
+        uint y;
+    };
+    struct uint3
+    {
+        uint x;
+        uint y;
+        uint z;
+    };
+    struct uint4
+    {
+        uint x;
+        uint y;
+        uint z;
+        uint w;
+    };
+    struct int2
+    {
+        int x;
+        int y;
+    };
+    struct int3
+    {
+        int x;
+        int y;
+        int z;
+    };
+    struct int4
+    {
+        int x;
+        int y;
+        int z;
+        int w;
+    };
+}
+

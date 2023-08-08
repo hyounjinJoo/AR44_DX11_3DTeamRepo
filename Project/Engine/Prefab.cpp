@@ -1,4 +1,4 @@
-#include "EnginePCH.h"
+#include "PCH_Engine.h"
 #include "Prefab.h"
 
 #include "PathMgr.h"
@@ -45,7 +45,7 @@ namespace mh
 
 		//혹시나 경로에 해당하는 폴더 경로가 없을 시에 throw error가 돼서 프로그램이 강제 종료되므로
 		//폴더 경로를 직접 만들어준다.
-		stdfs::path SavePath = PathMgr::GetRelativeResourcePath(GetResType());
+		stdfs::path SavePath = PathMgr::GetRelResourcePath(GetResType());
 		if (false == stdfs::exists(SavePath))
 		{
 			if (false == stdfs::create_directories(SavePath))
@@ -93,7 +93,7 @@ namespace mh
 			return eResult::Fail;
 		}
 
-		stdfs::path LoadPath = PathMgr::GetRelativeResourcePath(GetResType());
+		stdfs::path LoadPath = PathMgr::GetRelResourcePath(GetResType());
 		LoadPath /= _FilePath;
 		LoadPath.replace_extension(".json");
 

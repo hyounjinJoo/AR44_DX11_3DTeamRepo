@@ -9,7 +9,7 @@ namespace mh
 	class ComputeShader : public IShader
 	{
 	public:
-		ComputeShader(UINT _threadGroupX, UINT _threadGroupY, UINT _threadGroupZ);
+		ComputeShader(uint _threadGroupX, uint _threadGroupY, uint _threadGroupZ);
 		ComputeShader();
 		~ComputeShader();
 
@@ -31,12 +31,12 @@ namespace mh
 		Microsoft::WRL::ComPtr<ID3DBlob> mCSBlob;
 		Microsoft::WRL::ComPtr<ID3D11ComputeShader> mCS;
 
-		UINT mThreadGroupCountX;
-		UINT mThreadGroupCountY;
-		UINT mThreadGroupCountZ;
+		uint mThreadGroupCountX;
+		uint mThreadGroupCountY;
+		uint mThreadGroupCountZ;
 
-		UINT mGroupX;
-		UINT mGroupY;
-		UINT mGroupZ;
+		uint mGroupX;
+		uint mGroupY;
+		uint mGroupZ;
 	};
 }

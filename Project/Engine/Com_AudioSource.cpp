@@ -1,4 +1,4 @@
-#include "EnginePCH.h"
+#include "PCH_Engine.h"
 
 #include "Com_AudioSource.h"
 #include "AudioClip.h"
@@ -8,8 +8,15 @@
 #include "json-cpp/json.h"
 #include "ResMgr.h"
 
+#include <Fmod/fmod.hpp>
+#include <Fmod/fmod_studio.hpp>
+#include <Fmod/fmod_common.h>
+#include <Fmod/fmod_codec.h>
+
 namespace mh
 {
+	using namespace math;
+
 	Com_AudioSource::Com_AudioSource()
 		: IComponent(define::eComponentType::AudioSource)
 		, mAudioClip(nullptr)
@@ -32,7 +39,7 @@ namespace mh
 
 		if (mAudioClip)
 		{
-			jVal[JSONKEY(mAudioClip)] = mAudioClip->GetKey();
+			jVal[JSON_KEY(mAudioClip)] = mAudioClip->GetKey();
 		}
 
 		return eResult::Success;
@@ -51,9 +58,9 @@ namespace mh
 		}
 		const Json::Value& jVal = *_pJson;
 
-		if (jVal.isMember(JSONKEY(mAudioClip)))
+		if (jVal.isMember(JSON_KEY(mAudioClip)))
 		{
-			std::string strKey = jVal[JSONKEY(mAudilClip)].asString();
+			std::string strKey = jVal[JSON_KEY(mAudilClip)].asString();
 			mAudioClip = ResMgr::Load<AudioClip>(strKey);
 		}
 
@@ -76,8 +83,8 @@ namespace mh
 	void Com_AudioSource::FixedUpdate()
 	{
 		Com_Transform& tr = GetOwner()->GetTransform();
-		math::Vector3 pos = tr.GetPosition();
-		math::Vector3 foward = tr.Foward();
+		float3 pos = tr.GetPosition();
+		float3 foward = tr.Forward();
 
 		mAudioClip->Set3DAttributes(pos, foward);
 	}

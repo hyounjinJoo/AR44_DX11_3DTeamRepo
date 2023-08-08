@@ -1,4 +1,4 @@
-#include "EnginePCH.h"
+#include "PCH_Engine.h"
 #include "ComMgr.h"
 
 #include "AtExit.h"
@@ -31,7 +31,7 @@ namespace mh
 
 	void ComMgr::Init()
 	{
-		AtExit::AddFunc(std::bind(Release));
+		AtExit::AddFunc(ComMgr::Release);
 	}
 	void ComMgr::Release()
 	{

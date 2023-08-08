@@ -1,4 +1,4 @@
-#include "EnginePCH.h"
+#include "PCH_Engine.h"
 
 #include "Com_Light.h"
 #include "Com_Transform.h"
@@ -10,9 +10,7 @@
 
 #include "ConstBuffer.h"
 
-
 #include "json-cpp/json.h"
-
 
 namespace mh
 {
@@ -56,7 +54,7 @@ namespace mh
 
 		Json::Value& jVal = *_pJVal;
 
-		Json::MHSaveValue(_pJVal, JSONVAL(mAttribute));
+		Json::MHSaveValue(_pJVal, JSON_KEY_PAIR(mAttribute));
 
 		return eResult::Success;
 	}
@@ -77,12 +75,12 @@ namespace mh
 			return result;
 		}
 	
-		Json::MHLoadValue(_pJVal, JSONVAL(mAttribute));
+		Json::MHLoadValue(_pJVal, JSON_KEY_PAIR(mAttribute));
 
 		SetType(mAttribute.type);
 
 		//불러오기 실패 시 기본값으로 적용
-		if (false == Json::MHLoadValue(_pJVal, JSONVAL(mAttribute.type)))
+		if (false == Json::MHLoadValue(_pJVal, JSON_KEY_PAIR(mAttribute.type)))
 		{
 			mAttribute.type = eLightType::Directional;
 		}
@@ -106,12 +104,12 @@ namespace mh
 
 		if (eLightType::Point == mAttribute.type)
 		{
-			tr.SetScale(Vector3(mAttribute.radius * 5.f, mAttribute.radius * 5.f, mAttribute.radius * 5.f));
+			tr.SetScale(float3(mAttribute.radius * 5.f, mAttribute.radius * 5.f, mAttribute.radius * 5.f));
 		}
 
-		Vector3 position = tr.GetPosition();
-		mAttribute.position = Vector4(position.x, position.y, position.z, 1.0f);
-		mAttribute.direction = Vector4(tr.Foward().x, tr.Foward().y, tr.Foward().z, 0.0f);
+		float3 position = tr.GetPosition();
+		mAttribute.position = float4(position.x, position.y, position.z, 1.0f);
+		mAttribute.direction = float4(tr.Forward().x, tr.Forward().y, tr.Forward().z, 0.0f);
 
 		RenderMgr::PushLightAttribute(mAttribute);
 	}
@@ -129,7 +127,7 @@ namespace mh
 		ConstBuffer* cb = RenderMgr::GetConstBuffer(eCBType::Light);
 
 		LightCB data = {};
-		data.NumberOfLight = (UINT)RenderMgr::GetLights().size();
+		data.NumberOfLight = (uint)RenderMgr::GetLights().size();
 		data.IndexOfLight = mIndex;
 
 		cb->SetData(&data);

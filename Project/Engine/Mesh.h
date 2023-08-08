@@ -4,33 +4,44 @@
 
 namespace mh
 {
-	using namespace mh::math;
+	using namespace mh;
 	struct Vertex2D
 	{
-		Vector4 Pos;
-		Vector4 Color;
-		Vector2 UV;
+		float4 Pos;
+		float4 Color;
+		float2 UV;
 	};
 	struct Vertex3D
 	{
-		Vector4 Pos;
-		Vector4 Color;
-		Vector2 UV;
-		Vector3 Tangent;
-		Vector3 BiNormal;
-		Vector3 Normal;
+		float4 Pos;
+		float4 Color;
+		float2 UV;
+		float3 Tangent;
+		float3 BiNormal;
+		float3 Normal;
 	};
 
+	struct tIndexInfo
+	{
+		ComPtr<ID3D11Buffer>    IndexBuffer;
+		D3D11_BUFFER_DESC       tIBDesc;
+		UINT				    IdxCount;
+		void*					 pIdxSysMem;
+	};
+
+	class FBXLoader;
 	class Mesh : public IRes 
 	{
 	public:
 		Mesh();
 		virtual ~Mesh();
 
+		static std::shared_ptr<Mesh> CreateFromContainer(FBXLoader* _loader);
+
 		virtual eResult Load(const std::filesystem::path& _path) override;
 
 		template <typename Vertex>
-		inline bool Create(const std::vector<Vertex>& _vecVtx, const std::vector<UINT>& _vecIdx);
+		inline bool Create(const std::vector<Vertex>& _vecVtx, const std::vector<uint>& _vecIdx);
 
 		template <typename Vertex>
 		inline bool CreateVertexBuffer(const std::vector<Vertex>& _vecVtx);
@@ -38,24 +49,27 @@ namespace mh
 
 		bool CreateIndexBuffer(void* _data, size_t _count);
 
-		void BindBuffer() const;
-		void Render() const;
-		void RenderInstanced(UINT _count) const;
+		void BindBuffer(UINT _subSet = 0u) const;
+		void Render(UINT _subSet = 0u) const;
+		
+		void RenderInstanced(UINT _subSet, UINT _instanceCount) const;
+
+		const std::vector<Vertex3D> GetVertices() { return mVertices; }
+		UINT GetSubsetCount() { return (UINT)mIndexInfos.size(); }
 
 	private:
 		Microsoft::WRL::ComPtr<ID3D11Buffer> mVertexBuffer;
 		D3D11_BUFFER_DESC mVBDesc;
-		UINT mVertexByteStride;
-		UINT mVertexCount;
+		uint mVertexByteStride;
+		uint mVertexCount;
+		std::vector<Vertex3D> mVertices;
 
-		Microsoft::WRL::ComPtr<ID3D11Buffer> mIndexBuffer;
-		D3D11_BUFFER_DESC mIBDesc;
-		UINT mIndexCount;
+		std::vector<tIndexInfo>		mIndexInfos;
 	};
 
 
 	template<typename Vertex>
-	inline bool Mesh::Create(const std::vector<Vertex>& _vecVtx, const std::vector<UINT>& _vecIdx)
+	inline bool Mesh::Create(const std::vector<Vertex>& _vecVtx, const std::vector<uint>& _vecIdx)
 	{
 		if (false == CreateVertexBuffer((void*)_vecVtx.data(), sizeof(Vertex), _vecVtx.size()))
 		{

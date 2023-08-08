@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClInclude Include="PCH_ContentsJH.h" />
+    <ClInclude Include="Com_TestJH.h" />
+    <ClInclude Include="Scene_TestJH.h" />
+    <ClInclude Include="Script_TestJH.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="PCH_ContentsJH.cpp" />
+    <ClCompile Include="Com_TestJH.cpp" />
+    <ClCompile Include="Scene_TestJH.cpp" />
+    <ClCompile Include="Script_TestJH.cpp" />
+  </ItemGroup>
+</Project>

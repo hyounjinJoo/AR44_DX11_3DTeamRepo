@@ -1,4 +1,4 @@
-#include "EnginePCH.h"
+#include "PCH_Engine.h"
 #include "PathMgr.h"
 
 #include "AtExit.h"
@@ -16,12 +16,12 @@ namespace mh
 		mAbsolutePath = std::filesystem::current_path();
 		
 		mRelativePath = ".";
-		mRelativePath /= mh::define::ResRootDirName;
+		mRelativePath /= mh::define::strKey::DirName_Content;
 		
 		for (int i = 0; i < (int)eResourceType::End; ++i)
 		{
 			mRelativePath_Res[i] = mRelativePath;
-			mRelativePath_Res[i] /= mh::define::ArrResName[i];
+			mRelativePath_Res[i] /= mh::define::strKey::ArrResName[i];
 		}
 	}
 	void PathMgr::Release()

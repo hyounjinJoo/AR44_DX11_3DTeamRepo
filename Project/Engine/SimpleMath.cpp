@@ -1,4 +1,4 @@
-#include "EnginePCH.h"
+#include "PCH_Engine.h"
 
 #include "SimpleMath.h"
 
@@ -53,7 +53,7 @@ namespace mh::math
 
 
 	using namespace DirectX;
-	//using namespace mh::math;
+	//
 
 	/****************************************************************************
 	 *

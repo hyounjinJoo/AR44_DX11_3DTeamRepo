@@ -1,40 +1,50 @@
 #pragma once
-#include "EnginePCH.h"
-#include "define_GPU.h"
-#include "GPUMgr.h"
+
+#define WIN32_LEAN_AND_MEAN
+#include <windows.h>
+
+#include "SimpleMath.h"
+#include "define_Struct.h"
 
 namespace mh
 {
 	class Application
 	{
 	public:
-		Application();
-		~Application();
+		//struct tDesc_Application
+		//{
+		//	HWND Hwnd;
+		//	int  LeftWindowPos;
+		//	int	 TopWindowPos;
+		//	int  Width;
+		//	int  Height;
+		//	tDesc_GPUMgr GPUDesc;
+		//};
+		static BOOL Init(const define::tDesc_Application& _AppDesc);
 
-		virtual void Init();
-		virtual void Update();
-		virtual void FixedUpdate();
-		virtual void Render();
-		virtual void Destroy();
+		static void Update();
+		static void FixedUpdate();
+		static void Render();
+		static void Destroy();
 
 		// Running main engine loop
-		void Run();
-		void Present();
-		void Release();
+		static bool Run();
+		static void Present();
+		static void Release();
 
+		//사이즈를 입력하면 조절
+		static void SetWindowPos(int _LeftWindowPos, int _TopWindowPos);
+		static void SetWindowSize(int _Width, int _Height);
+		static int2 GetWIndowSize();
 
-		void SetWindow(HWND _hwnd, UINT _width, UINT _height);
-		void SetHwnd(HWND _hwnd) { mHwnd = _hwnd; }
-		HWND GetHwnd() const { return mHwnd; }
-		UINT GetWidth() const { return mWidth; }
-		UINT GetHeight() const { return mHeight; }
-
+		static HWND GetHwnd() { return mHwnd; }
 	private:
-		bool bInitialized = false;
+		static HWND mHwnd;
+		static HDC  mHdc;
+		static bool mbInitialized;
 
-		HWND mHwnd;
-		HDC mHdc;
-		UINT mHeight;
-		UINT mWidth;
+	public:
+		Application() = delete;
+		~Application() = delete;
 	};
 }
