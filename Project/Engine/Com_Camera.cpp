@@ -1,16 +1,16 @@
 
-#include "EnginePCH.h"
+#include "PCH_Engine.h"
 
 #include "Com_Camera.h"
 #include "Com_Transform.h"
 #include "GameObject.h"
 #include "Application.h"
 #include "RenderMgr.h"
-#include "Scene.h"
-#include "SceneManager.h"
+#include "IScene.h"
+#include "SceneMgr.h"
 #include "Material.h"
 #include "IRenderer.h"
-#include "SceneManager.h"
+#include "SceneMgr.h"
 #include "ResMgr.h"
 
 #include "MultiRenderTarget.h"
@@ -19,13 +19,15 @@ extern mh::Application gApplication;
 
 namespace mh
 {
-	math::Matrix Com_Camera::gView = math::Matrix::Identity;
-	math::Matrix Com_Camera::gInverseView = Matrix::Identity;
-	math::Matrix Com_Camera::gProjection = math::Matrix::Identity;
+	using namespace mh::define;
+
+	MATRIX Com_Camera::gView = MATRIX::Identity;
+	MATRIX Com_Camera::gInverseView = MATRIX::Identity;
+	MATRIX Com_Camera::gProjection = MATRIX::Identity;
 
 	Com_Camera::Com_Camera()
 		: IComponent(define::eComponentType::Camera)
-		, mType(eProjectionType::Orthographic)
+		, mProjType(eProjectionType::None)
 		, mAspectRatio(1.0f)
 		, mNear(1.0f)
 		, mFar(1000.0f)
@@ -40,19 +42,24 @@ namespace mh
 
 	void Com_Camera::Init()
 	{
-
 		RegisterCameraInRenderer();
 	}
 
 	void Com_Camera::Update()
 	{
-
+		
 	}
 
 	void Com_Camera::FixedUpdate()
 	{
+		if (eProjectionType::None == mProjType)
+		{
+			ERROR_MESSAGE_W(L"카메라의 투영행렬 타입을 설정하지 않았습니다.");
+			MH_ASSERT(false);
+			return;
+		}
+
 		CreateViewMatrix();
-		CreateProjectionMatrix();
 
 		RegisterCameraInRenderer();
 	}
@@ -80,7 +87,7 @@ namespace mh
 			Lights[i]->Render();
 		}
 
-		// Foward render
+		// Forward render
 		RenderMgr::GetMultiRenderTarget(eMRTType::Swapchain)->Bind();
 		//// defferd + swapchain merge
 		std::shared_ptr<Material> mergeMaterial = ResMgr::Find<Material>(strKey::Default::material::MergeMaterial);
@@ -99,18 +106,18 @@ namespace mh
 	void Com_Camera::CreateViewMatrix()
 	{
 		Com_Transform& tr = GetOwner()->GetTransform();
-		math::Vector3 pos = tr.GetPosition();
+		float3 pos = tr.GetPosition();
 
 		// Crate Translate view matrix
-		mView = math::Matrix::Identity;
-		mView *= math::Matrix::CreateTranslation(-pos);
+		mView = MATRIX::Identity;
+		mView *= MATRIX::CreateTranslation(-pos);
 		//회전 정보
 
-		math::Vector3 up = tr.Up();
-		math::Vector3 right = tr.Right();
-		math::Vector3 foward = tr.Foward();
+		float3 up = tr.Up();
+		float3 right = tr.Right();
+		float3 foward = tr.Forward();
 
-		math::Matrix viewRotate;
+		MATRIX viewRotate;
 		viewRotate._11 = right.x; viewRotate._12 = up.x; viewRotate._13 = foward.x;
 		viewRotate._21 = right.y; viewRotate._22 = up.y; viewRotate._23 = foward.y;
 		viewRotate._31 = right.z; viewRotate._32 = up.z; viewRotate._33 = foward.z;
@@ -120,39 +127,56 @@ namespace mh
 
 	void Com_Camera::CreateProjectionMatrix()
 	{
-		RECT winRect;
-		GetClientRect(gApplication.GetHwnd(), &winRect);
+		uint2 resolution = GPUMgr::GetResolution();
+		CreateProjectionMatrix(resolution.x, resolution.y);
+	}
 
-		float width = (winRect.right - winRect.left) * mScale;
-		float height = (winRect.bottom - winRect.top) * mScale;
+	void Com_Camera::CreateProjectionMatrix(uint ResolutionX, uint ResolutionY)
+	{
+		float width = (float)ResolutionX * mScale;
+		float height = (float)ResolutionY * mScale;
 		mAspectRatio = width / height;
 
-		if (mType == eProjectionType::Perspective)
+		switch (mProjType)
 		{
-			mProjection = math::Matrix::CreatePerspectiveFieldOfViewLH
+		case eProjectionType::Perspective:
+			mProjection = MATRIX::CreatePerspectiveFieldOfViewLH
 			(
 				XM_2PI / 6.0f
 				, mAspectRatio
 				, mNear
 				, mFar
 			);
+			break;
+		case eProjectionType::Orthographic:
+			mProjection = MATRIX::CreateOrthographicLH(width /*/ 100.0f*/, height /*/ 100.0f*/, mNear, mFar);
+			break;
+		default:
+			MH_ASSERT(false);
+			break;
 		}
-		else
-		{
-			mProjection = math::Matrix::CreateOrthographicLH(width /*/ 100.0f*/, height /*/ 100.0f*/, mNear, mFar);
-		}
+	}
+
+	void Com_Camera::SetScale(float _scale)
+	{
+		if (_scale < 0.f)
+			return;
+
+		mScale = _scale;
+		CreateProjectionMatrix();
 	}
 
 	void Com_Camera::RegisterCameraInRenderer()
 	{
-		define::eSceneType type = SceneManager::GetActiveScene()->GetSceneType();
-		RenderMgr::RegisterCamera(type, this);
+		//define::eSceneType type = SceneMgr::GetActiveScene()->GetSceneType();
+		RenderMgr::RegisterCamera(this);
 	}
 
 	void Com_Camera::TurnLayerMask(define::eLayerType _layer, bool _enable)
 	{
-		mLayerMasks.set((UINT)_layer, _enable);
+		mLayerMasks.set((uint)_layer, _enable);
 	}
+
 
 	void Com_Camera::SortGameObjects()
 	{
@@ -162,8 +186,8 @@ namespace mh
 		mTransparentGameObjects.clear();
 		mPostProcessGameObjects.clear();
 
-		Scene* scene = SceneManager::GetActiveScene();
-		for (int index = 0; index < (UINT)define::eLayerType::End; index++)
+		IScene* scene = SceneMgr::GetActiveScene();
+		for (int index = 0; index < (uint)define::eLayerType::End; index++)
 		{
 			if (mLayerMasks[index] == true)
 			{
@@ -244,7 +268,7 @@ namespace mh
 		if (renderer == nullptr)
 			return;
 
-		std::shared_ptr<Material> material = renderer->GetMaterial();
+		std::shared_ptr<Material> material = renderer->GetMaterial(0);
 		//if (material == nullptr)
 		//	continue;
 

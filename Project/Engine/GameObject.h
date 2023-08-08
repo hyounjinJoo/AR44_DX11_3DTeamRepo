@@ -140,22 +140,27 @@ namespace mh
 	template <typename T>
 	T* GameObject::GetComponent()
 	{
+		T* pCom{};
+
 		if constexpr (std::is_base_of_v<IScript, T>)
 		{
 			const std::string_view name = ComMgr::GetComName<T>();
 			for (size_t i = 0; i < mScripts.size(); ++i)
 			{
 				if (name == mScripts[i]->GetKey())
-					return static_cast<T*>(mScripts[i]);
+				{
+					pCom = static_cast<T*>(mScripts[i]);
+					break;
+				}
 			}
 		}
 		else
 		{
 			eComponentType ComType = GetComponentType<T>();
-			return dynamic_cast<T*>(mComponents[(int)ComType]);
+			pCom = dynamic_cast<T*>(mComponents[(int)ComType]);
 		}
 
-		return nullptr;
+		return pCom;
 	}
 
 

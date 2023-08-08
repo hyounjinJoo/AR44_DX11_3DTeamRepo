@@ -8,6 +8,9 @@ namespace mh
 	{
 	public:
 		Script_Player();
+		Script_Player(const Script_Player& _ohter) = default;
+		CLONE(Script_Player);
+
 		virtual ~Script_Player();
 
 		virtual void Init() override;

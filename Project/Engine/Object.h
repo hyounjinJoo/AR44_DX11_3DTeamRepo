@@ -1,17 +1,25 @@
 #pragma once
-#include "Scene.h"
+#include "IScene.h"
 #include "Layer.h"
 #include "GameObject.h"
-#include "SceneManager.h"
+#include "SceneMgr.h"
 #include "Com_Transform.h"
 
 namespace mh::object
 {
+	inline void Instantiate(define::eLayerType _type, GameObject* _pObj)
+	{
+		IScene* scene = SceneMgr::GetActiveScene();
+		Layer& layer = scene->GetLayer(_type);
+		layer.AddGameObject(_pObj);
+		_pObj->Init();
+	}
+
 	template <typename T>
 	static T* Instantiate(define::eLayerType _type)
 	{
 		T* gameObject = new T();
-		Scene* scene = SceneManager::GetActiveScene();
+		IScene* scene = SceneMgr::GetActiveScene();
 		Layer& layer = scene->GetLayer(_type);
 		layer.AddGameObject(gameObject);
 		gameObject->Init();
@@ -21,7 +29,7 @@ namespace mh::object
 	}
 
 	template <typename T>
-	static T* Instantiate(define::eLayerType _type, Scene* _scene)
+	static T* Instantiate(define::eLayerType _type, IScene* _scene)
 	{
 		T* gameObject = new T();
 		Layer& layer = _scene->GetLayer(_type);
@@ -34,7 +42,7 @@ namespace mh::object
 	static T* Instantiate(define::eLayerType _type, Com_Transform* _parent)
 	{
 		T* gameObject = new T();
-		Scene* scene = SceneManager::GetActiveScene();
+		IScene* scene = SceneMgr::GetActiveScene();
 		Layer& layer = scene->GetLayer(_type);
 		layer.AddGameObject(gameObject);
 
@@ -45,10 +53,10 @@ namespace mh::object
 	}
 
 	template <typename T>
-	static T* Instantiate(define::eLayerType _type, Vector3 _position, Vector3 _rotation)
+	static T* Instantiate(define::eLayerType _type, float3 _position, float3 _rotation)
 	{
 		T* gameObject = new T();
-		Scene* scene = SceneManager::GetActiveScene();
+		IScene* scene = SceneMgr::GetActiveScene();
 		Layer& layer = scene->GetLayer(_type);
 		layer.AddGameObject(gameObject);
 
@@ -60,10 +68,10 @@ namespace mh::object
 	}
 
 	template <typename T>
-	static T* Instantiate(define::eLayerType _type, Vector3 _position, Vector3 _rotation, Com_Transform* _parent)
+	static T* Instantiate(define::eLayerType _type, float3 _position, float3 _rotation, Com_Transform* _parent)
 	{
 		T* gameObject = new T();
-		Scene* scene = SceneManager::GetActiveScene();
+		IScene* scene = SceneMgr::GetActiveScene();
 		Layer& layer = scene->GetLayer(_type);
 		layer.AddGameObject(gameObject);
 

@@ -6,6 +6,7 @@
 #include "../define_Util.h"
 #include "../define_Enum.h"
 #include <wrl.h>
+#include <utility>
 
 namespace Microsoft::WRL
 {
@@ -58,7 +59,7 @@ namespace Json
 	{
 		//컨테이너는 변환 불가
 		static_assert(false == std::is_container_v<T>);
-		return mh::StringConv::Convert_T_to_String(_srcT);
+		return StringConv::Convert_T_to_String(_srcT);
 	}
 
 
@@ -93,7 +94,7 @@ namespace Json
 	{
 		//컨테이너는 변환 불가
 		static_assert(false == std::is_container_v<T>);
-		return mh::StringConv::Convert_String_to_T<T>(_jVal.asString());
+		return StringConv::Convert_String_to_T<T>(_jVal.asString());
 	}
 
 	template <typename T>
@@ -123,7 +124,7 @@ namespace Json
 
 	template <typename T, typename std::enable_if_t<
 		(true == std::is_vector_v<T> ||
-		true == std::_Is_std_array_v<T>)
+		true == std::is_std_array_v<T>)
 		, int>* = nullptr>
 	void MHSaveVector(Json::Value* _pJson, const char* _strKey, const T& _srcT)
 	{
@@ -152,7 +153,7 @@ namespace Json
 	//GetKey()가 있는 클래스 포인터 한정으로 사용가능
 	template <typename T, typename std::enable_if_t<
 		(true == std::is_vector_v<T> ||
-		true == std::_Is_std_array_v<T>)
+		true == std::is_std_array_v<T>)
 		, int>* = nullptr>
 	void MHSaveVectorPtr(Json::Value* _pJson, const char* _strKey, const T& _srcT)
 	{
@@ -296,7 +297,8 @@ namespace Json
 	}
 }
 
-#define JSONKEY(_varName) #_varName
-#define JSONVAL(_varName) #_varName, _varName
+#define JSON_KEY(_varName) #_varName
+
+#define JSON_KEY_PAIR(_varName) #_varName, _varName
 
 

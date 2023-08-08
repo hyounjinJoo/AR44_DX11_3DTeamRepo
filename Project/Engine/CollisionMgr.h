@@ -24,7 +24,7 @@ namespace mh
 		static void Render();
 
 		static void CollisionLayerCheck(define::eLayerType _left, define::eLayerType _right, bool _enable = true);
-		static void LayerCollision(class Scene* _scene, define::eLayerType _left, define::eLayerType _right);
+		static void LayerCollision(class IScene* _scene, define::eLayerType _left, define::eLayerType _right);
 		static void ColliderCollision(ICollider2D* _left, ICollider2D* _right);
 		static bool Intersect(ICollider2D* _left, ICollider2D* _right);
 
@@ -33,7 +33,7 @@ namespace mh
 		static void Release();
 
 	private:
-		static std::bitset<(UINT)define::eLayerType::End> mLayerCollisionMatrix[(UINT)define::eLayerType::End];
+		static std::bitset<(uint)define::eLayerType::End> mLayerCollisionMatrix[(uint)define::eLayerType::End];
 		static std::map<UINT64, bool> mCollisionMap;
 	};
 }

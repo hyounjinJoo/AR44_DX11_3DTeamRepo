@@ -2,13 +2,22 @@
 
 #include "SimpleMath.h"
 
-#include <Fmod/fmod.hpp>
-#include <Fmod/fmod_studio.hpp>
-#include <Fmod/fmod_common.h>
-#include <Fmod/fmod_codec.h>
+//전방선언
+namespace FMOD
+{
+	namespace Studio
+	{
+		class System;
+	}
+	class Sound;
+	class System;
+	class Channel;
+}
 
 namespace mh
 {
+	using namespace math;
+
 	class AudioMgr
 	{
 		friend class Application;
@@ -16,8 +25,8 @@ namespace mh
 		
 		static bool CreateSound(const std::filesystem::path& _fullPath, FMOD::Sound** _sound);
 		static void SoundPlay(FMOD::Sound* _sound, FMOD::Channel** _channel);
-		static void Set3DListenerAttributes(const math::Vector3* _POS, const math::Vector3* _VEL,
-											const math::Vector3* _forward, const math::Vector3* _up);
+		static void Set3DListenerAttributes(const float3* _POS, const float3* _VEL,
+											const float3* _forward, const float3* _up);
 
 	private:
 		static void Init();
