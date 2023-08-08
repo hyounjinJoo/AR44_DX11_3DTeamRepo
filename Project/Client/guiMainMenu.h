@@ -3,19 +3,17 @@
 
 namespace gui
 {
-	class YamYamEditor : public Widget
+	class MainMenu : public Widget
 	{
 	public:
-		YamYamEditor();
-		~YamYamEditor();
+		MainMenu();
+		virtual ~MainMenu();
 
 		virtual void FixedUpdate() override;
 		virtual void Update() override;
 		virtual void LateUpdate() override;
 
 	private:
-		bool mbPadding;
-		bool mbFullscreen;
-		ImGuiDockNodeFlags mDockspace_flags;
+
 	};
 }

@@ -3,6 +3,7 @@
 #include "guiEditorObject.h"
 #include "guiWidget.h"
 #include <Engine/define_GPU.h>
+#include <Engine/define_Struct.h>
 
 namespace gui
 {
@@ -17,6 +18,9 @@ namespace gui
 
 		template<typename T>
 		static T* GetWidget(const std::string& name);
+
+		static const std::unordered_map<std::string, Widget*, mh::define::tUmap_StringViewHasher, std::equal_to<>>&
+			GetWidgets() { return mWidgets; }
 
 
 	private:
@@ -36,11 +40,12 @@ namespace gui
 
 
 	private:
-		static std::map<std::string, Widget*> mWidgets;
+		static std::unordered_map<std::string, Widget*, mh::define::tUmap_StringViewHasher, std::equal_to<>> mWidgets;
+
 		static std::vector<EditorObject*> mEditorObjects;
 		static std::vector<DebugObject*> mDebugObjects;
 
-		static class YamYamEditor* mYamYamEditor;
+		static class MainMenu* mEditor;
 		static bool mbEnable;
 		static bool mbInitialized;
 

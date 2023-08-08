@@ -9,8 +9,8 @@
 namespace gui
 {
 	Game::Game()
+		: Widget("Game")
 	{
-		SetKey("Game");
 	}
 
 	Game::~Game()

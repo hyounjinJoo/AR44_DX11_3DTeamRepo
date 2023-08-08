@@ -7,8 +7,8 @@ namespace gui
 	class IRes : public Widget
 	{
 	public:
-		IRes();
-		~IRes();
+		IRes(const std::string_view _strKey);
+		virtual ~IRes();
 
 		virtual void FixedUpdate() override;
 		

@@ -7,7 +7,7 @@ namespace gui
 	{
 	public:
 		Texture();
-		~Texture();
+		virtual ~Texture();
 
 		virtual void Update() override;
 	};

@@ -18,8 +18,9 @@ namespace gui
 			Dead,
 		};
 
-		Widget();
+		Widget(const std::string_view _strKey);
 		virtual ~Widget();
+
 
 		virtual void FixedUpdate();
 		virtual void Update();

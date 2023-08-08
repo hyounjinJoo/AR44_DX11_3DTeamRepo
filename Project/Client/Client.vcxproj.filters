@@ -82,7 +82,7 @@
     <ClInclude Include="guiProject.h">
       <Filter>View</Filter>
     </ClInclude>
-    <ClInclude Include="guiYamYamEditor.h">
+    <ClInclude Include="guiMainMenu.h">
       <Filter>View</Filter>
     </ClInclude>
     <ClInclude Include="guiWidget.h">
@@ -132,6 +132,7 @@
       <Filter>main\WindowRes</Filter>
     </ClInclude>
     <ClInclude Include="ImGuiMgr.h" />
+    <ClInclude Include="guiGraphicsShaderEditor.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -170,7 +171,7 @@
     <ClCompile Include="guiProject.cpp">
       <Filter>View</Filter>
     </ClCompile>
-    <ClCompile Include="guiYamYamEditor.cpp">
+    <ClCompile Include="guiMainMenu.cpp">
       <Filter>View</Filter>
     </ClCompile>
     <ClCompile Include="guiWidget.cpp">
@@ -217,6 +218,7 @@
       <Filter>main</Filter>
     </ClCompile>
     <ClCompile Include="ImGuiMgr.cpp" />
+    <ClCompile Include="guiGraphicsShaderEditor.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="MHW.ico">

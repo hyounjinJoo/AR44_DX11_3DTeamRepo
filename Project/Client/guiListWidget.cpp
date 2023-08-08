@@ -6,10 +6,9 @@
 namespace gui
 {
 	ListWidget::ListWidget()
-		: Widget()
+		: Widget("ListWidget")
 		, mListIndex(-1)
 	{
-		SetKey("ListWidget");
 		SetState(eState::Paused);
 		SetSize(ImVec2(200.0f, 200.0f));
 	}

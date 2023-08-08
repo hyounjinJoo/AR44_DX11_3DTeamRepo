@@ -4,7 +4,8 @@
 
 namespace gui
 {
-	IRes::IRes()
+	IRes::IRes(const std::string_view _strKey)
+		: Widget(_strKey)
 	{
 
 	}

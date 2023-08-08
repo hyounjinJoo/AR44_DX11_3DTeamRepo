@@ -11,7 +11,7 @@ namespace gui
 	{
 	public:
 		Hierarchy();
-		~Hierarchy();
+		virtual ~Hierarchy();
 
 		virtual void FixedUpdate() override;
 		virtual void Update() override;

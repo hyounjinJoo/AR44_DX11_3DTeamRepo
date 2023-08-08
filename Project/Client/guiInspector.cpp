@@ -16,8 +16,8 @@ namespace gui
 {
 	using namespace mh::define;
 	Inspector::Inspector()
+		: Widget("Inspector")
 	{
-		SetKey("Inspector");
 		SetSize(ImVec2(300.0f, 100.0f));
 		
 		mComponents.resize((UINT)eComponentType::END);

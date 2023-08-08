@@ -6,6 +6,7 @@
 namespace gui
 {
 	Texture::Texture()
+		: IRes("Texture")
 	{
 
 	}

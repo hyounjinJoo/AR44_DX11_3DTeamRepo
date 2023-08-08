@@ -5,8 +5,8 @@
 namespace gui
 {
 	Console::Console()
+		: Widget("Console")
 	{
-		SetKey("Console");
 	}
 
 	Console::~Console()

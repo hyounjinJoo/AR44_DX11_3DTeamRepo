@@ -7,15 +7,15 @@
 
 namespace mh
 {
-	UINT32 Entity::gNextID{};
+	UINT32 Entity::gIDNext{};
 
 	Entity::Entity()
-		: mID(++gNextID)
+		: mID(++gIDNext)
 		, mStrKey()
 	{
 	}
 	Entity::Entity(const Entity& _other)
-		: mID(++gNextID)
+		: mID(++gIDNext)
 		, mStrKey(_other.mStrKey)
 	{
 	}
@@ -65,21 +65,16 @@ namespace mh
 
 namespace gui
 {
-	Entity::Entity()
-		: mID(PtrToUint(this))
-		, mStrKey("")
-	{
-	}
+	UINT32 Entity::guiIDNext{};
 
-	Entity::Entity(const char* _strKey)
-		: mID(PtrToUint(this))
+	Entity::Entity(const std::string_view _strKey)
+		: mID(++guiIDNext)
 		, mStrKey(_strKey)
 	{
-
 	}
 
 	Entity::Entity(const Entity& _other)
-		: mID(PtrToUint(this))
+		: mID(++guiIDNext)
 		, mStrKey(_other.mStrKey)
 	{
 	}

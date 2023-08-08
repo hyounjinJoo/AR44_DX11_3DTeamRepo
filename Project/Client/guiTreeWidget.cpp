@@ -5,7 +5,8 @@
 namespace gui
 {
 	TreeWidget::tNode::tNode()
-		: mTreeWidget(nullptr)
+		: Entity("TreeNode")
+		, mTreeWidget(nullptr)
 		, mData(nullptr)
 		, mParent(nullptr)
 		, mbSelected(false)
@@ -67,7 +68,8 @@ namespace gui
 
 	// Tree
 	TreeWidget::TreeWidget()
-		: mRoot(nullptr)
+		: Widget("TreeWIdget")
+		, mRoot(nullptr)
 	{
 
 	}

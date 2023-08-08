@@ -204,6 +204,7 @@ call Copy_DLL.bat $(Configuration)</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="guiGraphicsShaderEditor.h" />
     <ClInclude Include="PCH_Client.h" />
     <ClInclude Include="guiComponent.h" />
     <ClInclude Include="guiConsole.h" />
@@ -218,7 +219,7 @@ call Copy_DLL.bat $(Configuration)</Command>
     <ClInclude Include="guiTexture.h" />
     <ClInclude Include="guiTransform.h" />
     <ClInclude Include="guiTreeWidget.h" />
-    <ClInclude Include="guiYamYamEditor.h" />
+    <ClInclude Include="guiMainMenu.h" />
     <ClInclude Include="imconfig.h" />
     <ClInclude Include="imgui.h" />
     <ClInclude Include="imgui_impl_dx11.h" />
@@ -237,6 +238,7 @@ call Copy_DLL.bat $(Configuration)</Command>
     <ClInclude Include="GameClient.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="guiGraphicsShaderEditor.cpp" />
     <ClCompile Include="PCH_Client.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
@@ -256,7 +258,7 @@ call Copy_DLL.bat $(Configuration)</Command>
     <ClCompile Include="guiTexture.cpp" />
     <ClCompile Include="guiTransform.cpp" />
     <ClCompile Include="guiTreeWidget.cpp" />
-    <ClCompile Include="guiYamYamEditor.cpp" />
+    <ClCompile Include="guiMainMenu.cpp" />
     <ClCompile Include="imgui.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>

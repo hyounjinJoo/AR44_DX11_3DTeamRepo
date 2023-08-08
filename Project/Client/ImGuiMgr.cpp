@@ -19,21 +19,23 @@
 #include "guiGame.h"
 #include "guiHierarchy.h"
 #include "guiProject.h"
-#include "guiYamYamEditor.h"
+#include "guiMainMenu.h"
 #include "guiConsole.h"
 #include "guiListWidget.h"
 
 #include <Engine/AtExit.h>
 #include "GameClient.h"
 
+#include "guiGraphicsShaderEditor.h"
+
 extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 namespace gui
 {
-	std::map<std::string, Widget*> ImGuiMgr::mWidgets{};
+	std::unordered_map<std::string, Widget*, mh::define::tUmap_StringViewHasher, std::equal_to<>> ImGuiMgr::mWidgets{};
 	std::vector<EditorObject*> ImGuiMgr::mEditorObjects{};
 	std::vector<DebugObject*> ImGuiMgr::mDebugObjects{};
 
-	YamYamEditor* ImGuiMgr::mYamYamEditor{};
+	MainMenu* ImGuiMgr::mEditor{};
 	bool ImGuiMgr::mbEnable{};
 	bool ImGuiMgr::mbInitialized;
 
@@ -82,15 +84,15 @@ namespace gui
 
 		ImGuiInitialize();
 
-		mYamYamEditor = new YamYamEditor();
-		//mWidgets.push_back(mYamYamEditor);
+		mEditor = new MainMenu();
+		//mWidgets.push_back(mEditor);
 
 		// Init Widget 
 		Inspector* inspector = new Inspector();
 		mWidgets.insert(std::make_pair("Inspector", inspector));
 
-		Game* game = new Game();
-		mWidgets.insert(std::make_pair("Game", game));
+		//Game* game = new Game();
+		//mWidgets.insert(std::make_pair("Game", game));
 
 		Hierarchy* hierarchy = new Hierarchy();
 		mWidgets.insert(std::make_pair("Hierarchy", hierarchy));
@@ -101,8 +103,11 @@ namespace gui
 		Console* console = new Console();
 		mWidgets.insert(std::make_pair("Console", console));
 
-		ListWidget* listWidget = new ListWidget();
-		mWidgets.insert(std::make_pair("ListWidget", listWidget));
+		GraphicsShaderEditor* Editor = new GraphicsShaderEditor;
+		mWidgets.insert(std::make_pair("Graphics Shader Editor", Editor));
+
+		//ListWidget* listWidget = new ListWidget();
+		//mWidgets.insert(std::make_pair("ListWidget", listWidget));
 
 	}
 
@@ -155,26 +160,23 @@ namespace gui
 		if (mbEnable == false)
 			return;
 
-
-		ImGuiRelease();
-
 		for (auto iter : mWidgets)
 		{
 			delete iter.second;
 			iter.second = nullptr;
 		}
 
-		delete mYamYamEditor;
-		mYamYamEditor = nullptr;
+		SAFE_DELETE(mEditor);
 
 		for (auto obj : mEditorObjects)
 		{
-			delete obj;
-			obj = nullptr;
+			SAFE_DELETE(obj);
 		}
 
-		delete mDebugObjects[(UINT)eColliderType::Rect];
-		delete mDebugObjects[(UINT)eColliderType::Circle];
+		SAFE_DELETE(mDebugObjects[(UINT)eColliderType::Rect]);
+		SAFE_DELETE(mDebugObjects[(UINT)eColliderType::Circle]);
+
+		ImGuiRelease();
 	}
 
 	void ImGuiMgr::DebugRender(mh::tDebugMesh& mesh)
@@ -261,7 +263,7 @@ namespace gui
 
 	void ImGuiMgr::ImGuiRun()
 	{
-		bool show_demo_window = true;
+		bool show_demo_window = false;
 		bool show_another_window = false;
 		ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
 
@@ -281,7 +283,8 @@ namespace gui
 		//	widget->Update();
 		//}
 
-		mYamYamEditor->Render();
+		if(mEditor)
+			mEditor->Render();
 		for (auto iter : mWidgets)
 		{
 			iter.second->Render();

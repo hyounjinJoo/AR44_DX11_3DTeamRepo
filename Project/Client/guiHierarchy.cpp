@@ -16,9 +16,9 @@
 namespace gui
 {
 	Hierarchy::Hierarchy()
-		: mTreeWidget(nullptr)
+		: Widget("Hierarchy")
+		, mTreeWidget(nullptr)
 	{
-		SetKey("Hierarchy");
 
 		mh::int2 winSize = mh::Application::GetWIndowSize();
 		SetSize(ImVec2((float)(winSize.x / 2), (float)(winSize.y / 2)));
@@ -89,7 +89,7 @@ namespace gui
 
 	void Hierarchy::AddGameObject(TreeWidget::tNode* parent, mh::GameObject* gameObject)
 	{
-		std::string name(gameObject->GetName().begin(), gameObject->GetName().end());
+		std::string name(gameObject->GetName());
 
 		TreeWidget::tNode* node = mTreeWidget->AddNode(parent, name, gameObject);
 	}

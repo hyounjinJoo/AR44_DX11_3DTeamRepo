@@ -4,8 +4,8 @@
 
 namespace gui
 {
-	Widget::Widget()
-		: Entity()
+	Widget::Widget(const std::string_view _strKey)
+		: Entity(_strKey)
 		, mState(eState::Active)
 		, mParent(nullptr)
 		, mChilds{}

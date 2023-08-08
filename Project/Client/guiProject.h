@@ -11,7 +11,7 @@ namespace gui
 	{
 	public:
 		Project();
-		~Project();
+		virtual ~Project();
 
 		virtual void FixedUpdate() override;
 		virtual void Update() override;

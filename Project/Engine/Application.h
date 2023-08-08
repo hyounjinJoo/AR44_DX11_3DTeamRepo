@@ -31,6 +31,7 @@ namespace mh
 
 		// Running main engine loop
 		static bool Run();
+
 		static void Present();
 		static void Release();
 
@@ -42,6 +43,8 @@ namespace mh
 		static HWND GetHwnd() { return mHwnd; }
 
 		static void AddDestroyFunc(const std::function<void()>& _Func) { mDestroyFuncs.push_back(_Func); }
+
+		static void ShutDown() { mbInitialized = false; }
 
 	private:
 		static HWND mHwnd;

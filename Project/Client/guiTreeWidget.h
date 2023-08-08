@@ -11,7 +11,7 @@ namespace gui
 		struct tNode : public Entity
 		{
 			tNode();
-			~tNode();
+			virtual ~tNode();
 
 			void Update();
 

@@ -9,11 +9,10 @@
 namespace gui
 {
 	guiComponent::guiComponent(mh::define::eComponentType _type)
-		: mType(_type)
+		: Widget("Component")
+		, mType(_type)
 		, mTarget(nullptr)
 	{
-
-
 	}
 
 	guiComponent::~guiComponent()

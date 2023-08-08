@@ -64,6 +64,8 @@ namespace mh
 		
 		SceneMgr::Init();
 
+		mbInitialized = true;
+
 		return TRUE;
 	}
 
@@ -118,7 +120,7 @@ namespace mh
 		
 		//TODO: Engine 내부에서 종료할 방법 만들기
 		//이걸 false로 반환하면 꺼지도록 짜놓음
-		return true;
+		return mbInitialized;
 	}
 
 	void Application::Present()
@@ -130,6 +132,7 @@ namespace mh
 	{
 		Destroy();
 		ReleaseDC(mHwnd, mHdc);
+		mbInitialized = false;
 	}
 
 	void Application::SetWindowPos(int _LeftWindowPos, int _TopWindowPos)

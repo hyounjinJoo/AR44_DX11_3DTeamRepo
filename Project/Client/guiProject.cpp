@@ -21,9 +21,9 @@ namespace gui
 	using namespace mh::math;
 
 	Project::Project()
-		: mTreeWidget(nullptr)
+		: Widget("Project")
+		, mTreeWidget(nullptr)
 	{
-		SetKey("Project");
 
 		mh::int2 winSize = mh::Application::GetWIndowSize();
 
