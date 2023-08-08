@@ -121,7 +121,8 @@
     </Link>
     <PostBuildEvent>
       <Command>cd $(SolutionDir)
-call Copy_DLL.bat $(Configuration)</Command>
+call Copy_DLL.bat $(Configuration)
+call Copy_HLSL.bat $(Configuration)</Command>
     </PostBuildEvent>
     <FxCompile>
       <HeaderFileOutput>$(ProjectDir)CompiledShaderHeader\%(Filename)_$(Configuration).h</HeaderFileOutput>
@@ -157,7 +158,8 @@ call Copy_DLL.bat $(Configuration)</Command>
     </Link>
     <PostBuildEvent>
       <Command>cd $(SolutionDir)
-call Copy_DLL.bat $(Configuration)</Command>
+call Copy_DLL.bat $(Configuration)
+call Copy_HLSL.bat $(Configuration)</Command>
     </PostBuildEvent>
     <FxCompile>
       <HeaderFileOutput>$(ProjectDir)CompiledShaderHeader\%(Filename)_$(Configuration).h</HeaderFileOutput>
@@ -193,7 +195,8 @@ call Copy_DLL.bat $(Configuration)</Command>
     </PreBuildEvent>
     <PostBuildEvent>
       <Command>cd $(SolutionDir)
-call Copy_DLL.bat $(Configuration)</Command>
+call Copy_DLL.bat $(Configuration)
+call Copy_HLSL.bat $(Configuration)</Command>
     </PostBuildEvent>
     <FxCompile>
       <HeaderFileOutput>$(ProjectDir)CompiledShaderHeader\%(Filename)_$(Configuration).h</HeaderFileOutput>
@@ -233,7 +236,8 @@ call Copy_DLL.bat $(Configuration)</Command>
     </PreBuildEvent>
     <PostBuildEvent>
       <Command>cd $(SolutionDir)
-call Copy_DLL.bat $(Configuration)</Command>
+call Copy_DLL.bat $(Configuration)
+call Copy_HLSL.bat $(Configuration)</Command>
     </PostBuildEvent>
     <FxCompile>
       <HeaderFileOutput>$(ProjectDir)CompiledShaderHeader\%(Filename)_$(Configuration).h</HeaderFileOutput>

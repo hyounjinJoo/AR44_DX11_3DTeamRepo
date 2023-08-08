@@ -2,85 +2,182 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <ClCompile Include="PCH_Contents.cpp" />
-    <ClCompile Include="ContentsClassInitializer_Script.cpp">
+    <ClCompile Include="*.cpp" />
+    <ClCompile Include="PCH_Contents.cpp" />
+    <ClCompile Include="ContentsClassInitializer.cpp" />
+    <ClCompile Include="ContentsClassInitializer_Component.cpp" />
+    <ClCompile Include="ContentsClassInitializer_Scene.cpp" />
+    <ClCompile Include="ContentsClassInitializer_Script.cpp" />
+    <ClCompile Include="PCH_Contents.cpp" />
+    <ClCompile Include="Scene_Play.cpp" />
+    <ClCompile Include="Scene_Title.cpp" />
+    <ClCompile Include="Script_CameraMove.cpp" />
+    <ClCompile Include="Script_TestScript.cpp" />
+    <ClCompile Include="ContentsClassInitializer.cpp" />
+    <ClCompile Include="ContentsClassInitializer_Component.cpp" />
+    <ClCompile Include="ContentsClassInitializer_Scene.cpp" />
+    <ClCompile Include="ContentsClassInitializer_Script.cpp" />
+    <ClCompile Include="PCH_Contents.cpp" />
+    <ClCompile Include="Scene_Play.cpp" />
+    <ClCompile Include="Scene_Title.cpp" />
+    <ClCompile Include="Script_CameraMove.cpp" />
+    <ClCompile Include="Script_TestScript.cpp" />
+    <ClCompile Include="ContentsClassInitializer.cpp" />
+    <ClCompile Include="ContentsClassInitializer_Component.cpp" />
+    <ClCompile Include="ContentsClassInitializer_Scene.cpp" />
+    <ClCompile Include="ContentsClassInitializer_Script.cpp" />
+    <ClCompile Include="PCH_Contents.cpp" />
+    <ClCompile Include="Scene_Play.cpp" />
+    <ClCompile Include="Scene_Title.cpp" />
+    <ClCompile Include="Script_CameraMove.cpp" />
+    <ClCompile Include="Script_TestScript.cpp" />
+    <ClCompile Include="ContentsClassInitializer.cpp" />
+    <ClCompile Include="ContentsClassInitializer_Component.cpp" />
+    <ClCompile Include="ContentsClassInitializer_Scene.cpp" />
+    <ClCompile Include="ContentsClassInitializer_Script.cpp" />
+    <ClCompile Include="PCH_Contents.cpp" />
+    <ClCompile Include="Scene_Play.cpp" />
+    <ClCompile Include="Scene_Title.cpp" />
+    <ClCompile Include="Script_CameraMove.cpp" />
+    <ClCompile Include="Script_TestScript.cpp" />
+    <ClCompile Include="ContentsClassInitializer.cpp" />
+    <ClCompile Include="ContentsClassInitializer_Component.cpp" />
+    <ClCompile Include="ContentsClassInitializer_Scene.cpp" />
+    <ClCompile Include="ContentsClassInitializer_Script.cpp" />
+    <ClCompile Include="PCH_Contents.cpp" />
+    <ClCompile Include="Scene_Play.cpp" />
+    <ClCompile Include="Scene_Title.cpp" />
+    <ClCompile Include="Script_CameraMove.cpp" />
+    <ClCompile Include="Script_TestScript.cpp" />
+    <ClCompile Include="ContentsClassInitializer.cpp" />
+    <ClCompile Include="ContentsClassInitializer_Component.cpp" />
+    <ClCompile Include="ContentsClassInitializer_Scene.cpp" />
+    <ClCompile Include="ContentsClassInitializer_Script.cpp" />
+    <ClCompile Include="PCH_Contents.cpp" />
+    <ClCompile Include="Scene_Play.cpp" />
+    <ClCompile Include="Scene_Title.cpp" />
+    <ClCompile Include="Script_CameraMove.cpp" />
+    <ClCompile Include="Script_TestScript.cpp" />
+    <ClCompile Include="*.cpp">
       <Filter>Auto Generated</Filter>
     </ClCompile>
-    <ClCompile Include="ContentsClassInitializer_Scene.cpp">
+    <ClCompile Include="*.cpp">
       <Filter>Auto Generated</Filter>
     </ClCompile>
-    <ClCompile Include="ContentsClassInitializer_Component.cpp">
+    <ClCompile Include="*.cpp">
       <Filter>Auto Generated</Filter>
     </ClCompile>
-    <ClCompile Include="ContentsClassInitializer.cpp">
+    <ClCompile Include="*.cpp" />
+    <ClCompile Include="ContentsClassInitializer.cpp" />
+    <ClCompile Include="ContentsClassInitializer_Component.cpp" />
+    <ClCompile Include="ContentsClassInitializer_Scene.cpp" />
+    <ClCompile Include="ContentsClassInitializer_Script.cpp" />
+    <ClCompile Include="PCH_Contents.cpp" />
+    <ClCompile Include="Scene_Play.cpp" />
+    <ClCompile Include="Scene_Title.cpp" />
+    <ClCompile Include="Script_CameraMove.cpp" />
+    <ClCompile Include="Script_TestScript.cpp" />
+    <ClCompile Include="Com_TestJH.cpp" />
+    <ClCompile Include="ContentsClassInitializer.cpp" />
+    <ClCompile Include="ContentsClassInitializer_Component.cpp" />
+    <ClCompile Include="ContentsClassInitializer_Scene.cpp" />
+    <ClCompile Include="ContentsClassInitializer_Script.cpp" />
+    <ClCompile Include="PCH_Contents.cpp" />
+    <ClCompile Include="Scene_Play.cpp" />
+    <ClCompile Include="Scene_Title.cpp" />
+    <ClCompile Include="Script_CameraMove.cpp" />
+    <ClCompile Include="Script_JH.cpp" />
+    <ClCompile Include="Script_TestHJ.cpp" />
+    <ClCompile Include="Script_TestScript.cpp" />
+    <ClCompile Include="Com_TestJH.cpp" />
+    <ClCompile Include="ContentsClassInitializer.cpp" />
+    <ClCompile Include="ContentsClassInitializer_Component.cpp" />
+    <ClCompile Include="ContentsClassInitializer_Scene.cpp" />
+    <ClCompile Include="ContentsClassInitializer_Script.cpp" />
+    <ClCompile Include="PCH_Contents.cpp" />
+    <ClCompile Include="Scene_Play.cpp" />
+    <ClCompile Include="Scene_Title.cpp" />
+    <ClCompile Include="Script_CameraMove.cpp" />
+    <ClCompile Include="Script_JH.cpp" />
+    <ClCompile Include="Script_TestHJ.cpp" />
+    <ClCompile Include="Script_TestScript.cpp" />
+    <ClCompile Include="Com_TestJH.cpp" />
+    <ClCompile Include="ContentsClassInitializer.cpp" />
+    <ClCompile Include="ContentsClassInitializer_Component.cpp" />
+    <ClCompile Include="ContentsClassInitializer_Scene.cpp" />
+    <ClCompile Include="ContentsClassInitializer_Script.cpp" />
+    <ClCompile Include="PCH_Contents.cpp" />
+    <ClCompile Include="Scene_Play.cpp" />
+    <ClCompile Include="Scene_Title.cpp" />
+    <ClCompile Include="Script_CameraMove.cpp" />
+    <ClCompile Include="Script_JH.cpp" />
+    <ClCompile Include="Script_TestHJ.cpp" />
+    <ClCompile Include="Script_TestScript.cpp" />
+    <ClCompile Include="*.cpp" />
+    <ClCompile Include="*.cpp" />
+    <ClCompile Include="*.cpp" />
+    <ClCompile Include="*.cpp" />
+    <ClCompile Include="*.cpp" />
+    <ClCompile Include="*.cpp" />
+    <ClCompile Include="*.cpp">
       <Filter>Init</Filter>
     </ClCompile>
-    <ClCompile Include="Scene_Play.cpp">
-      <Filter>Scene</Filter>
+    <ClCompile Include="*.cpp">
+      <Filter>Auto Generated</Filter>
     </ClCompile>
-    <ClCompile Include="Scene_Title.cpp">
-      <Filter>Scene</Filter>
+    <ClCompile Include="*.cpp">
+      <Filter>Auto Generated</Filter>
     </ClCompile>
-    <ClCompile Include="Script_CameraMove.cpp">
-      <Filter>Script</Filter>
+    <ClCompile Include="*.cpp">
+      <Filter>Auto Generated</Filter>
     </ClCompile>
-    <ClCompile Include="Script_TestScript.cpp">
-      <Filter>Script</Filter>
+    <ClCompile Include="PCH_Contents.cpp">
+      <Filter>PCH</Filter>
     </ClCompile>
-    <ClCompile Include="Com_MyRenderer.cpp">
-      <Filter>Component</Filter>
-    </ClCompile>
+    <ClCompile Include="*.cpp" />
+    <ClCompile Include="*.cpp" />
+    <ClCompile Include="*.cpp" />
+    <ClCompile Include="*.cpp" />
+    <ClCompile Include="*.cpp" />
+    <ClCompile Include="*.cpp" />
+    <ClCompile Include="*.cpp" />
+    <ClCompile Include="*.cpp" />
+    <ClCompile Include="*.cpp" />
+    <ClCompile Include="*.cpp" />
+    <ClCompile Include="*.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="PCH_Contents.h" />
-    <ClInclude Include="strKey_Texture.h">
-      <Filter>Auto Generated</Filter>
-    </ClInclude>
-    <ClInclude Include="strKey_Shader.h">
-      <Filter>Auto Generated</Filter>
-    </ClInclude>
-    <ClInclude Include="strKey_Script.h">
+    <ClInclude Include="strKey_Component.h">
       <Filter>Auto Generated</Filter>
     </ClInclude>
     <ClInclude Include="strKey_Scene.h">
       <Filter>Auto Generated</Filter>
     </ClInclude>
-    <ClInclude Include="strKey_Component.h">
+    <ClInclude Include="strKey_Script.h">
+      <Filter>Auto Generated</Filter>
+    </ClInclude>
+    <ClInclude Include="strKey_Shader.h">
+      <Filter>Auto Generated</Filter>
+    </ClInclude>
+    <ClInclude Include="strKey_Texture.h">
       <Filter>Auto Generated</Filter>
     </ClInclude>
     <ClInclude Include="ContentsClassInitializer.h">
       <Filter>Init</Filter>
     </ClInclude>
-    <ClInclude Include="Scene_Play.h">
-      <Filter>Scene</Filter>
-    </ClInclude>
-    <ClInclude Include="Scene_Title.h">
-      <Filter>Scene</Filter>
-    </ClInclude>
-    <ClInclude Include="Script_CameraMove.h">
-      <Filter>Script</Filter>
-    </ClInclude>
-    <ClInclude Include="Script_TestScript.h">
-      <Filter>Script</Filter>
-    </ClInclude>
-    <ClInclude Include="Com_MyRenderer.h">
-      <Filter>Component</Filter>
+    <ClInclude Include="PCH_Contents.h">
+      <Filter>PCH</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Auto Generated">
-      <UniqueIdentifier>{5ba18238-3bda-4b9f-8b4a-cd220921e5f7}</UniqueIdentifier>
+      <UniqueIdentifier>{98e37a8a-a2f3-46dd-91df-a371fc61baca}</UniqueIdentifier>
     </Filter>
     <Filter Include="Init">
-      <UniqueIdentifier>{b6791b63-37e0-413b-a08e-0fae626f8c7f}</UniqueIdentifier>
+      <UniqueIdentifier>{25d192fb-6b9d-4390-a88c-9cd0a2aef150}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Scene">
-      <UniqueIdentifier>{019494e3-1376-4390-a135-e10946f1810d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Component">
-      <UniqueIdentifier>{a4c2e98d-9041-4351-8230-e5918eefd37e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Script">
-      <UniqueIdentifier>{350c030d-2356-4076-800d-1a176e29d23e}</UniqueIdentifier>
+    <Filter Include="PCH">
+      <UniqueIdentifier>{c9d56e49-3de8-4e37-86d5-3e550462f260}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>
