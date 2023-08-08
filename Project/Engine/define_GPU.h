@@ -1,6 +1,13 @@
 #pragma once
+
 #include <wrl.h>
 using Microsoft::WRL::ComPtr;
+namespace Microsoft::WRL
+{
+	template <class T> struct is_ComPtr : std::false_type {};
+	template <class T> struct is_ComPtr<Microsoft::WRL::ComPtr<T>> : std::true_type {};
+	template <class T> inline constexpr bool is_ComPtr_v = is_ComPtr<T>::value;
+}
 
 #include <d3d11.h>
 #include <d3dcompiler.h>
@@ -31,7 +38,7 @@ namespace mh::define
 	constexpr const int MRT_MAX = 8;
 
 	using namespace mh::define;
-	
+
 	enum class eValidationMode
 	{
 		Disabled,
@@ -254,7 +261,7 @@ namespace mh::define
 		float3 position;
 		float3 rotatation;
 		float3 scale;
-		
+
 		float radius;
 		float duration;
 		float time;

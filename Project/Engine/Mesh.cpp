@@ -100,6 +100,14 @@ namespace mh
 	{
 		GPUMgr::Context()->DrawIndexed(mIndexInfos[_subSet].IdxCount, 0, 0);
 	}
+
+	void Mesh::RenderAllMeshes() const
+	{
+		for (size_t i = 0; i < mIndexInfos.size(); ++i)
+		{
+			GPUMgr::Context()->DrawIndexed(mIndexInfos[i].IdxCount, 0, 0);
+		}
+	}
 	
 	void Mesh::RenderInstanced(UINT _subSet, UINT _instanceCount) const
 	{

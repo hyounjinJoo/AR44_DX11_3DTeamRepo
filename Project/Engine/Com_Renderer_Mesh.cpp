@@ -39,21 +39,27 @@ namespace mh
 		//GetMaterial()->Clear();
 		GetOwner()->GetTransform().SetConstBuffer();
 
-		GetMesh()->BindBuffer();
-		GetMaterial(0)->Bind();
+		for (UINT i = 0u; i < GetMesh()->GetSubsetCount(); ++i)
+		{
+			GetMesh()->BindBuffer(i);
+			GetMaterial(i)->Bind();
 
-		//Com_Animator* animator = GetOwner()->GetComponent<Com_Animator>();
-		//if (animator)
-		//{
-		//	animator->Binds();
-		//}
+			GetMesh()->Render(i);
 
-		GetMesh()->Render();
-		GetMaterial(0)->Clear();
+			//Com_Animator* animator = GetOwner()->GetComponent<Com_Animator>();
+			//if (animator)
+			//{
+			//	animator->Binds();
+			//}
 
-		//if (animator)
-		//{
-		//	animator->Clear();
-		//}
+			GetMaterial(i)->Clear();
+
+			//if (animator)
+			//{
+			//	animator->Clear();
+			//}
+		}
+
+
 	}
 }

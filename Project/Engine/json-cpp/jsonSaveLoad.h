@@ -8,12 +8,6 @@
 #include <wrl.h>
 #include <utility>
 
-namespace Microsoft::WRL
-{
-	template <class T> struct is_ComPtr : std::false_type {};
-	template <class T> struct is_ComPtr<Microsoft::WRL::ComPtr<T>> : std::true_type {};
-	template <class T> inline constexpr bool is_ComPtr_v = is_ComPtr<T>::value;
-}
 
 namespace Json
 {

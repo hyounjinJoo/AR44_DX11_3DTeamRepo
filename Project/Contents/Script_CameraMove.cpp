@@ -12,7 +12,7 @@ namespace mh
 {
 	Script_CameraMove::Script_CameraMove()
 		: mCamera()
-		, mCamSpeed(100.f)
+		, mCamSpeed(5000.f)
 	{
 	}
 
@@ -151,8 +151,8 @@ namespace mh
 		if (InputMgr::GetKey(eKeyCode::RBTN))
 		{
 			float2 vMouseDir = InputMgr::GetMouseDir();
-			vRot.y += TimeMgr::DeltaTime() * vMouseDir.x * 100.f;
-			vRot.x -= TimeMgr::DeltaTime() * vMouseDir.y * 100.f;
+			vRot.y += TimeMgr::DeltaTime() * vMouseDir.x;
+			vRot.x -= TimeMgr::DeltaTime() * vMouseDir.y;
 		}
 
 		tf.SetRelativePos(vPos);

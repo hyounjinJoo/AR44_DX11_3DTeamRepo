@@ -51,6 +51,7 @@ namespace mh
 
 		void BindBuffer(UINT _subSet = 0u) const;
 		void Render(UINT _subSet = 0u) const;
+		void RenderAllMeshes() const;
 		
 		void RenderInstanced(UINT _subSet, UINT _instanceCount) const;
 

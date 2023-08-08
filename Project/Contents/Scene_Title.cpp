@@ -112,6 +112,7 @@ namespace mh
 		{
 			std::shared_ptr<MeshData> data = ResMgr::Load<MeshData>("House.fbx");
 			GameObject* obj = data->Instantiate();
+			obj->SetName("fbxTextObj");
 			obj->AddComponent<Script_Player>();
 			object::Instantiate(eLayerType::Player, obj);
 
