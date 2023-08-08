@@ -38,7 +38,7 @@ namespace mh
 	ComPtr<ID3D11RasterizerState>		RenderMgr::mRasterizerStates[(uint)eRSType::End]{};
 	ComPtr<ID3D11DepthStencilState>		RenderMgr::mDepthStencilStates[(uint)eDSType::End]{};
 	ComPtr<ID3D11BlendState>			RenderMgr::mBlendStates[(uint)eBSType::End]{};
-	std::vector<Com_Camera*>			RenderMgr::mCameras[(uint)eSceneType::End]{};
+	std::vector<Com_Camera*>			RenderMgr::mCameras{};
 	std::vector<tDebugMesh>				RenderMgr::mDebugMeshes{};
 
 	std::unique_ptr<MultiRenderTarget>	RenderMgr::mMultiRenderTargets[(uint)eMRTType::End]{};
@@ -97,13 +97,12 @@ namespace mh
 		{
 			mBlendStates[i] = nullptr;
 		}
-		for (int i = 0; i < (int)eSceneType::End; ++i)
+
+		for (size_t i = 0; i < mCameras.size(); ++i)
 		{
-			for (size_t j = 0; j < mCameras[i].size(); ++i)
-			{
-				SAFE_DELETE(mCameras[i][j]);
-			}
+			SAFE_DELETE(mCameras[i]);
 		}
+
 		mDebugMeshes.clear();
 		mLightAttributes.clear();
 		mLightsBuffer.reset();
@@ -123,8 +122,7 @@ namespace mh
 		BindNoiseTexture();
 		BindLights();
 
-		eSceneType type = SceneMgr::GetActiveScene()->GetSceneType();
-		for (Com_Camera* cam : mCameras[(uint)type])
+		for (Com_Camera* cam : mCameras)
 		{
 			if (cam == nullptr)
 				continue;
@@ -132,7 +130,7 @@ namespace mh
 			cam->Render();
 		}
 
-		mCameras[(uint)type].clear();
+		mCameras.clear();
 		mLightAttributes.clear();
 	}
 
@@ -243,14 +241,11 @@ namespace mh
 			return false;
 		}
 
-		for (int i = 0; i < (int)eSceneType::End; ++i)
+		for (auto* iter : mCameras)
 		{
-			for (auto* iter : mCameras[i])
+			if (iter)
 			{
-				if (iter)
-				{
-					iter->CreateProjectionMatrix(_ResolutionX, _ResolutionY);
-				}
+				iter->CreateProjectionMatrix(_ResolutionX, _ResolutionY);
 			}
 		}
 

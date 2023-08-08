@@ -117,9 +117,9 @@ namespace mh
 		static ComPtr<ID3D11DepthStencilState> GetDepthStencilState(eDSType _Type) { return mDepthStencilStates[(int)_Type]; }
 		
 		static void SetMainCamera(Com_Camera* _pCam) { mMainCamera = _pCam; }
-		static inline Com_Camera* GetCamera(eSceneType _Type, uint _Idx);
+		static inline Com_Camera* GetCamera(uint _Idx);
 
-		static void RegisterCamera(eSceneType _Type, Com_Camera* _pCam) { mCameras[(int)_Type].push_back(_pCam); }
+		static void RegisterCamera(Com_Camera* _pCam) { mCameras.push_back(_pCam); }
 		
 		static void AddDebugMesh(const tDebugMesh& _DebugMesh) { mDebugMeshes.push_back(_DebugMesh); }
 
@@ -178,7 +178,7 @@ namespace mh
 		static ComPtr<ID3D11DepthStencilState>	mDepthStencilStates[(uint)eDSType::End];
 		static ComPtr<ID3D11BlendState>			mBlendStates[(uint)eBSType::End];
 		
-		static std::vector<Com_Camera*>			mCameras[(uint)eSceneType::End];
+		static std::vector<Com_Camera*>			mCameras;
 		static std::vector<tDebugMesh>			mDebugMeshes;
 
 		static std::unique_ptr<MultiRenderTarget> mMultiRenderTargets[(uint)eMRTType::End];
@@ -192,11 +192,11 @@ namespace mh
 	};
 
 
-	inline Com_Camera* RenderMgr::GetCamera(eSceneType _Type, uint _Idx)
+	inline Com_Camera* RenderMgr::GetCamera(uint _Idx)
 	{
 		Com_Camera* pCam = nullptr;
-		if (mCameras[(int)_Type].size() > (size_t)_Idx)
-			pCam = mCameras[(int)_Type][_Idx];
+		if (mCameras.size() > (size_t)_Idx)
+			pCam = mCameras[_Idx];
 
 		return pCam;
 	}

@@ -32,12 +32,6 @@ namespace mh::define
 	inline bool eResultSuccess(eResult _result) { return ((int)_result >= (int)eResult::Success); }
 	inline bool eResultFail(eResult _result) { return ((int)_result < (int)eResult::Success); }
 
-	enum class eSceneType
-	{
-		Tilte,
-		Play,
-		End,
-	};
 
 	enum class eLayerType
 	{

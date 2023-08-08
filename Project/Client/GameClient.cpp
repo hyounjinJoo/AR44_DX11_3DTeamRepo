@@ -6,6 +6,8 @@
 
 #include <Engine/Application.h>
 
+#include <Contents/ContentsClassInitializer.h>
+
 #include "ImGuiMgr.h"
 
 HINSTANCE GameClient::mInstance;
@@ -66,6 +68,7 @@ BOOL GameClient::Init(const GameClientDesc& _Desc)
     AppDesc.GPUDesc = _Desc.GPUDesc;
 
     mh::Application::Init(AppDesc);
+    mh::ContentsClassInitializer::Init();
 
     mHAccelTable = LoadAccelerators(mInstance, MAKEINTRESOURCE(IDR_ACCELERATOR1));
     return true;

@@ -1,15 +1,16 @@
 #pragma once
 #include "Entity.h"
 #include "Layer.h"
-#include "GameObject.h"
 
 namespace mh
 {
-	class Scene : public Entity
+	class GameObject;
+	class IScene 
+		: public Entity
 	{
 	public:
-		Scene(define::eSceneType type);
-		virtual ~Scene();
+		IScene();
+		virtual ~IScene();
 
 		virtual void Init();
 		virtual void Update();
@@ -17,18 +18,19 @@ namespace mh
 		virtual void Render();
 		virtual void Destroy();
 
-		virtual void OnEnter();
+		//리소스 로드
+		virtual void OnEnter() = 0;
 		virtual void OnExit();
 
-		define::eSceneType				GetSceneType() { return mType; }
 		void							AddGameObject(GameObject* _gameObj, const define::eLayerType _type);
 		Layer&							GetLayer(define::eLayerType _type) { return mLayers[(uint)_type]; }
 		std::vector<GameObject*>		GetDontDestroyGameObjects();
 		const std::vector<GameObject*>& GetGameObjects(const define::eLayerType _type);
 
+		bool	IsInitialized() const { return mbInitialized; }
 
 	private:
 		std::vector<Layer> mLayers;
-		define::eSceneType mType;
+		bool mbInitialized;
 	};
 }

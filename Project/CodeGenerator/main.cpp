@@ -120,5 +120,33 @@ int main(int argc, char* argv[])
 
         DirTree.CreateComMgrInitCode(Desc);
     }
+
+
+
+    //Generate Scene
+    {
+        std::regex regexCom(R"(Scene_\w+\.h)");
+
+        DirTree DirTree;
+        stdfs::path DirPath = define_Preset::Path::ContentsProj::A;
+
+        DirTree.SearchRecursive(DirPath, regexCom);
+
+        DirTree.CreateStrKeyHeader(DirPath / "strKey_Scene.h", "Scene", true);
+
+        tAddBaseClassDesc Desc = {};
+        Desc.BaseType = "IScene";
+        Desc.IncludePCH = R"(#include "PCH_Contents.h")";
+        Desc.IncludeMasterHeader = R"(#include "ContentsClassInitializer.h")";
+        Desc.IncludeStrKeyHeaderName = R"(#include "strKey_Scene.h")";
+        Desc.IncludeManagerHeader = "#include <Engine/SceneMgr.h>";
+        Desc.MasterNamespace = "namespace mh";
+        Desc.UsingNamespace = "using namespace mh::define;";
+        Desc.Constructor_T_MacroDefine = R"(SceneMgr::AddSceneConstructor<T>(strKey::Scene::##T))";
+        Desc.UserClassMgr_InitFuncName = "InitScene()";
+        Desc._FilePath = DirPath / "ContentsClassInitializer_Scene.cpp";
+
+        DirTree.CreateComMgrInitCode(Desc);
+    }
     return 0;
 }

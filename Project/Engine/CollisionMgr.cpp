@@ -1,7 +1,7 @@
 #include "PCH_Engine.h"
 #include "CollisionMgr.h"
 
-#include "Scene.h"
+#include "IScene.h"
 #include "SceneMgr.h"
 
 #include "AtExit.h"
@@ -26,7 +26,7 @@ namespace mh
 	}
 	void CollisionMgr::Update()
 	{
-		Scene* scene = SceneMgr::GetActiveScene();
+		IScene* scene = SceneMgr::GetActiveScene();
 		for (uint row = 0; row < (uint)define::eLayerType::End; row++)
 		{
 			for (uint column = 0; column < (uint)define::eLayerType::End; column++)
@@ -62,7 +62,7 @@ namespace mh
 
 		mLayerCollisionMatrix[row][column] = _enable;
 	}
-	void CollisionMgr::LayerCollision(Scene* _scene, define::eLayerType _left, define::eLayerType _right)
+	void CollisionMgr::LayerCollision(IScene* _scene, define::eLayerType _left, define::eLayerType _right)
 	{
 		const std::vector<GameObject*>& lefts = _scene->GetGameObjects(_left);
 		const std::vector<GameObject*>& rights = _scene->GetGameObjects(_right);
