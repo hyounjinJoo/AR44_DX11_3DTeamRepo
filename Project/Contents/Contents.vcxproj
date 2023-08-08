@@ -205,6 +205,9 @@ start CodeGenerator_$(Configuration).exe</Command>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Com_MyRenderer.h" />
+    <ClInclude Include="Com_TestSB.h" />
+    <ClInclude Include="Scene_TestSB.h" />
+    <ClInclude Include="Script_TestSB.h" />
     <ClInclude Include="Com_TestJH.h" />
     <ClInclude Include="PCH_Contents.h" />
     <ClInclude Include="Scene_TestJH.h" />
@@ -226,6 +229,7 @@ start CodeGenerator_$(Configuration).exe</Command>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Com_MyRenderer.cpp" />
+    <ClCompile Include="Com_TestSB.cpp" />
     <ClCompile Include="Com_TestJH.cpp" />
     <ClCompile Include="Com_TestHJ.cpp" />
     <ClCompile Include="ContentsClassInitializer.cpp" />
@@ -239,6 +243,8 @@ start CodeGenerator_$(Configuration).exe</Command>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="Scene_Play.cpp" />
+    <ClCompile Include="Scene_TestSB.cpp" />
+    <ClCompile Include="Script_TestSB.cpp" />
     <ClCompile Include="Scene_TestJH.cpp" />
     <ClCompile Include="Script_TestJH.cpp" />
     <ClCompile Include="Scene_TestHJ.cpp" />
