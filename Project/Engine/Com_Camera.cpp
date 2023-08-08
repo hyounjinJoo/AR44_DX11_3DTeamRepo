@@ -106,7 +106,7 @@ namespace mh
 	void Com_Camera::CreateViewMatrix()
 	{
 		Com_Transform& tr = GetOwner()->GetTransform();
-		float3 pos = tr.GetPosition();
+		float3 pos = tr.GetRelativePos();
 
 		// Crate Translate view matrix
 		mView = MATRIX::Identity;

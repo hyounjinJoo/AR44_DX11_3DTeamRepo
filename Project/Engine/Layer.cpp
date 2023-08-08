@@ -14,7 +14,7 @@ namespace mh
 	//	Transform* aTr = a->GetTransform();
 	//	Transform* bTr = b->GetTransform();
 
-	//	if (aTr->GetPosition().z <= bTr->GetPosition().z)
+	//	if (aTr->GetRelativePos().z <= bTr->GetRelativePos().z)
 	//	{
 	//		return true;
 	//	}

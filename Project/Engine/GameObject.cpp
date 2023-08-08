@@ -153,7 +153,6 @@ namespace mh
 			}
 		}
 
-
 		return eResult::Success;
 	}
 

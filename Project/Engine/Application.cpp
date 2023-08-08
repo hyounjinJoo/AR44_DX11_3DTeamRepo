@@ -18,6 +18,8 @@ namespace mh
 {
 	using namespace mh::define;
 
+	std::vector<std::function<void()>> Application::mDestroyFuncs;
+
 
 	HWND			Application::mHwnd{};
 	HDC				Application::mHdc{};
@@ -95,6 +97,15 @@ namespace mh
 
 	void Application::Destroy()
 	{
+		for (size_t i = 0; i < mDestroyFuncs.size(); ++i)
+		{
+			if (mDestroyFuncs[i])
+			{
+				mDestroyFuncs[i]();
+			}
+		}
+
+		mDestroyFuncs.clear();
 	}
 
 	// Running main engine loop
@@ -117,6 +128,7 @@ namespace mh
 
 	void Application::Release()
 	{
+		Destroy();
 		ReleaseDC(mHwnd, mHdc);
 	}
 

@@ -4,6 +4,7 @@
 #include "json-cpp/json-forwards.h"
 
 #include <filesystem>
+#include <string>
 
 namespace mh
 {
@@ -12,7 +13,7 @@ namespace mh
 		STRKEY_DECLARE(mStrKey);
 	}
 
-	using namespace define;
+	using namespace mh::define;
 	class Entity
 	{
 	public:

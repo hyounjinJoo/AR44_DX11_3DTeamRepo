@@ -104,10 +104,10 @@ namespace mh
 
 		if (eLightType::Point == mAttribute.type)
 		{
-			tr.SetScale(float3(mAttribute.radius * 5.f, mAttribute.radius * 5.f, mAttribute.radius * 5.f));
+			tr.SetRelativeScale(float3(mAttribute.radius * 5.f));
 		}
 
-		float3 position = tr.GetPosition();
+		float3 position = tr.GetRelativePos();
 		mAttribute.position = float4(position.x, position.y, position.z, 1.0f);
 		mAttribute.direction = float4(tr.Forward().x, tr.Forward().y, tr.Forward().z, 0.0f);
 

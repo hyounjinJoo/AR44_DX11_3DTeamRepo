@@ -182,14 +182,14 @@ namespace gui
 		DebugObject* debugObj = mDebugObjects[(UINT)mesh.type];
 		
 		mh::Com_Transform* tr = debugObj->GetComponent<mh::Com_Transform>();
-		tr->SetPosition(mesh.position);
-		tr->SetRotation(mesh.rotatation);
+		tr->SetRelativePos(mesh.position);
+		tr->SetRelativeRotXYZ(mesh.rotatation);
 		
 
 		if (mesh.type == eColliderType::Rect)
-			tr->SetScale(mesh.scale);
+			tr->SetRelativeScale(mesh.scale);
 		else
-			tr->SetScale(Vector3(mesh.radius));
+			tr->SetRelativeScale(Vector3(mesh.radius));
 
 
 		mh::IRenderer* renderer = debugObj->GetComponent<mh::IRenderer>();

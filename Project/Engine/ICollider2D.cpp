@@ -111,12 +111,12 @@ namespace mh
 
 	void ICollider2D::FixedUpdate()
 	{
-		float3 scale = mTransform->GetScale();
+		float3 scale = mTransform->GetRelativeScale();
 		scale *= float3(mSize.x, mSize.y, 1.0f);
 
-		float3 rotation = mTransform->GetRotation();
+		float3 rotation = mTransform->GetRelativeRotXYZ();
 
-		float3 position = mTransform->GetPosition();
+		float3 position = mTransform->GetRelativePos();
 		float3 colliderPos = position + float3(mCenter.x, mCenter.y, 0.0f);
 		mPosition = colliderPos;
 

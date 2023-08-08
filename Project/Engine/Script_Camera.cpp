@@ -25,7 +25,7 @@ namespace mh
 	{
 		Com_Transform& tr = GetOwner()->GetTransform();
 
-		float3 pos = tr.GetPosition();
+		float3 pos = tr.GetRelativePos();
 
 		if (InputMgr::GetKeyState(eKeyCode::D) == eKeyState::PRESSED)
 		{
@@ -52,7 +52,7 @@ namespace mh
 			pos += 100.0f * -tr.Up() * TimeMgr::DeltaTime();
 		}
 
-		tr.SetPosition(pos);
+		tr.SetRelativePos(pos);
 	}
 	void Script_Camera::Render()
 	{

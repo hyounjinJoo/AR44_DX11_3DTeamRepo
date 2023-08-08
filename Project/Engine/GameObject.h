@@ -8,6 +8,7 @@ namespace mh
 {
 	class GameObject : public Entity
 	{
+		friend class GameObject;
 	public:
 		enum class eState
 		{
@@ -72,6 +73,15 @@ namespace mh
 		void SetLayerType(define::eLayerType _type) { mLayerType = _type; }
 
 		void AddChild(GameObject* _pObj);
+		
+
+		bool IsMaster() const { return (bool)mParent; }
+		GameObject* GetParent() { return mParent; }
+		const std::vector<GameObject*>& GetChilds() const { return mChilds; }
+
+	private:
+		void SetParent(GameObject* _pObj) { mParent = _pObj; }
+		void RemoveChild(GameObject* _pObj);
 
 	private:
 		std::string mName;
@@ -133,7 +143,28 @@ namespace mh
 
 	inline void GameObject::AddChild(GameObject* _pObj)
 	{
-		MH_ASSERT(false);
+		//nullptr이나 자기 자신을 인자로 호출했을 경우 오류 발생			
+		MH_ASSERT(_pObj && this != _pObj);
+
+		//부모 오브젝트가 있을 경우 기존의 부모 오브젝트에서 자신을 제거한 후 여기에 추가해야함
+		if (nullptr != (_pObj->GetParent()))
+			_pObj->GetParent()->RemoveChild(_pObj);
+
+		_pObj->SetParent(this);
+		mChilds.push_back(_pObj);
+	}
+
+	inline void GameObject::RemoveChild(GameObject* _pObj)
+	{
+		for (auto iter = mChilds.begin(); iter != mChilds.end(); ++iter)
+		{
+			if ((*iter) == _pObj)
+			{
+				(*iter)->SetParent(nullptr);
+				mChilds.erase(iter);
+				break;
+			}
+		}
 	}
 
 

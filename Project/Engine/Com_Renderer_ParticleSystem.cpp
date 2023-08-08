@@ -215,7 +215,7 @@ namespace mh
 		}
 
 		mMaxParticles = mBuffer->GetStride();
-		float3 pos = GetOwner()->GetTransform().GetPosition();
+		float3 pos = GetOwner()->GetTransform().GetRelativePos();
 		mCBData.WorldPosition = float4(pos.x, pos.y, pos.z, 1.0f);
 		mCBData.MaxParticles = mMaxParticles;
 		mCBData.Radius = mRadius;

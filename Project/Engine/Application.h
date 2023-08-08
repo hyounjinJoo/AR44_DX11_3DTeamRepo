@@ -25,6 +25,8 @@ namespace mh
 		static void Update();
 		static void FixedUpdate();
 		static void Render();
+
+		//한 프레임 돌고 정리해야할 함수들 등록해놓으면 호출됨
 		static void Destroy();
 
 		// Running main engine loop
@@ -38,11 +40,15 @@ namespace mh
 		static int2 GetWIndowSize();
 
 		static HWND GetHwnd() { return mHwnd; }
+
+		static void AddDestroyFunc(const std::function<void()>& _Func) { mDestroyFuncs.push_back(_Func); }
+
 	private:
 		static HWND mHwnd;
 		static HDC  mHdc;
 		static bool mbInitialized;
 
+		static std::vector<std::function<void()>> mDestroyFuncs;
 	public:
 		Application() = delete;
 		~Application() = delete;
