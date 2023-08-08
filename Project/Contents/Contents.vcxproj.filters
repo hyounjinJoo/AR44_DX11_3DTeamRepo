@@ -37,6 +37,15 @@
     <ClInclude Include="strKey_Scene.h">
       <Filter>Auto Generated</Filter>
     </ClInclude>
+    <ClInclude Include="Com_TestCH.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Script_TestCH.h">
+      <Filter>Scripts</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene_TestCH.h">
+      <Filter>Scenes</Filter>
+    </ClInclude>
     <ClInclude Include="Com_TestSB.h">
       <Filter>Scripts</Filter>
     </ClInclude>
@@ -44,7 +53,6 @@
       <Filter>Scripts</Filter>
     </ClInclude>
     <ClInclude Include="Script_TestSB.h">
-
     <ClInclude Include="Scene_TestJH.h">
       <Filter>Scenes</Filter>
     </ClInclude>
@@ -110,7 +118,15 @@
     <ClCompile Include="ContentsClassInitializer.cpp">
       <Filter>Auto Generated</Filter>
     </ClCompile>
-
+    <ClCompile Include="Com_TestCH.cpp">
+      <Filter>Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Script_TestCH.cpp">
+      <Filter>Scripts</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene_TestCH.cpp">
+      <Filter>Scenes</Filter>
+    </ClCompile>
     <ClCompile Include="Com_TestSB.cpp">
       <Filter>Scripts</Filter>
     </ClCompile>
