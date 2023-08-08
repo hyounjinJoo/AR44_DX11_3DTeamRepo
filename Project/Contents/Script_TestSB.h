@@ -14,6 +14,7 @@ namespace mh
 
 	private:
 		int i;
+		int a;
 
 	};
 
