@@ -44,6 +44,13 @@
       <Filter>Scripts</Filter>
     </ClInclude>
     <ClInclude Include="Script_TestSB.h">
+    <ClInclude Include="Com_TestHJ.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene_TestHJ.h">
+      <Filter>Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="Script_TestHJ.h">
       <Filter>Scripts</Filter>
     </ClInclude>
   </ItemGroup>
@@ -102,6 +109,13 @@
       <Filter>Scripts</Filter>
     </ClCompile>
     <ClCompile Include="Script_TestSB.cpp">
+    <ClCompile Include="Com_TestHJ.cpp">
+      <Filter>Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene_TestHJ.cpp">
+      <Filter>Scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="Script_TestHJ.cpp">
       <Filter>Scripts</Filter>
     </ClCompile>
   </ItemGroup>

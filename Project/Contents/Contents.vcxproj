@@ -206,12 +206,15 @@ start CodeGenerator_$(Configuration).exe</Command>
   <ItemGroup>
     <ClInclude Include="Com_MyRenderer.h" />
     <ClInclude Include="Com_TestSB.h" />
+    <ClInclude Include="Scene_TestSB.h" />
+    <ClInclude Include="Script_TestSB.h" />
+    <ClInclude Include="Com_TestHJ.h" />
     <ClInclude Include="ContentsClassInitializer.h" />
     <ClInclude Include="PCH_Contents.h" />
     <ClInclude Include="Scene_Play.h" />
-    <ClInclude Include="Scene_TestSB.h" />
+    <ClInclude Include="Scene_TestHJ.h" />
     <ClInclude Include="Script_CameraMove.h" />
-    <ClInclude Include="Script_TestSB.h" />
+    <ClInclude Include="Script_TestHJ.h" />
     <ClInclude Include="Script_TestScript.h" />
     <ClInclude Include="strKey_Component.h" />
     <ClInclude Include="strKey_Scene.h" />
@@ -223,6 +226,7 @@ start CodeGenerator_$(Configuration).exe</Command>
   <ItemGroup>
     <ClCompile Include="Com_MyRenderer.cpp" />
     <ClCompile Include="Com_TestSB.cpp" />
+    <ClCompile Include="Com_TestHJ.cpp" />
     <ClCompile Include="ContentsClassInitializer.cpp" />
     <ClCompile Include="ContentsClassInitializer_Component.cpp" />
     <ClCompile Include="ContentsClassInitializer_Scene.cpp" />
@@ -237,6 +241,9 @@ start CodeGenerator_$(Configuration).exe</Command>
     <ClCompile Include="Scene_TestSB.cpp" />
     <ClCompile Include="Script_CameraMove.cpp" />
     <ClCompile Include="Script_TestSB.cpp" />
+    <ClCompile Include="Scene_TestHJ.cpp" />
+    <ClCompile Include="Script_CameraMove.cpp" />
+    <ClCompile Include="Script_TestHJ.cpp" />
     <ClCompile Include="Script_TestScript.cpp" />
     <ClCompile Include="Scene_Title.cpp" />
   </ItemGroup>
