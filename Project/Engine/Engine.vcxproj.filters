@@ -186,16 +186,10 @@
     <ClCompile Include="GridScript.cpp">
       <Filter>Resource\Script</Filter>
     </ClCompile>
-    <ClCompile Include="PlayScene.cpp">
-      <Filter>Scene</Filter>
-    </ClCompile>
-    <ClCompile Include="TitleScene.cpp">
-      <Filter>Scene</Filter>
-    </ClCompile>
     <ClCompile Include="Layer.cpp">
       <Filter>Scene\Layer</Filter>
     </ClCompile>
-    <ClCompile Include="Scene.cpp">
+    <ClCompile Include="IScene.cpp">
       <Filter>Scene\Base</Filter>
     </ClCompile>
     <ClCompile Include="Prefab.cpp">
@@ -376,16 +370,10 @@
     <ClInclude Include="GridScript.h">
       <Filter>Resource\Script</Filter>
     </ClInclude>
-    <ClInclude Include="TitleScene.h">
-      <Filter>Scene</Filter>
-    </ClInclude>
-    <ClInclude Include="PlayScene.h">
-      <Filter>Scene</Filter>
-    </ClInclude>
     <ClInclude Include="Layer.h">
       <Filter>Scene\Layer</Filter>
     </ClInclude>
-    <ClInclude Include="Scene.h">
+    <ClInclude Include="IScene.h">
       <Filter>Scene\Base</Filter>
     </ClInclude>
     <ClInclude Include="Prefab.h">

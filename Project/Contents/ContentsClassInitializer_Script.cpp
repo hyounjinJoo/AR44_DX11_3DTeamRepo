@@ -13,6 +13,10 @@
 
 
 #include "Script_CameraMove.h"
+#include "Script_TestCH.h"
+#include "Script_TestHJ.h"
+#include "Script_TestJH.h"
+#include "Script_TestSB.h"
 #include "Script_TestScript.h"
 
 #define CONSTRUCTOR_T(T) ComMgr::AddComConstructor<T>(strKey::Script::##T)
@@ -23,6 +27,10 @@ namespace mh
 	void ContentsClassInitializer::InitScript()
 	{
 		CONSTRUCTOR_T(Script_CameraMove);
+		CONSTRUCTOR_T(Script_TestCH);
+		CONSTRUCTOR_T(Script_TestHJ);
+		CONSTRUCTOR_T(Script_TestJH);
+		CONSTRUCTOR_T(Script_TestSB);
 		CONSTRUCTOR_T(Script_TestScript);
 	}
 }

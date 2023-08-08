@@ -4,6 +4,13 @@
 
 namespace mh
 {
+	Com_MyRenderer::Com_MyRenderer()
+	{
+	}
+
+	Com_MyRenderer::~Com_MyRenderer()
+	{
+	}
 	void Com_MyRenderer::Init()
 	{
 	}

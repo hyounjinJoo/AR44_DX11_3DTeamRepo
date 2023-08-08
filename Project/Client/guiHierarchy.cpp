@@ -2,7 +2,7 @@
 #include "guiHierarchy.h"
 
 #include <Engine/Application.h>
-#include <Engine/Scene.h>
+#include <Engine/IScene.h>
 #include <Engine/Layer.h>
 #include <Engine/SceneMgr.h>
 #include <Engine/RenderMgr.h>
@@ -68,7 +68,7 @@ namespace gui
 	{
 		mTreeWidget->Clear();
 
-		mh::Scene* scene = mh::SceneMgr::GetActiveScene();
+		mh::IScene* scene = mh::SceneMgr::GetActiveScene();
 		std::string sceneName = scene->GetKey();
 
 		TreeWidget::tNode* root = mTreeWidget->AddNode(nullptr, sceneName, 0, true);

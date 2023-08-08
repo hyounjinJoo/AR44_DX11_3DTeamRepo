@@ -1,41 +1,60 @@
-#include "PCH_Engine.h"
+#include "PCH_Contents.h"
+#include "Scene_Title.h"
 
-#include "ResMgr.h"
+#include <Engine/ResMgr.h>
+#include <Engine/Com_Transform.h>
+#include <Engine/Com_Renderer_Mesh.h>
+#include <Engine/RenderMgr.h>
+#include <Engine/Texture.h>
+#include <Engine/Script_Player.h>
+#include <Engine/Com_Camera.h>
+#include <Engine/Script_Camera.h>
+#include <Engine/Com_Renderer_Sprite.h>
+#include <Engine/GridScript.h>
+#include <Engine/Object.h>
+#include <Engine/InputMgr.h>
+#include <Engine/ICollider2D.h>
+#include <Engine/Player.h>
+#include <Engine/Monster.h>
+#include <Engine/CollisionMgr.h>
+#include <Engine/Com_Animator.h>
+#include <Engine/Com_Light.h>
+#include <Engine/PaintShader.h>
+#include <Engine/Com_Renderer_ParticleSystem.h>
+#include <Engine/Prefab.h>
 
-
-
-#include "TitleScene.h"
-#include "Com_Transform.h"
-#include "Com_Renderer_Mesh.h"
-#include "RenderMgr.h"
-#include "Texture.h"
-#include "Script_Player.h"
-#include "Com_Camera.h"
-#include "Script_Camera.h"
-#include "Com_Renderer_Sprite.h"
-#include "GridScript.h"
-#include "Object.h"
-#include "InputMgr.h"
-#include "ICollider2D.h"
-#include "Player.h"
-#include "Monster.h"
-#include "CollisionMgr.h"
-#include "Com_Animator.h"
-#include "Com_Light.h"
-#include "PaintShader.h"
-#include "Com_Renderer_ParticleSystem.h"
-#include "Prefab.h"
+#include "strKey_Script.h"
 
 namespace mh
 {
-	TitleScene::TitleScene()
-		: Scene(eSceneType::Tilte)
+	Scene_Title::Scene_Title()
 	{
 	}
-	TitleScene::~TitleScene()
+	Scene_Title::~Scene_Title()
 	{
 	}
-	void TitleScene::Init()
+	void Scene_Title::Init()
+	{
+		IScene::Init();
+	}
+	void Scene_Title::Update()
+	{
+		if (InputMgr::GetKeyDown(eKeyCode::N))
+		{
+			//SceneMgr::LoadScene(eSceneType::Play);
+		}
+
+		IScene::Update();
+	}
+	void Scene_Title::FixedUpdate()
+	{
+		IScene::FixedUpdate();
+	}
+	void Scene_Title::Render()
+	{
+		IScene::Render();
+	}
+	void Scene_Title::OnEnter()
 	{
 		// Main Com_Camera Game Object
 		GameObject* cameraObj = object::Instantiate<GameObject>(eLayerType::Com_Camera);
@@ -45,7 +64,7 @@ namespace mh
 		cameraComp->SetProjectionType(define::eProjectionType::Perspective);
 		//cameraComp->RegisterCameraInRenderer();
 		cameraComp->TurnLayerMask(eLayerType::UI, false);
-		cameraObj->AddComponent<Script_Camera>();
+		cameraObj->AddComponent(strKey::Script::Script_CameraMove);
 		//cameraObj->AddComponent()
 
 		RenderMgr::SetMainCamera(cameraComp);
@@ -152,31 +171,8 @@ namespace mh
 			lightComp->SetSpecular(float4(1.0f, 1.0f, 1.0f, 1.0f));
 			lightComp->SetAmbient(float4(0.15f, 0.15f, 0.15f, 1.0f));
 		}
-
-
-		Scene::Init();
 	}
-	void TitleScene::Update()
-	{
-		if (InputMgr::GetKeyDown(eKeyCode::N))
-		{
-			SceneMgr::LoadScene(eSceneType::Play);
-		}
-
-		Scene::Update();
-	}
-	void TitleScene::FixedUpdate()
-	{
-		Scene::FixedUpdate();
-	}
-	void TitleScene::Render()
-	{
-		Scene::Render();
-	}
-	void TitleScene::OnEnter()
-	{
-	}
-	void TitleScene::OnExit()
+	void Scene_Title::OnExit()
 	{
 	}
 }

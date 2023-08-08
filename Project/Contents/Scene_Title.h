@@ -1,13 +1,13 @@
 #pragma once
-#include "Scene.h"
+#include <Engine/IScene.h>
 
 namespace mh
 {
-	class PlayScene : public Scene
+	class Scene_Title : public IScene
 	{
 	public:
-		PlayScene();
-		virtual ~PlayScene();
+		Scene_Title();
+		virtual ~Scene_Title();
 
 		virtual void Init() override;
 		virtual void Update() override;

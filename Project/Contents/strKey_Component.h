@@ -16,4 +16,8 @@
 namespace mh::define::strKey::Com
 {
 	STRKEY Com_MyRenderer = "Com_MyRenderer";
+	STRKEY Com_TestCH = "Com_TestCH";
+	STRKEY Com_TestHJ = "Com_TestHJ";
+	STRKEY Com_TestJH = "Com_TestJH";
+	STRKEY Com_TestSB = "Com_TestSB";
 }
