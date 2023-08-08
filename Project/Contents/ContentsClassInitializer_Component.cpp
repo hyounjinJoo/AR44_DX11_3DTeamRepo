@@ -13,10 +13,6 @@
 
 
 #include "Com_MyRenderer.h"
-#include "Com_TestCH.h"
-#include "Com_TestHJ.h"
-#include "Com_TestJH.h"
-#include "Com_TestSB.h"
 
 #define CONSTRUCTOR_T(T) ComMgr::AddComConstructor<T>(strKey::Com::##T)
 
@@ -26,9 +22,5 @@ namespace mh
 	void ContentsClassInitializer::InitCom()
 	{
 		CONSTRUCTOR_T(Com_MyRenderer);
-		CONSTRUCTOR_T(Com_TestCH);
-		CONSTRUCTOR_T(Com_TestHJ);
-		CONSTRUCTOR_T(Com_TestJH);
-		CONSTRUCTOR_T(Com_TestSB);
 	}
 }

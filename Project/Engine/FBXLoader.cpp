@@ -7,6 +7,7 @@
 #include "Material.h"
 #include "define_Util.h"
 
+
 namespace mh
 {
 	using namespace fbxsdk;
