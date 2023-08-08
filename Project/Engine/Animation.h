@@ -11,10 +11,10 @@ namespace mh
 	public:
 		struct tSprite
 		{
-			math::Vector2 LeftTop;			// 좌측 상단 좌표
-			math::Vector2 Size;				// 좌측상단부터 잘라낼 가로 세로의 픽셀 길이
-			math::Vector2 Offset;			// 렌더링 위치 조정하기위한 좌표
-			math::Vector2 AtlasSize;		// 텍스처 이미지의 크기
+			float2 LeftTop;			// 좌측 상단 좌표
+			float2 Size;				// 좌측상단부터 잘라낼 가로 세로의 픽셀 길이
+			float2 Offset;			// 렌더링 위치 조정하기위한 좌표
+			float2 AtlasSize;		// 텍스처 이미지의 크기
 			float Duration;					// 프레임간에 시간 간격
 
 			tSprite()
@@ -39,13 +39,13 @@ namespace mh
 		virtual eResult SaveJson(Json::Value* _pJVal) override;
 		virtual eResult LoadJson(const Json::Value* _pJVal) override;
 
-		UINT Update();
+		uint Update();
 		void FixedUpdate();
 		void Render();
 
 		void Create(const std::string_view _name, std::shared_ptr<Texture> _atlas
-			, math::Vector2 _leftTop, math::Vector2 _size, math::Vector2 _offset
-			, UINT _spriteLegth, float _duration);
+			, float2 _leftTop, float2 _size, float2 _offset
+			, uint _spriteLegth, float _duration);
 
 		void BindShader();
 		void Reset();

@@ -1,12 +1,19 @@
-#include "EnginePCH.h"
+#include "PCH_Engine.h"
 
 #include "Com_AudioListener.h"
 #include "Com_Transform.h"
 #include "GameObject.h"
 #include "AudioMgr.h"
 
+#include <Fmod/fmod.hpp>
+#include <Fmod/fmod_studio.hpp>
+#include <Fmod/fmod_common.h>
+#include <Fmod/fmod_codec.h>
+
 namespace mh
 {
+	
+
 	Com_AudioListener::Com_AudioListener()
 		: IComponent(define::eComponentType::AudioListener)
 	{
@@ -31,11 +38,11 @@ namespace mh
 	void Com_AudioListener::FixedUpdate()
 	{
 		Com_Transform& tr = GetOwner()->GetTransform();
-		math::Vector3 pos = tr.GetPosition();
-		math::Vector3 foward = tr.Foward();
-		math::Vector3 up = tr.Up();
+		float3 pos = tr.GetPosition();
+		float3 foward = tr.Forward();
+		float3 up = tr.Up();
 
-		math::Vector3 vel = { 0.0f, 0.0f, 0.0f };
+		float3 vel = { 0.0f, 0.0f, 0.0f };
 		AudioMgr::Set3DListenerAttributes(&pos, &vel, &foward, &up);
 	}
 

@@ -1,4 +1,4 @@
-#include "EnginePCH.h"
+#include "PCH_Engine.h"
 
 #include "ConstBuffer.h"
 #include "GPUMgr.h"
@@ -19,9 +19,9 @@ namespace mh
 	{
 	}
 
-	bool ConstBuffer::Create(size_t _dataSize, UINT _dataCount)
+	bool ConstBuffer::Create(size_t _dataSize, uint _dataCount)
 	{
-		mDataSize = (UINT)_dataSize;
+		mDataSize = (uint)_dataSize;
 		mDataCount = _dataCount;
 
 		// 상수 버퍼
@@ -43,7 +43,7 @@ namespace mh
 		return bResult;
 	}
 
-	void ConstBuffer::SetData(void* _data, UINT _dataCount)
+	void ConstBuffer::SetData(void* _data, uint _dataCount)
 	{
 		MH_ASSERT(nullptr != _data && _dataCount <= mDataCount);
 	
@@ -68,27 +68,27 @@ namespace mh
 		auto pContext = GPUMgr::Context();
 		if (eShaderStageFlag::VS & _stageFlag)
 		{
-			pContext->VSSetConstantBuffers((UINT)mType, 1u, mBuffer.GetAddressOf());
+			pContext->VSSetConstantBuffers((uint)mType, 1u, mBuffer.GetAddressOf());
 		}
 		if (eShaderStageFlag::HS & _stageFlag)
 		{
-			pContext->HSSetConstantBuffers((UINT)mType, 1u, mBuffer.GetAddressOf());
+			pContext->HSSetConstantBuffers((uint)mType, 1u, mBuffer.GetAddressOf());
 		}
 		if (eShaderStageFlag::DS & _stageFlag)
 		{
-			pContext->DSSetConstantBuffers((UINT)mType, 1u, mBuffer.GetAddressOf());
+			pContext->DSSetConstantBuffers((uint)mType, 1u, mBuffer.GetAddressOf());
 		}
 		if (eShaderStageFlag::GS & _stageFlag)
 		{
-			pContext->GSSetConstantBuffers((UINT)mType, 1u, mBuffer.GetAddressOf());
+			pContext->GSSetConstantBuffers((uint)mType, 1u, mBuffer.GetAddressOf());
 		}
 		if (eShaderStageFlag::PS & _stageFlag)
 		{
-			pContext->PSSetConstantBuffers((UINT)mType, 1u, mBuffer.GetAddressOf());
+			pContext->PSSetConstantBuffers((uint)mType, 1u, mBuffer.GetAddressOf());
 		}
 		if (eShaderStageFlag::CS & _stageFlag)
 		{
-			pContext->CSSetConstantBuffers((UINT)mType, 1u, mBuffer.GetAddressOf());
+			pContext->CSSetConstantBuffers((uint)mType, 1u, mBuffer.GetAddressOf());
 		}
 	}
 }

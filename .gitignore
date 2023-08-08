@@ -381,9 +381,9 @@ FodyWeavers.xsd
 *.[bB][aA][kK]
 
 
-# Exclude Engine Lib
-!External/*
-External/Lib/Engine
+# Exclude Project Generated Lib
+External/
+Res/
 
 # Exclude Shader header
 CompiledShaderHeader/

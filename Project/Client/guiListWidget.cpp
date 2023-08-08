@@ -1,4 +1,4 @@
-#include "ClientPCH.h"
+#include "PCH_Client.h"
 #include "guiListWidget.h"
 
 #include <Engine/define_Util.h>
@@ -65,7 +65,7 @@ namespace gui
 	{
 		for (const auto& wName : list)
 		{
-			std::string name = mh::StringConv::ConvertUnicodeToUTF8(wName);
+			std::string name = StringConv::ConvertUnicodeToUTF8(wName);
 			mResourceList.push_back(name);
 		}
 	}

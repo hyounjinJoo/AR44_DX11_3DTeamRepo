@@ -1,4 +1,4 @@
-#include "EnginePCH.h"
+#include "PCH_Engine.h"
 
 #include "GameObject.h"
 #include "Com_Transform.h"
@@ -87,10 +87,10 @@ namespace mh
 			return Result;
 		}
 
-		Json::MHSaveValue(_pJson, JSONVAL(mName));
-		Json::MHSaveValue(_pJson, JSONVAL(mState));
-		Json::MHSaveValue(_pJson, JSONVAL(mLayerType));
-		Json::MHSaveValue(_pJson, JSONVAL(mbDontDestroy));
+		Json::MHSaveValue(_pJson, JSON_KEY_PAIR(mName));
+		Json::MHSaveValue(_pJson, JSON_KEY_PAIR(mState));
+		Json::MHSaveValue(_pJson, JSON_KEY_PAIR(mLayerType));
+		Json::MHSaveValue(_pJson, JSON_KEY_PAIR(mbDontDestroy));
 
 		{
 			(*_pJson)[strKey::Json::GameObject::mComponents] = Json::Value(Json::arrayValue);
@@ -170,10 +170,10 @@ namespace mh
 			return Result;
 		}
 
-		Json::MHLoadValue(_pJson, JSONVAL(mName));
-		Json::MHLoadValue(_pJson, JSONVAL(mState));
-		Json::MHLoadValue(_pJson, JSONVAL(mLayerType));
-		Json::MHLoadValue(_pJson, JSONVAL(mbDontDestroy));
+		Json::MHLoadValue(_pJson, JSON_KEY_PAIR(mName));
+		Json::MHLoadValue(_pJson, JSON_KEY_PAIR(mState));
+		Json::MHLoadValue(_pJson, JSON_KEY_PAIR(mLayerType));
+		Json::MHLoadValue(_pJson, JSON_KEY_PAIR(mbDontDestroy));
 
 		//컴포넌트 추가
 		if (_pJson->isMember(strKey::Json::GameObject::mComponents))

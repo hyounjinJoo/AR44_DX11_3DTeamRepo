@@ -32,6 +32,8 @@ namespace mh
 
 	private:
 		std::string mStrKey;
+
+		static UINT32 gNextID;
 		const UINT32 mID;
 	};
 }

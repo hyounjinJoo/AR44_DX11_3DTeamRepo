@@ -19,8 +19,7 @@
 //------------------------------------------------------------------------------
 // Rectangle operations
 //------------------------------------------------------------------------------
-//namespace mh::math
-
+using namespace mh::math;
 
 inline Vector2 Rectangle::Location() const noexcept
 {

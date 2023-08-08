@@ -1,5 +1,5 @@
 
-#include "ClientPCH.h"
+#include "PCH_Client.h"
 
 #include <Engine/Com_Renderer_Mesh.h>
 #include <Engine/ResMgr.h>
@@ -7,12 +7,10 @@
 #include <Engine/IRes.h>
 
 #include "guiCom_Renderer_Mesh.h"
-#include "guiEditor.h"
+#include "ImGuiMgr.h"
 #include "guiListWidget.h"
 #include "guiInspector.h"
 
-
-extern gui::Editor gEditor;
 
 namespace gui
 {
@@ -47,7 +45,7 @@ namespace gui
 			//	return;
 
 
-			mMaterial = meshRenderer->GetMaterial();
+			mMaterial = meshRenderer->GetMaterial(0);
 			mMesh = meshRenderer->GetMesh();
 		}
 	}
@@ -71,7 +69,7 @@ namespace gui
 		ImGui::SameLine();
 		if (ImGui::Button("##MeshBtn", ImVec2(15.0f, 15.0f)))
 		{
-			ListWidget* listUI = gEditor.GetWidget<ListWidget>("ListWidget");
+			ListWidget* listUI = ImGuiMgr::GetWidget<ListWidget>("ListWidget");
 			listUI->SetState(eState::Active);
 			
 
@@ -98,7 +96,7 @@ namespace gui
 		ImGui::SameLine();
 		if (ImGui::Button("##MaterialBtn", ImVec2(15.0f, 15.0f)))
 		{
-			ListWidget* listUI = gEditor.GetWidget<ListWidget>("ListWidget");
+			ListWidget* listUI = ImGuiMgr::GetWidget<ListWidget>("ListWidget");
 			listUI->SetState(eState::Active);
 			//모든 메쉬의 리소스를 가져와야한다.
 			const auto& materials
@@ -125,7 +123,7 @@ namespace gui
 	{
 		std::shared_ptr<mh::Mesh> mesh = mh::ResMgr::Find<mh::Mesh>(_strKey);
 
-		Inspector* inspector = gEditor.GetWidget<Inspector>("Inspector");
+		Inspector* inspector = ImGuiMgr::GetWidget<Inspector>("Inspector");
 		inspector->GetTargetGameObject()->GetComponent<mh::Com_Renderer_Mesh>()->SetMesh(mesh);
 	}
 
@@ -133,7 +131,7 @@ namespace gui
 	{
 		std::shared_ptr<mh::Material> material = mh::ResMgr::Find<mh::Material>(_strKey);
 
-		Inspector* inspector = gEditor.GetWidget<Inspector>("Inspector");
-		inspector->GetTargetGameObject()->GetComponent<mh::Com_Renderer_Mesh>()->SetMaterial(material);
+		Inspector* inspector = ImGuiMgr::GetWidget<Inspector>("Inspector");
+		inspector->GetTargetGameObject()->GetComponent<mh::Com_Renderer_Mesh>()->SetMaterial(material, 0);
 	}
 }

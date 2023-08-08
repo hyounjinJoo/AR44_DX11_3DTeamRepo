@@ -13,12 +13,6 @@
     <Filter Include="Resource">
       <UniqueIdentifier>{767d4264-e56a-430c-8c2d-f49d85c35b59}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Time">
-      <UniqueIdentifier>{d5cea299-11de-49f8-9c0c-c110056dd303}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Input">
-      <UniqueIdentifier>{cd4b9eba-c6cf-46a9-a814-89a620c95213}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Scene">
       <UniqueIdentifier>{976687b1-0493-449e-87e3-f6bf27d49c71}</UniqueIdentifier>
     </Filter>
@@ -45,9 +39,6 @@
     </Filter>
     <Filter Include="Scene\Layer">
       <UniqueIdentifier>{1e71bc42-a7cc-46d6-9577-a9d25d0f359c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Scene\Manager">
-      <UniqueIdentifier>{ed02c5d8-b13c-4afe-85b6-3e56a722014f}</UniqueIdentifier>
     </Filter>
     <Filter Include="Resource\Prefab">
       <UniqueIdentifier>{b366b499-a62e-4505-9f52-19a691c5fba5}</UniqueIdentifier>
@@ -122,45 +113,42 @@
       <UniqueIdentifier>{62546181-5d07-413f-a9e5-329a0986165d}</UniqueIdentifier>
     </Filter>
     <Filter Include="_DefaultShader">
-      <UniqueIdentifier>{b0fbd2d2-908f-4ddd-9a83-bbf806ed6fd4}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="_DefaultShader\Particle">
-      <UniqueIdentifier>{9a8e01a4-d785-4788-80da-28328a56008d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="_DefaultShader\Sprite">
-      <UniqueIdentifier>{e61cbeb7-973b-4379-9393-507cc37790fc}</UniqueIdentifier>
+      <UniqueIdentifier>{f9fb54b7-eaf0-450c-b3c7-b6781de3a310}</UniqueIdentifier>
     </Filter>
     <Filter Include="_DefaultShader\Basic3D">
-      <UniqueIdentifier>{83616c8f-803e-441b-9f46-76e13f986545}</UniqueIdentifier>
+      <UniqueIdentifier>{b8f94d4d-f815-445b-81b2-e0c013c5c816}</UniqueIdentifier>
     </Filter>
     <Filter Include="_DefaultShader\Debug">
-      <UniqueIdentifier>{eb1f4426-7923-4010-9987-0a99235b5788}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="_DefaultShader\Grid">
-      <UniqueIdentifier>{0026d585-d7e2-4037-8901-848de0bcd329}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="_DefaultShader\PostProcess">
-      <UniqueIdentifier>{a6f6cd7d-303c-4cb2-9291-c031cc2b4538}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="_DefaultShader\Triangle">
-      <UniqueIdentifier>{28afc3e1-3508-40ea-8cf4-c095f344c7a8}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="_DefaultShader\UI">
-      <UniqueIdentifier>{9ef6f139-805f-44fa-a3df-5d7311677c74}</UniqueIdentifier>
+      <UniqueIdentifier>{5d00f9ad-c0c8-4d56-9161-2c02c78f56f0}</UniqueIdentifier>
     </Filter>
     <Filter Include="_DefaultShader\Deffered">
-      <UniqueIdentifier>{96a011f5-ca86-4e20-8724-fb93161ac48a}</UniqueIdentifier>
+      <UniqueIdentifier>{89e98b6a-3b1a-4de3-b82d-f33c541db6d5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="_DefaultShader\Grid">
+      <UniqueIdentifier>{1ccdad10-4b75-4ca7-a6bc-598d2b7b3f79}</UniqueIdentifier>
     </Filter>
     <Filter Include="_DefaultShader\Light">
-      <UniqueIdentifier>{6d2d4c22-57c3-412a-b05f-e2076e189012}</UniqueIdentifier>
+      <UniqueIdentifier>{30909e2f-d261-4edf-b589-70344ae74c69}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="_DefaultShader\Particle">
+      <UniqueIdentifier>{14fd0960-d83d-4dd1-827f-03a0b6654f9b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="_DefaultShader\PostProcess">
+      <UniqueIdentifier>{07baad1d-f768-4b1c-8c6e-1306e5a5c0ad}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="_DefaultShader\Sprite">
+      <UniqueIdentifier>{4cedf35b-68b8-4395-b39e-8a99344fdd82}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="_DefaultShader\Triangle">
+      <UniqueIdentifier>{d5132f68-2ed1-40be-b859-4494446606a5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="_DefaultShader\UI">
+      <UniqueIdentifier>{695b14e9-caa2-473f-a6d4-b60a09e286e8}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Application.cpp">
       <Filter>High Level Interface</Filter>
-    </ClCompile>
-    <ClCompile Include="SimpleMath.cpp">
-      <Filter>Common\Math</Filter>
     </ClCompile>
     <ClCompile Include="Entity.cpp">
       <Filter>Common</Filter>
@@ -198,20 +186,11 @@
     <ClCompile Include="GridScript.cpp">
       <Filter>Resource\Script</Filter>
     </ClCompile>
-    <ClCompile Include="PlayScene.cpp">
-      <Filter>Scene</Filter>
-    </ClCompile>
-    <ClCompile Include="TitleScene.cpp">
-      <Filter>Scene</Filter>
-    </ClCompile>
     <ClCompile Include="Layer.cpp">
       <Filter>Scene\Layer</Filter>
     </ClCompile>
-    <ClCompile Include="Scene.cpp">
+    <ClCompile Include="IScene.cpp">
       <Filter>Scene\Base</Filter>
-    </ClCompile>
-    <ClCompile Include="SceneManager.cpp">
-      <Filter>Scene\Manager</Filter>
     </ClCompile>
     <ClCompile Include="Prefab.cpp">
       <Filter>Resource\Prefab</Filter>
@@ -262,7 +241,7 @@
     <ClCompile Include="GPUBuffer.cpp">
       <Filter>GPU\Buffer</Filter>
     </ClCompile>
-    <ClCompile Include="EnginePCH.cpp">
+    <ClCompile Include="PCH_Engine.cpp">
       <Filter>Common</Filter>
     </ClCompile>
     <ClCompile Include="json-cpp\jsoncpp.cpp">
@@ -280,7 +259,6 @@
     <ClCompile Include="IComponent.cpp">
       <Filter>GameObject\Component</Filter>
     </ClCompile>
-    <ClCompile Include="MeshData.cpp" />
     <ClCompile Include="ResMgr.cpp">
       <Filter>Manager</Filter>
     </ClCompile>
@@ -335,18 +313,25 @@
     <ClCompile Include="define_Util.cpp">
       <Filter>Common\define</Filter>
     </ClCompile>
+    <ClCompile Include="SimpleMath.cpp">
+      <Filter>Common\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="MeshData.cpp">
+      <Filter>Resource\Mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="FBXLoader.cpp" />
+    <ClCompile Include="SceneMgr.cpp">
+      <Filter>Manager</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application.h">
       <Filter>High Level Interface</Filter>
     </ClInclude>
-    <ClInclude Include="SimpleMath.h">
-      <Filter>Common\Math</Filter>
-    </ClInclude>
     <ClInclude Include="Entity.h">
       <Filter>Common</Filter>
     </ClInclude>
-    <ClInclude Include="EnginePCH.h">
+    <ClInclude Include="PCH_Engine.h">
       <Filter>Common</Filter>
     </ClInclude>
     <ClInclude Include="GameObject.h">
@@ -385,20 +370,11 @@
     <ClInclude Include="GridScript.h">
       <Filter>Resource\Script</Filter>
     </ClInclude>
-    <ClInclude Include="TitleScene.h">
-      <Filter>Scene</Filter>
-    </ClInclude>
-    <ClInclude Include="PlayScene.h">
-      <Filter>Scene</Filter>
-    </ClInclude>
     <ClInclude Include="Layer.h">
       <Filter>Scene\Layer</Filter>
     </ClInclude>
-    <ClInclude Include="Scene.h">
+    <ClInclude Include="IScene.h">
       <Filter>Scene\Base</Filter>
-    </ClInclude>
-    <ClInclude Include="SceneManager.h">
-      <Filter>Scene\Manager</Filter>
     </ClInclude>
     <ClInclude Include="Prefab.h">
       <Filter>Resource\Prefab</Filter>
@@ -488,7 +464,6 @@
     <ClInclude Include="define_Component.h">
       <Filter>Common\define</Filter>
     </ClInclude>
-    <ClInclude Include="MeshData.h" />
     <ClInclude Include="defines.h">
       <Filter>Common\define</Filter>
     </ClInclude>
@@ -558,11 +533,18 @@
     <ClInclude Include="define_Util.h">
       <Filter>Common\define</Filter>
     </ClInclude>
+    <ClInclude Include="SimpleMath.h">
+      <Filter>Common\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="MeshData.h">
+      <Filter>Resource\Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="FBXLoader.h" />
+    <ClInclude Include="SceneMgr.h">
+      <Filter>Manager</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="SimpleMath.inl">
-      <Filter>Common\Math</Filter>
-    </None>
     <None Include="cpp.hint">
       <Filter>Common</Filter>
     </None>
@@ -575,6 +557,9 @@
     <None Include="DefaultShader\SH_ConstBuffer.hlsli">
       <Filter>_DefaultShader</Filter>
     </None>
+    <None Include="DefaultShader\SH_Func.hlsli">
+      <Filter>_DefaultShader</Filter>
+    </None>
     <None Include="DefaultShader\SH_Globals.hlsli">
       <Filter>_DefaultShader</Filter>
     </None>
@@ -584,103 +569,118 @@
     <None Include="DefaultShader\SH_Sampler.hlsli">
       <Filter>_DefaultShader</Filter>
     </None>
-    <None Include="DefaultShader\SH_Particle.hlsli">
-      <Filter>_DefaultShader\Particle</Filter>
+    <None Include="DefaultShader\SH_Deffered.hlsli">
+      <Filter>_DefaultShader\Deffered</Filter>
+    </None>
+    <None Include="DefaultShader\SH_Grid.hlsli">
+      <Filter>_DefaultShader\Grid</Filter>
+    </None>
+    <None Include="DefaultShader\SH_LightDir.hlsli">
+      <Filter>_DefaultShader\Light</Filter>
+    </None>
+    <None Include="DefaultShader\SH_LightPoint.hlsli">
+      <Filter>_DefaultShader\Light</Filter>
     </None>
     <None Include="DefaultShader\SH_Light.hlsli">
       <Filter>_DefaultShader\Light</Filter>
     </None>
-    <None Include="DefaultShader\SH_Func.hlsli">
-      <Filter>_DefaultShader</Filter>
+    <None Include="DefaultShader\SH_PostProcess.hlsli">
+      <Filter>_DefaultShader\PostProcess</Filter>
+    </None>
+    <None Include="DefaultShader\SH_Particle.hlsli">
+      <Filter>_DefaultShader\Particle</Filter>
+    </None>
+    <None Include="DefaultShader\SH_Merge.hlsli">
+      <Filter>_DefaultShader\Deffered</Filter>
+    </None>
+    <None Include="DefaultShader\SH_Basic3D.hlsli">
+      <Filter>_DefaultShader\Basic3D</Filter>
+    </None>
+    <None Include="SimpleMath.inl">
+      <Filter>Common\Math</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="DefaultShader\CS_Paint.hlsl">
       <Filter>_DefaultShader</Filter>
     </FxCompile>
+    <FxCompile Include="DefaultShader\_0VS_Basic3D.hlsl">
+      <Filter>_DefaultShader\Basic3D</Filter>
+    </FxCompile>
+    <FxCompile Include="DefaultShader\_0VS_Debug.hlsl">
+      <Filter>_DefaultShader\Debug</Filter>
+    </FxCompile>
+    <FxCompile Include="DefaultShader\_0VS_Deffered.hlsl">
+      <Filter>_DefaultShader\Deffered</Filter>
+    </FxCompile>
+    <FxCompile Include="DefaultShader\_0VS_Grid.hlsl">
+      <Filter>_DefaultShader\Grid</Filter>
+    </FxCompile>
+    <FxCompile Include="DefaultShader\_0VS_LightDir.hlsl">
+      <Filter>_DefaultShader\Light</Filter>
+    </FxCompile>
+    <FxCompile Include="DefaultShader\_0VS_LightPoint.hlsl">
+      <Filter>_DefaultShader\Light</Filter>
+    </FxCompile>
+    <FxCompile Include="DefaultShader\_0VS_Merge.hlsl">
+      <Filter>_DefaultShader\Deffered</Filter>
+    </FxCompile>
+    <FxCompile Include="DefaultShader\_0VS_Particle.hlsl">
+      <Filter>_DefaultShader\Particle</Filter>
+    </FxCompile>
+    <FxCompile Include="DefaultShader\_0VS_PostProcess.hlsl">
+      <Filter>_DefaultShader\PostProcess</Filter>
+    </FxCompile>
+    <FxCompile Include="DefaultShader\_0VS_Sprite.hlsl">
+      <Filter>_DefaultShader\Sprite</Filter>
+    </FxCompile>
+    <FxCompile Include="DefaultShader\_0VS_Triangle.hlsl">
+      <Filter>_DefaultShader\Triangle</Filter>
+    </FxCompile>
+    <FxCompile Include="DefaultShader\_0VS_UserInterface.hlsl">
+      <Filter>_DefaultShader\UI</Filter>
+    </FxCompile>
+    <FxCompile Include="DefaultShader\_3GS_Particle.hlsl">
+      <Filter>_DefaultShader\Particle</Filter>
+    </FxCompile>
+    <FxCompile Include="DefaultShader\_4PS_Basic3D.hlsl">
+      <Filter>_DefaultShader\Basic3D</Filter>
+    </FxCompile>
+    <FxCompile Include="DefaultShader\_4PS_Debug.hlsl">
+      <Filter>_DefaultShader\Debug</Filter>
+    </FxCompile>
+    <FxCompile Include="DefaultShader\_4PS_Deffered.hlsl">
+      <Filter>_DefaultShader\Deffered</Filter>
+    </FxCompile>
+    <FxCompile Include="DefaultShader\_4PS_Grid.hlsl">
+      <Filter>_DefaultShader\Grid</Filter>
+    </FxCompile>
+    <FxCompile Include="DefaultShader\_4PS_LightDir.hlsl">
+      <Filter>_DefaultShader\Light</Filter>
+    </FxCompile>
+    <FxCompile Include="DefaultShader\_4PS_LightPoint.hlsl">
+      <Filter>_DefaultShader\Light</Filter>
+    </FxCompile>
+    <FxCompile Include="DefaultShader\_4PS_Merge.hlsl">
+      <Filter>_DefaultShader\Deffered</Filter>
+    </FxCompile>
+    <FxCompile Include="DefaultShader\_4PS_Particle.hlsl">
+      <Filter>_DefaultShader\Particle</Filter>
+    </FxCompile>
+    <FxCompile Include="DefaultShader\_4PS_PostProcess.hlsl">
+      <Filter>_DefaultShader\PostProcess</Filter>
+    </FxCompile>
+    <FxCompile Include="DefaultShader\_4PS_Sprite.hlsl">
+      <Filter>_DefaultShader\Sprite</Filter>
+    </FxCompile>
+    <FxCompile Include="DefaultShader\_4PS_Triangle.hlsl">
+      <Filter>_DefaultShader\Triangle</Filter>
+    </FxCompile>
+    <FxCompile Include="DefaultShader\_4PS_UserInterface.hlsl">
+      <Filter>_DefaultShader\UI</Filter>
+    </FxCompile>
     <FxCompile Include="DefaultShader\CS_Particle.hlsl">
       <Filter>_DefaultShader\Particle</Filter>
-    </FxCompile>
-    <FxCompile Include="DefaultShader\GS_Particle.hlsl">
-      <Filter>_DefaultShader\Particle</Filter>
-    </FxCompile>
-    <FxCompile Include="DefaultShader\PS_Sprite.hlsl">
-      <Filter>_DefaultShader\Sprite</Filter>
-    </FxCompile>
-    <FxCompile Include="DefaultShader\VS_Sprite.hlsl">
-      <Filter>_DefaultShader\Sprite</Filter>
-    </FxCompile>
-    <FxCompile Include="DefaultShader\VS_Basic3D.hlsl">
-      <Filter>_DefaultShader\Basic3D</Filter>
-    </FxCompile>
-    <FxCompile Include="DefaultShader\PS_Basic3D.hlsl">
-      <Filter>_DefaultShader\Basic3D</Filter>
-    </FxCompile>
-    <FxCompile Include="DefaultShader\VS_Debug.hlsl">
-      <Filter>_DefaultShader\Debug</Filter>
-    </FxCompile>
-    <FxCompile Include="DefaultShader\PS_Debug.hlsl">
-      <Filter>_DefaultShader\Debug</Filter>
-    </FxCompile>
-    <FxCompile Include="DefaultShader\VS_Grid.hlsl">
-      <Filter>_DefaultShader\Grid</Filter>
-    </FxCompile>
-    <FxCompile Include="DefaultShader\PS_Grid.hlsl">
-      <Filter>_DefaultShader\Grid</Filter>
-    </FxCompile>
-    <FxCompile Include="DefaultShader\VS_PostProcess.hlsl">
-      <Filter>_DefaultShader\PostProcess</Filter>
-    </FxCompile>
-    <FxCompile Include="DefaultShader\PS_PostProcess.hlsl">
-      <Filter>_DefaultShader\PostProcess</Filter>
-    </FxCompile>
-    <FxCompile Include="DefaultShader\PS_Triangle.hlsl">
-      <Filter>_DefaultShader\Triangle</Filter>
-    </FxCompile>
-    <FxCompile Include="DefaultShader\VS_Triangle.hlsl">
-      <Filter>_DefaultShader\Triangle</Filter>
-    </FxCompile>
-    <FxCompile Include="DefaultShader\VS_UserInterface.hlsl">
-      <Filter>_DefaultShader\UI</Filter>
-    </FxCompile>
-    <FxCompile Include="DefaultShader\PS_UserInterface.hlsl">
-      <Filter>_DefaultShader\UI</Filter>
-    </FxCompile>
-    <FxCompile Include="DefaultShader\VS_Particle.hlsl">
-      <Filter>_DefaultShader\Particle</Filter>
-    </FxCompile>
-    <FxCompile Include="DefaultShader\PS_Particle.hlsl">
-      <Filter>_DefaultShader\Particle</Filter>
-    </FxCompile>
-    <FxCompile Include="DefaultShader\VS_Deffered.hlsl">
-      <Filter>_DefaultShader\Deffered</Filter>
-    </FxCompile>
-    <FxCompile Include="DefaultShader\PS_Deffered.hlsl">
-      <Filter>_DefaultShader\Deffered</Filter>
-    </FxCompile>
-    <FxCompile Include="DefaultShader\VS_Merge.hlsl">
-      <Filter>_DefaultShader\Deffered</Filter>
-    </FxCompile>
-    <FxCompile Include="DefaultShader\PS_Merge.hlsl">
-      <Filter>_DefaultShader\Deffered</Filter>
-    </FxCompile>
-    <FxCompile Include="DefaultShader\PS_LightDir.hlsl">
-      <Filter>_DefaultShader\Light</Filter>
-    </FxCompile>
-    <FxCompile Include="DefaultShader\PS_Light.hlsl">
-      <Filter>_DefaultShader\Light</Filter>
-    </FxCompile>
-    <FxCompile Include="DefaultShader\VS_LightDir.hlsl">
-      <Filter>_DefaultShader\Light</Filter>
-    </FxCompile>
-    <FxCompile Include="DefaultShader\VS_Light.hlsl">
-      <Filter>_DefaultShader\Light</Filter>
-    </FxCompile>
-    <FxCompile Include="DefaultShader\VS_LightPoint.hlsl">
-      <Filter>_DefaultShader\Light</Filter>
-    </FxCompile>
-    <FxCompile Include="DefaultShader\PS_LightPoint.hlsl">
-      <Filter>_DefaultShader\Light</Filter>
     </FxCompile>
   </ItemGroup>
 </Project>

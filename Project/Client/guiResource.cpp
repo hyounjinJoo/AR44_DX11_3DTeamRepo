@@ -1,4 +1,4 @@
-#include "ClientPCH.h"
+#include "PCH_Client.h"
 
 #include "guiResource.h"
 
@@ -24,7 +24,7 @@ namespace gui
 		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, (ImVec4)ImColor::HSV(0.0f, 0.7f, 0.7f));
 		ImGui::PushStyleColor(ImGuiCol_ButtonActive, (ImVec4)ImColor::HSV(0.0f, 0.8f, 0.8f));
 
-		ImGui::Button(mh::define::ArrResName[(UINT)mTarget->GetResType()]);
+		ImGui::Button(mh::define::strKey::ArrResName[(UINT)mTarget->GetResType()]);
 		ImGui::PopStyleColor(3);
 		ImGui::PopID();
 	}
