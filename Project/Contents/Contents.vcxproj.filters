@@ -37,6 +37,15 @@
     <ClInclude Include="strKey_Scene.h">
       <Filter>Auto Generated</Filter>
     </ClInclude>
+    <ClInclude Include="Com_TestSB.h">
+      <Filter>Scripts</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene_TestSB.h">
+      <Filter>Scripts</Filter>
+    </ClInclude>
+    <ClInclude Include="Script_TestSB.h">
+      <Filter>Scripts</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Components">
@@ -85,6 +94,15 @@
     </ClCompile>
     <ClCompile Include="ContentsClassInitializer.cpp">
       <Filter>Auto Generated</Filter>
+    </ClCompile>
+    <ClCompile Include="Com_TestSB.cpp">
+      <Filter>Scripts</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene_TestSB.cpp">
+      <Filter>Scripts</Filter>
+    </ClCompile>
+    <ClCompile Include="Script_TestSB.cpp">
+      <Filter>Scripts</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
