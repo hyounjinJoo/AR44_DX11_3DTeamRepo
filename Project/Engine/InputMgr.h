@@ -105,7 +105,7 @@ namespace mh
 		}		
 
 	private:
-		static void InitializeGamePad();
+		static void InitGamePad();
 
 	private:
 		static std::vector<tKey> mKeys;

@@ -4,6 +4,7 @@
 #include "InputMgr.h"
 #include "Application.h"
 #include "Joystick.h"
+#include "TimeMgr.h"
 
 
 extern mh::Application gApplication;
@@ -88,6 +89,8 @@ namespace mh
 			ScreenToClient(gApplication.GetHwnd(), &mousePos);
 			mMousPosition.x = static_cast<float>(mousePos.x);
 			mMousPosition.y = static_cast<float>(mousePos.y);
+
+			InitGamePad();
 		}
 		else
 		{
@@ -108,8 +111,14 @@ namespace mh
 		mJoysticks.clear();
 	}
 
-	void InputMgr::InitializeGamePad()
+	void InputMgr::InitGamePad()
 	{
+		static int callTimes = 0;
+		callTimes++;
+
+		static float elapsedTime = 0.f;
+		elapsedTime += TimeMgr::DeltaTime();
+
 		auto hr = RoInitialize(RO_INIT_MULTITHREADED);
 		assert(SUCCEEDED(hr));
 				
@@ -131,6 +140,22 @@ namespace mh
 			hr = gamepads->GetAt(i, &gamepad);
 			assert(SUCCEEDED(hr));
 
+			bool isFind = false;
+
+			size_t Size = mJoysticks.size();
+			for (size_t index = 0; index < Size; ++index)
+			{
+				if (mJoysticks[index]->GetStick() == gamepad)
+				{
+					isFind = true;
+					break;
+				}
+			}
+
+			if (isFind)
+			{
+				continue;
+			}
 			// Joystick를 생성하고 gamepad를 전달.
 			mJoysticks.push_back(std::make_unique<Joystick>(gamepad));
 		}

@@ -219,9 +219,58 @@ namespace mh
 		mGamePad->put_Vibration(mGamePadVibration);
 	}
 
-	ABI::Windows::Gaming::Input::GamepadReading Joystick::GetState()
+	void Joystick::ClearVibration()
 	{
-		return mGamePadReading;
+		mLVibeTimer = 0.f;
+		mRVibeTimer = 0.f;
+		mLTVibeTimer = 0.f;
+		mRTVibeTimer = 0.f;
+
+		mLVibePower = 0.f;
+		mRVibePower = 0.f;
+		mLTVibePower = 0.f;
+		mRTVibePower = 0.f;
 	}
 
+	void Joystick::SetVibration(eVibrationTarget _targetMotor, eVibrationPower _motorPower, eVibrationDuration _duration)
+	{
+		float durationTime = static_cast<int>(_duration) + 1.f;
+		durationTime *= 0.5f;
+
+		float power = static_cast<int>(_motorPower) * 0.25f;
+
+		switch (_targetMotor)
+		{
+		case mh::eVibrationTarget::Left:
+			mLVibeTimer = durationTime;
+			mLVibePower = power;
+			break;
+		case mh::eVibrationTarget::Right:
+			mRVibeTimer = durationTime;
+			mRVibePower = power;
+			break;
+		case mh::eVibrationTarget::LeftTrigger:
+			mLTVibeTimer = durationTime;
+			mLTVibePower = power;
+			break;
+		case mh::eVibrationTarget::RightTrigger:
+			mRTVibeTimer = durationTime;
+			mRTVibePower = power;
+			break;
+		case mh::eVibrationTarget::Both:
+			mLVibeTimer = durationTime;
+			mLVibePower = power;
+			mRVibeTimer = durationTime;
+			mRVibePower = power;
+			break;
+		case mh::eVibrationTarget::BothTrigger:
+			mLTVibeTimer = durationTime;
+			mLTVibePower = power;
+			mRTVibeTimer = durationTime;
+			mRTVibePower = power;
+			break;
+		default:
+			break;
+		}
+	}
 }

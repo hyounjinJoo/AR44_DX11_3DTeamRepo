@@ -4,7 +4,6 @@
 #include <cstdint>
 #include <roapi.h>
 #include <wrl.h>
-#include <concrt.h>
 #include <Xinput.h>
 #include "windows.gaming.input.h"
 #include "SimpleMath.h"
@@ -13,9 +12,22 @@
 
 namespace mh
 {
+	// 왼, 오, 왼 트리거, 오른 트리거, 왼오, 왼오 트리거
+	enum class eVibrationTarget
+	{
+		Left,
+		Right,
+		LeftTrigger,
+		RightTrigger,
+		Both,
+		BothTrigger,
+	};
+
+	// 0.25 씩 증가
 	enum class eVibrationPower
 	{
 		Zero,
+		Little,
 		Small,
 		Middle,
 		Max,
@@ -64,10 +76,21 @@ namespace mh
 		Joystick& operator=(Joystick&& _Other) noexcept = delete;
 
 	public:
+		Microsoft::WRL::ComPtr<ABI::Windows::Gaming::Input::IGamepad> GetStick() { return mGamePad; }
 		void Update();
 		void CheckDeadZoneCase();
 		void ProcessingVibration();
-		ABI::Windows::Gaming::Input::GamepadReading GetState();
+		ABI::Windows::Gaming::Input::GamepadReading GetState() { return mGamePadReading; }
+
+		void ClearVibration();
+		void SetVibration(eVibrationTarget targetMotor, eVibrationPower motorPower, eVibrationDuration duration);
+		void SetDeadZone(float _leftThumb, float _rightThumb, float _leftTrigger, float _rightTrigger)
+		{
+			mDeadZone.LeftDeadZone = _leftThumb;
+			mDeadZone.RightDeadZone = _rightThumb;
+			mDeadZone.LeftTriggerDeadZone = _leftTrigger;
+			mDeadZone.RightTriggerDeadZone = _rightTrigger;
+		}
 
 	private:
 		Microsoft::WRL::ComPtr<ABI::Windows::Gaming::Input::IGamepad> mGamePad;
