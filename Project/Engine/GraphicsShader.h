@@ -41,6 +41,10 @@ namespace mh
 		void SetDSState(eDSType _state) { mDSType = _state; }
 		void SetBSState(eBSType _state) { mBSType = _state; }
 
+		void AddInputLayout(const D3D11_INPUT_ELEMENT_DESC& _desc) { mVecInputLayoutDesc.push_back(_desc); }
+		void SetInputLayout(const std::vector<D3D11_INPUT_ELEMENT_DESC>& _descs) { mVecInputLayoutDesc = _descs; }
+		const std::vector<D3D11_INPUT_ELEMENT_DESC>& GetInputLayoutDescs() { return mVecInputLayoutDesc; }
+
 	private:
 		eResult CreateShader(eGSStage _stage, const void* _pByteCode, size_t _ByteCodeSize);
 

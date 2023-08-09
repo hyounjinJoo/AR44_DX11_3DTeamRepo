@@ -1,6 +1,7 @@
 #pragma once
 
 #include "guiWidget.h"
+#include <Engine/define_GPU.h>
 
 namespace mh
 {
@@ -20,10 +21,16 @@ namespace gui
 		virtual void Update();
 		//virtual void LateUpdate();
 		//virtual void Render();
-		virtual void Close();
 
 		bool CreateDefaultShaders();
 
+		 
+	private:
+		std::vector<std::string> mSemanticNames;
+		std::vector<D3D11_INPUT_ELEMENT_DESC> mInputElements;
+
+
+		std::unique_ptr<mh::GraphicsShader> mEditTarget;
 
 	};
 }
