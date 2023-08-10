@@ -8,9 +8,11 @@ namespace gui
 {
 	guiTransform::guiTransform()
 		: guiComponent(mh::define::eComponentType::Transform)
+		, mType()
+		, mTarget()
 	{
 		SetKey("guiTransform");
-		SetSize(ImVec2(200.0f, 120.0f));
+		//SetSize(ImVec2(200.0f, 120.0f));
 	}
 
 	guiTransform::~guiTransform()
@@ -18,10 +20,8 @@ namespace gui
 
 	}
 
-	void guiTransform::FixedUpdate()
+	void guiTransform::Update()
 	{
-		Widget::FixedUpdate();
-
 		if (nullptr == mTarget)
 			return;
 
@@ -32,10 +32,8 @@ namespace gui
 		mScale = tr->GetRelativeScale();
 	}
 
-	void guiTransform::Update()
+	void guiTransform::UpdateUI()
 	{
-		Widget::Update();
-
 		ImGui::Text("Position"); ImGui::SameLine();
 		ImGui::InputFloat3("##Position", (float*)&mPosisition);
 
@@ -55,9 +53,4 @@ namespace gui
 		}
 	}
 
-	void guiTransform::LateUpdate()
-	{
-		Widget::LateUpdate();
-
-	}
 }

@@ -6,8 +6,6 @@
 
 namespace mh
 {
-	using namespace mh;
-
 	class Com_Animator : public IComponent
 	{
 	public:

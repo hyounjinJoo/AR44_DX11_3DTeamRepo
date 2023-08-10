@@ -9,9 +9,8 @@ namespace gui
 		guiTransform();
 		virtual ~guiTransform();
 
-		virtual void FixedUpdate() override;
 		virtual void Update() override;
-		virtual void LateUpdate() override;
+		virtual void UpdateUI() override;
 
 		void SetTarget(mh::GameObject* _target) { mTarget = _target; }
 		mh::GameObject* GetTarget() { return mTarget; }

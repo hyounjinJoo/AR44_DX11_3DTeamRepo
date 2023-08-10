@@ -1,7 +1,7 @@
 #pragma once
 #include "guiDebugObject.h"
 #include "guiEditorObject.h"
-#include "guiWidget.h"
+#include "guiBase.h"
 #include <Engine/define_GPU.h>
 #include <Engine/define_Struct.h>
 
@@ -17,11 +17,13 @@ namespace gui
 		static inline bool GetEnable() { return mbEnable; }
 
 		template<typename T>
-		static T* GetWidget(const std::string& name);
+		static T* FindGUIWindow(const std::string_view _strKey);
 
-		static const std::unordered_map<std::string, Widget*, mh::define::tUmap_StringViewHasher, std::equal_to<>>&
-			GetWidgets() { return mWidgets; }
+		template <typename T>
+		static T* AddGUIWindow(const std::string_view _strKey);
 
+		static const std::vector<guiBase*>&
+			GetGUIs() { return mGuiWindows; }
 
 	private:
 		static void Init();
@@ -33,25 +35,23 @@ namespace gui
 		
 		static void DebugRender(mh::tDebugMesh& mesh);
 
+	private:
 		static void ImGuiInitialize();
-		static void ImGuiRun();
+		static void ImGuiNewFrame();
+		static void ImGuiRender();
 		static void ImGuiRelease();
 
-
-
 	private:
-		static std::unordered_map<std::string, Widget*, mh::define::tUmap_StringViewHasher, std::equal_to<>> mWidgets;
+		//static std::unordered_map<std::string, guiBase*, mh::define::tUmap_StringViewHasher, std::equal_to<>> mGuiWindows;
+
+		static std::vector<guiBase*> mGuiWindows;
 
 		static std::vector<EditorObject*> mEditorObjects;
 		static std::vector<DebugObject*> mDebugObjects;
 
-		static class MainMenu* mEditor;
 		static bool mbEnable;
 		static bool mbInitialized;
-
 	};
-
-
 
 	inline void ImGuiMgr::SetEnable(bool _bEnable)
 	{
@@ -64,14 +64,50 @@ namespace gui
 		}
 	}
 
-	template<typename T>
-	inline T* ImGuiMgr::GetWidget(const std::string& name)
+	
+
+	template <typename T>
+	inline T* ImGuiMgr::FindGUIWindow(const std::string_view _name)
 	{
-		auto iter = mWidgets.find(name);
-		if (iter == mWidgets.end())
+		T* ptr = nullptr;
+		for (guiBase* iter : mGuiWindows)
+		{
+			if (_name == iter->GetKey())
+			{
+				ptr = dynamic_cast<T*>(iter);
+				break;
+			}
+		}
+
+		return ptr;
+	}
+
+
+	template<typename T>
+	inline T* ImGuiMgr::AddGUIWindow(const std::string_view _strKey)
+	{
+		if (_strKey.empty())
 			return nullptr;
 
-		return dynamic_cast<T*>(iter->second);
+		for (size_t i = 0; i < mGuiWindows.size(); ++i)
+		{
+			if (_strKey == mGuiWindows[i]->GetKey())
+			{
+				return nullptr;
+			}
+		}
+
+		T* retPtr = new T;
+		retPtr->SetKey(_strKey);
+		
+		if (mbInitialized)
+		{
+			retPtr->Init();
+		}
+
+
+
+		return retPtr;
 	}
 }
 

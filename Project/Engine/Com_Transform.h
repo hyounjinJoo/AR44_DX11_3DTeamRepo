@@ -17,8 +17,8 @@ namespace mh
         //단순 Value만 저장 중이므로 기본 복사 생성자로도 충분함.
         virtual ~Com_Transform();
 
-        virtual eResult SaveJson(Json::Value* _pJson) override;
-        virtual eResult LoadJson(const Json::Value* _pJson) override;
+        virtual define::eResult SaveJson(Json::Value* _pJson) override;
+        virtual define::eResult LoadJson(const Json::Value* _pJson) override;
 
     public:
         virtual void Init() override;
@@ -96,13 +96,13 @@ namespace mh
 
 
         MATRIX GetWorldRotMat() const;
-        float3 GetWorldRot(eAxis3D _eAxis) const;
+        float3 GetWorldRot(define::eAxis3D _eAxis) const;
 
-        const float3& GetRelativeDir(eDirectionType _eDir) const { return mDirRelative[(UINT)_eDir]; }
-        const float3& Forward() const { return mDirRelative[(int)eDirectionType::FRONT]; }
-        const float3& Up() const { return mDirRelative[(int)eDirectionType::UP]; }
-        const float3& Right() const { return mDirRelative[(int)eDirectionType::RIGHT]; }
-        float3 GetWorldDir(eDirectionType _eDir) const { return float3((float*)mMatWorldWithoutSize.m[(UINT)_eDir]).Normalize(); }
+        const float3& GetRelativeDir(define::eDirectionType _eDir) const { return mDirRelative[(UINT)_eDir]; }
+        const float3& Forward() const { return mDirRelative[(int)define::eDirectionType::FRONT]; }
+        const float3& Up() const { return mDirRelative[(int)define::eDirectionType::UP]; }
+        const float3& Right() const { return mDirRelative[(int)define::eDirectionType::RIGHT]; }
+        float3 GetWorldDir(define::eDirectionType _eDir) const { return float3((float*)mMatWorldWithoutSize.m[(UINT)_eDir]).Normalize(); }
         const MATRIX& GetWorldMatWithoutSize() const { return mMatWorldWithoutSize; }
         const MATRIX& GetWorldMat() const { return mMatWorldFinal; }
 
@@ -132,11 +132,11 @@ namespace mh
         float3    mRotRelative;
 
         //앞, 위, 오른쪽으로 나타내는 직관적인 방향 정보
-        //eDirectionType 열거체를 사용.
-        float3    mDirRelative[(int)eDirectionType::END];
+        //define::eDirectionType 열거체를 사용.
+        float3    mDirRelative[(int)define::eDirectionType::END];
 
         //월드 방향(모든 회전정보 누적)
-        float3    mDirWorld[(int)eDirectionType::END];
+        float3    mDirWorld[(int)define::eDirectionType::END];
 
         //부모로부터 상속받지 않은 자신의 상대적 행렬
         MATRIX  mMatRelative;
@@ -211,9 +211,9 @@ namespace mh
         return MATRIX(mMatWorldWithoutSize.Right().Normalize(), mMatWorldWithoutSize.Up().Normalize(), mMatWorldWithoutSize.Forward().Normalize());
     }
 
-    inline float3 Com_Transform::GetWorldRot(eAxis3D _eAxis) const
+    inline float3 Com_Transform::GetWorldRot(define::eAxis3D _eAxis) const
     {
-        return mMatWorldWithoutSize.Axis((eAxis4D)_eAxis).Normalize();
+        return mMatWorldWithoutSize.Axis((define::eAxis4D)_eAxis).Normalize();
     }
 
     inline void Com_Transform::ClearUpdateState()

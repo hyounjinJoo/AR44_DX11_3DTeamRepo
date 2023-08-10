@@ -1,20 +1,18 @@
 #pragma once
-#include "guiWidget.h"
+#include "guiChild.h"
 #include <Engine/GameObject.h>
 #include "guiComponent.h"
 #include "guiResource.h"
 
 namespace gui
 {
-	class Inspector : public Widget
+	class guiInspector : public guiChild
 	{
 	public:
-		Inspector();
-		virtual ~Inspector();
+		guiInspector();
+		virtual ~guiInspector();
 
-		virtual void FixedUpdate() override;
 		virtual void Update() override;
-		virtual void LateUpdate() override;
 
 		mh::GameObject* GetTargetGameObject() const { return mTargetGameObject; }
 		void SetTargetGameObject(mh::GameObject* target) { mTargetGameObject = target; }

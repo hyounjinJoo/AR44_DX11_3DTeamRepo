@@ -11,7 +11,7 @@ namespace mh
 namespace gui
 {
 	class GraphicsShaderEditor
-		: public Widget
+		: public guiWidget
 	{
 	public:
 		GraphicsShaderEditor();

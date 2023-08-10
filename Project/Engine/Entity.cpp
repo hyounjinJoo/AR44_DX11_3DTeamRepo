@@ -7,6 +7,8 @@
 
 namespace mh
 {
+	using namespace mh::define;
+
 	UINT32 Entity::gIDNext{};
 
 	Entity::Entity()
@@ -57,26 +59,6 @@ namespace mh
 		}
 
 		return eResult::Success;
-	}
-	Entity::~Entity()
-	{
-	}
-}
-
-namespace gui
-{
-	UINT32 Entity::guiIDNext{};
-
-	Entity::Entity(const std::string_view _strKey)
-		: mID(++guiIDNext)
-		, mStrKey(_strKey)
-	{
-	}
-
-	Entity::Entity(const Entity& _other)
-		: mID(++guiIDNext)
-		, mStrKey(_other.mStrKey)
-	{
 	}
 	Entity::~Entity()
 	{

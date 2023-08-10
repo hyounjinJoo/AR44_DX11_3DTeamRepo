@@ -7,24 +7,24 @@ namespace mh
 		: public GPUBuffer
 	{
 	public:
-		ConstBuffer(eCBType _type);
+		ConstBuffer(define::eCBType _type);
 		virtual ~ConstBuffer();
 
 		template <typename T>
 		bool Create(uint _dataCount = 1u);
 		bool Create(size_t _dataSize, uint _dataCount = 1u);
 		void SetData(void* _data, uint _dataCount = 1u);
-		void BindData(eShaderStageFlag_ _stageFlag = eShaderStageFlag::NONE);
+		void BindData(define::eShaderStageFlag_ _stageFlag = define::eShaderStageFlag::NONE);
 
-		void SetPresetTargetStage(eShaderStageFlag_ _flag) { mPresetTargetStage = _flag; }
+		void SetPresetTargetStage(define::eShaderStageFlag_ _flag) { mPresetTargetStage = _flag; }
 
 	private:
-		const eCBType mType;
+		const define::eCBType mType;
 
 
 		uint				mDataSize;
 		uint				mDataCount;
-		eShaderStageFlag_	mPresetTargetStage;
+		define::eShaderStageFlag_	mPresetTargetStage;
 	};
 
 

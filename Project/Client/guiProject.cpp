@@ -21,19 +21,20 @@ namespace gui
 	using namespace mh::math;
 
 	Project::Project()
-		: Widget("Project")
+		: guiChild("Project")
 		, mTreeWidget(nullptr)
 	{
 
-		mh::int2 winSize = mh::Application::GetWIndowSize();
+		mh::int2 winSize = mh::Application::GetWindowSize();
 
 		Vector2 size((float)winSize.x, (float)winSize.y);
 
-		SetSize(ImVec2((float)size.x / 2 + size.x / 5, size.y / 4));
+		//SetSize(ImVec2((float)size.x / 2 + size.x / 5, size.y / 4));
 
 		mTreeWidget = new TreeWidget();
 		mTreeWidget->SetKey("GameResources");
-		AddWidget(mTreeWidget);
+		
+		AddChild(mTreeWidget);
 
 		mTreeWidget->SetEvent(this
 			, std::bind(&Project::toInspector, this, std::placeholders::_1));
@@ -48,29 +49,12 @@ namespace gui
 		mTreeWidget = nullptr;
 	}
 
-	void Project::FixedUpdate()
-	{
-		Widget::FixedUpdate();
-
-		//리소스가 바뀐다면 리소스목록 초기화
-	}
-
-	void Project::Update()
-	{
-		Widget::Update();
-	}
-
-	void Project::LateUpdate()
-	{
-
-	}
-
 	void Project::ResetContent()
 	{
 		//mTreeWidget->Close();
 		mTreeWidget->Clear();
 
-		TreeWidget::tNode* pRootNode = mTreeWidget->AddNode(nullptr, "GameResources", 0, true);
+		TreeWidget::tNode* pRootNode = mTreeWidget->AddNode(nullptr, "GameResources", tData{}, true);
 
 		//enum class eResourceType
 		//{
@@ -90,11 +74,11 @@ namespace gui
 		AddResources<mh::GraphicsShader>(pRootNode, "Shaders");
 	}
 
-	void Project::toInspector(void* data)
+	void Project::toInspector(tData _data)
 	{
-		mh::IRes* resource = static_cast<mh::IRes*>(data);
+		mh::IRes* resource = static_cast<mh::IRes*>(_data.pData);
 
-		Inspector* inspector = ImGuiMgr::GetWidget<Inspector>("Inspector");
+		guiInspector* inspector = ImGuiMgr::FindGUIWindow<guiInspector>("guiInspector");
 		inspector->SetTargetResource(resource);
 		inspector->InitializeTargetResource();
 	}

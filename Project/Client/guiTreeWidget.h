@@ -1,28 +1,37 @@
 #pragma once
-#include "guiWidget.h"
-
+#include "guiChild.h"
 #include <functional>
 
 namespace gui
 {
-	class TreeWidget : public Widget
+	struct tData
+	{
+		void* pData;
+		size_t size;
+
+		template <typename T>
+		void SetDataPtr(const T _pData) { pData = (void*)_pData; size = sizeof(T); }
+	};
+
+	class TreeWidget : public guiChild
 	{
 	public:
-		struct tNode : public Entity
+		struct tNode : public guiEntity
 		{
 			tNode();
 			virtual ~tNode();
 
 			void Update();
 
-			void SetData(void* data) { mData = data; }
+			void SetData(tData _data) { mData = _data; }
+
 			void SetStem(bool bEnable) { mbStem = bEnable; }
 
 			void AddNode(tNode* node);
 			const std::vector<tNode*>& GetChilds() { return mChilds; }
 
 			TreeWidget* mTreeWidget;
-			void* mData;
+			tData mData;
 
 			tNode* mParent;
 			std::vector<tNode*> mChilds;
@@ -34,30 +43,27 @@ namespace gui
 		TreeWidget();
 		virtual ~TreeWidget();
 
-		virtual void FixedUpdate() override;
-		virtual void Update() override;
-		virtual void LateUpdate() override;
-		virtual void Close() override;
+		virtual void UpdateUI() override;
 
-		tNode* AddNode(tNode* parent, const std::string& name, void* data, bool stem = false);
+		tNode* AddNode(tNode* parent, const std::string& name, tData data, bool stem = false);
 		void Clear();
 		void SetDummyRoot(bool enable) { mbDummyRootUse = enable; }
 		void SetSelectedNode(tNode* node);
 
-		void SetEvent(Widget* widget, std::function<void(void* data)> func)
+		void SetEvent(guiBase* widget, std::function<void(tData)> func)
 		{
-			mEventWidget = widget;
+			mEventGUI = widget;
 			mEvent = func;
 		}
 
 
 	private:
-		tNode* mRoot;
+		std::unique_ptr<tNode> mRoot;
 
 		bool mbDummyRootUse;
 		tNode* mSelectedNode;
 
-		Widget* mEventWidget;
-		std::function<void(void* data)> mEvent;
+		guiBase* mEventGUI;
+		std::function<void(tData data)> mEvent;
 	};
 }

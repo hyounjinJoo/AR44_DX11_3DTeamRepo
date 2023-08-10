@@ -204,13 +204,17 @@ call Copy_DLL.bat $(Configuration)</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="guiChild.h" />
+    <ClInclude Include="guiEntity.h" />
     <ClInclude Include="guiGraphicsShaderEditor.h" />
+    <ClInclude Include="guiStrKeys.h" />
+    <ClInclude Include="guiWindow.h" />
     <ClInclude Include="imgui_stdlib.h" />
     <ClInclude Include="PCH_Client.h" />
     <ClInclude Include="guiComponent.h" />
     <ClInclude Include="guiConsole.h" />
     <ClInclude Include="guiGame.h" />
-    <ClInclude Include="guiHierarchy.h" />
+    <ClInclude Include="guiTree_GameObject.h" />
     <ClInclude Include="guiInspector.h" />
     <ClInclude Include="guiMaterial.h" />
     <ClInclude Include="guiMesh.h" />
@@ -229,7 +233,7 @@ call Copy_DLL.bat $(Configuration)</Command>
     <ClInclude Include="imstb_rectpack.h" />
     <ClInclude Include="imstb_textedit.h" />
     <ClInclude Include="imstb_truetype.h" />
-    <ClInclude Include="guiListWidget.h" />
+    <ClInclude Include="guiList.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="targetver.h" />
     <ClInclude Include="guiDebugObject.h" />
@@ -237,9 +241,13 @@ call Copy_DLL.bat $(Configuration)</Command>
     <ClInclude Include="guiEditorObject.h" />
     <ClInclude Include="guiWidget.h" />
     <ClInclude Include="GameClient.h" />
+    <ClInclude Include="guiBase.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="guiChild.cpp" />
+    <ClCompile Include="guiEntity.cpp" />
     <ClCompile Include="guiGraphicsShaderEditor.cpp" />
+    <ClCompile Include="guiWindow.cpp" />
     <ClCompile Include="imgui_stdlib.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
@@ -252,7 +260,7 @@ call Copy_DLL.bat $(Configuration)</Command>
     <ClCompile Include="guiComponent.cpp" />
     <ClCompile Include="guiConsole.cpp" />
     <ClCompile Include="guiGame.cpp" />
-    <ClCompile Include="guiHierarchy.cpp" />
+    <ClCompile Include="guiTree_GameObject.cpp" />
     <ClCompile Include="guiInspector.cpp" />
     <ClCompile Include="guiMaterial.cpp" />
     <ClCompile Include="guiMesh.cpp" />
@@ -291,13 +299,14 @@ call Copy_DLL.bat $(Configuration)</Command>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="guiListWidget.cpp" />
+    <ClCompile Include="guiList.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="guiDebugObject.cpp" />
     <ClCompile Include="ImGuiMgr.cpp" />
     <ClCompile Include="guiEditorObject.cpp" />
     <ClCompile Include="guiWidget.cpp" />
     <ClCompile Include="GameClient.cpp" />
+    <ClCompile Include="guiBase.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="MHW.ico" />

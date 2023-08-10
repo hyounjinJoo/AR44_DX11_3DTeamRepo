@@ -4,97 +4,14 @@
 
 namespace gui
 {
-	Widget::Widget(const std::string_view _strKey)
-		: Entity(_strKey)
-		, mState(eState::Active)
-		, mParent(nullptr)
-		, mChilds{}
-		, mWindow_flags(ImGuiWindowFlags_None)
+	guiWidget::guiWidget(const std::string_view _strKey)
+		: guiBase(_strKey)
 	{
-
+		SetNoChild(true);
 	}
 
-	Widget::~Widget()
+	guiWidget::~guiWidget()
 	{
 	}
 
-	void Widget::FixedUpdate()
-	{
-		if (mState != eState::Active)
-		{
-			return;
-		}
-	}
-
-	void Widget::Update()
-	{
-		if (mState != eState::Active)
-		{
-			return;
-		}
-	}
-
-	void Widget::LateUpdate()
-	{
-		if (mState != eState::Active)
-		{
-			return;
-		}
-	}
-
-	void Widget::Render()
-	{
-		if (mState != eState::Active)
-		{
-			return;
-		}
-		if (mParent == nullptr) 
-		{
-			bool open = (bool)GetState();
-			FixedUpdate();
-			ImGui::Begin(GetKey().c_str(), &open, mWindow_flags);
-			Update();
-			for (Widget* child : mChilds)
-			{
-				child->Render();
-			}
-			LateUpdate();
-
-			ImGui::End();
-		}
-		else
-		{
-			FixedUpdate();
-			ImGui::BeginChild(GetKey().c_str(), mSize);
-			Update();
-			for (Widget* child : mChilds)
-			{
-				child->Render();
-			}
-			LateUpdate();
-			ImGui::EndChild();
-		}
-	}
-
-	void Widget::Close()
-	{
-	}
-
-	void Widget::AddWidget(Widget* widget)
-	{
-		mChilds.push_back(widget);
-		widget->SetParent(this);
-	}
-
-	void Widget::WindowFocus(bool bEnable)
-	{
-		if (bEnable == true)
-		{
-			ImGui::SetWindowFocus(GetKey().c_str());
-		}
-		else
-		{
-			ImGui::SetWindowFocus(nullptr);
-		}
-	}
 }

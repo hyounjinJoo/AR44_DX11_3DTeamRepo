@@ -9,7 +9,7 @@
 namespace gui
 {
 	guiComponent::guiComponent(mh::define::eComponentType _type)
-		: Widget("Component")
+		: guiChild("Component")
 		, mType(_type)
 		, mTarget(nullptr)
 	{
@@ -20,12 +20,8 @@ namespace gui
 
 	}
 
-	void guiComponent::FixedUpdate()
-	{
 
-	}
-
-	void guiComponent::Update()
+	void guiComponent::UpdateUI()
 	{
 		ImGui::PushID(0);
 		ImGui::PushStyleColor(ImGuiCol_Button, (ImVec4)ImColor::HSV(0.0f, 0.6f, 0.6f));
@@ -35,10 +31,5 @@ namespace gui
 		ImGui::Button(mh::define::ArrComName[(UINT)mType]);
 		ImGui::PopStyleColor(3);
 		ImGui::PopID();
-	}
-
-	void guiComponent::LateUpdate()
-	{
-
 	}
 }

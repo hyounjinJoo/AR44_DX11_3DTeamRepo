@@ -4,8 +4,6 @@
 
 namespace mh
 {
-	using namespace mh::define;
-
 	class ComputeShader : public IShader
 	{
 	public:
@@ -13,11 +11,11 @@ namespace mh
 		ComputeShader();
 		~ComputeShader();
 
-		virtual eResult Load(const std::filesystem::path& _path) override;
+		virtual define::eResult Load(const std::filesystem::path& _path) override;
 
-		eResult CreateByCompile(const std::filesystem::path& _FullPath, const std::string_view _funcName);
-		eResult CreateByHeader(const unsigned char* _pByteCode, size_t _ByteCodeSize);
-		eResult CreateByCSO(const std::filesystem::path& _FileName);
+		define::eResult CreateByCompile(const std::filesystem::path& _FullPath, const std::string_view _funcName);
+		define::eResult CreateByHeader(const unsigned char* _pByteCode, size_t _ByteCodeSize);
+		define::eResult CreateByCSO(const std::filesystem::path& _FileName);
 
 		void OnExcute();
 
@@ -25,7 +23,7 @@ namespace mh
 		virtual void Clear();
 
 	private:
-		eResult CreateShader(const void* _pByteCode, size_t _ByteCodeSize);
+		define::eResult CreateShader(const void* _pByteCode, size_t _ByteCodeSize);
 
 	protected:
 		Microsoft::WRL::ComPtr<ID3DBlob> mCSBlob;

@@ -12,8 +12,6 @@ namespace mh
 	{
 		STRKEY_DECLARE(mStrKey);
 	}
-
-	using namespace mh::define;
 	class Entity
 	{
 	public:
@@ -24,8 +22,8 @@ namespace mh
 
 		virtual ~Entity();
 
-		virtual eResult SaveJson(Json::Value* _pJson);
-		virtual eResult LoadJson(const Json::Value* _pJson);
+		virtual define::eResult SaveJson(Json::Value* _pJson);
+		virtual define::eResult LoadJson(const Json::Value* _pJson);
 
 		void SetKey(const std::string_view _strKey) { mStrKey = _strKey; }
 		const std::string& GetKey() const { return mStrKey; }
@@ -39,27 +37,6 @@ namespace mh
 	};
 }
 
-namespace gui
-{
-	using namespace mh::define;
-	class Entity
-	{
-	public:
-		Entity(const std::string_view _strKey);
 
-		Entity(const Entity& _other);
-
-		virtual ~Entity();
-		
-		void SetKey(const std::string_view _strKey) { mStrKey = _strKey; }
-		const std::string& GetKey() const { return mStrKey; }
-		UINT32 GetID() const { return mID; }
-
-	private:
-		std::string mStrKey;
-		static UINT32 guiIDNext;
-		const UINT32 mID;
-	};
-}
 
 

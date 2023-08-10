@@ -1,23 +1,24 @@
 #pragma once
-#include "guiWidget.h"
+#include "guiChild.h"
 
-
-#include <Engine/GameObject.h>
 #include "guiTreeWidget.h"
+
+namespace mh
+{
+	class GameObject;
+}
 
 namespace gui
 {
-	class Hierarchy : public Widget
+	class guiTree_GameObject : public guiChild
 	{
 	public:
-		Hierarchy();
-		virtual ~Hierarchy();
+		guiTree_GameObject();
+		virtual ~guiTree_GameObject();
 
-		virtual void FixedUpdate() override;
 		virtual void Update() override;
-		virtual void LateUpdate() override;
 
-		void InitializeInspector(void* data);
+		void InitializeInspector(tData _data);
 		void InitializeScene();
 		void AddGameObject(TreeWidget::tNode* parent, mh::GameObject* gameObject);
 

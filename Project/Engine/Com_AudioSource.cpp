@@ -15,8 +15,6 @@
 
 namespace mh
 {
-	using namespace math;
-
 	Com_AudioSource::Com_AudioSource()
 		: IComponent(define::eComponentType::AudioSource)
 		, mAudioClip(nullptr)

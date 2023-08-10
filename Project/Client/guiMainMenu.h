@@ -1,17 +1,18 @@
 #pragma once
-#include "guiWidget.h"
+
+#include "guiBase.h"
 
 namespace gui
 {
-	class MainMenu : public Widget
+	class guiMainMenu : public guiBase
 	{
 	public:
-		MainMenu();
-		virtual ~MainMenu();
+		guiMainMenu();
+		virtual ~guiMainMenu();
 
-		virtual void FixedUpdate() override;
-		virtual void Update() override;
-		virtual void LateUpdate() override;
+		virtual bool BeginUI() final { return ImGui::BeginMainMenuBar(); }
+		virtual void UpdateUI() override;
+		virtual void EndUI() final { return ImGui::EndMainMenuBar(); }
 
 	private:
 

@@ -38,7 +38,7 @@ namespace mh
 		//사이즈를 입력하면 조절
 		static void SetWindowPos(int _LeftWindowPos, int _TopWindowPos);
 		static void SetWindowSize(int _Width, int _Height);
-		static int2 GetWIndowSize();
+		static int2 GetWindowSize();
 
 		static HWND GetHwnd() { return mHwnd; }
 

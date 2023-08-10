@@ -4,26 +4,4 @@
 
 namespace gui
 {
-	Console::Console()
-		: Widget("Console")
-	{
-	}
-
-	Console::~Console()
-	{
-	}
-
-	void Console::FixedUpdate()
-	{
-	}
-
-	void Console::Update()
-	{
-	}
-
-	void Console::LateUpdate()
-	{
-
-	}
-
 }

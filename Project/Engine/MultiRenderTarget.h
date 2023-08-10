@@ -13,7 +13,7 @@ namespace mh
 		MultiRenderTarget();
 		virtual ~MultiRenderTarget();
 
-		bool Create(std::shared_ptr<Texture> texture[MRT_MAX], std::shared_ptr<Texture> dsTexture);
+		bool Create(std::shared_ptr<Texture> texture[define::MRT_MAX], std::shared_ptr<Texture> dsTexture);
 		void Bind();
 		inline std::shared_ptr<Texture> GetRenderTarget(uint _uRenderTargetIndex);
 
@@ -21,8 +21,8 @@ namespace mh
 		void Clear(const float4& _clearColor);
 
 	private:
-		std::shared_ptr<Texture>	mRenderTargetTextures[MRT_MAX];
-		ID3D11RenderTargetView*		mRenderTargetViews[MRT_MAX];
+		std::shared_ptr<Texture>	mRenderTargetTextures[define::MRT_MAX];
+		ID3D11RenderTargetView*		mRenderTargetViews[define::MRT_MAX];
 		std::shared_ptr<Texture>	mDSTexture;
 		uint mRenderTargetCount;
     };
@@ -30,7 +30,7 @@ namespace mh
 	inline std::shared_ptr<Texture> MultiRenderTarget::GetRenderTarget(uint _uRenderTargetIndex)
 	{
 		std::shared_ptr<Texture> RenderTarget = nullptr;
-		if (_uRenderTargetIndex < MRT_MAX)
+		if (_uRenderTargetIndex < define::MRT_MAX)
 		{
 			RenderTarget = mRenderTargetTextures[_uRenderTargetIndex];
 		}

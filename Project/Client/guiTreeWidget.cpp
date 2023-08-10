@@ -1,13 +1,12 @@
 #include "PCH_Client.h"
-
 #include "guiTreeWidget.h"
 
 namespace gui
 {
 	TreeWidget::tNode::tNode()
-		: Entity("TreeNode")
+		: guiEntity("TreeNode")
 		, mTreeWidget(nullptr)
-		, mData(nullptr)
+		, mData{}
 		, mParent(nullptr)
 		, mbSelected(false)
 		, mbStem(false)
@@ -68,23 +67,21 @@ namespace gui
 
 	// Tree
 	TreeWidget::TreeWidget()
-		: Widget("TreeWIdget")
+		: guiChild("TreeWIdget")
 		, mRoot(nullptr)
+		, mbDummyRootUse{}
+		, mSelectedNode{}
+		, mEventGUI{}
+		, mEvent{}
 	{
-
 	}
 
 	TreeWidget::~TreeWidget()
 	{
-		delete mRoot;
-		mRoot = nullptr;
 	}
 
-	void TreeWidget::FixedUpdate()
-	{
-	}
 
-	void TreeWidget::Update()
+	void TreeWidget::UpdateUI()
 	{
 		if (mRoot == nullptr)
 		{
@@ -107,15 +104,7 @@ namespace gui
 		}
 	}
 
-	void TreeWidget::LateUpdate()
-	{
-	}
-
-	void TreeWidget::Close()
-	{
-	}
-
-	TreeWidget::tNode* TreeWidget::AddNode(tNode* parent, const std::string& name, void* data, bool isFrame)
+	TreeWidget::tNode* TreeWidget::AddNode(tNode* parent, const std::string& name, tData data, bool isFrame)
 	{
 		tNode* node = new tNode;
 		node->SetKey(name);
@@ -125,7 +114,7 @@ namespace gui
 
 		if (nullptr == parent)
 		{
-			mRoot = node;
+			mRoot = std::unique_ptr<tNode>(node);
 		}
 		else
 		{
@@ -137,11 +126,7 @@ namespace gui
 
 	void TreeWidget::Clear()
 	{
-		if (nullptr != mRoot)
-		{
-			delete mRoot;
-			mRoot = nullptr;
-		}
+		mRoot.reset();
 	}
 	void TreeWidget::SetSelectedNode(tNode* node)
 	{

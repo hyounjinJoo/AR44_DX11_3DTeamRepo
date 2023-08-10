@@ -159,7 +159,7 @@ namespace mh
 		::UpdateWindow(mHwnd);
 	}
 
-	int2 Application::GetWIndowSize()
+	int2 Application::GetWindowSize()
 	{
 		//클라이언트 영역과 윈도우 영역의 차이를 구해서 정확한 창 크기를 설정(해상도가 조금이라도 차이나면 문제 발생함)
 		RECT rcClient{};

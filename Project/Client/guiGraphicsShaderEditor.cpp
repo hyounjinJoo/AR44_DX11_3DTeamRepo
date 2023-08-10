@@ -2,6 +2,7 @@
 
 #include "guiGraphicsShaderEditor.h"
 
+
 #include <Engine/PathMgr.h>
 #include <Engine/GraphicsShader.h>
 #include <Engine/json-cpp/json.h>
@@ -139,7 +140,7 @@ namespace gui
 	namespace stdfs = std::filesystem;
 
 	GraphicsShaderEditor::GraphicsShaderEditor()
-		: Widget("Graphics Shader Editor")
+		: guiWidget("Graphics Shader Editor")
 		, mSemanticNames()
 		, mEditTarget()
 	{
@@ -320,7 +321,7 @@ namespace gui
 			mSemanticNames.emplace_back(std::string());
 		}
 
-		static int 
+		
 
 
 
@@ -379,7 +380,7 @@ namespace gui
 
 		//쉐이더 세팅 파일 경로 확인
 		std::vector<std::string> vecNewShaderGroup;
-		stdfs::path ShaderSettingDir = mh::PathMgr::GetRelResourcePath(eResourceType::GraphicsShader);
+		stdfs::path ShaderSettingDir = mh::PathMgr::GetRelResourcePath(mh::define::eResourceType::GraphicsShader);
 		if (false == stdfs::exists(ShaderSettingDir))
 		{
 			stdfs::create_directories(ShaderSettingDir);

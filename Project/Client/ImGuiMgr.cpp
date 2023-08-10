@@ -17,11 +17,12 @@
 
 #include "guiInspector.h"
 #include "guiGame.h"
-#include "guiHierarchy.h"
+#include "guiBase.h"
 #include "guiProject.h"
 #include "guiMainMenu.h"
 #include "guiConsole.h"
-#include "guiListWidget.h"
+#include "guiList.h"
+
 
 #include <Engine/AtExit.h>
 #include "GameClient.h"
@@ -31,11 +32,11 @@
 extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 namespace gui
 {
-	std::unordered_map<std::string, Widget*, mh::define::tUmap_StringViewHasher, std::equal_to<>> ImGuiMgr::mWidgets{};
+	//std::unordered_map<std::string, guiBase*, mh::define::tUmap_StringViewHasher, std::equal_to<>> ImGuiMgr::mGuiWindows{};
+	std::vector<guiBase*> ImGuiMgr::mGuiWindows{};
 	std::vector<EditorObject*> ImGuiMgr::mEditorObjects{};
 	std::vector<DebugObject*> ImGuiMgr::mDebugObjects{};
 
-	MainMenu* ImGuiMgr::mEditor{};
 	bool ImGuiMgr::mbEnable{};
 	bool ImGuiMgr::mbInitialized;
 
@@ -84,27 +85,28 @@ namespace gui
 
 		ImGuiInitialize();
 
-		mEditor = new MainMenu();
-		//mWidgets.push_back(mEditor);
+		guiMainMenu* MainMenu = new guiMainMenu;
+		mGuiWindows.push_back(MainMenu);
 
-		// Init Widget 
-		Inspector* inspector = new Inspector();
-		mWidgets.insert(std::make_pair("Inspector", inspector));
 
-		//Game* game = new Game();
-		//mWidgets.insert(std::make_pair("Game", game));
+		// Init guiWidget 
+		//guiInspector* inspector = new guiInspector();
+		//mWidgets.insert(std::make_pair("guiInspector", inspector));
 
-		Hierarchy* hierarchy = new Hierarchy();
-		mWidgets.insert(std::make_pair("Hierarchy", hierarchy));
+		////Game* game = new Game();
+		////mWidgets.insert(std::make_pair("Game", game));
 
-		Project* project = new Project();
-		mWidgets.insert(std::make_pair("Project", project));
-		
-		Console* console = new Console();
-		mWidgets.insert(std::make_pair("Console", console));
+		//guiTree_GameObject* hierarchy = new guiTree_GameObject();
+		//mWidgets.insert(std::make_pair("guiTree_GameObject", hierarchy));
 
-		GraphicsShaderEditor* Editor = new GraphicsShaderEditor;
-		mWidgets.insert(std::make_pair("Graphics Shader Editor", Editor));
+		//Project* project = new Project();
+		//mWidgets.insert(std::make_pair("Project", project));
+		//
+		//Console* console = new Console();
+		//mWidgets.insert(std::make_pair("Console", console));
+
+		//GraphicsShaderEditor* Editor = new GraphicsShaderEditor;
+		//mWidgets.insert(std::make_pair("Graphics Shader Editor", Editor));
 
 		//ListWidget* listWidget = new ListWidget();
 		//mWidgets.insert(std::make_pair("ListWidget", listWidget));
@@ -115,17 +117,16 @@ namespace gui
 	{
 		if (false == mbEnable)
 			return;
-
 		Update();
 		FixedUpdate();
 		Render();
-
-		ImGuiRun();
 	}
 
 
 	void ImGuiMgr::Update()
 	{
+		ImGuiNewFrame();
+
 		for (EditorObject* obj : mEditorObjects)
 		{
 			obj->Update();
@@ -138,6 +139,19 @@ namespace gui
 		{
 			obj->FixedUpdate();
 		}
+
+		for (guiBase* gui : mGuiWindows)
+		{
+			gui->FixedUpdate();
+		}
+
+		//for (const auto& pair : mGuiWindows)
+		//{
+		//	if (nullptr == pair.second->GetParent())
+		//	{
+		//		pair.second->FixedUpdate();
+		//	}
+		//}
 	}
 
 	void ImGuiMgr::Render()
@@ -153,6 +167,8 @@ namespace gui
 			DebugRender(mesh);
 		}
 		DebugMeshes.clear();
+
+		ImGuiRender();
 	}
 
 	void ImGuiMgr::Release()
@@ -160,14 +176,21 @@ namespace gui
 		if (mbEnable == false)
 			return;
 
-		for (auto iter : mWidgets)
+		//for (auto& iter : mGuiWindows)
+		//{
+		//	if (iter.second && nullptr == iter.second->GetParent())
+		//	{
+		//		SAFE_DELETE(iter.second);
+		//	}
+		//}
+		for (guiBase* gui : mGuiWindows)
 		{
-			delete iter.second;
-			iter.second = nullptr;
+			if (gui)
+				delete gui;
 		}
-
-		SAFE_DELETE(mEditor);
-
+		
+		mGuiWindows.clear();
+		
 		for (auto obj : mEditorObjects)
 		{
 			SAFE_DELETE(obj);
@@ -175,6 +198,9 @@ namespace gui
 
 		SAFE_DELETE(mDebugObjects[(UINT)eColliderType::Rect]);
 		SAFE_DELETE(mDebugObjects[(UINT)eColliderType::Circle]);
+
+		mEditorObjects.clear();
+		mDebugObjects.clear();
 
 		ImGuiRelease();
 	}
@@ -261,73 +287,27 @@ namespace gui
 
 	}
 
-	void ImGuiMgr::ImGuiRun()
+	void ImGuiMgr::ImGuiNewFrame()
+	{
+		// Start the Dear ImGui frame
+		ImGui_ImplDX11_NewFrame();
+		ImGui_ImplWin32_NewFrame();
+		ImGui::NewFrame();
+		ImGuiIO io = ImGui::GetIO();
+	}
+
+	void ImGuiMgr::ImGuiRender()
 	{
 		bool show_demo_window = false;
 		bool show_another_window = false;
 		ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
 
-		ImGuiIO io = ImGui::GetIO();
-
-		// Start the Dear ImGui frame
-		ImGui_ImplDX11_NewFrame();
-		ImGui_ImplWin32_NewFrame();
-		ImGui::NewFrame();
-
 		//// 1. Show the big demo window (Most of the sample code is in ImGui::ShowDemoWindow()! You can browse its code to learn more about Dear ImGui!).
 		if (show_demo_window)
 			ImGui::ShowDemoWindow(&show_demo_window);
 
-		//for (Widget* widget : mWidgets) 
-		//{
-		//	widget->Update();
-		//}
-
-		if(mEditor)
-			mEditor->Render();
-		for (auto iter : mWidgets)
-		{
-			iter.second->Render();
-		}
-
-#pragma region  SAMPLE
-		 //2. Show a simple window that we create ourselves. We use a Begin/End pair to create a named window.
-		//{
-		//	static float f = 0.0f;
-		//	static int counter = 0;
-
-		//	ImGui::Begin("Hello, world!");                          // Create a window called "Hello, world!" and append into it.
-
-		//	ImGui::Text("This is some useful text.");               // Display some text (you can use a format strings too)
-		//	ImGui::Checkbox("Demo Window", &show_demo_window);      // Edit bools storing our window open/close state
-		//	ImGui::Checkbox("Another Window", &show_another_window);
-
-		//	ImGui::SliderFloat("float", &f, 0.0f, 1.0f);            // Edit 1 float using a slider from 0.0f to 1.0f
-		//	ImGui::ColorEdit3("clear color", (float*)&clear_color); // Edit 3 floats representing a color
-
-		//	if (ImGui::Button("Button"))                            // Buttons return true when clicked (most widgets return true when edited/activated)
-		//		counter++;
-		//	ImGui::SameLine();
-		//	ImGui::Text("counter = %d", counter);
-
-		//	ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / io.Framerate, io.Framerate);
-		//	ImGui::End();
-		//}
-
-		//// 3. Show another simple window.
-		//if (show_another_window)
-		//{
-		//	ImGui::Begin("Another Window", &show_another_window);   // Pass a pointer to our bool variable (the window will have a closing button that will clear the bool when clicked)
-		//	ImGui::Text("Hello from another window!");
-		//	if (ImGui::Button("Close Me"))
-		//		show_another_window = false;
-		//	ImGui::End();
-		//}
-#pragma endregion
-		// Rendering
 		ImGui::Render();
 		ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
-
 		
 		// Update and Render additional Platform Windows
 		if (ImGui::GetIO().ConfigFlags & ImGuiConfigFlags_ViewportsEnable)

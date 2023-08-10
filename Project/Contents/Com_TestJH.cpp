@@ -3,11 +3,8 @@
 
 namespace mh
 {
-
-
-
 	Com_TestJH::Com_TestJH()
-		: IComponent(eComponentType::Collider)
+		: IComponent(define::eComponentType::Collider)
 	{
 	}
 

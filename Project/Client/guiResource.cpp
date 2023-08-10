@@ -5,7 +5,7 @@
 namespace gui
 {
 	IRes::IRes(const std::string_view _strKey)
-		: Widget(_strKey)
+		: guiChild(_strKey)
 	{
 
 	}
@@ -15,7 +15,7 @@ namespace gui
 
 	}
 
-	void IRes::FixedUpdate()
+	void IRes::UpdateUI()
 	{
 		if (mTarget == nullptr)
 			return;

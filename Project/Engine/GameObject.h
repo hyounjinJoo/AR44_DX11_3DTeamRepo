@@ -16,6 +16,9 @@ namespace mh
 			Paused,
 			Dead,
 		};
+		inline static bool IsActive(eState _state) { return (eState::Active == _state); }
+		inline static bool IsDead(eState _state) { return (eState::Dead == _state); }
+		inline static bool IsPaused(eState _state) { return (eState::Paused == _state); }
 
 	public:
 		GameObject();
@@ -54,13 +57,7 @@ namespace mh
 		void SetName(const std::string_view _Name) { mName = _Name; }
 		const std::string& GetName() const { return mName; }
 
-		bool IsDead()
-		{
-			if (mState == eState::Dead)
-				return true;
-			
-			return false;
-		}
+
 		eState GetState() { return mState; }
 		
 		void Pause() { mState = eState::Paused; }

@@ -7,6 +7,8 @@
 
 namespace mh
 {
+	using namespace mh::define;
+
 	StructBuffer::StructBuffer()
 		: GPUBuffer(eBufferType::Struct)
 		, mSBufferDesc()

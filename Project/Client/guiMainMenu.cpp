@@ -7,72 +7,44 @@
 
 namespace gui
 {
-	MainMenu::MainMenu()
-		: Widget("MainMenu")
+	guiMainMenu::guiMainMenu()
+		: guiBase("MainMenu")
 	{
         //SetSize(ImVec2(100.0f, 100.0f));
 	}
 
-	MainMenu::~MainMenu()
+	guiMainMenu::~guiMainMenu()
 	{
 	}
 
-	void MainMenu::FixedUpdate()
-	{
 
-	}
-
-	void MainMenu::Update()
+	void guiMainMenu::UpdateUI()
 	{
-        if (ImGui::BeginMainMenuBar())
-        {
-            if (ImGui::BeginMenu("Options"))
-            {
-				const auto& widgets = ImGuiMgr::GetWidgets();
-				for (const auto& widget : widgets)
+		if (ImGui::BeginMenu("UI Menu"))
+		{
+			const auto& widgets = ImGuiMgr::GetGUIs();
+			for (const auto& widget : widgets)
+			{
+				if (this == widget)
+					continue;
+				else if (nullptr == widget->GetParent())
 				{
-					if (this == widget.second)
-						continue;
-					else if (nullptr == widget.second->GetParent())
+					if (ImGui::MenuItem(widget->GetKey().c_str(), nullptr, widget->GetEnablePtr()))
 					{
-						if (ImGui::MenuItem(widget.second->GetKey().c_str()))
-						{
-							eState state = widget.second->GetState();
-							switch (state)
-							{
-							case gui::Widget::eState::Paused:
-								widget.second->SetState(eState::Active);
-								break;
-							case gui::Widget::eState::Active:
-								widget.second->SetState(eState::Paused);
-								break;
-							case gui::Widget::eState::Dead:
-								break;
-							default:
-								break;
-							}
-						}
 					}
 				}
+			}
 
+			ImGui::Separator();
 
-                ImGui::Separator();
+			bool p_open = GetEnable();
+			if (ImGui::MenuItem("Close", NULL, false, p_open != NULL))
+			{
+				mh::Application::ShutDown();
+			}
 
-                bool p_open = (bool)GetState();
-				if (ImGui::MenuItem("Close", NULL, false, p_open != NULL))
-				{
-					mh::Application::ShutDown();
-				}
-
-                ImGui::EndMenu();
-            }
-           
-            ImGui::EndMainMenuBar();
-        }
-	}
-
-	void MainMenu::LateUpdate()
-	{
+			ImGui::EndMenu();
+		}
 	}
 
 }

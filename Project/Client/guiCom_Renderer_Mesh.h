@@ -11,9 +11,8 @@ namespace gui
 		guiCom_Renderer_Mesh();
 		~guiCom_Renderer_Mesh();
 
-		virtual void FixedUpdate() override;
 		virtual void Update() override;
-		virtual void LateUpdate() override;
+		virtual void UpdateUI() override;
 	
 		void SetMesh(const std::string& _strKey);
 		void SetMaterial(const std::string& _strKey);

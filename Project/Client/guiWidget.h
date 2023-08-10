@@ -1,51 +1,15 @@
 #pragma once
-#include <Engine/Entity.h>
-
-#include <vector>
-#include "imgui.h"
-#include "imgui_impl_win32.h"
-#include "imgui_impl_dx11.h"
-#include "imgui_stdlib.h"
+#include "guiBase.h"
 
 namespace gui
 {
-	class Widget : public Entity
+	//guiWidget: 딱 하나의 기능을 담당. 계층구조 가지지 않음
+	class guiWidget : public guiBase
 	{
 	public:
-		enum class eState
-		{
-			Paused,
-			Active,
-			Dead,
-		};
-
-		Widget(const std::string_view _strKey);
-		virtual ~Widget();
-
-
-		virtual void FixedUpdate();
-		virtual void Update();
-		virtual void LateUpdate();
-		virtual void Render();
-		virtual void Close();
-
-		void AddWidget(Widget* widget);
-		void WindowFocus(bool bEnable);
-
-		void SetState(eState state) { mState = state; }
-		eState GetState() const { return mState; } 
-		void SetParent(Widget* parent) { mParent = parent; }
-		Widget* GetParent() const { return mParent; }
-		void SetSize(ImVec2 size) { mSize = size; }
-		ImVec2 GetSize() const { return mSize; }
-
-	protected:
-		ImGuiWindowFlags mWindow_flags;
+		guiWidget(const std::string_view _strKey);
+		virtual ~guiWidget();
 
 	private:
-		eState mState;
-		Widget* mParent;
-		std::vector<Widget*> mChilds;
-		ImVec2 mSize;
 	};
 }

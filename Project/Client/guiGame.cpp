@@ -9,15 +9,11 @@
 namespace gui
 {
 	Game::Game()
-		: Widget("Game")
+		: guiBase("Game")
 	{
 	}
 
 	Game::~Game()
-	{
-	}
-
-	void Game::FixedUpdate()
 	{
 	}
 
@@ -46,10 +42,6 @@ namespace gui
 
 		ImGui::Image((void*)gameTex->GetSRV().Get(), panelSize
 				, ImVec2(0.0f, 0.0f), ImVec2(1.0f, 1.0f), tintColor);
-	}
-
-	void Game::LateUpdate()
-	{
 	}
 
 }

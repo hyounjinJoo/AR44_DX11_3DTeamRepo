@@ -4,6 +4,8 @@
 
 namespace mh::define
 {
+
+
 	enum class eResult
 	{
 		Fail_NotImplemented = 0,

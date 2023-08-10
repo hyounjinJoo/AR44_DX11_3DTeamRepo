@@ -1,20 +1,18 @@
 #pragma once
-#include "guiWidget.h"
+#include "guiChild.h"
 #include <Engine/GameObject.h>
 
 
 namespace gui
 {
-	class guiComponent : public Widget
+	class guiComponent : public guiChild
 	{
 	public:
 		guiComponent(mh::define::eComponentType _type);
 		virtual ~guiComponent();
 
-		virtual void FixedUpdate() override;
-		virtual void Update() override;
-		virtual void LateUpdate() override;
-
+		virtual void UpdateUI() override;
+		
 		void SetTarget(mh::GameObject* _target) { mTarget = _target; }
 		mh::GameObject* GetTarget() { return mTarget; }
 

@@ -15,18 +15,20 @@
 namespace gui
 {
 	using namespace mh::define;
-	Inspector::Inspector()
-		: Widget("Inspector")
+	guiInspector::guiInspector()
+		: guiChild("guiInspector")
+		, mTargetResource()
+		, mTransform()
 	{
-		SetSize(ImVec2(300.0f, 100.0f));
+		//SetSize(ImVec2(300.0f, 100.0f));
 		
 		mComponents.resize((UINT)eComponentType::END);
 		mTargetGameObject = mh::RenderMgr::GetInspectorGameObject();
 
 		//TODO: 여기 작동 안함
-		//mTransform = new gui::Transform();
-		//mTransform->SetKey("InspectorTransform");
-		//mTransform->SetTarget(mTargetGameObject);
+		mTransform = new gui::guiTransform();
+		mTransform->SetKey("InspectorTransform");
+		mTransform->SetTarget(mTargetGameObject);
 		//AddWidget(mTransform);
 		//
 		//mComponents[(UINT)eComponentType::] = new gui::Com_Renderer_Mesh();
@@ -35,12 +37,12 @@ namespace gui
 		//AddWidget(mComponents[(UINT)eComponentType::Com_Renderer_Mesh]);
 
 		mResources.resize((UINT)eResourceType::End);
-		mResources[(UINT)eResourceType::Texture] = new gui::Texture();
+		//mResources[(UINT)eResourceType::Texture] = new gui::Texture();
 		mResources[(UINT)eResourceType::Texture]->SetKey("InspectorTexture");
-		AddWidget(mResources[(UINT)eResourceType::Texture]);
+		//AddWidget(mResources[(UINT)eResourceType::Texture]);
 	}
 
-	Inspector::~Inspector()
+	guiInspector::~guiInspector()
 	{
 		for (guiComponent* comp : mComponents)
 		{
@@ -55,29 +57,21 @@ namespace gui
 		}
 	}
 
-	void Inspector::FixedUpdate()
+	void guiInspector::Update()
 	{
 		//mComponents[(UINT)eComponentType::Transform]->SetTarget(mTarget);
 		//mComponents[(UINT)eComponentType::Com_Renderer_Mesh]->SetTarget(mTarget);
 	}
 
-	void Inspector::Update()
-	{
-		
-	}
 
-	void Inspector::LateUpdate()
-	{
-	}
-
-	void Inspector::ClearTarget()
+	void guiInspector::ClearTarget()
 	{
 		for (guiComponent* comp : mComponents)
 		{
 			if (comp == nullptr)
 				continue;
 
-			comp->SetState(eState::Paused);
+			comp->SetEnable(false);
 			comp->SetTarget(nullptr);
 		}
 
@@ -86,12 +80,12 @@ namespace gui
 			if (res == nullptr)
 				continue;
 
-			res->SetState(eState::Paused);
+			res->SetEnable(false);
 			res->SetTarget(nullptr);
 		}
 	}
 
-	void Inspector::InitializeTargetGameObject()
+	void guiInspector::InitializeTargetGameObject()
 	{
 		ClearTarget();
 
@@ -103,11 +97,11 @@ namespace gui
 		//mComponents[(UINT)eComponentType::Com_Renderer_Mesh]->SetTarget(mTargetGameObject);
 	}
 
-	void Inspector::InitializeTargetResource()
+	void guiInspector::InitializeTargetResource()
 	{
 		ClearTarget();
 
-		mResources[(UINT)eResourceType::Texture]->SetState(eState::Active);
-		mResources[(UINT)eResourceType::Texture]->SetTarget(mTargetResource);
+		//mResources[(UINT)eResourceType::Texture]->SetState(eState::Active);
+		//mResources[(UINT)eResourceType::Texture]->SetTarget(mTargetResource);
 	}
 }

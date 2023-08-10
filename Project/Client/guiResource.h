@@ -1,16 +1,16 @@
 #pragma once
-#include "guiWidget.h"
+#include "guiChild.h"
 #include <Engine/IRes.h>
 
 namespace gui
 {
-	class IRes : public Widget
+	class IRes : public guiChild
 	{
 	public:
 		IRes(const std::string_view _strKey);
 		virtual ~IRes();
 
-		virtual void FixedUpdate() override;
+		void UpdateUI() override;
 		
 		void SetTarget(mh::IRes* target) { mTarget = target; }
 		mh::IRes* GetTarget() const { return mTarget; }

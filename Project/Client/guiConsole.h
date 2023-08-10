@@ -4,17 +4,8 @@
 
 namespace gui
 {
-	class Console : public Widget
+	class Console
 	{
-	public:
-		Console();
-		virtual ~Console();
 
-		virtual void FixedUpdate() override;
-		virtual void Update() override;
-		virtual void LateUpdate() override;
-
-
-	private:
 	};
 }

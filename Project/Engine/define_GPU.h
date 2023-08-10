@@ -37,8 +37,6 @@ namespace mh::define
 {
 	constexpr const int MRT_MAX = 8;
 
-	using namespace mh::define;
-
 	enum class eValidationMode
 	{
 		Disabled,
