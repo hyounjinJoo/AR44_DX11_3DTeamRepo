@@ -25,6 +25,9 @@
 
 #include "strKey_Script.h"
 
+#include "Script_TestHJ.h"
+#include "Script_JH.h"
+
 namespace mh
 {
 	Scene_Title::Scene_Title()
@@ -111,6 +114,9 @@ namespace mh
 			GameObject* obj = data->Instantiate();
 			obj->AddComponent<Script_Player>();
 			object::Instantiate(eLayerType::Player, obj);
+
+			obj->AddComponent<Script_TestHJ>();
+			obj->AddComponent<Script_JH>();
 			//std::shared_ptr<MeshData> mymesh = std::make_shared<MeshData>();
 			//mymesh->Load("glass cube.fbx");
 			//mymesh->Load("cat.fbx");

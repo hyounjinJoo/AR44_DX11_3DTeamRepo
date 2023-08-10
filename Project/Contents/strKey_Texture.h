@@ -16,6 +16,7 @@
 namespace mh::define::strKey::Texture
 {
 	STRKEY DefaultSprite_png = "DefaultSprite.png";
+	STRKEY evm090_00_01_BML_png = "evm090_00_01_BML.png";
 	STRKEY HPBar_png = "HPBar.png";
 	STRKEY Light_png = "Light.png";
 	STRKEY Smile_png = "Smile.png";
