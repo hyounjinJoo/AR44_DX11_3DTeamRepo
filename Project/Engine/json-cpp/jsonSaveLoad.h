@@ -234,7 +234,7 @@ namespace Json
 		T vecT{};
 		if (_pJson->isMember(_strKey))
 		{
-			const Json::Value& jVal = *_pJson;
+			const Json::Value& jVal = (*_pJson)[_strKey];
 			if (jVal.isArray())
 			{
 				for (Json::ValueConstIterator iter = jVal.begin(); iter != jVal.end(); ++iter)
@@ -247,7 +247,7 @@ namespace Json
 	}
 
 
-	inline static std::vector<std::string> MHGetJsonVectorPtr(const Json::Value* _pJson, const char* _strKey)
+	inline std::vector<std::string> GetJsonVector(const Json::Value* _pJson, const char* _strKey)
 	{
 		std::vector<std::string> retVec;
 
@@ -280,7 +280,7 @@ namespace Json
 		T vecT{};
 		if (_pJson->isMember(_strKey))
 		{
-			const Json::Value& jVal = *_pJson;
+			const Json::Value& jVal = (*_pJson)[_strKey];
 			for (Json::ValueConstIterator iter = jVal.begin(); iter != jVal.end(); ++iter)
 			{
 				keyType key = MHConvertRead<keyType>(iter.key());

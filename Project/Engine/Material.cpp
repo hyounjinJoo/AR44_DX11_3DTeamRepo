@@ -117,8 +117,8 @@ namespace mh
         }
 
         
-        //포인터 배열은 MHGetJsonVectorPtr 함수를 통해서 Key값을 싹 받아올 수 있음.
-        const auto& vecLoad = Json::MHGetJsonVectorPtr(_pJVal, JSON_KEY(mTextures));
+        //포인터 배열은 GetJsonVector 함수를 통해서 Key값을 싹 받아올 수 있음.
+        const auto& vecLoad = Json::GetJsonVector(_pJVal, JSON_KEY(mTextures));
         for (size_t i = 0; i < vecLoad.size(); ++i)
         {
             mTextures[i] = ResMgr::Load<Texture>(vecLoad[i]);

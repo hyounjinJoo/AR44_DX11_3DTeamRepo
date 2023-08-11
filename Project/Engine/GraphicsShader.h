@@ -49,9 +49,9 @@ namespace mh
 		void SetBSState(eBSType _state) { mBSType = _state; }
 		eBSType GetBSState() const { return mBSType; }
 
-		void AddInputLayout(const D3D11_INPUT_ELEMENT_DESC& _desc) { mVecInputLayoutDesc.push_back(_desc); }
-		void SetInputLayout(const std::vector<D3D11_INPUT_ELEMENT_DESC>& _descs) { mVecInputLayoutDesc = _descs; }
-		const std::vector<D3D11_INPUT_ELEMENT_DESC>& GetInputLayoutDescs() { return mVecInputLayoutDesc; }
+		void AddInputLayout(const D3D11_INPUT_ELEMENT_DESC& _desc) { mInputLayoutDescs.push_back(_desc); }
+		void SetInputLayout(const std::vector<D3D11_INPUT_ELEMENT_DESC>& _descs) { mInputLayoutDescs = _descs; }
+		const std::vector<D3D11_INPUT_ELEMENT_DESC>& GetInputLayoutDescs() { return mInputLayoutDescs; }
 
 
 		//에디터용
@@ -64,7 +64,7 @@ namespace mh
 		eResult CreateShader(eGSStage _stage, const void* _pByteCode, size_t _ByteCodeSize);
 
 	private:
-		std::vector<D3D11_INPUT_ELEMENT_DESC> mVecInputLayoutDesc;
+		std::vector<D3D11_INPUT_ELEMENT_DESC> mInputLayoutDescs;
 		ComPtr<ID3D11InputLayout> mInputLayout;
 		D3D11_PRIMITIVE_TOPOLOGY mTopology;
 

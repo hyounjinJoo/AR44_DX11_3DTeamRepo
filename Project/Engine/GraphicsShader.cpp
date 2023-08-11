@@ -9,6 +9,18 @@
 
 namespace mh
 {
+	struct D3D11InputElementDescWithoutName
+	{
+		UINT SemanticIndex;
+		DXGI_FORMAT Format;
+		UINT InputSlot;
+		UINT AlignedByteOffset;
+		D3D11_INPUT_CLASSIFICATION InputSlotClass;
+		UINT InstanceDataStepRate;
+	};
+
+
+
 	namespace stdfs = std::filesystem;
 	using namespace mh::define;
 
@@ -42,8 +54,33 @@ namespace mh
 		}
 		Json::Value& jVal = *_pJVal;
 
+		Json::Value& jsonInputLayouts = jVal[JSON_KEY(mInputLayoutDescs)];
 		//Input Layout Desc
-		Json::MHSaveVector(_pJVal, JSON_KEY_PAIR(mVecInputLayoutDesc));
+		for (size_t i = 0; i < mInputLayoutDescs.size(); ++i)
+		{
+			Json::Value InputElement{};
+
+			std::string strSemanticName;
+			if (mInputLayoutDescs[i].SemanticName)
+			{
+				strSemanticName = mInputLayoutDescs[i].SemanticName;
+			}
+			InputElement.append(strSemanticName);
+			
+			D3D11InputElementDescWithoutName desc{};
+			desc.SemanticIndex = mInputLayoutDescs[i].SemanticIndex;
+			desc.InstanceDataStepRate = mInputLayoutDescs[i].InstanceDataStepRate;
+			desc.InputSlotClass = mInputLayoutDescs[i].InputSlotClass;
+			desc.InputSlot = mInputLayoutDescs[i].InputSlot;
+			desc.Format = mInputLayoutDescs[i].Format;
+			desc.AlignedByteOffset = mInputLayoutDescs[i].AlignedByteOffset;
+
+			InputElement.append(Json::MHConvertWrite(desc));
+
+			jsonInputLayouts.append(InputElement);
+		}
+		
+		Json::MHSaveVector(_pJVal, JSON_KEY_PAIR(mInputLayoutDescs));
 
 		//토폴로지
 		Json::MHSaveValue(_pJVal, JSON_KEY_PAIR(mTopology));
@@ -79,25 +116,66 @@ namespace mh
 		const Json::Value& jVal = *_pJVal;
 
 		//Input Layout Desc
-		mVecInputLayoutDesc = Json::MHGetJsonVector(_pJVal, JSON_KEY_PAIR(mVecInputLayoutDesc));
+		if (jVal.isMember(JSON_KEY(mInputLayoutDescs)))
+		{
+			const Json::Value& jsonInputLayouts = JSON_KEY(mInputLayoutDescs);
+
+			if (jVal.isArray())
+			{
+
+			}
+
+			//Input Layout Desc
+			for (size_t i = 0; i < mInputLayoutDescs.size(); ++i)
+			{
+				Json::Value InputElement{};
+
+				std::string strSemanticName;
+				if (mInputLayoutDescs[i].SemanticName)
+				{
+					strSemanticName = mInputLayoutDescs[i].SemanticName;
+				}
+				InputElement.append(strSemanticName);
+
+				D3D11InputElementDescWithoutName desc{};
+				desc.SemanticIndex = mInputLayoutDescs[i].SemanticIndex;
+				desc.InstanceDataStepRate = mInputLayoutDescs[i].InstanceDataStepRate;
+				desc.InputSlotClass = mInputLayoutDescs[i].InputSlotClass;
+				desc.InputSlot = mInputLayoutDescs[i].InputSlot;
+				desc.Format = mInputLayoutDescs[i].Format;
+				desc.AlignedByteOffset = mInputLayoutDescs[i].AlignedByteOffset;
+
+				InputElement.append(Json::MHConvertWrite(desc));
+
+				jsonInputLayouts.append(InputElement);
+			}
+		}
+
+
 
 		//토폴로지
 		Json::MHLoadValue(_pJVal, JSON_KEY_PAIR(mTopology));
 
 		//쉐이더
 		{
-			const std::vector<std::string>& vecStrKey = Json::MHGetJsonVectorPtr(_pJVal, JSON_KEY(mArrShaderCode));
+			const std::vector<std::string>& vecStrKey = Json::GetJsonVector(_pJVal, JSON_KEY(mArrShaderCode));
 
 			//에딧 모드가 아닐 경우에만 로드
-			if (false == mbEditMode)
-			{
+
 				for (size_t i = 0; i < vecStrKey.size(); ++i)
 				{
-					CreateByCSO((eGSStage)i, vecStrKey[i]);
-					if ((size_t)eGSStage::END == i)
-						break;
+					if (false == mbEditMode)
+					{
+						CreateByCSO((eGSStage)i, vecStrKey[i]);
+						if ((size_t)eGSStage::END == i)
+							break;
+					}
+					else
+					{
+						mArrShaderCode[i].strKey = vecStrKey[i];
+					}
 				}
-			}
+
 		}
 
 		//RS, DS, BS
@@ -269,11 +347,11 @@ namespace mh
 			return eResult::Fail_Create;
 		}
 
-		mVecInputLayoutDesc = _VecLayoutDesc;
+		mInputLayoutDescs = _VecLayoutDesc;
 
 		if (FAILED(GPUMgr::Device()->CreateInputLayout(
-			mVecInputLayoutDesc.data(),
-			(uint)mVecInputLayoutDesc.size(),
+			mInputLayoutDescs.data(),
+			(uint)mInputLayoutDescs.size(),
 			VSBlobData->GetBufferPointer(),
 			VSBlobData->GetBufferSize(),
 			mInputLayout.ReleaseAndGetAddressOf()

@@ -384,14 +384,14 @@ namespace gui
 			if (entry.is_directory())
 				continue;
 
-			std::string fileName = entry.path().filename().replace_extension(mh::define::strKey::Ext_ShaderSetting).string();
+			std::string fileName = entry.path().filename().string();
 
 			for (size_t i = 0; i < (size_t)mh::define::eGSStage::END; ++i)
 			{
 				size_t pos = fileName.find(mh::define::strKey::ArrGSPrefix[i]);
 				if (std::string::npos != pos)
 				{
-					std::string baseFileName = fileName;
+					std::string baseFileName = entry.path().filename().replace_extension(mh::strKey::Ext_ShaderSetting).string();
 					baseFileName.erase(pos, std::strlen(mh::define::strKey::ArrGSPrefix[i]));
 
 					umapGSGroup[baseFileName].FileName[i] = fileName;
@@ -580,25 +580,21 @@ namespace gui
 			ImGui::OpenPopup("Edit Layout Element");
 			if (ImGui::BeginPopupModal("Edit Layout Element", &mbSaveModal))
 			{
-				mStageTypeCombo.FixedUpdate();
-
 				ImGui::InputText("Shader Name", &mSaveFileName);
 
 				if (ImGui::Button("Save File"))
 				{
-					if (-1 == mStageTypeCombo.GetCurrentIndex() || mSaveFileName.empty())
+					if (mSaveFileName.empty())
 					{
 						MessageBoxW(nullptr, L"쉐이더 타입 또는 이름이 제대로 입력되지 않았습니다.", nullptr, MB_OK);
 
-						mStageTypeCombo.UnSelect();
 						mSaveFileName.clear();
 
 						mbSaveModal = false;
 					}
 					else
 					{
-						stdfs::path FileName = mStageTypeCombo.GetCurrentSelected().strName;
-						FileName += mSaveFileName;
+						stdfs::path FileName = mSaveFileName;
 
 						SaveToJson(FileName);
 
@@ -656,16 +652,17 @@ namespace gui
 
 	void guiGraphicsShaderEditor::SaveToJson(const std::filesystem::path& _filePath)
 	{
-		std::unique_ptr<mh::GraphicsShader> shader = std::make_unique<mh::GraphicsShader>();
+		mh::GraphicsShader shader{};
 
-		shader->SetInputLayout(mInputLayoutDescs);
+
+		shader.SetInputLayout(mInputLayoutDescs);
 
 		{
 			int curSel = mTopologyCombo.GetCurrentIndex();
 			if (curSel >= 0)
 			{
 				D3D_PRIMITIVE_TOPOLOGY topology = (D3D_PRIMITIVE_TOPOLOGY)curSel;
-				shader->SetTopology(topology);
+				shader.SetTopology(topology);
 			}
 			else
 			{
@@ -682,7 +679,7 @@ namespace gui
 					NOTIFICATION_W(L"필수인 Vertex Shader가 설정되지 않았습니다.");
 					return;
 				}
-				shader->SetShaderKey((mh::define::eGSStage)i, mStageNames[i]);
+				shader.SetShaderKey((mh::define::eGSStage)i, mStageNames[i]);
 			}
 		}
 
@@ -692,7 +689,7 @@ namespace gui
 			if (0 <= curSel && curSel < (int)mh::define::eRSType::End)
 			{
 				mh::define::eRSType Type = (mh::define::eRSType)curSel;
-				shader->SetRSState(Type);
+				shader.SetRSState(Type);
 			}
 			else
 			{
@@ -706,7 +703,7 @@ namespace gui
 			if (0 <= curSel && curSel < (int)mh::define::eDSType::End)
 			{
 				mh::define::eDSType Type = (mh::define::eDSType)curSel;
-				shader->SetDSState(Type);
+				shader.SetDSState(Type);
 			}
 			else
 			{
@@ -721,7 +718,7 @@ namespace gui
 			if (0 <= curSel && curSel < (int)mh::define::eBSType::End)
 			{
 				mh::define::eBSType Type = (mh::define::eBSType)curSel;
-				shader->SetBSState(Type);
+				shader.SetBSState(Type);
 			}
 			else
 			{
@@ -730,7 +727,8 @@ namespace gui
 			}
 		}
 
-		if (mh::eResultSuccess(shader->Save(_filePath)))
+		shader.SetKey(_filePath.string());
+		if (mh::eResultSuccess(shader.Save(_filePath)))
 		{
 			LoadShaderSettingComboBox();
 		}
@@ -738,15 +736,17 @@ namespace gui
 
 	void guiGraphicsShaderEditor::LoadFromJson(const std::filesystem::path& _filePath)
 	{
-		std::unique_ptr<mh::GraphicsShader> shader = std::make_unique<mh::GraphicsShader>();
-		shader->SetEditMode(true);
-		if (mh::eResultFail(shader->Load(_filePath)))
+		mh::GraphicsShader shader{};
+		shader.SetEditMode(true);
+		if (mh::eResultFail(shader.Load(_filePath)))
 		{
 			NOTIFICATION_W(L"로드 실패.");
 			return;
 		}
 
-		mInputLayoutDescs = shader->GetInputLayoutDescs();
+		mSaveFileName = _filePath.string();
+
+		mInputLayoutDescs = shader.GetInputLayoutDescs();
 		mSemanticNames.clear();
 		mSemanticNames.resize(mInputLayoutDescs.size());
 		for (size_t i = 0; i < mInputLayoutDescs.size(); ++i)
@@ -754,15 +754,15 @@ namespace gui
 			mSemanticNames[i] = mInputLayoutDescs[i].SemanticName;
 		}
 		
-		mTopologyCombo.SetCurrentIndex((int)shader->GetTopology());
+		mTopologyCombo.SetCurrentIndex((int)shader.GetTopology());
 
 		for (size_t i = 0; i < mStageNames.size(); ++i)
 		{	
-			mStageNames[i] = shader->GetShaderKey((mh::define::eGSStage)i);
+			mStageNames[i] = shader.GetShaderKey((mh::define::eGSStage)i);
 		}
 
-		mRSTypeCombo.SetCurrentIndex((int)shader->GetRSState());
-		mDSTypeCombo.SetCurrentIndex((int)shader->GetDSState());
-		mBSTypeCombo.SetCurrentIndex((int)shader->GetBSState());
+		mRSTypeCombo.SetCurrentIndex((int)shader.GetRSState());
+		mDSTypeCombo.SetCurrentIndex((int)shader.GetDSState());
+		mBSTypeCombo.SetCurrentIndex((int)shader.GetBSState());
 	}
 }
