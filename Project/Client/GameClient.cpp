@@ -8,7 +8,7 @@
 
 #include <Contents/ContentsClassInitializer.h>
 
-#include "ImGuiMgr.h"
+#include "guiMgr.h"
 
 HINSTANCE GameClient::mInstance;
 HWND GameClient::mHwnd;
@@ -24,7 +24,7 @@ BOOL GameClient::Run(const GameClientDesc& _Desc)
     BOOL bResult = FALSE;
     bResult = Init(_Desc);
 
-    gui::ImGuiMgr::SetEnable(_Desc.RunEditor);
+    gui::guiMgr::SetEnable(_Desc.RunEditor);
 
     while (bResult)
     {
@@ -100,7 +100,7 @@ BOOL GameClient::Loop()
         {
             bReturn = mh::Application::Run();
 
-            gui::ImGuiMgr::Run();
+            gui::guiMgr::Run();
             
             mh::Application::Present();
         }

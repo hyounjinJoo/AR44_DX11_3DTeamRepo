@@ -1,5 +1,6 @@
 #pragma once
 #include "guiEntity.h"
+#include "strKey_gui.h"
 
 namespace gui
 {
@@ -7,20 +8,13 @@ namespace gui
 		: public guiEntity
 	{
 	public:
-		guiBase(const std::string_view _strKey);
+		guiBase(const std::string_view _strName);
 		virtual ~guiBase();
 
+		void InitRecursive();
 		void FixedUpdate();
 
-		guiBase* GetParent() { return mParent; }
-		guiBase* AddChild(guiBase* _pChild);
-
-		bool GetEnable() { return mbEnable; }
-		bool* GetEnablePtr() { return &mbEnable; }
-		void SetEnable(bool _bEnable) { mbEnable = _bEnable; }
-		void Close() { mbEnable = false; }
-
-	protected:
+		virtual void Init() {}
 		virtual void Update() {}
 
 		//재정의해서 각자 guiBase에 맞는 begin함수를 호출. bool 값이 반환되며, true가 반환되었을 때에만 endUI()가 호출됨.
@@ -35,17 +29,30 @@ namespace gui
 		//재정의해서 각자 guiBase에 맞는 end함수를 호출
 		virtual void EndUI() = 0;
 
+
+		guiBase* GetParent() { return mParent; }
+
+		template <typename T>
+		T* AddChild();
+		void AddChild(guiBase* _pChild);
+
+		void ReserveChildsVector(size_t _size) { mChilds.reserve(_size); }
+
+		bool GetEnable() { return mbEnable; }
+		bool* GetEnablePtr() { return &mbEnable; }
+		void SetEnable(bool _bEnable) { mbEnable = _bEnable; }
+		void Close() { mbEnable = false; }
+
+
+
 		//void SaveRecursive(Json::Value& _Node);
 		//void LoadRecursive(Json::Value& _Node);
 
 		void SetNoChild(bool _bNoChild) { mbNoChild = _bNoChild; }
 		void SetParent(guiBase* _Parent) { mParent = _Parent; }
-		
-
-	private:
 		const std::vector<guiBase*>& GetChilds() { return mChilds; }
-
 		void RemoveChild(guiBase* _pChild);
+
 
 	private:
 		guiBase* mParent;
@@ -54,6 +61,21 @@ namespace gui
 
 		bool						mbEnable;
 	};
+
+	template<typename T>
+	inline T* guiBase::AddChild()
+	{
+		static_assert(std::is_base_of_v<guiBase, T>);
+
+		T* retVal = nullptr;
+		if(false == mbNoChild)
+		{
+			retVal = new T;
+			AddChild(retVal);
+		}
+
+		return retVal;
+	}
 }
 
 

@@ -6,27 +6,25 @@
 #include <Engine/Com_Renderer_Sprite.h>
 #include <Engine/IRes.h>
 
-#include "guiCom_Renderer_Mesh.h"
-#include "ImGuiMgr.h"
+#include "guiCom_Renderer.h"
+#include "guiMgr.h"
 #include "guiList.h"
 #include "guiInspector.h"
 
 
 namespace gui
 {
-	guiCom_Renderer_Mesh::guiCom_Renderer_Mesh()
+	guiCom_Renderer::guiCom_Renderer()
 		: guiComponent(eComponentType::Renderer)
 	{
-		SetKey("guiCom_Renderer_Mesh");
-		//SetSize(ImVec2(200.0f, 120.0f));
 	}
 
-	guiCom_Renderer_Mesh::~guiCom_Renderer_Mesh()
+	guiCom_Renderer::~guiCom_Renderer()
 	{
 
 	}
 
-	void guiCom_Renderer_Mesh::Update()
+	void guiCom_Renderer::Update()
 	{
 		if (GetTarget())
 		{
@@ -48,12 +46,9 @@ namespace gui
 		}
 	}
 
-	void guiCom_Renderer_Mesh::UpdateUI()
+	void guiCom_Renderer::UpdateUI()
 	{
-		guiComponent::UpdateUI();
-
-		if (mMesh == nullptr
-			|| mMaterial == nullptr)
+		if (mMesh == nullptr || mMaterial == nullptr)
 			return;
 
 		std::string meshName
@@ -67,7 +62,7 @@ namespace gui
 		ImGui::SameLine();
 		if (ImGui::Button("##MeshBtn", ImVec2(15.0f, 15.0f)))
 		{
-			guiList* listUI = ImGuiMgr::FindGUIWindow<guiList>("ListWidget");
+			guiList* listUI = guiMgr::FindGuiWindow<guiList>("ListWidget");
 			listUI->SetEnable(true);
 			
 
@@ -82,7 +77,7 @@ namespace gui
 			}
 
 			listUI->SetItemList(name);
-			listUI->SetEvent(this, std::bind(&guiCom_Renderer_Mesh::SetMesh
+			listUI->SetEvent(this, std::bind(&guiCom_Renderer::SetMesh
 				, this, std::placeholders::_1));
 		}
 
@@ -94,7 +89,7 @@ namespace gui
 		ImGui::SameLine();
 		if (ImGui::Button("##MaterialBtn", ImVec2(15.0f, 15.0f)))
 		{
-			guiList* listUI = ImGuiMgr::FindGUIWindow<guiList>("ListWidget");
+			guiList* listUI = guiMgr::FindGuiWindow<guiList>("ListWidget");
 			listUI->SetEnable(true);
 			//모든 메쉬의 리소스를 가져와야한다.
 			const auto& materials
@@ -107,25 +102,25 @@ namespace gui
 			}
 
 			listUI->SetItemList(Name);
-			listUI->SetEvent(this, std::bind(&guiCom_Renderer_Mesh::SetMaterial
+			listUI->SetEvent(this, std::bind(&guiCom_Renderer::SetMaterial
 				, this, std::placeholders::_1));
 		}
 	}
 
 
-	void guiCom_Renderer_Mesh::SetMesh(const std::string& _strKey)
+	void guiCom_Renderer::SetMesh(const std::string& _strKey)
 	{
 		std::shared_ptr<mh::Mesh> mesh = mh::ResMgr::Find<mh::Mesh>(_strKey);
 
-		guiInspector* inspector = ImGuiMgr::FindGUIWindow<guiInspector>("guiInspector");
+		guiInspector* inspector = guiMgr::FindGuiWindow<guiInspector>("guiInspector");
 		inspector->GetTargetGameObject()->GetComponent<mh::Com_Renderer_Mesh>()->SetMesh(mesh);
 	}
 
-	void guiCom_Renderer_Mesh::SetMaterial(const std::string& _strKey)
+	void guiCom_Renderer::SetMaterial(const std::string& _strKey)
 	{
 		std::shared_ptr<mh::Material> material = mh::ResMgr::Find<mh::Material>(_strKey);
 
-		guiInspector* inspector = ImGuiMgr::FindGUIWindow<guiInspector>("guiInspector");
+		guiInspector* inspector = guiMgr::FindGuiWindow<guiInspector>("guiInspector");
 		inspector->GetTargetGameObject()->GetComponent<mh::Com_Renderer_Mesh>()->SetMaterial(material, 0);
 	}
 }

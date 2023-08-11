@@ -5,9 +5,10 @@
 
 namespace mh
 {
-	std::filesystem::path PathMgr::mAbsolutePath;
-	std::filesystem::path PathMgr::mRelativePath;
-	std::filesystem::path PathMgr::mRelativePath_Res[(int)eResourceType::End];
+	std::filesystem::path PathMgr::mAbsolutePath{};
+	std::filesystem::path PathMgr::mRelativePath{};
+	std::filesystem::path PathMgr::mRelativePath_Res[(int)eResourceType::END]{};
+	std::filesystem::path PathMgr::mRelativePath_ShaderBin{};
 
 	void PathMgr::Init()
 	{
@@ -17,8 +18,11 @@ namespace mh
 		
 		mRelativePath = ".";
 		mRelativePath /= mh::define::strKey::DirName_Content;
+
+		mRelativePath_ShaderBin = ".";
+		mRelativePath_ShaderBin /= mh::define::strKey::DirName_ShaderBin;
 		
-		for (int i = 0; i < (int)eResourceType::End; ++i)
+		for (int i = 0; i < (int)eResourceType::END; ++i)
 		{
 			mRelativePath_Res[i] = mRelativePath;
 			mRelativePath_Res[i] /= mh::define::strKey::ArrResName[i];
@@ -28,10 +32,12 @@ namespace mh
 	{
 		mAbsolutePath.clear();
 		mRelativePath.clear();
-		for (int i = 0; i < (int)eResourceType::End; ++i)
+		for (int i = 0; i < (int)eResourceType::END; ++i)
 		{
 			mRelativePath_Res[i].clear();
 		}
+
+		mRelativePath_ShaderBin.clear();
 	}
 }
 

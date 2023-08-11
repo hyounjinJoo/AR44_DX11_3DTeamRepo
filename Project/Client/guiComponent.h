@@ -10,8 +10,6 @@ namespace gui
 	public:
 		guiComponent(mh::define::eComponentType _type);
 		virtual ~guiComponent();
-
-		virtual void UpdateUI() override;
 		
 		void SetTarget(mh::GameObject* _target) { mTarget = _target; }
 		mh::GameObject* GetTarget() { return mTarget; }

@@ -4,7 +4,7 @@
 namespace gui
 {
 	TreeWidget::tNode::tNode()
-		: guiEntity("TreeNode")
+		: guiEntity("")
 		, mTreeWidget(nullptr)
 		, mData{}
 		, mParent(nullptr)
@@ -21,7 +21,7 @@ namespace gui
 		}
 	}
 	// Node
-	void TreeWidget::tNode::Update()
+	void TreeWidget::tNode::UpdateUI()
 	{
 		//ImGuiTreeNodeFlags_::ImGuiTreeNodeFlags_Framed;
 
@@ -52,7 +52,7 @@ namespace gui
 
 			for (tNode* node : mChilds)
 			{
-				node->Update();
+				node->UpdateUI();
 			}
 
 			ImGui::TreePop();
@@ -67,7 +67,7 @@ namespace gui
 
 	// Tree
 	TreeWidget::TreeWidget()
-		: guiChild("TreeWIdget")
+		: guiChild(strKey::TreeWidget)
 		, mRoot(nullptr)
 		, mbDummyRootUse{}
 		, mSelectedNode{}
@@ -88,23 +88,21 @@ namespace gui
 			return;
 		}
 
-		//mRoot->Update();
-
 		if (!mbDummyRootUse)
 		{
-			mRoot->Update();
+			mRoot->UpdateUI();
 		}
 		else
 		{
 			const std::vector<tNode*>& childs = mRoot->GetChilds();
 			for (tNode* child : childs)
 			{
-				child->Update();
+				child->UpdateUI();
 			}
 		}
 	}
 
-	TreeWidget::tNode* TreeWidget::AddNode(tNode* parent, const std::string& name, tData data, bool isFrame)
+	TreeWidget::tNode* TreeWidget::AddNode(tNode* parent, const std::string& name, mh::define::tDataPtr data, bool isFrame)
 	{
 		tNode* node = new tNode;
 		node->SetKey(name);

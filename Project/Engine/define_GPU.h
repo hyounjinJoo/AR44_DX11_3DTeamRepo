@@ -155,6 +155,39 @@ namespace mh::define
 		End,
 	};
 
+	namespace strKey
+	{
+		constexpr const char* eSamplerType[(int)mh::define::eSamplerType::End]
+		{
+			"Point",
+			"Linear",
+			"Anisotropic",
+		};
+
+		constexpr const char* eRSType[(int)mh::define::eRSType::End]
+		{
+			"SolidBack",
+			"SolidFront",
+			"SolidNone",
+			"WireframeNone",
+		};
+
+		constexpr const char* eDSType[(int)mh::define::eDSType::End]
+		{
+			"Less",
+			"Greater",
+			"NoWrite",
+			"None",
+		};
+
+		constexpr const char* eBSType[(int)mh::define::eBSType::End]
+		{
+			"Default",
+			"AlphaBlend",
+			"OneOne",
+		};
+	}
+
 	enum class eRenderingMode
 	{
 		//Deffered

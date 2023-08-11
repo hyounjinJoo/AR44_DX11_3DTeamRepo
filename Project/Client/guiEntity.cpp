@@ -5,13 +5,12 @@ namespace gui
 {
 	UINT32 guiEntity::gIDNext{};
 
-	guiEntity::guiEntity(const std::string_view _strKey)
+	guiEntity::guiEntity(const std::string_view _strName)
 		: mID(++gIDNext)
-		, mStrKey(_strKey)
+		, mName(_strName)
+		, mStrKey(_strName)
 	{
 	}
-
-
 
 
 	guiEntity::~guiEntity()

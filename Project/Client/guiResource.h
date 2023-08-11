@@ -4,11 +4,11 @@
 
 namespace gui
 {
-	class IRes : public guiChild
+	class guiResource : public guiChild
 	{
 	public:
-		IRes(const std::string_view _strKey);
-		virtual ~IRes();
+		guiResource(mh::eResourceType _resType);
+		virtual ~guiResource();
 
 		void UpdateUI() override;
 		

@@ -5,18 +5,18 @@
 
 namespace gui
 {
-	Texture::Texture()
-		: IRes("Texture")
+	guiTexture::guiTexture()
+		: guiResource(mh::define::eResourceType::Texture)
 	{
 
 	}
 
-	Texture::~Texture()
+	guiTexture::~guiTexture()
 	{
 
 	}
 
-	void Texture::Update()
+	void guiTexture::UpdateUI()
 	{
 		mh::Texture* targetTex 
 			= dynamic_cast<mh::Texture*>(GetTarget());

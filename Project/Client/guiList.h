@@ -5,7 +5,7 @@
 
 namespace gui
 {
-	class guiWidget;
+	class guiBase;
 	class guiList : public guiBase
 	{
 	public:

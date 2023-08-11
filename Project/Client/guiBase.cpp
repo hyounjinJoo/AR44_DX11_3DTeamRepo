@@ -5,8 +5,8 @@
 
 namespace gui
 {
-	guiBase::guiBase(const std::string_view _strKey)
-		: guiEntity(_strKey)
+	guiBase::guiBase(const std::string_view _strName)
+		: guiEntity(_strName)
 		, mParent()
 		, mChilds{}
 		, mbNoChild()
@@ -14,8 +14,22 @@ namespace gui
 	{
 	}
 
+
 	guiBase::~guiBase()
 	{
+		for (size_t i = 0; i < mChilds.size(); ++i)
+		{
+			if (mChilds[i])
+				delete mChilds[i];
+		}
+	}
+	void guiBase::InitRecursive()
+	{
+		Init();
+		for (size_t i = 0; i < mChilds.size(); ++i)
+		{
+			mChilds[i]->InitRecursive();
+		}
 	}
 	void guiBase::FixedUpdate()
 	{
@@ -28,7 +42,6 @@ namespace gui
 		if (true == BeginUI())
 		{
 			UpdateUI();
-
 			for (size_t i = 0; i < mChilds.size(); ++i)
 			{
 				mChilds[i]->FixedUpdate();
@@ -38,28 +51,17 @@ namespace gui
 		}
 	}
 
-	guiBase* guiBase::AddChild(guiBase* _pChild)
+	void guiBase::AddChild(guiBase* _pChild)
 	{
-		if (mbNoChild)
+		if (_pChild)
 		{
-			SAFE_DELETE(_pChild);
+			_pChild->MakeUniqueKeyByName();
+			_pChild->SetParent(this);
+			mChilds.push_back(_pChild);
 		}
-		else
-		{
-			if (_pChild)
-			{
-				if (_pChild->GetParent())
-				{
-					_pChild->GetParent()->RemoveChild(_pChild);
-				}
-
-				mChilds.push_back(_pChild);
-				_pChild->SetParent(this);
-			}
-		}
-
-		return _pChild;
 	}
+
+
 	void guiBase::RemoveChild(guiBase* _pChild)
 	{
 		for (auto iter = mChilds.begin(); iter != mChilds.end(); ++iter)

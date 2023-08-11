@@ -4,8 +4,8 @@
 
 namespace gui
 {
-	guiWindow::guiWindow(const std::string_view _strKey)
-		: guiBase(_strKey)
+	guiWindow::guiWindow(const std::string_view _strName)
+		: guiBase(_strName)
 		, mWindowFlag()
 		//, mSize()
 	{
@@ -16,14 +16,7 @@ namespace gui
 	bool guiWindow::BeginUI()
 	{
 		bool retVal = ImGui::Begin(GetKey().c_str(), GetEnablePtr(), mWindowFlag);
-		if (retVal)
-		{
-			//if (ImGuiWindowFlags_::ImGuiWindowFlags_NoResize & mWindowFlag)
-			//{
-			//	ImGui::SetNextWindowSize(mSize);
-			//}
-		}
-		else
+		if(false == retVal)
 		{
 			ImGui::End();
 		}

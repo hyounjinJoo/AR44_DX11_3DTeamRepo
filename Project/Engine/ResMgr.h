@@ -54,7 +54,7 @@ namespace mh
 		static void Release();
 	
 	private:
-		static std::unordered_map<std::string, std::shared_ptr<IRes>, tUmap_StringViewHasher, std::equal_to<>> mArrRes[(int)eResourceType::End];
+		static std::unordered_map<std::string, std::shared_ptr<IRes>, tUmap_StringViewHasher, std::equal_to<>> mArrRes[(int)eResourceType::END];
 	};
 
 
@@ -96,7 +96,7 @@ namespace mh
 			return eResourceType::ComputeShader;
 		}
 		
-		return eResourceType::End;
+		return eResourceType::END;
 	}
 
 	template<typename T>

@@ -22,7 +22,7 @@ namespace mh::define
 		
 		GraphicsShader,
 		ComputeShader,
-		End,
+		END,
 
 	};
 
@@ -30,7 +30,7 @@ namespace mh::define
 	{
 		STRKEY DirName_Content = "Res";
 		//리소스 이름 겸 Res 폴더 내의 폴더명으로 사용
-		STRKEY ArrResName[(int)eResourceType::End] =
+		STRKEY ArrResName[(int)eResourceType::END] =
 		{
 			"Mesh",
 			"MeshData",

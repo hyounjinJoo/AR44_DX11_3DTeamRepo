@@ -3,12 +3,12 @@
 
 namespace gui
 {
-	class Texture : public gui::IRes
+	class guiTexture : public gui::guiResource
 	{
 	public:
-		Texture();
-		virtual ~Texture();
+		guiTexture();
+		virtual ~guiTexture();
 
-		virtual void Update() override;
+		virtual void UpdateUI() override;
 	};
 }

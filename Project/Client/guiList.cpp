@@ -6,7 +6,7 @@
 namespace gui
 {
 	guiList::guiList()
-		: guiBase("guiList")
+		: guiBase(strKey::ListBox)
 		, mListIndex(-1)
 		, mSize(200.f, 200.f)
 		, mEventGUI()

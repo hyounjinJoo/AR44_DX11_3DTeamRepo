@@ -23,6 +23,7 @@ namespace mh
 		virtual eResult SaveJson(Json::Value* _pJVal) override;
 		virtual eResult LoadJson(const Json::Value* _pJVal) override;
 
+		virtual eResult Save(const std::filesystem::path& _path) override;
 		virtual eResult Load(const std::filesystem::path& _path) override;
 
 		eResult CreateByCompile(eGSStage _stage, const stdfs::path& _FullPath, const std::string_view _funcName);
@@ -37,13 +38,27 @@ namespace mh
 		ID3D11InputLayout** GetInputLayoutAddressOf() { return mInputLayout.GetAddressOf(); }
 
 		void SetTopology(D3D11_PRIMITIVE_TOPOLOGY _topology) { mTopology = _topology; }
+		D3D11_PRIMITIVE_TOPOLOGY GetTopology() { return mTopology; }
+
 		void SetRSState(eRSType _state) { mRSType = _state; }
+		eRSType GetRSState() const { return mRSType; }
+
 		void SetDSState(eDSType _state) { mDSType = _state; }
+		eDSType GetDSState() const { return mDSType; }
+
 		void SetBSState(eBSType _state) { mBSType = _state; }
+		eBSType GetBSState() const { return mBSType; }
 
 		void AddInputLayout(const D3D11_INPUT_ELEMENT_DESC& _desc) { mVecInputLayoutDesc.push_back(_desc); }
 		void SetInputLayout(const std::vector<D3D11_INPUT_ELEMENT_DESC>& _descs) { mVecInputLayoutDesc = _descs; }
 		const std::vector<D3D11_INPUT_ELEMENT_DESC>& GetInputLayoutDescs() { return mVecInputLayoutDesc; }
+
+
+		//에디터용
+		inline void SetEditMode(bool _bEditMode) { mbEditMode = _bEditMode; }
+		inline void SetShaderKey(eGSStage _stage, const std::string_view _strKey);
+		inline const std::string& GetShaderKey(eGSStage _stage) { return mArrShaderCode[(int)_stage].strKey; }
+		
 
 	private:
 		eResult CreateShader(eGSStage _stage, const void* _pByteCode, size_t _ByteCodeSize);
@@ -66,5 +81,13 @@ namespace mh
 		eBSType mBSType;
 
 		ComPtr<ID3DBlob> mErrorBlob;
+
+		bool mbEditMode;
 	};
+
+
+	inline void GraphicsShader::SetShaderKey(eGSStage _stage, const std::string_view _strKey)
+	{
+		mArrShaderCode[(int)_stage].strKey = _strKey;
+	}
 }

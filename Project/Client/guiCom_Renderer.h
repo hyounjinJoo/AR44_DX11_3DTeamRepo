@@ -5,13 +5,14 @@
 
 namespace gui
 {
-	class guiCom_Renderer_Mesh : public guiComponent
+	class guiCom_Renderer : public guiComponent
 	{
 	public:
-		guiCom_Renderer_Mesh();
-		~guiCom_Renderer_Mesh();
+		guiCom_Renderer();
+		virtual ~guiCom_Renderer();
 
 		virtual void Update() override;
+
 		virtual void UpdateUI() override;
 	
 		void SetMesh(const std::string& _strKey);

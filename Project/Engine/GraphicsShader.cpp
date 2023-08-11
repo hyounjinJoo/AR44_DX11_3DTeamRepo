@@ -20,6 +20,7 @@ namespace mh
 		, mDSType(eDSType::Less)
 		, mBSType(eBSType::AlphaBlend)
 		, mErrorBlob()
+		, mbEditMode(false)
 	{
 	}
 
@@ -86,11 +87,16 @@ namespace mh
 		//쉐이더
 		{
 			const std::vector<std::string>& vecStrKey = Json::MHGetJsonVectorPtr(_pJVal, JSON_KEY(mArrShaderCode));
-			for (size_t i = 0; i < vecStrKey.size(); ++i)
+
+			//에딧 모드가 아닐 경우에만 로드
+			if (false == mbEditMode)
 			{
-				CreateByCSO((eGSStage)i, vecStrKey[i]);
-				if ((size_t)eGSStage::END == i)
-					break;
+				for (size_t i = 0; i < vecStrKey.size(); ++i)
+				{
+					CreateByCSO((eGSStage)i, vecStrKey[i]);
+					if ((size_t)eGSStage::END == i)
+						break;
+				}
 			}
 		}
 
@@ -102,9 +108,45 @@ namespace mh
 		return eResult::Success;
 	}
 
+	eResult GraphicsShader::Save(const std::filesystem::path& _path)
+	{
+		stdfs::path FilePath = PathMgr::GetRelResourcePath(eResourceType::GraphicsShader);
+		FilePath /= _path;
+		FilePath.replace_extension(define::strKey::Ext_ShaderSetting);
+
+		Json::Value jVal;
+		eResult result = SaveJson(&jVal);
+		if (eResultFail(result))
+			return result;
+
+		std::ofstream ofs(FilePath);
+		if (false == ofs.is_open())
+			return eResult::Fail_OpenFile;
+
+		ofs << jVal;
+
+		ofs.close();
+
+		return eResult::Success;
+	}
+
 	eResult GraphicsShader::Load(const std::filesystem::path& _path)
 	{
-		return eResult::Fail_NotImplemented;
+		stdfs::path FilePath = PathMgr::GetRelResourcePath(eResourceType::GraphicsShader);
+		FilePath /= _path;
+		FilePath.replace_extension(define::strKey::Ext_ShaderSetting);
+
+		std::ifstream ifs(FilePath);
+		if (false == ifs.is_open())
+			return eResult::Fail_OpenFile;
+
+		Json::Value jVal{};
+		ifs >> jVal;
+		ifs.close();
+
+		eResult result = LoadJson(&jVal);
+
+		return result;
 	}
 
 	eResult GraphicsShader::CreateByCompile(eGSStage _stage, const stdfs::path& _FullPath, const std::string_view _funcName)

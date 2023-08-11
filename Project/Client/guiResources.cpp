@@ -1,7 +1,7 @@
 
 #include "PCH_Client.h"
 
-#include "guiProject.h"
+#include "guiResources.h"
 
 #include <Engine/Texture.h>
 #include <Engine/Material.h>
@@ -12,7 +12,7 @@
 #include "guiInspector.h"
 #include "guiResource.h"
 
-#include "ImGuiMgr.h"
+#include "guiMgr.h"
 
 #include <Engine/Application.h>
 
@@ -20,41 +20,33 @@ namespace gui
 {
 	using namespace mh::math;
 
-	Project::Project()
-		: guiChild("Project")
+	guiResources::guiResources()
+		: guiWindow(strKey::ResourceViewer)
 		, mTreeWidget(nullptr)
 	{
-
-		mh::int2 winSize = mh::Application::GetWindowSize();
-
-		Vector2 size((float)winSize.x, (float)winSize.y);
-
-		//SetSize(ImVec2((float)size.x / 2 + size.x / 5, size.y / 4));
-
-		mTreeWidget = new TreeWidget();
-		mTreeWidget->SetKey("GameResources");
-		
-		AddChild(mTreeWidget);
+		mTreeWidget = AddChild<TreeWidget>();
 
 		mTreeWidget->SetEvent(this
-			, std::bind(&Project::toInspector, this, std::placeholders::_1));
+			, std::bind(&guiResources::toInspector, this, std::placeholders::_1));
 
 		mTreeWidget->SetDummyRoot(true);
+	}
+
+	guiResources::~guiResources()
+	{
+	}
+
+	void guiResources::Init()
+	{
 		ResetContent();
 	}
 
-	Project::~Project()
-	{
-		delete mTreeWidget;
-		mTreeWidget = nullptr;
-	}
-
-	void Project::ResetContent()
+	void guiResources::ResetContent()
 	{
 		//mTreeWidget->Close();
 		mTreeWidget->Clear();
 
-		TreeWidget::tNode* pRootNode = mTreeWidget->AddNode(nullptr, "GameResources", tData{}, true);
+		TreeWidget::tNode* pRootNode = mTreeWidget->AddNode(nullptr, "GameResources", mh::define::tDataPtr{}, true);
 
 		//enum class eResourceType
 		//{
@@ -74,13 +66,13 @@ namespace gui
 		AddResources<mh::GraphicsShader>(pRootNode, "Shaders");
 	}
 
-	void Project::toInspector(tData _data)
+	void guiResources::toInspector(mh::define::tDataPtr _data)
 	{
 		mh::IRes* resource = static_cast<mh::IRes*>(_data.pData);
 
-		guiInspector* inspector = ImGuiMgr::FindGUIWindow<guiInspector>("guiInspector");
+		guiInspector* inspector = guiMgr::FindGuiWindow<guiInspector>(strKey::Inspector);
 		inspector->SetTargetResource(resource);
-		inspector->InitializeTargetResource();
+		//inspector->InitializeTargetResource();
 	}
 
 }

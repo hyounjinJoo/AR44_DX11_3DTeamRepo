@@ -3,12 +3,12 @@
 #include "guiMainMenu.h"
 #include <Engine/Application.h>
 
-#include "ImGuiMgr.h"
+#include "guiMgr.h"
 
 namespace gui
 {
 	guiMainMenu::guiMainMenu()
-		: guiBase("MainMenu")
+		: guiBase(strKey::MainMenu)
 	{
         //SetSize(ImVec2(100.0f, 100.0f));
 	}
@@ -22,14 +22,14 @@ namespace gui
 	{
 		if (ImGui::BeginMenu("UI Menu"))
 		{
-			const auto& widgets = ImGuiMgr::GetGUIs();
-			for (const auto& widget : widgets)
+			const auto& guis = guiMgr::GetGUIs();
+			for (const auto& widget : guis)
 			{
-				if (this == widget)
+				if (this == widget.second)
 					continue;
-				else if (nullptr == widget->GetParent())
+				else if (nullptr == widget.second->GetParent())
 				{
-					if (ImGui::MenuItem(widget->GetKey().c_str(), nullptr, widget->GetEnablePtr()))
+					if (ImGui::MenuItem(widget.second->GetKey().c_str(), nullptr, widget.second->GetEnablePtr()))
 					{
 					}
 				}

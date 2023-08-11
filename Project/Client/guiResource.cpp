@@ -4,18 +4,19 @@
 
 namespace gui
 {
-	IRes::IRes(const std::string_view _strKey)
-		: guiChild(_strKey)
+	guiResource::guiResource(mh::eResourceType _resType)
+		: guiChild(mh::define::strKey::ArrResName[(int)_resType])
+		, mTarget()
 	{
 
 	}
 
-	IRes::~IRes()
+	guiResource::~guiResource()
 	{
 
 	}
 
-	void IRes::UpdateUI()
+	void guiResource::UpdateUI()
 	{
 		if (mTarget == nullptr)
 			return;

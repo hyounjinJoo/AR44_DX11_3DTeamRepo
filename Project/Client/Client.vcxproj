@@ -205,9 +205,10 @@ call Copy_DLL.bat $(Configuration)</Command>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="guiChild.h" />
+    <ClInclude Include="guiComboBox.h" />
     <ClInclude Include="guiEntity.h" />
     <ClInclude Include="guiGraphicsShaderEditor.h" />
-    <ClInclude Include="guiStrKeys.h" />
+    <ClInclude Include="strKey_gui.h" />
     <ClInclude Include="guiWindow.h" />
     <ClInclude Include="imgui_stdlib.h" />
     <ClInclude Include="PCH_Client.h" />
@@ -218,11 +219,11 @@ call Copy_DLL.bat $(Configuration)</Command>
     <ClInclude Include="guiInspector.h" />
     <ClInclude Include="guiMaterial.h" />
     <ClInclude Include="guiMesh.h" />
-    <ClInclude Include="guiCom_Renderer_Mesh.h" />
-    <ClInclude Include="guiProject.h" />
+    <ClInclude Include="guiCom_Renderer.h" />
+    <ClInclude Include="guiResources.h" />
     <ClInclude Include="guiResource.h" />
     <ClInclude Include="guiTexture.h" />
-    <ClInclude Include="guiTransform.h" />
+    <ClInclude Include="guiCom_Transform.h" />
     <ClInclude Include="guiTreeWidget.h" />
     <ClInclude Include="guiMainMenu.h" />
     <ClInclude Include="imconfig.h" />
@@ -237,14 +238,14 @@ call Copy_DLL.bat $(Configuration)</Command>
     <ClInclude Include="resource.h" />
     <ClInclude Include="targetver.h" />
     <ClInclude Include="guiDebugObject.h" />
-    <ClInclude Include="ImGuiMgr.h" />
+    <ClInclude Include="guiMgr.h" />
     <ClInclude Include="guiEditorObject.h" />
-    <ClInclude Include="guiWidget.h" />
     <ClInclude Include="GameClient.h" />
     <ClInclude Include="guiBase.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="guiChild.cpp" />
+    <ClCompile Include="guiComboBox.cpp" />
     <ClCompile Include="guiEntity.cpp" />
     <ClCompile Include="guiGraphicsShaderEditor.cpp" />
     <ClCompile Include="guiWindow.cpp" />
@@ -264,11 +265,11 @@ call Copy_DLL.bat $(Configuration)</Command>
     <ClCompile Include="guiInspector.cpp" />
     <ClCompile Include="guiMaterial.cpp" />
     <ClCompile Include="guiMesh.cpp" />
-    <ClCompile Include="guiCom_Renderer_Mesh.cpp" />
-    <ClCompile Include="guiProject.cpp" />
+    <ClCompile Include="guiCom_Renderer.cpp" />
+    <ClCompile Include="guiResources.cpp" />
     <ClCompile Include="guiResource.cpp" />
     <ClCompile Include="guiTexture.cpp" />
-    <ClCompile Include="guiTransform.cpp" />
+    <ClCompile Include="guiCom_Transform.cpp" />
     <ClCompile Include="guiTreeWidget.cpp" />
     <ClCompile Include="guiMainMenu.cpp" />
     <ClCompile Include="imgui.cpp">
@@ -302,9 +303,8 @@ call Copy_DLL.bat $(Configuration)</Command>
     <ClCompile Include="guiList.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="guiDebugObject.cpp" />
-    <ClCompile Include="ImGuiMgr.cpp" />
+    <ClCompile Include="guiMgr.cpp" />
     <ClCompile Include="guiEditorObject.cpp" />
-    <ClCompile Include="guiWidget.cpp" />
     <ClCompile Include="GameClient.cpp" />
     <ClCompile Include="guiBase.cpp" />
   </ItemGroup>

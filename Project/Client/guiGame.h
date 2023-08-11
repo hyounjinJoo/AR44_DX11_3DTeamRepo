@@ -1,15 +1,16 @@
 #pragma once
-#include "guiBase.h"
+#include "guiWindow.h"
 
 namespace gui
 {
-	class Game : public guiBase
+	class guiGame : public guiWindow
 	{
 	public:
-		Game();
-		virtual ~Game();
+		guiGame();
+		virtual ~guiGame();
 
-		virtual void Update() override;
+
+		virtual void UpdateUI() override;
 
 	private:
 	};

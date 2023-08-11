@@ -10,7 +10,7 @@ namespace mh
 
 namespace gui
 {
-	class guiTree_GameObject : public guiChild
+	class guiTree_GameObject : public guiWindow
 	{
 	public:
 		guiTree_GameObject();
@@ -18,7 +18,7 @@ namespace gui
 
 		virtual void Update() override;
 
-		void InitializeInspector(tData _data);
+		void GameobjectSelectCallback(mh::define::tDataPtr _data);
 		void InitializeScene();
 		void AddGameObject(TreeWidget::tNode* parent, mh::GameObject* gameObject);
 

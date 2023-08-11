@@ -46,4 +46,14 @@ namespace mh::define
 		std::size_t operator()(const std::string_view str) const { return hash_type{}(str); }
 		std::size_t operator()(std::string const& str) const { return hash_type{}(str); }
 	};
+
+	struct tDataPtr
+	{
+		void* pData;
+		size_t size;
+
+		template <typename T>
+		void SetDataPtr(const T _pData) { pData = (void*)_pData; size = sizeof(T); }
+	};
+
 }

@@ -7,14 +7,13 @@
 
 namespace gui
 {
-	class Project : public guiChild
+	class guiResources : public guiWindow
 	{
 	public:
-		Project();
-		virtual ~Project();
+		guiResources();
+		virtual ~guiResources();
 
-
-		//virtual void Update() override;
+		virtual void Init() override;
 
 		void ResetContent();
 
@@ -26,17 +25,17 @@ namespace gui
 				= mh::ResMgr::GetResources<T>();
 
 			TreeWidget::tNode* stemNode
-				= mTreeWidget->AddNode(rootNode, name, tData{}, true);
+				= mTreeWidget->AddNode(rootNode, name, mh::define::tDataPtr{}, true);
 
 			for (const auto& resource : resources)
 			{
-				tData data{};
+				mh::define::tDataPtr data{};
 				data.SetDataPtr(resource.second.get());
 				mTreeWidget->AddNode(stemNode, resource.first, data);
 			}
 		}
 
-		void toInspector(tData _data);
+		void toInspector(mh::define::tDataPtr _data);
 
 		TreeWidget* mTreeWidget;
 	};

@@ -118,8 +118,6 @@ namespace mh
 		Render();
 		Destroy();
 		
-		//TODO: Engine 내부에서 종료할 방법 만들기
-		//이걸 false로 반환하면 꺼지도록 짜놓음
 		return mbInitialized;
 	}
 

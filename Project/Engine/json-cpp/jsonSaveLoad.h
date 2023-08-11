@@ -247,12 +247,13 @@ namespace Json
 	}
 
 
-	static std::vector<std::string> MHGetJsonVectorPtr(const Json::Value* _pJson, const char* _strKey)
+	inline static std::vector<std::string> MHGetJsonVectorPtr(const Json::Value* _pJson, const char* _strKey)
 	{
-		std::vector<std::string> retVec{};
+		std::vector<std::string> retVec;
+
 		if (_pJson->isMember(_strKey))
 		{
-			const Json::Value& jVal = *_pJson;
+			const Json::Value& jVal = (*_pJson)[_strKey];
 			if (jVal.isArray())
 			{
 				for (Json::ValueConstIterator iter = jVal.begin(); iter != jVal.end(); ++iter)

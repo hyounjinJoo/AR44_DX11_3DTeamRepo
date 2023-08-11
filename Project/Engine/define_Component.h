@@ -46,36 +46,38 @@ namespace mh::define
 
 	};
 
-	STRKEY ArrComName[(int)eComponentType::END] =
+	namespace strKey
 	{
-		"Transform",
-		"Collider",
-		"Animator",
-		"Light",
-		"Camera",
-
-		"AudioSource",
-		"AudioListener",
-
-		"Renderer",
-
-		"Scripts"
-	};
-
-
-	namespace strKey::Default
-	{
-		namespace com
+		STRKEY ArrComName[(int)eComponentType::END] =
 		{
-			STRKEY_DECLARE(Com_Animator);
-			STRKEY_DECLARE(Com_AudioListener);
-			STRKEY_DECLARE(Com_AudioSource);
-			STRKEY_DECLARE(Com_Camera);
-			STRKEY_DECLARE(Com_Light);
-			STRKEY_DECLARE(Com_Renderer_Mesh);
-			STRKEY_DECLARE(Com_Renderer_ParticleSystem);
-			STRKEY_DECLARE(Com_Renderer_Sprite);
-			STRKEY_DECLARE(Com_Transform);
+			"Transform",
+			"Collider",
+			"Animator",
+			"Light",
+			"Camera",
+
+			"AudioSource",
+			"AudioListener",
+
+			"Renderer",
+
+			"Scripts"
+		};
+
+		namespace Default
+		{
+			namespace com
+			{
+				STRKEY_DECLARE(Com_Animator);
+				STRKEY_DECLARE(Com_AudioListener);
+				STRKEY_DECLARE(Com_AudioSource);
+				STRKEY_DECLARE(Com_Camera);
+				STRKEY_DECLARE(Com_Light);
+				STRKEY_DECLARE(Com_Renderer_Mesh);
+				STRKEY_DECLARE(Com_Renderer_ParticleSystem);
+				STRKEY_DECLARE(Com_Renderer_Sprite);
+				STRKEY_DECLARE(Com_Transform);
+			}
 		}
 	}
 }

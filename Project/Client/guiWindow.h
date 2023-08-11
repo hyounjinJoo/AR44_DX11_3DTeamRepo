@@ -7,11 +7,11 @@ namespace gui
 		public guiBase
 	{
 	public:
-		guiWindow(const std::string_view _strKey);
+		guiWindow(const std::string_view _strName);
 		virtual ~guiWindow();
 
 		virtual bool BeginUI() override;
-		virtual void UpdateUI() = 0;
+		virtual void UpdateUI() {};
 		virtual void EndUI() override;
 
 		void SetFlag(ImGuiWindowFlags _flag) { mWindowFlag = _flag; }

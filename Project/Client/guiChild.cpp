@@ -1,9 +1,10 @@
 #include "PCH_Client.h"
 #include "guiChild.h"
 
-gui::guiChild::guiChild(const std::string_view _strKey)
-    : guiWindow(_strKey)
+gui::guiChild::guiChild(const std::string_view _strName)
+    : guiWindow(_strName)
     , mbBorder(true)
+	, mSize{}
 {
 }
 
@@ -13,7 +14,13 @@ gui::guiChild::~guiChild()
 
 bool gui::guiChild::BeginUI()
 {
-    return ImGui::BeginChild(GetKey().c_str(), ImVec2(0.f, 0.f), mbBorder, GetImGuiWindowFlag());
+	bool retVal = ImGui::BeginChild(GetKey().c_str(), mSize, mbBorder, GetImGuiWindowFlag());
+	if (false == retVal)
+	{
+		ImGui::EndChild();
+	}
+
+	return retVal;
 }
 
 

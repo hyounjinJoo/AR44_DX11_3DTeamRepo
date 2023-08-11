@@ -8,16 +8,16 @@
 
 namespace gui
 {
-	Game::Game()
-		: guiBase("Game")
+	guiGame::guiGame()
+		: guiWindow(strKey::GameViewer)
 	{
 	}
 
-	Game::~Game()
+	guiGame::~guiGame()
 	{
 	}
 
-	void Game::Update()
+	void guiGame::UpdateUI()
 	{
 		std::shared_ptr<mh::Texture> renderTarget
 			= mh::GPUMgr::GetRenderTargetTex();

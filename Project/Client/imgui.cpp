@@ -2843,7 +2843,7 @@ void ImGuiListClipper::End()
     if (ImGuiListClipperData* data = (ImGuiListClipperData*)TempData)
     {
         // In theory here we should assert that we are already at the right position, but it seems saner to just seek at the end and not assert/crash the user.
-        IMGUI_DEBUG_LOG_CLIPPER("Clipper: End() in '%s'\n", g.CurrentWindow->Name);
+        IMGUI_DEBUG_LOG_CLIPPER("Clipper: END() in '%s'\n", g.CurrentWindow->Name);
         if (ItemsCount >= 0 && ItemsCount < INT_MAX && DisplayStart >= 0)
             ImGuiListClipper_SeekCursorForItem(this, ItemsCount);
 
@@ -3009,7 +3009,7 @@ bool ImGuiListClipper::Step()
     }
     else
     {
-        IMGUI_DEBUG_LOG_CLIPPER("Clipper: Step(): End.\n");
+        IMGUI_DEBUG_LOG_CLIPPER("Clipper: Step(): END.\n");
         End();
     }
     return ret;
@@ -7335,14 +7335,14 @@ void ImGui::End()
     // Error checking: verify that user hasn't called End() too many times!
     if (g.CurrentWindowStack.Size <= 1 && g.WithinFrameScopeWithImplicitWindow)
     {
-        IM_ASSERT_USER_ERROR(g.CurrentWindowStack.Size > 1, "Calling End() too many times!");
+        IM_ASSERT_USER_ERROR(g.CurrentWindowStack.Size > 1, "Calling END() too many times!");
         return;
     }
     IM_ASSERT(g.CurrentWindowStack.Size > 0);
 
     // Error checking: verify that user doesn't directly call End() on a child window.
     if ((window->Flags & ImGuiWindowFlags_ChildWindow) && !(window->Flags & ImGuiWindowFlags_DockNodeHost) && !window->DockIsActive)
-        IM_ASSERT_USER_ERROR(g.WithinEndChild, "Must call EndChild() and not End()!");
+        IM_ASSERT_USER_ERROR(g.WithinEndChild, "Must call EndChild() and not END()!");
 
     // Close anything that is open
     if (window->DC.CurrentColumns)
@@ -8398,7 +8398,7 @@ ImGuiKey ImGui::GetKeyIndex(ImGuiKey key)
 static const char* const GKeyNames[] =
 {
     "Tab", "LeftArrow", "RightArrow", "UpArrow", "DownArrow", "PageUp", "PageDown",
-    "Home", "End", "Insert", "Delete", "Backspace", "Space", "Enter", "Escape",
+    "Home", "END", "Insert", "Delete", "Backspace", "Space", "Enter", "Escape",
     "LeftCtrl", "LeftShift", "LeftAlt", "LeftSuper", "RightCtrl", "RightShift", "RightAlt", "RightSuper", "Menu",
     "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "A", "B", "C", "D", "E", "F", "G", "H",
     "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z",
@@ -9750,14 +9750,14 @@ static void ImGui::ErrorCheckEndFrameSanityChecks()
         if (g.CurrentWindowStack.Size > 1)
         {
             ImGuiWindow* window = g.CurrentWindowStack.back().Window; // <-- This window was not Ended!
-            IM_ASSERT_USER_ERROR(g.CurrentWindowStack.Size == 1, "Mismatched Begin/BeginChild vs End/EndChild calls: did you forget to call End/EndChild?");
+            IM_ASSERT_USER_ERROR(g.CurrentWindowStack.Size == 1, "Mismatched Begin/BeginChild vs END/EndChild calls: did you forget to call END/EndChild?");
             IM_UNUSED(window);
             while (g.CurrentWindowStack.Size > 1)
                 End();
         }
         else
         {
-            IM_ASSERT_USER_ERROR(g.CurrentWindowStack.Size == 1, "Mismatched Begin/BeginChild vs End/EndChild calls: did you call End/EndChild too much?");
+            IM_ASSERT_USER_ERROR(g.CurrentWindowStack.Size == 1, "Mismatched Begin/BeginChild vs END/EndChild calls: did you call END/EndChild too much?");
         }
     }
 
@@ -9789,7 +9789,7 @@ void    ImGui::ErrorCheckEndFrameRecover(ImGuiErrorLogCallback log_callback, voi
         }
         else
         {
-            if (log_callback) log_callback(user_data, "Recovered from missing End() for '%s'", window->Name);
+            if (log_callback) log_callback(user_data, "Recovered from missing END() for '%s'", window->Name);
             End();
         }
     }

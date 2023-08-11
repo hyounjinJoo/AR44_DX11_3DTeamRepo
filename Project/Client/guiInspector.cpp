@@ -8,100 +8,121 @@
 
 #include <Engine/RenderMgr.h>
 
-#include "guiTransform.h"
-#include "guiCom_Renderer_Mesh.h"
+#include "guiCom_Transform.h"
+#include "guiCom_Renderer.h"
 #include "guiTexture.h"
 
 namespace gui
 {
 	using namespace mh::define;
 	guiInspector::guiInspector()
-		: guiChild("guiInspector")
+		: guiWindow(strKey::Inspector)
 		, mTargetResource()
-		, mTransform()
 	{
-		//SetSize(ImVec2(300.0f, 100.0f));
-		
-		mComponents.resize((UINT)eComponentType::END);
-		mTargetGameObject = mh::RenderMgr::GetInspectorGameObject();
+		//컴포넌트의 경우 수동 관리
+		mGuiComponents.resize((int)mh::define::eComponentType::END);
+		mGuiResources.resize((int)mh::define::eResourceType::END);
 
-		//TODO: 여기 작동 안함
-		mTransform = new gui::guiTransform();
-		mTransform->SetKey("InspectorTransform");
-		mTransform->SetTarget(mTargetGameObject);
-		//AddWidget(mTransform);
-		//
-		//mComponents[(UINT)eComponentType::] = new gui::Com_Renderer_Mesh();
-		//mComponents[(UINT)eComponentType::Com_Renderer_Mesh]->SetKey("InspectorMeshRenderer");
-		//mComponents[(UINT)eComponentType::Com_Renderer_Mesh]->SetTarget(mTargetGameObject);
-		//AddWidget(mComponents[(UINT)eComponentType::Com_Renderer_Mesh]);
+		mGuiComponents[(int)eComponentType::Transform] = new guiCom_Transform;
+		mGuiComponents[(int)eComponentType::Transform]->SetSize(ImVec2(0.f, 100.f));
 
-		mResources.resize((UINT)eResourceType::End);
-		//mResources[(UINT)eResourceType::Texture] = new gui::Texture();
-		mResources[(UINT)eResourceType::Texture]->SetKey("InspectorTexture");
-		//AddWidget(mResources[(UINT)eResourceType::Texture]);
+		mGuiComponents[(int)eComponentType::Renderer] = new guiCom_Renderer;
+		mGuiComponents[(int)eComponentType::Renderer]->SetSize(ImVec2(0.f, 100.f));
+
+		mGuiResources[(int)eResourceType::Texture] = new guiTexture;
 	}
 
 	guiInspector::~guiInspector()
 	{
-		for (guiComponent* comp : mComponents)
+		for (size_t i = 0; i < mGuiComponents.size(); ++i)
 		{
-			delete comp;
-			comp = nullptr;
+			if (mGuiComponents[i])
+				delete mGuiComponents[i];
 		}
 
-		for (gui::IRes* res : mResources)
+		for (size_t i = 0; i < mGuiResources.size(); ++i)
 		{
-			delete res;
-			res = nullptr;
+			if (mGuiResources[i])
+				delete mGuiResources[i];
+		}
+	}
+
+	void guiInspector::Init()
+	{
+		for (size_t i = 0; i < mGuiComponents.size(); ++i)
+		{
+			if (mGuiComponents[i])
+				mGuiComponents[i]->InitRecursive();
+		}
+
+		for (size_t i = 0; i < mGuiResources.size(); ++i)
+		{
+			if (mGuiResources[i])
+				mGuiResources[i]->InitRecursive();
 		}
 	}
 
 	void guiInspector::Update()
 	{
-		//mComponents[(UINT)eComponentType::Transform]->SetTarget(mTarget);
-		//mComponents[(UINT)eComponentType::Com_Renderer_Mesh]->SetTarget(mTarget);
-	}
+		mTargetGameObject = mh::RenderMgr::GetInspectorGameObject();
 
-
-	void guiInspector::ClearTarget()
-	{
-		for (guiComponent* comp : mComponents)
+		for (size_t i = 0; i < mGuiComponents.size(); ++i)
 		{
-			if (comp == nullptr)
-				continue;
-
-			comp->SetEnable(false);
-			comp->SetTarget(nullptr);
+			if (mGuiComponents[i])
+			{
+				if (mTargetGameObject)
+				{
+					mGuiComponents[i]->SetTarget(mTargetGameObject);
+					mGuiComponents[i]->Update();
+				}
+					
+			}
 		}
 
-		for (gui::IRes* res : mResources)
+		
+		for (size_t i = 0; i < mGuiResources.size(); ++i)
 		{
-			if (res == nullptr)
-				continue;
 
-			res->SetEnable(false);
-			res->SetTarget(nullptr);
+			if (mGuiResources[i])
+			{
+				if (mTargetResource)
+				{
+					mGuiResources[i]->SetTarget(mTargetResource);
+					mGuiResources[i]->Update();
+				}
+			}
+				
 		}
 	}
 
-	void guiInspector::InitializeTargetGameObject()
+	void guiInspector::UpdateUI()
 	{
-		ClearTarget();
+		for (size_t i = 0; i < mGuiComponents.size(); ++i)
+		{
+			IndicatorButton(mh::define::strKey::ArrComName[(UINT)i]);
 
+			if (mTargetGameObject && mGuiComponents[i])
+				mGuiComponents[i]->FixedUpdate();
+		}
 
+		for (size_t i = 0; i < mGuiResources.size(); ++i)
+		{
+			IndicatorButton(mh::define::strKey::ArrResName[i]);
 
-		//mComponents[(UINT)eComponentType::]->SetState(eState::Active);
-		//mComponents[(UINT)eComponentType::Transform]->SetTarget(mTargetGameObject);
-		//mComponents[(UINT)eComponentType::Com_Renderer_Mesh]->SetState(eState::Active);
-		//mComponents[(UINT)eComponentType::Com_Renderer_Mesh]->SetTarget(mTargetGameObject);
+			if (mTargetResource && mGuiResources[i])
+				mGuiResources[i]->FixedUpdate();
+		}
 	}
 
-	void guiInspector::InitializeTargetResource()
+	void guiInspector::IndicatorButton(const char* _strButtonName)
 	{
-		ClearTarget();
+		ImGui::PushID(0);
+		ImGui::PushStyleColor(ImGuiCol_Button, (ImVec4)ImColor::HSV(0.0f, 0.6f, 0.6f));
+		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, (ImVec4)ImColor::HSV(0.0f, 0.7f, 0.7f));
+		ImGui::PushStyleColor(ImGuiCol_ButtonActive, (ImVec4)ImColor::HSV(0.0f, 0.8f, 0.8f));
 
-		//mResources[(UINT)eResourceType::Texture]->SetState(eState::Active);
-		//mResources[(UINT)eResourceType::Texture]->SetTarget(mTargetResource);
+		ImGui::Button(_strButtonName);
+		ImGui::PopStyleColor(3);
+		ImGui::PopID();
 	}
 }

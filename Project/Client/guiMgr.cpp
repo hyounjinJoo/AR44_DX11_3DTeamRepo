@@ -1,5 +1,5 @@
 #include "PCH_Client.h"
-#include "ImGuiMgr.h"
+#include "guiMgr.h"
 
 #include <Engine/Mesh.h>
 #include <Engine/ResMgr.h>
@@ -18,10 +18,11 @@
 #include "guiInspector.h"
 #include "guiGame.h"
 #include "guiBase.h"
-#include "guiProject.h"
+#include "guiResources.h"
 #include "guiMainMenu.h"
 #include "guiConsole.h"
 #include "guiList.h"
+#include "guiTree_GameObject.h"
 
 
 #include <Engine/AtExit.h>
@@ -29,24 +30,27 @@
 
 #include "guiGraphicsShaderEditor.h"
 
+#include "guiDebugObject.h"
+#include "guiEditorObject.h"
+
 extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 namespace gui
 {
-	//std::unordered_map<std::string, guiBase*, mh::define::tUmap_StringViewHasher, std::equal_to<>> ImGuiMgr::mGuiWindows{};
-	std::vector<guiBase*> ImGuiMgr::mGuiWindows{};
-	std::vector<EditorObject*> ImGuiMgr::mEditorObjects{};
-	std::vector<DebugObject*> ImGuiMgr::mDebugObjects{};
+	std::unordered_map<std::string, guiBase*, mh::define::tUmap_StringViewHasher, std::equal_to<>> guiMgr::mGuiWindows{};
+	//std::vector<guiBase*> guiMgr::mGuiWindows{};
+	std::vector<EditorObject*> guiMgr::mEditorObjects{};
+	std::vector<DebugObject*> guiMgr::mDebugObjects{};
 
-	bool ImGuiMgr::mbEnable{};
-	bool ImGuiMgr::mbInitialized;
+	bool guiMgr::mbEnable{};
+	bool guiMgr::mbInitialized;
 
 	using namespace mh::define;
 	using namespace mh::math;
 
 	
-	void ImGuiMgr::Init()
+	void guiMgr::Init()
 	{
-		AtExit::AddFunc(ImGuiMgr::Release);
+		AtExit::AddFunc(guiMgr::Release);
 
 		::GameClient::RegisterImGuiWndProc(ImGui_ImplWin32_WndProcHandler);
 
@@ -85,35 +89,32 @@ namespace gui
 
 		ImGuiInitialize();
 
-		guiMainMenu* MainMenu = new guiMainMenu;
-		mGuiWindows.push_back(MainMenu);
+		AddGuiWindow<guiMainMenu>();
 
+		AddGuiWindow<guiInspector>();
 
-		// Init guiWidget 
-		//guiInspector* inspector = new guiInspector();
-		//mWidgets.insert(std::make_pair("guiInspector", inspector));
-
+		//AddGuiWindow<guiGame>();
 		////Game* game = new Game();
 		////mWidgets.insert(std::make_pair("Game", game));
 
-		//guiTree_GameObject* hierarchy = new guiTree_GameObject();
-		//mWidgets.insert(std::make_pair("guiTree_GameObject", hierarchy));
+		AddGuiWindow<guiTree_GameObject>();
 
-		//Project* project = new Project();
-		//mWidgets.insert(std::make_pair("Project", project));
-		//
-		//Console* console = new Console();
-		//mWidgets.insert(std::make_pair("Console", console));
+		AddGuiWindow<guiResources>();
 
-		//GraphicsShaderEditor* Editor = new GraphicsShaderEditor;
+		AddGuiWindow<guiGraphicsShaderEditor>();
+		//guiGraphicsShaderEditor* Editor = new guiGraphicsShaderEditor;
 		//mWidgets.insert(std::make_pair("Graphics Shader Editor", Editor));
 
 		//ListWidget* listWidget = new ListWidget();
 		//mWidgets.insert(std::make_pair("ListWidget", listWidget));
 
+		for (const auto& iter : mGuiWindows)
+		{
+			iter.second->InitRecursive();
+		}
 	}
 
-	void ImGuiMgr::Run()
+	void guiMgr::Run()
 	{
 		if (false == mbEnable)
 			return;
@@ -123,7 +124,7 @@ namespace gui
 	}
 
 
-	void ImGuiMgr::Update()
+	void guiMgr::Update()
 	{
 		ImGuiNewFrame();
 
@@ -133,16 +134,16 @@ namespace gui
 		}
 	}
 
-	void ImGuiMgr::FixedUpdate()
+	void guiMgr::FixedUpdate()
 	{
 		for (EditorObject* obj : mEditorObjects)
 		{
 			obj->FixedUpdate();
 		}
 
-		for (guiBase* gui : mGuiWindows)
+		for (const auto& guiPair : mGuiWindows)
 		{
-			gui->FixedUpdate();
+			guiPair.second->FixedUpdate();
 		}
 
 		//for (const auto& pair : mGuiWindows)
@@ -154,7 +155,7 @@ namespace gui
 		//}
 	}
 
-	void ImGuiMgr::Render()
+	void guiMgr::Render()
 	{
 		for (EditorObject* obj : mEditorObjects)
 		{
@@ -171,7 +172,7 @@ namespace gui
 		ImGuiRender();
 	}
 
-	void ImGuiMgr::Release()
+	void guiMgr::Release()
 	{
 		if (mbEnable == false)
 			return;
@@ -183,12 +184,14 @@ namespace gui
 		//		SAFE_DELETE(iter.second);
 		//	}
 		//}
-		for (guiBase* gui : mGuiWindows)
+
+		for (const auto& guiPair : mGuiWindows)
 		{
-			if (gui)
-				delete gui;
+			if (guiPair.second)
+			{
+				delete guiPair.second;
+			}
 		}
-		
 		mGuiWindows.clear();
 		
 		for (auto obj : mEditorObjects)
@@ -205,7 +208,7 @@ namespace gui
 		ImGuiRelease();
 	}
 
-	void ImGuiMgr::DebugRender(mh::tDebugMesh& mesh)
+	void guiMgr::DebugRender(mh::tDebugMesh& mesh)
 	{
 		DebugObject* debugObj = mDebugObjects[(UINT)mesh.type];
 		
@@ -232,7 +235,7 @@ namespace gui
 		debugObj->Render();
 	}
 
-	void ImGuiMgr::ImGuiInitialize()
+	void guiMgr::ImGuiInitialize()
 	{
 		// Setup Dear ImGui context
 		IMGUI_CHECKVERSION();
@@ -287,7 +290,7 @@ namespace gui
 
 	}
 
-	void ImGuiMgr::ImGuiNewFrame()
+	void guiMgr::ImGuiNewFrame()
 	{
 		// Start the Dear ImGui frame
 		ImGui_ImplDX11_NewFrame();
@@ -296,7 +299,7 @@ namespace gui
 		ImGuiIO io = ImGui::GetIO();
 	}
 
-	void ImGuiMgr::ImGuiRender()
+	void guiMgr::ImGuiRender()
 	{
 		bool show_demo_window = false;
 		bool show_another_window = false;
@@ -317,11 +320,43 @@ namespace gui
 		}
 	}
 
-	void ImGuiMgr::ImGuiRelease()
+	void guiMgr::AddGuiWindow(guiBase* _pBase)
+	{
+		//최상위 윈도우는 이름 자체가 고유값이여야 함
+		const std::string_view guiName = _pBase->GetKey();
+		guiBase* findPtr = FindGuiWindow(guiName);
+		if (findPtr)
+		{
+			_pBase->MakeUniqueKeyByName();
+		}
+
+		mGuiWindows.insert(std::make_pair(_pBase->GetKey(), _pBase));
+
+		if (mbInitialized)
+		{
+			_pBase->InitRecursive();
+		}
+	}
+
+	void guiMgr::ImGuiRelease()
 	{
 		// Cleanup
 		ImGui_ImplDX11_Shutdown();
 		ImGui_ImplWin32_Shutdown();
 		ImGui::DestroyContext();
+	}
+
+
+	guiBase* guiMgr::FindGuiWindow(const std::string_view _strKey)
+	{
+		guiBase* pui = nullptr;
+
+		const auto& iter = mGuiWindows.find(_strKey);
+		if (iter != mGuiWindows.end())
+		{
+			pui = iter->second;
+		}
+		
+		return pui;
 	}
 }
