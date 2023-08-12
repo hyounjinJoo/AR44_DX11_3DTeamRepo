@@ -24,7 +24,6 @@ namespace gui
 		bool CreateDefaultShaders();
 		
 	private:
-		//void LoadShaderStageComboBox();
 		void LoadShaderSettingComboBox();
 
 		void DXGISelectCallback(const guiComboBox::tComboItem& _item);
@@ -40,9 +39,12 @@ namespace gui
 	private:
 		int		mSemanticEditIdx;
 
-		std::vector<std::string> mSemanticNames;
 		std::vector<D3D11_INPUT_ELEMENT_DESC> mInputLayoutDescs;
+
+		std::string mSemanticName;
 		D3D11_INPUT_ELEMENT_DESC mDescForEdit;
+
+
 		guiComboBox mDXGIFormatCombo;
 
 		guiComboBox mTopologyCombo;

@@ -5,6 +5,9 @@
 #include "imgui/imgui_impl_win32.h"
 #include "imgui/imgui_impl_dx11.h"
 
+#include "GameMainWindow.h"
+#include "AtExit.h"
+
 #include "Mesh.h"
 #include "ResMgr.h"
 #include "Material.h"
@@ -24,7 +27,7 @@
 #include "guiList.h"
 #include "guiTree_GameObject.h"
 
-#include "AtExit.h"
+
 
 #include "guiGraphicsShaderEditor.h"
 
@@ -52,7 +55,7 @@ namespace gui
 	{
 		AtExit::AddFunc(guiMgr::Release);
 
-		::GameEngineWindow::RegisterImGuiWndProc(ImGui_ImplWin32_WndProcHandler);
+		::GameMainWindow::RegisterImGuiWndProc(ImGui_ImplWin32_WndProcHandler);
 
 		// 충돌체의 종류 갯수만큼만 있으면 된다.
 		mDebugObjects.resize((UINT)eColliderType::End);

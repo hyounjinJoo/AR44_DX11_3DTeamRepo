@@ -77,7 +77,9 @@ namespace mh
 			desc.InputSlotClass = mInputLayoutDescs[i].InputSlotClass;
 			desc.InstanceDataStepRate = mInputLayoutDescs[i].InstanceDataStepRate;
 
-			InputElement.append(Json::MHConvertWrite(desc));
+			std::string converted = Json::MHConvertWrite(desc);
+
+			InputElement.append(converted);
 
 			jsonInputLayouts.append(InputElement);
 		}

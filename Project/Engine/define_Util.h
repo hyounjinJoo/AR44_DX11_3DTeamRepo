@@ -1,6 +1,6 @@
 #pragma once
 #include <string>
-
+#include "base64.h"
 
 class StringConv
 {
@@ -24,13 +24,8 @@ public:
 	inline static std::string Convert_T_to_String(const T& _srcT);
 
 	template <typename T>
-	inline static void Convert_T_to_String(const T& _srcT, std::string& _destT);
-
-	template <typename T>
 	inline static T Convert_String_to_T(const std::string& _srcStr);
 
-	template <typename T>
-	inline static bool Convert_String_to_T(const std::string& _srcStr, const T& _destT);
 
 private:
 	StringConv() = delete;
@@ -94,45 +89,24 @@ inline std::wstring& StringConv::UpperCase(std::wstring& _wstr)
 }
 
 template<typename T>
-inline std::string StringConv::Convert_T_to_String(const T& _SrcT)
+inline std::string StringConv::Convert_T_to_String(const T& _srcT)
 {
-	return std::string((const char*)&_SrcT, sizeof(T));
+	return base64_encode((const unsigned char*)&_srcT, sizeof(T));
 }
 
 template<typename T>
-inline void StringConv::Convert_T_to_String(const T& _srcT, std::string& _destT)
+inline T StringConv::Convert_String_to_T(const std::string& _srcStr)
 {
-	_destT = std::string((const char*)&_srcT, sizeof(T));
-}
+	T ReturnResult{};
 
-template<typename T>
-inline T StringConv::Convert_String_to_T(const std::string& _SrcStr)
-{
-	T ReturnResult;
-	memset(&ReturnResult, 0, sizeof(T));
+	std::string decoded = base64_decode(_srcStr);
 
-	if (_SrcStr.size() >= sizeof(T))
-	{
-		memcpy((void*)&ReturnResult, _SrcStr.data(), sizeof(T));
-	}
+	memcpy_s((void*)&ReturnResult, sizeof(T), decoded.c_str(), decoded.size());
 
 	return ReturnResult;
 }
 
-template<typename T>
-inline bool StringConv::Convert_String_to_T(const std::string& _SrcStr, const T& _DestT)
-{
-	memset((void*)&_DestT, 0, sizeof(T));
 
-	bool Result = false;
-	if (_SrcStr.size() >= sizeof(T))
-	{
-		memcpy((void*)&_DestT, _SrcStr.data(), sizeof(T));
-		Result = true;
-	}
-
-	return Result;
-}
 
 
 namespace std

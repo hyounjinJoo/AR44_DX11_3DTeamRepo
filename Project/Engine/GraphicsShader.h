@@ -3,6 +3,11 @@
 #include "define_GPU.h"
 #include <unordered_set>
 
+namespace gui
+{
+	class guiGraphicsShaderEditor;
+}
+
 namespace mh
 {
 	using Microsoft::WRL::ComPtr;
@@ -16,6 +21,7 @@ namespace mh
 
 	class GraphicsShader : public IShader
 	{
+		friend class gui::guiGraphicsShaderEditor;
 	public:
 		GraphicsShader();
 		virtual ~GraphicsShader();

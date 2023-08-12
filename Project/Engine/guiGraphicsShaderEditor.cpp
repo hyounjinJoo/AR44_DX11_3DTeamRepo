@@ -162,9 +162,9 @@ namespace gui
 
 	guiGraphicsShaderEditor::guiGraphicsShaderEditor()
 		: guiWindow(strKey::guiGraphicsShaderEditor)
-		, mSemanticNames()
 		, mDescForEdit()
 		, mSemanticEditIdx(-1)
+		, mSemanticName{}
 		, mInputLayoutDescs{}
 		, mDXGIFormatCombo{}
 		, mTopologyCombo{}
@@ -178,7 +178,6 @@ namespace gui
 		, mSaveFileName()
 		, mLoadFileCombo()
 	{	
-		mSemanticNames.resize(1);
 	}
 	guiGraphicsShaderEditor::~guiGraphicsShaderEditor()
 	{
@@ -261,6 +260,34 @@ namespace gui
 
 		for (size_t i = 0; i < mInputLayoutDescs.size(); ++i)
 		{
+			
+			std::string Delete = cDelete;
+			Delete += std::to_string(i);
+			if (ImGui::Button(Delete.c_str()))
+			{
+				auto mInputElementsIter = mInputLayoutDescs.begin() + i;
+
+				//다음 이터레이터를 받아서 순회 시작
+				mInputElementsIter = mInputLayoutDescs.erase(mInputElementsIter);
+				break;
+			}
+
+			ImGui::SameLine();
+
+			std::string Edit = cEdit;
+			Edit += std::to_string(i);
+			if (ImGui::Button(Edit.c_str()))
+			{
+				mSemanticEditIdx = (int)i;
+				mSemanticName = mInputLayoutDescs[i].SemanticName;
+				mDescForEdit = mInputLayoutDescs[i];
+				mDXGIFormatCombo.SetCurrentIndex((int)mDescForEdit.Format);
+			}
+
+
+
+			ImGui::SameLine();
+
 			constexpr const char* cSemantic = "Semantic ";
 			std::string SemanticNameIdx = cSemantic;
 			SemanticNameIdx += std::to_string(i);
@@ -268,35 +295,11 @@ namespace gui
 			if (mInputLayoutDescs[i].SemanticName)
 			{
 				SemanticNameIdx += ": ";
-				SemanticNameIdx += mSemanticNames[i];
+				SemanticNameIdx += mInputLayoutDescs[i].SemanticName;
 			}
 				
 			ImGui::Text(SemanticNameIdx.c_str());
-			ImGui::SameLine(100.f);
 
-			std::string Edit = cEdit;
-			Edit += std::to_string(i);
-			if (ImGui::Button(Edit.c_str()))
-			{
-				mSemanticEditIdx = (int)i;
-				mDescForEdit = mInputLayoutDescs[i];
-				mDXGIFormatCombo.SetCurrentIndex((int)mDescForEdit.Format);
-			}
-
-			ImGui::SameLine();
-
-			std::string Delete = cDelete;
-			Delete += std::to_string(i);
-			if (ImGui::Button(Delete.c_str()))
-			{
-				auto SemanticNameIter = mSemanticNames.begin() + i;
-				auto mInputElementsIter = mInputLayoutDescs.begin() + i;
-
-				//다음 이터레이터를 받아서 순회 시작
-				SemanticNameIter = mSemanticNames.erase(SemanticNameIter);
-				mInputElementsIter = mInputLayoutDescs.erase(mInputElementsIter);
-				break;
-			}
 		}
 
 		InputElementEditModal();
@@ -306,7 +309,6 @@ namespace gui
 			D3D11_INPUT_ELEMENT_DESC desc{};
 			desc.SemanticIndex = (UINT)mInputLayoutDescs.size();
 			mInputLayoutDescs.emplace_back(desc);
-			mSemanticNames.emplace_back(std::string());
 		}
 
 		//토폴로지 업데이트
@@ -331,20 +333,23 @@ namespace gui
 		//Blend State
 		mBSTypeCombo.FixedUpdate();
 
-		static const ImVec2 ButtonSize{ 100.f, 50.f };
+		
 		ImGui::Spacing();
 		ImGui::Separator();
-		if (ImGui::Button("Create Default Shaders", ButtonSize))
+
+		if (ImGui::Button("Create Default Shaders", ImVec2(0.f, 50.f)))
 		{
 			CreateDefaultShaders();
 		}
 
 		ImGui::Separator();
 
+		static const ImVec2 ButtonSize{ 100.f, 50.f };
+
+		ImGui::GetWindowWidth();
 		if (ImGui::Button("Save", ButtonSize))
 		{
 			mbSaveModal = true;
-			
 		}
 		SaveModal();
 
@@ -513,10 +518,10 @@ namespace gui
 		{
 			ImGui::SetNextWindowSize(ImVec2{ 400.f, 500.f });
 			ImGui::OpenPopup("Edit Layout Element");
-			if (ImGui::BeginPopupModal("Edit Layout Element", &bSemanticEditMode))
+			if (ImGui::BeginPopupModal("Edit Layout Element"))
 			{
 				//이름은 별도로 저장(저장 버튼 누를떄 가져옴)
-				ImGui::InputText("SemanticName", &mSemanticNames[mSemanticEditIdx]);
+				ImGui::InputText("SemanticName", &mSemanticName);
 
 				//DXGI Format 에딧
 				mDXGIFormatCombo.FixedUpdate();
@@ -543,24 +548,38 @@ namespace gui
 
 				if (ImGui::Button("OK", buttonSize))
 				{
-					int curSel = mDXGIFormatCombo.GetCurrentIndex();
-					if (curSel >= 0)
+					do
 					{
+						if (mSemanticName.empty())
+						{
+							break;
+						}
+
+						const auto& pair = mh::GraphicsShader::mSemanticNames.insert(mSemanticName);
+
+						mDescForEdit.SemanticName = pair.first->c_str();
+
+						int curSel = mDXGIFormatCombo.GetCurrentIndex();
+
+						if (curSel < 0)
+							break;
+
 						if ((DXGI_FORMAT)curSel <= DXGI_FORMAT_SAMPLER_FEEDBACK_MIP_REGION_USED_OPAQUE)
 							mDescForEdit.Format = (DXGI_FORMAT)curSel;
-						//else
-						//	mDescForEdit.Format = DXGI_FORMAT_FORCE_UINT;
-					}
+							//else
+							//	mDescForEdit.Format = DXGI_FORMAT_FORCE_UINT;
+
+					} while (false);
+
 
 					mInputLayoutDescs[mSemanticEditIdx] = mDescForEdit;
 					mDXGIFormatCombo.UnSelect();
-
 					mSemanticEditIdx = -1;
 				}
 				ImGui::SameLine();
 				if (ImGui::Button("Cancel", buttonSize))
 				{
-					mSemanticNames[mSemanticEditIdx].clear();
+					mSemanticName.clear();
 					mDescForEdit = D3D11_INPUT_ELEMENT_DESC{};
 					mDXGIFormatCombo.UnSelect();
 
@@ -579,7 +598,7 @@ namespace gui
 		{
 			ImGui::SetNextWindowSize(ImVec2{ 400.f, 500.f });
 			ImGui::OpenPopup("Edit Layout Element");
-			if (ImGui::BeginPopupModal("Edit Layout Element", &mbSaveModal))
+			if (ImGui::BeginPopupModal("Edit Layout Element"))
 			{
 				ImGui::InputText("Shader Name", &mSaveFileName);
 
@@ -602,6 +621,7 @@ namespace gui
 						mStageTypeCombo.UnSelect();
 						mSaveFileName.clear();
 						mbSaveModal = false;
+						ImGui::CloseCurrentPopup();
 					}
 				}
 				if (ImGui::Button("Cancel"))
@@ -609,10 +629,13 @@ namespace gui
 					mStageTypeCombo.UnSelect();
 					mSaveFileName.clear();
 					mbSaveModal = false;
+					ImGui::CloseCurrentPopup();
 				}
+
+				ImGui::EndPopup();
 			}
 
-			ImGui::EndPopup();
+			//ImGui::EndPopup();
 		}
 	}
 
@@ -621,8 +644,9 @@ namespace gui
 		if (mbLoadModal)
 		{
 			ImGui::SetNextWindowSize(ImVec2{ 400.f, 500.f });
+			
 			ImGui::OpenPopup("Edit Layout Element");
-			if (ImGui::BeginPopupModal("Edit Layout Element", &mbLoadModal))
+			if (ImGui::BeginPopupModal("Edit Layout Element"))
 			{
 				mLoadFileCombo.FixedUpdate();
 
@@ -639,15 +663,19 @@ namespace gui
 					}
 
 					mbLoadModal = false;
+					ImGui::CloseCurrentPopup();
 				}
 				if (ImGui::Button("Cancel"))
 				{
 					mLoadFileCombo.UnSelect();
 					mbLoadModal = false;
+					ImGui::CloseCurrentPopup();
 				}
+
+				ImGui::EndPopup();
 			}
 
-			ImGui::EndPopup();
+			
 		}
 	}
 
@@ -658,14 +686,12 @@ namespace gui
 		//이름 등록
 		for (size_t i = 0; i < mInputLayoutDescs.size(); ++i)
 		{
-			if (mSemanticNames[i].empty())
+			if (nullptr == mInputLayoutDescs[i].SemanticName)
 			{
 				std::wstring errorMsg = std::to_wstring(i);
 				errorMsg += L" 번 입력 레이아웃의 Semantic 이름이 존재하지 않습니다.";
 				return;
 			}
-
-			mInputLayoutDescs[i].SemanticName = mSemanticNames[i].c_str();
 		}
 		shader.SetInputLayoutDesc(mInputLayoutDescs);
 
@@ -755,16 +781,10 @@ namespace gui
 			NOTIFICATION_W(L"로드 실패.");
 			return;
 		}
-
+		
 		mSaveFileName = _filePath.string();
 
-		mInputLayoutDescs = shader.GetInputLayoutDescs();
-		mSemanticNames.clear();
-		mSemanticNames.resize(mInputLayoutDescs.size());
-		for (size_t i = 0; i < mInputLayoutDescs.size(); ++i)
-		{
-			mSemanticNames[i] = mInputLayoutDescs[i].SemanticName;
-		}
+		mInputLayoutDescs = shader.mInputLayoutDescs;
 		
 		mTopologyCombo.SetCurrentIndex((int)shader.GetTopology());
 

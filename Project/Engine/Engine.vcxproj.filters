@@ -446,6 +446,9 @@
     <ClCompile Include="GameMainWindow.cpp">
       <Filter>High Level Interface</Filter>
     </ClCompile>
+    <ClCompile Include="base64.cpp">
+      <Filter>Common</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application.h">
@@ -773,6 +776,9 @@
     </ClInclude>
     <ClInclude Include="resource.h">
       <Filter>Common\WindowResource</Filter>
+    </ClInclude>
+    <ClInclude Include="base64.h">
+      <Filter>Common</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
