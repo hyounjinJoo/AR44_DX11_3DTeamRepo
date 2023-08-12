@@ -876,7 +876,8 @@ namespace mh
 			TriangleShader->SetEngineDefaultRes(true);
 			TriangleShader->CreateByHeader(eGSStage::VS, _0VS_Triangle, sizeof(_0VS_Triangle));
 			TriangleShader->CreateByHeader(eGSStage::PS, _4PS_Triangle, sizeof(_4PS_Triangle));
-			TriangleShader->CreateInputLayout(vecLayoutDesc);
+			TriangleShader->SetInputLayoutDesc(vecLayoutDesc);
+			TriangleShader->CreateInputLayout();
 
 			ResMgr::Insert(strKey::Default::shader::graphics::RectShader, TriangleShader);
 		}
@@ -888,7 +889,8 @@ namespace mh
 			spriteShader->CreateByHeader(eGSStage::VS, _0VS_Sprite, sizeof(_0VS_Sprite));
 			spriteShader->CreateByHeader(eGSStage::PS, _4PS_Sprite, sizeof(_4PS_Sprite));
 			spriteShader->SetRSState(eRSType::SolidNone);
-			spriteShader->CreateInputLayout(vecLayoutDesc);
+			spriteShader->SetInputLayoutDesc(vecLayoutDesc);
+			spriteShader->CreateInputLayout();
 
 
 			ResMgr::Insert(strKey::Default::shader::graphics::SpriteShader, spriteShader);
@@ -901,7 +903,8 @@ namespace mh
 			uiShader->SetEngineDefaultRes(true);
 			uiShader->CreateByHeader(eGSStage::VS, _0VS_UserInterface, sizeof(_0VS_UserInterface));
 			uiShader->CreateByHeader(eGSStage::PS, _4PS_UserInterface, sizeof(_4PS_UserInterface));
-			uiShader->CreateInputLayout(vecLayoutDesc);
+			uiShader->SetInputLayoutDesc(vecLayoutDesc);
+			uiShader->CreateInputLayout();
 
 
 			ResMgr::Insert(strKey::Default::shader::graphics::UIShader, uiShader);
@@ -914,7 +917,8 @@ namespace mh
 			gridShader->SetEngineDefaultRes(true);
 			gridShader->CreateByHeader(eGSStage::VS, _0VS_Grid, sizeof(_0VS_Grid));
 			gridShader->CreateByHeader(eGSStage::PS, _4PS_Grid, sizeof(_4PS_Grid));
-			gridShader->CreateInputLayout(vecLayoutDesc);
+			gridShader->SetInputLayoutDesc(vecLayoutDesc);
+			gridShader->CreateInputLayout();
 
 			gridShader->SetRSState(eRSType::SolidNone);
 			gridShader->SetDSState(eDSType::NoWrite);
@@ -930,7 +934,8 @@ namespace mh
 			debugShader->SetEngineDefaultRes(true);
 			debugShader->CreateByHeader(eGSStage::VS, _0VS_Debug, sizeof(_0VS_Debug));
 			debugShader->CreateByHeader(eGSStage::PS, _4PS_Debug, sizeof(_4PS_Debug));
-			debugShader->CreateInputLayout(vecLayoutDesc);
+			debugShader->SetInputLayoutDesc(vecLayoutDesc);
+			debugShader->CreateInputLayout();
 
 			//debugShader->Create(eShaderStage::VS, "DebugVS.hlsl", "main");
 			//debugShader->Create(eShaderStage::PS, "DebugPS.hlsl", "main");
@@ -960,7 +965,9 @@ namespace mh
 			particleShader->CreateByHeader(eGSStage::VS, _0VS_Particle, sizeof(_0VS_Particle));
 			particleShader->CreateByHeader(eGSStage::GS, _3GS_Particle, sizeof(_3GS_Particle));
 			particleShader->CreateByHeader(eGSStage::PS, _4PS_Particle, sizeof(_4PS_Particle));
-			particleShader->CreateInputLayout(vecLayoutDesc);
+			particleShader->SetInputLayoutDesc(vecLayoutDesc);
+			particleShader->CreateInputLayout();
+
 
 			particleShader->SetRSState(eRSType::SolidNone);
 			particleShader->SetDSState(eDSType::NoWrite);
@@ -980,7 +987,8 @@ namespace mh
 			postProcessShader->SetEngineDefaultRes(true);
 			postProcessShader->CreateByHeader(eGSStage::VS, _0VS_PostProcess, sizeof(_0VS_PostProcess));
 			postProcessShader->CreateByHeader(eGSStage::PS, _4PS_PostProcess, sizeof(_4PS_PostProcess));
-			postProcessShader->CreateInputLayout(vecLayoutDesc);
+			postProcessShader->SetInputLayoutDesc(vecLayoutDesc);
+			postProcessShader->CreateInputLayout();
 
 			postProcessShader->SetDSState(eDSType::NoWrite);
 			ResMgr::Insert(strKey::Default::shader::graphics::PostProcessShader, postProcessShader);
@@ -1025,7 +1033,8 @@ namespace mh
 
 			basic3DShader->CreateByHeader(eGSStage::VS, _0VS_Basic3D, sizeof(_0VS_Basic3D));
 			basic3DShader->CreateByHeader(eGSStage::PS, _4PS_Basic3D, sizeof(_4PS_Basic3D));
-			basic3DShader->CreateInputLayout(vecLayoutDesc);
+			basic3DShader->SetInputLayoutDesc(vecLayoutDesc);
+			basic3DShader->CreateInputLayout();
 
 			ResMgr::Insert(strKey::Default::shader::graphics::Basic3DShader, basic3DShader);
 		}
@@ -1038,7 +1047,8 @@ namespace mh
 		defferedShader->CreateByHeader(eGSStage::VS, _0VS_Deffered, sizeof(_0VS_Deffered));
 		defferedShader->CreateByHeader(eGSStage::PS, _4PS_Deffered, sizeof(_4PS_Deffered));
 
-		defferedShader->CreateInputLayout(vecLayoutDesc);
+		defferedShader->SetInputLayoutDesc(vecLayoutDesc);
+		defferedShader->CreateInputLayout();
 
 		ResMgr::Insert(strKey::Default::shader::graphics::DefferedShader, defferedShader);
 
@@ -1052,7 +1062,8 @@ namespace mh
 			lightShader->CreateByHeader(eGSStage::VS, _0VS_LightDir, sizeof(_0VS_LightDir));
 			lightShader->CreateByHeader(eGSStage::PS, _4PS_LightDir, sizeof(_4PS_LightDir));
 
-			lightShader->CreateInputLayout(vecLayoutDesc);
+			lightShader->SetInputLayoutDesc(vecLayoutDesc);
+			lightShader->CreateInputLayout();
 
 			lightShader->SetRSState(eRSType::SolidBack);
 			lightShader->SetDSState(eDSType::None);
@@ -1066,7 +1077,8 @@ namespace mh
 			lightShader->CreateByHeader(eGSStage::VS, _0VS_LightPoint, sizeof(_0VS_LightPoint));
 			lightShader->CreateByHeader(eGSStage::PS, _4PS_LightPoint, sizeof(_4PS_LightPoint));
 
-			lightShader->CreateInputLayout(vecLayoutDesc);
+			lightShader->SetInputLayoutDesc(vecLayoutDesc);
+			lightShader->CreateInputLayout();
 
 			lightShader->SetRSState(eRSType::SolidFront);
 			lightShader->SetDSState(eDSType::None);
@@ -1083,7 +1095,8 @@ namespace mh
 		MergeShader->CreateByHeader(eGSStage::VS, _0VS_Merge, sizeof(_0VS_Merge));
 		MergeShader->CreateByHeader(eGSStage::PS, _4PS_Merge, sizeof(_4PS_Merge));
 
-		MergeShader->CreateInputLayout(vecLayoutDesc);
+		MergeShader->SetInputLayoutDesc(vecLayoutDesc);
+		MergeShader->CreateInputLayout();
 
 		MergeShader->SetRSState(eRSType::SolidBack);
 		MergeShader->SetDSState(eDSType::None);

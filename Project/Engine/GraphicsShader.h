@@ -1,6 +1,7 @@
 #pragma once
 #include "IShader.h"
 #include "define_GPU.h"
+#include <unordered_set>
 
 namespace mh
 {
@@ -30,9 +31,10 @@ namespace mh
 		eResult CreateByHeader(eGSStage _stage, const unsigned char* _pByteCode, size_t _ByteCodeSize);
 		eResult CreateByCSO(eGSStage _stage, const stdfs::path& _FileName);
 
-		eResult CreateInputLayout(const std::vector<D3D11_INPUT_ELEMENT_DESC>& _VecLayoutDesc);
-
-		void Binds();
+		inline void AddInputLayoutDesc(const D3D11_INPUT_ELEMENT_DESC& _desc);
+		inline void SetInputLayoutDesc(const std::vector<D3D11_INPUT_ELEMENT_DESC>& _descs);
+		eResult CreateInputLayout();
+		const std::vector<D3D11_INPUT_ELEMENT_DESC>& GetInputLayoutDescs() { return mInputLayoutDescs; }
 
 		ID3D11InputLayout* GetInputLayout() { return mInputLayout.Get(); }
 		ID3D11InputLayout** GetInputLayoutAddressOf() { return mInputLayout.GetAddressOf(); }
@@ -49,10 +51,9 @@ namespace mh
 		void SetBSState(eBSType _state) { mBSType = _state; }
 		eBSType GetBSState() const { return mBSType; }
 
-		void AddInputLayout(const D3D11_INPUT_ELEMENT_DESC& _desc) { mInputLayoutDescs.push_back(_desc); }
-		void SetInputLayout(const std::vector<D3D11_INPUT_ELEMENT_DESC>& _descs) { mInputLayoutDescs = _descs; }
-		const std::vector<D3D11_INPUT_ELEMENT_DESC>& GetInputLayoutDescs() { return mInputLayoutDescs; }
 
+
+		void Binds();
 
 		//에디터용
 		inline void SetEditMode(bool _bEditMode) { mbEditMode = _bEditMode; }
@@ -64,6 +65,7 @@ namespace mh
 		eResult CreateShader(eGSStage _stage, const void* _pByteCode, size_t _ByteCodeSize);
 
 	private:
+		static std::unordered_set<std::string> mSemanticNames;
 		std::vector<D3D11_INPUT_ELEMENT_DESC> mInputLayoutDescs;
 		ComPtr<ID3D11InputLayout> mInputLayout;
 		D3D11_PRIMITIVE_TOPOLOGY mTopology;
@@ -84,6 +86,29 @@ namespace mh
 
 		bool mbEditMode;
 	};
+
+	inline void GraphicsShader::AddInputLayoutDesc(const D3D11_INPUT_ELEMENT_DESC& _desc)
+	{
+		mInputLayoutDescs.push_back(_desc);
+
+		//이름을 별도 저장된 공간에 저장된 뒤 해당 주소로 교체
+		const auto& pair = mSemanticNames.insert(mInputLayoutDescs.back().SemanticName);
+		mInputLayoutDescs.back().SemanticName = pair.first->c_str();
+	}
+
+	inline void GraphicsShader::SetInputLayoutDesc(const std::vector<D3D11_INPUT_ELEMENT_DESC>& _descs)
+	{
+		mInputLayoutDescs = _descs;
+
+		for (size_t i = 0; i < mInputLayoutDescs.size(); ++i)
+		{
+			if (mInputLayoutDescs[i].SemanticName)
+			{
+				const auto& pair = mSemanticNames.insert(mInputLayoutDescs[i].SemanticName);
+				mInputLayoutDescs[i].SemanticName = pair.first->c_str();
+			}
+		}
+	}
 
 
 	inline void GraphicsShader::SetShaderKey(eGSStage _stage, const std::string_view _strKey)

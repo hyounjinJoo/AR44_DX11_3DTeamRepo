@@ -33,6 +33,7 @@ namespace gui
 		void AddItem(const tComboItem& _tItem) { mItems.push_back(_tItem); }
 
 		//새로 들어온 벡터값으로 값을 교체
+		void SetItems(const std::vector<std::string>& _strItems);
 		void SetItems(std::vector<tComboItem>& _vecItem) { Reset(); std::swap(mItems, _vecItem); }
 
 		void Reset() { mItems.clear(); mCurrentSelected = -1; mComboFlags = 0; }
@@ -64,6 +65,15 @@ namespace gui
 	inline bool guiComboBox::IsIndexValid() const
 	{
 		return (0 <= mCurrentSelected && mCurrentSelected < mItems.size());
+	}
+
+	inline void guiComboBox::SetItems(const std::vector<std::string>& _strItems)
+	{
+		mItems.clear();
+		for (size_t i = 0; i < _strItems.size(); ++i)
+		{
+			mItems.push_back(tComboItem{ _strItems[i],});
+		}
 	}
 }
 

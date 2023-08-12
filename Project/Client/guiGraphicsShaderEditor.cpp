@@ -136,7 +136,7 @@ namespace gui
 			"DXGI_FORMAT_V408",
 			"DXGI_FORMAT_SAMPLER_FEEDBACK_MIN_MIP_OPAQUE",
 			"DXGI_FORMAT_SAMPLER_FEEDBACK_MIP_REGION_USED_OPAQUE",
-			"DXGI_FORMAT_FORCE_UINT",
+			//"DXGI_FORMAT_FORCE_UINT",
 		};
 		constexpr const size_t DXGI_FORMAT_StringSize = sizeof(DXGI_FORMAT_String) / sizeof(const char*);
 
@@ -268,7 +268,7 @@ namespace gui
 			if (mInputLayoutDescs[i].SemanticName)
 			{
 				SemanticNameIdx += ": ";
-				SemanticNameIdx += mInputLayoutDescs[i].SemanticName;
+				SemanticNameIdx += mSemanticNames[i];
 			}
 				
 			ImGui::Text(SemanticNameIdx.c_str());
@@ -280,7 +280,7 @@ namespace gui
 			{
 				mSemanticEditIdx = (int)i;
 				mDescForEdit = mInputLayoutDescs[i];
-				
+				mDXGIFormatCombo.SetCurrentIndex((int)mDescForEdit.Format);
 			}
 
 			ImGui::SameLine();
@@ -453,6 +453,8 @@ namespace gui
 				ofs.close();
 
 				vecNewShaderGroup.push_back(iter.first.string());
+
+				mLoadFileCombo.SetItems(vecNewShaderGroup);
 			}
 		}
 
@@ -499,14 +501,7 @@ namespace gui
 
 	void guiGraphicsShaderEditor::DXGISelectCallback(const guiComboBox::tComboItem& _item)
 	{
-		int curSel = mDXGIFormatCombo.GetCurrentIndex();
-		if (curSel >= 0)
-		{
-			if ((DXGI_FORMAT)curSel <= DXGI_FORMAT_SAMPLER_FEEDBACK_MIP_REGION_USED_OPAQUE)
-				mDescForEdit.Format = (DXGI_FORMAT)curSel;
-			else
-				mDescForEdit.Format = DXGI_FORMAT_FORCE_UINT;
-		}
+
 	}
 
 
@@ -520,14 +515,10 @@ namespace gui
 			ImGui::OpenPopup("Edit Layout Element");
 			if (ImGui::BeginPopupModal("Edit Layout Element", &bSemanticEditMode))
 			{
-				if (ImGui::InputText("SemanticName", &mSemanticNames[mSemanticEditIdx]))
-				{
-					mDescForEdit.SemanticName = mSemanticNames[mSemanticEditIdx].c_str();
-				}
+				//이름은 별도로 저장(저장 버튼 누를떄 가져옴)
+				ImGui::InputText("SemanticName", &mSemanticNames[mSemanticEditIdx]);
 
 				//DXGI Format 에딧
-				//변경점이 있을 경우 콜백함수가 호출됨
-				mDXGIFormatCombo.SetCurrentIndex((int)mDescForEdit.Format);
 				mDXGIFormatCombo.FixedUpdate();
 
 				int ByteOffset = (int)mDescForEdit.AlignedByteOffset;
@@ -552,6 +543,15 @@ namespace gui
 
 				if (ImGui::Button("OK", buttonSize))
 				{
+					int curSel = mDXGIFormatCombo.GetCurrentIndex();
+					if (curSel >= 0)
+					{
+						if ((DXGI_FORMAT)curSel <= DXGI_FORMAT_SAMPLER_FEEDBACK_MIP_REGION_USED_OPAQUE)
+							mDescForEdit.Format = (DXGI_FORMAT)curSel;
+						//else
+						//	mDescForEdit.Format = DXGI_FORMAT_FORCE_UINT;
+					}
+
 					mInputLayoutDescs[mSemanticEditIdx] = mDescForEdit;
 					mDXGIFormatCombo.UnSelect();
 
@@ -560,6 +560,7 @@ namespace gui
 				ImGui::SameLine();
 				if (ImGui::Button("Cancel", buttonSize))
 				{
+					mSemanticNames[mSemanticEditIdx].clear();
 					mDescForEdit = D3D11_INPUT_ELEMENT_DESC{};
 					mDXGIFormatCombo.UnSelect();
 
@@ -654,8 +655,19 @@ namespace gui
 	{
 		mh::GraphicsShader shader{};
 
+		//이름 등록
+		for (size_t i = 0; i < mInputLayoutDescs.size(); ++i)
+		{
+			if (mSemanticNames[i].empty())
+			{
+				std::wstring errorMsg = std::to_wstring(i);
+				errorMsg += L" 번 입력 레이아웃의 Semantic 이름이 존재하지 않습니다.";
+				return;
+			}
 
-		shader.SetInputLayout(mInputLayoutDescs);
+			mInputLayoutDescs[i].SemanticName = mSemanticNames[i].c_str();
+		}
+		shader.SetInputLayoutDesc(mInputLayoutDescs);
 
 		{
 			int curSel = mTopologyCombo.GetCurrentIndex();

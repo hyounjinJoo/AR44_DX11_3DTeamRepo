@@ -9,6 +9,8 @@
 
 namespace mh
 {
+	std::unordered_set<std::string> GraphicsShader::mSemanticNames{};
+
 	struct D3D11InputElementDescWithoutName
 	{
 		UINT SemanticIndex;
@@ -66,21 +68,21 @@ namespace mh
 				strSemanticName = mInputLayoutDescs[i].SemanticName;
 			}
 			InputElement.append(strSemanticName);
-			
+
 			D3D11InputElementDescWithoutName desc{};
 			desc.SemanticIndex = mInputLayoutDescs[i].SemanticIndex;
-			desc.InstanceDataStepRate = mInputLayoutDescs[i].InstanceDataStepRate;
-			desc.InputSlotClass = mInputLayoutDescs[i].InputSlotClass;
-			desc.InputSlot = mInputLayoutDescs[i].InputSlot;
 			desc.Format = mInputLayoutDescs[i].Format;
+			desc.InputSlot = mInputLayoutDescs[i].InputSlot;
 			desc.AlignedByteOffset = mInputLayoutDescs[i].AlignedByteOffset;
+			desc.InputSlotClass = mInputLayoutDescs[i].InputSlotClass;
+			desc.InstanceDataStepRate = mInputLayoutDescs[i].InstanceDataStepRate;
 
 			InputElement.append(Json::MHConvertWrite(desc));
 
 			jsonInputLayouts.append(InputElement);
 		}
-		
-		Json::MHSaveVector(_pJVal, JSON_KEY_PAIR(mInputLayoutDescs));
+
+		//Json::MHSaveVector(_pJVal, JSON_KEY_PAIR(mInputLayoutDescs));
 
 		//토폴로지
 		Json::MHSaveValue(_pJVal, JSON_KEY_PAIR(mTopology));
@@ -116,42 +118,42 @@ namespace mh
 		const Json::Value& jVal = *_pJVal;
 
 		//Input Layout Desc
+		mInputLayoutDescs.clear();
 		if (jVal.isMember(JSON_KEY(mInputLayoutDescs)))
 		{
-			const Json::Value& jsonInputLayouts = JSON_KEY(mInputLayoutDescs);
+			const Json::Value& jsonInputLayouts = jVal[JSON_KEY(mInputLayoutDescs)];
 
-			if (jVal.isArray())
+			if (jsonInputLayouts.isArray())
 			{
-
-			}
-
-			//Input Layout Desc
-			for (size_t i = 0; i < mInputLayoutDescs.size(); ++i)
-			{
-				Json::Value InputElement{};
-
-				std::string strSemanticName;
-				if (mInputLayoutDescs[i].SemanticName)
+				for (
+					Json::ValueConstIterator iter = jsonInputLayouts.begin();
+					iter != jsonInputLayouts.end();
+					++iter
+					)
 				{
-					strSemanticName = mInputLayoutDescs[i].SemanticName;
+					if (2 > iter->size())
+					{
+						NOTIFICATION_W(L"Input Layout Desc 정보가 누락되어 있습니다.");
+						return eResult::Fail_InValid;
+					}
+
+					const auto& pair = mSemanticNames.insert((*iter)[0].asString());
+
+					D3D11InputElementDescWithoutName descValue = Json::MHConvertRead<D3D11InputElementDescWithoutName>((*iter)[1]);
+
+					D3D11_INPUT_ELEMENT_DESC desc{};
+					desc.SemanticName = pair.first->c_str();
+					desc.SemanticIndex = descValue.SemanticIndex;
+					desc.Format = descValue.Format;
+					desc.InputSlot = descValue.InputSlot;
+					desc.AlignedByteOffset = descValue.AlignedByteOffset;
+					desc.InputSlotClass = descValue.InputSlotClass;
+					desc.InstanceDataStepRate = descValue.InstanceDataStepRate;
+
+					mInputLayoutDescs.push_back(desc);
 				}
-				InputElement.append(strSemanticName);
-
-				D3D11InputElementDescWithoutName desc{};
-				desc.SemanticIndex = mInputLayoutDescs[i].SemanticIndex;
-				desc.InstanceDataStepRate = mInputLayoutDescs[i].InstanceDataStepRate;
-				desc.InputSlotClass = mInputLayoutDescs[i].InputSlotClass;
-				desc.InputSlot = mInputLayoutDescs[i].InputSlot;
-				desc.Format = mInputLayoutDescs[i].Format;
-				desc.AlignedByteOffset = mInputLayoutDescs[i].AlignedByteOffset;
-
-				InputElement.append(Json::MHConvertWrite(desc));
-
-				jsonInputLayouts.append(InputElement);
 			}
 		}
-
-
 
 		//토폴로지
 		Json::MHLoadValue(_pJVal, JSON_KEY_PAIR(mTopology));
@@ -161,20 +163,19 @@ namespace mh
 			const std::vector<std::string>& vecStrKey = Json::GetJsonVector(_pJVal, JSON_KEY(mArrShaderCode));
 
 			//에딧 모드가 아닐 경우에만 로드
-
-				for (size_t i = 0; i < vecStrKey.size(); ++i)
+			for (size_t i = 0; i < vecStrKey.size(); ++i)
+			{
+				if (false == mbEditMode)
 				{
-					if (false == mbEditMode)
-					{
-						CreateByCSO((eGSStage)i, vecStrKey[i]);
-						if ((size_t)eGSStage::END == i)
-							break;
-					}
-					else
-					{
-						mArrShaderCode[i].strKey = vecStrKey[i];
-					}
+					CreateByCSO((eGSStage)i, vecStrKey[i]);
+					if ((size_t)eGSStage::END == i)
+						break;
 				}
+				else
+				{
+					mArrShaderCode[i].strKey = vecStrKey[i];
+				}
+			}
 
 		}
 
@@ -337,7 +338,7 @@ namespace mh
 		return Result;
 	}
 
-	eResult GraphicsShader::CreateInputLayout(const std::vector<D3D11_INPUT_ELEMENT_DESC>& _VecLayoutDesc)
+	eResult GraphicsShader::CreateInputLayout()
 	{
 		ID3DBlob* VSBlobData = mArrShaderCode[(int)eGSStage::VS].blob.Get();
 
@@ -346,8 +347,11 @@ namespace mh
 			ERROR_MESSAGE_W(L"정점 쉐이더가 준비되지 않아서 Input Layout을 생성할 수 없습니다.");
 			return eResult::Fail_Create;
 		}
-
-		mInputLayoutDescs = _VecLayoutDesc;
+		else if (mInputLayoutDescs.empty())
+		{
+			ERROR_MESSAGE_W(L"입력 레이아웃이 설정되어있지 않아 Input Layout을 생성할 수 없습니다.");
+			return eResult::Fail_Create;
+		}
 
 		if (FAILED(GPUMgr::Device()->CreateInputLayout(
 			mInputLayoutDescs.data(),
