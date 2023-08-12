@@ -1,6 +1,5 @@
 #pragma once
 #include "guiBase.h"
-
 #include <functional>
 
 namespace gui

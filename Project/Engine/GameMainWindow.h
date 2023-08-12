@@ -1,17 +1,24 @@
 #pragma once
-#include "PCH_Client.h"
 
-#include <Engine/define_Struct.h>
+#include <Windows.h>
+#include <vector>
+#include <functional>
 
-struct GameClientDesc
+#include "define_Struct.h"
+
+struct tDesc_GameMainWindow
 {
 	HINSTANCE Inst;
+	HICON	  WindowIcon;
 	const TCHAR* TitleName;
 	const TCHAR* ClassName;
 	int LeftPos;
 	int TopPos;
 	int Width;
 	int Height;
+
+	std::vector<std::function<void()>> ExternalInitFuncs;
+
 	mh::define::tDesc_GPUMgr GPUDesc;
 
 	bool RunEditor;
@@ -26,23 +33,21 @@ struct tUmap_LightHashFunc32
 };
 
 using MsgHandleFunc = std::function<LRESULT WINAPI(HWND, UINT, WPARAM, LPARAM)>;
-class GameClient
+class GameMainWindow
 {
 public:
-	static BOOL Run(const GameClientDesc& _Desc);
+	static BOOL Run(const tDesc_GameMainWindow& _Desc);
 
 	static inline void RegisterImGuiWndProc(std::function<LRESULT(HWND, UINT, WPARAM, LPARAM)> _Func);
 	static void AddMsgHandleFunc(UINT _Message, MsgHandleFunc _HandleFunc);
 	static void RemoveMsgHandleFunc(UINT _Message, MsgHandleFunc _HandleFunc);
 	
 private:
-	static BOOL Init(const GameClientDesc& _Desc);
+	static BOOL Init(const tDesc_GameMainWindow& _Desc);
 	static BOOL Loop();
-	static ATOM RegisterClientClass(const GameClientDesc& _Desc);
-	static BOOL InitInstance(const GameClientDesc& _Desc);
+	static ATOM RegisterClientClass(const tDesc_GameMainWindow& _Desc);
+	static BOOL InitInstance(const tDesc_GameMainWindow& _Desc);
 	static LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
-	
-
 
 	static void Release();
 
@@ -51,31 +56,28 @@ private:
 	static LRESULT WINAPI Wm_Paint(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
 	static LRESULT WINAPI Wm_Destroy(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
 
-
-
 private:
 	static HINSTANCE mInstance;
 	static HWND mHwnd;
 	static HACCEL mHAccelTable;
 
-	//static bool bLoop;
 
 	static std::unordered_map<UINT, std::vector<MsgHandleFunc>, tUmap_LightHashFunc32> mMsgHandleFuncs;
 	static std::function<LRESULT(HWND, UINT, WPARAM, LPARAM)> mImGuiWndProc;
 
 private:
-	GameClient() = delete;
-	~GameClient() = delete;
+	GameMainWindow() = delete;
+	~GameMainWindow() = delete;
 };
 
 
 
-inline void GameClient::RegisterImGuiWndProc(std::function<LRESULT(HWND, UINT, WPARAM, LPARAM)> _Func)
+inline void GameMainWindow::RegisterImGuiWndProc(std::function<LRESULT(HWND, UINT, WPARAM, LPARAM)> _Func)
 {
 	mImGuiWndProc = _Func;
 }
 
-inline void GameClient::AddMsgHandleFunc(UINT _Message, MsgHandleFunc _HandleFunc)
+inline void GameMainWindow::AddMsgHandleFunc(UINT _Message, MsgHandleFunc _HandleFunc)
 {
 	if (nullptr == _HandleFunc)
 		return;

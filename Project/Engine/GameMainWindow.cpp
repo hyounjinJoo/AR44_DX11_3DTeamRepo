@@ -1,23 +1,22 @@
-#include "PCH_Client.h"
-#include "GameClient.h"
+#include "PCH_Engine.h"
+#include "GameMainWindow.h"
+#include "resource.h"
 
-#include <Engine/define_Macro.h>
-#include <Engine/AtExit.h>
-
-#include <Engine/Application.h>
-
-#include <Contents/ContentsClassInitializer.h>
+#include "define_Macro.h"
+#include "AtExit.h"
+         
+#include "Application.h"
 
 #include "guiMgr.h"
 
-HINSTANCE GameClient::mInstance;
-HWND GameClient::mHwnd;
-HACCEL GameClient::mHAccelTable;
+HINSTANCE GameMainWindow::mInstance{};
+HWND GameMainWindow::mHwnd{};
+HACCEL GameMainWindow::mHAccelTable{};
 
-std::unordered_map<UINT, std::vector<MsgHandleFunc>, tUmap_LightHashFunc32> GameClient::mMsgHandleFuncs;
-std::function<LRESULT(HWND, UINT, WPARAM, LPARAM)> GameClient::mImGuiWndProc;
+std::unordered_map<UINT, std::vector<MsgHandleFunc>, tUmap_LightHashFunc32> GameMainWindow::mMsgHandleFuncs{};
+std::function<LRESULT(HWND, UINT, WPARAM, LPARAM)> GameMainWindow::mImGuiWndProc{};
 
-BOOL GameClient::Run(const GameClientDesc& _Desc)
+BOOL GameMainWindow::Run(const tDesc_GameMainWindow& _Desc)
 {
     DebugCheck(0);
 
@@ -36,12 +35,13 @@ BOOL GameClient::Run(const GameClientDesc& _Desc)
 }
 
 
-BOOL GameClient::Init(const GameClientDesc& _Desc)
+BOOL GameMainWindow::Init(const tDesc_GameMainWindow& _Desc)
 {
     mInstance = _Desc.Inst;
     AddMsgHandleFunc(WM_COMMAND, Wm_Command);
     AddMsgHandleFunc(WM_PAINT, Wm_Paint);
     AddMsgHandleFunc(WM_DESTROY, Wm_Destroy);
+
 
     if (false == RegisterClientClass(_Desc))
     {
@@ -68,13 +68,18 @@ BOOL GameClient::Init(const GameClientDesc& _Desc)
     AppDesc.GPUDesc = _Desc.GPUDesc;
 
     mh::Application::Init(AppDesc);
-    mh::ContentsClassInitializer::Init();
+   
+    for (size_t i = 0; i < _Desc.ExternalInitFuncs.size(); ++i)
+    {
+        if(_Desc.ExternalInitFuncs[i])
+            _Desc.ExternalInitFuncs[i]();
+    }
 
     mHAccelTable = LoadAccelerators(mInstance, MAKEINTRESOURCE(IDR_ACCELERATOR1));
     return true;
 }
 
-BOOL GameClient::Loop()
+BOOL GameMainWindow::Loop()
 {
     BOOL bReturn = TRUE;
     MSG msg;
@@ -109,27 +114,7 @@ BOOL GameClient::Loop()
     return bReturn;
 }
 
-void GameClient::Release()
-{
-    AtExit::CallAtExit();
-
-    mInstance = {};
-    mHwnd = {};
-
-    mImGuiWndProc = nullptr;
-    mMsgHandleFuncs.clear();
-}
-
-void GameClient::DebugCheck(long _block)
-{
-	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
-    if (_block)
-    {
-        _CrtSetBreakAlloc(_block);
-    }
-}
-
-ATOM GameClient::RegisterClientClass(const GameClientDesc& _Desc)
+ATOM GameMainWindow::RegisterClientClass(const tDesc_GameMainWindow& _Desc)
 {
     WNDCLASSEX WinClass;
 
@@ -140,17 +125,38 @@ ATOM GameClient::RegisterClientClass(const GameClientDesc& _Desc)
     WinClass.cbClsExtra = 0;
     WinClass.cbWndExtra = 0;
     WinClass.hInstance = mInstance;
-    WinClass.hIcon = LoadIcon(mInstance, MAKEINTRESOURCE(IDI_ICON1));
+    WinClass.hIcon = _Desc.WindowIcon;
     WinClass.hCursor = LoadCursor(nullptr, IDC_ARROW);
     WinClass.hbrBackground = (HBRUSH)(COLOR_WINDOW + 1);
     WinClass.lpszMenuName = NULL/*MAKEINTRESOURCEW(IDC_MY44ENGINE)*/;
     WinClass.lpszClassName = _Desc.ClassName;
-    WinClass.hIconSm = LoadIcon(mInstance, MAKEINTRESOURCE(IDI_ICON1));
+    WinClass.hIconSm = _Desc.WindowIcon;
 
     return RegisterClassEx(&WinClass);
 }
 
-BOOL GameClient::InitInstance(const GameClientDesc& _Desc)
+void GameMainWindow::Release()
+{
+    AtExit::CallAtExit();
+
+    mInstance = {};
+    mHwnd = {};
+
+    mImGuiWndProc = nullptr;
+    mMsgHandleFuncs.clear();
+}
+
+void GameMainWindow::DebugCheck(long _block)
+{
+	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
+    if (_block)
+    {
+        _CrtSetBreakAlloc(_block);
+    }
+}
+
+
+BOOL GameMainWindow::InitInstance(const tDesc_GameMainWindow& _Desc)
 {
     mHwnd = CreateWindowW(_Desc.ClassName, _Desc.TitleName, WS_OVERLAPPEDWINDOW,
         CW_USEDEFAULT, 0, CW_USEDEFAULT, 0, nullptr, nullptr, _Desc.Inst, nullptr);
@@ -161,7 +167,7 @@ BOOL GameClient::InitInstance(const GameClientDesc& _Desc)
     return TRUE;
 }
 
-LRESULT CALLBACK GameClient::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
+LRESULT CALLBACK GameMainWindow::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
     if (mImGuiWndProc)
     {
@@ -192,22 +198,20 @@ LRESULT CALLBACK GameClient::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPA
 
 
 
-LRESULT __stdcall GameClient::Wm_Command(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
+LRESULT __stdcall GameMainWindow::Wm_Command(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
     int wmId = LOWORD(wParam);
     // 메뉴 선택을 구문 분석합니다:
-    switch (wmId)
-    {
-    case IDM_ABOUT:
-        break;
-    default:
-        return DefWindowProc(hWnd, message, wParam, lParam);
-    }
+    //switch (wmId)
+    //{
+    //default:
+    //    return DefWindowProc(hWnd, message, wParam, lParam);
+    //}
 
     return 1;
 }
 
-LRESULT __stdcall GameClient::Wm_Paint(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
+LRESULT __stdcall GameMainWindow::Wm_Paint(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
     PAINTSTRUCT ps;
     HDC hdc = BeginPaint(hWnd, &ps);
@@ -217,7 +221,7 @@ LRESULT __stdcall GameClient::Wm_Paint(HWND hWnd, UINT message, WPARAM wParam, L
     return 1;
 }
 
-LRESULT __stdcall GameClient::Wm_Destroy(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
+LRESULT __stdcall GameMainWindow::Wm_Destroy(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
     PostQuitMessage(0);
     return 1;
@@ -226,7 +230,7 @@ LRESULT __stdcall GameClient::Wm_Destroy(HWND hWnd, UINT message, WPARAM wParam,
 
 
 
-void GameClient::RemoveMsgHandleFunc(UINT _Message, MsgHandleFunc _HandleFunc)
+void GameMainWindow::RemoveMsgHandleFunc(UINT _Message, MsgHandleFunc _HandleFunc)
 {
     const auto& mapIter = mMsgHandleFuncs.find(_Message);
     if (mapIter != mMsgHandleFuncs.end())

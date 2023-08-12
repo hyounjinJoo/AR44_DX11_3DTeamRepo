@@ -2,8 +2,8 @@
 #include "guiChild.h"
 #include "guiTreeWidget.h"
 
-#include <Engine/IRes.h>
-#include <Engine/ResMgr.h>
+#include "IRes.h"
+#include "ResMgr.h"
 
 namespace gui
 {

@@ -1,10 +1,11 @@
 
 #include "PCH_Engine.h"
 
-#include <Engine/Com_Renderer_Mesh.h>
-#include <Engine/ResMgr.h>
-#include <Engine/Com_Renderer_Sprite.h>
-#include <Engine/IRes.h>
+#include "Com_Renderer_Mesh.h"
+#include "ResMgr.h"
+#include "Com_Renderer_Sprite.h"
+#include "IRes.h"
+#include "GameObject.h"
 
 #include "guiCom_Renderer.h"
 #include "guiMgr.h"

@@ -1,6 +1,6 @@
 #pragma once
 #include "guiBase.h"
-#include <Engine/define_Struct.h>
+#include "define_Struct.h"
 
 namespace gui
 {

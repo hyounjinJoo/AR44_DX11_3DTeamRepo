@@ -2,9 +2,9 @@
 #include "PCH_Engine.h"
 #include "guiGame.h"
 
-#include <Engine/ResMgr.h>
-#include <Engine/Texture.h>
-#include <Engine/GPUMgr.h>
+#include "ResMgr.h"
+#include "Texture.h"
+#include "GPUMgr.h"
 
 namespace gui
 {

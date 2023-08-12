@@ -1,7 +1,7 @@
 #pragma once
 #include "guiChild.h"
 #include <functional>
-#include <Engine/define_Struct.h>
+#include "define_Struct.h"
 
 namespace gui
 {

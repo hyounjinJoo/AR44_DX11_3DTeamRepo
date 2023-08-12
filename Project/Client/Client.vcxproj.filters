@@ -14,9 +14,6 @@
       <Filter>main</Filter>
     </ClInclude>
     <ClInclude Include="PCH_Client.h" />
-    <ClInclude Include="GameClient.h">
-      <Filter>main</Filter>
-    </ClInclude>
     <ClInclude Include="resource.h">
       <Filter>main\WindowRes</Filter>
     </ClInclude>
@@ -26,9 +23,6 @@
       <Filter>main</Filter>
     </ClCompile>
     <ClCompile Include="PCH_Client.cpp" />
-    <ClCompile Include="GameClient.cpp">
-      <Filter>main</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Image Include="MHW.ico">

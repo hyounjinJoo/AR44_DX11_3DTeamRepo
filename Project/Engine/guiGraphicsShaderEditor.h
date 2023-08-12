@@ -1,7 +1,7 @@
 #pragma once
 
 #include "guiWindow.h"
-#include <Engine/define_GPU.h>
+#include "define_GPU.h"
 #include "guiComboBox.h"
 
 namespace mh

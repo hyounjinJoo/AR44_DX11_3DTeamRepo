@@ -3,18 +3,18 @@
 
 #include "guiResources.h"
 
-#include <Engine/Texture.h>
-#include <Engine/Material.h>
-#include <Engine/Mesh.h>
-#include <Engine/GraphicsShader.h>
-#include <Engine/ResMgr.h>
+#include "Texture.h"
+#include "Material.h"
+#include "Mesh.h"
+#include "GraphicsShader.h"
+#include "ResMgr.h"
 
 #include "guiInspector.h"
 #include "guiResource.h"
 
 #include "guiMgr.h"
 
-#include <Engine/Application.h>
+#include "Application.h"
 
 namespace gui
 {

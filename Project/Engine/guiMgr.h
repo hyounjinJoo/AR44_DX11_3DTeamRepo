@@ -1,8 +1,8 @@
 #pragma once
 #include "guiChild.h"
-#include <Engine/define_GPU.h>
-#include <Engine/define_Struct.h>
-#include <Engine/define_Macro.h>
+#include "define_GPU.h"
+#include "define_Struct.h"
+#include "define_Macro.h"
 
 namespace gui
 {
@@ -10,7 +10,7 @@ namespace gui
 	class DebugObject;
 	class guiMgr
 	{
-		friend class GameClient;
+		friend class GameEngineWindow;
 	public:
 		static void Run();
 

@@ -1,7 +1,7 @@
 #include "PCH_Engine.h"
 #include "guiCom_Transform.h"
 
-#include <Engine/Com_Transform.h>
+#include "Com_Transform.h"
 #include "guiInspector.h"
 
 namespace gui

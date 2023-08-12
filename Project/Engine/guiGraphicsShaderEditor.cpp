@@ -2,9 +2,9 @@
 
 #include "guiGraphicsShaderEditor.h"
 
-#include <Engine/PathMgr.h>
-#include <Engine/GraphicsShader.h>
-#include <Engine/json-cpp/json.h>
+#include "PathMgr.h"
+#include "GraphicsShader.h"
+#include "json-cpp/json.h"
 
 
 namespace gui

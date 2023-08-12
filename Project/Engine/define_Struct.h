@@ -19,6 +19,7 @@ namespace mh::define
 		int  Width;
 		int  Height;
 		tDesc_GPUMgr GPUDesc;
+		WNDCLASSEX WinClassDesc;
 	};
 
 	struct tUmap_LightHashFunc32

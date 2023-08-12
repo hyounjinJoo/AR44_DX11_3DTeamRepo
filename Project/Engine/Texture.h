@@ -1,10 +1,8 @@
 #pragma once
-
 #include "IRes.h"
 #include "GPUMgr.h"
 
 #include <DirectXTex/DirectXTex.h>
-
 
 namespace mh
 {

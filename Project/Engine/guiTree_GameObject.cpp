@@ -1,17 +1,17 @@
 #include "PCH_Engine.h"
 #include "guiTree_GameObject.h"
 
-#include <Engine/Application.h>
-#include <Engine/IScene.h>
-#include <Engine/Layer.h>
-#include <Engine/SceneMgr.h>
-#include <Engine/RenderMgr.h>
+#include "Application.h"
+#include "IScene.h"
+#include "Layer.h"
+#include "SceneMgr.h"
+#include "RenderMgr.h"
 
 #include "guiInspector.h"
 #include "guiMgr.h"
 #include "guiInspector.h"
 
-#include <Engine/Application.h>
+#include "Application.h"
 
 namespace gui
 {

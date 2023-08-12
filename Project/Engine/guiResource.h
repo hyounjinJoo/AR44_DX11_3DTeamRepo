@@ -1,6 +1,6 @@
 #pragma once
 #include "guiChild.h"
-#include <Engine/IRes.h>
+#include "IRes.h"
 
 namespace gui
 {

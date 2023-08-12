@@ -1,7 +1,7 @@
 #include "PCH_Engine.h"
 
 #include "guiTexture.h"
-#include <Engine/Texture.h>
+#include "Texture.h"
 
 namespace gui
 {

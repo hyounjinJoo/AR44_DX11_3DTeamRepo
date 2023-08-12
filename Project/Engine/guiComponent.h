@@ -1,6 +1,6 @@
 #pragma once
 #include "guiChild.h"
-#include <Engine/GameObject.h>
+#include "GameObject.h"
 
 
 namespace gui

@@ -1,19 +1,19 @@
 #include "PCH_Engine.h"
 #include "guiMgr.h"
 
-#include <Engine/Mesh.h>
-#include <Engine/ResMgr.h>
-#include <Engine/Material.h>
-#include <Engine/Com_Transform.h>
-#include <Engine/Com_Renderer_Mesh.h>
-#include <Engine/GridScript.h>
-#include <Engine/Object.h>
-#include <Engine/Application.h>
-#include <Engine/GPUMgr.h>
+#include "imgui/imgui.h"
+#include "imgui/imgui_impl_win32.h"
+#include "imgui/imgui_impl_dx11.h"
 
-#include "imgui.h"
-#include "imgui_impl_win32.h"
-#include "imgui_impl_dx11.h"
+#include "Mesh.h"
+#include "ResMgr.h"
+#include "Material.h"
+#include "Com_Transform.h"
+#include "Com_Renderer_Mesh.h"
+#include "GridScript.h"
+#include "Object.h"
+#include "Application.h"
+#include "GPUMgr.h"
 
 #include "guiInspector.h"
 #include "guiGame.h"
@@ -24,14 +24,14 @@
 #include "guiList.h"
 #include "guiTree_GameObject.h"
 
-
-#include <Engine/AtExit.h>
-#include "GameClient.h"
+#include "AtExit.h"
 
 #include "guiGraphicsShaderEditor.h"
 
 #include "guiDebugObject.h"
 #include "guiEditorObject.h"
+
+
 
 extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 namespace gui
@@ -52,7 +52,7 @@ namespace gui
 	{
 		AtExit::AddFunc(guiMgr::Release);
 
-		::GameClient::RegisterImGuiWndProc(ImGui_ImplWin32_WndProcHandler);
+		::GameEngineWindow::RegisterImGuiWndProc(ImGui_ImplWin32_WndProcHandler);
 
 		// 충돌체의 종류 갯수만큼만 있으면 된다.
 		mDebugObjects.resize((UINT)eColliderType::End);
