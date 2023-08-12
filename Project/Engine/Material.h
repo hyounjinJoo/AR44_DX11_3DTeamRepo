@@ -42,9 +42,10 @@ namespace mh
 
 	private:
 		std::shared_ptr<GraphicsShader> mShader;
-		std::array<std::shared_ptr<Texture>, (int)eTextureSlot::End> mTextures;
+		std::array<std::shared_ptr<Texture>, (int)eTextureSlot::END> mTextures;
 
-		MaterialCB mCB;
+		CB_MaterialData mCB;
+
 		eRenderingMode mMode;
 
 		float4 mDiffuseColor;

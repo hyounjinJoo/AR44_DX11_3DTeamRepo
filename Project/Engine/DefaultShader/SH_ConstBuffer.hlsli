@@ -1,79 +1,119 @@
 #ifndef SH_CONST_BUFFER
 #define SH_CONST_BUFFER
 
-cbuffer Global : register(b0)
-{
-	uint2  guResolution;
-	float2 gfResolution;
-	float  gDeltaTime;
-}
+#include "SH_Common.hlsli"
 
-cbuffer Transform : register(b1)
+
+REGISTER_DECLARE(cbuffer, CB_Global, b, 0)
 {
-	row_major matrix world;
-	row_major matrix inverseWorld;
-	row_major matrix view;
-	row_major matrix inverseView;
-	row_major matrix projection;
-}
-cbuffer MaterialData : register(b2)
+	uint2	uResolution;
+	float2	fResolution;
+	float	DeltaTime;
+	int		pad0;
+};
+
+REGISTER_DECLARE(cbuffer, CB_Transform, b, 1)
+{
+	MATRIX world;
+	MATRIX inverseWorld;
+	MATRIX view;
+	MATRIX inverseView;
+	MATRIX projection;
+};
+
+REGISTER_DECLARE(cbuffer, CB_MaterialData, b, 2)
 {
 	float4 Diff;
 	float4 Spec;
 	float4 Amb;
 	float4 Emv;
 
-	uint usedAlbedo;
-	uint usedNormal;
-	uint usedSpecular;
-	uint Padd1;
-}
+	BOOL usedAlbedo;
+	BOOL usedNormal;
+	BOOL usedSpecular;
+	uint Pad1;
+};
 
-cbuffer Grid : register(b3)
+REGISTER_DECLARE(cbuffer, CB_Grid, b, 3)
 {
     float4 cameraPosition;
     float2 cameraScale;
     float2 resolution;
-}
+};
 
-cbuffer Animation : register(b4)
+REGISTER_DECLARE(cbuffer, CB_Animation2D, b, 4)
 {
-    float2 leftTop;
-    float2 spriteSize;
-    float2 offset;
-    float2 atlasSize;
+	float2 leftTop;
+	float2 spriteSize;
+	float2 offset;
+	float2 atlasSize;
 
-    uint animationType;
-}
+	uint animationType;
+	float3 pad2;
+};
 
-cbuffer NumberOfLight : register(b5)
-{
+REGISTER_DECLARE(cbuffer, CB_NumberOfLight, b, 5)
+{ 	
 	uint numberOfLight;
 	uint indexOfLight;
-}
+	
+	float2 pad3;
+};
 
-cbuffer ParticleSystem : register(b6)
+
+REGISTER_DECLARE(cbuffer, CB_ParticleSystem, b, 6)
 {
-    float4 worldPosition;
-    float4 startColor;
-    float4 startSize;
+	float4 worldPosition;
+	float4 startColor;
+	float4 startSize;
     
-    uint maxParticles;
-    uint simulationSpace;
-    float radius;
-    float startSpeed;
+	uint maxParticles;
+	uint simulationSpace;
+	float radius;
+	float startSpeed;
     
-    float startLifeTime;
-    float deltaTime;
-    float elapsedTime; //누적시간
-    int padding;
-}
+	float startLifeTime;
+	float deltaTime;
+	float elapsedTime; //누적시간
+	int LightPad;
+};
 
-cbuffer Noise : register(b7)
+REGISTER_DECLARE(cbuffer, CB_Noise, b, 7)
 {
 	float4 NoiseSize;
 	float NoiseTime;
-}
+	
+	float3 NoisePad;
+};
+
+REGISTER_DECLARE(cbuffer, CB_SBufferCount, b, 8)
+{
+	uint SBufferDataCount;
+	
+	uint3 SBufferPad;
+};
+
+
+#ifdef __cplusplus
+
+namespace mh::define
+{
+	enum class eCBType
+	{
+		Global = register_b_CB_Global,	
+		Transform = register_b_CB_Transform,	
+		Material = register_b_CB_MaterialData,	
+		Grid = register_b_CB_Grid,		
+		Animation2D = register_b_CB_Animation2D,	
+		numberOfLight = register_b_CB_NumberOfLight,
+		ParticleSystem = register_b_CB_ParticleSystem,
+		Noise = register_b_CB_Noise,	
+		SBufferCount = register_b_CB_SBufferCount,
+		END
+	};
+};
+
+#endif
 
 
 #endif

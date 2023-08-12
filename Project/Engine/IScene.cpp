@@ -8,7 +8,7 @@ namespace mh
 	IScene::IScene()
 		: mbInitialized()
 	{
-		mLayers.resize((uint)define::eLayerType::End);
+		mLayers.resize((uint)define::eLayerType::END);
 	}
 
 	IScene::~IScene()

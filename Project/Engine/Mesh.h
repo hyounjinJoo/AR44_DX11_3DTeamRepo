@@ -4,7 +4,6 @@
 
 namespace mh
 {
-	using namespace mh;
 	struct Vertex2D
 	{
 		float4 Pos;

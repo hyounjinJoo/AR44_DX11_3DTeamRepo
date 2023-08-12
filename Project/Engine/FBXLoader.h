@@ -37,14 +37,14 @@ namespace mh
 	struct tContainer
 	{
 		std::wstring								strName;
-		std::vector<mh::float3>						vecPos;
-		std::vector<mh::float3>						vecTangent;
-		std::vector<mh::float3>						vecBinormal;
-		std::vector<mh::float3>						vecNormal;
-		std::vector<mh::float2>						vecUV;
+		std::vector<float3>						vecPos;
+		std::vector<float3>						vecTangent;
+		std::vector<float3>						vecBinormal;
+		std::vector<float3>						vecNormal;
+		std::vector<float2>						vecUV;
 
-		std::vector<mh::float4>						vecIndices;
-		std::vector<mh::float4>						vecWeights;
+		std::vector<float4>						vecIndices;
+		std::vector<float4>						vecWeights;
 
 		std::vector<std::vector<UINT>>				vecIdx;
 		std::vector<tFbxMaterial>				vecMtrl;

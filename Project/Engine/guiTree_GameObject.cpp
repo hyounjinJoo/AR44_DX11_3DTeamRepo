@@ -20,7 +20,7 @@ namespace gui
 		, mTreeWidget(nullptr)
 	{
 
-		mh::int2 winSize = mh::Application::GetWindowSize();
+		int2 winSize = mh::Application::GetWindowSize();
 		//SetSize(ImVec2((float)(winSize.x / 2), (float)(winSize.y / 2)));
 
 		mTreeWidget = AddChild<TreeWidget>();
@@ -60,7 +60,7 @@ namespace gui
 
 		TreeWidget::tNode* root = mTreeWidget->AddNode(nullptr, sceneName, mh::define::tDataPtr{}, true);
 
-		for (size_t i = 0; i < (UINT)mh::define::eLayerType::End; i++)
+		for (size_t i = 0; i < (UINT)mh::define::eLayerType::END; i++)
 		{
 			mh::Layer& layer = scene->GetLayer((mh::define::eLayerType)i);
 			const std::vector<mh::GameObject*>& gameObjs

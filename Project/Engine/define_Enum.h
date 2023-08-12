@@ -46,7 +46,7 @@ namespace mh::define
 		tParticle,
 		PostProcess,
 		UI,
-		End = 16,
+		END = 16,
 	};
 
 	enum class eProjectionType
@@ -63,7 +63,7 @@ namespace mh::define
 		Circle,
 		Box,
 		Sphere,
-		End,
+		END,
 	};
 
 	enum class eAnimationType
@@ -71,7 +71,7 @@ namespace mh::define
 		None,
 		SecondDimension,
 		ThirdDimension,
-		End,
+		END,
 	};
 
 	enum class eLightType
@@ -79,6 +79,6 @@ namespace mh::define
 		Directional,
 		Point,
 		Spot,
-		End,
+		END,
 	};
 }

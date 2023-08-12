@@ -209,8 +209,8 @@ namespace gui
 
 		{
 			std::vector<guiComboBox::tComboItem> Items;
-			Items.reserve((size_t)mh::define::eRSType::End);
-			for (size_t i = 0; i < (size_t)mh::define::eRSType::End; ++i)
+			Items.reserve((size_t)mh::define::eRSType::END);
+			for (size_t i = 0; i < (size_t)mh::define::eRSType::END; ++i)
 			{
 				Items.push_back(guiComboBox::tComboItem{ mh::define::strKey::eRSType[i],});
 			}
@@ -220,8 +220,8 @@ namespace gui
 
 		{
 			std::vector<guiComboBox::tComboItem> Items;
-			Items.reserve((size_t)mh::define::eDSType::End);
-			for (size_t i = 0; i < (size_t)mh::define::eDSType::End; ++i)
+			Items.reserve((size_t)mh::define::eDSType::END);
+			for (size_t i = 0; i < (size_t)mh::define::eDSType::END; ++i)
 			{
 				Items.push_back(guiComboBox::tComboItem{ mh::define::strKey::eDSType[i], });
 			}
@@ -231,8 +231,8 @@ namespace gui
 
 		{
 			std::vector<guiComboBox::tComboItem> Items;
-			Items.reserve((size_t)mh::define::eBSType::End);
-			for (size_t i = 0; i < (size_t)mh::define::eBSType::End; ++i)
+			Items.reserve((size_t)mh::define::eBSType::END);
+			for (size_t i = 0; i < (size_t)mh::define::eBSType::END; ++i)
 			{
 				Items.push_back(guiComboBox::tComboItem{ mh::define::strKey::eBSType[i], });
 			}
@@ -724,7 +724,7 @@ namespace gui
 
 		{
 			int curSel = mRSTypeCombo.GetCurrentIndex();
-			if (0 <= curSel && curSel < (int)mh::define::eRSType::End)
+			if (0 <= curSel && curSel < (int)mh::define::eRSType::END)
 			{
 				mh::define::eRSType Type = (mh::define::eRSType)curSel;
 				shader.SetRSState(Type);
@@ -738,7 +738,7 @@ namespace gui
 
 		{
 			int curSel = mDSTypeCombo.GetCurrentIndex();
-			if (0 <= curSel && curSel < (int)mh::define::eDSType::End)
+			if (0 <= curSel && curSel < (int)mh::define::eDSType::END)
 			{
 				mh::define::eDSType Type = (mh::define::eDSType)curSel;
 				shader.SetDSState(Type);
@@ -753,7 +753,7 @@ namespace gui
 		{
 			int curSel = mBSTypeCombo.GetCurrentIndex();
 
-			if (0 <= curSel && curSel < (int)mh::define::eBSType::End)
+			if (0 <= curSel && curSel < (int)mh::define::eBSType::END)
 			{
 				mh::define::eBSType Type = (mh::define::eBSType)curSel;
 				shader.SetBSState(Type);

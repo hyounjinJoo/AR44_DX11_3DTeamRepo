@@ -160,14 +160,14 @@ namespace mh
 	{
 		mAtlas->BindDataSRV(12u, eShaderStageFlag::PS);
 
-		ConstBuffer* cb = RenderMgr::GetConstBuffer(eCBType::Animation);
+		ConstBuffer* cb = RenderMgr::GetConstBuffer(eCBType::Animation2D);
 
-		AnimationCB info = {};
-		info.Type = (uint)define::eAnimationType::SecondDimension;
-		info.LeftTop = mSpriteSheet[mIndex].LeftTop;
-		info.Offset = mSpriteSheet[mIndex].Offset;
-		info.Size = mSpriteSheet[mIndex].Size;
-		info.AtlasSize = mSpriteSheet[mIndex].AtlasSize;
+		CB_Animation2D info = {};
+		info.animationType = (uint)define::eAnimationType::SecondDimension;
+		info.leftTop = mSpriteSheet[mIndex].LeftTop;
+		info.offset = mSpriteSheet[mIndex].Offset;
+		info.spriteSize = mSpriteSheet[mIndex].Size;
+		info.atlasSize = mSpriteSheet[mIndex].AtlasSize;
 
 		cb->SetData(&info);
 		cb->BindData(eShaderStageFlag::PS);
@@ -185,10 +185,10 @@ namespace mh
 		//Texture clear
 		Texture::Clear(12);
 
-		ConstBuffer* cb = RenderMgr::GetConstBuffer(eCBType::Animation);
+		ConstBuffer* cb = RenderMgr::GetConstBuffer(eCBType::Animation2D);
 
-		AnimationCB info = {};
-		info.Type = (uint)define::eAnimationType::None;
+		CB_Animation2D info = {};
+		info.animationType = (uint)define::eAnimationType::None;
 
 		cb->SetData(&info);
 		cb->BindData(eShaderStageFlag::PS);

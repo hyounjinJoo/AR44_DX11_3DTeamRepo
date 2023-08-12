@@ -1027,48 +1027,6 @@ namespace mh::math
 #include "SimpleMath.inl"
 }
 
-namespace mh
-{
-    using float2 = math::Vector2;
-    using float3 = math::Vector3;
-    using float4 = math::Vector4;
-    using MATRIX = math::Matrix;
-    using uint = UINT;
-    struct uint2
-    {
-        uint x;
-        uint y;
-    };
-    struct uint3
-    {
-        uint x;
-        uint y;
-        uint z;
-    };
-    struct uint4
-    {
-        uint x;
-        uint y;
-        uint z;
-        uint w;
-    };
-    struct int2
-    {
-        int x;
-        int y;
-    };
-    struct int3
-    {
-        int x;
-        int y;
-        int z;
-    };
-    struct int4
-    {
-        int x;
-        int y;
-        int z;
-        int w;
-    };
-}
+#include "DefaultShader/SH_Common.hlsli"
+
 

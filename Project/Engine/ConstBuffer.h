@@ -1,6 +1,8 @@
 #pragma once
 #include "GPUBuffer.h"
 
+#include "DefaultShader/SH_ConstBuffer.hlsli"
+
 namespace mh
 {
 	class ConstBuffer 
@@ -17,10 +19,8 @@ namespace mh
 		void BindData(define::eShaderStageFlag_ _stageFlag = define::eShaderStageFlag::NONE);
 
 		void SetPresetTargetStage(define::eShaderStageFlag_ _flag) { mPresetTargetStage = _flag; }
-
 	private:
 		const define::eCBType mType;
-
 
 		uint				mDataSize;
 		uint				mDataCount;

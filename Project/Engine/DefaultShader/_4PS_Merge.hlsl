@@ -20,7 +20,7 @@
 float4 main(VSOut In) : SV_Target
 {
 	float4 OutColor = (float4) 0.0f;
-	float2 UV = In.Position.xy / gfResolution;
+	float2 UV = In.Position.xy / fResolution;
     
 	float4 viewPos = positionTarget.Sample(anisotropicSampler, UV);
 	if (0.0f == viewPos.a)

@@ -55,10 +55,10 @@ namespace mh
 
 		// Constant buffer
 		ConstBuffer* CB = RenderMgr::GetConstBuffer(eCBType::Grid);
-		GridCB data;
-		data.CameraPosition = position;
-		data.CameraScale = float2(scale, scale);
-		data.Resolution = resolution;
+		CB_Grid data;
+		data.cameraPosition = position;
+		data.cameraScale = float2(scale, scale);
+		data.resolution = resolution;
 		
 		CB->SetData(&data);
 		CB->BindData(eShaderStageFlag::VS | eShaderStageFlag::PS);

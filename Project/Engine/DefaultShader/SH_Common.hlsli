@@ -4,43 +4,42 @@
 //C++
 #ifdef __cplusplus
 
-#include "../SimpleMath.h"
 
-namespace mh
-{
-using float2 = float2;
-using float3 = float2;
-using float4 = float2;
+using float2 = mh::math::Vector2;
+using float3 = mh::math::Vector3;
+using float4 = mh::math::Vector4;
+using MATRIX = mh::math::Matrix;
+using uint = UINT;
 
-using BOOL = int;
 //윈도우 쪽 헤더에 정의되어 있음
+#ifndef BOOL
+using BOOL = int;
+#endif
+
 #ifndef TRUE
-//constexpr const int TRUE = 1;
+constexpr const int TRUE = 1;
 #endif
 #ifndef FALSE
-//constexpr const int FALSE = 0;
+constexpr const int FALSE = 0;
 #endif
 
 struct int2 { int x; int y; };
 struct int3 { int x; int y; int z; };
 struct int4 { int x; int y; int z; int w; };
 
-using uint = uint;
+using uint = UINT;
 struct uint2 { uint x; uint y; };
 struct uint3 { uint x; uint y; uint z; };
 struct uint4 { uint x; uint y; uint z; uint w; };
-}
 
-using MATRIX = MATRIX;
+
 
 #define SEMANTIC(_Type)
 
-#define cbuffer struct
-
+#else
 //=========================================
 //================ HLSL ===================
 //=========================================
-#else
 
 #define FLT_EPSILON 1.192092896e-07F
 
@@ -52,8 +51,6 @@ using MATRIX = MATRIX;
 #define SEMANTIC(_Type)  : _Type
 
 #endif
-
-
 
 //ENUM 관련
 #ifdef __cplusplus
@@ -73,5 +70,29 @@ using MATRIX = MATRIX;
 #endif
 
 
+//Register Slot 관련
+#ifdef __cplusplus
+
+#define REGISTER_DECLARE(_bufferType, _bufferName, _registerType, _registerNumber)\
+constexpr int register_##_registerType##_##_bufferName = _registerNumber;\
+_bufferType(_bufferType, _bufferName)
+
+#define cbuffer(_bufferType, _bufferName) struct alignas(16) _bufferName
+
+#define REGISTER(_Type)
+#define REGISTER_SLOT(_RegisterType, _iSlotIdx) _iSlotIdx
+
+#else//HLSL
+
+#define REGISTER_DECLARE(_bufferType, _bufferName, _registerType, _registerNumber)\
+_bufferType _bufferName : register(_registerType##_registerNumber)
+
+#define REGISTER(_Type) : register(_Type)
+#define REGISTER_SLOT(_RegisterType, _iSlotIdx) _RegisterType##_iSlotIdx
 
 #endif
+
+#endif
+
+
+

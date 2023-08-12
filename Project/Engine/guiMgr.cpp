@@ -58,7 +58,7 @@ namespace gui
 		::GameMainWindow::RegisterImGuiWndProc(ImGui_ImplWin32_WndProcHandler);
 
 		// 충돌체의 종류 갯수만큼만 있으면 된다.
-		mDebugObjects.resize((UINT)eColliderType::End);
+		mDebugObjects.resize((UINT)eColliderType::END);
 
 		std::shared_ptr<mh::Mesh> rectMesh = mh::ResMgr::Find<mh::Mesh>(mh::strKey::Default::mesh::DebugRectMesh);
 		std::shared_ptr<mh::Material> material = mh::ResMgr::Find<mh::Material>(mh::strKey::Default::material::DebugMaterial);

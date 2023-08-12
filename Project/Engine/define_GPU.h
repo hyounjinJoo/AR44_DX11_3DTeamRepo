@@ -20,18 +20,20 @@ namespace Microsoft::WRL
 #include "define_Enum.h"
 #include "define_Macro.h"
 
-#define CB_GETBINDSLOT(name) __CBUFFERBINDSLOT__##name##__
-#define CBUFFER(name, slot) static const int CB_GETBINDSLOT(name) = slot; struct alignas(16) name
+#include "DefaultShader/SH_ConstBuffer.hlsli"
 
-#define CBSLOT_GLOBAL			0
-#define CBSLOT_TRANSFORM		1
-#define CBSLOT_MATERIAL			2
-#define CBSLOT_GRID				3
-#define CBSLOT_ANIMATION		4
-#define CBSLOT_NUMBEROFLIGHT	5
-#define CBSLOT_PARTICLESYSTEM	6
-#define CBSLOT_NOISE			7
-#define CBSLOT_SBUFFER			8
+//#define CB_GETBINDSLOT(name) __CBUFFERBINDSLOT__##name##__
+//#define CBUFFER(name, slot) static const int CB_GETBINDSLOT(name) = slot; struct alignas(16) name
+//
+//#define CBSLOT_GLOBAL			0
+//#define CBSLOT_TRANSFORM		1
+//#define CBSLOT_MATERIAL			2
+//#define CBSLOT_GRID				3
+//#define CBSLOT_ANIMATION		4
+//#define CBSLOT_NUMBEROFLIGHT	5
+//#define CBSLOT_PARTICLESYSTEM	6
+//#define CBSLOT_NOISE			7
+//#define CBSLOT_SBUFFER			8
 
 namespace mh::define
 {
@@ -76,7 +78,7 @@ namespace mh::define
 		Deffered,
 		Light,
 		Shadow,
-		End,
+		END,
 	};
 
 
@@ -126,7 +128,7 @@ namespace mh::define
 		Point,
 		Linear,
 		Anisotropic,
-		End,
+		END,
 	};
 
 	enum class eRSType
@@ -135,7 +137,7 @@ namespace mh::define
 		SolidFront,
 		SolidNone,
 		WireframeNone,
-		End,
+		END,
 	};
 
 	enum class eDSType
@@ -144,7 +146,7 @@ namespace mh::define
 		Greater,
 		NoWrite,
 		None,
-		End,
+		END,
 	};
 
 	enum class eBSType
@@ -152,19 +154,19 @@ namespace mh::define
 		Default,
 		AlphaBlend,
 		OneOne,
-		End,
+		END,
 	};
 
 	namespace strKey
 	{
-		constexpr const char* eSamplerType[(int)mh::define::eSamplerType::End]
+		constexpr const char* eSamplerType[(int)mh::define::eSamplerType::END]
 		{
 			"Point",
 			"Linear",
 			"Anisotropic",
 		};
 
-		constexpr const char* eRSType[(int)mh::define::eRSType::End]
+		constexpr const char* eRSType[(int)mh::define::eRSType::END]
 		{
 			"SolidBack",
 			"SolidFront",
@@ -172,7 +174,7 @@ namespace mh::define
 			"WireframeNone",
 		};
 
-		constexpr const char* eDSType[(int)mh::define::eDSType::End]
+		constexpr const char* eDSType[(int)mh::define::eDSType::END]
 		{
 			"Less",
 			"Greater",
@@ -180,7 +182,7 @@ namespace mh::define
 			"None",
 		};
 
-		constexpr const char* eBSType[(int)mh::define::eBSType::End]
+		constexpr const char* eBSType[(int)mh::define::eBSType::END]
 		{
 			"Default",
 			"AlphaBlend",
@@ -203,23 +205,11 @@ namespace mh::define
 		Transparent,
 		PostProcess,
 		None,
-		End,
+		END,
 	};
 
 
-	enum class eCBType
-	{
-		Global,
-		Transform,
-		Material,
-		Grid,
-		Animation,
-		Light,
-		ParticleSystem,
-		Noise,
-		SBuffer,
-		End,
-	};
+
 
 
 	enum class eGPUParam
@@ -236,7 +226,7 @@ namespace mh::define
 	{
 		SRV,
 		UAV,
-		End,
+		END,
 	};
 
 	enum class eTextureSlot
@@ -259,7 +249,7 @@ namespace mh::define
 		//Array2DT10,
 		//Array2DT11,
 
-		End,
+		END,
 	};
 
 	enum class eMRT_Defferd
@@ -268,7 +258,7 @@ namespace mh::define
 		NormalTarget,
 		AlbedoTarget,
 		SpecularTarget,
-		End
+		END
 	};
 
 	enum class eMRT_Light

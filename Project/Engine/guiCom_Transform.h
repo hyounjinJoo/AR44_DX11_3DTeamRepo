@@ -14,9 +14,9 @@ namespace gui
 		virtual void UpdateUI() override;
 
 	private:
-		mh::float3 mPosisition;
-		mh::float3 mRotation;
-		mh::float3 mScale;
+		float3 mPosisition;
+		float3 mRotation;
+		float3 mScale;
 	};
 
 }

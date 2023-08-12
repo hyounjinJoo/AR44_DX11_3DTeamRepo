@@ -33,15 +33,15 @@ namespace mh
 	Com_Camera*							RenderMgr::mMainCamera{};
 	GameObject*							RenderMgr::mInspectorGameObject{};
 
-	std::unique_ptr<ConstBuffer>		RenderMgr::mConstBuffers[(uint)eCBType::End]{};
-	ComPtr<ID3D11SamplerState>			RenderMgr::mSamplerStates[(uint)eSamplerType::End]{};
-	ComPtr<ID3D11RasterizerState>		RenderMgr::mRasterizerStates[(uint)eRSType::End]{};
-	ComPtr<ID3D11DepthStencilState>		RenderMgr::mDepthStencilStates[(uint)eDSType::End]{};
-	ComPtr<ID3D11BlendState>			RenderMgr::mBlendStates[(uint)eBSType::End]{};
+	std::unique_ptr<ConstBuffer>		RenderMgr::mConstBuffers[(uint)eCBType::END]{};
+	ComPtr<ID3D11SamplerState>			RenderMgr::mSamplerStates[(uint)eSamplerType::END]{};
+	ComPtr<ID3D11RasterizerState>		RenderMgr::mRasterizerStates[(uint)eRSType::END]{};
+	ComPtr<ID3D11DepthStencilState>		RenderMgr::mDepthStencilStates[(uint)eDSType::END]{};
+	ComPtr<ID3D11BlendState>			RenderMgr::mBlendStates[(uint)eBSType::END]{};
 	std::vector<Com_Camera*>			RenderMgr::mCameras{};
 	std::vector<tDebugMesh>				RenderMgr::mDebugMeshes{};
 
-	std::unique_ptr<MultiRenderTarget>	RenderMgr::mMultiRenderTargets[(uint)eMRTType::End]{};
+	std::unique_ptr<MultiRenderTarget>	RenderMgr::mMultiRenderTargets[(uint)eMRTType::END]{};
 
 	std::vector<Com_Light*>				RenderMgr::mLights{};
 	std::vector<tLightAttribute>		RenderMgr::mLightAttributes{};
@@ -77,23 +77,23 @@ namespace mh
 	{
 		mMainCamera = nullptr;
 		mInspectorGameObject = nullptr;
-		for (int i = 0; i < (int)eCBType::End; ++i)
+		for (int i = 0; i < (int)eCBType::END; ++i)
 		{
 			mConstBuffers->reset();
 		}
-		for (int i = 0; i < (int)eSamplerType::End; ++i)
+		for (int i = 0; i < (int)eSamplerType::END; ++i)
 		{
 			mSamplerStates[i] = nullptr;
 		}
-		for (int i = 0; i < (int)eRSType::End; ++i)
+		for (int i = 0; i < (int)eRSType::END; ++i)
 		{
 			mRasterizerStates[i] = nullptr;
 		}
-		for (int i = 0; i < (int)eDSType::End; ++i)
+		for (int i = 0; i < (int)eDSType::END; ++i)
 		{
 			mDepthStencilStates[i] = nullptr;
 		}
-		for (int i = 0; i < (int)eBSType::End; ++i)
+		for (int i = 0; i < (int)eBSType::END; ++i)
 		{
 			mBlendStates[i] = nullptr;
 		}
@@ -108,7 +108,7 @@ namespace mh
 		mLightsBuffer.reset();
 		mPostProcessTexture = nullptr;
 
-		for (int i = 0; i < (int)eMRTType::End; ++i)
+		for (int i = 0; i < (int)eMRTType::END; ++i)
 		{
 			mMultiRenderTargets[i].reset();
 		}
@@ -155,15 +155,15 @@ namespace mh
 
 		mLightsBuffer->BindDataSRV(13, Flag);
 
-		LightCB trCb = {};
-		trCb.NumberOfLight = (uint)mLightAttributes.size();
+		CB_NumberOfLight trCb = {};
+		trCb.numberOfLight = (uint)mLightAttributes.size();
 
 		for (size_t i = 0; i < mLights.size(); i++)
 		{
 			mLights[i]->SetIndex((uint)i);
 		}
 
-		ConstBuffer* cb = mConstBuffers[(uint)eCBType::Light].get();
+		ConstBuffer* cb = mConstBuffers[(uint)eCBType::numberOfLight].get();
 		cb->SetData(&trCb);
 		cb->BindData(Flag);
 	}
@@ -172,7 +172,7 @@ namespace mh
 		std::shared_ptr<Texture> noise = ResMgr::Find<Texture>(define::strKey::Default::texture::noise_03);
 		noise->BindDataSRV(16u, eShaderStageFlag::ALL);
 
-		NoiseCB info = {};
+		CB_Noise info = {};
 		info.NoiseSize.x = (float)noise->GetWidth();
 		info.NoiseSize.y = (float)noise->GetHeight();
 
@@ -203,7 +203,7 @@ namespace mh
 
 	void RenderMgr::ClearMultiRenderTargets()
 	{
-		for (int i = 0; i < (int)eMRTType::End; ++i)
+		for (int i = 0; i < (int)eMRTType::END; ++i)
 		{
 			if (mMultiRenderTargets[i])
 			{
@@ -222,7 +222,7 @@ namespace mh
 
 	void RenderMgr::UpdateGlobalCBuffer()
 	{
-		GlobalCB cb{};
+		CB_Global cb{};
 		cb.uResolution.x = GPUMgr::GetResolutionX();
 		cb.uResolution.y = GPUMgr::GetResolutionY();
 		cb.fResolution.x = (float)cb.uResolution.x;
@@ -1110,34 +1110,34 @@ namespace mh
 	{
 #pragma region CONSTANT BUFFER
 		mConstBuffers[(uint)eCBType::Global] = std::make_unique<ConstBuffer>(eCBType::Global);
-		mConstBuffers[(uint)eCBType::Global]->Create(sizeof(GlobalCB));
+		mConstBuffers[(uint)eCBType::Global]->Create(sizeof(CB_Global));
 		mConstBuffers[(uint)eCBType::Global]->SetPresetTargetStage(eShaderStageFlag::ALL);
 
 		UpdateGlobalCBuffer();
 
 		mConstBuffers[(uint)eCBType::Transform] = std::make_unique<ConstBuffer>(eCBType::Transform);
-		mConstBuffers[(uint)eCBType::Transform]->Create(sizeof(TransformCB));
+		mConstBuffers[(uint)eCBType::Transform]->Create(sizeof(CB_Transform));
 
 		mConstBuffers[(uint)eCBType::Material] = std::make_unique<ConstBuffer>(eCBType::Material);
-		mConstBuffers[(uint)eCBType::Material]->Create(sizeof(MaterialCB));
+		mConstBuffers[(uint)eCBType::Material]->Create(sizeof(CB_MaterialData));
 
 		mConstBuffers[(uint)eCBType::Grid] = std::make_unique<ConstBuffer>(eCBType::Grid);
-		mConstBuffers[(uint)eCBType::Grid]->Create(sizeof(GridCB));
+		mConstBuffers[(uint)eCBType::Grid]->Create(sizeof(CB_Grid));
 
-		mConstBuffers[(uint)eCBType::Animation] = std::make_unique<ConstBuffer>(eCBType::Animation);
-		mConstBuffers[(uint)eCBType::Animation]->Create(sizeof(AnimationCB));
+		mConstBuffers[(uint)eCBType::Animation2D] = std::make_unique<ConstBuffer>(eCBType::Animation2D);
+		mConstBuffers[(uint)eCBType::Animation2D]->Create(sizeof(CB_Animation2D));
 
-		mConstBuffers[(uint)eCBType::Light] = std::make_unique<ConstBuffer>(eCBType::Light);
-		mConstBuffers[(uint)eCBType::Light]->Create(sizeof(LightCB));
+		mConstBuffers[(uint)eCBType::numberOfLight] = std::make_unique<ConstBuffer>(eCBType::numberOfLight);
+		mConstBuffers[(uint)eCBType::numberOfLight]->Create(sizeof(CB_NumberOfLight));
 
 		mConstBuffers[(uint)eCBType::ParticleSystem] = std::make_unique<ConstBuffer>(eCBType::ParticleSystem);
-		mConstBuffers[(uint)eCBType::ParticleSystem]->Create(sizeof(ParticleSystemCB));
+		mConstBuffers[(uint)eCBType::ParticleSystem]->Create(sizeof(CB_ParticleSystem));
 
 		mConstBuffers[(uint)eCBType::Noise] = std::make_unique<ConstBuffer>(eCBType::Noise);
-		mConstBuffers[(uint)eCBType::Noise]->Create(sizeof(NoiseCB));
+		mConstBuffers[(uint)eCBType::Noise]->Create(sizeof(CB_Noise));
 
-		mConstBuffers[(uint)eCBType::SBuffer] = std::make_unique<ConstBuffer>(eCBType::SBuffer);
-		mConstBuffers[(uint)eCBType::SBuffer]->Create<SBufferCB>();
+		mConstBuffers[(uint)eCBType::SBufferCount] = std::make_unique<ConstBuffer>(eCBType::SBufferCount);
+		mConstBuffers[(uint)eCBType::SBufferCount]->Create<CB_SBufferCount>();
 
 #pragma endregion
 #pragma region STRUCTED BUFFER

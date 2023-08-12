@@ -55,7 +55,7 @@ namespace mh
 
 	void Texture::ClearAll()
 	{
-		for (int i = 0; i < (int)eTextureSlot::End; ++i)
+		for (int i = 0; i < (int)eTextureSlot::END; ++i)
 		{
 			ID3D11ShaderResourceView* srv = nullptr;
 

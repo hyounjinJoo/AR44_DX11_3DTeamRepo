@@ -124,11 +124,11 @@ namespace mh
 		Com_Transform* tr = GetOwner()->GetComponent<Com_Transform>();
 		tr->SetConstBuffer();
 
-		ConstBuffer* cb = RenderMgr::GetConstBuffer(eCBType::Light);
+		ConstBuffer* cb = RenderMgr::GetConstBuffer(eCBType::numberOfLight);
 
-		LightCB data = {};
-		data.NumberOfLight = (uint)RenderMgr::GetLights().size();
-		data.IndexOfLight = mIndex;
+		CB_NumberOfLight data = {};
+		data.numberOfLight = (uint)RenderMgr::GetLights().size();
+		data.indexOfLight = mIndex;
 
 		cb->SetData(&data);
 		cb->BindData(eShaderStageFlag::VS | eShaderStageFlag::PS);

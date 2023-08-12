@@ -187,7 +187,7 @@ namespace mh
 		mPostProcessGameObjects.clear();
 
 		IScene* scene = SceneMgr::GetActiveScene();
-		for (int index = 0; index < (uint)define::eLayerType::End; index++)
+		for (int index = 0; index < (uint)define::eLayerType::END; index++)
 		{
 			if (mLayerMasks[index] == true)
 			{
