@@ -73,19 +73,36 @@ struct uint4 { uint x; uint y; uint z; uint w; };
 //Register Slot 관련
 #ifdef __cplusplus
 
+#define CBUFFER(_bufferName, _structName, _registerNumber)\
+constexpr int CBuffer_##_bufferName = _registerNumber;\
+constexpr int Register_b_##_bufferName = _registerNumber
+
+#define TEXTURE2D(_bufferName, _structName, _registerNumber)
+
+
 #define REGISTER_DECLARE(_bufferType, _bufferName, _registerType, _registerNumber)\
 constexpr int register_##_registerType##_##_bufferName = _registerNumber;\
 _bufferType(_bufferType, _bufferName)
 
 #define cbuffer(_bufferType, _bufferName) struct alignas(16) _bufferName
+#define Texture2D(_bufferType, _bufferName) 
 
 #define REGISTER(_Type)
 #define REGISTER_SLOT(_RegisterType, _iSlotIdx) _iSlotIdx
 
 #else//HLSL
 
+#define CBUFFER(_bufferName, _structName, _registerNumber)\
+cbuffer _bufferName : register(b##_registerNumber)\
+{ _structName _bufferName; }
+
+
+
+
 #define REGISTER_DECLARE(_bufferType, _bufferName, _registerType, _registerNumber)\
 _bufferType _bufferName : register(_registerType##_registerNumber)
+
+#define alignas(_Num)
 
 #define REGISTER(_Type) : register(_Type)
 #define REGISTER_SLOT(_RegisterType, _iSlotIdx) _RegisterType##_iSlotIdx

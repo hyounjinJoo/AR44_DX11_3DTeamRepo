@@ -5,6 +5,8 @@ PSOut main(VSOut In) : SV_Target
 {
 	PSOut OutColor;
     
+	
+	//현재 시멘틱이 덮어씌워지고 있음.
 	float4 objColor = float4(1.0f, 1.0f, 1.0f, 1.0f);
     
 	if (usedAlbedo == 1)

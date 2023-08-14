@@ -3,16 +3,17 @@
 
 #include "SH_Common.hlsli"
 
-
-REGISTER_DECLARE(cbuffer, CB_Global, b, 0)
+struct tCB_Global alignas(16)
 {
-	uint2	uResolution;
-	float2	fResolution;
-	float	DeltaTime;
-	int		pad0;
+	uint2 uResolution;
+	float2 fResolution;
+	float DeltaTime;
+	int3  PadGlobal;
 };
 
-REGISTER_DECLARE(cbuffer, CB_Transform, b, 1)
+
+
+struct tCB_Transform alignas(16)
 {
 	MATRIX world;
 	MATRIX inverseWorld;
@@ -21,7 +22,10 @@ REGISTER_DECLARE(cbuffer, CB_Transform, b, 1)
 	MATRIX projection;
 };
 
-REGISTER_DECLARE(cbuffer, CB_MaterialData, b, 2)
+
+
+
+struct tCB_MaterialData alignas(16)
 {
 	float4 Diff;
 	float4 Spec;
@@ -34,14 +38,17 @@ REGISTER_DECLARE(cbuffer, CB_MaterialData, b, 2)
 	uint Pad1;
 };
 
-REGISTER_DECLARE(cbuffer, CB_Grid, b, 3)
+
+
+struct tCB_Grid alignas(16)
 {
-    float4 cameraPosition;
-    float2 cameraScale;
-    float2 resolution;
+	float4 cameraPosition;
+	float2 cameraScale;
+	float2 resolution;
 };
 
-REGISTER_DECLARE(cbuffer, CB_Animation2D, b, 4)
+
+struct tCB_Animation2D alignas(16)
 {
 	float2 leftTop;
 	float2 spriteSize;
@@ -52,8 +59,9 @@ REGISTER_DECLARE(cbuffer, CB_Animation2D, b, 4)
 	float3 pad2;
 };
 
-REGISTER_DECLARE(cbuffer, CB_NumberOfLight, b, 5)
-{ 	
+
+struct tCB_NumberOfLight alignas(16)
+{
 	uint numberOfLight;
 	uint indexOfLight;
 	
@@ -61,7 +69,9 @@ REGISTER_DECLARE(cbuffer, CB_NumberOfLight, b, 5)
 };
 
 
-REGISTER_DECLARE(cbuffer, CB_ParticleSystem, b, 6)
+
+
+struct tCB_ParticleSystem alignas(16)
 {
 	float4 worldPosition;
 	float4 startColor;
@@ -78,20 +88,37 @@ REGISTER_DECLARE(cbuffer, CB_ParticleSystem, b, 6)
 	int LightPad;
 };
 
-REGISTER_DECLARE(cbuffer, CB_Noise, b, 7)
+
+
+
+struct tCB_Noise alignas(16)
 {
 	float4 NoiseSize;
-	float NoiseTime;
 	
+	float NoiseTime;
 	float3 NoisePad;
 };
 
-REGISTER_DECLARE(cbuffer, CB_SBufferCount, b, 8)
+
+
+
+
+struct tCB_SBufferCount alignas(16)
 {
 	uint SBufferDataCount;
-	
 	uint3 SBufferPad;
 };
+
+
+CBUFFER(CB_Global, tCB_Global, 0);
+CBUFFER(CB_Transform, tCB_Transform, 1);
+CBUFFER(CB_MaterialData, tCB_MaterialData, 2);
+CBUFFER(CB_Grid, tCB_Grid, 3);
+CBUFFER(CB_Animation2D, tCB_Animation2D, 4);
+CBUFFER(CB_NumberOfLight, tCB_NumberOfLight, 5);
+CBUFFER(CB_ParticleSystem, tCB_ParticleSystem, 6);
+CBUFFER(CB_Noise, tCB_Noise, 7);
+CBUFFER(CB_SBufferCount, tCB_SBufferCount, 8);
 
 
 #ifdef __cplusplus
@@ -100,15 +127,15 @@ namespace mh::define
 {
 	enum class eCBType
 	{
-		Global = register_b_CB_Global,	
-		Transform = register_b_CB_Transform,	
-		Material = register_b_CB_MaterialData,	
-		Grid = register_b_CB_Grid,		
-		Animation2D = register_b_CB_Animation2D,	
-		numberOfLight = register_b_CB_NumberOfLight,
-		ParticleSystem = register_b_CB_ParticleSystem,
-		Noise = register_b_CB_Noise,	
-		SBufferCount = register_b_CB_SBufferCount,
+		Global = Register_b_CB_Global,	
+		Transform = Register_b_CB_Transform,	
+		Material = Register_b_CB_MaterialData,	
+		Grid = Register_b_CB_Grid,		
+		Animation2D = Register_b_CB_Animation2D,	
+		numberOfLight = Register_b_CB_NumberOfLight,
+		ParticleSystem = Register_b_CB_ParticleSystem,
+		Noise = Register_b_CB_Noise,	
+		SBufferCount = Register_b_CB_SBufferCount,
 		END
 	};
 };

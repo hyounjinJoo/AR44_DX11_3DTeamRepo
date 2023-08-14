@@ -11,7 +11,7 @@ PS_OUT main(VSOut _in)
 {
 	PS_OUT output = (PS_OUT) 0.f;
     
-	float2 vUV = _in.Position.xy / fResolution;
+	float2 vUV = _in.Position.xy / CB_Global.fResolution;
 	float4 vViewPos = positionTarget.Sample(anisotropicSampler, vUV);
     
 	if (0.f == vViewPos.a)
