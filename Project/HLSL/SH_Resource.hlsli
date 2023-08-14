@@ -1,54 +1,59 @@
 #ifndef SH_RESOURCE
 #define SH_RESOURCE
 
-//t 버퍼
+#include "SH_CommonStruct.hlsli"
 
+//t 버퍼
+TEXTURE2D(albedoTexture, t, 0);
+TEXTURE2D(normalTexture, t, 1);
+TEXTURE2D(specularTexture, t, 2);
+TEXTURE2D(emissiveTexture, t, 3);
 // Material Default Texture
-Texture2D albedoTexture : register(t0);
-Texture2D normalTexture : register(t1);
-Texture2D specularTexture : register(t2);
-Texture2D emissiveTexture : register(t3);
+//Texture2D albedoTexture : register(t0);
+//Texture2D normalTexture : register(t1);
+//Texture2D specularTexture : register(t2);
+//Texture2D emissiveTexture : register(t3);
+
 
 // defferd
-Texture2D positionTarget : register(t4);
-Texture2D normalTarget : register(t5);
-Texture2D albedoTarget : register(t6);
-Texture2D specularTarget : register(t7);
+TEXTURE2D(positionTarget, t, 4);
+TEXTURE2D(normalTarget, t, 5);
+TEXTURE2D(albedoTarget, t, 6);
+TEXTURE2D(specularTarget, t, 7);
+//Texture2D positionTarget : register(t4);
+//Texture2D normalTarget : register(t5);
+//Texture2D albedoTarget : register(t6);
+//Texture2D specularTarget : register(t7);
 
-Texture2D diffuseLightTarget : register(t8);
-Texture2D specularLightTarget : register(t9);
-
-			//std::shared_ptr<Texture> pos = std::make_shared<Texture>();
-			//std::shared_ptr<Texture> normal = std::make_shared<Texture>();
-			//std::shared_ptr<Texture> albedo = std::make_shared<Texture>();
-			//std::shared_ptr<Texture> specular = std::make_shared<Texture>();
-
-//Atlas texture
-Texture2D atlasTexture : register(t12);
 
 // Light
+TEXTURE2D(diffuseLightTarget, t, 8);
+TEXTURE2D(specularLightTarget, t, 9);
+//Texture2D diffuseLightTarget : register(t8);
+//Texture2D specularLightTarget : register(t9);
+
+
+//Atlas texture(Animation 2D)
+TEXTURE2D(atlasTexture, t, 12);
+
+// Light
+SBUFFER(lightAttributes, tLightAttribute, t, 13);
+
+
 //StructuredBuffer<LightAttribute> lightAttributes : register(t13);
 //StructuredBuffer<LightAttribute> lightAttributes3D : register(t14);
 
-// Particle
-//StructuredBuffer<Particle> particleBuffer : register(t15);
-//RWStructuredBuffer<Particle> ParticleBuffer : register(u0);
-//RWStructuredBuffer<ParticleShared> ParticleSharedBuffer : register(u1);
+
+
 
 // noise
-//Texture2D NoiseTexture : register(t16);
+TEXTURE2D(NoiseTexture, t, 16);
 
 
 
 // postProcess
-Texture2D postProcessTexture : register(t60);
-Texture2D guiGameTexture : register(t61);
-
-
-//Texture2D 0 : register(t60);
-//Texture2D 1 : register(t61);
-//Texture2D 2 : register(t60);
-//Texture2D 3 : register(t61);
+TEXTURE2D(postProcessTexture, t, 60);
+TEXTURE2D(guiGameTexture, t, 61);
 
 
 #endif

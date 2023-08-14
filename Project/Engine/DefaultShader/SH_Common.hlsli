@@ -1,6 +1,10 @@
 #ifndef SH_COMMON
 #define SH_COMMON
 
+#ifndef __cplusplus
+#define HLSL_ONLY
+#endif
+
 //C++
 #ifdef __cplusplus
 
@@ -73,40 +77,48 @@ struct uint4 { uint x; uint y; uint z; uint w; };
 //Register Slot 관련
 #ifdef __cplusplus
 
-#define CBUFFER(_bufferName, _structName, _registerNumber)\
-constexpr int CBuffer_##_bufferName = _registerNumber;\
-constexpr int Register_b_##_bufferName = _registerNumber
+#define REGISTER_DECLARE(_bufferName, _registerType, _registerNumber)\
+constexpr int Register_##_registerType##_##_bufferName = _registerNumber
 
-#define TEXTURE2D(_bufferName, _structName, _registerNumber)
+#define CBUFFER(_bufferName, _structName, _registerType, _registerNumber)\
+REGISTER_DECLARE(_bufferName, _registerType, _registerNumber);\
+constexpr int CBUFFER_##_bufferName = _registerNumber
 
+#define TEXTURE2D(_bufferName, _registerType, _registerNumber)\
+REGISTER_DECLARE(_bufferName, _registerType, _registerNumber)
 
-#define REGISTER_DECLARE(_bufferType, _bufferName, _registerType, _registerNumber)\
-constexpr int register_##_registerType##_##_bufferName = _registerNumber;\
-_bufferType(_bufferType, _bufferName)
+#define SBUFFER(_bufferName, _structName, _registerType, _registerNumber)\
+REGISTER_DECLARE(_bufferName, _registerType, _registerNumber)
 
-#define cbuffer(_bufferType, _bufferName) struct alignas(16) _bufferName
-#define Texture2D(_bufferType, _bufferName) 
+#define SBUFFER_RW(_bufferName, _structName, _registerType, _registerNumber)\
+REGISTER_DECLARE(_bufferName, _registerType, _registerNumber)
 
-#define REGISTER(_Type)
-#define REGISTER_SLOT(_RegisterType, _iSlotIdx) _iSlotIdx
+#define SAMPLER(_bufferName, _registerType, _registerNumber)\
+REGISTER_DECLARE(_bufferName, _registerType, _registerNumber)
+
+//#define REGISTER(_Type)
+//#define REGISTER_SLOT(_RegisterType, _iSlotIdx) _iSlotIdx
+
 
 #else//HLSL
 
-#define CBUFFER(_bufferName, _structName, _registerNumber)\
-cbuffer _bufferName : register(b##_registerNumber)\
+#define CBUFFER(_bufferName, _structName, _registerType, _registerNumber)\
+cbuffer _bufferName : register(_registerType##_registerNumber)\
 { _structName _bufferName; }
 
+#define TEXTURE2D(_bufferName, _registerType, _registerNumber)\
+Texture2D _bufferName : register(_registerType##_registerNumber)
 
+#define SBUFFER(_bufferName, _structName, _registerType, _registerNumber)\
+StructuredBuffer<_structName> _bufferName : register(_registerType##_registerNumber)
 
+#define SBUFFER_RW(_bufferName, _structName, _registerType, _registerNumber)\
+RWStructuredBuffer<_structName> _bufferName : register(_registerType##_registerNumber)
 
-#define REGISTER_DECLARE(_bufferType, _bufferName, _registerType, _registerNumber)\
-_bufferType _bufferName : register(_registerType##_registerNumber)
+#define SAMPLER(_bufferName, _registerType, _registerNumber)\
+SamplerState _bufferName : register(_registerType##_registerNumber)
 
 #define alignas(_Num)
-
-#define REGISTER(_Type) : register(_Type)
-#define REGISTER_SLOT(_RegisterType, _iSlotIdx) _RegisterType##_iSlotIdx
-
 #endif
 
 #endif

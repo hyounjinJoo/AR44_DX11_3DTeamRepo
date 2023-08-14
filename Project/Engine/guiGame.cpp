@@ -29,11 +29,11 @@ namespace gui
 		//61 번 셰이더 리소스 뷰 null초기화
 		ID3D11ShaderResourceView* gameSRV = nullptr;
 		auto pContext = mh::GPUMgr::Context();
-		pContext->PSSetShaderResources(61, 1u, &gameSRV);
+		pContext->PSSetShaderResources(Register_t_guiGameTexture, 1u, &gameSRV);
 		pContext->CopyResource(gameTex->GetTexture().Get()
 			, renderTarget->GetTexture().Get());
 
-		gameTex->BindDataSRV(61, mh::eShaderStageFlag::PS);
+		gameTex->BindDataSRV(Register_t_guiGameTexture, mh::eShaderStageFlag::PS);
 
 		ImGuiIO io = ImGui::GetIO();
 		ImVec2 panelSize = ImGui::GetWindowSize();

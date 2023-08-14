@@ -288,36 +288,35 @@ namespace mh::define
 		float time;
 	};
 
-	struct tLightAttribute
-	{
-		float4 diffuse;
-		float4 specular;
-		float4 ambient;
+	//struct tLightAttribute
+	//{
+	//	float4 diffuse;
+	//	float4 specular;
+	//	float4 ambient;
 
-		float4 position;
-		float4 direction;
+	//	float4 position;
+	//	float4 direction;
 
-		define::eLightType type;
-		float radius;
-		float angle;
-		int padding;
-	};
+	//	define::eLightType type;
+	//	float radius;
+	//	float angle;
+	//	int padding;
+	//};
 
-	struct tParticle
-	{
-		float4 position;
-		float4 direction;
+	//struct tParticle
+	//{
+	//	float4 position;
+	//	float4 direction;
 
-		float lifeTime;
-		float time;
-		float speed;
-		uint active;
-	};
-
-	struct tParticleShared
-	{
-		uint activeCount;
-	};
+	//	float lifeTime;
+	//	float time;
+	//	float speed;
+	//	uint active;
+	//};
+	//struct tParticleShared
+	//{
+	//	uint activeCount;
+	//};
 
 
 }

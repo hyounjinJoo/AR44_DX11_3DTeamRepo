@@ -1,11 +1,5 @@
 #include "SH_LightDir.hlsli"
-
-		//albedo = Resources::Find<Texture>(L"PositionTarget");
-		//lightMaterial->SetTexture(eTextureSlot::PositionTarget, albedo);
-		//albedo = Resources::Find<Texture>(L"NormalTarget");
-		//lightMaterial->SetTexture(eTextureSlot::NormalTarget, albedo);
-		//albedo = Resources::Find<Texture>(L"SpecularTarget");
-		//lightMaterial->SetTexture(eTextureSlot::SpecularTarget, albedo);
+#include "SH_Func_DecodeColor.hlsli"
 
 PS_OUT main(VSOut _in)
 {
@@ -19,11 +13,11 @@ PS_OUT main(VSOut _in)
       
 	float4 vViewNormal = normalTarget.Sample(anisotropicSampler, vUV);
         
-	LightColor lightcolor = (LightColor) 0.f;
+	tLightColor lightcolor = (tLightColor) 0.f;
 	CalculateLight3D(vViewPos.xyz, vViewNormal.xyz, 0, lightcolor);
     
 	float SpecCoef = specularTarget.Sample(anisotropicSampler, vUV).x;
-	float4 vSpec = decode(SpecCoef);
+	float4 vSpec = DecodeColor(SpecCoef);
 
 	output.vDiffuse = lightcolor.diffuse + lightcolor.ambient;
 	output.vSpecular.xyz = lightcolor.specular.xyz; // * vSpec.xyz;

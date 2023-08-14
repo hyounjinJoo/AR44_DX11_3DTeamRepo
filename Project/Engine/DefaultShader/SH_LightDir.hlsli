@@ -1,7 +1,7 @@
 #ifndef SH_LIGHTDIR
 #define SH_LIGHTDIR
-
 #include "SH_Globals.hlsli"
+#include "SH_Func_Light.hlsli"
 
 struct VSIn
 {

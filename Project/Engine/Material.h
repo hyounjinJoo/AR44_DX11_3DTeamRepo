@@ -44,7 +44,7 @@ namespace mh
 		std::shared_ptr<GraphicsShader> mShader;
 		std::array<std::shared_ptr<Texture>, (int)eTextureSlot::END> mTextures;
 
-		CB_MaterialData mCB;
+		tCB_MaterialData mCB;
 
 		eRenderingMode mMode;
 

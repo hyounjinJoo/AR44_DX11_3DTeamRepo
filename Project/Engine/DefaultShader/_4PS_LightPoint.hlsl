@@ -1,4 +1,5 @@
 #include "SH_LightPoint.hlsli"
+#include "SH_Func_DecodeColor.hlsli"
 
 		//albedo = Resources::Find<Texture>(L"PositionTarget");
 		//lightMaterial->SetTexture(eTextureSlot::PositionTarget, albedo);
@@ -19,7 +20,7 @@ PS_OUT main(VSOut _in)
       
     // 광원 영역에 잡힌 position target의 위차값을 로컬영역으로 바꿔야한다.
     // 로컬 영역에서 광원메쉬 (spherer)의 내부에 있다면 실제로 point light 안에 들어가있다는 뜻
-	float4 vLocalPos = mul(mul(vViewPos, inverseView), inverseWorld);
+	float4 vLocalPos = mul(mul(vViewPos, CB_Transform.inverseView), CB_Transform.inverseWorld);
 	if (length(vLocalPos.xyz) > 0.5f)
 	{
 		discard;
@@ -27,11 +28,11 @@ PS_OUT main(VSOut _in)
     
 	float4 vViewNormal = normalTarget.Sample(anisotropicSampler, vUV);
         
-	LightColor lightcolor = (LightColor) 0.f;
-	CalculateLight3D(vViewPos.xyz, vViewNormal.xyz, indexOfLight, lightcolor);
+	tLightColor lightcolor = (tLightColor) 0.f;
+	CalculateLight3D(vViewPos.xyz, vViewNormal.xyz, CB_NumberOfLight.indexOfLight, lightcolor);
     
 	float SpecCoef = specularTarget.Sample(anisotropicSampler, vUV).x;
-	float4 vSpec = decode(SpecCoef);
+	float4 vSpec = DecodeColor(SpecCoef);
 
 	output.vDiffuse = lightcolor.diffuse + lightcolor.ambient;
 	output.vSpecular.xyz = lightcolor.specular.xyz; // * vSpec.xyz;

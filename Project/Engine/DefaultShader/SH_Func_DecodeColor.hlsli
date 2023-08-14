@@ -1,7 +1,7 @@
-#ifndef SH_FUNC
-#define SH_FUNC
+#ifndef SH_FUNC_DECODE_COLOR
+#define SH_FUNC_DECODE_COLOR
 
-float4 decode(float _value)
+float4 DecodeColor(float _value)
 {
 	uint rgba = asint(_value);
 

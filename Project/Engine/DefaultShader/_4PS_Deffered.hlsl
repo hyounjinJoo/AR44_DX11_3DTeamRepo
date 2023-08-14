@@ -9,14 +9,14 @@ PSOut main(VSOut In) : SV_Target
 	//현재 시멘틱이 덮어씌워지고 있음.
 	float4 objColor = float4(1.0f, 1.0f, 1.0f, 1.0f);
     
-	if (usedAlbedo == 1)
+	if (CB_MaterialData.usedAlbedo == 1)
 	{
 		objColor = albedoTexture.Sample(anisotropicSampler, In.UV);
 	}
     
 	float3 vNormal = In.ViewNormal;
     
-	if (usedNormal == 1)
+	if (CB_MaterialData.usedNormal == 1)
 	{
     // 물체의 표면에 적용될 탄젠트 공간 기준 방향벡터를 가져온다.
 		vNormal = normalTexture.Sample(anisotropicSampler, In.UV).xyz;

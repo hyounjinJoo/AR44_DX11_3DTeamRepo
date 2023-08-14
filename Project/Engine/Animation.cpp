@@ -158,11 +158,11 @@ namespace mh
 
 	void Animation::BindShader()
 	{
-		mAtlas->BindDataSRV(12u, eShaderStageFlag::PS);
+		mAtlas->BindDataSRV(Register_t_atlasTexture, eShaderStageFlag::PS);
 
 		ConstBuffer* cb = RenderMgr::GetConstBuffer(eCBType::Animation2D);
 
-		CB_Animation2D info = {};
+		tCB_Animation2D info = {};
 		info.animationType = (uint)define::eAnimationType::SecondDimension;
 		info.leftTop = mSpriteSheet[mIndex].LeftTop;
 		info.offset = mSpriteSheet[mIndex].Offset;
@@ -187,7 +187,7 @@ namespace mh
 
 		ConstBuffer* cb = RenderMgr::GetConstBuffer(eCBType::Animation2D);
 
-		CB_Animation2D info = {};
+		tCB_Animation2D info = {};
 		info.animationType = (uint)define::eAnimationType::None;
 
 		cb->SetData(&info);

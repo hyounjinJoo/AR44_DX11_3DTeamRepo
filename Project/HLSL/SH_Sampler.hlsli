@@ -1,8 +1,9 @@
 #ifndef SH_SAMPLER
 #define SH_SAMPLER
+#include "SH_COMMON.hlsli"
 
-SamplerState pointSampler : register(s0);
-SamplerState linearSampler : register(s1);
-SamplerState anisotropicSampler : register(s2);
+SAMPLER(pointSampler, s, 0);
+SAMPLER(linearSampler, s, 1);
+SAMPLER(anisotropicSampler, s, 2);
 
 #endif

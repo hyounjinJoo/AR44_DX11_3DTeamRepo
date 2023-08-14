@@ -239,7 +239,7 @@ namespace mh
 	void Com_Renderer_ParticleSystem::Render()
 	{
 		GetOwner()->GetTransform().SetConstBuffer();
-		mBuffer->BindDataSRV(15, eShaderStageFlag::GS);
+		mBuffer->BindDataSRV(Register_t_atlasTexture, eShaderStageFlag::GS);
 
 		GetMaterial(0)->Bind();
 		GetMesh()->RenderInstanced(0u, mMaxParticles);

@@ -785,7 +785,7 @@
     <None Include="cpp.hint">
       <Filter>Common</Filter>
     </None>
-    <None Include="DefaultShader\SH_Blur.hlsli">
+    <None Include="DefaultShader\SH_Func_Blur.hlsli">
       <Filter>_DefaultShader</Filter>
     </None>
     <None Include="DefaultShader\SH_Common.hlsli">
@@ -794,7 +794,7 @@
     <None Include="DefaultShader\SH_ConstBuffer.hlsli">
       <Filter>_DefaultShader</Filter>
     </None>
-    <None Include="DefaultShader\SH_Func.hlsli">
+    <None Include="DefaultShader\SH_Func_DecodeColor.hlsli">
       <Filter>_DefaultShader</Filter>
     </None>
     <None Include="DefaultShader\SH_Globals.hlsli">
@@ -818,7 +818,7 @@
     <None Include="DefaultShader\SH_LightPoint.hlsli">
       <Filter>_DefaultShader\Light</Filter>
     </None>
-    <None Include="DefaultShader\SH_Light.hlsli">
+    <None Include="DefaultShader\SH_Func_Light.hlsli">
       <Filter>_DefaultShader\Light</Filter>
     </None>
     <None Include="DefaultShader\SH_PostProcess.hlsli">
@@ -835,6 +835,12 @@
     </None>
     <None Include="SimpleMath.inl">
       <Filter>Common\Math</Filter>
+    </None>
+    <None Include="DefaultShader\SH_CommonStruct.hlsli">
+      <Filter>_DefaultShader</Filter>
+    </None>
+    <None Include="DefaultShader\SH_Functions.hlsli">
+      <Filter>_DefaultShader</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>

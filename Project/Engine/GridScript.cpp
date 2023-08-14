@@ -55,7 +55,7 @@ namespace mh
 
 		// Constant buffer
 		ConstBuffer* CB = RenderMgr::GetConstBuffer(eCBType::Grid);
-		CB_Grid data;
+		tCB_Grid data;
 		data.cameraPosition = position;
 		data.cameraScale = float2(scale, scale);
 		data.resolution = resolution;

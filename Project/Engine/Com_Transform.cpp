@@ -318,7 +318,7 @@ namespace mh
 
 	void Com_Transform::SetConstBuffer()
 	{
-		CB_Transform trCb = {};
+		tCB_Transform trCb = {};
 		trCb.world = mMatWorldFinal;
 		trCb.inverseWorld = mMatWorldFinal.Invert();
 		trCb.view = Com_Camera::GetGpuViewMatrix();

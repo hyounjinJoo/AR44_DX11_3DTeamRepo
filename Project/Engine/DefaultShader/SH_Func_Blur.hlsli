@@ -1,10 +1,7 @@
-#ifndef SH_BLUR
-#define SH_BLUR
-
+#ifndef SH_FUNC_BLUR
+#define SH_FUNC_BLUR
 #include "SH_ConstBuffer.hlsli"
-
-Texture2D NoiseTexture : register(t16);
-
+#include "SH_Resource.hlsli"
 
 static float GaussianFilter[5][5] =
 {
@@ -29,7 +26,7 @@ float4 GaussianBlur(float2 UV)
     else if (UV.y < 0.0f)
         UV.y = 1.0f + frac(UV.y);
     
-    int2 iUV = UV * NoiseSize.xy;
+    int2 iUV = UV * CB_Noise.NoiseSize.xy;
     iUV -= int2(2, 2);
     
     for (int i = 0; i < 5; i++)

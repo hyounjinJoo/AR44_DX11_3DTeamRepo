@@ -153,9 +153,10 @@ namespace mh
 
 		eShaderStageFlag_ Flag = eShaderStageFlag::VS | eShaderStageFlag::PS;
 
-		mLightsBuffer->BindDataSRV(13, Flag);
+		mLightsBuffer->BindDataSRV(Register_t_lightAttributes, Flag);
 
-		CB_NumberOfLight trCb = {};
+		
+		tCB_NumberOfLight trCb = {};
 		trCb.numberOfLight = (uint)mLightAttributes.size();
 
 		for (size_t i = 0; i < mLights.size(); i++)
@@ -170,9 +171,9 @@ namespace mh
 	void RenderMgr::BindNoiseTexture()
 	{
 		std::shared_ptr<Texture> noise = ResMgr::Find<Texture>(define::strKey::Default::texture::noise_03);
-		noise->BindDataSRV(16u, eShaderStageFlag::ALL);
+		noise->BindDataSRV(Register_t_NoiseTexture, eShaderStageFlag::ALL);
 
-		CB_Noise info = {};
+		tCB_Noise info = {};
 		info.NoiseSize.x = (float)noise->GetWidth();
 		info.NoiseSize.y = (float)noise->GetHeight();
 
@@ -198,7 +199,7 @@ namespace mh
 
 		GPUMgr::Context()->CopyResource(dest, source);
 
-		mPostProcessTexture->BindDataSRV(60u, eShaderStageFlag::PS);
+		mPostProcessTexture->BindDataSRV(Register_t_postProcessTexture, eShaderStageFlag::PS);
 	}
 
 	void RenderMgr::ClearMultiRenderTargets()
@@ -222,7 +223,7 @@ namespace mh
 
 	void RenderMgr::UpdateGlobalCBuffer()
 	{
-		CB_Global cb{};
+		tCB_Global cb{};
 		cb.uResolution.x = GPUMgr::GetResolutionX();
 		cb.uResolution.y = GPUMgr::GetResolutionY();
 		cb.fResolution.x = (float)cb.uResolution.x;
@@ -1110,34 +1111,34 @@ namespace mh
 	{
 #pragma region CONSTANT BUFFER
 		mConstBuffers[(uint)eCBType::Global] = std::make_unique<ConstBuffer>(eCBType::Global);
-		mConstBuffers[(uint)eCBType::Global]->Create(sizeof(CB_Global));
+		mConstBuffers[(uint)eCBType::Global]->Create(sizeof(tCB_Global));
 		mConstBuffers[(uint)eCBType::Global]->SetPresetTargetStage(eShaderStageFlag::ALL);
 
 		UpdateGlobalCBuffer();
 
 		mConstBuffers[(uint)eCBType::Transform] = std::make_unique<ConstBuffer>(eCBType::Transform);
-		mConstBuffers[(uint)eCBType::Transform]->Create(sizeof(CB_Transform));
+		mConstBuffers[(uint)eCBType::Transform]->Create(sizeof(tCB_Transform));
 
 		mConstBuffers[(uint)eCBType::Material] = std::make_unique<ConstBuffer>(eCBType::Material);
-		mConstBuffers[(uint)eCBType::Material]->Create(sizeof(CB_MaterialData));
+		mConstBuffers[(uint)eCBType::Material]->Create(sizeof(tCB_MaterialData));
 
 		mConstBuffers[(uint)eCBType::Grid] = std::make_unique<ConstBuffer>(eCBType::Grid);
-		mConstBuffers[(uint)eCBType::Grid]->Create(sizeof(CB_Grid));
+		mConstBuffers[(uint)eCBType::Grid]->Create(sizeof(tCB_Grid));
 
 		mConstBuffers[(uint)eCBType::Animation2D] = std::make_unique<ConstBuffer>(eCBType::Animation2D);
-		mConstBuffers[(uint)eCBType::Animation2D]->Create(sizeof(CB_Animation2D));
+		mConstBuffers[(uint)eCBType::Animation2D]->Create(sizeof(tCB_Animation2D));
 
 		mConstBuffers[(uint)eCBType::numberOfLight] = std::make_unique<ConstBuffer>(eCBType::numberOfLight);
-		mConstBuffers[(uint)eCBType::numberOfLight]->Create(sizeof(CB_NumberOfLight));
+		mConstBuffers[(uint)eCBType::numberOfLight]->Create(sizeof(tCB_NumberOfLight));
 
 		mConstBuffers[(uint)eCBType::ParticleSystem] = std::make_unique<ConstBuffer>(eCBType::ParticleSystem);
-		mConstBuffers[(uint)eCBType::ParticleSystem]->Create(sizeof(CB_ParticleSystem));
+		mConstBuffers[(uint)eCBType::ParticleSystem]->Create(sizeof(tCB_ParticleSystem));
 
 		mConstBuffers[(uint)eCBType::Noise] = std::make_unique<ConstBuffer>(eCBType::Noise);
-		mConstBuffers[(uint)eCBType::Noise]->Create(sizeof(CB_Noise));
+		mConstBuffers[(uint)eCBType::Noise]->Create(sizeof(tCB_Noise));
 
 		mConstBuffers[(uint)eCBType::SBufferCount] = std::make_unique<ConstBuffer>(eCBType::SBufferCount);
-		mConstBuffers[(uint)eCBType::SBufferCount]->Create<CB_SBufferCount>();
+		mConstBuffers[(uint)eCBType::SBufferCount]->Create<tCB_SBufferCount>();
 
 #pragma endregion
 #pragma region STRUCTED BUFFER
@@ -1197,7 +1198,7 @@ namespace mh
 		//noise
 		std::shared_ptr<Texture> mNoiseTex = std::make_shared<Texture>();
 		mNoiseTex->Create(GPUMgr::GetResolutionX(), GPUMgr::GetResolutionY(), DXGI_FORMAT_R8G8B8A8_UNORM, D3D11_BIND_SHADER_RESOURCE);
-		mNoiseTex->BindDataSRV(eShaderStageFlag::PS, 60);
+		mNoiseTex->BindDataSRV(Register_t_NoiseTexture, eShaderStageFlag::PS);
 	}
 
 

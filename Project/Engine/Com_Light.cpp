@@ -77,12 +77,12 @@ namespace mh
 	
 		Json::MHLoadValue(_pJVal, JSON_KEY_PAIR(mAttribute));
 
-		SetType(mAttribute.type);
+		SetType((eLightType)mAttribute.lightType);
 
 		//불러오기 실패 시 기본값으로 적용
-		if (false == Json::MHLoadValue(_pJVal, JSON_KEY_PAIR(mAttribute.type)))
+		if (false == Json::MHLoadValue(_pJVal, JSON_KEY_PAIR(mAttribute.lightType)))
 		{
-			mAttribute.type = eLightType::Directional;
+			mAttribute.lightType = (int)eLightType::Directional;
 		}
 
 		return eResult::Success;
@@ -102,7 +102,7 @@ namespace mh
 	{
 		Com_Transform& tr = GetOwner()->GetTransform();
 
-		if (eLightType::Point == mAttribute.type)
+		if (eLightType::Point == (eLightType)mAttribute.lightType)
 		{
 			tr.SetRelativeScale(float3(mAttribute.radius * 5.f));
 		}
@@ -126,7 +126,7 @@ namespace mh
 
 		ConstBuffer* cb = RenderMgr::GetConstBuffer(eCBType::numberOfLight);
 
-		CB_NumberOfLight data = {};
+		tCB_NumberOfLight data = {};
 		data.numberOfLight = (uint)RenderMgr::GetLights().size();
 		data.indexOfLight = mIndex;
 
@@ -141,18 +141,18 @@ namespace mh
 
 	void Com_Light::SetType(eLightType type)
 	{
-		mAttribute.type = type;
-		if (mAttribute.type == eLightType::Directional)
+		mAttribute.lightType = (int)type;
+		if (mAttribute.lightType == (int)eLightType::Directional)
 		{
 			mVolumeMesh = ResMgr::Find<Mesh>(strKey::Default::mesh::RectMesh);
 			mLightMaterial = ResMgr::Find<Material>(strKey::Default::material::LightDirMaterial);
 		}
-		else if (mAttribute.type == eLightType::Point)
+		else if (mAttribute.lightType == (int)eLightType::Point)
 		{
 			mVolumeMesh = ResMgr::Find<Mesh>(strKey::Default::mesh::SphereMesh);
 			mLightMaterial = ResMgr::Find<Material>(strKey::Default::material::LightPointMaterial);
 		}
-		else if (mAttribute.type == eLightType::Spot)
+		else if (mAttribute.lightType == (int)eLightType::Spot)
 		{
 			ERROR_MESSAGE_W(L"미구현");
 		}

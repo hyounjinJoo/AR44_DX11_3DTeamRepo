@@ -1,7 +1,8 @@
 #ifndef SH_LIGHTPOINT
 #define SH_LIGHTPOINT
-
 #include "SH_Globals.hlsli"
+#include "SH_Func_Light.hlsli"
+#include "SH_Func_DecodeColor.hlsli"
 
 struct VSIn
 {

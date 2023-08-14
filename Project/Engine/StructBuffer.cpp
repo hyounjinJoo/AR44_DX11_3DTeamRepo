@@ -178,7 +178,7 @@ namespace mh
 
 		//g_arrSBufferShareData의 자신의 인덱스에 해당하는 위치에 이번에 업데이트된 구조체의 갯수를 삽입
 		//상수 버퍼의 바인딩은 BindData()를 하는 시점에 해준다.
-		CB_SBufferCount cb = {};
+		tCB_SBufferCount cb = {};
 		cb.SBufferDataCount = mElementCount;
 
 
@@ -419,7 +419,7 @@ namespace mh
 		//상수버퍼의 주소는 한번 실행되면 변하지 않으므로 static, const 형태로 선언.
 		static ConstBuffer* pStructCBuffer = RenderMgr::GetConstBuffer(eCBType::SBufferCount);
 
-		CB_SBufferCount cb = {};
+		tCB_SBufferCount cb = {};
 		cb.SBufferDataCount = mElementCount;
 
 		pStructCBuffer->SetData(&cb);
