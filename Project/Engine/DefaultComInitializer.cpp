@@ -4,7 +4,8 @@
 #include "ComMgr.h"
 #include "define_Component.h"
 
-#include "Com_Animator.h"
+#include "Com_Animator2D.h"
+#include "Com_Animator3D.h"
 #include "Com_AudioListener.h"
 #include "Com_AudioSource.h"
 #include "Com_Camera.h"
@@ -19,7 +20,8 @@ namespace mh
 	using namespace mh::define;
 	void DefaultComInitializer::Init()
 	{
-		ComMgr::AddComConstructor<Com_Animator>(strKey::Default::com::Com_Animator);
+		ComMgr::AddComConstructor<Com_Animator2D>(strKey::Default::com::Com_Animator2D);
+		ComMgr::AddComConstructor<Com_Animator3D>(strKey::Default::com::Com_Animator3D);
 		ComMgr::AddComConstructor<Com_AudioListener>(strKey::Default::com::Com_AudioListener);
 		ComMgr::AddComConstructor<Com_AudioSource>(strKey::Default::com::Com_AudioSource);
 		ComMgr::AddComConstructor<Com_Camera>(strKey::Default::com::Com_Camera);

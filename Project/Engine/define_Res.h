@@ -39,7 +39,7 @@ namespace mh::define
 			"Material",
 			//"Sound",
 			//"Font,",
-			"Animation",
+			"Animation2D",
 
 			"AudioClip",
 			"Prefab",
@@ -121,6 +121,7 @@ namespace mh::define
 					STRKEY_DECLARE(ParticleCS);
 					STRKEY_DECLARE(PostProcessShader);
 					STRKEY_DECLARE(BasicShader);
+					STRKEY_DECLARE(Animation3D);
 				}
 			}
 		}

@@ -3,7 +3,7 @@
 #include "Com_Renderer_Sprite.h"
 #include "GameObject.h"
 #include "Com_Transform.h"
-#include "Com_Animator.h"
+#include "Com_Animator2D.h"
 
 namespace mh
 {
@@ -34,7 +34,7 @@ namespace mh
 		GetMesh()->BindBuffer();
 		GetMaterial(0)->Bind();
 
-		Com_Animator* animator = GetOwner()->GetComponent<Com_Animator>();
+		Com_Animator2D* animator = GetOwner()->GetComponent<Com_Animator2D>();
 		if (animator)
 		{
 			animator->Binds();

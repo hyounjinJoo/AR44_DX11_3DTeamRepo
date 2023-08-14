@@ -3,7 +3,7 @@
 #include "define_Component.h"
 
 #include "Com_Transform.h"
-#include "Com_Animator.h"
+#include "Com_Animator2D.h"
 #include "Com_AudioSource.h"
 #include "Com_AudioListener.h"
 #include "Com_Camera.h"

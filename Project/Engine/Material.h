@@ -29,15 +29,18 @@ namespace mh
 		void Clear();
 
 		void SetShader(std::shared_ptr<GraphicsShader> _shader) { mShader = _shader; }
-		void SetTexture(eTextureSlot slot, std::shared_ptr<Texture> _texture) { mTextures[(uint)slot] = _texture; }
-
 		std::shared_ptr<GraphicsShader> GetShader() const { return mShader; }
+
+		void SetTexture(eTextureSlot slot, std::shared_ptr<Texture> _texture) { mTextures[(uint)slot] = _texture; }
 		std::shared_ptr<Texture> GetTexture(eTextureSlot _slot) const { return mTextures[(uint)_slot]; }
 
 		eRenderingMode GetRenderingMode() const { return mMode; }
 		void SetRenderingMode(eRenderingMode _mode) { mMode = _mode; }
 
 		inline void SetMaterialCoefficient(const float4& _vDiff, const float4& _vSpec, const float4& _vAmb, const float4& _vEmis);
+
+		void SetAnim3D(bool _bAnim3D) { mCB.bAnim = (BOOL)_bAnim3D; }
+		void SetBoneCount(int _iBoneCount) { mCB.BoneCount = _iBoneCount; }
 
 
 	private:

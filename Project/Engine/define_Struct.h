@@ -1,6 +1,11 @@
 #pragma once
-
 #include <string>
+#include <vector>
+#include <Windows.h>
+#include <fbxsdk/core/base/fbxtime.h>
+
+
+#include "SimpleMath.h"
 
 namespace mh::define
 {
@@ -56,5 +61,54 @@ namespace mh::define
 		template <typename T>
 		void SetDataPtr(const T _pData) { pData = (void*)_pData; size = sizeof(T); }
 	};
+
+
+
+	// ============
+// Animation 3D
+// ============
+	struct tFrameTrans
+	{
+		float4	vTranslate;
+		float4	vScale;
+		float4	qRot;
+	};
+
+	struct tMTKeyFrame
+	{
+		double	dTime;
+		int		iFrame;
+		float3	vTranslate;
+		float3	vScale;
+		float4	qRot;
+	};
+
+
+	struct tMTBone
+	{
+		std::wstring				strBoneName;
+		int					iDepth;
+		int					iParentIndx;
+		MATRIX				matOffset;	// Offset 행렬(뼈 -> 루트 까지의 행렬)
+		MATRIX				matBone;   // 이거 안씀
+		std::vector<tMTKeyFrame>	vecKeyFrame;
+	};
+
+	struct tMTAnimClip
+	{
+		std::wstring			strAnimName;
+		int				iStartFrame;
+		int				iEndFrame;
+		int				iFrameLength;
+
+		double			dStartTime;
+		double			dEndTime;
+		double			dTimeLength;
+		float			fUpdateTime; // 이거 안씀
+
+		fbxsdk::FbxTime::EMode	eMode;
+	};
+
+
 
 }

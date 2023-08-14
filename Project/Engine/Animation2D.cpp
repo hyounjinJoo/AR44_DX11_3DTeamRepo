@@ -1,6 +1,6 @@
 #include "PCH_Engine.h"
 
-#include "Animation.h"
+#include "Animation2D.h"
 #include "TimeMgr.h"
 #include "RenderMgr.h"
 
@@ -10,9 +10,7 @@
 
 namespace mh
 {
-
-
-	Animation::Animation()
+	Animation2D::Animation2D()
 		: IRes(eResourceType::Animation)
 		, mAnimator(nullptr)
 		, mAtlas(nullptr)
@@ -24,7 +22,7 @@ namespace mh
 
 	}
 
-	Animation::Animation(const Animation& _other)
+	Animation2D::Animation2D(const Animation2D& _other)
 		: IRes(_other)
 		, mAnimator() //이건 이 애니메이션을 복사해서 가져가는 주인이 새로 설정해줘야함
 		, mAnimationName(_other.mAnimationName)
@@ -36,16 +34,16 @@ namespace mh
 	{
 	}
 
-	Animation::~Animation()
+	Animation2D::~Animation2D()
 	{
 	}
 
-	eResult Animation::Load(const std::filesystem::path& _fileName)
+	eResult Animation2D::Load(const std::filesystem::path& _fileName)
 	{
 		return eResult();
 	}
 
-	eResult Animation::SaveJson(Json::Value* _pJVal)
+	eResult Animation2D::SaveJson(Json::Value* _pJVal)
 	{
 		if (nullptr == _pJVal)
 		{
@@ -73,7 +71,7 @@ namespace mh
 		return eResult::Success;
 	}
 
-	eResult Animation::LoadJson(const Json::Value* _pJVal)
+	eResult Animation2D::LoadJson(const Json::Value* _pJVal)
 	{
 		if (nullptr == _pJVal)
 		{
@@ -95,7 +93,7 @@ namespace mh
 		return eResult::Success;
 	}
 
-	uint Animation::Update()
+	uint Animation2D::Update()
 	{
 		if (mbComplete)
 			return -1;
@@ -120,16 +118,16 @@ namespace mh
 		return -1;
 	}
 
-	void Animation::FixedUpdate()
+	void Animation2D::FixedUpdate()
 	{
 
 	}
 
-	void Animation::Render()
+	void Animation2D::Render()
 	{
 	}
 
-	void Animation::Create(const std::string_view _name
+	void Animation2D::Create(const std::string_view _name
 		, std::shared_ptr<Texture> _atlas
 		, float2 _leftTop, float2 _size, float2 _offset
 		, uint _spriteLegth, float _duration)
@@ -156,14 +154,14 @@ namespace mh
 
 	}
 
-	void Animation::BindShader()
+	void Animation2D::BindShader()
 	{
 		mAtlas->BindDataSRV(Register_t_atlasTexture, eShaderStageFlag::PS);
 
 		ConstBuffer* cb = RenderMgr::GetConstBuffer(eCBType::Animation2D);
 
 		tCB_Animation2D info = {};
-		info.animationType = (uint)define::eAnimationType::SecondDimension;
+		info.animationType = (uint)eDimensionType::_2D;
 		info.leftTop = mSpriteSheet[mIndex].LeftTop;
 		info.offset = mSpriteSheet[mIndex].Offset;
 		info.spriteSize = mSpriteSheet[mIndex].Size;
@@ -173,14 +171,14 @@ namespace mh
 		cb->BindData(eShaderStageFlag::PS);
 	}
 
-	void Animation::Reset()
+	void Animation2D::Reset()
 	{
 		mTime = 0.0f;
 		mIndex = 0;
 		mbComplete = false;
 	}
 
-	void Animation::Clear()
+	void Animation2D::Clear()
 	{
 		//Texture clear
 		Texture::Clear(12);
@@ -188,7 +186,7 @@ namespace mh
 		ConstBuffer* cb = RenderMgr::GetConstBuffer(eCBType::Animation2D);
 
 		tCB_Animation2D info = {};
-		info.animationType = (uint)define::eAnimationType::None;
+		info.animationType = (uint)define::eDimensionType::NOT_SET;
 
 		cb->SetData(&info);
 		cb->BindData(eShaderStageFlag::PS);

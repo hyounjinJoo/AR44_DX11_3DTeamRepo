@@ -1,12 +1,12 @@
 #pragma once
-#include "IComponent.h"
-#include "Animation.h"
+#include "IAnimator.h"
+#include "Animation2D.h"
 
 #include "define_Struct.h"
 
 namespace mh
 {
-	class Com_Animator : public IComponent
+	class Com_Animator2D : public IAnimator
 	{
 	public:
 		struct tEvents
@@ -33,12 +33,12 @@ namespace mh
 			std::vector<tEvent> Events;
 		};
 
-		Com_Animator();
+		Com_Animator2D();
 
-		Com_Animator(const Com_Animator& _other);
-		CLONE(Com_Animator);
+		Com_Animator2D(const Com_Animator2D& _other);
+		CLONE(Com_Animator2D);
 
-		virtual ~Com_Animator();
+		virtual ~Com_Animator2D();
 
 		virtual eResult SaveJson(Json::Value* _pJson) override;
 		virtual eResult LoadJson(const Json::Value* _pJson) override;
@@ -55,12 +55,12 @@ namespace mh
 			, uint _spriteLength
 			, float _duration);
 
-		Animation* FindAnimation(const std::string_view _name) const;
+		Animation2D* FindAnimation(const std::string_view _name) const;
 		tEvents* FindEvents(const std::string_view _name) const; 
 		void Play(const std::string_view _name, bool _loop = true);
 
-		void Binds();
-		void Clear();
+		virtual void Binds();
+		virtual void Clear();
 
 		std::function<void()>& GetStartEvent(const std::string_view _name) const;
 		std::function<void()>& GetCompleteEvent(const std::string_view _name) const;
@@ -68,9 +68,9 @@ namespace mh
 		std::function<void()>& GetEvent(const std::string_view _name, uint _index) const;
 
 	private:
-		std::unordered_map<std::string, Animation*, define::tUmap_StringViewHasher, std::equal_to<>>	mAnimations;
+		std::unordered_map<std::string, Animation2D*, define::tUmap_StringViewHasher, std::equal_to<>>	mAnimations;
 		std::unordered_map<std::string, tEvents*, define::tUmap_StringViewHasher, std::equal_to<>>		mEvents;
-		Animation* mActiveAnimation;
+		Animation2D* mActiveAnimation;
 		bool mbLoop;
 	};
 }

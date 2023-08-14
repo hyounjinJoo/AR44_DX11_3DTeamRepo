@@ -103,6 +103,19 @@ namespace mh
 		CreateMaterial();
 	}
 
+	MATRIX FBXLoader::GetMatrixFromFbxMatrix(fbxsdk::FbxAMatrix& _mat)
+	{
+		MATRIX mat;
+		for (int i = 0; i < 4; ++i)
+		{
+			for (int j = 0; j < 4; ++j)
+			{
+				mat.m[i][j] = (float)_mat.Get(i, j);
+			}
+		}
+		return mat;
+	}
+
 	void FBXLoader::LoadMeshDataFromNode(FbxNode* _pNode)
 	{
 		// 노드의 메쉬정보 읽기

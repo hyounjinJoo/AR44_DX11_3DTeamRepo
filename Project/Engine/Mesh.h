@@ -1,6 +1,8 @@
 #pragma once
-#include "define_GPU.h"
 #include "IRes.h"
+
+#include "define_GPU.h"
+#include "define_Struct.h"
 
 namespace mh
 {
@@ -18,6 +20,9 @@ namespace mh
 		float3 Tangent;
 		float3 BiNormal;
 		float3 Normal;
+
+		float4 Weights;
+		float4 Indices;
 	};
 
 	struct tIndexInfo
@@ -29,6 +34,7 @@ namespace mh
 	};
 
 	class FBXLoader;
+	class StructBuffer;
 	class Mesh : public IRes 
 	{
 	public:
@@ -57,6 +63,17 @@ namespace mh
 		const std::vector<Vertex3D> GetVertices() { return mVertices; }
 		UINT GetSubsetCount() { return (UINT)mIndexInfos.size(); }
 
+
+		//Animation 3D
+		const std::vector<tMTBone>* GetBones() { return &m_vecBones; }
+		UINT GetBoneCount() { return (UINT)m_vecBones.size(); }
+		const std::vector<tMTAnimClip>* GetAnimClip() { return &m_vecAnimClip; }
+		bool IsAnimMesh() { return !m_vecAnimClip.empty(); }
+
+		StructBuffer* GetBoneFrameDataBuffer() { return m_pBoneFrameData; } // 전체 본 프레임 정보
+		StructBuffer* GetBoneOffsetBuffer() { return  m_pBoneOffset; }	   // 각 뼈의 offset 행렬
+
+
 	private:
 		Microsoft::WRL::ComPtr<ID3D11Buffer> mVertexBuffer;
 		D3D11_BUFFER_DESC mVBDesc;
@@ -65,6 +82,14 @@ namespace mh
 		std::vector<Vertex3D> mVertices;
 
 		std::vector<tIndexInfo>		mIndexInfos;
+
+
+		// Animation3D 정보
+		std::vector<define::tMTAnimClip>		m_vecAnimClip;
+		std::vector<define::tMTBone>			m_vecBones;
+
+		StructBuffer* m_pBoneFrameData;   // 전체 본 프레임 정보(크기, 이동, 회전) (프레임 개수만큼)
+		StructBuffer* m_pBoneOffset;	  // 각 뼈의 offset 행렬(각 뼈의 위치를 되돌리는 행렬) (1행 짜리)
 	};
 
 

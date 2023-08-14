@@ -117,23 +117,21 @@ namespace mh
 		{
 			strKey = _fileName.string();
 		}
-			
 
-
-		std::shared_ptr<T> pRes = Find<T>(strKey);
+		std::shared_ptr<IRes> FindRes = Find(GetResType<T>(), strKey);
 
 		// 이미 해당 키로 리소스가 있다면, 반환
-		if (nullptr != pRes)
-			return pRes;
+		if (FindRes)
+			return std::dynamic_pointer_cast<T>(FindRes);
 
-		pRes = std::make_shared<T>();
+		std::shared_ptr<T> NewRes = std::make_shared<T>();
 
-		if (FAILED(pRes->Load(_fileName)))
+		if (FAILED(NewRes->Load(_fileName)))
 			return nullptr;
 
-		Insert(strKey, pRes);
+		Insert(strKey, NewRes);
 
-		return pRes;
+		return NewRes;
 	}
 
 	template<typename T>

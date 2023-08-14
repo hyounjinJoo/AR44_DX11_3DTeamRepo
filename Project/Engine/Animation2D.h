@@ -6,7 +6,7 @@ namespace mh
 {
 	using mh::Texture;
 
-	class Animation : public IRes
+	class Animation2D : public IRes
 	{
 	public:
 		struct tSprite
@@ -28,12 +28,12 @@ namespace mh
 			}
 		};
 
-		Animation();
+		Animation2D();
 
-		Animation(const Animation& _other);
-		CLONE(Animation);
+		Animation2D(const Animation2D& _other);
+		CLONE(Animation2D);
 
-		virtual ~Animation();
+		virtual ~Animation2D();
 
 		virtual eResult Load(const std::filesystem::path& _fileName) override;
 		virtual eResult SaveJson(Json::Value* _pJVal) override;
@@ -55,7 +55,7 @@ namespace mh
 		const std::string& GetAnimationName() const { return mAnimationName; }
 
 	private:
-		class Com_Animator* mAnimator;
+		class Com_Animator2D* mAnimator;
 		std::string mAnimationName;
 		std::shared_ptr<Texture> mAtlas;
 		std::vector<tSprite> mSpriteSheet;

@@ -7,6 +7,7 @@
 #include "FBXLoader.h"
 #include "GameObject.h"
 #include "Com_Renderer_Mesh.h"
+#include "Com_Animator3D.h"
 
 namespace mh
 {
@@ -78,15 +79,16 @@ namespace mh
 			Renderer->SetMaterial(mMaterials[i], i);
 		}
 
-		//TODO: Animation 파트 추가
-		//if (false == m_pMesh->IsAnimMesh())
-		//	return pNewObj;
+		if (false == mMesh->IsAnimMesh())
+			return pNewObj;
 
-		//CAnimator3D* pAnimator = new CAnimator3D;
-		//pNewObj->AddComponent(pAnimator);
+		Com_Animator3D* Animator3D = pNewObj->AddComponent<Com_Animator3D>();
 
-		//pAnimator->SetBones(m_pMesh->GetBones());
-		//pAnimator->SetAnimClip(m_pMesh->GetAnimClip());
+		Animator3D->SetBones(mMesh->GetBones());
+		Animator3D->SetAnimClip(mMesh->GetAnimClip());
+
+		Animator3D->SetBones(mMesh->GetBones());
+		Animator3D->SetAnimClip(mMesh->GetAnimClip());
 
 		return pNewObj;
 	}

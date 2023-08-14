@@ -4,8 +4,6 @@
 
 namespace mh::define
 {
-
-
 	enum class eResult
 	{
 		Fail_NotImplemented = 0,
@@ -66,19 +64,18 @@ namespace mh::define
 		END,
 	};
 
-	enum class eAnimationType
-	{
-		None,
-		SecondDimension,
-		ThirdDimension,
-		END,
-	};
-
 	enum class eLightType
 	{
 		Directional,
 		Point,
 		Spot,
 		END,
+	};
+
+	enum class eDimensionType
+	{
+		NOT_SET,
+		_2D,
+		_3D
 	};
 }

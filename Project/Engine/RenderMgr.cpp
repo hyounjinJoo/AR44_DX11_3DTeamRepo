@@ -10,6 +10,7 @@
 #include "ConstBuffer.h"
 #include "PaintShader.h"
 #include "ParticleShader.h"
+#include "Animation3DShader.h"
 
 #include "SceneMgr.h"
 
@@ -1025,6 +1026,25 @@ namespace mh
 		LayoutDesc.SemanticIndex = 0;
 		vecLayoutDesc.push_back(LayoutDesc);
 
+		LayoutDesc = D3D11_INPUT_ELEMENT_DESC{};
+		LayoutDesc.AlignedByteOffset = 96;
+		LayoutDesc.Format = DXGI_FORMAT_R32G32B32A32_FLOAT;
+		LayoutDesc.InputSlot = 0;
+		LayoutDesc.InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
+		LayoutDesc.SemanticName = "BLENDWEIGHT";
+		LayoutDesc.SemanticIndex = 0;
+		vecLayoutDesc.push_back(LayoutDesc);
+
+		LayoutDesc = D3D11_INPUT_ELEMENT_DESC{};
+		LayoutDesc.AlignedByteOffset = 128;
+		LayoutDesc.Format = DXGI_FORMAT_R32G32B32A32_FLOAT;
+		LayoutDesc.InputSlot = 0;
+		LayoutDesc.InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
+		LayoutDesc.SemanticName = "BLENDINDICES";
+		LayoutDesc.SemanticIndex = 0;
+		vecLayoutDesc.push_back(LayoutDesc);
+
+
 #pragma endregion
 
 #pragma region BASIC 3D
@@ -1093,6 +1113,7 @@ namespace mh
 
 #pragma region MERGE
 		std::shared_ptr<GraphicsShader> MergeShader = std::make_shared<GraphicsShader>();
+		MergeShader->SetEngineDefaultRes(true);
 		MergeShader->CreateByHeader(eGSStage::VS, _0VS_Merge, sizeof(_0VS_Merge));
 		MergeShader->CreateByHeader(eGSStage::PS, _4PS_Merge, sizeof(_4PS_Merge));
 
@@ -1104,6 +1125,15 @@ namespace mh
 		MergeShader->SetBSState(eBSType::Default);
 
 		ResMgr::Insert(strKey::Default::shader::graphics::MergeShader, MergeShader);
+#pragma endregion
+
+
+#pragma region ANIMATION 3D
+		std::shared_ptr<Animation3DShader> Anim3DShader = std::make_shared<Animation3DShader>();
+		Anim3DShader->SetEngineDefaultRes(true);
+		Anim3DShader->CreateByHeader(CS_Animation3D, sizeof(CS_Animation3D));
+
+		ResMgr::Insert(strKey::Default::shader::compute::Animation3D, Anim3DShader);
 #pragma endregion
 	}
 
@@ -1118,6 +1148,10 @@ namespace mh
 
 		mConstBuffers[(uint)eCBType::Transform] = std::make_unique<ConstBuffer>(eCBType::Transform);
 		mConstBuffers[(uint)eCBType::Transform]->Create(sizeof(tCB_Transform));
+
+		mConstBuffers[(uint)eCBType::ComputeShader] = std::make_unique<ConstBuffer>(eCBType::ComputeShader);
+		mConstBuffers[(uint)eCBType::ComputeShader]->Create<tCB_ComputeShader>(1u);
+		mConstBuffers[(uint)eCBType::ComputeShader]->SetPresetTargetStage(eShaderStageFlag::CS);
 
 		mConstBuffers[(uint)eCBType::Material] = std::make_unique<ConstBuffer>(eCBType::Material);
 		mConstBuffers[(uint)eCBType::Material]->Create(sizeof(tCB_MaterialData));
@@ -1139,6 +1173,9 @@ namespace mh
 
 		mConstBuffers[(uint)eCBType::SBufferCount] = std::make_unique<ConstBuffer>(eCBType::SBufferCount);
 		mConstBuffers[(uint)eCBType::SBufferCount]->Create<tCB_SBufferCount>();
+
+		mConstBuffers[(uint)eCBType::Animation3D] = std::make_unique<ConstBuffer>(eCBType::Animation3D);
+		mConstBuffers[(uint)eCBType::Animation3D]->Create<tCB_Animation3D>();
 
 #pragma endregion
 #pragma region STRUCTED BUFFER

@@ -33,8 +33,9 @@ namespace mh
 		void SetMesh(const std::shared_ptr<Mesh> _mesh);
 		inline void SetMaterial(const std::shared_ptr <Material> _Mtrl, uint _idx);
 		std::shared_ptr<Mesh> GetMesh() const { return mMesh; }
-		std::shared_ptr<Material> GetMaterial(uint _idx);
-		
+		std::shared_ptr<Material> GetMaterial(UINT _idx);
+		UINT GetMaterialCount() { return (UINT)mMaterials.size(); }
+
 		
 	private:
 		std::shared_ptr <Mesh> mMesh;
@@ -51,7 +52,7 @@ namespace mh
 		mMaterials[_idx].CurrentMaterial = _Mtrl;
 	}
 
-	inline std::shared_ptr<Material> IRenderer::GetMaterial(uint _idx)
+	inline std::shared_ptr<Material> IRenderer::GetMaterial(UINT _idx)
 	{
 		if (nullptr == mMaterials[_idx].CurrentMaterial)
 		{

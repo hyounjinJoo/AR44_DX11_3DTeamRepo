@@ -20,24 +20,30 @@ TEXTURE2D(positionTarget, t, 4);
 TEXTURE2D(normalTarget, t, 5);
 TEXTURE2D(albedoTarget, t, 6);
 TEXTURE2D(specularTarget, t, 7);
-//Texture2D positionTarget : register(t4);
-//Texture2D normalTarget : register(t5);
-//Texture2D albedoTarget : register(t6);
-//Texture2D specularTarget : register(t7);
 
 
 // Light
 TEXTURE2D(diffuseLightTarget, t, 8);
 TEXTURE2D(specularLightTarget, t, 9);
-//Texture2D diffuseLightTarget : register(t8);
-//Texture2D specularLightTarget : register(t9);
 
 
 //Atlas texture(Animation 2D)
 TEXTURE2D(atlasTexture, t, 12);
 
+//Bone Matrices(Animation 3D)
+SBUFFER(g_arrFrameTrans, tFrameTrans, t, 16);
+SBUFFER(g_arrOffset, Matrix, t, 17);
+SBUFFER_RW(g_arrFinalMat, Matrix, u, 0);
+
+//StructuredBuffer<tFrameTrans> g_arrFrameTrans : register(t16);
+//StructuredBuffer<matrix> g_arrOffset : register(t17);
+//RWStructuredBuffer<matrix> g_arrFinalMat : register(u0);
+
+SBUFFER(g_arrBoneMat, Matrix, t, 30);
+
+
 // Light
-SBUFFER(lightAttributes, tLightAttribute, t, 13);
+SBUFFER(lightAttributes, tLightAttribute, t, 14);
 
 
 //StructuredBuffer<LightAttribute> lightAttributes : register(t13);

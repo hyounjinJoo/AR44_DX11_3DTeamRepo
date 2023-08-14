@@ -15,13 +15,13 @@ namespace mh
 		AtExit::AddFunc(PathMgr::Release);
 
 		mAbsolutePath = std::filesystem::current_path();
-		
-		mRelativePath = ".";
-		mRelativePath /= mh::define::strKey::DirName_Content;
 
 		mRelativePath_ShaderBin = ".";
 		mRelativePath_ShaderBin /= mh::define::strKey::DirName_ShaderBin;
 		
+		mRelativePath = ".";
+		mRelativePath /= mh::define::strKey::DirName_Content;
+
 		for (int i = 0; i < (int)eResourceType::END; ++i)
 		{
 			mRelativePath_Res[i] = mRelativePath;

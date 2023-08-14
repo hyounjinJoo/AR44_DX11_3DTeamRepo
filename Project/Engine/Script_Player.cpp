@@ -5,7 +5,7 @@
 #include "GameObject.h"
 #include "InputMgr.h"
 #include "TimeMgr.h"
-#include "Com_Animator.h"
+#include "Com_Animator2D.h"
 
 namespace mh
 {
@@ -52,7 +52,7 @@ namespace mh
 			tr.SetRelativeRotY(rotY);
 		}
 
-		Com_Animator* animator = GetOwner()->GetComponent<Com_Animator>();
+		Com_Animator2D* animator = GetOwner()->GetComponent<Com_Animator2D>();
 		if (InputMgr::GetKey(eKeyCode::N_1))
 		{
 			animator->Play("MoveDown");

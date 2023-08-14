@@ -48,6 +48,8 @@ namespace mh
 		template <typename T>
 		inline T* GetComponent();
 
+		inline IComponent* GetComponent(define::eComponentType _type) { return mComponents[(int)_type]; }
+
 		template <typename T>
 		inline eComponentType GetComponentType();
 
@@ -203,7 +205,7 @@ namespace mh
 		{
 			return eComponentType::Collider;
 		}
-		else if constexpr (std::is_base_of_v<Com_Animator, T>)
+		else if constexpr (std::is_base_of_v<Com_Animator2D, T>)
 		{
 			return eComponentType::Animator;
 		}

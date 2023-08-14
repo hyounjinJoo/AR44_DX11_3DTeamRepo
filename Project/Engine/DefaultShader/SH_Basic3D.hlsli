@@ -10,6 +10,9 @@ struct VSIn
 	float3 Tangent : TANGENT;
 	float3 Normal : NORMAL;
 	float3 BiNormal : BINORMAL;
+	
+	float4 vWeights : BLENDWEIGHT;
+	float4 vIndices : BLENDINDICES;
 };
 
 struct VSOut

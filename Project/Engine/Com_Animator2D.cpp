@@ -1,13 +1,13 @@
 #include "PCH_Engine.h"
 
-#include "Com_Animator.h"
+#include "Com_Animator2D.h"
 
 #include "json-cpp\json.h"
 
 namespace mh
 {
-	Com_Animator::Com_Animator()
-		: IComponent(define::eComponentType::Animator)
+	Com_Animator2D::Com_Animator2D()
+		: IAnimator(define::eDimensionType::_2D)
 		, mAnimations{}
 		, mEvents{}
 		, mActiveAnimation(nullptr)
@@ -15,8 +15,8 @@ namespace mh
 	{
 
 	}
-	Com_Animator::Com_Animator(const Com_Animator& _other)
-		: IComponent(_other)
+	Com_Animator2D::Com_Animator2D(const Com_Animator2D& _other)
+		: IAnimator(_other)
 		//복사작업을 따로 해줘야할 경우 여기서는 일단 초기화해줌
 		, mAnimations{}
 		, mEvents{}
@@ -71,7 +71,7 @@ namespace mh
 
 	}
 
-	Com_Animator::~Com_Animator()
+	Com_Animator2D::~Com_Animator2D()
 	{
 		for (auto anim : mAnimations)
 		{
@@ -85,21 +85,21 @@ namespace mh
 			evt.second = nullptr;
 		}
 	}
-	eResult Com_Animator::SaveJson(Json::Value* _pJson)
+	eResult Com_Animator2D::SaveJson(Json::Value* _pJson)
 	{
 
 
 
 		return eResult::Success;
 	}
-	eResult Com_Animator::LoadJson(const Json::Value* _pJson)
+	eResult Com_Animator2D::LoadJson(const Json::Value* _pJson)
 	{
 		return eResult();
 	}
-	void Com_Animator::Init()
+	void Com_Animator2D::Init()
 	{
 	}
-	void Com_Animator::Update()
+	void Com_Animator2D::Update()
 	{
 		if (mActiveAnimation == nullptr)
 			return;
@@ -126,25 +126,25 @@ namespace mh
 		}
 
 	}
-	void Com_Animator::FixedUpdate()
+	void Com_Animator2D::FixedUpdate()
 	{
 	}
-	void Com_Animator::Render()
+	void Com_Animator2D::Render()
 	{
 	}
 
-	bool Com_Animator::Create(const std::string_view _name, std::shared_ptr<Texture> _atlas
+	bool Com_Animator2D::Create(const std::string_view _name, std::shared_ptr<Texture> _atlas
 		, float2 _leftTop, float2 _size, float2 _offset
 		, uint _spriteLegth, float _duration)
 	{
 		if (_atlas == nullptr)
 			return false;
 
-		Animation* animation = FindAnimation(_name);
+		Animation2D* animation = FindAnimation(_name);
 		if (animation != nullptr)
 			return false;
 
-		animation = new Animation();
+		animation = new Animation2D();
 		animation->Create(_name, _atlas, _leftTop, _size, _offset, _spriteLegth, _duration);
 
 		mAnimations.insert(std::make_pair(_name, animation));
@@ -156,7 +156,7 @@ namespace mh
 		return true;
 	}
 
-	Animation* Com_Animator::FindAnimation(const std::string_view _name) const
+	Animation2D* Com_Animator2D::FindAnimation(const std::string_view _name) const
 	{
 		const auto iter = mAnimations.find(_name);
 
@@ -168,7 +168,7 @@ namespace mh
 		return iter->second;
 	}
 	
-	Com_Animator::tEvents* Com_Animator::FindEvents(const std::string_view _name) const
+	Com_Animator2D::tEvents* Com_Animator2D::FindEvents(const std::string_view _name) const
 	{
 		const auto iter
 			= mEvents.find(_name);
@@ -180,9 +180,9 @@ namespace mh
 
 		return iter->second;
 	}
-	void Com_Animator::Play(const std::string_view _name, bool _loop)
+	void Com_Animator2D::Play(const std::string_view _name, bool _loop)
 	{
-		Animation* prevAnimation = mActiveAnimation;
+		Animation2D* prevAnimation = mActiveAnimation;
 		tEvents* events = nullptr;
 		if (prevAnimation)
 			events = FindEvents(prevAnimation->GetAnimationName());
@@ -200,7 +200,7 @@ namespace mh
 			events->StartEvent();
 	}
 
-	void Com_Animator::Binds()
+	void Com_Animator2D::Binds()
 	{
 		if (mActiveAnimation == nullptr)
 			return;
@@ -208,7 +208,7 @@ namespace mh
 		mActiveAnimation->BindShader();
 	}
 
-	void Com_Animator::Clear()
+	void Com_Animator2D::Clear()
 	{
 		if (mActiveAnimation == nullptr)
 			return;
@@ -218,25 +218,25 @@ namespace mh
 
 
 
-	std::function<void()>& Com_Animator::GetStartEvent(const std::string_view _name) const
+	std::function<void()>& Com_Animator2D::GetStartEvent(const std::string_view _name) const
 	{
 		tEvents* events = FindEvents(_name);
 
 		return events->StartEvent.Event;
 	}
-	std::function<void()>& Com_Animator::GetCompleteEvent(const std::string_view _name) const
+	std::function<void()>& Com_Animator2D::GetCompleteEvent(const std::string_view _name) const
 	{
 		tEvents* events = FindEvents(_name);
 
 		return events->CompleteEvent.Event;
 	}
-	std::function<void()>& Com_Animator::GetEndEvent(const std::string_view _name) const
+	std::function<void()>& Com_Animator2D::GetEndEvent(const std::string_view _name) const
 	{
 		tEvents* events = FindEvents(_name);
 
 		return events->EndEvent.Event;
 	}
-	std::function<void()>& Com_Animator::GetEvent(const std::string_view _name, uint _index) const
+	std::function<void()>& Com_Animator2D::GetEvent(const std::string_view _name, uint _index) const
 	{
 		tEvents* events = FindEvents(_name);
 

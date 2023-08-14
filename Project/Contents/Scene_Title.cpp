@@ -17,7 +17,7 @@
 #include <Engine/Player.h>
 #include <Engine/Monster.h>
 #include <Engine/CollisionMgr.h>
-#include <Engine/Com_Animator.h>
+#include <Engine/Com_Animator2D.h>
 #include <Engine/Com_Light.h>
 #include <Engine/PaintShader.h>
 #include <Engine/Com_Renderer_ParticleSystem.h>

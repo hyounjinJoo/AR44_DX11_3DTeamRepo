@@ -169,6 +169,9 @@
     <Filter Include="Common\WindowResource">
       <UniqueIdentifier>{7c2bcaa2-f3ec-46ae-9c79-07087d540363}</UniqueIdentifier>
     </Filter>
+    <Filter Include="_DefaultShader\Animation 3D">
+      <UniqueIdentifier>{d3e8caa9-5036-4c5b-9533-7c3a801fceac}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Application.cpp">
@@ -234,10 +237,10 @@
     <ClCompile Include="Monster.cpp">
       <Filter>GameObject\Component\Script\Contents</Filter>
     </ClCompile>
-    <ClCompile Include="Animation.cpp">
+    <ClCompile Include="Animation2D.cpp">
       <Filter>GameObject\Component\Animator</Filter>
     </ClCompile>
-    <ClCompile Include="Com_Animator.cpp">
+    <ClCompile Include="Com_Animator2D.cpp">
       <Filter>GameObject\Component\Animator</Filter>
     </ClCompile>
     <ClCompile Include="PaintShader.cpp">
@@ -449,6 +452,15 @@
     <ClCompile Include="base64.cpp">
       <Filter>Common</Filter>
     </ClCompile>
+    <ClCompile Include="IAnimator.cpp">
+      <Filter>GameObject\Component\Animator</Filter>
+    </ClCompile>
+    <ClCompile Include="Com_Animator3D.cpp">
+      <Filter>GameObject\Component\Animator</Filter>
+    </ClCompile>
+    <ClCompile Include="Animation3DShader.cpp">
+      <Filter>GameObject\Component\Animator</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application.h">
@@ -520,10 +532,10 @@
     <ClInclude Include="Monster.h">
       <Filter>GameObject\Component\Script\Contents</Filter>
     </ClInclude>
-    <ClInclude Include="Com_Animator.h">
+    <ClInclude Include="Com_Animator2D.h">
       <Filter>GameObject\Component\Animator</Filter>
     </ClInclude>
-    <ClInclude Include="Animation.h">
+    <ClInclude Include="Animation2D.h">
       <Filter>GameObject\Component\Animator</Filter>
     </ClInclude>
     <ClInclude Include="PaintShader.h">
@@ -780,6 +792,15 @@
     <ClInclude Include="base64.h">
       <Filter>Common</Filter>
     </ClInclude>
+    <ClInclude Include="IAnimator.h">
+      <Filter>GameObject\Component\Animator</Filter>
+    </ClInclude>
+    <ClInclude Include="Com_Animator3D.h">
+      <Filter>GameObject\Component\Animator</Filter>
+    </ClInclude>
+    <ClInclude Include="Animation3DShader.h">
+      <Filter>GameObject\Component\Animator</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="cpp.hint">
@@ -840,6 +861,9 @@
       <Filter>_DefaultShader</Filter>
     </None>
     <None Include="DefaultShader\SH_Functions.hlsli">
+      <Filter>_DefaultShader</Filter>
+    </None>
+    <None Include="DefaultShader\SH_Func_Animation3D.hlsli">
       <Filter>_DefaultShader</Filter>
     </None>
   </ItemGroup>
@@ -924,6 +948,9 @@
     </FxCompile>
     <FxCompile Include="DefaultShader\CS_Particle.hlsl">
       <Filter>_DefaultShader\Particle</Filter>
+    </FxCompile>
+    <FxCompile Include="DefaultShader\CS_Animation3D.hlsl">
+      <Filter>_DefaultShader\Animation 3D</Filter>
     </FxCompile>
   </ItemGroup>
   <ItemGroup>

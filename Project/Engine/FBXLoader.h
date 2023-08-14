@@ -4,6 +4,7 @@
 
 #include <fbxsdk/fbxsdk.h>
 
+
 namespace mh
 {
 	//===============
@@ -104,11 +105,16 @@ namespace mh
 		void Init();
 		void LoadFbx(const std::wstring& _strPath);
 
+		// FbxMatrix -> Matrix
+		static MATRIX GetMatrixFromFbxMatrix(fbxsdk::FbxAMatrix& _mat);
+
 	public:
 		int GetContainerCount() { return (int)mContainers.size(); }
 		const tContainer& GetContainer(int _iIdx) { return mContainers[_iIdx]; }
 		std::vector<tBone*>& GetBones() { return mBones; }
 		std::vector<tAnimClip*>& GetAnimClip() { return mAnimClips; }
+
+
 
 	private:
 		void LoadMeshDataFromNode(fbxsdk::FbxNode* _pRoot);
