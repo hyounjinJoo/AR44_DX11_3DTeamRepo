@@ -162,9 +162,22 @@ namespace mh
 
 	eResult Texture::Load(const std::filesystem::path& _FileName)
 	{
-		stdfs::path FullPath = PathMgr::GetRelResourcePath(GetResType());
+		eResult result = eResult::Fail;
 
-		eResult result = LoadFile(FullPath / _FileName);
+		stdfs::path resPath;
+
+		//만약 ".fbm"으로 끝나는 '폴더'일 경우 MeshData 경로에서 받아온다.
+		if (_FileName.parent_path().extension() == ".fbm")
+		{
+			resPath = PathMgr::GetRelResourcePath(eResourceType::MeshData);
+		}
+		//그렇지 않을 경우 상대 경로를 직접 만들어서 로드해준다.
+		else
+		{
+			resPath = PathMgr::GetRelResourcePath(GetResType());
+		}
+
+		result = LoadFile(resPath / _FileName);
 
 		if (eResult::Success == result)
 		{

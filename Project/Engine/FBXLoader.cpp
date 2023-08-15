@@ -8,6 +8,7 @@
 #include "define_Util.h"
 
 using namespace fbxsdk;
+
 namespace mh
 {
 	
@@ -408,7 +409,9 @@ namespace mh
 			{
 				FbxFileTexture* pFbxTex = TextureProperty.GetSrcObject<FbxFileTexture>(0);
 				if (NULL != pFbxTex)
+				{
 					retStr = pFbxTex->GetRelativeFileName();
+				}
 			}
 		}
 
@@ -417,61 +420,87 @@ namespace mh
 
 	void FBXLoader::LoadTexture()
 	{
-		const stdfs::path& path_content = PathMgr::GetRelResourcePath(eResourceType::Texture);
+		//const stdfs::path& texPath = PathMgr::GetRelResourcePath(eResourceType::Texture);
+		
+		//stdfs::path path_fbx_texture = texPath / "FBXTex";
+		//if (false == exists(path_fbx_texture))
+		//{
+		//	create_directory(path_fbx_texture);
+		//}
 
-		//Todo: FBXTex STRKEY로 변경
-		stdfs::path path_fbx_texture = path_content / "FBXTex";
-		if (false == exists(path_fbx_texture))
-		{
-			create_directory(path_fbx_texture);
-		}
+		//stdfs::path path_origin;
+		//stdfs::path path_filename;
+		//stdfs::path path_dest;
 
-		stdfs::path path_origin;
-		stdfs::path path_filename;
-		stdfs::path path_dest;
-
+		const stdfs::path& fbxPath = PathMgr::GetRelResourcePath(eResourceType::MeshData);
 
 		for (UINT i = 0; i < mContainers.size(); ++i)
 		{
 			for (UINT j = 0; j < mContainers[i].vecMtrl.size(); ++j)
 			{
-				std::vector<stdfs::path> vecPath;
-				vecPath.reserve(4);
-
-				vecPath.push_back(mContainers[i].vecMtrl[j].strDiff);
-				vecPath.push_back(mContainers[i].vecMtrl[j].strNormal);
-				vecPath.push_back(mContainers[i].vecMtrl[j].strSpec);
-				vecPath.push_back(mContainers[i].vecMtrl[j].strEmis);
-
-				for (size_t k = 0; k < vecPath.size(); ++k)
+				if (false == mContainers[i].vecMtrl[j].strDiff.empty())
 				{
-					if (vecPath[k].filename().empty())
-						continue;
+					ResMgr::Load<Texture>(mContainers[i].vecMtrl[j].strDiff);
+				}				
+				
+				if (false == mContainers[i].vecMtrl[j].strNormal.empty())
+				{
+					ResMgr::Load<Texture>(mContainers[i].vecMtrl[j].strNormal);
+				}				
+				
+				if (false == mContainers[i].vecMtrl[j].strSpec.empty())
+				{
+					ResMgr::Load<Texture>(mContainers[i].vecMtrl[j].strSpec);
+				}				
+				
+				if (false == mContainers[i].vecMtrl[j].strEmis.empty())
+				{
+					ResMgr::Load<Texture>(mContainers[i].vecMtrl[j].strEmis);
+				}
 
-					path_origin = vecPath[k];
-					path_filename = vecPath[k].filename();
-					path_dest = path_fbx_texture / path_filename;
+				//mContainers[i].vecMtrl[j].strDiff);
+				//mContainers[i].vecMtrl[j].strNormal
+				//	mContainers[i].vecMtrl[j].strSpec);
+				//	mContainers[i].vecMtrl[j].strEmis);
 
-					if (false == exists(path_dest))
+				//std::vector<stdfs::path> vecPath;
+				//vecPath.reserve(4);
+
+				//vecPath.push_back(mContainers[i].vecMtrl[j].strDiff);
+				//vecPath.push_back(mContainers[i].vecMtrl[j].strNormal);
+				//vecPath.push_back(mContainers[i].vecMtrl[j].strSpec);
+				//vecPath.push_back(mContainers[i].vecMtrl[j].strEmis);
+
+				//for (size_t k = 0; k < vecPath.size(); ++k)
+				//{
+				//	if (vecPath[k].filename().empty())
+				//		continue;
+
+					//path_origin = fbxPath / vecPath[k];
+					//path_filename = vecPath[k].filename();
+					//path_dest = path_fbx_texture / path_filename;
+
+					//FBX 파일이 존재하지 않을 경우 텍스처 폴더로 copy
+	/*				if (exists(path_origin) && false == exists(path_dest))
 					{
 						stdfs::copy(path_origin, path_dest);
-					}
+					}*/
 
-					stdfs::path loadPath = "FBXTex";
-					loadPath /= path_filename;
-					ResMgr::Load<Texture>(loadPath);
+					//stdfs::path loadPath = "FBXTex";
+					//loadPath /= path_filename;
+					//ResMgr::Load<Texture>(loadPath);
 
-					switch (k)
-					{
-					case 0: mContainers[i].vecMtrl[j].strDiff = path_dest.string(); break;
-					case 1: mContainers[i].vecMtrl[j].strNormal = path_dest.string(); break;
-					case 2: mContainers[i].vecMtrl[j].strSpec = path_dest.string(); break;
-					case 3: mContainers[i].vecMtrl[j].strEmis = path_dest.string(); break;
-					}
-				}
+					//switch (k)
+					//{
+					////case 0: mContainers[i].vecMtrl[j].strDiff = path_dest.string(); break;
+					//case 1: mContainers[i].vecMtrl[j].strNormal = path_dest.string(); break;
+					//case 2: mContainers[i].vecMtrl[j].strSpec = path_dest.string(); break;
+					//case 3: mContainers[i].vecMtrl[j].strEmis = path_dest.string(); break;
+					//}
+				//}
 			}
-			path_origin = path_origin.parent_path();
-			remove_all(path_origin);
+			//path_origin = path_origin.parent_path();
+			//remove_all(path_origin);
 		}
 	}
 
@@ -512,13 +541,8 @@ namespace mh
 				pMaterial->SetShader(ResMgr::Find<GraphicsShader>(strKey::Default::shader::graphics::DefferedShader));
 
 				
-				const stdfs::path& TexPath = PathMgr::GetRelResourcePath(eResourceType::Texture);
 				{
-					stdfs::path strTexKey = mContainers[i].vecMtrl[j].strDiff;
-					std::string relPath = strTexKey.lexically_relative(TexPath).string();
-
-					//TODO: 여기 지저분한거 수정
-					std::shared_ptr<Texture> pTex = ResMgr::Find<Texture>(relPath);
+					std::shared_ptr<Texture> pTex = ResMgr::Find<Texture>(mContainers[i].vecMtrl[j].strDiff);
 					if (nullptr != pTex)
 					{
 						pMaterial->SetTexture(eTextureSlot::Albedo, pTex);
@@ -527,9 +551,7 @@ namespace mh
 
 					
 				{
-					stdfs::path strTexKey = mContainers[i].vecMtrl[j].strNormal;
-					std::string relPath = strTexKey.lexically_relative(TexPath).string();
-					std::shared_ptr<Texture> pTex = ResMgr::Find<Texture>(relPath);
+					std::shared_ptr<Texture> pTex = ResMgr::Find<Texture>(mContainers[i].vecMtrl[j].strNormal);
 					if (nullptr != pTex)
 					{
 						pMaterial->SetTexture(eTextureSlot::Normal, pTex);
@@ -538,9 +560,7 @@ namespace mh
 				}
 
 				{
-					stdfs::path strTexKey = mContainers[i].vecMtrl[j].strSpec;
-					std::string relPath = strTexKey.lexically_relative(TexPath).string();
-					std::shared_ptr<Texture> pTex = ResMgr::Find<Texture>(relPath);
+					std::shared_ptr<Texture> pTex = ResMgr::Find<Texture>(mContainers[i].vecMtrl[j].strSpec);
 					if (nullptr != pTex)
 					{
 						pMaterial->SetTexture(eTextureSlot::Specular, pTex);
@@ -548,9 +568,7 @@ namespace mh
 				}
 
 				{
-					stdfs::path strTexKey = mContainers[i].vecMtrl[j].strEmis;
-					std::string relPath = strTexKey.lexically_relative(TexPath).string();
-					std::shared_ptr<Texture> pTex = ResMgr::Find<Texture>(relPath);
+					std::shared_ptr<Texture> pTex = ResMgr::Find<Texture>(mContainers[i].vecMtrl[j].strEmis);
 					if (nullptr != pTex)
 					{
 						pMaterial->SetTexture(eTextureSlot::Emissive, pTex);

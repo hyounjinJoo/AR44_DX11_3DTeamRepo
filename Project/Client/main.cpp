@@ -25,7 +25,7 @@ BOOL APIENTRY wWinMain(_In_ HINSTANCE hInstance,
     Desc.GPUDesc.ResolutionY = (UINT)Desc.Height;
     Desc.GPUDesc.RefreshRate = 144u;
 
-    Desc.RunEditor = true;
+    Desc.RunEditor = false;
 
     return GameMainWindow::Run(Desc);
 }

@@ -24,8 +24,7 @@ namespace mh
 
 	eResult MeshData::Load(const std::filesystem::path& _path)
 	{
-		stdfs::path fullPath = PathMgr::GetAbsContentPath();// (eResourceType::MeshData);
-		fullPath /= define::strKey::GetResName(eResourceType::MeshData);
+		stdfs::path fullPath = PathMgr::GetRelResourcePath(eResourceType::MeshData);
 		fullPath /= _path;
 
 		FBXLoader loader;
