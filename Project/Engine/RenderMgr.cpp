@@ -1027,7 +1027,7 @@ namespace mh
 		vecLayoutDesc.push_back(LayoutDesc);
 
 		LayoutDesc = D3D11_INPUT_ELEMENT_DESC{};
-		LayoutDesc.AlignedByteOffset = 96;
+		LayoutDesc.AlignedByteOffset = 76;
 		LayoutDesc.Format = DXGI_FORMAT_R32G32B32A32_FLOAT;
 		LayoutDesc.InputSlot = 0;
 		LayoutDesc.InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
@@ -1036,7 +1036,7 @@ namespace mh
 		vecLayoutDesc.push_back(LayoutDesc);
 
 		LayoutDesc = D3D11_INPUT_ELEMENT_DESC{};
-		LayoutDesc.AlignedByteOffset = 128;
+		LayoutDesc.AlignedByteOffset = 92;
 		LayoutDesc.Format = DXGI_FORMAT_R32G32B32A32_FLOAT;
 		LayoutDesc.InputSlot = 0;
 		LayoutDesc.InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
@@ -1357,7 +1357,6 @@ namespace mh
 		dsDesc.DepthFunc = D3D11_COMPARISON_FUNC::D3D11_COMPARISON_LESS_EQUAL;
 		dsDesc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK::D3D11_DEPTH_WRITE_MASK_ALL;
 		dsDesc.StencilEnable = false;
-
 		GPUMgr::Device()->CreateDepthStencilState(&dsDesc
 			, mDepthStencilStates[(uint)eDSType::Less].GetAddressOf());
 

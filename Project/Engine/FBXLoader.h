@@ -51,7 +51,7 @@ namespace mh
 		std::vector<tFbxMaterial>				vecMtrl;
 
 		// Animation 관련 정보
-		bool								bAnimation;
+		bool									bAnimation;
 		std::vector<std::vector<tWeightsAndIndices>>	vecWI;
 
 		void Resize(UINT _iSize)

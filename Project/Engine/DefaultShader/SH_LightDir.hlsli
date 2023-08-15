@@ -6,18 +6,20 @@
 struct VSIn
 {
 	float4 Position : POSITION;
+	float2 UV : TEXCOORD;
 };
 
 struct VSOut
 {
 	float4 Position : SV_Position;
+	float2 UV : TEXCOORD;
 };
 
 
 struct PS_OUT
 {
-	float4 vDiffuse : SV_Target;
-	float4 vSpecular : SV_Target1;
+	float4 vDiffuse :	SV_Target0;
+	float4 vSpecular :	SV_Target1;
 };
 
 #endif

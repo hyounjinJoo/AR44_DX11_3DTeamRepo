@@ -13,10 +13,9 @@
 
 namespace mh
 {
-
 	Com_Transform::Com_Transform()
 		: IComponent(eComponentType::Transform)
-		, mSize(100.f, 100.f, 100.f)
+		, mSize(1.f, 1.f, 1.f)
 		, mScaleRelative(1.f, 1.f, 1.f)
 		, mIsScaleDefault(true)
 		, mbInheritScale(true)

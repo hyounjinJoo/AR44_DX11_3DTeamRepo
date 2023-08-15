@@ -42,7 +42,7 @@ namespace mh
 
 	void Com_Camera::Init()
 	{
-		RegisterCameraInRenderer();
+		//RegisterCameraInRenderer();
 	}
 
 	void Com_Camera::Update()
@@ -89,6 +89,8 @@ namespace mh
 
 		// Forward render
 		RenderMgr::GetMultiRenderTarget(eMRTType::Swapchain)->Bind();
+
+
 		//// defferd + swapchain merge
 		std::shared_ptr<Material> mergeMaterial = ResMgr::Find<Material>(strKey::Default::material::MergeMaterial);
 		std::shared_ptr<Mesh> rectMesh = ResMgr::Find<Mesh>(strKey::Default::mesh::RectMesh);

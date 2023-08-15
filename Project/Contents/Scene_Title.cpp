@@ -115,6 +115,7 @@ namespace mh
 			obj->SetName("fbxTextObj");
 			obj->AddComponent<Script_Player>();
 			object::Instantiate(eLayerType::Player, obj);
+			//obj->GetTransform()
 
 			obj->AddComponent<Script_TestHJ>();
 			obj->AddComponent<Script_JH>();

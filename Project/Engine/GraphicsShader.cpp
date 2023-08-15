@@ -32,7 +32,7 @@ namespace mh
 		, mTopology(D3D11_PRIMITIVE_TOPOLOGY::D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST)
 		, mRSType(eRSType::SolidBack)
 		, mDSType(eDSType::Less)
-		, mBSType(eBSType::AlphaBlend)
+		, mBSType(eBSType::Default)
 		, mErrorBlob()
 		, mbEditMode(false)
 	{
@@ -389,7 +389,7 @@ namespace mh
 		ID3D11BlendState*			bs = RenderMgr::GetBlendState(mBSType).Get();
 
 		pContext->RSSetState(rs);
-		pContext->OMSetDepthStencilState(ds, 0u);
+		pContext->OMSetDepthStencilState(ds, 10u);
 
 		constexpr float blendFactor[4] = { 0.f, 0.f, 0.f, 0.f };
 		pContext->OMSetBlendState(bs, blendFactor, UINT_MAX);

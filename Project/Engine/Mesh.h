@@ -17,10 +17,11 @@ namespace mh
 		float4 Pos;
 		float4 Color;
 		float2 UV;
-		float3 Tangent;
-		float3 BiNormal;
-		float3 Normal;
+		float3 Tangent;	//접선 벡터
+		float3 Normal;	//법선 벡터
+		float3 BiNormal;//종법선 벡터
 
+		//Animation 가중치 및 인덱스
 		float4 Weights;
 		float4 Indices;
 	};

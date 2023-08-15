@@ -4,6 +4,7 @@
 #include "SH_Globals.hlsli"
 #include "SH_Func_Animation3D.hlsli"
 
+
 struct VSIn
 {
 	float4 Position : POSITION;
@@ -23,8 +24,8 @@ struct VSOut
     
 	float3 ViewPos : POSITION;
     
-	float3 ViewNormal : NORMAL;
 	float3 ViewTanget : TANGENT;
+	float3 ViewNormal : NORMAL;
 	float3 ViewBiNormal : BINORMAL;
 };
 

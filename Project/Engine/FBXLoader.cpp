@@ -204,9 +204,9 @@ namespace mh
 				arrIdx[j] = iIdx;
 
 				//노말 정보를 받아오기
-				//GetTangent(_pFbxMesh, &Container, iIdx, iVtxOrder);
-				//GetBinormal(_pFbxMesh, &Container, iIdx, iVtxOrder);
-				//GetNormal(_pFbxMesh, &Container, iIdx, iVtxOrder);
+				GetTangent(_pFbxMesh, &Container, iIdx, iVtxOrder);
+				GetBinormal(_pFbxMesh, &Container, iIdx, iVtxOrder);
+				GetNormal(_pFbxMesh, &Container, iIdx, iVtxOrder);
 
 				GetUV(_pFbxMesh, &Container, iIdx, _pFbxMesh->GetTextureUVIndex(i, j));
 
