@@ -30,7 +30,7 @@ namespace mh
 		ComPtr<ID3D11Buffer>    IndexBuffer;
 		D3D11_BUFFER_DESC       tIBDesc;
 		UINT				    IdxCount;
-		void*					 pIdxSysMem;
+		//void*					 pIdxSysMem;
 	};
 
 	class FBXLoader;
@@ -50,9 +50,11 @@ namespace mh
 
 		template <typename Vertex>
 		inline bool CreateVertexBuffer(const std::vector<Vertex>& _vecVtx);
-		bool CreateVertexBuffer(void* _data, size_t _dataStride, size_t _count);
+		bool CreateVertexBuffer(const void* _data, size_t _dataStride, size_t _count);
 
-		bool CreateIndexBuffer(void* _data, size_t _count);
+
+		bool CreateIndexBuffer(const void* _data, size_t _count);
+		inline bool CreateIndexBuffer(const std::vector<UINT>& _indices);
 
 		void BindBuffer(UINT _subSet = 0u) const;
 		void Render(UINT _subSet = 0u) const;
@@ -60,7 +62,7 @@ namespace mh
 		
 		void RenderInstanced(UINT _subSet, UINT _instanceCount) const;
 
-		const std::vector<Vertex3D> GetVertices() { return mVertices; }
+		//const std::vector<Vertex3D> GetVertices() { return mVertices; }
 		UINT GetSubsetCount() { return (UINT)mIndexInfos.size(); }
 
 
@@ -79,7 +81,7 @@ namespace mh
 		D3D11_BUFFER_DESC mVBDesc;
 		uint mVertexByteStride;
 		uint mVertexCount;
-		std::vector<Vertex3D> mVertices;
+		//std::vector<Vertex3D> mVertices;
 
 		std::vector<tIndexInfo>		mIndexInfos;
 
@@ -111,6 +113,11 @@ namespace mh
 	template<typename Vertex>
 	inline bool Mesh::CreateVertexBuffer(const std::vector<Vertex>& _vecVtx)
 	{
-		return CreateVertexBuffer((void*)_vecVtx.data(), sizeof(Vertex), _vecVtx.size());
+		return CreateVertexBuffer(static_cast<const void*>(_vecVtx.data()), sizeof(Vertex), _vecVtx.size());
 	}
+	inline bool Mesh::CreateIndexBuffer(const std::vector<UINT>& _indices)
+	{
+		return CreateIndexBuffer(static_cast<const void*>(_indices.data()), _indices.size());
+	}
+
 }

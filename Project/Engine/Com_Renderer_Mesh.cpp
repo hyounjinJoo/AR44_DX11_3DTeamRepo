@@ -68,12 +68,15 @@ namespace mh
 			}
 		}
 			
+		
 		//Render
 		UINT iSubsetCount = GetMesh()->GetSubsetCount();
 		for (UINT i = 0; i < iSubsetCount; ++i)
 		{
 			if (nullptr != GetMaterial(i))
 			{
+				GetMesh()->BindBuffer(i);
+
 				// 사용할 재질 업데이트
 				GetMaterial(i)->Bind();
 

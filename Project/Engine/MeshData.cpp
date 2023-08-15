@@ -24,7 +24,8 @@ namespace mh
 
 	eResult MeshData::Load(const std::filesystem::path& _path)
 	{
-		stdfs::path fullPath = PathMgr::GetRelResourcePath(eResourceType::MeshData);
+		stdfs::path fullPath = PathMgr::GetAbsContentPath();// (eResourceType::MeshData);
+		fullPath /= define::strKey::GetResName(eResourceType::MeshData);
 		fullPath /= _path;
 
 		FBXLoader loader;
@@ -53,7 +54,7 @@ namespace mh
 		for (UINT i = 0; i < loader.GetContainer(0).vecMtrl.size(); ++i)
 		{
 			// 예외처리 (material 이름이 입력 안되어있을 수도 있다.)
-			std::string strKey = StringConv::ConvertUnicodeToUTF8(loader.GetContainer(0).vecMtrl[i].strMtrlName);
+			std::string strKey = loader.GetContainer(0).vecMtrl[i].strMtrlName;
 			std::shared_ptr<Material> pMtrl = ResMgr::Find<Material>(strKey);
 			MH_ASSERT(pMtrl.get());
 

@@ -22,11 +22,11 @@ namespace mh
 	struct tFbxMaterial
 	{
 		tMtrlData			tMtrl;
-		std::wstring		strMtrlName;
-		std::wstring		strDiff;
-		std::wstring		strNormal;
-		std::wstring		strSpec;
-		std::wstring		strEmis;
+		std::string		strMtrlName;
+		std::string		strDiff;
+		std::string		strNormal;
+		std::string		strSpec;
+		std::string		strEmis;
 	};
 
 	struct tWeightsAndIndices
@@ -37,7 +37,7 @@ namespace mh
 
 	struct tContainer
 	{
-		std::wstring								strName;
+		std::string								strName;
 		std::vector<float3>						vecPos;
 		std::vector<float3>						vecTangent;
 		std::vector<float3>						vecBinormal;
@@ -75,23 +75,22 @@ namespace mh
 
 	struct tBone
 	{
-		std::wstring				strBoneName;
-		int					iDepth;			// 계층구조 깊이
-		int					iParentIndx;	// 부모 Bone 의 인덱스
-		fbxsdk::FbxAMatrix			matOffset;		// Offset 행렬( -> 뿌리 -> Local)
-		fbxsdk::FbxAMatrix			matBone;
-		std::vector<tKeyFrame>	vecKeyFrame;
+		std::string				strBoneName{};
+		int					iDepth{};			// 계층구조 깊이
+		int					iParentIndx{};	// 부모 Bone 의 인덱스
+		fbxsdk::FbxAMatrix			matOffset{};		// Offset 행렬( -> 뿌리 -> Local)
+		fbxsdk::FbxAMatrix			matBone{};
+		std::vector<tKeyFrame>	vecKeyFrame{};
 	};
 
 	struct tAnimClip
 	{
-		std::wstring		strName;
-		fbxsdk::FbxTime		tStartTime;
-		fbxsdk::FbxTime		tEndTime;
+		std::string		strName{};
+		fbxsdk::FbxTime		tStartTime{};
+		fbxsdk::FbxTime		tEndTime{};
 		
-
-		fbxsdk::FbxLongLong	llTimeLength;
-		fbxsdk::FbxTime::EMode eMode;
+		fbxsdk::FbxLongLong	llTimeLength{};
+		fbxsdk::FbxTime::EMode eMode{};
 	};
 
 	class FBXLoader :
@@ -103,7 +102,7 @@ namespace mh
 
 	public:
 		void Init();
-		void LoadFbx(const std::wstring& _strPath);
+		define::eResult LoadFbx(const std::filesystem::path& _strPath);
 
 		// FbxMatrix -> Matrix
 		static MATRIX GetMatrixFromFbxMatrix(fbxsdk::FbxAMatrix& _mat);
@@ -127,14 +126,14 @@ namespace mh
 		void GetUV(fbxsdk::FbxMesh* _pMesh, tContainer* _pContainer, int _iIdx, int _iVtxOrder);
 
 		float4 GetMtrlData(fbxsdk::FbxSurfaceMaterial* _pSurface, const char* _pMtrlName, const char* _pMtrlFactorName);
-		std::wstring GetMtrlTextureName(fbxsdk::FbxSurfaceMaterial* _pSurface, const char* _pMtrlProperty);
+		std::string GetMtrlTextureName(fbxsdk::FbxSurfaceMaterial* _pSurface, const char* _pMtrlProperty);
 
 		void LoadTexture();
 		void CreateMaterial();
 
 		// Animation
 		void LoadSkeleton(fbxsdk::FbxNode* _pNode);
-		void LoadSkeleton_Re(fbxsdk::FbxNode* _pNode, int _iDepth, int _iIdx, int _iParentIdx);
+		void LoadSkeletonRecursive(fbxsdk::FbxNode* _pNode, int _iDepth, int _iIdx, int _iParentIdx);
 		void LoadAnimationClip();
 		void Triangulate(fbxsdk::FbxNode* _pNode);
 

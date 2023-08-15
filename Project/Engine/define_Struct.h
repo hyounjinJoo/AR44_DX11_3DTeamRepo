@@ -86,7 +86,7 @@ namespace mh::define
 
 	struct tMTBone
 	{
-		std::wstring				strBoneName;
+		std::string				strBoneName;
 		int					iDepth;
 		int					iParentIndx;
 		MATRIX				matOffset;	// Offset 행렬(뼈 -> 루트 까지의 행렬)
@@ -96,7 +96,7 @@ namespace mh::define
 
 	struct tMTAnimClip
 	{
-		std::wstring			strAnimName;
+		std::string			strAnimName;
 		int				iStartFrame;
 		int				iEndFrame;
 		int				iFrameLength;

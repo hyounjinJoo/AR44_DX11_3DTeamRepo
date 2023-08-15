@@ -11,20 +11,25 @@ namespace mh
 {
 	Mesh::Mesh()
 		: IRes(eResourceType::Mesh)
+		, mVertexBuffer{}
 		, mVBDesc{}
-		, mVertexByteStride()
-		, mVertexCount()
+		, mVertexByteStride{}
+		, mVertexCount{}
+		//, mVertices{}
 		, mIndexInfos{}
+		, m_vecAnimClip{}
+		, m_vecBones{}
+		, m_pBoneFrameData{}
+		, m_pBoneOffset{}
 	{
-
 	}
 
 	Mesh::~Mesh()
 	{
 		for (size_t i = 0; i < mIndexInfos.size(); ++i)
 		{
-			if (mIndexInfos[i].pIdxSysMem)
-				delete mIndexInfos[i].pIdxSysMem;
+			//if (mIndexInfos[i].pIdxSysMem)
+			//	delete mIndexInfos[i].pIdxSysMem;
 		}
 
 		if (m_pBoneFrameData)
@@ -39,7 +44,7 @@ namespace mh
 		return eResult::Fail_NotImplemented;
 	}
 
-	bool Mesh::CreateVertexBuffer(void* _data, size_t _dataStride, size_t _count)
+	bool Mesh::CreateVertexBuffer(const void* _data, size_t _dataStride, size_t _count)
 	{
 		mVertexByteStride = (uint)_dataStride;
 		mVertexCount = (uint)_count;
@@ -66,7 +71,7 @@ namespace mh
 		return Result;
 	}
 
-	bool Mesh::CreateIndexBuffer(void* _data, size_t _count)
+	bool Mesh::CreateIndexBuffer(const void* _data, size_t _count)
 	{
 		tIndexInfo indexInfo = {};
 		indexInfo.IdxCount = (UINT)_count;
@@ -85,8 +90,8 @@ namespace mh
 		if (FAILED(GPUMgr::Device()->CreateBuffer(&indexInfo.tIBDesc, &subData, indexInfo.IndexBuffer.GetAddressOf())))
 			return false;
 
-		indexInfo.pIdxSysMem = new UINT[indexInfo.IdxCount];
-		memcpy(indexInfo.pIdxSysMem, _data, sizeof(UINT) * indexInfo.IdxCount);
+		//indexInfo.pIdxSysMem = new UINT[indexInfo.IdxCount];
+		//memcpy(indexInfo.pIdxSysMem, _data, sizeof(UINT) * indexInfo.IdxCount);
 
 		mIndexInfos.push_back(indexInfo);
 		return true;
@@ -126,24 +131,7 @@ namespace mh
 		const tContainer* container = &(_loader->GetContainer(0));
 
 		UINT iVtxCount = (UINT)container->vecPos.size();
-
-		D3D11_BUFFER_DESC tVtxDesc = {};
-
-		tVtxDesc.ByteWidth = sizeof(Vertex3D) * iVtxCount;
-		tVtxDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
-
-		tVtxDesc.Usage = D3D11_USAGE_DEFAULT;
-		if (D3D11_USAGE_DYNAMIC == tVtxDesc.Usage)
-			tVtxDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
-
 		std::vector<Vertex3D> vecVtx3d(iVtxCount);
-
-		//mVertices.resize(iVtxCount);
-
-		//tSub.pSysMem = malloc(tVtxDesc.ByteWidth);
-		//Vertex3D* pSys = (Vertex3D*)tSub.pSysMem;
-
-		//MH_ASSERT(pSys);
 		for (UINT i = 0; i < iVtxCount; ++i)
 		{
 			vecVtx3d[i].Pos = float4(container->vecPos[i], 1.f);
@@ -155,56 +143,85 @@ namespace mh
 			vecVtx3d[i].Weights = container->vecWeights[i];
 			vecVtx3d[i].Indices = container->vecIndices[i];
 		}
-
-		D3D11_SUBRESOURCE_DATA tSub = {};
-		tSub.pSysMem = vecVtx3d.data();
-
-		ComPtr<ID3D11Buffer> pVB = NULL;
-		if (FAILED(GPUMgr::Device()->CreateBuffer(&tVtxDesc, &tSub, pVB.GetAddressOf())))
-		{
-			return NULL;
-		}
-
 		std::shared_ptr<Mesh> pMesh = std::make_shared<Mesh>();
-		pMesh->mVertexBuffer = pVB;
-		pMesh->mVBDesc = tVtxDesc;
-		pMesh->mVertices = std::move(vecVtx3d);
-		pMesh->mVertexByteStride = sizeof(Vertex3D);
-		pMesh->mVertexCount = (UINT)pMesh->mVertices.size();
+		pMesh->CreateVertexBuffer<Vertex3D>(vecVtx3d);
+
+		//D3D11_BUFFER_DESC tVtxDesc = {};
+
+		//tVtxDesc.ByteWidth = sizeof(Vertex3D) * iVtxCount;
+		//tVtxDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
+
+		//tVtxDesc.Usage = D3D11_USAGE_DEFAULT;
+		//if (D3D11_USAGE_DYNAMIC == tVtxDesc.Usage)
+		//	tVtxDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+
+		
+
+		//mVertices.resize(iVtxCount);
+		//tSub.pSysMem = malloc(tVtxDesc.ByteWidth);
+		//Vertex3D* pSys = (Vertex3D*)tSub.pSysMem;
+
+		//MH_ASSERT(pSys);
+
+
+		//D3D11_SUBRESOURCE_DATA tSub = {};
+		//tSub.pSysMem = vecVtx3d.data();
+
+		//ComPtr<ID3D11Buffer> pVB = NULL;
+		//if (FAILED(GPUMgr::Device()->CreateBuffer(&tVtxDesc, &tSub, pVB.GetAddressOf())))
+		//{
+		//	return NULL;
+		//}
+
+
+		//pMesh->mVertexBuffer = pVB;
+		//pMesh->mVBDesc = tVtxDesc;
+		////pMesh->mVertices = std::move(vecVtx3d);
+		//pMesh->mVertexByteStride = sizeof(Vertex3D);
+		//pMesh->mVertexCount = (UINT)vecVtx3d.size();
+
+		
 
 		//pMesh->mVertexSysMem = pSys;
 
 		// 인덱스 정보
+		
+		//Info.IdxCount = (UINT)container->vecIdx.size();
 		UINT iIdxBufferCount = (UINT)container->vecIdx.size();
-		D3D11_BUFFER_DESC tIdxDesc = {};
 
+		//D3D11_BUFFER_DESC tIdxDesc = {};
+
+		
 		for (UINT i = 0; i < iIdxBufferCount; ++i)
 		{
-			tIdxDesc.ByteWidth = (UINT)container->vecIdx[i].size() * sizeof(UINT); // Index Format 이 R32_UINT 이기 때문
-			tIdxDesc.BindFlags = D3D11_BIND_INDEX_BUFFER;
-			tIdxDesc.Usage = D3D11_USAGE_DEFAULT;
-			if (D3D11_USAGE_DYNAMIC == tIdxDesc.Usage)
-				tIdxDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+			pMesh->CreateIndexBuffer(container->vecIdx[i]);
 
-			void* pSysMem = malloc(tIdxDesc.ByteWidth);
-			MH_ASSERT(nullptr != pSysMem);
+			//tIndexInfo Info{};
+			//Info.tIBDesc.ByteWidth = (UINT)container->vecIdx[i].size() * sizeof(UINT); // Index Format 이 R32_UINT 이기 때문
+			//Info.tIBDesc.BindFlags = D3D11_BIND_INDEX_BUFFER;
+			//Info.tIBDesc.Usage = D3D11_USAGE_DEFAULT;
 
-			memcpy(pSysMem, container->vecIdx[i].data(), tIdxDesc.ByteWidth);
-			tSub.pSysMem = pSysMem;
 
-			ComPtr<ID3D11Buffer> pIB = nullptr;
-			if (FAILED(GPUMgr::Device()->CreateBuffer(&tIdxDesc, &tSub, pIB.GetAddressOf())))
-			{
-				return NULL;
-			}
+			////void* pSysMem = malloc(tIdxDesc.ByteWidth);
+			////MH_ASSERT(nullptr != pSysMem);
 
-			tIndexInfo info = {};
-			info.tIBDesc = tIdxDesc;
-			info.IdxCount = (UINT)container->vecIdx[i].size();
-			info.pIdxSysMem = pSysMem;
-			info.IndexBuffer = pIB;
+			////memcpy(pSysMem, container->vecIdx[i].data(), tIdxDesc.ByteWidth);
+			//D3D11_SUBRESOURCE_DATA tSub{};
+			//tSub.pSysMem = pSysMem;
 
-			pMesh->mIndexInfos.push_back(info);
+			//ComPtr<ID3D11Buffer> pIB = nullptr;
+			//if (FAILED(GPUMgr::Device()->CreateBuffer(&tIdxDesc, &tSub, pIB.GetAddressOf())))
+			//{
+			//	return NULL;
+			//}
+
+			//tIndexInfo info = {};
+			//info.tIBDesc = tIdxDesc;
+			//info.IdxCount = (UINT)container->vecIdx[i].size();
+			//info.pIdxSysMem = pSysMem;
+			//info.IndexBuffer = pIB;
+
+			//pMesh->mIndexInfos.push_back(info);
 		}
 
 

@@ -7,9 +7,10 @@
 #include "Material.h"
 #include "define_Util.h"
 
+using namespace fbxsdk;
 namespace mh
 {
-	using namespace fbxsdk;
+	
 	namespace stdfs = std::filesystem;
 
 	FBXLoader::FBXLoader()
@@ -57,26 +58,27 @@ namespace mh
 			assert(NULL);
 	}
 
-	void FBXLoader::LoadFbx(const std::wstring& _strPath)
+	eResult FBXLoader::LoadFbx(const stdfs::path& _strPath)
 	{
 		mContainers.clear();
 
 		mImporter = FbxImporter::Create(mManager, "");
 
-		//std::wstring str = wstring_convert<codecvt_utf8<wchar_t>>().from_bytes(strName.c_str());
-		std::string strPath = StringConv::ConvertUnicodeToUTF8(_strPath);
-
-		if (!mImporter->Initialize(strPath.c_str(), -1, mManager->GetIOSettings()))
-			assert(nullptr);
+		if (false == mImporter->Initialize(_strPath.string().c_str(), -1, mManager->GetIOSettings()))
+		{
+			ERROR_MESSAGE_W(L"FBX 로더 초기화 실패");
+		}
 
 		mImporter->Import(mScene);
 
-		/*FbxAxisSystem originAxis = FbxAxisSystem::eMax;
-		originAxis = mScene->GetGlobalSettings().GetAxisSystem();
-		FbxAxisSystem DesireAxis = FbxAxisSystem::DirectX;
-		DesireAxis.ConvertScene(mScene);
-		originAxis = mScene->GetGlobalSettings().GetAxisSystem();*/
+		//Former
+		//FbxAxisSystem originAxis = FbxAxisSystem::eMax;
+		//originAxis = mScene->GetGlobalSettings().GetAxisSystem();
+		//FbxAxisSystem DesireAxis = FbxAxisSystem::DirectX;
+		//DesireAxis.ConvertScene(mScene);
+		//originAxis = mScene->GetGlobalSettings().GetAxisSystem();
 
+		//Latter
 		mScene->GetGlobalSettings().SetAxisSystem(FbxAxisSystem::Max);
 
 		// Bone 정보 읽기
@@ -101,6 +103,8 @@ namespace mh
 
 		// 필요한 메테리얼 생성
 		CreateMaterial();
+
+		return eResult::Success;
 	}
 
 	MATRIX FBXLoader::GetMatrixFromFbxMatrix(fbxsdk::FbxAMatrix& _mat)
@@ -158,7 +162,7 @@ namespace mh
 
 		std::string strName = _pFbxMesh->GetName();
 
-		Container.strName = StringConv::ConvertUTF8ToUnicode(strName);
+		Container.strName = strName;
 
 		int iVtxCnt = _pFbxMesh->GetControlPointsCount();
 		Container.Resize(iVtxCnt);
@@ -198,9 +202,11 @@ namespace mh
 				int iIdx = _pFbxMesh->GetPolygonVertex(i, j);
 				arrIdx[j] = iIdx;
 
-				GetTangent(_pFbxMesh, &Container, iIdx, iVtxOrder);
-				GetBinormal(_pFbxMesh, &Container, iIdx, iVtxOrder);
-				GetNormal(_pFbxMesh, &Container, iIdx, iVtxOrder);
+				//노말 정보를 받아오기
+				//GetTangent(_pFbxMesh, &Container, iIdx, iVtxOrder);
+				//GetBinormal(_pFbxMesh, &Container, iIdx, iVtxOrder);
+				//GetNormal(_pFbxMesh, &Container, iIdx, iVtxOrder);
+
 				GetUV(_pFbxMesh, &Container, iIdx, _pFbxMesh->GetTextureUVIndex(i, j));
 
 				++iVtxOrder;
@@ -220,7 +226,7 @@ namespace mh
 
 		std::string str = _pMtrlSur->GetName();
 		
-		tMtrlInfo.strMtrlName = StringConv::ConvertUTF8ToUnicode(str);
+		tMtrlInfo.strMtrlName = str;
 
 		// Diff
 		tMtrlInfo.tMtrl.vDiff = GetMtrlData(_pMtrlSur
@@ -257,9 +263,11 @@ namespace mh
 		, int _iIdx		 /*해당 정점의 인덱스*/
 		, int _iVtxOrder /*폴리곤 단위로 접근하는 순서*/)
 	{
+
 		int iTangentCnt = _pMesh->GetElementTangentCount();
-		if (1 != iTangentCnt)
-			assert(NULL); // 정점 1개가 포함하는 탄젠트 정보가 2개 이상이다.
+		//MH_ASSERT(1 == iTangentCnt);// 정점 1개가 포함하는 탄젠트 정보가 2개 이상이다.
+		if (iTangentCnt < 1)
+			return;
 
 		// 탄젠트 data 의 시작 주소
 		FbxGeometryElementTangent* pTangent = _pMesh->GetElementTangent();
@@ -387,9 +395,9 @@ namespace mh
 		return vRetVal;
 	}
 
-	std::wstring FBXLoader::GetMtrlTextureName(FbxSurfaceMaterial* _pSurface, const char* _pMtrlProperty)
+	std::string FBXLoader::GetMtrlTextureName(FbxSurfaceMaterial* _pSurface, const char* _pMtrlProperty)
 	{
-		std::string strName;
+		std::string retStr;
 
 		FbxProperty TextureProperty = _pSurface->FindProperty(_pMtrlProperty);
 		if (TextureProperty.IsValid())
@@ -400,10 +408,11 @@ namespace mh
 			{
 				FbxFileTexture* pFbxTex = TextureProperty.GetSrcObject<FbxFileTexture>(0);
 				if (NULL != pFbxTex)
-					strName = pFbxTex->GetFileName();
+					retStr = pFbxTex->GetRelativeFileName();
 			}
 		}
-		return StringConv::ConvertUTF8ToUnicode(strName);
+
+		return retStr;
 	}
 
 	void FBXLoader::LoadTexture()
@@ -421,15 +430,18 @@ namespace mh
 		stdfs::path path_filename;
 		stdfs::path path_dest;
 
+
 		for (UINT i = 0; i < mContainers.size(); ++i)
 		{
 			for (UINT j = 0; j < mContainers[i].vecMtrl.size(); ++j)
 			{
 				std::vector<stdfs::path> vecPath;
-				vecPath.push_back(mContainers[i].vecMtrl[j].strDiff.c_str());
-				vecPath.push_back(mContainers[i].vecMtrl[j].strNormal.c_str());
-				vecPath.push_back(mContainers[i].vecMtrl[j].strSpec.c_str());
-				vecPath.push_back(mContainers[i].vecMtrl[j].strEmis.c_str());
+				vecPath.reserve(4);
+
+				vecPath.push_back(mContainers[i].vecMtrl[j].strDiff);
+				vecPath.push_back(mContainers[i].vecMtrl[j].strNormal);
+				vecPath.push_back(mContainers[i].vecMtrl[j].strSpec);
+				vecPath.push_back(mContainers[i].vecMtrl[j].strEmis);
 
 				for (size_t k = 0; k < vecPath.size(); ++k)
 				{
@@ -438,11 +450,11 @@ namespace mh
 
 					path_origin = vecPath[k];
 					path_filename = vecPath[k].filename();
-					path_dest = path_fbx_texture / path_filename.wstring();
+					path_dest = path_fbx_texture / path_filename;
 
 					if (false == exists(path_dest))
 					{
-						copy(path_origin, path_dest);
+						stdfs::copy(path_origin, path_dest);
 					}
 
 					stdfs::path loadPath = "FBXTex";
@@ -451,10 +463,10 @@ namespace mh
 
 					switch (k)
 					{
-					case 0: mContainers[i].vecMtrl[j].strDiff = path_dest; break;
-					case 1: mContainers[i].vecMtrl[j].strNormal = path_dest; break;
-					case 2: mContainers[i].vecMtrl[j].strSpec = path_dest; break;
-					case 3: mContainers[i].vecMtrl[j].strEmis = path_dest; break;
+					case 0: mContainers[i].vecMtrl[j].strDiff = path_dest.string(); break;
+					case 1: mContainers[i].vecMtrl[j].strNormal = path_dest.string(); break;
+					case 2: mContainers[i].vecMtrl[j].strSpec = path_dest.string(); break;
+					case 3: mContainers[i].vecMtrl[j].strEmis = path_dest.string(); break;
 					}
 				}
 			}
@@ -465,8 +477,8 @@ namespace mh
 
 	void FBXLoader::CreateMaterial()
 	{
-		std::wstring strMtrlName;
-		std::wstring strPath;
+		std::string strMtrlName;
+		std::string strPath;
 
 		for (UINT i = 0; i < mContainers.size(); ++i)
 		{
@@ -475,15 +487,15 @@ namespace mh
 				// Material 이름짓기
 				strMtrlName = mContainers[i].vecMtrl[j].strMtrlName;
 				if (strMtrlName.empty())
-					strMtrlName = stdfs::path(mContainers[i].vecMtrl[j].strDiff).stem();
+					strMtrlName = stdfs::path(mContainers[i].vecMtrl[j].strDiff).stem().string();
 
-				strPath = L"material\\";
-				strPath += strMtrlName + L".mtrl";
+				strPath = "material\\";
+				strPath += strMtrlName + ".mtrl";
 
 				// 재질 이름
 				mContainers[i].vecMtrl[j].strMtrlName = strPath;
 
-				std::string strName = StringConv::ConvertUnicodeToUTF8(strPath);
+				std::string strName = strPath;
 
 				// 이미 로딩된 재질이면 로딩된 것을 사용
 				std::shared_ptr<Material> pMaterial = ResMgr::Find<Material>(strName);
@@ -502,7 +514,7 @@ namespace mh
 				
 				const stdfs::path& TexPath = PathMgr::GetRelResourcePath(eResourceType::Texture);
 				{
-					stdfs::path strTexKey = StringConv::ConvertUnicodeToUTF8(mContainers[i].vecMtrl[j].strDiff);
+					stdfs::path strTexKey = mContainers[i].vecMtrl[j].strDiff;
 					std::string relPath = strTexKey.lexically_relative(TexPath).string();
 
 					//TODO: 여기 지저분한거 수정
@@ -515,7 +527,7 @@ namespace mh
 
 					
 				{
-					stdfs::path strTexKey = StringConv::ConvertUnicodeToUTF8(mContainers[i].vecMtrl[j].strNormal);
+					stdfs::path strTexKey = mContainers[i].vecMtrl[j].strNormal;
 					std::string relPath = strTexKey.lexically_relative(TexPath).string();
 					std::shared_ptr<Texture> pTex = ResMgr::Find<Texture>(relPath);
 					if (nullptr != pTex)
@@ -526,7 +538,7 @@ namespace mh
 				}
 
 				{
-					stdfs::path strTexKey = StringConv::ConvertUnicodeToUTF8(mContainers[i].vecMtrl[j].strSpec);
+					stdfs::path strTexKey = mContainers[i].vecMtrl[j].strSpec;
 					std::string relPath = strTexKey.lexically_relative(TexPath).string();
 					std::shared_ptr<Texture> pTex = ResMgr::Find<Texture>(relPath);
 					if (nullptr != pTex)
@@ -536,7 +548,7 @@ namespace mh
 				}
 
 				{
-					stdfs::path strTexKey = StringConv::ConvertUnicodeToUTF8(mContainers[i].vecMtrl[j].strEmis);
+					stdfs::path strTexKey = mContainers[i].vecMtrl[j].strEmis;
 					std::string relPath = strTexKey.lexically_relative(TexPath).string();
 					std::shared_ptr<Texture> pTex = ResMgr::Find<Texture>(relPath);
 					if (nullptr != pTex)
@@ -563,10 +575,10 @@ namespace mh
 	{
 		int iChildCount = _pNode->GetChildCount();
 
-		LoadSkeleton_Re(_pNode, 0, 0, -1);
+		LoadSkeletonRecursive(_pNode, 0, 0, -1);
 	}
 
-	void FBXLoader::LoadSkeleton_Re(FbxNode* _pNode, int _iDepth, int _iIdx, int _iParentIdx)
+	void FBXLoader::LoadSkeletonRecursive(FbxNode* _pNode, int _iDepth, int _iIdx, int _iParentIdx)
 	{
 		FbxNodeAttribute* pAttr = _pNode->GetNodeAttribute();
 
@@ -574,9 +586,7 @@ namespace mh
 		{
 			tBone* pBone = new tBone;
 
-			std::string strBoneName = _pNode->GetName();
-
-			pBone->strBoneName = StringConv::ConvertUTF8ToUnicode(strBoneName);
+			pBone->strBoneName = _pNode->GetName();
 			pBone->iDepth = _iDepth++;
 			pBone->iParentIndx = _iParentIdx;
 
@@ -586,7 +596,7 @@ namespace mh
 		int iChildCount = _pNode->GetChildCount();
 		for (int i = 0; i < iChildCount; ++i)
 		{
-			LoadSkeleton_Re(_pNode->GetChild(i), _iDepth, (int)mBones.size(), _iIdx);
+			LoadSkeletonRecursive(_pNode->GetChild(i), _iDepth, (int)mBones.size(), _iIdx);
 		}
 	}
 
@@ -608,9 +618,7 @@ namespace mh
 
 			tAnimClip* pAnimClip = new tAnimClip;
 
-			std::string strClipName = pAnimStack->GetName();
-
-			pAnimClip->strName = StringConv::ConvertUTF8ToUnicode(strClipName);
+			pAnimClip->strName = pAnimStack->GetName();
 
 			FbxTakeInfo* pTakeInfo = mScene->GetTakeInfo(pAnimStack->GetName());
 			pAnimClip->tStartTime = pTakeInfo->mLocalTimeSpan.GetStart();
@@ -846,11 +854,9 @@ namespace mh
 
 	int FBXLoader::FindBoneIndex(const std::string& _strBoneName)
 	{
-		std::wstring strBoneName = std::wstring(_strBoneName.begin(), _strBoneName.end());
-
 		for (UINT i = 0; i < mBones.size(); ++i)
 		{
-			if (mBones[i]->strBoneName == strBoneName)
+			if (mBones[i]->strBoneName == _strBoneName)
 				return i;
 		}
 

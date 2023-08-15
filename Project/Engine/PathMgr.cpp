@@ -15,6 +15,7 @@ namespace mh
 		AtExit::AddFunc(PathMgr::Release);
 
 		mAbsolutePath = std::filesystem::current_path();
+		mAbsolutePath /= define::strKey::DirName_Content;
 
 		mRelativePath_ShaderBin = ".";
 		mRelativePath_ShaderBin /= mh::define::strKey::DirName_ShaderBin;
