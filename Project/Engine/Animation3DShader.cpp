@@ -1,6 +1,8 @@
 #include "PCH_Engine.h"
 #include "Animation3DShader.h"
 
+#include "RenderMgr.h"
+#include "ConstBuffer.h"
 #include "StructBuffer.h"
 #include "DefaultShader/SH_Resource.hlsli"
 
@@ -27,6 +29,10 @@ namespace mh
 		m_pFrameDataBuffer->BindDataSRV(Register_t_g_arrFrameTrans, eShaderStageFlag::CS); // t16
 		m_pOffsetMatBuffer->BindDataSRV(Register_t_g_arrOffset, eShaderStageFlag::CS); // t17
 		m_pOutputBuffer->BindDataUAV(Register_u_g_arrFinalMat);   // u0
+
+		ConstBuffer* pAnimCB = RenderMgr::GetConstBuffer(eCBType::Animation3D);
+		pAnimCB->SetData(&mAnim3DData);
+		pAnimCB->BindData();
 
 		uint3 DataCounts{};
 		DataCounts.x = mAnim3DData.BoneCount;

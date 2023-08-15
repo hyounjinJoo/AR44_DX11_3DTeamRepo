@@ -79,16 +79,13 @@ namespace mh
 			Renderer->SetMaterial(mMaterials[i], i);
 		}
 
-		if (false == mMesh->IsAnimMesh())
-			return pNewObj;
+		if (mMesh->IsAnimMesh())
+		{
+			Com_Animator3D* Animator3D = pNewObj->AddComponent<Com_Animator3D>();
 
-		Com_Animator3D* Animator3D = pNewObj->AddComponent<Com_Animator3D>();
-
-		Animator3D->SetBones(mMesh->GetBones());
-		Animator3D->SetAnimClip(mMesh->GetAnimClip());
-
-		Animator3D->SetBones(mMesh->GetBones());
-		Animator3D->SetAnimClip(mMesh->GetAnimClip());
+			Animator3D->SetBones(mMesh->GetBones());
+			Animator3D->SetAnimClip(mMesh->GetAnimClip());
+		}
 
 		return pNewObj;
 	}

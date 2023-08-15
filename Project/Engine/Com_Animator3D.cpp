@@ -149,6 +149,15 @@ namespace mh
 		}
 	}
 
+	void Com_Animator3D::Init()
+	{
+		tSBufferDesc desc{};
+		desc.REGISLOT_u_UAV = Register_u_g_arrFinalMat;
+		desc.eSBufferType = eStructBufferType::READ_WRITE;
+		
+		m_pBoneFinalMatBuffer->SetDesc(desc);
+	}
+
 
 	void Com_Animator3D::check_mesh(std::shared_ptr<Mesh> _pMesh)
 	{

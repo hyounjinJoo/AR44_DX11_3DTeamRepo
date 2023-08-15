@@ -13,6 +13,7 @@ PS_OUT main(VSOut _in)
 		discard;
       
 	float4 vViewNormal = normalTarget.Sample(anisotropicSampler, vUV);
+	
         
 	tLightColor lightcolor = (tLightColor) 0.f;
 	CalculateLight3D(vViewPos.xyz, vViewNormal.xyz, CB_NumberOfLight.indexOfLight, lightcolor);

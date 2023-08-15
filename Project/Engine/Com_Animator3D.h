@@ -20,7 +20,11 @@ namespace mh
 
 		virtual ~Com_Animator3D();
 
+		virtual void Init() override;
+		virtual void Update() {};
 		virtual void FixedUpdate() override;
+		virtual void Render() {};
+
 
 		void SetBones(const std::vector<define::tMTBone>* _vecBones) { m_pVecBones = _vecBones; m_vecFinalBoneMat.resize(m_pVecBones->size()); }
 		void SetAnimClip(const std::vector<define::tMTAnimClip>* _vecAnimClip);
@@ -32,9 +36,7 @@ namespace mh
 		virtual void Binds();
 		virtual void Clear();
 
-		virtual void Init() {};
-		virtual void Update() {};
-		virtual void Render() {};
+
 
 	private:
 		void check_mesh(std::shared_ptr<Mesh> _pMesh);
@@ -45,16 +47,16 @@ namespace mh
 
         std::vector<float>				m_vecClipUpdateTime;
         std::vector<MATRIX>				m_vecFinalBoneMat; // 텍스쳐에 전달할 최종 행렬정보
-        int							m_iFrameCount; // 30
-        double						m_dCurTime;
-        int							m_iCurClip; // 클립 인덱스	
+        int								m_iFrameCount; // 30
+        double							m_dCurTime;
+        int								m_iCurClip; // 클립 인덱스	
 
-        int							m_iFrameIdx; // 클립의 현재 프레임
-        int							m_iNextFrameIdx; // 클립의 다음 프레임
-        float						m_fRatio;	// 프레임 사이 비율
+        int								m_iFrameIdx; // 클립의 현재 프레임
+        int								m_iNextFrameIdx; // 클립의 다음 프레임
+        float							m_fRatio;	// 프레임 사이 비율
 
-        StructBuffer* m_pBoneFinalMatBuffer;  // 특정 프레임의 최종 행렬
-        bool						m_bFinalMatUpdate; // 최종행렬 연산 수행여부
+        StructBuffer*					m_pBoneFinalMatBuffer;  // 특정 프레임의 최종 행렬
+        bool							m_bFinalMatUpdate; // 최종행렬 연산 수행여부
 	};
 }
 

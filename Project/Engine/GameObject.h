@@ -205,7 +205,7 @@ namespace mh
 		{
 			return eComponentType::Collider;
 		}
-		else if constexpr (std::is_base_of_v<Com_Animator2D, T>)
+		else if constexpr (std::is_base_of_v<IAnimator, T>)
 		{
 			return eComponentType::Animator;
 		}

@@ -5,7 +5,8 @@
 [numthreads(256, 1, 1)]
 void main(int3 _iThreadIdx : SV_DispatchThreadID)
 {
-	if (CB_Animation3D.BoneCount <= _iThreadIdx.x)
+	//Total Data Count.x = Bone Count
+	if (CB_ComputeShader.TotalDataCount.x <= (uint)_iThreadIdx.x)
 		return;
 
     // 오프셋 행렬을 곱하여 최종 본행렬을 만들어낸다.		
@@ -13,8 +14,8 @@ void main(int3 _iThreadIdx : SV_DispatchThreadID)
 	matrix matBone = (matrix) 0.f;
 
     // Frame Data Index == Bone Count * Frame Count + _iThreadIdx.x
-	uint iFrameDataIndex = CB_Animation3D.BoneCount * CB_Animation3D.CurFrameIdx + _iThreadIdx.x;
-	uint iNextFrameDataIdx = CB_Animation3D.BoneCount * (CB_Animation3D.CurFrameIdx + 1) + _iThreadIdx.x;
+	uint iFrameDataIndex = CB_ComputeShader.TotalDataCount.x * CB_Animation3D.CurFrameIdx + _iThreadIdx.x;
+	uint iNextFrameDataIdx = CB_ComputeShader.TotalDataCount.x * (CB_Animation3D.CurFrameIdx + 1) + _iThreadIdx.x;
 
 	float4 vScale = lerp(g_arrFrameTrans[iFrameDataIndex].vScale, g_arrFrameTrans[iNextFrameDataIdx].vScale, CB_Animation3D.FrameRatio);
 	float4 vTrans = lerp(g_arrFrameTrans[iFrameDataIndex].vTranslate, g_arrFrameTrans[iNextFrameDataIdx].vTranslate, CB_Animation3D.FrameRatio);

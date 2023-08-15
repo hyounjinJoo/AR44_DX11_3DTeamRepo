@@ -120,7 +120,6 @@ namespace mh
 				Data.SysMemPitch = mElementStride * (uint)_uElemCount;
 				Data.SysMemSlicePitch = mBufferDesc.StructureByteStride;
 				pData = &Data;
-				mCurBoundView = eBufferViewType::SRV;
 			}
 
 
@@ -307,6 +306,7 @@ namespace mh
 		{
 			_SRVSlot = (int)mSBufferDesc.REGISLOT_t_SRV;
 		}
+
 		mCurBoundRegister = _SRVSlot;
 
 		if (eShaderStageFlag::NONE == _stageFlag)

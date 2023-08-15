@@ -4,7 +4,7 @@
 PSOut main(VSOut _in) : SV_Target
 {
 	float4 vObjectColor = float4(0.4f, 0.4f, 0.4f, 1.f);
-	float4 vOutColor = float4(0.f, 0.f, 0.f, 1.f);
+	float4 vOutColor = float4(1.f, 1.f, 1.f, 1.f);
 	float3 vViewNormal = _in.ViewNormal;
     
 	if (CB_MaterialData.usedAlbedo == 1)
