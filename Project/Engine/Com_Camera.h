@@ -65,7 +65,7 @@ namespace  mh
 		float mFar;
 		float mScale;
 
-		std::bitset<(uint)define::eLayerType::End> mLayerMasks;
+		std::bitset<(uint)define::eLayerType::END> mLayerMasks;
 		std::vector<GameObject*> mDefferedOpaqueGameObjects;
 		std::vector<GameObject*> mOpaqueGameObjects;
 		std::vector<GameObject*> mCutoutGameObjects;

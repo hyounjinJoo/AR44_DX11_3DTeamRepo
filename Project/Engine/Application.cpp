@@ -18,6 +18,8 @@ namespace mh
 {
 	using namespace mh::define;
 
+	std::vector<std::function<void()>> Application::mDestroyFuncs;
+
 
 	HWND			Application::mHwnd{};
 	HDC				Application::mHdc{};
@@ -62,6 +64,8 @@ namespace mh
 		
 		SceneMgr::Init();
 
+		mbInitialized = true;
+
 		return TRUE;
 	}
 
@@ -95,6 +99,15 @@ namespace mh
 
 	void Application::Destroy()
 	{
+		for (size_t i = 0; i < mDestroyFuncs.size(); ++i)
+		{
+			if (mDestroyFuncs[i])
+			{
+				mDestroyFuncs[i]();
+			}
+		}
+
+		mDestroyFuncs.clear();
 	}
 
 	// Running main engine loop
@@ -105,19 +118,19 @@ namespace mh
 		Render();
 		Destroy();
 		
-		//TODO: Engine 내부에서 종료할 방법 만들기
-		//이걸 false로 반환하면 꺼지도록 짜놓음
-		return true;
+		return mbInitialized;
 	}
 
 	void Application::Present()
 	{
-		GPUMgr::Present();
+		GPUMgr::Present(true);
 	}
 
 	void Application::Release()
 	{
+		Destroy();
 		ReleaseDC(mHwnd, mHdc);
+		mbInitialized = false;
 	}
 
 	void Application::SetWindowPos(int _LeftWindowPos, int _TopWindowPos)
@@ -144,7 +157,7 @@ namespace mh
 		::UpdateWindow(mHwnd);
 	}
 
-	int2 Application::GetWIndowSize()
+	int2 Application::GetWindowSize()
 	{
 		//클라이언트 영역과 윈도우 영역의 차이를 구해서 정확한 창 크기를 설정(해상도가 조금이라도 차이나면 문제 발생함)
 		RECT rcClient{};

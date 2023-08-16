@@ -15,8 +15,6 @@
 
 namespace mh
 {
-	using namespace math;
-
 	Com_AudioSource::Com_AudioSource()
 		: IComponent(define::eComponentType::AudioSource)
 		, mAudioClip(nullptr)
@@ -83,7 +81,7 @@ namespace mh
 	void Com_AudioSource::FixedUpdate()
 	{
 		Com_Transform& tr = GetOwner()->GetTransform();
-		float3 pos = tr.GetPosition();
+		float3 pos = tr.GetRelativePos();
 		float3 foward = tr.Forward();
 
 		mAudioClip->Set3DAttributes(pos, foward);

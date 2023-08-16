@@ -1,4 +1,5 @@
 #include "SH_Globals.hlsli"
+#include "SH_Func_Light.hlsli"
 struct VSIn
 {
     float4 Pos : POSITION;
@@ -23,14 +24,14 @@ float4 main(VSOut In) : SV_Target
     
     //color.a += time;
     
-    if (animationType == 1) // 2D
+    if (CB_Animation2D.animationType == 1) // 2D
     {
-        float2 diff = (atlasSize - spriteSize) / 2.0f;
-        float2 UV = (leftTop - diff - offset) + (atlasSize * In.UV);
+		float2 diff = (CB_Animation2D.atlasSize - CB_Animation2D.spriteSize) / 2.0f;
+		float2 UV = (CB_Animation2D.leftTop - diff - CB_Animation2D.offset) + (CB_Animation2D.atlasSize * In.UV);
         
-        if (UV.x < leftTop.x || UV.y < leftTop.y 
-            || UV.x > leftTop.x + spriteSize.x 
-            || UV.y > leftTop.y + spriteSize.y)
+		if (UV.x < CB_Animation2D.leftTop.x || UV.y < CB_Animation2D.leftTop.y 
+            || UV.x > CB_Animation2D.leftTop.x + CB_Animation2D.spriteSize.x 
+            || UV.y > CB_Animation2D.leftTop.y + CB_Animation2D.spriteSize.y)
             discard;
         
         //UV.x = -UV.x;
@@ -53,8 +54,8 @@ float4 main(VSOut In) : SV_Target
     if (color.a <= 0.0f)
         discard;
     
-    LightColor lightColor = (LightColor) 0.0f;
-    for (uint i = 0; i < numberOfLight; i++)
+    tLightColor lightColor = (tLightColor) 0.0f;
+    for (uint i = 0; i < CB_NumberOfLight.numberOfLight; i++)
     {
         CalculateLight(lightColor, In.WorldPos.xyz, i);
     }

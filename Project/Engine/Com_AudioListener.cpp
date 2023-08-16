@@ -38,7 +38,7 @@ namespace mh
 	void Com_AudioListener::FixedUpdate()
 	{
 		Com_Transform& tr = GetOwner()->GetTransform();
-		float3 pos = tr.GetPosition();
+		float3 pos = tr.GetRelativePos();
 		float3 foward = tr.Forward();
 		float3 up = tr.Up();
 

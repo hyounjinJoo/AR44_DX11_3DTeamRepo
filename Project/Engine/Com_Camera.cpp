@@ -42,7 +42,7 @@ namespace mh
 
 	void Com_Camera::Init()
 	{
-		RegisterCameraInRenderer();
+		//RegisterCameraInRenderer();
 	}
 
 	void Com_Camera::Update()
@@ -89,6 +89,8 @@ namespace mh
 
 		// Forward render
 		RenderMgr::GetMultiRenderTarget(eMRTType::Swapchain)->Bind();
+
+
 		//// defferd + swapchain merge
 		std::shared_ptr<Material> mergeMaterial = ResMgr::Find<Material>(strKey::Default::material::MergeMaterial);
 		std::shared_ptr<Mesh> rectMesh = ResMgr::Find<Mesh>(strKey::Default::mesh::RectMesh);
@@ -106,7 +108,7 @@ namespace mh
 	void Com_Camera::CreateViewMatrix()
 	{
 		Com_Transform& tr = GetOwner()->GetTransform();
-		float3 pos = tr.GetPosition();
+		float3 pos = tr.GetRelativePos();
 
 		// Crate Translate view matrix
 		mView = MATRIX::Identity;
@@ -187,7 +189,7 @@ namespace mh
 		mPostProcessGameObjects.clear();
 
 		IScene* scene = SceneMgr::GetActiveScene();
-		for (int index = 0; index < (uint)define::eLayerType::End; index++)
+		for (int index = 0; index < (uint)define::eLayerType::END; index++)
 		{
 			if (mLayerMasks[index] == true)
 			{

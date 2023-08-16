@@ -14,14 +14,14 @@ namespace mh
     {
         eStructBufferType eSBufferType;
 
-        eShaderStageFlag_ TargetStage;
+        define::eShaderStageFlag_ TargetStage;
 
         int REGISLOT_t_SRV;
         int REGISLOT_u_UAV;
 
         tSBufferDesc()
             : eSBufferType()
-            , TargetStage(eShaderStageFlag::ALL)
+            , TargetStage(define::eShaderStageFlag::ALL)
             , REGISLOT_t_SRV(-1)
             , REGISLOT_u_UAV(-1)
         {}
@@ -44,8 +44,8 @@ namespace mh
         void SetDesc(const tSBufferDesc& _tDesc);
 
         //Setter Getter Adder
-        void SetPipelineTarget(eShaderStageFlag_ _StageFlag) { mSBufferDesc.TargetStage = _StageFlag; }
-        void AddPipelineTarget(eShaderStageFlag_ _StageFlag) { mSBufferDesc.TargetStage |= _StageFlag; }
+        void SetPipelineTarget(define::eShaderStageFlag_ _StageFlag) { mSBufferDesc.TargetStage = _StageFlag; }
+        void AddPipelineTarget(define::eShaderStageFlag_ _StageFlag) { mSBufferDesc.TargetStage |= _StageFlag; }
 
         uint GetCapacity() const { return mElementCapacity; }
 
@@ -66,7 +66,7 @@ namespace mh
         void GetData(void* _pDest, size_t _uDestByteCapacity);
 
         //데이터를 특정 레지스터에 바인딩. SRV에 바인딩할것인지 UAV에 바인딩할것인지를 지정
-        void BindDataSRV(int _SRVSlot = -1, eShaderStageFlag_ _stageFlag = eShaderStageFlag::NONE);
+        void BindDataSRV(int _SRVSlot = -1, define::eShaderStageFlag_ _stageFlag = define::eShaderStageFlag::NONE);
 
         //Bind buffer with UAV Mode to Compute shader 
         void BindDataUAV(int _UAVSlot = -1);
@@ -75,7 +75,7 @@ namespace mh
 
     private:
         void SetDefaultDesc();
-        void BindConstBuffer(eShaderStageFlag_ _stageFlag);
+        void BindConstBuffer(define::eShaderStageFlag_ _stageFlag);
 
         bool CreateStagingBuffer();
         bool CreateSRV();
@@ -99,7 +99,7 @@ namespace mh
         ComPtr<ID3D11Buffer>    mStagingBuffer;
 
         int                     mCurBoundRegister;
-        eBufferViewType         mCurBoundView;
+        define::eBufferViewType         mCurBoundView;
 	};
 
     inline void StructBuffer::SetDesc(const tSBufferDesc& _tDesc)

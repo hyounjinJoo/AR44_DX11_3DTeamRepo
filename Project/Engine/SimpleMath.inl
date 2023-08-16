@@ -1,3 +1,4 @@
+#include "SimpleMath.h"
 //-------------------------------------------------------------------------------------
 // SimpleMath.inl -- Simplified C++ SimpleMath wrapper for DirectXMath
 //
@@ -749,6 +750,16 @@ inline bool Vector3::operator != (const Vector3& V) const noexcept
 // Assignment operators
 //------------------------------------------------------------------------------
 
+inline Vector3& mh::math::Vector3::operator+=(const Vector2& _v2) noexcept
+{
+    using namespace DirectX;
+    const XMVECTOR v1 = XMLoadFloat3(this);
+    const XMVECTOR v2 = XMLoadFloat2(&_v2);
+    const XMVECTOR X = XMVectorAdd(v1, v2);
+    XMStoreFloat3(this, X);
+    return *this;
+}
+
 inline Vector3& Vector3::operator+= (const Vector3& V) noexcept
 {
     using namespace DirectX;
@@ -948,12 +959,13 @@ inline Vector3 Vector3::Cross(const Vector3& V) const noexcept
     return result;
 }
 
-inline void Vector3::Normalize() noexcept
+inline Vector3& Vector3::Normalize() noexcept
 {
     using namespace DirectX;
     const XMVECTOR v1 = XMLoadFloat3(this);
     const XMVECTOR X = XMVector3Normalize(v1);
     XMStoreFloat3(this, X);
+    return *this;
 }
 
 inline void Vector3::Normalize(Vector3& result) const noexcept

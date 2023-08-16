@@ -1,6 +1,13 @@
 #pragma once
+
 #include <wrl.h>
 using Microsoft::WRL::ComPtr;
+namespace Microsoft::WRL
+{
+	template <class T> struct is_ComPtr : std::false_type {};
+	template <class T> struct is_ComPtr<Microsoft::WRL::ComPtr<T>> : std::true_type {};
+	template <class T> inline constexpr bool is_ComPtr_v = is_ComPtr<T>::value;
+}
 
 #include <d3d11.h>
 #include <d3dcompiler.h>
@@ -13,25 +20,25 @@ using Microsoft::WRL::ComPtr;
 #include "define_Enum.h"
 #include "define_Macro.h"
 
-#define CB_GETBINDSLOT(name) __CBUFFERBINDSLOT__##name##__
-#define CBUFFER(name, slot) static const int CB_GETBINDSLOT(name) = slot; struct alignas(16) name
+#include "DefaultShader/SH_ConstBuffer.hlsli"
 
-#define CBSLOT_GLOBAL			0
-#define CBSLOT_TRANSFORM		1
-#define CBSLOT_MATERIAL			2
-#define CBSLOT_GRID				3
-#define CBSLOT_ANIMATION		4
-#define CBSLOT_NUMBEROFLIGHT	5
-#define CBSLOT_PARTICLESYSTEM	6
-#define CBSLOT_NOISE			7
-#define CBSLOT_SBUFFER			8
+//#define CB_GETBINDSLOT(name) __CBUFFERBINDSLOT__##name##__
+//#define CBUFFER(name, slot) static const int CB_GETBINDSLOT(name) = slot; struct alignas(16) name
+//
+//#define CBSLOT_GLOBAL			0
+//#define CBSLOT_TRANSFORM		1
+//#define CBSLOT_MATERIAL			2
+//#define CBSLOT_GRID				3
+//#define CBSLOT_ANIMATION		4
+//#define CBSLOT_NUMBEROFLIGHT	5
+//#define CBSLOT_PARTICLESYSTEM	6
+//#define CBSLOT_NOISE			7
+//#define CBSLOT_SBUFFER			8
 
 namespace mh::define
 {
 	constexpr const int MRT_MAX = 8;
 
-	using namespace mh::define;
-	
 	enum class eValidationMode
 	{
 		Disabled,
@@ -71,7 +78,7 @@ namespace mh::define
 		Deffered,
 		Light,
 		Shadow,
-		End,
+		END,
 	};
 
 
@@ -121,7 +128,7 @@ namespace mh::define
 		Point,
 		Linear,
 		Anisotropic,
-		End,
+		END,
 	};
 
 	enum class eRSType
@@ -130,7 +137,7 @@ namespace mh::define
 		SolidFront,
 		SolidNone,
 		WireframeNone,
-		End,
+		END,
 	};
 
 	enum class eDSType
@@ -139,7 +146,7 @@ namespace mh::define
 		Greater,
 		NoWrite,
 		None,
-		End,
+		END,
 	};
 
 	enum class eBSType
@@ -147,8 +154,41 @@ namespace mh::define
 		Default,
 		AlphaBlend,
 		OneOne,
-		End,
+		END,
 	};
+
+	namespace strKey
+	{
+		constexpr const char* eSamplerType[(int)mh::define::eSamplerType::END]
+		{
+			"Point",
+			"Linear",
+			"Anisotropic",
+		};
+
+		constexpr const char* eRSType[(int)mh::define::eRSType::END]
+		{
+			"SolidBack",
+			"SolidFront",
+			"SolidNone",
+			"WireframeNone",
+		};
+
+		constexpr const char* eDSType[(int)mh::define::eDSType::END]
+		{
+			"Less",
+			"Greater",
+			"NoWrite",
+			"None",
+		};
+
+		constexpr const char* eBSType[(int)mh::define::eBSType::END]
+		{
+			"Default",
+			"AlphaBlend",
+			"OneOne",
+		};
+	}
 
 	enum class eRenderingMode
 	{
@@ -165,23 +205,11 @@ namespace mh::define
 		Transparent,
 		PostProcess,
 		None,
-		End,
+		END,
 	};
 
 
-	enum class eCBType
-	{
-		Global,
-		Transform,
-		Material,
-		Grid,
-		Animation,
-		Light,
-		ParticleSystem,
-		Noise,
-		SBuffer,
-		End,
-	};
+
 
 
 	enum class eGPUParam
@@ -198,7 +226,7 @@ namespace mh::define
 	{
 		SRV,
 		UAV,
-		End,
+		END,
 	};
 
 	enum class eTextureSlot
@@ -221,7 +249,7 @@ namespace mh::define
 		//Array2DT10,
 		//Array2DT11,
 
-		End,
+		END,
 	};
 
 	enum class eMRT_Defferd
@@ -230,7 +258,7 @@ namespace mh::define
 		NormalTarget,
 		AlbedoTarget,
 		SpecularTarget,
-		End
+		END
 	};
 
 	enum class eMRT_Light
@@ -254,42 +282,41 @@ namespace mh::define
 		float3 position;
 		float3 rotatation;
 		float3 scale;
-		
+
 		float radius;
 		float duration;
 		float time;
 	};
 
-	struct tLightAttribute
-	{
-		float4 diffuse;
-		float4 specular;
-		float4 ambient;
+	//struct tLightAttribute
+	//{
+	//	float4 diffuse;
+	//	float4 specular;
+	//	float4 ambient;
 
-		float4 position;
-		float4 direction;
+	//	float4 position;
+	//	float4 direction;
 
-		define::eLightType type;
-		float radius;
-		float angle;
-		int padding;
-	};
+	//	define::eLightType type;
+	//	float radius;
+	//	float angle;
+	//	int padding;
+	//};
 
-	struct tParticle
-	{
-		float4 position;
-		float4 direction;
+	//struct tParticle
+	//{
+	//	float4 position;
+	//	float4 direction;
 
-		float lifeTime;
-		float time;
-		float speed;
-		uint active;
-	};
-
-	struct tParticleShared
-	{
-		uint activeCount;
-	};
+	//	float lifeTime;
+	//	float time;
+	//	float speed;
+	//	uint active;
+	//};
+	//struct tParticleShared
+	//{
+	//	uint activeCount;
+	//};
 
 
 }

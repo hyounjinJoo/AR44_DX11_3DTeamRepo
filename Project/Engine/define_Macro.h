@@ -12,6 +12,8 @@
 #define ERROR_MESSAGE_A(_aStrMessage) MessageBoxA(nullptr, _aStrMessage, NULL, MB_OK); DEBUG_BREAK
 #define ERROR_MESSAGE_W(_wStrMessage) MessageBoxW(nullptr, _wStrMessage, NULL, MB_OK); DEBUG_BREAK
 
+#define NOTIFICATION_W(_wStrMessage) MessageBoxW(nullptr, _wStrMessage, NULL, MB_OK)
+
 #define MH_ASSERT(expression) assert(expression)
 
 #define BIT_MASK(_MaskPos) 1<<_MaskPos

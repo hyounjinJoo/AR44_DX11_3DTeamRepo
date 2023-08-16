@@ -8,7 +8,7 @@
 
 namespace mh
 {
-	std::bitset<(uint)define::eLayerType::End> CollisionMgr::mLayerCollisionMatrix[(uint)define::eLayerType::End] = {};
+	std::bitset<(uint)define::eLayerType::END> CollisionMgr::mLayerCollisionMatrix[(uint)define::eLayerType::END] = {};
 	std::map<UINT64, bool> CollisionMgr::mCollisionMap;
 
 	void CollisionMgr::Init()
@@ -17,7 +17,7 @@ namespace mh
 	}
 	void CollisionMgr::Release()
 	{
-		for (int i = 0; i < (int)define::eLayerType::End; ++i)
+		for (int i = 0; i < (int)define::eLayerType::END; ++i)
 		{
 			mLayerCollisionMatrix[i].reset();
 		}
@@ -27,9 +27,9 @@ namespace mh
 	void CollisionMgr::Update()
 	{
 		IScene* scene = SceneMgr::GetActiveScene();
-		for (uint row = 0; row < (uint)define::eLayerType::End; row++)
+		for (uint row = 0; row < (uint)define::eLayerType::END; row++)
 		{
-			for (uint column = 0; column < (uint)define::eLayerType::End; column++)
+			for (uint column = 0; column < (uint)define::eLayerType::END; column++)
 			{
 				if (mLayerCollisionMatrix[row][column])
 				{
@@ -177,8 +177,8 @@ namespace mh
 		Com_Transform& leftTr = _left->GetOwner()->GetTransform();
 		Com_Transform& rightTr = _right->GetOwner()->GetTransform();
 
-		MATRIX leftMat = leftTr.GetWorldMatrix();
-		MATRIX rightMat = rightTr.GetWorldMatrix();
+		MATRIX leftMat = leftTr.GetWorldMat();
+		MATRIX rightMat = rightTr.GetWorldMat();
 
 
 
@@ -207,7 +207,7 @@ namespace mh
 		for (int index = 0; index < 4; index++)
 			Axis[index].z = 0.0f;
 
-		float3 vc = leftTr.GetPosition() - rightTr.GetPosition();
+		float3 vc = leftTr.GetWorldPos() - rightTr.GetWorldPos();
 		vc.z = 0.0f;
 
 		float3 centerDir = vc;

@@ -2,6 +2,8 @@
 #include "define_GPU.h"
 #include "SimpleMath.h"
 
+#include "DefaultShader/SH_Func_Light.hlsli"
+
 namespace mh
 {
 	class ConstBuffer;
@@ -16,88 +18,7 @@ namespace mh
 	
 	using namespace mh::define;
 	using namespace Microsoft::WRL;
-	
-	CBUFFER(GlobalCB, CBSLOT_GLOBAL)
-	{
-		uint2  uResolution;
-		float2 fResolution;
-		float DeltaTime;
-	};
 
-	CBUFFER(TransformCB, CBSLOT_TRANSFORM)
-	{
-		MATRIX World;
-		MATRIX InverseWorld;
-		MATRIX View;
-		MATRIX InverseView;
-		MATRIX Projection;
-	};
-
-	CBUFFER(MaterialCB, CBSLOT_MATERIAL)
-	{
-		float4 Diff;
-		float4 Spec;
-		float4 Amb;
-		float4 Emv;
-
-		uint UsedAlbedo;
-		uint UsedNormal;
-		uint UsedSpecular;
-
-		uint Padd1;
-	};
-
-	CBUFFER(GridCB, CBSLOT_GRID)
-	{
-		float4 CameraPosition;
-		float2 CameraScale;
-		float2 Resolution;
-	};
-
-	CBUFFER(AnimationCB, CBSLOT_ANIMATION)
-	{
-		float2 LeftTop;
-		float2 Size;
-		float2 Offset;
-		float2 AtlasSize;
-
-		uint Type;
-	};
-
-	//CBSLOT_NUMBEROFLIGHT
-	CBUFFER(LightCB, CBSLOT_NUMBEROFLIGHT)
-	{
-		uint NumberOfLight;
-		uint IndexOfLight;
-	};
-
-	CBUFFER(ParticleSystemCB, CBSLOT_PARTICLESYSTEM)
-	{
-		float4 WorldPosition;
-		float4 StartColor;
-		float4 StartSize;
-
-		uint MaxParticles;
-		uint SimulationSpace;
-		float Radius;
-		float StartSpeed;
-
-		float StartLifeTime;
-		float DeltaTime;
-		float ElapsedTime; //누적시간
-		int	Padding;
-	};
-
-	CBUFFER(NoiseCB, CBSLOT_NOISE)
-	{
-		float4 NoiseSize;
-		float NoiseTime;
-	};
-
-	CBUFFER(SBufferCB, CBSLOT_SBUFFER)
-	{
-		uint SBufferDataCount;
-	};
 
 	class MultiRenderTarget;
 	class RenderMgr
@@ -172,16 +93,16 @@ namespace mh
 		static Com_Camera* mMainCamera;
 		static GameObject* mInspectorGameObject;
 
-		static std::unique_ptr<ConstBuffer>		mConstBuffers[(uint)eCBType::End];
-		static ComPtr<ID3D11SamplerState>		mSamplerStates[(uint)eSamplerType::End];
-		static ComPtr<ID3D11RasterizerState>	mRasterizerStates[(uint)eRSType::End];
-		static ComPtr<ID3D11DepthStencilState>	mDepthStencilStates[(uint)eDSType::End];
-		static ComPtr<ID3D11BlendState>			mBlendStates[(uint)eBSType::End];
+		static std::unique_ptr<ConstBuffer>		mConstBuffers[(uint)eCBType::END];
+		static ComPtr<ID3D11SamplerState>		mSamplerStates[(uint)eSamplerType::END];
+		static ComPtr<ID3D11RasterizerState>	mRasterizerStates[(uint)eRSType::END];
+		static ComPtr<ID3D11DepthStencilState>	mDepthStencilStates[(uint)eDSType::END];
+		static ComPtr<ID3D11BlendState>			mBlendStates[(uint)eBSType::END];
 		
 		static std::vector<Com_Camera*>			mCameras;
 		static std::vector<tDebugMesh>			mDebugMeshes;
 
-		static std::unique_ptr<MultiRenderTarget> mMultiRenderTargets[(uint)eMRTType::End];
+		static std::unique_ptr<MultiRenderTarget> mMultiRenderTargets[(uint)eMRTType::END];
 
 		static std::vector<Com_Light*>			mLights;
 		static std::vector<tLightAttribute>		mLightAttributes;

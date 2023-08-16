@@ -24,7 +24,7 @@ namespace mh
         , mMode(_other.mMode)
         , mShader(_other.mShader)
     {
-        for (int i = 0; i < (int)eTextureSlot::End; ++i)
+        for (int i = 0; i < (int)eTextureSlot::END; ++i)
         {
             mTextures[i] = _other.mTextures[i];
         }
@@ -64,7 +64,7 @@ namespace mh
             jVal[JSON_KEY(mShader)] = mShader->GetKey();
         }
             
-        std::is_array_v<std::array<std::shared_ptr<Texture>, (int)eTextureSlot::End>>;
+        std::is_array_v<std::array<std::shared_ptr<Texture>, (int)eTextureSlot::END>>;
 
         Json::MHSaveVectorPtr(_pJVal, "mTextures", mTextures);
 
@@ -117,8 +117,8 @@ namespace mh
         }
 
         
-        //포인터 배열은 MHGetJsonVectorPtr 함수를 통해서 Key값을 싹 받아올 수 있음.
-        const auto& vecLoad = Json::MHGetJsonVectorPtr(_pJVal, JSON_KEY(mTextures));
+        //포인터 배열은 GetJsonVector 함수를 통해서 Key값을 싹 받아올 수 있음.
+        const auto& vecLoad = Json::GetJsonVector(_pJVal, JSON_KEY(mTextures));
         for (size_t i = 0; i < vecLoad.size(); ++i)
         {
             mTextures[i] = ResMgr::Load<Texture>(vecLoad[i]);
@@ -163,7 +163,7 @@ namespace mh
 
     void Material::Bind()
     {
-        for (size_t slotIndex = 0; slotIndex < (uint)eTextureSlot::End; slotIndex++)
+        for (size_t slotIndex = 0; slotIndex < (uint)eTextureSlot::END; slotIndex++)
         {
             if (mTextures[slotIndex] == nullptr)
             {
@@ -175,12 +175,12 @@ namespace mh
 
         if (mTextures[(uint)eTextureSlot::Albedo])
         {
-            mCB.UsedAlbedo = 1;
+            mCB.usedAlbedo = TRUE;
         }
 
         if (mTextures[(uint)eTextureSlot::Normal])
         {
-            mCB.UsedNormal = 1;
+            mCB.usedNormal = TRUE;
         }
 
         ConstBuffer* CB = RenderMgr::GetConstBuffer(eCBType::Material);
@@ -194,7 +194,7 @@ namespace mh
 
     void Material::Clear()
     {
-        for (size_t slotIndex = 0; slotIndex < (uint)eTextureSlot::End; slotIndex++)
+        for (size_t slotIndex = 0; slotIndex < (uint)eTextureSlot::END; slotIndex++)
         {
             if (mTextures[slotIndex] == nullptr)
 			{

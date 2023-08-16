@@ -17,9 +17,9 @@ VSOut main(VSIn In)
 {
     VSOut Out = (VSOut) 0.f;
     
-    float4 worldPosition = mul(In.Pos, world);
-    float4 viewPosition = mul(worldPosition, view);
-    float4 ProjPosition = mul(viewPosition, projection);
+	float4 worldPosition = mul(In.Pos, CB_Transform.world);
+	float4 viewPosition = mul(worldPosition, CB_Transform.view);
+	float4 ProjPosition = mul(viewPosition, CB_Transform.projection);
     
     Out.Pos = ProjPosition;
     Out.Color = In.Color;

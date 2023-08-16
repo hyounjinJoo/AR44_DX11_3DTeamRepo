@@ -17,14 +17,14 @@ float4 main(VSOut In) : SV_Target
 {
 	float4 OutColor = float4(1.0f, 1.0f, 1.0f, 1.0f);
 
-	if (usedAlbedo == 1)
+	if (CB_MaterialData.usedAlbedo == 1)
 	{
 		OutColor = albedoTexture.Sample(anisotropicSampler, In.UV);
 	}
 
 	float3 vNormal = In.ViewNormal;
 
-	if (usedNormal == 1)
+	if (CB_MaterialData.usedNormal == 1)
 	{
 	// 물체의 표면에 적용될 탄젠트 공간 기준 방향벡터를 가져온다.
 			vNormal = normalTexture.Sample(anisotropicSampler, In.UV).xyz;
@@ -44,9 +44,10 @@ float4 main(VSOut In) : SV_Target
 
 
 	
-	LightColor lightColor = (LightColor)0.0f;
-	for (uint i = 0; i < numberOfLight; i++)
+	tLightColor lightColor = (tLightColor)0.0f;
+	for (uint i = 0; i < CB_NumberOfLight.numberOfLight; i++)
 	{
+		
 		CalculateLight3D(In.ViewPos, vNormal, i, lightColor);
 	}
 

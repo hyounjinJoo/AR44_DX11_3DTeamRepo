@@ -2,6 +2,7 @@
 #include "define_GPU.h"
 #include "define_Enum.h"
 #include "define_Struct.h"
+#include "DefaultShader/SH_Globals.hlsli"
 
 namespace mh
 {

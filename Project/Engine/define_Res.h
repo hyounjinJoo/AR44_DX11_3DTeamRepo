@@ -22,7 +22,7 @@ namespace mh::define
 		
 		GraphicsShader,
 		ComputeShader,
-		End,
+		END,
 
 	};
 
@@ -30,7 +30,7 @@ namespace mh::define
 	{
 		STRKEY DirName_Content = "Res";
 		//리소스 이름 겸 Res 폴더 내의 폴더명으로 사용
-		STRKEY ArrResName[(int)eResourceType::End] =
+		STRKEY ArrResName[(int)eResourceType::END] =
 		{
 			"Mesh",
 			"MeshData",
@@ -39,7 +39,7 @@ namespace mh::define
 			"Material",
 			//"Sound",
 			//"Font,",
-			"Animation",
+			"Animation2D",
 
 			"AudioClip",
 			"Prefab",
@@ -49,8 +49,8 @@ namespace mh::define
 		};
 		inline STRKEY GetResName(eResourceType _type) { return ArrResName[(int)_type]; }
 
-		STRKEY DirName_ShaderBin = "ShaderBin";
-		STRKEY Ext_ShaderBin = ".cso";
+		STRKEY DirName_ShaderCSO = "ShaderCSO";
+		STRKEY Ext_ShaderCSO = ".cso";
 
 		namespace Default
 		{
@@ -121,6 +121,7 @@ namespace mh::define
 					STRKEY_DECLARE(ParticleCS);
 					STRKEY_DECLARE(PostProcessShader);
 					STRKEY_DECLARE(BasicShader);
+					STRKEY_DECLARE(Animation3D);
 				}
 			}
 		}

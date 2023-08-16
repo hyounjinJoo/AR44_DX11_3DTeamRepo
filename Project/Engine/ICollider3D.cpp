@@ -6,6 +6,8 @@
 
 namespace mh
 {
+	using namespace mh::define;
+
 	ICollider3D::ICollider3D()
 		: ICollider(define::eColliderType::None)
 	{

@@ -7,6 +7,7 @@
 #include "FBXLoader.h"
 #include "GameObject.h"
 #include "Com_Renderer_Mesh.h"
+#include "Com_Animator3D.h"
 
 namespace mh
 {
@@ -52,7 +53,7 @@ namespace mh
 		for (UINT i = 0; i < loader.GetContainer(0).vecMtrl.size(); ++i)
 		{
 			// 예외처리 (material 이름이 입력 안되어있을 수도 있다.)
-			std::string strKey = StringConv::ConvertUnicodeToUTF8(loader.GetContainer(0).vecMtrl[i].strMtrlName);
+			std::string strKey = loader.GetContainer(0).vecMtrl[i].strMtrlName;
 			std::shared_ptr<Material> pMtrl = ResMgr::Find<Material>(strKey);
 			MH_ASSERT(pMtrl.get());
 
@@ -78,15 +79,13 @@ namespace mh
 			Renderer->SetMaterial(mMaterials[i], i);
 		}
 
-		//TODO: Animation 파트 추가
-		//if (false == m_pMesh->IsAnimMesh())
-		//	return pNewObj;
+		if (mMesh->IsAnimMesh())
+		{
+			Com_Animator3D* Animator3D = pNewObj->AddComponent<Com_Animator3D>();
 
-		//CAnimator3D* pAnimator = new CAnimator3D;
-		//pNewObj->AddComponent(pAnimator);
-
-		//pAnimator->SetBones(m_pMesh->GetBones());
-		//pAnimator->SetAnimClip(m_pMesh->GetAnimClip());
+			Animator3D->SetBones(mMesh->GetBones());
+			Animator3D->SetAnimClip(mMesh->GetAnimClip());
+		}
 
 		return pNewObj;
 	}

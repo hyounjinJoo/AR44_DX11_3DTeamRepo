@@ -4,8 +4,6 @@
 
 namespace mh
 {
-	
-
 	class Com_Transform;
 	class ICollider2D : public ICollider
 	{
@@ -16,8 +14,8 @@ namespace mh
 
 		virtual ~ICollider2D();
 
-		virtual eResult SaveJson(Json::Value* _pJVal) override;
-		virtual eResult LoadJson(const Json::Value* _pJVal) override;
+		virtual define::eResult SaveJson(Json::Value* _pJVal) override;
+		virtual define::eResult LoadJson(const Json::Value* _pJVal) override;
 
 		virtual void Init() override;
 		virtual void Update() override;
@@ -38,7 +36,7 @@ namespace mh
 		void SetRadius(float _radius) { mRadius = _radius; }
 		bool IsTriiger() const { return mbTrigger; }
 		uint GetID() const { return mID; }
-		float3 GetPosition() const { return mPosition; }
+		float3 GetRelativePos() const { return mPosition; }
 		float2 GetSize() const { return mSize; }
 
 	private:
