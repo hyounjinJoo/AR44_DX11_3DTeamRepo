@@ -19,6 +19,7 @@ namespace mh
 
 		virtual ~Material();
 
+		virtual eResult Save(const std::filesystem::path& _path) override;
 		virtual eResult Load(const std::filesystem::path& _path) override;
 
 		virtual eResult SaveJson(Json::Value* _pJVal) override;

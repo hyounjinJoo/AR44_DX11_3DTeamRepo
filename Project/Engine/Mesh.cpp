@@ -14,7 +14,7 @@
 
 namespace mh
 {
-	namespace stdfs = std::filesystem;
+	
 
 	Mesh::Mesh()
 		: IRes(eResourceType::Mesh)
@@ -48,12 +48,12 @@ namespace mh
 
 	eResult Mesh::Save(const std::filesystem::path& _path)
 	{
-		stdfs::path filePath = PathMgr::GetRelResourcePath(GetResType());
+		std::fs::path filePath = PathMgr::GetContentPathRelative(GetResType());
 
 		//폴더 없으면 폴더 생성
-		if (false == stdfs::exists(filePath))
+		if (false == std::fs::exists(filePath))
 		{
-			stdfs::create_directories(filePath);
+			std::fs::create_directories(filePath);
 		}
 
 		// 파일 경로 만들기
@@ -120,12 +120,12 @@ namespace mh
 
 	eResult Mesh::Load(const std::filesystem::path& _path)
 	{
-		stdfs::path filePath = PathMgr::GetRelResourcePath(GetResType());
+		std::fs::path filePath = PathMgr::GetContentPathRelative(GetResType());
 
 		//폴더 없으면 폴더 생성
-		if (false == stdfs::exists(filePath))
+		if (false == std::fs::exists(filePath))
 		{
-			stdfs::create_directories(filePath);
+			std::fs::create_directories(filePath);
 			ERROR_MESSAGE_W(L"파일이 없습니다.");
 			return eResult::Fail_PathNotExist;
 		}
@@ -344,9 +344,9 @@ namespace mh
 	}
 
 
-	std::shared_ptr<Mesh> Mesh::CreateFromContainer(FBXLoader* _loader)
+	std::shared_ptr<Mesh> Mesh::CreateFromContainer(FBXLoader& _loader)
 	{
-		const tContainer* container = &(_loader->GetContainer(0));
+		const tContainer* container = &(_loader.GetContainer(0));
 
 		UINT iVtxCount = (UINT)container->vecPos.size();
 		std::vector<Vertex3D> vecVtx3d(iVtxCount);
@@ -364,43 +364,6 @@ namespace mh
 		std::shared_ptr<Mesh> pMesh = std::make_shared<Mesh>();
 		pMesh->CreateVertexBuffer<Vertex3D>(vecVtx3d);
 
-		//D3D11_BUFFER_DESC tVtxDesc = {};
-
-		//tVtxDesc.ByteWidth = sizeof(Vertex3D) * iVtxCount;
-		//tVtxDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
-
-		//tVtxDesc.Usage = D3D11_USAGE_DEFAULT;
-		//if (D3D11_USAGE_DYNAMIC == tVtxDesc.Usage)
-		//	tVtxDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
-
-		
-
-		//mVertices.resize(iVtxCount);
-		//tSub.pSysMem = malloc(tVtxDesc.ByteWidth);
-		//Vertex3D* pSys = (Vertex3D*)tSub.pSysMem;
-
-		//MH_ASSERT(pSys);
-
-
-		//D3D11_SUBRESOURCE_DATA tSub = {};
-		//tSub.pSysMem = vecVtx3d.data();
-
-		//ComPtr<ID3D11Buffer> pVB = NULL;
-		//if (FAILED(GPUMgr::Device()->CreateBuffer(&tVtxDesc, &tSub, pVB.GetAddressOf())))
-		//{
-		//	return NULL;
-		//}
-
-
-		//pMesh->mVertexBuffer = pVB;
-		//pMesh->mVBDesc = tVtxDesc;
-		////pMesh->mVertices = std::move(vecVtx3d);
-		//pMesh->mVertexByteStride = sizeof(Vertex3D);
-		//pMesh->mVertexCount = (UINT)vecVtx3d.size();
-
-		
-
-		//pMesh->mVertexSysMem = pSys;
 
 		// 인덱스 정보
 		
@@ -447,7 +410,7 @@ namespace mh
 		if (false == container->bAnimation)
 			return pMesh;
 
-		std::vector<tBone*>& vecBone = _loader->GetBones();
+		std::vector<tBone*>& vecBone = _loader.GetBones();
 		UINT iFrameCount = 0;
 		for (UINT i = 0; i < vecBone.size(); ++i)
 		{
@@ -492,7 +455,7 @@ namespace mh
 			pMesh->m_vecBones.push_back(bone);
 		}
 
-		std::vector<tAnimClip*>& vecAnimClip = _loader->GetAnimClip();
+		std::vector<tAnimClip*>& vecAnimClip = _loader.GetAnimClip();
 
 		for (UINT i = 0; i < vecAnimClip.size(); ++i)
 		{

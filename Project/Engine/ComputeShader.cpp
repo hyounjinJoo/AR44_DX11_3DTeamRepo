@@ -14,7 +14,7 @@
 
 namespace mh
 {
-	namespace stdfs = std::filesystem;
+	
 
 	ComputeShader::ComputeShader(uint3 _threadsPerGroup)
 		: IShader(define::eResourceType::ComputeShader)
@@ -33,7 +33,7 @@ namespace mh
 
 	eResult ComputeShader::Load(const std::filesystem::path& _path)
 	{
-		stdfs::path FilePath = PathMgr::GetShaderBinPath();
+		std::fs::path FilePath = PathMgr::GetShaderCSOPath();
 		FilePath /= _path;
 		FilePath.replace_extension(define::strKey::Ext_ShaderCSO);
 

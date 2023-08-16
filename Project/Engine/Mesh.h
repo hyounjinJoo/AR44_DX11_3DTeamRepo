@@ -46,7 +46,7 @@ namespace mh
 		Mesh();
 		virtual ~Mesh();
 
-		static std::shared_ptr<Mesh> CreateFromContainer(FBXLoader* _loader);
+		static std::shared_ptr<Mesh> CreateFromContainer(FBXLoader& _loader);
 
 		virtual eResult Save(const std::filesystem::path& _path) override;
 		virtual eResult Load(const std::filesystem::path& _path) override;

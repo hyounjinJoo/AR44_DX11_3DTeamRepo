@@ -26,11 +26,11 @@
 #include <combaseapi.h>
 #include "EnumFlags.h"
 
-#ifdef _DEBUG
-#pragma comment(lib, "FBXLoader/Debug/libfbxsdk-md.lib")
-#else
-#pragma comment(lib, "FBXLoader/Release/libfbxsdk-md.lib")
-#endif
+namespace std
+{
+	namespace fs = filesystem;
+}
+
 
 #endif
 

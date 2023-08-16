@@ -11,7 +11,7 @@ namespace gui
 namespace mh
 {
 	using Microsoft::WRL::ComPtr;
-	namespace stdfs = std::filesystem;
+	
 
 	struct tShaderCode
 	{
@@ -33,9 +33,9 @@ namespace mh
 		virtual eResult Save(const std::filesystem::path& _path) override;
 		virtual eResult Load(const std::filesystem::path& _path) override;
 
-		eResult CreateByCompile(eGSStage _stage, const stdfs::path& _FullPath, const std::string_view _funcName);
+		eResult CreateByCompile(eGSStage _stage, const std::filesystem::path& _FullPath, const std::string_view _funcName);
 		eResult CreateByHeader(eGSStage _stage, const unsigned char* _pByteCode, size_t _ByteCodeSize);
-		eResult CreateByCSO(eGSStage _stage, const stdfs::path& _FileName);
+		eResult CreateByCSO(eGSStage _stage, const std::filesystem::path& _FileName);
 
 		inline void AddInputLayoutDesc(const D3D11_INPUT_ELEMENT_DESC& _desc);
 		inline void SetInputLayoutDesc(const std::vector<D3D11_INPUT_ELEMENT_DESC>& _descs);

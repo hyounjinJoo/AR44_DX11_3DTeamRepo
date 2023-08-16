@@ -10,9 +10,12 @@
 #include "Com_Animator3D.h"
 #include "define_Util.h"
 
+#include "PathMgr.h"
+#include "json-cpp/json.h"
+
 namespace mh
 {
-	namespace stdfs = std::filesystem;
+	
 
 	MeshData::MeshData()
 		: IRes(define::eResourceType::MeshData)
@@ -23,53 +26,120 @@ namespace mh
 	{
 	}
 
-	eResult MeshData::Save(const std::filesystem::path& _filePath)
+	eResult MeshData::Save(const std::filesystem::path& _fileName)
 	{
+		std::fs::path fullPath = PathMgr::GetContentPathRelative(GetResType());
+		if (false == std::fs::exists(fullPath))
+			std::fs::create_directories(fullPath);
 
-		return eResult();
+		std::ofstream ofs(fullPath);
+		if (false == ofs.is_open())
+			return eResult::Fail_OpenFile;
+
+		Json::Value jVal{};
+		eResult result = SaveJson(&jVal);
+		if (eResultFail(result))
+			return result;
+		
+		ofs << jVal;
+		ofs.close();
+
+		return eResult::Success;
+	}
+
+	eResult MeshData::SaveJson(Json::Value* _pJson)
+	{
+		if (nullptr == _pJson)
+			return eResult::Fail_Nullptr;
+		eResult result = IRes::SaveJson(_pJson);
+		if (eResultFail(result))
+			return result;
+
+		//둘중 하나라도 없을 경우 저장 불가
+		if (nullptr == mMesh || mMaterials.empty())
+			return eResult::Fail_InValid;
+		
+		Json::Value& jVal = *_pJson;
+
+		jVal[JSON_KEY(mMesh)] = mMesh->GetKey();
+
+		Json::Value& jValMtrls = jVal[JSON_KEY(mMaterials)];
+
+		for (size_t i = 0; i < mMaterials.size(); ++i)
+		{
+			if (mMaterials[i])
+			{
+				jValMtrls.append(mMaterials[i]->GetKey());
+			}
+		}
+
+		return eResult::Success;
 	}
 
 	eResult MeshData::Load(const std::filesystem::path& _path)
 	{
-		stdfs::path fullPath = PathMgr::GetRelResourcePath(eResourceType::MeshData);
+		std::fs::path fullPath = PathMgr::GetContentPathRelative(eResourceType::MeshData);
 		fullPath /= _path;
 
-		FBXLoader loader;
-		loader.Init();
-		loader.LoadFbx(fullPath);
+		std::string ext = StringConv::UpperCaseReturn(_path.extension().string());
 
-		// 메쉬 가져오기
-		std::shared_ptr<Mesh> pMesh = nullptr;
-		pMesh = Mesh::CreateFromContainer(&loader);
-
-		// ResMgr 에 메쉬 등록
-		if (nullptr != pMesh)
+		//FBX일 경우에는 FBXLoader를 통해서 가져온다.
+		if (".FBX" == ext)
 		{
-			stdfs::path strMeshKey = _path;
-			strMeshKey.replace_extension(".fbx");
-		
-			ResMgr::Insert(strMeshKey.string(), pMesh);
+			FBXLoader loader{};
+			loader.Init();
+			eResult result = loader.LoadFbx(fullPath);
+			if (eResultFail(result))
+			{
+				ERROR_MESSAGE_W(L"FBX 불러오기 실패.");
+				return result;
+			}
 
-			// 메시를 실제 파일로 저장
-			//pMesh->Save(strMeshKey);
+			// 메쉬 가져오기
+			std::shared_ptr<Mesh> pMesh = nullptr;
+			pMesh = Mesh::CreateFromContainer(loader);
+
+			// ResMgr 에 메쉬 등록
+			if (nullptr != pMesh)
+			{	
+				std::fs::path strMeshKey = _path;
+				//.msh로 확장자를 변경
+				strMeshKey.replace_extension(define::strKey::Ext_MeshData);
+				//Key로 저장
+				pMesh->SetKey(strMeshKey.string());
+
+				//메쉬를 엔진의 포맷으로 변경해서 저장한다.
+				eResult result = pMesh->Save(strMeshKey);
+				
+				if (eResultFail(result))
+				{
+					ERROR_MESSAGE_W(L"Mesh 저장 실패.");
+					return result;
+				}
+				
+				//성공 시 ResMgr에 넣는다.
+				ResMgr::Insert(strMeshKey.string(), pMesh);
+			}
+
+			std::vector<std::shared_ptr<Material>> vecMtrl;
+
+			// 메테리얼 가져오기
+			for (UINT i = 0; i < loader.GetContainer(0).vecMtrl.size(); ++i)
+			{
+				// 예외처리 (material 이름이 입력 안되어있을 수도 있다.)
+				std::string strKey = loader.GetContainer(0).vecMtrl[i].strMtrlName;
+				std::shared_ptr<Material> pMtrl = ResMgr::Find<Material>(strKey);
+				MH_ASSERT(pMtrl.get());
+
+
+				vecMtrl.push_back(pMtrl);
+			}
+
+			mMesh = pMesh;
+			mMaterials = vecMtrl;
 		}
 
-		std::vector<std::shared_ptr<Material>> vecMtrl;
 
-		// 메테리얼 가져오기
-		for (UINT i = 0; i < loader.GetContainer(0).vecMtrl.size(); ++i)
-		{
-			// 예외처리 (material 이름이 입력 안되어있을 수도 있다.)
-			std::string strKey = loader.GetContainer(0).vecMtrl[i].strMtrlName;
-			std::shared_ptr<Material> pMtrl = ResMgr::Find<Material>(strKey);
-			MH_ASSERT(pMtrl.get());
-
-
-			vecMtrl.push_back(pMtrl);
-		}
-
-		mMesh = pMesh;
-		mMaterials = vecMtrl;
 
 		return eResult::Success;
 	}

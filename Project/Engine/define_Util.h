@@ -168,9 +168,7 @@ template<typename T>
 inline T StringConv::Convert_String_to_T(const std::string& _srcStr)
 {
 	T ReturnResult{};
-
 	std::string decoded = base64_decode(_srcStr);
-
 	memcpy_s((void*)&ReturnResult, sizeof(T), decoded.c_str(), decoded.size());
 
 	return ReturnResult;

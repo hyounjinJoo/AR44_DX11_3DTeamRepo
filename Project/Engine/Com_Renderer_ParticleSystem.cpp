@@ -102,16 +102,16 @@ namespace mh
 		////누적시간
 		//float mElapsedTime;
 
-		Json::MHSaveValue(_pJVal, JSON_KEY_PAIR(mStartSize));
-		Json::MHSaveValue(_pJVal, JSON_KEY_PAIR(mStartColor));
-		Json::MHSaveValue(_pJVal, JSON_KEY_PAIR(mSimulationSpace));
-		Json::MHSaveValue(_pJVal, JSON_KEY_PAIR(mMaxParticles));
-		Json::MHSaveValue(_pJVal, JSON_KEY_PAIR(mStartLifeTime));
-		Json::MHSaveValue(_pJVal, JSON_KEY_PAIR(mFrequency));
-		Json::MHSaveValue(_pJVal, JSON_KEY_PAIR(mRadius));
-		Json::MHSaveValue(_pJVal, JSON_KEY_PAIR(mStartSpeed));
-		Json::MHSaveValue(_pJVal, JSON_KEY_PAIR(mTime));
-		Json::MHSaveValue(_pJVal, JSON_KEY_PAIR(mElapsedTime));
+		Json::MH::SaveValue(_pJVal, JSON_KEY_PAIR(mStartSize));
+		Json::MH::SaveValue(_pJVal, JSON_KEY_PAIR(mStartColor));
+		Json::MH::SaveValue(_pJVal, JSON_KEY_PAIR(mSimulationSpace));
+		Json::MH::SaveValue(_pJVal, JSON_KEY_PAIR(mMaxParticles));
+		Json::MH::SaveValue(_pJVal, JSON_KEY_PAIR(mStartLifeTime));
+		Json::MH::SaveValue(_pJVal, JSON_KEY_PAIR(mFrequency));
+		Json::MH::SaveValue(_pJVal, JSON_KEY_PAIR(mRadius));
+		Json::MH::SaveValue(_pJVal, JSON_KEY_PAIR(mStartSpeed));
+		Json::MH::SaveValue(_pJVal, JSON_KEY_PAIR(mTime));
+		Json::MH::SaveValue(_pJVal, JSON_KEY_PAIR(mElapsedTime));
 
 		return eResult::Success;
 	}
@@ -132,20 +132,20 @@ namespace mh
 			return result;
 		}
 
-		if (false == Json::MHLoadValue(_pJVal, JSON_KEY_PAIR(mStartSize)))
+		if (false == Json::MH::LoadValue(_pJVal, JSON_KEY_PAIR(mStartSize)))
 		{
 			mStartSize = float4::One;
 		}
 
-		Json::MHLoadValue(_pJVal, JSON_KEY_PAIR(mStartColor));
-		Json::MHLoadValue(_pJVal, JSON_KEY_PAIR(mSimulationSpace));
-		Json::MHLoadValue(_pJVal, JSON_KEY_PAIR(mMaxParticles));
-		Json::MHLoadValue(_pJVal, JSON_KEY_PAIR(mStartLifeTime));
-		Json::MHLoadValue(_pJVal, JSON_KEY_PAIR(mFrequency));
-		Json::MHLoadValue(_pJVal, JSON_KEY_PAIR(mRadius));
-		Json::MHLoadValue(_pJVal, JSON_KEY_PAIR(mStartSpeed));
-		Json::MHLoadValue(_pJVal, JSON_KEY_PAIR(mTime));
-		Json::MHLoadValue(_pJVal, JSON_KEY_PAIR(mElapsedTime));
+		Json::MH::LoadValue(_pJVal, JSON_KEY_PAIR(mStartColor));
+		Json::MH::LoadValue(_pJVal, JSON_KEY_PAIR(mSimulationSpace));
+		Json::MH::LoadValue(_pJVal, JSON_KEY_PAIR(mMaxParticles));
+		Json::MH::LoadValue(_pJVal, JSON_KEY_PAIR(mStartLifeTime));
+		Json::MH::LoadValue(_pJVal, JSON_KEY_PAIR(mFrequency));
+		Json::MH::LoadValue(_pJVal, JSON_KEY_PAIR(mRadius));
+		Json::MH::LoadValue(_pJVal, JSON_KEY_PAIR(mStartSpeed));
+		Json::MH::LoadValue(_pJVal, JSON_KEY_PAIR(mTime));
+		Json::MH::LoadValue(_pJVal, JSON_KEY_PAIR(mElapsedTime));
 
 		return eResult::Success;
 	}

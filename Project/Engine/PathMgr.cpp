@@ -8,7 +8,7 @@ namespace mh
 	std::filesystem::path PathMgr::mAbsolutePath{};
 	std::filesystem::path PathMgr::mRelativePath{};
 	std::filesystem::path PathMgr::mRelativePath_Res[(int)eResourceType::END]{};
-	std::filesystem::path PathMgr::mRelativePath_ShaderBin{};
+	std::filesystem::path PathMgr::mRelativePath_ShaderCSO{};
 
 	void PathMgr::Init()
 	{
@@ -17,8 +17,8 @@ namespace mh
 		mAbsolutePath = std::filesystem::current_path();
 		mAbsolutePath /= define::strKey::DirName_Content;
 
-		mRelativePath_ShaderBin = ".";
-		mRelativePath_ShaderBin /= mh::define::strKey::DirName_ShaderCSO;
+		mRelativePath_ShaderCSO = ".";
+		mRelativePath_ShaderCSO /= mh::define::strKey::DirName_ShaderCSO;
 		
 		mRelativePath = ".";
 		mRelativePath /= mh::define::strKey::DirName_Content;
@@ -38,7 +38,7 @@ namespace mh
 			mRelativePath_Res[i].clear();
 		}
 
-		mRelativePath_ShaderBin.clear();
+		mRelativePath_ShaderCSO.clear();
 	}
 }
 

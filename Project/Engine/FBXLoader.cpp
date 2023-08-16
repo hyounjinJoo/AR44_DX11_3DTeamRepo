@@ -7,12 +7,17 @@
 #include "Material.h"
 #include "define_Util.h"
 
-using namespace fbxsdk;
+#ifdef _DEBUG
+#pragma comment(lib, "FBXLoader/Debug/libfbxsdk-md.lib")
+#else
+#pragma comment(lib, "FBXLoader/Release/libfbxsdk-md.lib")
+#endif
 
+using namespace fbxsdk;
 namespace mh
 {
 	
-	namespace stdfs = std::filesystem;
+	
 
 	FBXLoader::FBXLoader()
 		: mManager(NULL)
@@ -59,7 +64,7 @@ namespace mh
 			assert(NULL);
 	}
 
-	eResult FBXLoader::LoadFbx(const stdfs::path& _strPath)
+	eResult FBXLoader::LoadFbx(const std::fs::path& _strPath)
 	{
 		mContainers.clear();
 
@@ -103,7 +108,7 @@ namespace mh
 		LoadTexture();
 
 		// 필요한 메테리얼 생성
-		CreateMaterial();
+		CreateMaterial(_strPath);
 
 		return eResult::Success;
 	}
@@ -413,9 +418,13 @@ namespace mh
 			if (1 <= iCnt)
 			{
 				FbxFileTexture* pFbxTex = TextureProperty.GetSrcObject<FbxFileTexture>(0);
-				if (NULL != pFbxTex)
+				if (nullptr != pFbxTex)
 				{
-					retStr = pFbxTex->GetRelativeFileName();
+					//절대 주소가 있을 경우에만 상대 주소를 꺼내와서 저장
+					if (std::fs::exists(pFbxTex->GetFileName()))
+					{
+						retStr = pFbxTex->GetRelativeFileName();
+					}
 				}
 			}
 		}
@@ -425,130 +434,111 @@ namespace mh
 
 	void FBXLoader::LoadTexture()
 	{
-		//const stdfs::path& texPath = PathMgr::GetRelResourcePath(eResourceType::Texture);
-		
-		//stdfs::path path_fbx_texture = texPath / "FBXTex";
-		//if (false == exists(path_fbx_texture))
-		//{
-		//	create_directory(path_fbx_texture);
-		//}
+		//일단 텍스처를 Texture 컨텐츠 폴더로 옮겨준다.
+		const std::fs::path& fbxPath = PathMgr::GetContentPathRelative(eResourceType::MeshData);
+		const std::fs::path& texPath = PathMgr::GetContentPathRelative(eResourceType::Texture);
 
-		//stdfs::path path_origin;
-		//stdfs::path path_filename;
-		//stdfs::path path_dest;
+		//텍스처 폴더 발견 시 최초 한번 Texture 폴더로 이동시키기 위한 코드
+		std::fs::path srcPathToDelete{};
+		auto CopyAndLoadTex = 
+			[&](std::string& _TextureRelativePath)->void
+			{
+				//비어있을경우 return
+				if (_TextureRelativePath.empty())
+					return;
 
-		const stdfs::path& fbxPath = PathMgr::GetRelResourcePath(eResourceType::MeshData);
+				//이동 원본 경로와 목표 경로를 만들어준다.
+				std::fs::path srcPath = fbxPath / _TextureRelativePath;
+				std::fs::path destPath = texPath / _TextureRelativePath;
 
+				//src에 파일이 있는데 dest에 없을 경우 복사
+				if (std::fs::exists(srcPath) && false == std::fs::exists(destPath))
+				{
+					//파일을 복사하고 
+					std::fs::copy(srcPath, destPath);
+				}
+
+				//바로 Texture Load. 로드 실패 시 false 반환
+				if (nullptr == ResMgr::Load<Texture>(_TextureRelativePath))
+				{
+					_TextureRelativePath.clear();
+					return;
+				}
+				else if (srcPathToDelete.empty())
+				{
+					srcPathToDelete = srcPath;
+					srcPathToDelete.remove_filename();
+				}
+			};
+
+		//순회를 돌며 텍스처 확인 후 이동시키고 로드까지 완료시킨다.
 		for (UINT i = 0; i < mContainers.size(); ++i)
 		{
 			for (UINT j = 0; j < mContainers[i].vecMtrl.size(); ++j)
 			{
-				if (false == mContainers[i].vecMtrl[j].strDiff.empty())
-				{
-					ResMgr::Load<Texture>(mContainers[i].vecMtrl[j].strDiff);
-				}				
-				
-				if (false == mContainers[i].vecMtrl[j].strNormal.empty())
-				{
-					ResMgr::Load<Texture>(mContainers[i].vecMtrl[j].strNormal);
-				}				
-				
-				if (false == mContainers[i].vecMtrl[j].strSpec.empty())
-				{
-					ResMgr::Load<Texture>(mContainers[i].vecMtrl[j].strSpec);
-				}				
-				
-				if (false == mContainers[i].vecMtrl[j].strEmis.empty())
-				{
-					ResMgr::Load<Texture>(mContainers[i].vecMtrl[j].strEmis);
-				}
-
-				//mContainers[i].vecMtrl[j].strDiff);
-				//mContainers[i].vecMtrl[j].strNormal
-				//	mContainers[i].vecMtrl[j].strSpec);
-				//	mContainers[i].vecMtrl[j].strEmis);
-
-				//std::vector<stdfs::path> vecPath;
-				//vecPath.reserve(4);
-
-				//vecPath.push_back(mContainers[i].vecMtrl[j].strDiff);
-				//vecPath.push_back(mContainers[i].vecMtrl[j].strNormal);
-				//vecPath.push_back(mContainers[i].vecMtrl[j].strSpec);
-				//vecPath.push_back(mContainers[i].vecMtrl[j].strEmis);
-
-				//for (size_t k = 0; k < vecPath.size(); ++k)
-				//{
-				//	if (vecPath[k].filename().empty())
-				//		continue;
-
-					//path_origin = fbxPath / vecPath[k];
-					//path_filename = vecPath[k].filename();
-					//path_dest = path_fbx_texture / path_filename;
-
-					//FBX 파일이 존재하지 않을 경우 텍스처 폴더로 copy
-	/*				if (exists(path_origin) && false == exists(path_dest))
-					{
-						stdfs::copy(path_origin, path_dest);
-					}*/
-
-					//stdfs::path loadPath = "FBXTex";
-					//loadPath /= path_filename;
-					//ResMgr::Load<Texture>(loadPath);
-
-					//switch (k)
-					//{
-					////case 0: mContainers[i].vecMtrl[j].strDiff = path_dest.string(); break;
-					//case 1: mContainers[i].vecMtrl[j].strNormal = path_dest.string(); break;
-					//case 2: mContainers[i].vecMtrl[j].strSpec = path_dest.string(); break;
-					//case 3: mContainers[i].vecMtrl[j].strEmis = path_dest.string(); break;
-					//}
-				//}
+				CopyAndLoadTex(mContainers[i].vecMtrl[j].strDiff);
+				CopyAndLoadTex(mContainers[i].vecMtrl[j].strNormal);
+				CopyAndLoadTex(mContainers[i].vecMtrl[j].strSpec);
+				CopyAndLoadTex(mContainers[i].vecMtrl[j].strEmis);
 			}
-			//path_origin = path_origin.parent_path();
-			//remove_all(path_origin);
+		}
+		
+		//순회 다돌았는데 원본 폴더 경로 있으면 제거
+		if (std::fs::exists(srcPathToDelete))
+		{
+			std::fs::remove_all(srcPathToDelete);
 		}
 	}
 
-	void FBXLoader::CreateMaterial()
+	void FBXLoader::CreateMaterial(const std::filesystem::path& _strPath)
 	{
-		std::string strMtrlName;
-		std::string strPath;
+		//std::string strMtrlKey;
+		//std::string strPath;
 
 		for (UINT i = 0; i < mContainers.size(); ++i)
 		{
 			for (UINT j = 0; j < mContainers[i].vecMtrl.size(); ++j)
 			{
-				//TODO: Material 저장 코드
-				// Material 이름짓기
-				strMtrlName = mContainers[i].vecMtrl[j].strMtrlName;
-				if (strMtrlName.empty())
-					strMtrlName = stdfs::path(mContainers[i].vecMtrl[j].strDiff).stem().string();
+				std::fs::path strMtrlKey = mContainers[i].vecMtrl[j].strMtrlName;
+				if (strMtrlKey.empty())
+				{
+					//파일 이름에서 확장자 제거하고 이름만 받아옴
+					strMtrlKey = _strPath.stem();
 
-				strPath = "material\\";
-				strPath += strMtrlName + ".mtrl";
+					//번호 붙여줌
+					strMtrlKey += "_Mtrl";
+					strMtrlKey += std::to_string(j);
+				}
+				
+				//.json 확장자 붙여 줌
+				strMtrlKey.replace_extension(strKey::Ext_Material);
+
+				//strPath = "material\\";
+				//strPath += strMtrlKey + ".mtrl";
 
 				// 재질 이름
-				mContainers[i].vecMtrl[j].strMtrlName = strPath;
+				mContainers[i].vecMtrl[j].strMtrlName = strMtrlKey.string();
 
-				std::string strName = strPath;
+				//std::string strName = strPath;
 
 				// 이미 로딩된 재질이면 로딩된 것을 사용
-				std::shared_ptr<Material> pMaterial = ResMgr::Find<Material>(strName);
+				std::shared_ptr<Material> pMaterial = ResMgr::Find<Material>(mContainers[i].vecMtrl[j].strMtrlName);
 				if (nullptr != pMaterial)
 					continue;
 
 				pMaterial = std::make_shared<Material>();
 
 				// 상대경로가 곧 키
-				pMaterial->SetKey(strName);
+				pMaterial->SetKey(mContainers[i].vecMtrl[j].strMtrlName);
 
+
+				//일단 기본 설정은 Deffered Shader 적용하는 걸로. 나중에 바꿀 것
 				pMaterial->SetRenderingMode(eRenderingMode::DefferdOpaque);
-
 				pMaterial->SetShader(ResMgr::Find<GraphicsShader>(strKey::Default::shader::graphics::DefferedShader));
 
 				
 				{
-					std::shared_ptr<Texture> pTex = ResMgr::Find<Texture>(mContainers[i].vecMtrl[j].strDiff);
+					std::shared_ptr<Texture> pTex = ResMgr::Load<Texture>(mContainers[i].vecMtrl[j].strDiff);
 					if (nullptr != pTex)
 					{
 						pMaterial->SetTexture(eTextureSlot::Albedo, pTex);
@@ -557,16 +547,15 @@ namespace mh
 
 					
 				{
-					std::shared_ptr<Texture> pTex = ResMgr::Find<Texture>(mContainers[i].vecMtrl[j].strNormal);
+					std::shared_ptr<Texture> pTex = ResMgr::Load<Texture>(mContainers[i].vecMtrl[j].strNormal);
 					if (nullptr != pTex)
 					{
 						pMaterial->SetTexture(eTextureSlot::Normal, pTex);
-
 					}
 				}
 
 				{
-					std::shared_ptr<Texture> pTex = ResMgr::Find<Texture>(mContainers[i].vecMtrl[j].strSpec);
+					std::shared_ptr<Texture> pTex = ResMgr::Load<Texture>(mContainers[i].vecMtrl[j].strSpec);
 					if (nullptr != pTex)
 					{
 						pMaterial->SetTexture(eTextureSlot::Specular, pTex);
@@ -589,8 +578,15 @@ namespace mh
 					, mContainers[i].vecMtrl[j].tMtrl.vAmb
 					, mContainers[i].vecMtrl[j].tMtrl.vEmv);
 
+				eResult result = pMaterial->Save(strMtrlKey);
+
+				if (eResultFail(result))
+				{
+					ERROR_MESSAGE_W(L"FBX 변환 에러: Material 저장 실패");
+				}
+
 				ResMgr::Insert(pMaterial->GetKey(), pMaterial);
-				//pMaterial->Save(strPath);
+				
 			}
 		}
 	}

@@ -5,6 +5,9 @@
 
 #include "json-cpp/json.h"
 #include "ResMgr.h"
+#include "PathMgr.h"
+
+#include "json-cpp/json.h"
 
 namespace mh
 {
@@ -32,12 +35,60 @@ namespace mh
 
     Material::~Material()
     {
+    }
 
+    eResult Material::Save(const std::filesystem::path& _path)
+    {
+        std::fs::path fullPath = PathMgr::GetContentPathRelative(GetResType());
+        if (false == std::fs::exists(fullPath))
+        {
+            std::fs::create_directories(fullPath);
+        }
+        fullPath /= _path;
+
+        std::ofstream ofs(fullPath);
+        if (false == ofs.is_open())
+            return eResult::Fail_OpenFile;
+
+        Json::Value jVal{};
+        eResult result = SaveJson(&jVal);
+        if (eResultFail(result))
+            return result;
+
+        ofs << jVal;
+        ofs.close();
+
+        return eResult::Success;
     }
 
     eResult Material::Load(const std::filesystem::path& _path)
     {
-        return eResult::Fail_NotImplemented;
+        std::fs::path fullPath = PathMgr::GetContentPathRelative(GetResType());
+        if (false == std::fs::exists(fullPath))
+        {
+            std::fs::create_directories(fullPath);
+            ERROR_MESSAGE_W(L"Material 폴더가 없습니다.");
+            return eResult::Fail_PathNotExist;
+        }
+        fullPath /= _path;
+
+        std::ifstream ifs(fullPath);
+        if (false == ifs.is_open())
+        {
+            ERROR_MESSAGE_W(L"Material 파일이 없습니다.");
+            return eResult::Fail_OpenFile;
+        }
+
+        Json::Value jVal{};
+        ifs >> jVal;
+        ifs.close();
+
+        eResult result = LoadJson(&jVal);
+        if (eResultFail(result))
+            return result;
+
+
+        return eResult::Success;
     }
 
     eResult Material::SaveJson(Json::Value* _pJVal)
@@ -63,31 +114,12 @@ namespace mh
         {
             jVal[JSON_KEY(mShader)] = mShader->GetKey();
         }
-            
-        std::is_array_v<std::array<std::shared_ptr<Texture>, (int)eTextureSlot::END>>;
-
-        Json::MHSaveVectorPtr(_pJVal, "mTextures", mTextures);
-
-        Json::MHSaveVectorPtr(_pJVal, JSON_KEY_PAIR(mTextures));
-
-        //mTextures은 텍스처 배열이므로 Key를 가져와서 저장
-        //for (int i = 0; i < mTextures.size(); ++i)
-        //{
-        //    Json::Value& TexJson = jVal[JSON_KEY(mTextures)];
-        //    if (mTextures[i])
-        //    {
-        //        TexJson.append(mTextures[i]->GetKey());
-        //    }
-        //    else
-        //    {
-        //        TexJson.append(Json::Value(Json::nullValue));
-        //    }
-        //}
-
+        
+        Json::MH::SaveStrKeyVector(_pJVal, JSON_KEY_PAIR(mTextures));
 
         //단순 Value의 경우에는 매크로로 바로 저장 가능
-        Json::MHSaveValue(_pJVal, JSON_KEY_PAIR(mCB));
-        Json::MHSaveValue(_pJVal, JSON_KEY_PAIR(mMode));
+        Json::MH::SaveValue(_pJVal, JSON_KEY_PAIR(mCB));
+        Json::MH::SaveValue(_pJVal, JSON_KEY_PAIR(mMode));
 
         return eResult::Success;
     }
@@ -108,27 +140,24 @@ namespace mh
         }
         const Json::Value& jVal = *_pJVal;
 
-        //쉐이더 데이터가 있는지 확인하고
-        if (jVal.isMember(JSON_KEY(mShader)))
+        //쉐이더 데이터가 있는지 확인하고 가져온 키값으로 쉐이더를 로드
+        std::string shaderStrKey = Json::MH::LoadStrKey(_pJVal, JSON_KEY_PAIR(mShader));
+        if (false == shaderStrKey.empty())
         {
-            //가져온 키값으로 쉐이더를 로드
-            std::string strKey = jVal[JSON_KEY(mShader)].asString();
-            ResMgr::Load<GraphicsShader>(strKey);
+            mShader = ResMgr::Load<GraphicsShader>(shaderStrKey);
         }
-
         
-        //포인터 배열은 GetJsonVector 함수를 통해서 Key값을 싹 받아올 수 있음.
-        const auto& vecLoad = Json::GetJsonVector(_pJVal, JSON_KEY(mTextures));
+        //포인터 배열은 MH::LoadStrKeyVector 함수를 통해서 Key값을 싹 받아올 수 있음.
+        const auto& vecLoad = Json::MH::LoadStrKeyVector(_pJVal, JSON_KEY(mTextures));
         for (size_t i = 0; i < vecLoad.size(); ++i)
         {
-            mTextures[i] = ResMgr::Load<Texture>(vecLoad[i]);
+            if(false == vecLoad[i].empty())
+                mTextures[i] = ResMgr::Load<Texture>(vecLoad[i]);
         }
 
-
         //단순 Value의 경우에는 함수로 바로 불러오기 가능
-        Json::MHLoadValue(_pJVal, JSON_KEY_PAIR(mMode));
-        Json::MHLoadValue(_pJVal, JSON_KEY_PAIR(mCB));
-
+        Json::MH::LoadValue(_pJVal, JSON_KEY_PAIR(mMode));
+        Json::MH::LoadValue(_pJVal, JSON_KEY_PAIR(mCB));
 
         return eResult();
     }

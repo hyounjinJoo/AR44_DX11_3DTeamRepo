@@ -87,10 +87,10 @@ namespace mh
 			return Result;
 		}
 
-		Json::MHSaveValue(_pJson, JSON_KEY_PAIR(mName));
-		Json::MHSaveValue(_pJson, JSON_KEY_PAIR(mState));
-		Json::MHSaveValue(_pJson, JSON_KEY_PAIR(mLayerType));
-		Json::MHSaveValue(_pJson, JSON_KEY_PAIR(mbDontDestroy));
+		Json::MH::SaveValue(_pJson, JSON_KEY_PAIR(mName));
+		Json::MH::SaveValue(_pJson, JSON_KEY_PAIR(mState));
+		Json::MH::SaveValue(_pJson, JSON_KEY_PAIR(mLayerType));
+		Json::MH::SaveValue(_pJson, JSON_KEY_PAIR(mbDontDestroy));
 
 		{
 			(*_pJson)[strKey::Json::GameObject::mComponents] = Json::Value(Json::arrayValue);
@@ -169,10 +169,10 @@ namespace mh
 			return Result;
 		}
 
-		Json::MHLoadValue(_pJson, JSON_KEY_PAIR(mName));
-		Json::MHLoadValue(_pJson, JSON_KEY_PAIR(mState));
-		Json::MHLoadValue(_pJson, JSON_KEY_PAIR(mLayerType));
-		Json::MHLoadValue(_pJson, JSON_KEY_PAIR(mbDontDestroy));
+		Json::MH::LoadValue(_pJson, JSON_KEY_PAIR(mName));
+		Json::MH::LoadValue(_pJson, JSON_KEY_PAIR(mState));
+		Json::MH::LoadValue(_pJson, JSON_KEY_PAIR(mLayerType));
+		Json::MH::LoadValue(_pJson, JSON_KEY_PAIR(mbDontDestroy));
 
 		//컴포넌트 추가
 		if (_pJson->isMember(strKey::Json::GameObject::mComponents))

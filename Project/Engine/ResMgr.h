@@ -26,7 +26,7 @@ namespace mh
 {
 	using namespace mh::define;
 	using namespace mh;
-	namespace stdfs = std::filesystem;
+	
 
 	class ResMgr
 	{
@@ -120,12 +120,13 @@ namespace mh
 
 		std::shared_ptr<IRes> FindRes = Find(GetResType<T>(), strKey);
 
-		// 이미 해당 키로 리소스가 있다면, 반환
+		// 이미 해당 키로 리소스가 있다면, dynamic 캐스팅 해서 반환
 		if (FindRes)
 			return std::dynamic_pointer_cast<T>(FindRes);
 
 		std::shared_ptr<T> NewRes = std::make_shared<T>();
 
+		//Load 실패 시 nullptr 반환
 		if (FAILED(NewRes->Load(_fileName)))
 			return nullptr;
 

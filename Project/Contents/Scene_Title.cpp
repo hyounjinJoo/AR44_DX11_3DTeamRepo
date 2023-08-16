@@ -110,7 +110,7 @@ namespace mh
 		//}
 
 		{
-			std::shared_ptr<MeshData> data = ResMgr::Load<MeshData>("StylizedCrossbow.fbx");
+			std::shared_ptr<MeshData> data = ResMgr::Load<MeshData>("house.fbx");
 			GameObject* obj = data->Instantiate();
 			obj->SetName("fbxTextObj");
 			obj->AddComponent<Script_Player>();

@@ -63,9 +63,9 @@ namespace mh
 		//for (size_t i = 0; i < mSpriteSheet.size(); ++i)
 		//{
 		//	//3. 순회돌면서 하나씩 추가한다.
-		//	jVal.append(Json::MHConvertWrite(mSpriteSheet[i]));
+		//	jVal.append(Json::ConvertWrite(mSpriteSheet[i]));
 		//}
-		Json::MHSaveVector(_pJVal, JSON_KEY_PAIR(mSpriteSheet));
+		Json::MH::SaveValueVector(_pJVal, JSON_KEY_PAIR(mSpriteSheet));
 
 
 		return eResult::Success;
@@ -84,7 +84,7 @@ namespace mh
 		}
 		const Json::Value& jVal = (*_pJVal);
 
-		auto SpriteData = Json::MHGetJsonVector(_pJVal, JSON_KEY_PAIR(mSpriteSheet));
+		auto SpriteData = Json::MH::LoadValueVector(_pJVal, JSON_KEY_PAIR(mSpriteSheet));
 		mSpriteSheet = std::move(SpriteData);
 
 		

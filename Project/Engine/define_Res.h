@@ -51,6 +51,8 @@ namespace mh::define
 
 		STRKEY DirName_ShaderCSO = "ShaderCSO";
 		STRKEY Ext_ShaderCSO = ".cso";
+		STRKEY Ext_MeshData = ".msh";
+		STRKEY Ext_Material = ".json";
 
 		namespace Default
 		{

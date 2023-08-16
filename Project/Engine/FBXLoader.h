@@ -129,7 +129,9 @@ namespace mh
 		std::string GetMtrlTextureName(fbxsdk::FbxSurfaceMaterial* _pSurface, const char* _pMtrlProperty);
 
 		void LoadTexture();
-		void CreateMaterial();
+
+		//혹시라도 Material 이름이 안지어져있을 때 사용하기위해 Path를 받아옴(이름이 있을경우 사용 X)
+		void CreateMaterial(const std::filesystem::path& _strPath);
 
 		// Animation
 		void LoadSkeleton(fbxsdk::FbxNode* _pNode);
