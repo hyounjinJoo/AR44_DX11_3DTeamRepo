@@ -518,6 +518,7 @@ namespace mh
 		{
 			for (UINT j = 0; j < mContainers[i].vecMtrl.size(); ++j)
 			{
+				//TODO: Material 저장 코드
 				// Material 이름짓기
 				strMtrlName = mContainers[i].vecMtrl[j].strMtrlName;
 				if (strMtrlName.empty())

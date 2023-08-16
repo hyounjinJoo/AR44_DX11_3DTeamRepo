@@ -215,7 +215,7 @@ namespace mh
 				}
 				else
 				{
-					mMultiRenderTargets[i]->Clear(float4(0.2f));
+					mMultiRenderTargets[i]->Clear(float4(0.7f));
 				}
 			}
 				

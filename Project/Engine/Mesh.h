@@ -1,6 +1,5 @@
 #pragma once
 #include "IRes.h"
-
 #include "define_GPU.h"
 #include "define_Struct.h"
 
@@ -29,9 +28,14 @@ namespace mh
 	struct tIndexInfo
 	{
 		ComPtr<ID3D11Buffer>    IndexBuffer;
-		D3D11_BUFFER_DESC       tIBDesc;
-		UINT				    IdxCount;
-		//void*					 pIdxSysMem;
+
+		struct Value
+		{
+			D3D11_BUFFER_DESC       tIBDesc;
+			UINT				    IdxCount;
+		} Val;
+
+		std::vector<UINT>		IdxSysMem;
 	};
 
 	class FBXLoader;
@@ -44,6 +48,7 @@ namespace mh
 
 		static std::shared_ptr<Mesh> CreateFromContainer(FBXLoader* _loader);
 
+		virtual eResult Save(const std::filesystem::path& _path) override;
 		virtual eResult Load(const std::filesystem::path& _path) override;
 
 		template <typename Vertex>
@@ -51,10 +56,9 @@ namespace mh
 
 		template <typename Vertex>
 		inline bool CreateVertexBuffer(const std::vector<Vertex>& _vecVtx);
-		bool CreateVertexBuffer(const void* _data, size_t _dataStride, size_t _count);
+		bool CreateVertexBuffer(const void* _data, size_t _dataStride, size_t _dataCount);
 
-
-		bool CreateIndexBuffer(const void* _data, size_t _count);
+		bool CreateIndexBuffer(const UINT* _data, size_t _dataCount);
 		inline bool CreateIndexBuffer(const std::vector<UINT>& _indices);
 
 		void BindBuffer(UINT _subSet = 0u) const;
@@ -76,16 +80,24 @@ namespace mh
 		StructBuffer* GetBoneFrameDataBuffer() { return m_pBoneFrameData; } // 전체 본 프레임 정보
 		StructBuffer* GetBoneOffsetBuffer() { return  m_pBoneOffset; }	   // 각 뼈의 offset 행렬
 
+	private:
+		//버퍼를 만들지 않고 단순 데이터만 집어넣음
+		bool SetVertexBufferData(const void* _data, size_t _dataStride, size_t _dataCount);
+		bool SetIndexBufferData(const UINT* _data, size_t _dataCount);
+
+		bool CreateVertexBuffer();
+		bool CreateIndexBuffer();
+
+		//void CreateAnimSBuffer();
 
 	private:
 		Microsoft::WRL::ComPtr<ID3D11Buffer> mVertexBuffer;
 		D3D11_BUFFER_DESC mVBDesc;
-		uint mVertexByteStride;
-		uint mVertexCount;
-		//std::vector<Vertex3D> mVertices;
-
+		UINT mVertexByteStride;
+		UINT mVertexCount;
+		std::vector<unsigned char> mVertexSysMem;
+		
 		std::vector<tIndexInfo>		mIndexInfos;
-
 
 		// Animation3D 정보
 		std::vector<define::tMTAnimClip>		m_vecAnimClip;
@@ -104,7 +116,7 @@ namespace mh
 			return false;
 		}
 
-		if (false == CreateIndexBuffer((void*)_vecIdx.data(), _vecIdx.size()))
+		if (false == CreateIndexBuffer((UINT*)_vecIdx.data(), _vecIdx.size()))
 		{
 			return false;
 		}
@@ -118,7 +130,7 @@ namespace mh
 	}
 	inline bool Mesh::CreateIndexBuffer(const std::vector<UINT>& _indices)
 	{
-		return CreateIndexBuffer(static_cast<const void*>(_indices.data()), _indices.size());
+		return CreateIndexBuffer(static_cast<const UINT*>(_indices.data()), _indices.size());
 	}
 
 }

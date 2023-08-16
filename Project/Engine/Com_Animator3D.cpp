@@ -60,19 +60,19 @@ namespace mh
 		// 현재 재생중인 Clip 의 시간을 진행한다.
 		m_vecClipUpdateTime[m_iCurClip] += TimeMgr::DeltaTime();
 
-		if (m_vecClipUpdateTime[m_iCurClip] >= m_pVecClip->at(m_iCurClip).dTimeLength)
+		if (m_vecClipUpdateTime[m_iCurClip] >= m_pVecClip->at(m_iCurClip).Val.dTimeLength)
 		{
 			m_vecClipUpdateTime[m_iCurClip] = 0.f;
 		}
 
-		m_dCurTime = m_pVecClip->at(m_iCurClip).dStartTime + m_vecClipUpdateTime[m_iCurClip];
+		m_dCurTime = m_pVecClip->at(m_iCurClip).Val.dStartTime + m_vecClipUpdateTime[m_iCurClip];
 
 		// 현재 프레임 인덱스 구하기
 		double dFrameIdx = m_dCurTime * (double)m_iFrameCount;
 		m_iFrameIdx = (int)(dFrameIdx);
 
 		// 다음 프레임 인덱스
-		if (m_iFrameIdx >= m_pVecClip->at(0).iFrameLength - 1)
+		if (m_iFrameIdx >= m_pVecClip->at(0).Val.iFrameLength - 1)
 			m_iNextFrameIdx = m_iFrameIdx;	// 끝이면 현재 인덱스를 유지
 		else
 			m_iNextFrameIdx = m_iFrameIdx + 1;

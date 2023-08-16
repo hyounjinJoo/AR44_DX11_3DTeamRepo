@@ -2,10 +2,11 @@
 #include <string>
 #include <vector>
 #include <Windows.h>
-#include <fbxsdk/core/base/fbxtime.h>
 
-
+#include "DefaultShader/SH_CommonStruct.hlsli"
 #include "SimpleMath.h"
+
+#include <fbxsdk/core/base/fbxtime.h>
 
 namespace mh::define
 {
@@ -62,53 +63,53 @@ namespace mh::define
 		void SetDataPtr(const T _pData) { pData = (void*)_pData; size = sizeof(T); }
 	};
 
-
-
 	// ============
 // Animation 3D
 // ============
-	struct tFrameTrans
-	{
-		float4	vTranslate;
-		float4	vScale;
-		float4	qRot;
-	};
+	//struct tFrameTranslation
+	//{
+	//	float4	vTranslate;
+	//	float4	vScale;
+	//	float4	qRot;
+	//};
 
 	struct tMTKeyFrame
 	{
 		double	dTime;
 		int		iFrame;
-		float3	vTranslate;
-		float3	vScale;
-		float4	qRot;
+		tFrameTranslation  FrameTrans;
 	};
-
 
 	struct tMTBone
 	{
-		std::string				strBoneName;
-		int					iDepth;
-		int					iParentIndx;
-		MATRIX				matOffset;	// Offset 행렬(뼈 -> 루트 까지의 행렬)
-		MATRIX				matBone;   // 이거 안씀
+		std::string			strBoneName;
+
+		struct Value//저장을 위해서 별도의 struct 안에 넣어놓음
+		{
+			int					iDepth;
+			int					iParentIndx;
+			MATRIX				matOffset;	// Offset 행렬(뼈 -> 루트 까지의 행렬)
+			MATRIX				matBone;   // 이거 안씀
+		} Val;
+
 		std::vector<tMTKeyFrame>	vecKeyFrame;
 	};
 
 	struct tMTAnimClip
 	{
 		std::string			strAnimName;
-		int				iStartFrame;
-		int				iEndFrame;
-		int				iFrameLength;
+		struct Value//저장을 위해서 별도의 struct 안에 넣어놓음
+		{
+			int				iStartFrame;
+			int				iEndFrame;
+			int				iFrameLength;
 
-		double			dStartTime;
-		double			dEndTime;
-		double			dTimeLength;
-		float			fUpdateTime; // 이거 안씀
+			double			dStartTime;
+			double			dEndTime;
+			double			dTimeLength;
+			float			fUpdateTime; // 이거 안씀
 
-		fbxsdk::FbxTime::EMode	eMode;
+			fbxsdk::FbxTime::EMode	eMode;
+		} Val;
 	};
-
-
-
 }

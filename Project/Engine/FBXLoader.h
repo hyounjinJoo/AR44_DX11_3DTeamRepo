@@ -70,7 +70,7 @@ namespace mh
 	struct tKeyFrame
 	{
 		fbxsdk::FbxAMatrix  matTransform;
-		double		dTime;
+		double				dTime;
 	};
 
 	struct tBone

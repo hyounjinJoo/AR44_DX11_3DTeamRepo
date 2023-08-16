@@ -8,6 +8,7 @@
 #include "GameObject.h"
 #include "Com_Renderer_Mesh.h"
 #include "Com_Animator3D.h"
+#include "define_Util.h"
 
 namespace mh
 {
@@ -20,6 +21,12 @@ namespace mh
 
 	MeshData::~MeshData()
 	{
+	}
+
+	eResult MeshData::Save(const std::filesystem::path& _filePath)
+	{
+
+		return eResult();
 	}
 
 	eResult MeshData::Load(const std::filesystem::path& _path)
