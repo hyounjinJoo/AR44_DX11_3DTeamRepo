@@ -279,7 +279,12 @@ namespace gui
 			if (ImGui::Button(Edit.c_str()))
 			{
 				mSemanticEditIdx = (int)i;
-				mSemanticName = mInputLayoutDescs[i].SemanticName;
+
+				if (mInputLayoutDescs[i].SemanticName)
+					mSemanticName = mInputLayoutDescs[i].SemanticName;
+				else
+					mSemanticName.clear();
+				
 				mDescForEdit = mInputLayoutDescs[i];
 				mDXGIFormatCombo.SetCurrentIndex((int)mDescForEdit.Format);
 			}

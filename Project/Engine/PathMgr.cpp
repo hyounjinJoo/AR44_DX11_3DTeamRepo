@@ -18,7 +18,7 @@ namespace mh
 		mAbsolutePath /= define::strKey::DirName_Content;
 
 		mRelativePath_ShaderBin = ".";
-		mRelativePath_ShaderBin /= mh::define::strKey::DirName_ShaderBin;
+		mRelativePath_ShaderBin /= mh::define::strKey::DirName_ShaderCSO;
 		
 		mRelativePath = ".";
 		mRelativePath /= mh::define::strKey::DirName_Content;

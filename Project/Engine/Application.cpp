@@ -123,7 +123,7 @@ namespace mh
 
 	void Application::Present()
 	{
-		GPUMgr::Present();
+		GPUMgr::Present(true);
 	}
 
 	void Application::Release()

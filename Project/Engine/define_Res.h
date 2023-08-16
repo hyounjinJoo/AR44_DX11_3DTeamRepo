@@ -49,8 +49,8 @@ namespace mh::define
 		};
 		inline STRKEY GetResName(eResourceType _type) { return ArrResName[(int)_type]; }
 
-		STRKEY DirName_ShaderBin = "ShaderBin";
-		STRKEY Ext_ShaderBin = ".cso";
+		STRKEY DirName_ShaderCSO = "ShaderCSO";
+		STRKEY Ext_ShaderCSO = ".cso";
 
 		namespace Default
 		{

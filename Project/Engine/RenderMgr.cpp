@@ -789,7 +789,7 @@ namespace mh
 			// 인덱스
 			// 북극점
 			std::vector<uint> indices;
-			indices.reserve(2000);
+			indices.reserve(10000);
 			for (uint i = 0; i < iSliceCount; ++i)
 			{
 				indices.push_back(0);

@@ -35,7 +35,7 @@ namespace mh
 	{
 		stdfs::path FilePath = PathMgr::GetShaderBinPath();
 		FilePath /= _path;
-		FilePath.replace_extension(define::strKey::Ext_ShaderBin);
+		FilePath.replace_extension(define::strKey::Ext_ShaderCSO);
 
 		return CreateByCSO(FilePath);
 	}
