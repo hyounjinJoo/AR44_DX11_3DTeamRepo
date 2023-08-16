@@ -20,6 +20,7 @@ namespace mh::define::strKey::Texture
 	STRKEY HPBar_png = "HPBar.png";
 	STRKEY Light_png = "Light.png";
 	STRKEY Smile_png = "Smile.png";
+	STRKEY test_png = "test.png";
 	STRKEY Zelda_png = "Zelda.png";
 	namespace Cube
 	{

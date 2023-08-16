@@ -221,7 +221,7 @@ namespace mh
 		mViewPort.MinDepth = (FLOAT)0.f;
 		mViewPort.MaxDepth = (FLOAT)1.f;
 
-		int2 winSize = Application::GetWIndowSize();
+		int2 winSize = Application::GetWindowSize();
 
 		mViewPort.Width = (FLOAT)winSize.x;
 		mViewPort.Height = (FLOAT)winSize.y;

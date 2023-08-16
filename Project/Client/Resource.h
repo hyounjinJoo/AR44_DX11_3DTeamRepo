@@ -3,7 +3,6 @@
 // Client.rc에서 사용되고 있습니다.
 //
 #define IDI_ICON1                       101
-#define IDR_ACCELERATOR1                102
 #define IDM_ABOUT                       40001
 
 // Next default values for new objects

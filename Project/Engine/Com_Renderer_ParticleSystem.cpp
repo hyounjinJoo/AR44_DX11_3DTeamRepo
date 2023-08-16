@@ -215,17 +215,17 @@ namespace mh
 		}
 
 		mMaxParticles = mBuffer->GetStride();
-		float3 pos = GetOwner()->GetTransform().GetPosition();
-		mCBData.WorldPosition = float4(pos.x, pos.y, pos.z, 1.0f);
-		mCBData.MaxParticles = mMaxParticles;
-		mCBData.Radius = mRadius;
-		mCBData.SimulationSpace = (uint)mSimulationSpace;
-		mCBData.StartSpeed = mStartSpeed;
-		mCBData.StartSize = mStartSize;
-		mCBData.StartColor = mStartColor;
-		mCBData.StartLifeTime = mStartLifeTime;
-		mCBData.DeltaTime = TimeMgr::DeltaTime();
-		mCBData.ElapsedTime += TimeMgr::DeltaTime();
+		float3 pos = GetOwner()->GetTransform().GetRelativePos();
+		mCBData.worldPosition = float4(pos.x, pos.y, pos.z, 1.0f);
+		mCBData.maxParticles = mMaxParticles;
+		mCBData.radius = mRadius;
+		mCBData.simulationSpace = (uint)mSimulationSpace;
+		mCBData.startSpeed = mStartSpeed;
+		mCBData.startSize = mStartSize;
+		mCBData.startColor = mStartColor;
+		mCBData.startLifeTime = mStartLifeTime;
+		mCBData.deltaTime = TimeMgr::DeltaTime();
+		mCBData.elapsedTime += TimeMgr::DeltaTime();
 
 		ConstBuffer* cb = RenderMgr::GetConstBuffer(eCBType::ParticleSystem);
 		cb->SetData(&mCBData);
@@ -239,7 +239,7 @@ namespace mh
 	void Com_Renderer_ParticleSystem::Render()
 	{
 		GetOwner()->GetTransform().SetConstBuffer();
-		mBuffer->BindDataSRV(15, eShaderStageFlag::GS);
+		mBuffer->BindDataSRV(Register_t_atlasTexture, eShaderStageFlag::GS);
 
 		GetMaterial(0)->Bind();
 		GetMesh()->RenderInstanced(0u, mMaxParticles);

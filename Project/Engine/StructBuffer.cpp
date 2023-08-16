@@ -7,6 +7,8 @@
 
 namespace mh
 {
+	using namespace mh::define;
+
 	StructBuffer::StructBuffer()
 		: GPUBuffer(eBufferType::Struct)
 		, mSBufferDesc()
@@ -118,7 +120,6 @@ namespace mh
 				Data.SysMemPitch = mElementStride * (uint)_uElemCount;
 				Data.SysMemSlicePitch = mBufferDesc.StructureByteStride;
 				pData = &Data;
-				mCurBoundView = eBufferViewType::SRV;
 			}
 
 
@@ -176,7 +177,7 @@ namespace mh
 
 		//g_arrSBufferShareData의 자신의 인덱스에 해당하는 위치에 이번에 업데이트된 구조체의 갯수를 삽입
 		//상수 버퍼의 바인딩은 BindData()를 하는 시점에 해준다.
-		SBufferCB cb = {};
+		tCB_SBufferCount cb = {};
 		cb.SBufferDataCount = mElementCount;
 
 
@@ -305,6 +306,7 @@ namespace mh
 		{
 			_SRVSlot = (int)mSBufferDesc.REGISLOT_t_SRV;
 		}
+
 		mCurBoundRegister = _SRVSlot;
 
 		if (eShaderStageFlag::NONE == _stageFlag)
@@ -415,9 +417,9 @@ namespace mh
 	{
 		//구조체 정보를 담은 상수버퍼에 바인딩한 구조체 갯수를 넣어서 전달
 		//상수버퍼의 주소는 한번 실행되면 변하지 않으므로 static, const 형태로 선언.
-		static ConstBuffer* pStructCBuffer = RenderMgr::GetConstBuffer(eCBType::SBuffer);
+		static ConstBuffer* pStructCBuffer = RenderMgr::GetConstBuffer(eCBType::SBufferCount);
 
-		SBufferCB cb = {};
+		tCB_SBufferCount cb = {};
 		cb.SBufferDataCount = mElementCount;
 
 		pStructCBuffer->SetData(&cb);

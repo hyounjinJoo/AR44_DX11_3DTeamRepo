@@ -2,26 +2,24 @@
 
 
 
-StructuredBuffer<tParticle> particleBuffer : register(t15);
-
 [maxvertexcount(6)]
 void main( point VSOut input[1], inout TriangleStream<GSOutput> output)
 {
     GSOutput Out[4] = { (GSOutput) 0.0f, (GSOutput) 0.0f, (GSOutput) 0.0f, (GSOutput) 0.0f };
 	
-    if (0 == particleBuffer[input[0].iInstance].active)
+    if (0 == ParticleBuffer[input[0].iInstance].active)
         return;
 	
-    float3 vWorldPos = input[0].Pos.xyz + particleBuffer[input[0].iInstance].position.xyz;
+	float3 vWorldPos = input[0].Pos.xyz + ParticleBuffer[input[0].iInstance].position.xyz;
     
-    if (simulationSpace == 0)
+    if (CB_ParticleSystem.simulationSpace == 0)
     {
-        vWorldPos += world._41_42_43;
+		vWorldPos += CB_Transform.world._41_42_43;
 
     }
-    float3 vViewPos = mul(float4(vWorldPos, 1.0f), view).xyz;
+	float3 vViewPos = mul(float4(vWorldPos, 1.0f), CB_Transform.view).xyz;
 	
-    float3 vScale = startSize.xyz;
+    float3 vScale = CB_ParticleSystem.startSize.xyz;
     //vScale = lerp(20.0f, 50.0f, elapsedTime);
 	
     float3 NewPos[4] =
@@ -34,8 +32,8 @@ void main( point VSOut input[1], inout TriangleStream<GSOutput> output)
 	
     for (int i = 0; i < 4; i++)
     {
-        Out[i].Pos = mul(float4(NewPos[i], 1.0f), projection);
-    }
+		Out[i].Pos = mul(float4(NewPos[i], 1.0f), CB_Transform.projection);
+	}
 	
     Out[0].UV = float2(0.0f, 0.0f);
     Out[1].UV = float2(1.0f, 0.0f);

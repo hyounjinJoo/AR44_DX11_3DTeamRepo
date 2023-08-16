@@ -2,6 +2,8 @@
 #define SH_DEFFERED
 
 #include "SH_Globals.hlsli"
+#include "SH_Func_Animation3D.hlsli"
+
 
 struct VSIn
 {
@@ -10,6 +12,9 @@ struct VSIn
 	float3 Tangent : TANGENT;
 	float3 Normal : NORMAL;
 	float3 BiNormal : BINORMAL;
+	
+	float4 vWeights : BLENDWEIGHT;
+	float4 vIndices : BLENDINDICES;
 };
 
 struct VSOut
@@ -19,8 +24,8 @@ struct VSOut
     
 	float3 ViewPos : POSITION;
     
-	float3 ViewNormal : NORMAL;
 	float3 ViewTanget : TANGENT;
+	float3 ViewNormal : NORMAL;
 	float3 ViewBiNormal : BINORMAL;
 };
 

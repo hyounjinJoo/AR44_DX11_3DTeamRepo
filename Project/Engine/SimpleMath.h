@@ -12,6 +12,42 @@
 using namespace DirectX;
 using namespace DirectX::PackedVector;
 
+namespace mh::define
+{
+    enum class eAxis2D
+    {
+        X,
+        Y,
+        END
+    };
+
+
+    enum class eAxis3D
+    {
+        X,
+        Y,
+        Z,
+        END
+    };
+
+    enum class eAxis4D
+    {
+        X,
+        Y,
+        Z,
+        W,
+        END
+    };
+
+    //직관적인 방향
+    enum class eDirectionType
+    {
+        RIGHT,
+        UP,
+        FRONT,
+        END
+    };
+}
 
 namespace mh::math
 {
@@ -215,6 +251,7 @@ namespace mh::math
         
 
         Vector3(const Vector3&) = default;
+        Vector3& operator=(const Vector2& _v2) { this->x = _v2.x; this->y = _v2.y; this->z = 0.f; }
         Vector3& operator=(const Vector3&) = default;
 
         Vector3(Vector3&&) = default;
@@ -229,6 +266,7 @@ namespace mh::math
         // Assignment operators
         Vector3& operator= (const XMVECTORF32& F) noexcept { x = F.f[0]; y = F.f[1]; z = F.f[2]; return *this; }
 
+        Vector3& operator+= (const Vector2& _v2) noexcept;
         Vector3& operator+= (const Vector3& V) noexcept;
         Vector3& operator-= (const Vector3& V) noexcept;
         Vector3& operator*= (const Vector3& V) noexcept;
@@ -249,7 +287,7 @@ namespace mh::math
         void Cross(const Vector3& V, Vector3& result) const noexcept;
         Vector3 Cross(const Vector3& V) const noexcept;
 
-        void Normalize() noexcept;
+        Vector3& Normalize() noexcept;
         void Normalize(Vector3& result) const noexcept;
 
         void Clamp(const Vector3& vmin, const Vector3& vmax) noexcept;
@@ -512,6 +550,9 @@ namespace mh::math
         Matrix operator- () const noexcept;
 
         // Properties
+        Vector3 Axis(define::eAxis4D _Axis) const { return Vector3(this->m[(int)_Axis]); }
+
+        // Properties
         Vector3 Up() const noexcept { return Vector3(_21, _22, _23); }
         void Up(const Vector3& v) noexcept { _21 = v.x; _22 = v.y; _23 = v.z; }
 
@@ -524,11 +565,11 @@ namespace mh::math
         Vector3 Left() const noexcept { return Vector3(-_11, -_12, -_13); }
         void Left(const Vector3& v) noexcept { _11 = -v.x; _12 = -v.y; _13 = -v.z; }
 
-        Vector3 Forward() const noexcept { return Vector3(-_31, -_32, -_33); }
-        void Forward(const Vector3& v) noexcept { _31 = -v.x; _32 = -v.y; _33 = -v.z; }
+        Vector3 Forward() const noexcept { return Vector3(_31, _32, _33); }
+        void Forward(const Vector3& v) noexcept { _31 = v.x; _32 = v.y; _33 = v.z; }
 
-        Vector3 Backward() const noexcept { return Vector3(_31, _32, _33); }
-        void Backward(const Vector3& v) noexcept { _31 = v.x; _32 = v.y; _33 = v.z; }
+        Vector3 Backward() const noexcept { return Vector3(-_31, -_32, -_33); }
+        void Backward(const Vector3& v) noexcept { _31 = -v.x; _32 = -v.y; _33 = -v.z; }
 
         Vector3 Translation() const  noexcept { return Vector3(_41, _42, _43); }
         void Translation(const Vector3& v) noexcept { _41 = v.x; _42 = v.y; _43 = v.z; }
@@ -986,48 +1027,6 @@ namespace mh::math
 #include "SimpleMath.inl"
 }
 
-namespace mh
-{
-    using float2 = math::Vector2;
-    using float3 = math::Vector3;
-    using float4 = math::Vector4;
-    using MATRIX = math::Matrix;
-    using uint = UINT;
-    struct uint2
-    {
-        uint x;
-        uint y;
-    };
-    struct uint3
-    {
-        uint x;
-        uint y;
-        uint z;
-    };
-    struct uint4
-    {
-        uint x;
-        uint y;
-        uint z;
-        uint w;
-    };
-    struct int2
-    {
-        int x;
-        int y;
-    };
-    struct int3
-    {
-        int x;
-        int y;
-        int z;
-    };
-    struct int4
-    {
-        int x;
-        int y;
-        int z;
-        int w;
-    };
-}
+#include "DefaultShader/SH_Common.hlsli"
+
 

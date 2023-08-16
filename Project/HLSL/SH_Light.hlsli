@@ -3,36 +3,39 @@
 
 #include "SH_ConstBuffer.hlsli"
 
-struct LightColor
+struct alignas(16) tLightColor
 {
 	float4 diffuse;
 	float4 specular;
 	float4 ambient;
 };
 
-struct LightAttribute
+struct alignas(16) tLightAttribute
 {
-	LightColor color;
+	tLightColor color;
 	float4 position;
 	float4 direction;
     
-	int type;
+	int lightType;
 	float radius;
 	float angle;
 	int padding;
 };
 
-StructuredBuffer<LightAttribute> lightAttributes : register(t13);
+SBUFFER(lightAttributes, tLightAttribute, t, 13);
+
+//HLSL
+#ifndef __cplusplus
 //StructuredBuffer<LightAttribute> lightAttributes3D : register(t14);
 
 //2D
-void CalculateLight(in out LightColor pLightColor, float3 position, int idx)
+void CalculateLight(in out tLightColor pLightColor, float3 position, int idx)
 {
-	if (0 == lightAttributes[idx].type)
+	if (0 == lightAttributes[idx].lightType)
 	{
 		pLightColor.diffuse += lightAttributes[idx].color.diffuse;
 	}
-	else if (1 == lightAttributes[idx].type)
+	else if (1 == lightAttributes[idx].lightType)
 	{
 		float length = distance(lightAttributes[idx].position.xy, position.xy);
         
@@ -55,11 +58,11 @@ static float3 globalLightDir = float3(1.0f, -1.0f, 1.0f);
 static float3 globalLightColor = float3(1.0f, 1.0f, 1.0f);
 static float3 globalLightAmb = float3(0.15f, 0.15f, 0.15f);
 
-void CalculateLight3D(float3 viewPos, float3 viewNormal, int lightIdx, inout LightColor lightColor)
+void CalculateLight3D(float3 viewPos, float3 viewNormal, int lightIdx, inout tLightColor lightColor)
 {
     
    
-	LightAttribute lightInfo = lightAttributes[lightIdx];
+	tLightAttribute lightInfo = lightAttributes[lightIdx];
     
 	float3 viewLightDir = (float3) 0.0f;
 
@@ -68,9 +71,9 @@ void CalculateLight3D(float3 viewPos, float3 viewNormal, int lightIdx, inout Lig
 	float fSpecPow = 0.0f;
     
     // Directional
-	if (0 == lightInfo.type)
+	if (0 == lightInfo.lightType)
 	{
-		viewLightDir = normalize(mul(float4(lightInfo.direction.xyz, 0.0f), view)).xyz;
+		viewLightDir = normalize(mul(float4(lightInfo.direction.xyz, 0.0f), CB_Transform.view)).xyz;
 
         //view space 상에서 빛의 세기를 구함
 		fDiffPow = saturate(dot(-viewLightDir, viewNormal));
@@ -90,10 +93,10 @@ void CalculateLight3D(float3 viewPos, float3 viewNormal, int lightIdx, inout Lig
 
 	}
     // point
-	else if (1 == lightInfo.type)
+	else if (1 == lightInfo.lightType)
 	{
         // view space 상에서 광원의 위치를 알아낸다.
-		float3 vLightViewPos = mul(float4(lightInfo.position.xyz, 1.0f), view).xyz;
+		float3 vLightViewPos = mul(float4(lightInfo.position.xyz, 1.0f), CB_Transform.view).xyz;
         
         // 광원의 위치에서 표면을 향하는 벡터
 		viewLightDir = viewPos - vLightViewPos;
@@ -136,7 +139,7 @@ void CalculateLight3D(float3 viewPos, float3 viewNormal, int lightIdx, inout Lig
 	lightColor.ambient = lightInfo.color.ambient;
 }
 
-//void CalculateLight3D(float3 _vViewPos, float3 _vViewNormal, int _LightIdx, inout LightColor _lightcolor)
+//void CalculateLight3D(float3 _vViewPos, float3 _vViewNormal, int _LightIdx, inout tLightColor _lightcolor)
 //{
 //    LightAttribute lightinfo = lightAttributes[_LightIdx];
        
@@ -214,5 +217,6 @@ void CalculateLight3D(float3 viewPos, float3 viewNormal, int lightIdx, inout Lig
 //    _lightcolor.ambient += lightinfo.color.ambient;
 //}
 
+#endif
 
 #endif

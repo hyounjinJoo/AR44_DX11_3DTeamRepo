@@ -205,36 +205,8 @@ call Copy_DLL.bat $(Configuration)</Command>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="PCH_Client.h" />
-    <ClInclude Include="guiComponent.h" />
-    <ClInclude Include="guiConsole.h" />
-    <ClInclude Include="guiGame.h" />
-    <ClInclude Include="guiHierarchy.h" />
-    <ClInclude Include="guiInspector.h" />
-    <ClInclude Include="guiMaterial.h" />
-    <ClInclude Include="guiMesh.h" />
-    <ClInclude Include="guiCom_Renderer_Mesh.h" />
-    <ClInclude Include="guiProject.h" />
-    <ClInclude Include="guiResource.h" />
-    <ClInclude Include="guiTexture.h" />
-    <ClInclude Include="guiTransform.h" />
-    <ClInclude Include="guiTreeWidget.h" />
-    <ClInclude Include="guiYamYamEditor.h" />
-    <ClInclude Include="imconfig.h" />
-    <ClInclude Include="imgui.h" />
-    <ClInclude Include="imgui_impl_dx11.h" />
-    <ClInclude Include="imgui_impl_win32.h" />
-    <ClInclude Include="imgui_internal.h" />
-    <ClInclude Include="imstb_rectpack.h" />
-    <ClInclude Include="imstb_textedit.h" />
-    <ClInclude Include="imstb_truetype.h" />
-    <ClInclude Include="guiListWidget.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="targetver.h" />
-    <ClInclude Include="guiDebugObject.h" />
-    <ClInclude Include="ImGuiMgr.h" />
-    <ClInclude Include="guiEditorObject.h" />
-    <ClInclude Include="guiWidget.h" />
-    <ClInclude Include="GameClient.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="PCH_Client.cpp">
@@ -243,55 +215,7 @@ call Copy_DLL.bat $(Configuration)</Command>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="guiComponent.cpp" />
-    <ClCompile Include="guiConsole.cpp" />
-    <ClCompile Include="guiGame.cpp" />
-    <ClCompile Include="guiHierarchy.cpp" />
-    <ClCompile Include="guiInspector.cpp" />
-    <ClCompile Include="guiMaterial.cpp" />
-    <ClCompile Include="guiMesh.cpp" />
-    <ClCompile Include="guiCom_Renderer_Mesh.cpp" />
-    <ClCompile Include="guiProject.cpp" />
-    <ClCompile Include="guiResource.cpp" />
-    <ClCompile Include="guiTexture.cpp" />
-    <ClCompile Include="guiTransform.cpp" />
-    <ClCompile Include="guiTreeWidget.cpp" />
-    <ClCompile Include="guiYamYamEditor.cpp" />
-    <ClCompile Include="imgui.cpp">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
-    </ClCompile>
-    <ClCompile Include="imgui_demo.cpp">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
-    </ClCompile>
-    <ClCompile Include="imgui_draw.cpp">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
-    </ClCompile>
-    <ClCompile Include="imgui_impl_dx11.cpp">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
-    </ClCompile>
-    <ClCompile Include="imgui_impl_win32.cpp">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
-    </ClCompile>
-    <ClCompile Include="imgui_tables.cpp">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
-    </ClCompile>
-    <ClCompile Include="imgui_widgets.cpp">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
-    </ClCompile>
-    <ClCompile Include="guiListWidget.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="guiDebugObject.cpp" />
-    <ClCompile Include="ImGuiMgr.cpp" />
-    <ClCompile Include="guiEditorObject.cpp" />
-    <ClCompile Include="guiWidget.cpp" />
-    <ClCompile Include="GameClient.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="MHW.ico" />

@@ -33,7 +33,7 @@ namespace mh
 		static void Release();
 
 	private:
-		static std::bitset<(uint)define::eLayerType::End> mLayerCollisionMatrix[(uint)define::eLayerType::End];
+		static std::bitset<(uint)define::eLayerType::END> mLayerCollisionMatrix[(uint)define::eLayerType::END];
 		static std::map<UINT64, bool> mCollisionMap;
 	};
 }

@@ -46,6 +46,8 @@
 #include "CompiledShaderHeader/_0VS_Merge_Debug.h"
 #include "CompiledShaderHeader/_4PS_Merge_Debug.h"
 
+#include "CompiledShaderHeader/CS_Animation3D_Debug.h"
+
 #else
 
 #include "CompiledShaderHeader/_0VS_Basic3D_Release.h"
@@ -89,5 +91,7 @@
 
 #include "CompiledShaderHeader/_0VS_Merge_Release.h"
 #include "CompiledShaderHeader/_4PS_Merge_Release.h"
+
+#include "CompiledShaderHeader/CS_Animation3D_Release.h"
 
 #endif

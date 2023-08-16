@@ -6,6 +6,8 @@
 
 namespace mh
 {
+	using namespace mh::define;
+
 	IComponent::IComponent(define::eComponentType _type)
 		: mType(_type)
 		, mOwner(nullptr)

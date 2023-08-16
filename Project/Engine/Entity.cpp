@@ -7,15 +7,17 @@
 
 namespace mh
 {
-	UINT32 Entity::gNextID{};
+	using namespace mh::define;
+
+	UINT32 Entity::gIDNext{};
 
 	Entity::Entity()
-		: mID(++gNextID)
+		: mID(++gIDNext)
 		, mStrKey()
 	{
 	}
 	Entity::Entity(const Entity& _other)
-		: mID(++gNextID)
+		: mID(++gIDNext)
 		, mStrKey(_other.mStrKey)
 	{
 	}
@@ -57,31 +59,6 @@ namespace mh
 		}
 
 		return eResult::Success;
-	}
-	Entity::~Entity()
-	{
-	}
-}
-
-namespace gui
-{
-	Entity::Entity()
-		: mID(PtrToUint(this))
-		, mStrKey("")
-	{
-	}
-
-	Entity::Entity(const char* _strKey)
-		: mID(PtrToUint(this))
-		, mStrKey(_strKey)
-	{
-
-	}
-
-	Entity::Entity(const Entity& _other)
-		: mID(PtrToUint(this))
-		, mStrKey(_other.mStrKey)
-	{
 	}
 	Entity::~Entity()
 	{

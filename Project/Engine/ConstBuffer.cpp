@@ -5,6 +5,8 @@
 
 namespace mh
 {
+	using namespace mh::define;
+
 	ConstBuffer::ConstBuffer(eCBType _type)
 		: GPUBuffer(eBufferType::Const)
 		, mType(_type)

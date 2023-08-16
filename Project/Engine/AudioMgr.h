@@ -16,8 +16,6 @@ namespace FMOD
 
 namespace mh
 {
-	using namespace math;
-
 	class AudioMgr
 	{
 		friend class Application;

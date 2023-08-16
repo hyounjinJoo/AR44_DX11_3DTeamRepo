@@ -64,7 +64,7 @@ namespace mh
 		Com_Transform& tf = GetOwner()->GetTransform();
 
 		// 키 입력에 따른 카메라 이동
-		float3 vPos = tf.GetPosition();
+		float3 vPos = tf.GetRelativePos();
 
 		float fSpeed = mCamSpeed;
 		if (InputMgr::GetKey(eKeyCode::LSHIFT))
@@ -107,15 +107,15 @@ namespace mh
 			mCamera->SetScale(fScale);
 		}
 
-		tf.SetPosition(vPos);
+		tf.SetRelativePos(vPos);
 	}
 
 	void Script_CameraMove::Camera3DMove()
 	{
 		Com_Transform& tf = GetOwner()->GetTransform();
 
-		float3 vPos = tf.GetPosition();
-		float3 vRot = tf.GetRotation();
+		float3 vPos = tf.GetRelativePos();
+		float3 vRot = tf.GetRelativeRotXYZ();
 
 		float3 vFront = tf.Forward();
 		float3 vUp = tf.Up();
@@ -151,12 +151,12 @@ namespace mh
 		if (InputMgr::GetKey(eKeyCode::RBTN))
 		{
 			float2 vMouseDir = InputMgr::GetMouseDir();
-			vRot.y += TimeMgr::DeltaTime() * vMouseDir.x * 100.f;
-			vRot.x -= TimeMgr::DeltaTime() * vMouseDir.y * 100.f;
+			vRot.y += TimeMgr::DeltaTime() * vMouseDir.x;
+			vRot.x -= TimeMgr::DeltaTime() * vMouseDir.y;
 		}
 
-		tf.SetPosition(vPos);
-		tf.SetRotation(vRot);
+		tf.SetRelativePos(vPos);
+		tf.SetRelativeRotXYZ(vRot);
 	}
 }
 

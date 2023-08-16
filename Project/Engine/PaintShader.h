@@ -10,7 +10,7 @@ namespace mh
 		PaintShader();
 		~PaintShader();
 
-		virtual void Binds() override;
+		virtual bool Binds() override;
 		virtual void Clear() override;
 		
 		void SetTarget(std::shared_ptr<Texture> _texture) { mTarget = _texture; }

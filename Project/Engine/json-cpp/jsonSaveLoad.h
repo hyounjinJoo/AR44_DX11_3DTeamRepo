@@ -8,12 +8,6 @@
 #include <wrl.h>
 #include <utility>
 
-namespace Microsoft::WRL
-{
-	template <class T> struct is_ComPtr : std::false_type {};
-	template <class T> struct is_ComPtr<Microsoft::WRL::ComPtr<T>> : std::true_type {};
-	template <class T> inline constexpr bool is_ComPtr_v = is_ComPtr<T>::value;
-}
 
 namespace Json
 {
@@ -240,7 +234,7 @@ namespace Json
 		T vecT{};
 		if (_pJson->isMember(_strKey))
 		{
-			const Json::Value& jVal = *_pJson;
+			const Json::Value& jVal = (*_pJson)[_strKey];
 			if (jVal.isArray())
 			{
 				for (Json::ValueConstIterator iter = jVal.begin(); iter != jVal.end(); ++iter)
@@ -253,12 +247,13 @@ namespace Json
 	}
 
 
-	static std::vector<std::string> MHGetJsonVectorPtr(const Json::Value* _pJson, const char* _strKey)
+	inline std::vector<std::string> GetJsonVector(const Json::Value* _pJson, const char* _strKey)
 	{
-		std::vector<std::string> retVec{};
+		std::vector<std::string> retVec;
+
 		if (_pJson->isMember(_strKey))
 		{
-			const Json::Value& jVal = *_pJson;
+			const Json::Value& jVal = (*_pJson)[_strKey];
 			if (jVal.isArray())
 			{
 				for (Json::ValueConstIterator iter = jVal.begin(); iter != jVal.end(); ++iter)
@@ -285,7 +280,7 @@ namespace Json
 		T vecT{};
 		if (_pJson->isMember(_strKey))
 		{
-			const Json::Value& jVal = *_pJson;
+			const Json::Value& jVal = (*_pJson)[_strKey];
 			for (Json::ValueConstIterator iter = jVal.begin(); iter != jVal.end(); ++iter)
 			{
 				keyType key = MHConvertRead<keyType>(iter.key());

@@ -6,20 +6,19 @@
 
 namespace mh
 {
-	using namespace mh::define;
 	class GameObject;
 	class IComponent : public Entity
 	{
 	public:
-		IComponent(eComponentType _type);
+		IComponent(define::eComponentType _type);
 
 		IComponent(const IComponent& _other);
 		CLONE_DISABLE(IComponent);
 
 		virtual ~IComponent();
 
-		virtual eResult SaveJson(Json::Value* _pJson) override;
-		virtual eResult LoadJson(const Json::Value* _pJson) override;
+		virtual define::eResult SaveJson(Json::Value* _pJson) override;
+		virtual define::eResult LoadJson(const Json::Value* _pJson) override;
 
 
 		virtual void Init() = 0;
@@ -27,13 +26,13 @@ namespace mh
 		virtual void FixedUpdate() = 0;
 		virtual void Render() = 0;
 
-		eComponentType GetComType() const { return mType; };
+		define::eComponentType GetComType() const { return mType; };
 
 		GameObject* GetOwner() const { return mOwner; }
 		void SetOwner(GameObject* _owner) { mOwner = _owner; }
 
 	private:
-		const eComponentType mType;
+		const define::eComponentType mType;
 		GameObject* mOwner;
 	};
 }

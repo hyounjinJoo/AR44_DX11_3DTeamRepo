@@ -77,28 +77,28 @@
     <IntDir>$(SolutionDir)Output\Obj\$(Configuration)\$(ProjectName)\</IntDir>
     <MultiProcFXC>true</MultiProcFXC>
     <LibraryPath>$(SolutionDir)External\Lib\;$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64)</LibraryPath>
-    <ExternalIncludePath>$(SolutionDir)External\Include;$(VC_IncludePath);$(WindowsSDK_IncludePath);</ExternalIncludePath>
+    <ExternalIncludePath>$(SolutionDir)External\Include\;$(VC_IncludePath);$(WindowsSDK_IncludePath);</ExternalIncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <OutDir>$(SolutionDir)External\Lib\$(ProjectName)\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)Output\Obj\$(Configuration)\$(ProjectName)\</IntDir>
     <MultiProcFXC>true</MultiProcFXC>
     <LibraryPath>$(SolutionDir)External\Lib\;$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64)</LibraryPath>
-    <ExternalIncludePath>$(SolutionDir)External\Include;$(VC_IncludePath);$(WindowsSDK_IncludePath);</ExternalIncludePath>
+    <ExternalIncludePath>$(SolutionDir)External\Include\;$(VC_IncludePath);$(WindowsSDK_IncludePath);</ExternalIncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <OutDir>$(SolutionDir)External\Lib\$(ProjectName)\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)Output\Obj\$(Configuration)\$(ProjectName)\</IntDir>
     <MultiProcFXC>true</MultiProcFXC>
     <LibraryPath>$(SolutionDir)External\Lib\;$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86)</LibraryPath>
-    <ExternalIncludePath>$(SolutionDir)External\Include;$(VC_IncludePath);$(WindowsSDK_IncludePath);</ExternalIncludePath>
+    <ExternalIncludePath>$(SolutionDir)External\Include\;$(VC_IncludePath);$(WindowsSDK_IncludePath);</ExternalIncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <OutDir>$(SolutionDir)External\Lib\$(ProjectName)\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)Output\Obj\$(Configuration)\$(ProjectName)\</IntDir>
     <MultiProcFXC>true</MultiProcFXC>
     <LibraryPath>$(SolutionDir)External\Lib\;$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86)</LibraryPath>
-    <ExternalIncludePath>$(SolutionDir)External\Include;$(VC_IncludePath);$(WindowsSDK_IncludePath);</ExternalIncludePath>
+    <ExternalIncludePath>$(SolutionDir)External\Include\;$(VC_IncludePath);$(WindowsSDK_IncludePath);</ExternalIncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -249,25 +249,64 @@ call Copy_HLSL.bat $(Configuration)</Command>
     </FxCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="Animation.h" />
+    <ClInclude Include="Animation2D.h" />
+    <ClInclude Include="Animation3DShader.h" />
+    <ClInclude Include="base64.h" />
     <ClInclude Include="ComMgr.h" />
     <ClInclude Include="Components.h" />
-    <ClInclude Include="Com_Animator.h" />
+    <ClInclude Include="Com_Animator2D.h" />
     <ClInclude Include="AtExit.h" />
     <ClInclude Include="AudioClip.h" />
+    <ClInclude Include="Com_Animator3D.h" />
     <ClInclude Include="Com_AudioListener.h" />
     <ClInclude Include="Com_AudioSource.h" />
     <ClInclude Include="DefaultComInitializer.h" />
     <ClInclude Include="FBXLoader.h" />
+    <ClInclude Include="GameMainWindow.h" />
+    <ClInclude Include="guiBase.h" />
+    <ClInclude Include="guiChild.h" />
+    <ClInclude Include="guiComboBox.h" />
+    <ClInclude Include="guiComponent.h" />
+    <ClInclude Include="guiCom_Renderer.h" />
+    <ClInclude Include="guiCom_Transform.h" />
+    <ClInclude Include="guiConsole.h" />
+    <ClInclude Include="guiDebugObject.h" />
+    <ClInclude Include="guiEditorObject.h" />
+    <ClInclude Include="guiEntity.h" />
+    <ClInclude Include="guiGame.h" />
+    <ClInclude Include="guiGraphicsShaderEditor.h" />
+    <ClInclude Include="guiInspector.h" />
+    <ClInclude Include="guiList.h" />
+    <ClInclude Include="guiMainMenu.h" />
+    <ClInclude Include="guiMaterial.h" />
+    <ClInclude Include="guiMesh.h" />
+    <ClInclude Include="guiMgr.h" />
+    <ClInclude Include="guiResource.h" />
+    <ClInclude Include="guiResources.h" />
+    <ClInclude Include="guiTexture.h" />
+    <ClInclude Include="guiTreeWidget.h" />
+    <ClInclude Include="guiTree_GameObject.h" />
+    <ClInclude Include="guiWindow.h" />
+    <ClInclude Include="IAnimator.h" />
     <ClInclude Include="ICollider3D.h" />
     <ClInclude Include="ICollider2D.h" />
     <ClInclude Include="CollisionMgr.h" />
     <ClInclude Include="Application.h" />
+    <ClInclude Include="imgui\imconfig.h" />
+    <ClInclude Include="imgui\imgui.h" />
+    <ClInclude Include="imgui\imgui_impl_dx11.h" />
+    <ClInclude Include="imgui\imgui_impl_win32.h" />
+    <ClInclude Include="imgui\imgui_internal.h" />
+    <ClInclude Include="imgui\imgui_stdlib.h" />
+    <ClInclude Include="imgui\imstb_rectpack.h" />
+    <ClInclude Include="imgui\imstb_textedit.h" />
+    <ClInclude Include="imgui\imstb_truetype.h" />
     <ClInclude Include="IRenderer.h" />
     <ClInclude Include="Com_Camera.h" />
     <ClInclude Include="json-cpp\jsonSaveLoad.h" />
     <ClInclude Include="MultiRenderTarget.h" />
     <ClInclude Include="RenderMgr.h" />
+    <ClInclude Include="resource.h" />
     <ClInclude Include="Script_Camera.h" />
     <ClInclude Include="ICollider.h" />
     <ClInclude Include="DefaultShaders.h" />
@@ -317,6 +356,7 @@ call Copy_HLSL.bat $(Configuration)</Command>
     <ClInclude Include="IScript.h" />
     <ClInclude Include="GraphicsShader.h" />
     <ClInclude Include="Com_Renderer_Sprite.h" />
+    <ClInclude Include="strKey_gui.h" />
     <ClInclude Include="StructBuffer.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="TimeMgr.h" />
@@ -324,19 +364,101 @@ call Copy_HLSL.bat $(Configuration)</Command>
     <ClInclude Include="define_Util.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Animation.cpp" />
+    <ClCompile Include="Animation2D.cpp" />
+    <ClCompile Include="Animation3DShader.cpp" />
+    <ClCompile Include="base64.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
     <ClCompile Include="ComMgr.cpp" />
-    <ClCompile Include="Com_Animator.cpp" />
+    <ClCompile Include="Com_Animator2D.cpp" />
     <ClCompile Include="AtExit.cpp" />
     <ClCompile Include="AudioClip.cpp" />
+    <ClCompile Include="Com_Animator3D.cpp" />
     <ClCompile Include="Com_AudioListener.cpp" />
     <ClCompile Include="Com_AudioSource.cpp" />
     <ClCompile Include="DefaultComInitializer.cpp" />
     <ClCompile Include="FBXLoader.cpp" />
+    <ClCompile Include="GameMainWindow.cpp" />
+    <ClCompile Include="guiBase.cpp" />
+    <ClCompile Include="guiChild.cpp" />
+    <ClCompile Include="guiComboBox.cpp" />
+    <ClCompile Include="guiComponent.cpp" />
+    <ClCompile Include="guiCom_Renderer.cpp" />
+    <ClCompile Include="guiCom_Transform.cpp" />
+    <ClCompile Include="guiConsole.cpp" />
+    <ClCompile Include="guiDebugObject.cpp" />
+    <ClCompile Include="guiEditorObject.cpp" />
+    <ClCompile Include="guiEntity.cpp" />
+    <ClCompile Include="guiGame.cpp" />
+    <ClCompile Include="guiGraphicsShaderEditor.cpp" />
+    <ClCompile Include="guiInspector.cpp" />
+    <ClCompile Include="guiList.cpp" />
+    <ClCompile Include="guiMainMenu.cpp" />
+    <ClCompile Include="guiMaterial.cpp" />
+    <ClCompile Include="guiMesh.cpp" />
+    <ClCompile Include="guiMgr.cpp" />
+    <ClCompile Include="guiResource.cpp" />
+    <ClCompile Include="guiResources.cpp" />
+    <ClCompile Include="guiTexture.cpp" />
+    <ClCompile Include="guiTreeWidget.cpp" />
+    <ClCompile Include="guiTree_GameObject.cpp" />
+    <ClCompile Include="guiWindow.cpp" />
+    <ClCompile Include="IAnimator.cpp" />
     <ClCompile Include="ICollider3D.cpp" />
     <ClCompile Include="ICollider2D.cpp" />
     <ClCompile Include="CollisionMgr.cpp" />
     <ClCompile Include="Application.cpp" />
+    <ClCompile Include="imgui\imgui.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="imgui\imgui_demo.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="imgui\imgui_draw.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="imgui\imgui_impl_dx11.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="imgui\imgui_impl_win32.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="imgui\imgui_stdlib.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="imgui\imgui_tables.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="imgui\imgui_widgets.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
     <ClCompile Include="IRenderer.cpp" />
     <ClCompile Include="Com_Camera.cpp" />
     <ClCompile Include="MultiRenderTarget.cpp" />
@@ -399,14 +521,17 @@ call Copy_HLSL.bat $(Configuration)</Command>
   <ItemGroup>
     <None Include="cpp.hint" />
     <None Include="DefaultShader\SH_Basic3D.hlsli" />
-    <None Include="DefaultShader\SH_Blur.hlsli" />
+    <None Include="DefaultShader\SH_Functions.hlsli" />
+    <None Include="DefaultShader\SH_Func_Animation3D.hlsli" />
+    <None Include="DefaultShader\SH_Func_Blur.hlsli" />
     <None Include="DefaultShader\SH_Common.hlsli" />
+    <None Include="DefaultShader\SH_CommonStruct.hlsli" />
     <None Include="DefaultShader\SH_ConstBuffer.hlsli" />
     <None Include="DefaultShader\SH_Deffered.hlsli" />
-    <None Include="DefaultShader\SH_Func.hlsli" />
+    <None Include="DefaultShader\SH_Func_DecodeColor.hlsli" />
     <None Include="DefaultShader\SH_Globals.hlsli" />
     <None Include="DefaultShader\SH_Grid.hlsli" />
-    <None Include="DefaultShader\SH_Light.hlsli" />
+    <None Include="DefaultShader\SH_Func_Light.hlsli" />
     <None Include="DefaultShader\SH_LightDir.hlsli" />
     <None Include="DefaultShader\SH_LightPoint.hlsli" />
     <None Include="DefaultShader\SH_Merge.hlsli" />
@@ -417,6 +542,16 @@ call Copy_HLSL.bat $(Configuration)</Command>
     <None Include="SimpleMath.inl" />
   </ItemGroup>
   <ItemGroup>
+    <FxCompile Include="DefaultShader\CS_Animation3D.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Compute</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Compute</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">5.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Compute</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">5.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Compute</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
+    </FxCompile>
     <FxCompile Include="DefaultShader\CS_Paint.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Compute</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Compute</ShaderType>
@@ -579,6 +714,9 @@ call Copy_HLSL.bat $(Configuration)</Command>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
     </FxCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Engine.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
