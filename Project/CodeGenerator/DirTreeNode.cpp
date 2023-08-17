@@ -144,7 +144,11 @@ HRESULT DirTreeNode::WriteStrKeyTree(CodeWriter& _CodeWriter, bool _bEraseExtens
 	if (false == IsRoot())
 	{
 		std::string strCode = "namespace ";
-		strCode += m_DirName.filename().string();
+
+		std::string DirName = m_DirName.filename().string();
+		//변수명에 사용할 수 없는 특수문자를 제외
+		strCode += std::regex_replace(DirName, define_Preset::Regex::g_VarForbiddenChars::A, "_");
+
 		_CodeWriter.WriteCode(0, strCode);
 	}
 
