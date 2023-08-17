@@ -21,12 +21,5 @@ namespace mh
 
 	}
 
-	void Com_TestJH::FixedUpdate()
-	{
-	}
-
-	void Com_TestJH::Render()
-	{
-	}
 
 }

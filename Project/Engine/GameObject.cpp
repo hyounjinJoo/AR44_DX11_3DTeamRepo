@@ -287,13 +287,12 @@ namespace mh
 		}
 	}
 
+	//이 함수는 다른 카메라가 호출함
 	void GameObject::Render()
 	{
-		for (size_t i = 0; i < mComponents.size(); ++i)
+		if (mComponents[(int)eComponentType::Renderer])
 		{
-			if (nullptr == mComponents[i])
-				continue;
-			mComponents[i]->Render();
+			static_cast<IRenderer*>(mComponents[(int)eComponentType::Renderer])->Render();
 		}
 
 		for (size_t i = 0; i < mChilds.size(); ++i)

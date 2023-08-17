@@ -1,4 +1,4 @@
-#pragma once
+		#pragma once
 #include "Entity.h"
 
 #include "Components.h"
@@ -209,7 +209,7 @@ namespace mh
 		{
 			return eComponentType::Animator;
 		}
-		else if constexpr (std::is_base_of_v<Com_Light, T>)
+		else if constexpr (std::is_base_of_v<Com_Light3D, T>)
 		{
 			return eComponentType::Light;
 		}

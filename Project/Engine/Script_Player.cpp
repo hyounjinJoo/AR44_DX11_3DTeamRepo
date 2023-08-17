@@ -59,10 +59,6 @@ namespace mh
 		}
 	}
 
-	void Script_Player::Render()
-	{
-	}
-
 	void Script_Player::OnCollisionEnter(ICollider2D* _collider)
 	{
 	}

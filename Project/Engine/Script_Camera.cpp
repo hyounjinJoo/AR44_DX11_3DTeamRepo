@@ -54,7 +54,4 @@ namespace mh
 
 		tr.SetRelativePos(pos);
 	}
-	void Script_Camera::Render()
-	{
-	}
 }

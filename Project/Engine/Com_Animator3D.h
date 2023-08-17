@@ -23,7 +23,6 @@ namespace mh
 		virtual void Init() override;
 		virtual void Update() {};
 		virtual void FixedUpdate() override;
-		virtual void Render() {};
 
 
 		void SetBones(const std::vector<define::tMTBone>* _vecBones) { m_pVecBones = _vecBones; m_vecFinalBoneMat.resize(m_pVecBones->size()); }

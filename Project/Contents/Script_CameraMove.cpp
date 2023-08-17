@@ -51,13 +51,6 @@ namespace mh
 		}
 	}
 
-	void Script_CameraMove::FixedUpdate()
-	{
-	}
-
-	void Script_CameraMove::Render()
-	{
-	}
 
 	void Script_CameraMove::Camera2DMove()
 	{

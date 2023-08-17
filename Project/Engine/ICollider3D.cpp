@@ -68,19 +68,5 @@ namespace mh
 		return eResult::Success;
 	}
 
-	void ICollider3D::Init()
-	{
-	}
 
-	void ICollider3D::Update()
-	{
-	}
-
-	void ICollider3D::FixedUpdate()
-	{
-	}
-
-	void ICollider3D::Render()
-	{
-	}
 }

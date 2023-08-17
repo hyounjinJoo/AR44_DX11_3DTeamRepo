@@ -21,10 +21,9 @@ namespace mh
         virtual define::eResult LoadJson(const Json::Value* _pJson) override;
 
     public:
-        virtual void Init() override;
-        virtual void Update() override;
+        //virtual void Init() override;
+        //virtual void Update() override;
         virtual void FixedUpdate() override;
-        virtual void Render() override;
 
         void SetConstBuffer();
 

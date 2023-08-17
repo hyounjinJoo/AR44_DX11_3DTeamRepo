@@ -31,14 +31,6 @@ namespace mh
 	{
 	}
 
-	void Com_Transform::Init()
-	{
-	}
-
-	void Com_Transform::Update()
-	{
-	}
-
 	void Com_Transform::FixedUpdate()
 	{
 		//bool 값들은 Tick()에서 false로 초기화 된다.
@@ -75,10 +67,6 @@ namespace mh
 
 
 		Application::AddDestroyFunc(std::bind(&Com_Transform::ClearUpdateState, this));
-	}
-
-	void Com_Transform::Render()
-	{
 	}
 
 	eResult Com_Transform::SaveJson(Json::Value* _pJson)

@@ -141,9 +141,6 @@ namespace mh
 		RenderMgr::AddDebugMesh(meshAttribute);
 	}
 
-	void ICollider2D::Render()
-	{
-	}
 
 	void ICollider2D::OnCollisionEnter(ICollider2D* _collider)
 	{

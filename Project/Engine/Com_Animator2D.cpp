@@ -129,9 +129,7 @@ namespace mh
 	void Com_Animator2D::FixedUpdate()
 	{
 	}
-	void Com_Animator2D::Render()
-	{
-	}
+
 
 	bool Com_Animator2D::Create(const std::string_view _name, std::shared_ptr<Texture> _atlas
 		, float2 _leftTop, float2 _size, float2 _offset

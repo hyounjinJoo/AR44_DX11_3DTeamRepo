@@ -87,9 +87,6 @@ namespace mh
 		mAudioClip->Set3DAttributes(pos, foward);
 	}
 
-	void Com_AudioSource::Render()
-	{
-	}
 
 	void Com_AudioSource::Play()
 	{

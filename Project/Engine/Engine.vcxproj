@@ -292,6 +292,7 @@ call Copy_HLSL.bat $(Configuration)</Command>
     <ClInclude Include="ICollider2D.h" />
     <ClInclude Include="CollisionMgr.h" />
     <ClInclude Include="Application.h" />
+    <ClInclude Include="ILight.h" />
     <ClInclude Include="imgui\imconfig.h" />
     <ClInclude Include="imgui\imgui.h" />
     <ClInclude Include="imgui\imgui_impl_dx11.h" />
@@ -336,7 +337,7 @@ call Copy_HLSL.bat $(Configuration)</Command>
     <ClInclude Include="json-cpp\json-forwards.h" />
     <ClInclude Include="json-cpp\json.h" />
     <ClInclude Include="Layer.h" />
-    <ClInclude Include="Com_Light.h" />
+    <ClInclude Include="Com_Light3D.h" />
     <ClInclude Include="Material.h" />
     <ClInclude Include="PathMgr.h" />
     <ClInclude Include="Mesh.h" />
@@ -411,6 +412,7 @@ call Copy_HLSL.bat $(Configuration)</Command>
     <ClCompile Include="ICollider2D.cpp" />
     <ClCompile Include="CollisionMgr.cpp" />
     <ClCompile Include="Application.cpp" />
+    <ClCompile Include="ILight.cpp" />
     <ClCompile Include="imgui\imgui.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
@@ -490,7 +492,7 @@ call Copy_HLSL.bat $(Configuration)</Command>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="Layer.cpp" />
-    <ClCompile Include="Com_Light.cpp" />
+    <ClCompile Include="Com_Light3D.cpp" />
     <ClCompile Include="Material.cpp" />
     <ClCompile Include="MeshData.cpp" />
     <ClCompile Include="PathMgr.cpp" />

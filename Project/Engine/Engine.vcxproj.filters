@@ -249,7 +249,7 @@
     <ClCompile Include="ComputeShader.cpp">
       <Filter>Resource\Shaders\Compute\Base</Filter>
     </ClCompile>
-    <ClCompile Include="Com_Light.cpp">
+    <ClCompile Include="Com_Light3D.cpp">
       <Filter>GameObject\Component\Light</Filter>
     </ClCompile>
     <ClCompile Include="ConstBuffer.cpp">
@@ -461,6 +461,7 @@
     <ClCompile Include="Animation3DShader.cpp">
       <Filter>GameObject\Component\Animator</Filter>
     </ClCompile>
+    <ClCompile Include="ILight.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application.h">
@@ -544,7 +545,7 @@
     <ClInclude Include="ComputeShader.h">
       <Filter>Resource\Shaders\Compute\Base</Filter>
     </ClInclude>
-    <ClInclude Include="Com_Light.h">
+    <ClInclude Include="Com_Light3D.h">
       <Filter>GameObject\Component\Light</Filter>
     </ClInclude>
     <ClInclude Include="ConstBuffer.h">
@@ -801,6 +802,7 @@
     <ClInclude Include="Animation3DShader.h">
       <Filter>GameObject\Component\Animator</Filter>
     </ClInclude>
+    <ClInclude Include="ILight.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="cpp.hint">

@@ -1,5 +1,5 @@
 #pragma once
-#include "IComponent.h"
+#include "ILight.h"
 #include "define_GPU.h"
 #include "defaultShader/SH_Func_Light.hlsli"
 
@@ -7,22 +7,24 @@ namespace mh
 {
 	class Mesh;
 	class Material;
-	class Com_Light : public IComponent
+	class Com_Light3D : public ILight
 	{
 	public:
-		Com_Light();
+		Com_Light3D();
 
-		Com_Light(const Com_Light& _other);
-		CLONE(Com_Light);
+		Com_Light3D(const Com_Light3D& _other);
+		CLONE(Com_Light3D);
 
-		virtual ~Com_Light();
+		virtual ~Com_Light3D();
 
 		virtual define::eResult SaveJson(Json::Value* _pJVal) override;
 		virtual define::eResult LoadJson(const Json::Value* _pJVal) override;
 
-		virtual void Init() override;
-		virtual void Update() override;
+		//virtual void Init() override;
+		//virtual void Update() override;
 		virtual void FixedUpdate() override;
+
+		//Camera가 호출
 		virtual void Render() override;
 
 		const tLightAttribute& GetLightAttribute() { return mAttribute; }

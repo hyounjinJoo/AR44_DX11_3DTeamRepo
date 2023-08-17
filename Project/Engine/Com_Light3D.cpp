@@ -1,6 +1,6 @@
 #include "PCH_Engine.h"
 
-#include "Com_Light.h"
+#include "Com_Light3D.h"
 #include "Com_Transform.h"
 #include "GameObject.h"
 #include "RenderMgr.h"
@@ -14,8 +14,8 @@
 
 namespace mh
 {
-	Com_Light::Com_Light()
-		: IComponent(eComponentType::Light)
+	Com_Light3D::Com_Light3D()
+		: ILight(eDimensionType::_3D)
 		, mVolumeMesh()
 		, mLightMaterial()
 		, mIndex()
@@ -24,8 +24,8 @@ namespace mh
 
 	}
 
-	Com_Light::Com_Light(const Com_Light& _other)
-		:IComponent(eComponentType::Light)
+	Com_Light3D::Com_Light3D(const Com_Light3D& _other)
+		: ILight(_other)
 		, mIndex(_other.mIndex)
 		, mAttribute(_other.mAttribute)
 		, mVolumeMesh(_other.mVolumeMesh)
@@ -34,12 +34,12 @@ namespace mh
 		RenderMgr::AddLight(this);
 	}
 
-	Com_Light::~Com_Light()
+	Com_Light3D::~Com_Light3D()
 	{
 		RenderMgr::RemoveLight(this);
 	}
 
-	eResult Com_Light::SaveJson(Json::Value* _pJVal)
+	eResult Com_Light3D::SaveJson(Json::Value* _pJVal)
 	{
 		if (nullptr == _pJVal)
 		{
@@ -59,7 +59,7 @@ namespace mh
 		return eResult::Success;
 	}
 
-	eResult Com_Light::LoadJson(const Json::Value* _pJVal)
+	eResult Com_Light3D::LoadJson(const Json::Value* _pJVal)
 	{
 
 		if (nullptr == _pJVal)
@@ -88,17 +88,7 @@ namespace mh
 		return eResult::Success;
 	}
 
-	void Com_Light::Init()
-	{
-
-	}
-
-	void Com_Light::Update()
-	{
-
-	}
-
-	void Com_Light::FixedUpdate()
+	void Com_Light3D::FixedUpdate()
 	{
 		Com_Transform& tr = GetOwner()->GetTransform();
 
@@ -114,7 +104,8 @@ namespace mh
 		RenderMgr::PushLightAttribute(mAttribute);
 	}
 
-	void Com_Light::Render()
+
+	void Com_Light3D::Render()
 	{
 		if (nullptr == mLightMaterial)
 		{
@@ -139,7 +130,7 @@ namespace mh
 	}
 
 
-	void Com_Light::SetType(eLightType type)
+	void Com_Light3D::SetType(eLightType type)
 	{
 		mAttribute.lightType = (int)type;
 		if (mAttribute.lightType == (int)eLightType::Directional)

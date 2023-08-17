@@ -64,12 +64,6 @@ namespace mh
 		CB->BindData(eShaderStageFlag::VS | eShaderStageFlag::PS);
  	}
 
-	void GridScript::FixedUpdate()
-	{
-	}
 
-	void GridScript::Render()
-	{
-	}
 
 }

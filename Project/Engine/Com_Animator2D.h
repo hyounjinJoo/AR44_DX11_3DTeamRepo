@@ -46,7 +46,6 @@ namespace mh
 		virtual void Init() override;
 		virtual void Update() override;
 		virtual void FixedUpdate() override;
-		virtual void Render() override;
 
 		bool Create(const std::string_view _name
 			, std::shared_ptr<Texture> _atlas

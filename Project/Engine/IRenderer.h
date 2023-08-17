@@ -24,10 +24,6 @@ namespace mh
 		virtual eResult SaveJson(Json::Value* _pJson) override;
 		virtual eResult LoadJson(const Json::Value* _pJson) override;
 
-
-		//virtual void Init() override {};
-		//virtual void Update() {};
-		//virtual void FixedUpdate() override;
 		virtual void Render() = 0;
 
 		void SetMesh(const std::shared_ptr<Mesh> _mesh);

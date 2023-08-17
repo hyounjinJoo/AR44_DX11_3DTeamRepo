@@ -18,7 +18,7 @@
 #include <Engine/Monster.h>
 #include <Engine/CollisionMgr.h>
 #include <Engine/Com_Animator2D.h>
-#include <Engine/Com_Light.h>
+#include <Engine/Com_Light3D.h>
 #include <Engine/PaintShader.h>
 #include <Engine/Com_Renderer_ParticleSystem.h>
 #include <Engine/Prefab.h>
@@ -146,7 +146,7 @@ namespace mh
 			directionalLight->GetComponent<Com_Transform>()->SetRelativePos(float3(0.0f, 100.0f, 0.0f));
 			directionalLight->GetComponent<Com_Transform>()->SetRelativeRotXYZ(float3(45.0f, 0.0f, 0.0f));
 
-			Com_Light* lightComp = directionalLight->AddComponent<Com_Light>();
+			Com_Light3D* lightComp = directionalLight->AddComponent<Com_Light3D>();
 			lightComp->SetType(eLightType::Directional);
 			lightComp->SetDiffuse(float4(0.7f, 0.7f, 0.7f, 1.0f));
 			lightComp->SetSpecular(float4(1.0f, 1.0f, 1.0f, 1.0f));
@@ -159,7 +159,7 @@ namespace mh
 
 			directionalLight->GetComponent<Com_Transform>()->SetRelativePos(float3(0.0f, 0.0f, 0.0f));
 
-			Com_Light* lightComp = directionalLight->AddComponent<Com_Light>();
+			Com_Light3D* lightComp = directionalLight->AddComponent<Com_Light3D>();
 			lightComp->SetType(eLightType::Point);
 			lightComp->SetRadius(20.0f);
 			lightComp->SetDiffuse(float4(0.0f, 0.0f, 1.0f, 1.0f));
@@ -173,7 +173,7 @@ namespace mh
 
 			directionalLight->GetComponent<Com_Transform>()->SetRelativePos(float3(-15.0f, 0.0f, 0.0f));
 
-			Com_Light* lightComp = directionalLight->AddComponent<Com_Light>();
+			Com_Light3D* lightComp = directionalLight->AddComponent<Com_Light3D>();
 			lightComp->SetType(eLightType::Point);
 			lightComp->SetRadius(30.0f);
 			lightComp->SetDiffuse(float4(0.0f, 1.0f, 0.0f, 1.0f));

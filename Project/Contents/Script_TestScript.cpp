@@ -17,10 +17,4 @@ namespace mh
 	void Script_TestScript::Update()
 	{
 	}
-	void Script_TestScript::FixedUpdate()
-	{
-	}
-	void Script_TestScript::Render()
-	{
-	}
 }

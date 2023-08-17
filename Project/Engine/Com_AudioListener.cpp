@@ -46,8 +46,4 @@ namespace mh
 		AudioMgr::Set3DListenerAttributes(&pos, &vel, &foward, &up);
 	}
 
-	void Com_AudioListener::Render()
-	{
-
-	}
 }
