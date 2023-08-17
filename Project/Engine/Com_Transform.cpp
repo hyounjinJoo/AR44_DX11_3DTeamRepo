@@ -308,9 +308,14 @@ namespace mh
 		tCB_Transform trCb = {};
 		trCb.world = mMatWorldFinal;
 		trCb.inverseWorld = mMatWorldFinal.Invert();
+
 		trCb.view = Com_Camera::GetGpuViewMatrix();
 		trCb.inverseView = trCb.view.Invert();
+
 		trCb.projection = Com_Camera::GetGpuProjectionMatrix();
+
+		trCb.WorldView = trCb.world * trCb.view;
+		trCb.WVP = trCb.WorldView * trCb.projection;
 
 		ConstBuffer* cb = RenderMgr::GetConstBuffer(eCBType::Transform);
 		cb->SetData(&trCb);

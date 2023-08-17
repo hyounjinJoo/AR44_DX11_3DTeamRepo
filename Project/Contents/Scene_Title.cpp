@@ -110,7 +110,7 @@ namespace mh
 		//}
 
 		{
-			std::shared_ptr<MeshData> data = ResMgr::Load<MeshData>("Monster.json");
+			std::shared_ptr<MeshData> data = ResMgr::Load<MeshData>("Player_DefaultBin.json");
 			//std::shared_ptr<MeshData> data = ResMgr::Load<MeshData>("house.json");
 			GameObject* obj = data->Instantiate();
 			obj->SetName("fbxTextObj");

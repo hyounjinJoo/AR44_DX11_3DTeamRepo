@@ -136,9 +136,6 @@
     <Filter Include="_DefaultShader\PostProcess">
       <UniqueIdentifier>{07baad1d-f768-4b1c-8c6e-1306e5a5c0ad}</UniqueIdentifier>
     </Filter>
-    <Filter Include="_DefaultShader\Sprite">
-      <UniqueIdentifier>{4cedf35b-68b8-4395-b39e-8a99344fdd82}</UniqueIdentifier>
-    </Filter>
     <Filter Include="_DefaultShader\Triangle">
       <UniqueIdentifier>{d5132f68-2ed1-40be-b859-4494446606a5}</UniqueIdentifier>
     </Filter>
@@ -171,6 +168,15 @@
     </Filter>
     <Filter Include="_DefaultShader\Animation 3D">
       <UniqueIdentifier>{d3e8caa9-5036-4c5b-9533-7c3a801fceac}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="_DefaultShader\Animation">
+      <UniqueIdentifier>{b3488934-a992-4d5c-8fc1-1445957636b3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="_DefaultShader\Animation\2D">
+      <UniqueIdentifier>{d6792c36-47a4-4673-80d9-51774b9cef73}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="_DefaultShader\Animation\3D">
+      <UniqueIdentifier>{bb5fc774-25fe-4450-b656-3c85eecb7d07}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -900,9 +906,6 @@
     <FxCompile Include="DefaultShader\_0VS_PostProcess.hlsl">
       <Filter>_DefaultShader\PostProcess</Filter>
     </FxCompile>
-    <FxCompile Include="DefaultShader\_0VS_Sprite.hlsl">
-      <Filter>_DefaultShader\Sprite</Filter>
-    </FxCompile>
     <FxCompile Include="DefaultShader\_0VS_Triangle.hlsl">
       <Filter>_DefaultShader\Triangle</Filter>
     </FxCompile>
@@ -939,9 +942,6 @@
     <FxCompile Include="DefaultShader\_4PS_PostProcess.hlsl">
       <Filter>_DefaultShader\PostProcess</Filter>
     </FxCompile>
-    <FxCompile Include="DefaultShader\_4PS_Sprite.hlsl">
-      <Filter>_DefaultShader\Sprite</Filter>
-    </FxCompile>
     <FxCompile Include="DefaultShader\_4PS_Triangle.hlsl">
       <Filter>_DefaultShader\Triangle</Filter>
     </FxCompile>
@@ -951,8 +951,14 @@
     <FxCompile Include="DefaultShader\CS_Particle.hlsl">
       <Filter>_DefaultShader\Particle</Filter>
     </FxCompile>
+    <FxCompile Include="DefaultShader\_4PS_Sprite.hlsl">
+      <Filter>_DefaultShader\Animation\2D</Filter>
+    </FxCompile>
+    <FxCompile Include="DefaultShader\_0VS_Sprite.hlsl">
+      <Filter>_DefaultShader\Animation\2D</Filter>
+    </FxCompile>
     <FxCompile Include="DefaultShader\CS_Animation3D.hlsl">
-      <Filter>_DefaultShader\Animation 3D</Filter>
+      <Filter>_DefaultShader\Animation\3D</Filter>
     </FxCompile>
   </ItemGroup>
   <ItemGroup>

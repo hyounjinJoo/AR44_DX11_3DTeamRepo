@@ -18,6 +18,9 @@ namespace mh
 	public:
 		static const std::filesystem::path& GetResPathAbsolute() { return mAbsolutePath; }
 		static const std::filesystem::path& GetResPathRelative() { return mRelativePath; }
+
+		static inline std::filesystem::path GetContentPathAbsolute(eResourceType _eResType);
+
 		static const std::filesystem::path& GetContentPathRelative(eResourceType _eResType) { return mRelativePath_Res[(int)_eResType]; }
 
 		static const std::filesystem::path& GetShaderCSOPath() { return mRelativePath_ShaderCSO; }
@@ -32,6 +35,11 @@ namespace mh
 		
 		static std::filesystem::path mRelativePath_ShaderCSO;
 	};
+
+	inline std::filesystem::path PathMgr::GetContentPathAbsolute(eResourceType _eResType)
+	{
+		return mAbsolutePath / define::strKey::ArrResName[(int)_eResType];
+	}
 
 }
 

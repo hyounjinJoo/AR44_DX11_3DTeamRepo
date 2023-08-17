@@ -43,15 +43,14 @@ namespace mh
 	eResult Mesh::Save(const std::filesystem::path& _path)
 	{
 		std::fs::path filePath = PathMgr::GetContentPathRelative(GetResType());
-
-		//폴더 없으면 폴더 생성
-		if (false == std::fs::exists(filePath))
-		{
-			std::fs::create_directories(filePath);
-		}
-
-		// 파일 경로 만들기
 		filePath /= _path;
+
+		const std::fs::path& parentPath = filePath.parent_path();
+		//폴더 없으면 폴더 생성
+		if (false == std::fs::exists(parentPath))
+		{
+			std::fs::create_directories(parentPath);
+		}
 
 		std::ofstream ofs(filePath, std::ios::binary);
 		if (false == ofs.is_open())

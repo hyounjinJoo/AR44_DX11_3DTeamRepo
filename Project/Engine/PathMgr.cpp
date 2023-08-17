@@ -49,6 +49,7 @@ namespace mh
 		}
 
 	}
+
 	void PathMgr::Release()
 	{
 		mAbsolutePath.clear();

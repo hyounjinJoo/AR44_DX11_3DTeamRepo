@@ -94,4 +94,34 @@ namespace mh::define::strKey::Texture
 		STRKEY Sparks_png = "particle/Sparks.png";
 	}
 
+	namespace Player_Default.fbm
+	{
+		STRKEY DXT1_cage003_BML_dds = "Player_Default.fbm/DXT1_cage003_BML.dds";
+		STRKEY DXT1_cage003_EM_dds = "Player_Default.fbm/DXT1_cage003_EM.dds";
+		STRKEY DXT1_hand008_BML_dds = "Player_Default.fbm/DXT1_hand008_BML.dds";
+		STRKEY DXT1_knife001_BML_dds = "Player_Default.fbm/DXT1_knife001_BML.dds";
+		STRKEY DXT1_m_arm039_0001_BML_dds = "Player_Default.fbm/DXT1_m_arm039_0001_BML.dds";
+		STRKEY DXT1_m_arm039_0001_XM_dds = "Player_Default.fbm/DXT1_m_arm039_0001_XM.dds";
+		STRKEY DXT1_m_body039_0001_BML_dds = "Player_Default.fbm/DXT1_m_body039_0001_BML.dds";
+		STRKEY DXT1_m_body039_0001_XM_dds = "Player_Default.fbm/DXT1_m_body039_0001_XM.dds";
+		STRKEY DXT1_m_helm039_0001_BML_dds = "Player_Default.fbm/DXT1_m_helm039_0001_BML.dds";
+		STRKEY DXT1_m_helm039_0001_XM_dds = "Player_Default.fbm/DXT1_m_helm039_0001_XM.dds";
+		STRKEY DXT1_m_leg039_0001_BML_dds = "Player_Default.fbm/DXT1_m_leg039_0001_BML.dds";
+		STRKEY DXT1_m_leg039_0001_XM_dds = "Player_Default.fbm/DXT1_m_leg039_0001_XM.dds";
+		STRKEY DXT1_m_slinger039_0000_BML_dds = "Player_Default.fbm/DXT1_m_slinger039_0000_BML.dds";
+		STRKEY DXT1_m_slinger039_0000_XM_dds = "Player_Default.fbm/DXT1_m_slinger039_0000_XM.dds";
+		STRKEY DXT1_m_wst039_0001_BML_dds = "Player_Default.fbm/DXT1_m_wst039_0001_BML.dds";
+		STRKEY DXT1_m_wst039_0001_XM_dds = "Player_Default.fbm/DXT1_m_wst039_0001_XM.dds";
+	}
+
+	namespace Res1
+	{
+		namespace GrayCrystal.fbm
+		{
+			STRKEY stm520_012_01_00_BML_png = "Res1/GrayCrystal.fbm/stm520_012_01_00_BML.png";
+			STRKEY stm520_012_01_00_NM_png = "Res1/GrayCrystal.fbm/stm520_012_01_00_NM.png";
+		}
+
+	}
+
 }

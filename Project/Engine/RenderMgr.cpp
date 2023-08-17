@@ -209,13 +209,13 @@ namespace mh
 		{
 			if (mMultiRenderTargets[i])
 			{
-				if ((int)eMRTType::Light == i)
+				if ((int)eMRTType::Swapchain == i)
 				{
-					mMultiRenderTargets[i]->Clear(float4(0.f));
+					mMultiRenderTargets[i]->Clear(float4(0.2f));
 				}
 				else
 				{
-					mMultiRenderTargets[i]->Clear(float4(0.7f));
+					mMultiRenderTargets[i]->Clear(float4(0.f));
 				}
 			}
 				

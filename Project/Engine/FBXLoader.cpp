@@ -420,10 +420,16 @@ namespace mh
 				FbxFileTexture* pFbxTex = TextureProperty.GetSrcObject<FbxFileTexture>(0);
 				if (nullptr != pFbxTex)
 				{
-					//절대 주소가 있을 경우에만 상대 주소를 꺼내와서 저장
-					if (std::fs::exists(pFbxTex->GetFileName()))
+					std::fs::path fullPath = pFbxTex->GetFileName();
+
+					//절대 주소가 있을 경우 상대 주소를 만들어서 저장
+					if (std::fs::exists(fullPath))
 					{
-						retStr = pFbxTex->GetRelativeFileName();
+						static std::fs::path resPath = PathMgr::GetContentPathAbsolute(eResourceType::MeshData);
+
+						fullPath = fullPath.lexically_relative(resPath);
+
+						retStr = fullPath.string();
 					}
 				}
 			}
