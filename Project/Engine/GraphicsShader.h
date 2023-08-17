@@ -76,7 +76,7 @@ namespace mh
 		ComPtr<ID3D11InputLayout> mInputLayout;
 		D3D11_PRIMITIVE_TOPOLOGY mTopology;
 
-		tShaderCode mArrShaderCode[(int)eGSStage::END];
+		std::array<tShaderCode, (int)eGSStage::END>  mArrShaderCode;
 
 		ComPtr<ID3D11VertexShader>		mVS;
 		ComPtr<ID3D11HullShader>		mHS;

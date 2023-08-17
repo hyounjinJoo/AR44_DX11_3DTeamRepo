@@ -268,7 +268,12 @@ namespace Json
 		}
 
 
-		static std::vector<std::string> LoadStrKeyVector(const Json::Value* _pJson, const char* _strKey)
+		template <typename T, typename std::enable_if_t<(
+			true == std::is_vector_v<T> ||
+			true == std::is_std_array_v<T> ||
+			true == std::is_array_v<T>
+			), bool>* = nullptr>
+		static std::vector<std::string> LoadStrKeyVector(const Json::Value* _pJson, const char* _strKey, const T& _tSrc)
 		{
 			std::vector<std::string> retVec;
 

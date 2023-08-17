@@ -148,7 +148,7 @@ namespace mh
         }
         
         //포인터 배열은 MH::LoadStrKeyVector 함수를 통해서 Key값을 싹 받아올 수 있음.
-        const auto& vecLoad = Json::MH::LoadStrKeyVector(_pJVal, JSON_KEY(mTextures));
+        const auto& vecLoad = Json::MH::LoadStrKeyVector(_pJVal, JSON_KEY_PAIR(mTextures));
         for (size_t i = 0; i < vecLoad.size(); ++i)
         {
             if(false == vecLoad[i].empty())

@@ -191,10 +191,13 @@ namespace mh
 		{
 			_ifs.read(reinterpret_cast<char*>(&_val), sizeof(T));
 		}
+	
 
-
-		template <typename T, typename std::enable_if_t<
-			std::is_vector_v<T>>* = nullptr>
+		//Vector 또는 String
+		template <typename T, typename std::enable_if_t<(
+			std::is_vector_v<T> ||
+			std::is_same_v<std::string, T>
+		)>* = nullptr>
 		static void SaveValueVector(std::ofstream& _ofs, const T& _val)
 		{
 			using valType = T::value_type;
@@ -202,8 +205,10 @@ namespace mh
 			_ofs.write(reinterpret_cast<const char*>(_val.data()), _val.size() * sizeof(valType));
 		}
 
-		template <typename T, typename std::enable_if_t<
-			std::is_vector_v<T>>* = nullptr>
+		template <typename T, typename std::enable_if_t<(
+			std::is_vector_v<T> ||
+			std::is_same_v<std::string, T>
+		)>* = nullptr>
 			static void LoadValueVector(std::ifstream& _ifs, T& _val)
 		{
 			using valType = T::value_type;
@@ -213,8 +218,15 @@ namespace mh
 			_ifs.read(reinterpret_cast<char*>(_val.data()), _val.size() * sizeof(valType));
 		}
 
+		static void SaveStr(std::ofstream& _ofs, const std::string& _val)
+		{
+			SaveValueVector(_ofs, _val);
+		}
 
-
+		static void LoadStr(std::ifstream& _ifs, std::string& _val)
+		{
+			LoadValueVector(_ifs, _val);
+		}
 
 	private:
 		Binary() = delete;

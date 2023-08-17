@@ -15,12 +15,14 @@ namespace mh
 		virtual ~MeshData();
 
 		virtual eResult Save(const std::filesystem::path& _fileName) override;
-		virtual eResult SaveJson(Json::Value* _pJson) override;
 		virtual eResult Load(const std::filesystem::path& _path) override;
+
+		virtual eResult SaveJson(Json::Value* _pJson) override;
+		virtual eResult LoadJson(const Json::Value* _pJson) override;
 		GameObject* Instantiate();
 
-
 	private:
+
 		std::shared_ptr<Mesh>					mMesh;
 		std::vector<std::shared_ptr<Material>>	mMaterials;
     };

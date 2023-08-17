@@ -48,6 +48,16 @@ namespace mh::define::strKey::Texture
 		STRKEY SPR_Vill_Warehouse03_Spec_tga = "FBXTex/SPR_Vill_Warehouse03_Spec.tga";
 	}
 
+	namespace house.fbm
+	{
+		STRKEY SPR_Vill_Warehouse01_Diff_tga = "house.fbm/SPR_Vill_Warehouse01_Diff.tga";
+		STRKEY SPR_Vill_Warehouse01_Norm_tga = "house.fbm/SPR_Vill_Warehouse01_Norm.tga";
+		STRKEY SPR_Vill_Warehouse01_Spec_tga = "house.fbm/SPR_Vill_Warehouse01_Spec.tga";
+		STRKEY SPR_Vill_Warehouse02_Norm_tga = "house.fbm/SPR_Vill_Warehouse02_Norm.tga";
+		STRKEY SPR_Vill_Warehouse03_Diff_tga = "house.fbm/SPR_Vill_Warehouse03_Diff.tga";
+		STRKEY SPR_Vill_Warehouse03_Spec_tga = "house.fbm/SPR_Vill_Warehouse03_Spec.tga";
+	}
+
 	namespace noise
 	{
 		STRKEY noise_01_png = "noise/noise_01.png";

@@ -59,15 +59,14 @@ namespace mh
 		// 파일 경로 만들기
 		filePath /= _path;
 
-		//파일 쓰기모드로 열기
-		std::ofstream ofs(_path, std::ios::binary);
+		std::ofstream ofs(filePath, std::ios::binary);
 		if (false == ofs.is_open())
 		{
 			return eResult::Fail_OpenFile;
 		}
 		
 		//Key값 저장
-		ofs << GetKey();
+		Binary::SaveStr(ofs, GetKey());
 
 		//Microsoft::WRL::ComPtr<ID3D11Buffer> mVertexBuffer;
 		//저장 필요 없음
@@ -76,16 +75,18 @@ namespace mh
 		Binary::SaveValue(ofs, mVBDesc);
 		
 		//UINT mVertexByteStride;
-		ofs << mVertexByteStride;
+		Binary::SaveValue(ofs, mVertexByteStride);
+		//ofs << mVertexByteStride;
 
 		//UINT mVertexCount;
-		ofs << mVertexCount;
+		Binary::SaveValue(ofs, mVertexCount);
+		//ofs << mVertexCount;
 
 		//std::vector<unsigned char> mVertexSysMem;
 		Binary::SaveValueVector(ofs, mVertexSysMem);
 
 		//std::vector<tIndexInfo>		mIndexInfos;
-		ofs << mIndexInfos.size();
+		Binary::SaveValue(ofs, mIndexInfos.size());
 		for (size_t i = 0; i < mIndexInfos.size(); ++i)
 		{
 			Binary::SaveValue(ofs, mIndexInfos[i].Val);
@@ -94,19 +95,19 @@ namespace mh
 		
 		//// Animation3D 정보
 		//std::vector<define::tMTAnimClip>		m_vecAnimClip;
-		ofs << m_vecAnimClip.size();
+		Binary::SaveValue(ofs, m_vecAnimClip.size());
 		for (size_t i = 0; i < m_vecAnimClip.size(); ++i)
 		{
-			ofs << m_vecAnimClip[i].strAnimName;
+			Binary::SaveStr(ofs, m_vecAnimClip[i].strAnimName);
 			Binary::SaveValue(ofs, m_vecAnimClip[i].Val);
 		}
 
 
 		//std::vector<define::tMTBone>			m_vecBones;
-		ofs << m_vecBones.size();
+		Binary::SaveValue(ofs, m_vecBones.size());
 		for (size_t i = 0; i < m_vecBones.size(); ++i)
 		{
-			ofs << m_vecBones[i].strBoneName;
+			Binary::SaveStr(ofs, m_vecBones[i].strBoneName);
 			Binary::SaveValue(ofs, m_vecBones[i].Val);
 			Binary::SaveValueVector(ofs, m_vecBones[i].vecKeyFrame);
 		}
@@ -114,6 +115,7 @@ namespace mh
 		//StructBuffer* m_pBoneFrameData;   // 전체 본 프레임 정보(크기, 이동, 회전) (프레임 개수만큼)
 		//StructBuffer* m_pBoneOffset;	  // 각 뼈의 offset 행렬(각 뼈의 위치를 되돌리는 행렬) (1행 짜리)
 		//저장 필요 X
+		ofs.close();
 
 		return eResult::Success;
 	}
@@ -132,18 +134,34 @@ namespace mh
 		// 파일 경로 만들기
 		filePath /= _path;
 
-		std::ifstream ifs(filePath);
+		std::ifstream ifs(filePath, std::ios::binary);
 		if (false == ifs.is_open())
 			return eResult::Fail_OpenFile;
+
+		//Key값 가져오기
+		std::string strKey;
+		Binary::LoadStr(ifs, strKey);
+		SetKey(strKey);
+
+		////D3D11_BUFFER_DESC mVBDesc;
+		//Binary::SaveValue(ofs, mVBDesc);
+
+		////UINT mVertexByteStride;
+		//ofs << mVertexByteStride;
+
+		////UINT mVertexCount;
+		//ofs << mVertexCount;
 
 		//D3D11_BUFFER_DESC mVBDesc;
 		Binary::LoadValue(ifs, mVBDesc);
 
 		//UINT mVertexByteStride;
-		ifs >> mVertexByteStride;
+		Binary::LoadValue(ifs, mVertexByteStride);
+		//ifs >> mVertexByteStride;
 
 		//UINT mVertexCount;
-		ifs >> mVertexCount;
+		Binary::LoadValue(ifs, mVertexCount);
+		//ifs >> mVertexCount;
 
 		//std::vector<unsigned char> mVertexSysMem;
 		Binary::LoadValueVector(ifs, mVertexSysMem);
@@ -159,13 +177,16 @@ namespace mh
 		//std::vector<tIndexInfo>		mIndexInfos;
 		{
 			size_t size{};
-			ifs >> size;
-			mIndexInfos.resize(size);
+			Binary::LoadValue(ifs, size);
+
+			//매번 생성해서 집어넣음
+			mIndexInfos.reserve(size);
 			for (size_t i = 0; i < size; ++i)
 			{
-				Binary::LoadValue(ifs, mIndexInfos[i].Val);
-				Binary::LoadValueVector(ifs, mIndexInfos[i].IdxSysMem);
-
+				tIndexInfo info{};
+				Binary::LoadValue(ifs, info.Val);
+				Binary::LoadValueVector(ifs, info.IdxSysMem);
+				mIndexInfos.push_back(info);
 				if (false == CreateIndexBuffer())
 				{
 					ERROR_MESSAGE_W(L"인덱스 버퍼 로드 실패");
@@ -179,11 +200,11 @@ namespace mh
 		//std::vector<define::tMTAnimClip>		m_vecAnimClip;
 		{
 			size_t size{};
-			ifs >> size;
+			Binary::LoadValue(ifs, size);
 			m_vecAnimClip.resize(size);
 			for (size_t i = 0; i < size; ++i)
 			{
-				ifs >> m_vecAnimClip[i].strAnimName;
+				Binary::LoadStr(ifs, m_vecAnimClip[i].strAnimName);
 				Binary::LoadValue(ifs, m_vecAnimClip[i].Val);
 			}
 		}
@@ -192,11 +213,11 @@ namespace mh
 				//std::vector<define::tMTBone>			m_vecBones;
 		{
 			size_t size{};
-			ifs >> size;
+			Binary::LoadValue(ifs, size);
 			m_vecBones.resize(size);
 			for (size_t i = 0; i < size; ++i)
 			{
-				ifs >> m_vecBones[i].strBoneName;
+				Binary::LoadStr(ifs, m_vecBones[i].strBoneName);
 				Binary::LoadValue(ifs, m_vecBones[i].Val);
 				Binary::LoadValueVector(ifs, m_vecBones[i].vecKeyFrame);
 			}

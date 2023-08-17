@@ -32,6 +32,9 @@ namespace mh
 		if (false == std::fs::exists(fullPath))
 			std::fs::create_directories(fullPath);
 
+		fullPath /= _fileName;
+		fullPath.replace_extension(strKey::Ext_MeshData);
+
 		std::ofstream ofs(fullPath);
 		if (false == ofs.is_open())
 			return eResult::Fail_OpenFile;
@@ -43,35 +46,6 @@ namespace mh
 		
 		ofs << jVal;
 		ofs.close();
-
-		return eResult::Success;
-	}
-
-	eResult MeshData::SaveJson(Json::Value* _pJson)
-	{
-		if (nullptr == _pJson)
-			return eResult::Fail_Nullptr;
-		eResult result = IRes::SaveJson(_pJson);
-		if (eResultFail(result))
-			return result;
-
-		//둘중 하나라도 없을 경우 저장 불가
-		if (nullptr == mMesh || mMaterials.empty())
-			return eResult::Fail_InValid;
-		
-		Json::Value& jVal = *_pJson;
-
-		jVal[JSON_KEY(mMesh)] = mMesh->GetKey();
-
-		Json::Value& jValMtrls = jVal[JSON_KEY(mMaterials)];
-
-		for (size_t i = 0; i < mMaterials.size(); ++i)
-		{
-			if (mMaterials[i])
-			{
-				jValMtrls.append(mMaterials[i]->GetKey());
-			}
-		}
 
 		return eResult::Success;
 	}
@@ -102,14 +76,14 @@ namespace mh
 			// ResMgr 에 메쉬 등록
 			if (nullptr != pMesh)
 			{	
-				std::fs::path strMeshKey = _path;
+				std::fs::path strKey = _path;
 				//.msh로 확장자를 변경
-				strMeshKey.replace_extension(define::strKey::Ext_MeshData);
-				//Key로 저장
-				pMesh->SetKey(strMeshKey.string());
+				strKey.replace_extension(define::strKey::Ext_Mesh);
+				//Key로 Mesh를 저장
+				pMesh->SetKey(strKey.string());
 
 				//메쉬를 엔진의 포맷으로 변경해서 저장한다.
-				eResult result = pMesh->Save(strMeshKey);
+				eResult result = pMesh->Save(strKey);
 				
 				if (eResultFail(result))
 				{
@@ -118,7 +92,7 @@ namespace mh
 				}
 				
 				//성공 시 ResMgr에 넣는다.
-				ResMgr::Insert(strMeshKey.string(), pMesh);
+				ResMgr::Insert(strKey.string(), pMesh);
 			}
 
 			std::vector<std::shared_ptr<Material>> vecMtrl;
@@ -137,12 +111,103 @@ namespace mh
 
 			mMesh = pMesh;
 			mMaterials = vecMtrl;
+
+			//다른게 다 진행됐으면 자신도 저장
+			//키값 만들고 세팅하고
+			std::fs::path strKeyMeshData = _path;
+			strKeyMeshData.replace_extension(strKey::Ext_MeshData);
+			std::string strKey = strKeyMeshData.string();
+			SetKey(strKey);
+
+			//저장함수 호출
+			result = Save(_path);
+			if (eResultFail(result))
+			{
+				return result;
+			}
+
+			//성공 시 ResMgr가 이걸 리소스 목록에 등록해줄것임
 		}
 
+		//그렇지 않을 경우 json을 통해 로드
+		else
+		{
+			Json::Value jVal;
+			std::ifstream ifs(fullPath);
+			if (false == ifs.is_open())
+			{
+				return eResult::Fail_OpenFile;
+			}
 
+			ifs >> jVal;
+			ifs.close();
+			eResult result = LoadJson(&jVal);
+			if (eResultFail(result))
+				return result;
+		}
 
 		return eResult::Success;
 	}
+
+	eResult MeshData::SaveJson(Json::Value* _pJson)
+	{
+		if (nullptr == _pJson)
+			return eResult::Fail_Nullptr;
+		eResult result = IRes::SaveJson(_pJson);
+		if (eResultFail(result))
+			return result;
+
+		//둘중 하나라도 없을 경우 저장 불가
+		if (nullptr == mMesh || mMaterials.empty())
+			return eResult::Fail_InValid;
+
+		Json::Value& jVal = *_pJson;
+
+		Json::MH::SaveStrKey(_pJson, JSON_KEY_PAIR(mMesh));
+
+		Json::MH::SaveStrKeyVector(_pJson, JSON_KEY_PAIR(mMaterials));
+
+		return eResult::Success;
+	}
+
+
+	eResult MeshData::LoadJson(const Json::Value* _pJson)
+	{
+		if (nullptr == _pJson)
+			return eResult::Fail_Nullptr;
+		eResult result = IRes::LoadJson(_pJson);
+		if (eResultFail(result))
+			return result;
+
+		const Json::Value& jVal = *_pJson;
+
+		{
+			std::string strKey = Json::MH::LoadStrKey(_pJson, JSON_KEY_PAIR(mMesh));
+			mMesh = ResMgr::Load<Mesh>(strKey);
+			if (nullptr == mMesh)
+			{
+				return eResult::Fail_Create;
+			}
+		}
+		
+		{
+			mMaterials.clear();
+			const auto& strKeys = Json::MH::LoadStrKeyVector(_pJson, JSON_KEY_PAIR(mMaterials));
+			for (size_t i = 0; i < strKeys.size(); ++i)
+			{
+				std::shared_ptr<Material> material = nullptr;
+				if (false == strKeys[i].empty())
+				{
+					material = ResMgr::Load<Material>(strKeys[i]);
+				}
+
+				mMaterials.push_back(material);
+			}
+		}
+
+		return eResult::Success;
+	}
+
 
 	GameObject* MeshData::Instantiate()
 	{

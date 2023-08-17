@@ -454,6 +454,13 @@ namespace mh
 				//src에 파일이 있는데 dest에 없을 경우 복사
 				if (std::fs::exists(srcPath) && false == std::fs::exists(destPath))
 				{
+					std::fs::path destDir = destPath;
+					destDir.remove_filename();
+					if (false == std::fs::exists(destDir))
+					{
+						std::fs::create_directories(destDir);
+					}
+
 					//파일을 복사하고 
 					std::fs::copy(srcPath, destPath);
 				}
