@@ -58,6 +58,22 @@ namespace mh::define::strKey::Texture
 		STRKEY SPR_Vill_Warehouse03_Spec_tga = "house.fbm/SPR_Vill_Warehouse03_Spec.tga";
 	}
 
+	namespace Monster.fbm
+	{
+		STRKEY CH_NPC_MOB_Anashar_A01_Lower_D_KGW_tga = "Monster.fbm/CH_NPC_MOB_Anashar_A01_Lower_D_KGW.tga";
+		STRKEY CH_NPC_MOB_Anashar_A01_Lower_N_KGW_tga = "Monster.fbm/CH_NPC_MOB_Anashar_A01_Lower_N_KGW.tga";
+		STRKEY CH_NPC_MOB_Anashar_A01_Lower_SP_KGW_tga = "Monster.fbm/CH_NPC_MOB_Anashar_A01_Lower_SP_KGW.tga";
+		STRKEY CH_NPC_MOB_Anashar_A01_Shoulder_D_KGW_tga = "Monster.fbm/CH_NPC_MOB_Anashar_A01_Shoulder_D_KGW.tga";
+		STRKEY CH_NPC_MOB_Anashar_A01_Shoulder_N_KGW_tga = "Monster.fbm/CH_NPC_MOB_Anashar_A01_Shoulder_N_KGW.tga";
+		STRKEY CH_NPC_MOB_Anashar_A01_Shoulder_SP_KGW_tga = "Monster.fbm/CH_NPC_MOB_Anashar_A01_Shoulder_SP_KGW.tga";
+		STRKEY CH_NPC_MOB_Anashar_A01_Upper_D_KGW_tga = "Monster.fbm/CH_NPC_MOB_Anashar_A01_Upper_D_KGW.tga";
+		STRKEY CH_NPC_MOB_Anashar_A01_Upper_N_KGW_tga = "Monster.fbm/CH_NPC_MOB_Anashar_A01_Upper_N_KGW.tga";
+		STRKEY CH_NPC_MOB_Anashar_A01_Upper_SP_KGW_tga = "Monster.fbm/CH_NPC_MOB_Anashar_A01_Upper_SP_KGW.tga";
+		STRKEY CH_NPC_MOB_Anashar_Weapon_A01_D_KGW_tga = "Monster.fbm/CH_NPC_MOB_Anashar_Weapon_A01_D_KGW.tga";
+		STRKEY CH_NPC_MOB_Anashar_Weapon_A01_N_KGW_tga = "Monster.fbm/CH_NPC_MOB_Anashar_Weapon_A01_N_KGW.tga";
+		STRKEY CH_NPC_MOB_Anashar_Weapon_A01_SP_KGW_tga = "Monster.fbm/CH_NPC_MOB_Anashar_Weapon_A01_SP_KGW.tga";
+	}
+
 	namespace noise
 	{
 		STRKEY noise_01_png = "noise/noise_01.png";

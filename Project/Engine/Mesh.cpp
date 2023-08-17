@@ -38,12 +38,6 @@ namespace mh
 			//if (mIndexInfos[i].pIdxSysMem)
 			//	delete mIndexInfos[i].pIdxSysMem;
 		}
-
-		if (m_pBoneFrameData)
-			delete m_pBoneFrameData;
-
-		if (m_pBoneOffset)
-			delete m_pBoneOffset;
 	}
 
 	eResult Mesh::Save(const std::filesystem::path& _path)
@@ -223,7 +217,50 @@ namespace mh
 			}
 		}
 
+		// Animation 이 있는 Mesh 경우 structuredbuffer 만들어두기
+		if (IsAnimMesh())
+		{
+			// BoneOffet 행렬
+			std::vector<MATRIX> vecOffset;
+			std::vector<tFrameTranslation> vecFrameTrans;
 
+			//프레임 갯수 구하기
+			size_t iFrameCount = 0; 
+			for (size_t i = 0; i < m_vecBones.size(); ++i)
+			{
+				iFrameCount = max(iFrameCount, (size_t)m_vecBones[i].vecKeyFrame.size());
+			}
+
+			vecFrameTrans.resize((UINT)m_vecBones.size() * iFrameCount);
+			for (size_t i = 0; i < m_vecBones.size(); ++i)
+			{
+				vecOffset.push_back(m_vecBones[i].Val.matOffset);
+
+				for (size_t j = 0; j < m_vecBones[i].vecKeyFrame.size(); ++j)
+				{
+					vecFrameTrans[(UINT)m_vecBones.size() * j + i]
+						= m_vecBones[i].vecKeyFrame[j].FrameTrans;
+				}
+			}
+
+
+			//Create
+			m_pBoneOffset = std::make_unique<StructBuffer>();
+			tSBufferDesc Desc{};
+			Desc.eSBufferType = eStructBufferType::READ_ONLY;
+			Desc.REGISLOT_t_SRV = Register_t_g_arrBoneMat;
+			m_pBoneOffset->SetDesc(Desc);
+			m_pBoneOffset->Create<MATRIX>(vecOffset.size(), vecOffset.data(), vecOffset.size());
+
+
+			m_pBoneFrameData = std::make_unique<StructBuffer>();
+			Desc = tSBufferDesc{};
+			Desc.REGISLOT_t_SRV = Register_t_g_arrFrameTrans;
+			Desc.eSBufferType = eStructBufferType::READ_ONLY;
+			m_pBoneFrameData->SetDesc(Desc);
+			size_t SbufferSize = vecOffset.size() * (size_t)iFrameCount;
+			m_pBoneFrameData->Create<tFrameTranslation>(SbufferSize, vecFrameTrans.data(), SbufferSize);
+		}
 		//StructBuffer* m_pBoneFrameData;   // 전체 본 프레임 정보(크기, 이동, 회전) (프레임 개수만큼)
 		//StructBuffer* m_pBoneOffset;	  // 각 뼈의 offset 행렬(각 뼈의 위치를 되돌리는 행렬) (1행 짜리)
 
@@ -515,7 +552,7 @@ namespace mh
 			}
 
 			//Create
-			pMesh->m_pBoneOffset = new StructBuffer;
+			pMesh->m_pBoneOffset = std::make_unique<StructBuffer>();
 			tSBufferDesc Desc{};
 			Desc.eSBufferType = eStructBufferType::READ_ONLY;
 			Desc.REGISLOT_t_SRV = Register_t_g_arrBoneMat;
@@ -523,7 +560,7 @@ namespace mh
 			pMesh->m_pBoneOffset->Create<MATRIX>(vecOffset.size(), vecOffset.data(), vecOffset.size());
 
 
-			pMesh->m_pBoneFrameData = new StructBuffer;
+			pMesh->m_pBoneFrameData = std::make_unique<StructBuffer>();
 			Desc = tSBufferDesc{};
 			Desc.REGISLOT_t_SRV = Register_t_g_arrFrameTrans;
 			Desc.eSBufferType = eStructBufferType::READ_ONLY;

@@ -201,7 +201,8 @@ namespace mh
 		static void SaveValueVector(std::ofstream& _ofs, const T& _val)
 		{
 			using valType = T::value_type;
-			_ofs << _val.size();
+			size_t size = _val.size();
+			_ofs.write(reinterpret_cast<const char*>(&size), sizeof(size_t));;
 			_ofs.write(reinterpret_cast<const char*>(_val.data()), _val.size() * sizeof(valType));
 		}
 
@@ -213,7 +214,7 @@ namespace mh
 		{
 			using valType = T::value_type;
 			size_t size{};
-			_ifs >> size;
+			_ifs.read(reinterpret_cast<char*>(&size), sizeof(size_t));
 			_val.resize(size);
 			_ifs.read(reinterpret_cast<char*>(_val.data()), _val.size() * sizeof(valType));
 		}
