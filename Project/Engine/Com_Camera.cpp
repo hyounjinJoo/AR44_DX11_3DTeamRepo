@@ -271,8 +271,9 @@ namespace mh
 			return;
 
 		std::shared_ptr<Material> material = renderer->GetMaterial(0);
-		//if (material == nullptr)
-		//	continue;
+
+		if (material == nullptr)
+			return;
 
 		eRenderingMode mode = material->GetRenderingMode();
 

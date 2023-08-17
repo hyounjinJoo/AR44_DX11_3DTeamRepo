@@ -3,6 +3,7 @@
 #include "Com_Animator2D.h"
 
 #include "json-cpp\json.h"
+#include "GameObject.h"
 
 namespace mh
 {
@@ -150,6 +151,32 @@ namespace mh
 		tEvents* events = new tEvents();
 		events->Events.resize(_spriteLegth);
 		mEvents.insert(std::make_pair(_name, events));
+
+		return true;
+	}
+
+	bool Com_Animator2D::CreateXY(const std::string_view _name, std::shared_ptr<Texture> _atlas, UINT _uColTotal, UINT _uRowTotal, float _duration)
+	{
+		if (_atlas == nullptr)
+			return false;
+
+		Animation2D* animation = FindAnimation(_name);
+		if (animation != nullptr)
+			return false;
+
+		animation = new Animation2D();
+		animation->CreateXY(_name, _atlas, _uColTotal, _uRowTotal, _duration);
+
+		mAnimations.insert(std::make_pair(_name, animation));
+
+		tEvents* events = new tEvents();
+		events->Events.resize(_uColTotal * _uRowTotal);
+		mEvents.insert(std::make_pair(_name, events));
+
+		float2 size = animation->GetSpriteSize(0u);
+
+		//사이즈 수정
+		GetOwner()->GetTransform().SetSizeXY(animation->GetSpriteSize(0u));
 
 		return true;
 	}

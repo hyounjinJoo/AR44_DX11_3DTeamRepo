@@ -19,6 +19,7 @@ namespace mh::define::strKey::Texture
 	STRKEY evm090_00_01_BML_png = "evm090_00_01_BML.png";
 	STRKEY HPBar_png = "HPBar.png";
 	STRKEY Light_png = "Light.png";
+	STRKEY lurker_SunkenColony__bmp = "lurker(SunkenColony).bmp";
 	STRKEY Smile_png = "Smile.png";
 	STRKEY test_png = "test.png";
 	STRKEY Zelda_png = "Zelda.png";
@@ -48,7 +49,7 @@ namespace mh::define::strKey::Texture
 		STRKEY SPR_Vill_Warehouse03_Spec_tga = "FBXTex/SPR_Vill_Warehouse03_Spec.tga";
 	}
 
-	namespace house.fbm
+	namespace house_fbm
 	{
 		STRKEY SPR_Vill_Warehouse01_Diff_tga = "house.fbm/SPR_Vill_Warehouse01_Diff.tga";
 		STRKEY SPR_Vill_Warehouse01_Norm_tga = "house.fbm/SPR_Vill_Warehouse01_Norm.tga";
@@ -58,7 +59,7 @@ namespace mh::define::strKey::Texture
 		STRKEY SPR_Vill_Warehouse03_Spec_tga = "house.fbm/SPR_Vill_Warehouse03_Spec.tga";
 	}
 
-	namespace Monster.fbm
+	namespace Monster_fbm
 	{
 		STRKEY CH_NPC_MOB_Anashar_A01_Lower_D_KGW_tga = "Monster.fbm/CH_NPC_MOB_Anashar_A01_Lower_D_KGW.tga";
 		STRKEY CH_NPC_MOB_Anashar_A01_Lower_N_KGW_tga = "Monster.fbm/CH_NPC_MOB_Anashar_A01_Lower_N_KGW.tga";
@@ -94,7 +95,7 @@ namespace mh::define::strKey::Texture
 		STRKEY Sparks_png = "particle/Sparks.png";
 	}
 
-	namespace Player_Default.fbm
+	namespace Player_Default_fbm
 	{
 		STRKEY DXT1_cage003_BML_dds = "Player_Default.fbm/DXT1_cage003_BML.dds";
 		STRKEY DXT1_cage003_EM_dds = "Player_Default.fbm/DXT1_cage003_EM.dds";
@@ -116,7 +117,7 @@ namespace mh::define::strKey::Texture
 
 	namespace Res1
 	{
-		namespace GrayCrystal.fbm
+		namespace GrayCrystal_fbm
 		{
 			STRKEY stm520_012_01_00_BML_png = "Res1/GrayCrystal.fbm/stm520_012_01_00_BML.png";
 			STRKEY stm520_012_01_00_NM_png = "Res1/GrayCrystal.fbm/stm520_012_01_00_NM.png";
