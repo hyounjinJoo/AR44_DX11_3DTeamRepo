@@ -17,9 +17,9 @@ namespace mh
 
 		virtual ~Com_Renderer_Mesh();
 
-		virtual void Init() override;
-		virtual void Update() override;
-		virtual void FixedUpdate() override;
+		//virtual void Init() override;
+		//virtual void Update() override;
+		virtual void FixedUpdate() override {};
 		virtual void Render() override;
 	};
 }

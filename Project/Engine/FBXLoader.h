@@ -109,6 +109,8 @@ namespace mh
 
 	public:
 		int GetContainerCount() { return (int)mContainers.size(); }
+
+		//index 번호가 유효하지 않을 상황에 대비해서 주소로 반환
 		inline const tFBXContainer* GetContainer(int _iIdx) const;
 		std::vector<tBone*>& GetBones() { return mBones; }
 		std::vector<tAnimClip*>& GetAnimClip() { return mAnimClips; }

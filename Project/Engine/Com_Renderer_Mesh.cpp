@@ -16,18 +16,6 @@ namespace mh
 	{
 	}
 
-	void Com_Renderer_Mesh::Init()
-	{
-	}
-
-	void Com_Renderer_Mesh::Update()
-	{
-	}
-
-	void Com_Renderer_Mesh::FixedUpdate()
-	{
-	}
-
 	void Com_Renderer_Mesh::Render()
 	{
 		//메쉬 또는 재질이 없을 경우 렌더링 불가능이므로 return;
@@ -35,12 +23,6 @@ namespace mh
 			return;
 
 		GetOwner()->GetTransform().SetConstBuffer();
-
-		//GetMesh()->BindBuffer(i);
-		//GetMaterial(i)->Bind();
-
-		//GetMesh()->Render(i);
-
 
 		//애니메이션 확인
 		IAnimator* Animator = static_cast<IAnimator*>(GetOwner()->GetComponent(define::eComponentType::Animator));

@@ -32,6 +32,7 @@ namespace mh
 		std::shared_ptr<Material> GetMaterial(UINT _idx);
 		UINT GetMaterialCount() { return (UINT)mMaterials.size(); }
 
+		bool IsRenderReady() const { return (mMesh && false == mMaterials.empty()); }
 		
 	private:
 		std::shared_ptr <Mesh> mMesh;

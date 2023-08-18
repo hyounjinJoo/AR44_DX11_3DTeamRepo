@@ -244,51 +244,44 @@ namespace mh
 					return result;
 				}
 
-				//성공 시 ResMgr에 넣는다.
-				ResMgr::Insert(strKey.string(), meshCont.pMesh);
+
 			}
 
 			//std::vector<std::shared_ptr<Material>> vecMtrl;
 
 			// 메테리얼 가져오기
-			
-			for (UINT i = 0; i < loader.GetContainer(0).vecMtrl.size(); ++i)
+			for (UINT i = 0; i < cont->vecMtrl.size(); ++i)
 			{
+				//Material의 경우 FBX Loader에서 만들어 놨음
 				// 예외처리 (material 이름이 입력 안되어있을 수도 있다.)
-				std::string strKey = loader.GetContainer(0).vecMtrl[i].strMtrlName;
+				std::string strKey = cont->vecMtrl[i].strMtrlName;
 				std::shared_ptr<Material> pMtrl = ResMgr::Find<Material>(strKey);
+
+				//혹시나 없을 경우 에러
 				MH_ASSERT(pMtrl.get());
 
-
-				vecMtrl.push_back(pMtrl);
+				meshCont.pMaterials.push_back(pMtrl);
 			}
-
-			tMeshContainer meshContainer{};
-			meshContainer.mMesh = pMesh;
-			meshContainer.mMaterials = vecMtrl;
-			mMesh = pMesh;
-			mMaterials = vecMtrl;
 
 			//다른게 다 진행됐으면 자신도 저장
 			//키값 만들고 세팅하고
-			std::fs::path strKeyMeshData = _path;
+			std::fs::path strKeyMeshData = _fileName;
 			strKeyMeshData.replace_extension(strKey::Ext_MeshData);
 			std::string strKey = strKeyMeshData.string();
 			SetKey(strKey);
 
 			//저장함수 호출
-			result = Save(_path);
+			result = Save(strKey);
 			if (eResultFail(result))
 			{
 				return result;
 			}
+
+			//전부 저장에 성공했을 경우 ResMgr에서 이 주소(MeshData)를 리소스에 추가한다
+			//애초에 호출한 클래스가 ResMgr임
 		}
 
-
-
-		//성공 시 ResMgr가 이걸 리소스 목록에 등록해줄것임
-
-		return eResult();
+		return eResult::Success;
 	}
 }
 
