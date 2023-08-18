@@ -401,41 +401,44 @@ namespace mh
 	}
 
 
-	std::shared_ptr<Mesh> Mesh::CreateFromContainer(FBXLoader& _loader)
+	eResult Mesh::CreateFromContainer(const tFBXContainer* _fbxContainer)
 	{
-		const tContainer* container = &(_loader.GetContainer(0));
+		if (nullptr == _fbxContainer)
+			return eResult::Fail_Nullptr;
 
-		UINT iVtxCount = (UINT)container->vecPos.size();
+		//const tFBXContainer& container = _fbxContainer->GetContainer(0);
+
+		UINT iVtxCount = (UINT)_fbxContainer->vecPos.size();
 		std::vector<Vertex3D> vecVtx3d(iVtxCount);
 		for (UINT i = 0; i < iVtxCount; ++i)
 		{
-			vecVtx3d[i].Pos = float4(container->vecPos[i], 1.f);
-			vecVtx3d[i].UV = container->vecUV[i];
+			vecVtx3d[i].Pos = float4(_fbxContainer->vecPos[i], 1.f);
+			vecVtx3d[i].UV = _fbxContainer->vecUV[i];
 			vecVtx3d[i].Color = float4(1.f, 0.f, 1.f, 1.f);
-			vecVtx3d[i].Normal = container->vecNormal[i];
-			vecVtx3d[i].Tangent = container->vecTangent[i];
-			vecVtx3d[i].BiNormal = container->vecBinormal[i];
-			vecVtx3d[i].Weights = container->vecWeights[i];
-			vecVtx3d[i].Indices = container->vecIndices[i];
+			vecVtx3d[i].Normal = _fbxContainer->vecNormal[i];
+			vecVtx3d[i].Tangent = _fbxContainer->vecTangent[i];
+			vecVtx3d[i].BiNormal = _fbxContainer->vecBinormal[i];
+			vecVtx3d[i].Weights = _fbxContainer->vecWeights[i];
+			vecVtx3d[i].Indices = _fbxContainer->vecIndices[i];
 		}
-		std::shared_ptr<Mesh> pMesh = std::make_shared<Mesh>();
-		pMesh->CreateVertexBuffer<Vertex3D>(vecVtx3d);
+		//std::shared_ptr<Mesh> pMesh = std::make_shared<Mesh>();
+		CreateVertexBuffer<Vertex3D>(vecVtx3d);
 
 
 		// 인덱스 정보
 		
-		//Info.IdxCount = (UINT)container->vecIdx.size();
-		UINT iIdxBufferCount = (UINT)container->vecIdx.size();
+		//Info.IdxCount = (UINT)_fbxContainer->vecIdx.size();
+		UINT iIdxBufferCount = (UINT)_fbxContainer->vecIdx.size();
 
 		//D3D11_BUFFER_DESC tIdxDesc = {};
 
 		
 		for (UINT i = 0; i < iIdxBufferCount; ++i)
 		{
-			pMesh->CreateIndexBuffer(container->vecIdx[i]);
+			CreateIndexBuffer(_fbxContainer->vecIdx[i]);
 
 			//tIndexInfo Info{};
-			//Info.tIBDesc.ByteWidth = (UINT)container->vecIdx[i].size() * sizeof(UINT); // Index Format 이 R32_UINT 이기 때문
+			//Info.tIBDesc.ByteWidth = (UINT)_fbxContainer->vecIdx[i].size() * sizeof(UINT); // Index Format 이 R32_UINT 이기 때문
 			//Info.tIBDesc.BindFlags = D3D11_BIND_INDEX_BUFFER;
 			//Info.tIBDesc.Usage = D3D11_USAGE_DEFAULT;
 
@@ -443,7 +446,7 @@ namespace mh
 			////void* pSysMem = malloc(tIdxDesc.ByteWidth);
 			////MH_ASSERT(nullptr != pSysMem);
 
-			////memcpy(pSysMem, container->vecIdx[i].data(), tIdxDesc.ByteWidth);
+			////memcpy(pSysMem, _fbxContainer->vecIdx[i].data(), tIdxDesc.ByteWidth);
 			//D3D11_SUBRESOURCE_DATA tSub{};
 			//tSub.pSysMem = pSysMem;
 
@@ -455,19 +458,19 @@ namespace mh
 
 			//tIndexInfo info = {};
 			//info.tIBDesc = tIdxDesc;
-			//info.IdxCount = (UINT)container->vecIdx[i].size();
+			//info.IdxCount = (UINT)_fbxContainer->vecIdx[i].size();
 			//info.pIdxSysMem = pSysMem;
 			//info.IndexBuffer = pIB;
 
-			//pMesh->mIndexInfos.push_back(info);
+			//mIndexInfos.push_back(info);
 		}
 
 
-		// Animation3D
-		if (false == container->bAnimation)
-			return pMesh;
+		// Animation3D가 없을 경우에는 여기서 중단
+		if (false == _fbxContainer->bAnimation)
+			return eResult::Success;
 
-		std::vector<tBone*>& vecBone = _loader.GetBones();
+		std::vector<tBone*>& vecBone = _fbxContainer->GetBones();
 		UINT iFrameCount = 0;
 		for (UINT i = 0; i < vecBone.size(); ++i)
 		{
@@ -489,14 +492,14 @@ namespace mh
 				Keyframe.FrameTrans.vTranslate.y = (float)keyFrameTransform.mData[1];
 				Keyframe.FrameTrans.vTranslate.z = (float)keyFrameTransform.mData[2];
 				Keyframe.FrameTrans.vTranslate.w = (float)keyFrameTransform.mData[3];
-				//float4(pMesh->m_vecBones[i].vecKeyFrame[j].vTranslate, 0.f),
+				//float4(m_vecBones[i].vecKeyFrame[j].vTranslate, 0.f),
 
 				const auto& keyFrameScale = vecBone[i]->vecKeyFrame[j].matTransform.GetS();
 				Keyframe.FrameTrans.vScale.x = (float)keyFrameScale.mData[0];
 				Keyframe.FrameTrans.vScale.y = (float)keyFrameScale.mData[1];
 				Keyframe.FrameTrans.vScale.z = (float)keyFrameScale.mData[2];
 				Keyframe.FrameTrans.vScale.w = (float)keyFrameScale.mData[3];
-				//float4(pMesh->m_vecBones[i].vecKeyFrame[j].vScale, 0.f),
+				//float4(m_vecBones[i].vecKeyFrame[j].vScale, 0.f),
 
 				const auto& keyFrameQuat = vecBone[i]->vecKeyFrame[j].matTransform.GetQ();
 				Keyframe.FrameTrans.qRot.x = (float)keyFrameQuat.mData[0];
@@ -509,10 +512,10 @@ namespace mh
 
 			iFrameCount = max(iFrameCount, (UINT)bone.vecKeyFrame.size());
 
-			pMesh->m_vecBones.push_back(bone);
+			m_vecBones.push_back(bone);
 		}
 
-		std::vector<tAnimClip*>& vecAnimClip = _loader.GetAnimClip();
+		std::vector<tAnimClip*>& vecAnimClip = _fbxContainer->GetAnimClip();
 
 		for (UINT i = 0; i < vecAnimClip.size(); ++i)
 		{
@@ -528,47 +531,47 @@ namespace mh
 			tClip.Val.iFrameLength = tClip.Val.iEndFrame - tClip.Val.iStartFrame;
 			tClip.Val.eMode = vecAnimClip[i]->eMode;
 
-			pMesh->m_vecAnimClip.push_back(tClip);
+			m_vecAnimClip.push_back(tClip);
 		}
 
 		// Animation 이 있는 Mesh 경우 structuredbuffer 만들어두기
-		if (pMesh->IsAnimMesh())
+		if (IsAnimMesh())
 		{
 			// BoneOffet 행렬
 			std::vector<MATRIX> vecOffset;
 			std::vector<tFrameTranslation> vecFrameTrans;
-			vecFrameTrans.resize((UINT)pMesh->m_vecBones.size() * iFrameCount);
+			vecFrameTrans.resize((UINT)m_vecBones.size() * iFrameCount);
 
-			for (size_t i = 0; i < pMesh->m_vecBones.size(); ++i)
+			for (size_t i = 0; i < m_vecBones.size(); ++i)
 			{
-				vecOffset.push_back(pMesh->m_vecBones[i].Val.matOffset);
+				vecOffset.push_back(m_vecBones[i].Val.matOffset);
 
-				for (size_t j = 0; j < pMesh->m_vecBones[i].vecKeyFrame.size(); ++j)
+				for (size_t j = 0; j < m_vecBones[i].vecKeyFrame.size(); ++j)
 				{
-					vecFrameTrans[(UINT)pMesh->m_vecBones.size() * j + i]
-						= pMesh->m_vecBones[i].vecKeyFrame[j].FrameTrans;
+					vecFrameTrans[(UINT)m_vecBones.size() * j + i]
+						= m_vecBones[i].vecKeyFrame[j].FrameTrans;
 				}
 			}
 
 			//Create
-			pMesh->m_pBoneOffset = std::make_unique<StructBuffer>();
+			m_pBoneOffset = std::make_unique<StructBuffer>();
 			tSBufferDesc Desc{};
 			Desc.eSBufferType = eStructBufferType::READ_ONLY;
 			Desc.REGISLOT_t_SRV = Register_t_g_arrBoneMat;
-			pMesh->m_pBoneOffset->SetDesc(Desc);
-			pMesh->m_pBoneOffset->Create<MATRIX>(vecOffset.size(), vecOffset.data(), vecOffset.size());
+			m_pBoneOffset->SetDesc(Desc);
+			m_pBoneOffset->Create<MATRIX>(vecOffset.size(), vecOffset.data(), vecOffset.size());
 
 
-			pMesh->m_pBoneFrameData = std::make_unique<StructBuffer>();
+			m_pBoneFrameData = std::make_unique<StructBuffer>();
 			Desc = tSBufferDesc{};
 			Desc.REGISLOT_t_SRV = Register_t_g_arrFrameTrans;
 			Desc.eSBufferType = eStructBufferType::READ_ONLY;
-			pMesh->m_pBoneFrameData->SetDesc(Desc);
+			m_pBoneFrameData->SetDesc(Desc);
 			size_t SbufferSize = vecOffset.size() * (size_t)iFrameCount;
-			pMesh->m_pBoneFrameData->Create<tFrameTranslation>(SbufferSize, vecFrameTrans.data(), SbufferSize);
+			m_pBoneFrameData->Create<tFrameTranslation>(SbufferSize, vecFrameTrans.data(), SbufferSize);
 		}
 
-		return pMesh;
+		return eResult::Success;
 	}
 }
 

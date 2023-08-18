@@ -40,13 +40,14 @@ namespace mh
 
 	class FBXLoader;
 	class StructBuffer;
+	struct tFBXContainer;
 	class Mesh : public IRes 
 	{
 	public:
 		Mesh();
 		virtual ~Mesh();
 
-		static std::shared_ptr<Mesh> CreateFromContainer(FBXLoader& _loader);
+		eResult CreateFromContainer(const tFBXContainer* _fbxContainer);
 
 		virtual eResult Save(const std::filesystem::path& _path) override;
 		virtual eResult Load(const std::filesystem::path& _path) override;

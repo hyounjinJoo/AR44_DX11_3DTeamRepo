@@ -126,6 +126,8 @@ namespace mh
 		return mat;
 	}
 
+
+
 	void FBXLoader::LoadMeshDataFromNode(FbxNode* _pNode)
 	{
 		// 노드의 메쉬정보 읽기
@@ -163,8 +165,8 @@ namespace mh
 
 	void FBXLoader::LoadMesh(FbxMesh* _pFbxMesh)
 	{
-		mContainers.push_back(tContainer{});
-		tContainer& Container = mContainers[mContainers.size() - 1];
+		mContainers.push_back(tFBXContainer{});
+		tFBXContainer& Container = mContainers[mContainers.size() - 1];
 
 		std::string strName = _pFbxMesh->GetName();
 
@@ -265,7 +267,7 @@ namespace mh
 	}
 
 	void FBXLoader::GetTangent(FbxMesh* _pMesh
-		, tContainer* _pContainer
+		, tFBXContainer* _pContainer
 		, int _iIdx		 /*해당 정점의 인덱스*/
 		, int _iVtxOrder /*폴리곤 단위로 접근하는 순서*/)
 	{
@@ -301,7 +303,7 @@ namespace mh
 		_pContainer->vecTangent[_iIdx].z = (float)vTangent.mData[1];
 	}
 
-	void FBXLoader::GetBinormal(FbxMesh* _pMesh, tContainer* _pContainer, int _iIdx, int _iVtxOrder)
+	void FBXLoader::GetBinormal(FbxMesh* _pMesh, tFBXContainer* _pContainer, int _iIdx, int _iVtxOrder)
 	{
 		int iBinormalCnt = _pMesh->GetElementBinormalCount();
 		//if (1 != iBinormalCnt)
@@ -335,7 +337,7 @@ namespace mh
 		_pContainer->vecBinormal[_iIdx].z = (float)vBinormal.mData[1];
 	}
 
-	void FBXLoader::GetNormal(FbxMesh* _pMesh, tContainer* _pContainer, int _iIdx, int _iVtxOrder)
+	void FBXLoader::GetNormal(FbxMesh* _pMesh, tFBXContainer* _pContainer, int _iIdx, int _iVtxOrder)
 	{
 		int iNormalCnt = _pMesh->GetElementNormalCount();
 
@@ -370,7 +372,7 @@ namespace mh
 		_pContainer->vecNormal[_iIdx].z = (float)vNormal.mData[1];
 	}
 
-	void FBXLoader::GetUV(FbxMesh* _pMesh, tContainer* _pContainer, int _iIdx, int _iUVIndex)
+	void FBXLoader::GetUV(FbxMesh* _pMesh, tFBXContainer* _pContainer, int _iIdx, int _iUVIndex)
 	{
 		FbxGeometryElementUV* pUV = _pMesh->GetElementUV();
 
@@ -687,7 +689,7 @@ namespace mh
 		}
 	}
 
-	void FBXLoader::LoadAnimationData(FbxMesh* _pMesh, tContainer* _pContainer)
+	void FBXLoader::LoadAnimationData(FbxMesh* _pMesh, tFBXContainer* _pContainer)
 	{
 		// Animation Data 로드할 필요가 없음
 		int iSkinCount = _pMesh->GetDeformerCount(FbxDeformer::eSkin);
@@ -740,7 +742,7 @@ namespace mh
 	}
 
 
-	void FBXLoader::CheckWeightAndIndices(FbxMesh* _pMesh, tContainer* _pContainer)
+	void FBXLoader::CheckWeightAndIndices(FbxMesh* _pMesh, tFBXContainer* _pContainer)
 	{
 		std::vector<std::vector<tWeightsAndIndices>>::iterator iter = _pContainer->vecWI.begin();
 
@@ -793,7 +795,7 @@ namespace mh
 	}
 
 	void FBXLoader::LoadKeyframeTransform(FbxNode* _pNode, FbxCluster* _pCluster
-		, const FbxAMatrix& _matNodeTransform, int _iBoneIdx, tContainer* _pContainer)
+		, const FbxAMatrix& _matNodeTransform, int _iBoneIdx, tFBXContainer* _pContainer)
 	{
 		if (mAnimClips.empty())
 			return;
@@ -835,7 +837,7 @@ namespace mh
 
 	void FBXLoader::LoadOffsetMatrix(FbxCluster* _pCluster
 		, const FbxAMatrix& _matNodeTransform
-		, int _iBoneIdx, tContainer* _pContainer)
+		, int _iBoneIdx, tFBXContainer* _pContainer)
 	{
 		FbxAMatrix matClusterTrans;
 		FbxAMatrix matClusterLinkTrans;
@@ -865,7 +867,7 @@ namespace mh
 
 	void FBXLoader::LoadWeightsAndIndices(FbxCluster* _pCluster
 		, int _iBoneIdx
-		, tContainer* _pContainer)
+		, tFBXContainer* _pContainer)
 	{
 		int iIndicesCount = _pCluster->GetControlPointIndicesCount();
 

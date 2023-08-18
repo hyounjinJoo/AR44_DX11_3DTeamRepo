@@ -50,88 +50,32 @@ namespace mh
 		return eResult::Success;
 	}
 
-	eResult MeshData::Load(const std::filesystem::path& _path)
+	eResult MeshData::Load(const std::filesystem::path& _filePath)
 	{
-		std::fs::path fullPath = PathMgr::GetContentPathRelative(eResourceType::MeshData);
-		fullPath /= _path;
-
-		std::string ext = StringConv::UpperCaseReturn(_path.extension().string());
+		std::string ext = StringConv::UpperCaseReturn(_filePath.extension().string());
 
 		//FBX일 경우에는 FBXLoader를 통해서 가져온다.
 		if (".FBX" == ext)
 		{
-			FBXLoader loader{};
-			loader.Init();
-			eResult result = loader.LoadFbx(fullPath);
+			eResult result = LoadFromFBX(_filePath);
 			if (eResultFail(result))
-			{
-				ERROR_MESSAGE_W(L"FBX 불러오기 실패.");
 				return result;
-			}
-
-			// 메쉬 가져오기
-			std::shared_ptr<Mesh> pMesh = nullptr;
-			pMesh = Mesh::CreateFromContainer(loader);
-
-			// ResMgr 에 메쉬 등록
-			if (nullptr != pMesh)
-			{	
-				std::fs::path strKey = _path;
-				//.msh로 확장자를 변경
-				strKey.replace_extension(define::strKey::Ext_Mesh);
-				//Key로 Mesh를 저장
-				pMesh->SetKey(strKey.string());
-
-				//메쉬를 엔진의 포맷으로 변경해서 저장한다.
-				eResult result = pMesh->Save(strKey);
-				
-				if (eResultFail(result))
-				{
-					ERROR_MESSAGE_W(L"Mesh 저장 실패.");
-					return result;
-				}
-				
-				//성공 시 ResMgr에 넣는다.
-				ResMgr::Insert(strKey.string(), pMesh);
-			}
-
-			std::vector<std::shared_ptr<Material>> vecMtrl;
-
-			// 메테리얼 가져오기
-			for (UINT i = 0; i < loader.GetContainer(0).vecMtrl.size(); ++i)
-			{
-				// 예외처리 (material 이름이 입력 안되어있을 수도 있다.)
-				std::string strKey = loader.GetContainer(0).vecMtrl[i].strMtrlName;
-				std::shared_ptr<Material> pMtrl = ResMgr::Find<Material>(strKey);
-				MH_ASSERT(pMtrl.get());
-
-
-				vecMtrl.push_back(pMtrl);
-			}
-
-			mMesh = pMesh;
-			mMaterials = vecMtrl;
-
-			//다른게 다 진행됐으면 자신도 저장
-			//키값 만들고 세팅하고
-			std::fs::path strKeyMeshData = _path;
-			strKeyMeshData.replace_extension(strKey::Ext_MeshData);
-			std::string strKey = strKeyMeshData.string();
-			SetKey(strKey);
-
-			//저장함수 호출
-			result = Save(_path);
-			if (eResultFail(result))
-			{
-				return result;
-			}
-
-			//성공 시 ResMgr가 이걸 리소스 목록에 등록해줄것임
 		}
 
 		//그렇지 않을 경우 json을 통해 로드
-		else
+		else if (".JSON" == ext)
 		{
+			std::fs::path fullPath = PathMgr::GetContentPathRelative(eResourceType::MeshData);
+			fullPath /= _filePath;
+			if (false == std::fs::exists(fullPath.parent_path()))
+			{
+				if (false == std::fs::create_directories(fullPath))
+				{
+					ERROR_MESSAGE_W(L"경로 정보가 이상합니다.");
+					return eResult::Fail_PathNotExist;
+				}
+			}
+
 			Json::Value jVal;
 			std::ifstream ifs(fullPath);
 			if (false == ifs.is_open())
@@ -230,6 +174,121 @@ namespace mh
 		}
 
 		return pNewObj;
+	}
+
+	eResult MeshData::LoadFromFBX(const std::filesystem::path& _fileName)
+	{
+		std::fs::path fullPath = PathMgr::GetContentPathRelative(eResourceType::MeshData);
+		fullPath /= _fileName;
+		if (false == std::fs::exists(fullPath.parent_path()))
+		{
+			if (false == std::fs::create_directories(fullPath))
+			{
+				ERROR_MESSAGE_W(L"경로 정보가 이상합니다.");
+				return eResult::Fail_PathNotExist;
+			}
+		}
+
+		FBXLoader loader{};
+		loader.Init();
+		eResult result = loader.LoadFbx(fullPath);
+		if (eResultFail(result))
+		{
+			ERROR_MESSAGE_W(L"FBX 불러오기 실패.");
+			return result;
+		}
+
+		//컨테이너 갯수만큼 순회를 돌아준다.
+		for (int i = 0; i < loader.GetContainerCount(); ++i)
+		{
+			tMeshContainer meshCont{};
+
+			//컨테이너를 가져옴
+			const tFBXContainer* cont = loader.GetContainer(i);
+
+			//예외 처리
+			if (nullptr == cont)
+			{
+				mMeshContainers.clear();
+				std::wstring errorMsg = std::to_wstring(i);
+				errorMsg += L" 번째 컨테이너가 nullptr 입니다.";
+				ERROR_MESSAGE_W(errorMsg.c_str());
+				return eResult::Fail_Nullptr;
+			}
+
+			//가져올 메쉬를 생성
+			meshCont.pMesh = std::make_shared<Mesh>();
+
+			result = meshCont.pMesh->CreateFromContainer(cont);
+			if (eResultFail(result))
+			{
+				ERROR_MESSAGE_W(L"FBX로부터 메쉬 정보를 읽어오는 데 실패했습니다.");
+				return eResult::Fail;
+			}
+
+			// ResMgr 에 메쉬 등록
+			if (nullptr != meshCont.pMesh)
+			{
+				std::fs::path strKey = _fileName;
+				//.msh로 확장자를 변경
+				strKey.replace_extension(define::strKey::Ext_Mesh);
+				//Key로 Mesh를 저장
+				meshCont.pMesh->SetKey(strKey.string());
+
+				//메쉬를 엔진의 포맷으로 변경해서 저장한다.
+				eResult result = meshCont.pMesh->Save(strKey);
+
+				if (eResultFail(result))
+				{
+					ERROR_MESSAGE_W(L"Mesh 저장 실패.");
+					return result;
+				}
+
+				//성공 시 ResMgr에 넣는다.
+				ResMgr::Insert(strKey.string(), meshCont.pMesh);
+			}
+
+			//std::vector<std::shared_ptr<Material>> vecMtrl;
+
+			// 메테리얼 가져오기
+			
+			for (UINT i = 0; i < loader.GetContainer(0).vecMtrl.size(); ++i)
+			{
+				// 예외처리 (material 이름이 입력 안되어있을 수도 있다.)
+				std::string strKey = loader.GetContainer(0).vecMtrl[i].strMtrlName;
+				std::shared_ptr<Material> pMtrl = ResMgr::Find<Material>(strKey);
+				MH_ASSERT(pMtrl.get());
+
+
+				vecMtrl.push_back(pMtrl);
+			}
+
+			tMeshContainer meshContainer{};
+			meshContainer.mMesh = pMesh;
+			meshContainer.mMaterials = vecMtrl;
+			mMesh = pMesh;
+			mMaterials = vecMtrl;
+
+			//다른게 다 진행됐으면 자신도 저장
+			//키값 만들고 세팅하고
+			std::fs::path strKeyMeshData = _path;
+			strKeyMeshData.replace_extension(strKey::Ext_MeshData);
+			std::string strKey = strKeyMeshData.string();
+			SetKey(strKey);
+
+			//저장함수 호출
+			result = Save(_path);
+			if (eResultFail(result))
+			{
+				return result;
+			}
+		}
+
+
+
+		//성공 시 ResMgr가 이걸 리소스 목록에 등록해줄것임
+
+		return eResult();
 	}
 }
 

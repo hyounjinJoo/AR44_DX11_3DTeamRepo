@@ -7,6 +7,14 @@ namespace mh
 	class Mesh;
 	class Material;
 	class GameObject;
+
+	struct tMeshContainer
+	{
+		std::shared_ptr<Mesh>					pMesh;
+		std::vector<std::shared_ptr<Material>>	pMaterials;
+	};
+
+
     class MeshData :
         public IRes
     {
@@ -22,9 +30,10 @@ namespace mh
 		GameObject* Instantiate();
 
 	private:
+		eResult LoadFromFBX(const std::filesystem::path& _fileName);
 
-		std::shared_ptr<Mesh>					mMesh;
-		std::vector<std::shared_ptr<Material>>	mMaterials;
+	private:
+		std::vector<tMeshContainer> mMeshContainers;
     };
 }
 
