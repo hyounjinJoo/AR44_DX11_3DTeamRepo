@@ -24,7 +24,7 @@ namespace mh
 		, mbLockRotation()
 		, mbNeedMyUpdate(true)
 	{
-		SetKey(strKey::Default::com::Com_Transform);
+		//SetKey(strKey::Default::com::Com_Transform);
 	}
 
 	Com_Transform::~Com_Transform()
@@ -42,19 +42,19 @@ namespace mh
 			UpdateMyTransform();
 		}
 
-		//부모 트랜스폼'만' 갱신되었을 경우 : 자신은 갱신할 필요 없음.
+		//부모 트랜스폼이 갱신되었는지 확인하고, 갱신되었을 경우 자신의 행렬도 갱신
 		GameObject* parent = GetOwner()->GetParent();
-		if (parent && parent->GetTransform().IsUpdated())
+		if (parent)
 		{
-			UpdateParentMatrix();
+			Com_Transform* tf = parent->GetComponent<Com_Transform>();
+			if(tf && tf->IsUpdated())
+				UpdateParentMatrix(tf);
 		}
+		
 
-		bool Updated = false;
 		//둘중에 하나라도 업데이트 되었을 경우 월드행렬을 새로 계산한다.
 		if (mbNeedMyUpdate || mbSizeUpdated)
 		{
-			Updated = true;
-
 			//부모 행렬이 있을 경우 부모행렬을 곱해줌.
 			if (GetOwner()->GetParent())
 				mMatWorldWithoutSize = mMatRelative * mMatParent;
@@ -64,7 +64,6 @@ namespace mh
 			//자신의 사이즈가 반영된 최종 월드행렬을 계산
 			mMatWorldFinal = MATRIX::CreateScale(mSize) * mMatWorldWithoutSize;
 		}
-
 
 		Application::AddDestroyFunc(std::bind(&Com_Transform::ClearUpdateState, this));
 	}
@@ -252,61 +251,57 @@ namespace mh
 	}
 
 
-	void Com_Transform::UpdateParentMatrix()
+	void Com_Transform::UpdateParentMatrix(const Com_Transform* _parentTransform)
 	{
 		mMatParent = MATRIX::Identity;
 
-		GameObject* parent = GetOwner()->GetParent();
-		if (nullptr == parent)
+		if (_parentTransform)
 		{
-			return;
-		}
+			mMatParent = _parentTransform->GetWorldMatWithoutSize();
 
-		mMatParent = parent->GetTransform().GetWorldMatWithoutSize();
-
-		//부모 오브젝트가 있을 경우 부모의 월드행렬을 받아온다. 
-		//성공 시 true가 반환되므로 이 때는 상속 과정을 시작하면 됨
-		bool bWorldDirInherit = false;
-		if (true == mbInheritRot)
-		{
-			//회전 상속 + 크기 미상속 -> 크기정보 제거
-			if (false == mbInheritScale)
+			//부모 오브젝트가 있을 경우 부모의 월드행렬을 받아온다. 
+			//성공 시 true가 반환되므로 이 때는 상속 과정을 시작하면 됨
+			bool bWorldDirInherit = false;
+			if (true == mbInheritRot)
 			{
-				//정규화해서 크기정보를 제거
-				mMatParent.Right(mMatParent.Right().Normalize());
-				mMatParent.Up(mMatParent.Up().Normalize());
-				mMatParent.Forward(mMatParent.Forward().Normalize());
-			}
-			//else: 둘 다 상속 받는 경우에는 작업할 것이 없음. 그냥 빠져나가면 됨
+				//회전 상속 + 크기 미상속 -> 크기정보 제거
+				if (false == mbInheritScale)
+				{
+					//정규화해서 크기정보를 제거
+					mMatParent.Right(mMatParent.Right().Normalize());
+					mMatParent.Up(mMatParent.Up().Normalize());
+					mMatParent.Forward(mMatParent.Forward().Normalize());
+				}
+				//else: 둘 다 상속 받는 경우에는 작업할 것이 없음. 그냥 빠져나가면 됨
 
-			bWorldDirInherit = true;	//이때만 월드방향을 상속받아주면 된다.
-		}
-		else
-		{
-			constexpr size_t eraseSize = sizeof(float) * 12;
-			//회전 미상속 + 크기 상속 -> 회전정보 제거
-			if (true == mbInheritScale)
-			{
-				//회전정보만 상속받는 경우: 크기정보만 추출
-				float3 Scale(mMatParent.Right().Length(), mMatParent.Up().Length(), mMatParent.Forward().Length());
-				//float(4) * 12 -> 회전 파트를 모두 0으로 밀어버리고 크기만 등록
-
-				memset(mMatParent.m, 0, eraseSize);
-				mMatParent._11 = Scale.x;
-				mMatParent._22 = Scale.y;
-				mMatParent._33 = Scale.z;
+				bWorldDirInherit = true;	//이때만 월드방향을 상속받아주면 된다.
 			}
-			//회전 미상속 + 크기 미상속 -> 전부 밀고 단위행렬로
 			else
 			{
-				memset(mMatParent.m, 0, eraseSize);
-				mMatParent._11 = 1.f;
-				mMatParent._22 = 1.f;
-				mMatParent._33 = 1.f;
+				constexpr size_t eraseSize = sizeof(float) * 12;
+				//회전 미상속 + 크기 상속 -> 회전정보 제거
+				if (true == mbInheritScale)
+				{
+					//회전정보만 상속받는 경우: 크기정보만 추출
+					float3 Scale(mMatParent.Right().Length(), mMatParent.Up().Length(), mMatParent.Forward().Length());
+					//float(4) * 12 -> 회전 파트를 모두 0으로 밀어버리고 크기만 등록
+
+					memset(mMatParent.m, 0, eraseSize);
+					mMatParent._11 = Scale.x;
+					mMatParent._22 = Scale.y;
+					mMatParent._33 = Scale.z;
+				}
+				//회전 미상속 + 크기 미상속 -> 전부 밀고 단위행렬로
+				else
+				{
+					memset(mMatParent.m, 0, eraseSize);
+					mMatParent._11 = 1.f;
+					mMatParent._22 = 1.f;
+					mMatParent._33 = 1.f;
+				}
 			}
 		}
 	}
-
 
 	void Com_Transform::SetConstBuffer()
 	{

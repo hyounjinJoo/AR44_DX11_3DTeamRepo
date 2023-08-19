@@ -14,7 +14,7 @@ namespace mh
 	public:
 		Material();
 
-		Material(const Material& _other);
+		Material(const Material& _other) = default;
 		CLONE(Material);
 
 		virtual ~Material();

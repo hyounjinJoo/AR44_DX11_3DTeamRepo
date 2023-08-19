@@ -64,11 +64,7 @@ namespace mh::define
 		void SetDataPtr(const T _pData) { pData = (void*)_pData; size = sizeof(T); }
 	};
 
-	struct tMeshContainer
-	{
-		std::shared_ptr<Mesh>					pMesh;
-		std::vector<std::shared_ptr<Material>>	pMaterials;
-	};
+
 
 // ============
 // Animation 3D

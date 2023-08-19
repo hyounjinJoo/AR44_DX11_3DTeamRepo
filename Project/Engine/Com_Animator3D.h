@@ -9,6 +9,7 @@ namespace mh
 {
 	class StructBuffer;
 	class Mesh;
+	class Skeleton;
 	class Com_Animator3D :
 		public IAnimator
 	{
@@ -25,7 +26,7 @@ namespace mh
 		virtual void FixedUpdate() override;
 
 
-		void SetBones(const std::vector<define::tMTBone>* _vecBones) { m_pVecBones = _vecBones; m_vecFinalBoneMat.resize(m_pVecBones->size()); }
+		void SetBones(Skeleton* _pSkeleton);
 		void SetAnimClip(const std::vector<define::tMTAnimClip>* _vecAnimClip);
 		void SetClipTime(int _iClipIdx, float _fTime) { m_vecClipUpdateTime[_iClipIdx] = _fTime; }
 

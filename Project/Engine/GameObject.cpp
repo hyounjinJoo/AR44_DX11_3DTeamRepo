@@ -236,16 +236,15 @@ namespace mh
 	{
 		for (size_t i = 0; i < mComponents.size(); ++i)
 		{
-			if (nullptr == mComponents[i])
-				continue;
-			mComponents[i]->Init();
+			if (mComponents[i])
+				mComponents[i]->Init();
 		}
 
 		for (size_t i = 0; i < mChilds.size(); ++i)
 		{
-			if (nullptr == mChilds[i])
-				continue;
-			mChilds[i]->Init();
+			if (mChilds[i])
+				mChilds[i]->Init();
+			
 		}
 	}
 
@@ -253,16 +252,16 @@ namespace mh
 	{
 		for (size_t i = 0; i < mComponents.size(); ++i)
 		{
-			if (nullptr == mComponents[i])
-				continue;
-			mComponents[i]->Update();
+			if (mComponents[i])
+				mComponents[i]->Update();
+			
 		}
 
 		for (size_t i = 0; i < mChilds.size(); ++i)
 		{
-			if (nullptr == mChilds[i])
-				continue;
-			mChilds[i]->Update();
+			if (mChilds[i])
+				mChilds[i]->Update();
+			
 		}
 	}
 
@@ -277,25 +276,24 @@ namespace mh
 
 		for (size_t i = 0; i < mChilds.size(); ++i)
 		{
-			if (nullptr == mChilds[i])
-				continue;
-			mChilds[i]->FixedUpdate();
+			if (mChilds[i])
+				mChilds[i]->FixedUpdate();
 		}
 	}
 
 	//이 함수는 다른 카메라가 호출함
 	void GameObject::Render()
 	{
-		if (mComponents[(int)eComponentType::Renderer])
+		for (size_t i = 0; i < mComponents.size(); ++i)
 		{
-			static_cast<IRenderer*>(mComponents[(int)eComponentType::Renderer])->Render();
+			if (mComponents[i])
+				mComponents[i]->Render();
 		}
 
 		for (size_t i = 0; i < mChilds.size(); ++i)
 		{
-			if (nullptr == mChilds[i])
-				continue;
-			mChilds[i]->Render();
+			if (mChilds[i])
+				mChilds[i]->Render();
 		}
 	}
 

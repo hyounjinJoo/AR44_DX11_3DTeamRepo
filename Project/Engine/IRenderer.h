@@ -5,11 +5,18 @@
 
 namespace mh
 {
+	enum class eMaterialMode
+	{
+		Shared,
+		Dynamic
+	};
 	struct tMaterialSet
 	{
-		std::shared_ptr<Material> SharedMaterial;
-		std::shared_ptr<Material> DynamicMaterial;
-		std::shared_ptr<Material> CurrentMaterial;
+		std::shared_ptr<Material>	SharedMaterial;
+		std::unique_ptr<Material>	DynamicMaterial;
+		Material*					CurrentMaterial;
+
+		eMaterialMode MaterialMode;
 	};
 
 	class IRenderer : public IComponent
@@ -17,7 +24,7 @@ namespace mh
 	public:
 		IRenderer();
 
-		IRenderer(const IRenderer& _other) = default;
+		IRenderer(const IRenderer& _other);
 
 		virtual ~IRenderer();
 
@@ -27,15 +34,29 @@ namespace mh
 		virtual void Render() = 0;
 
 		void SetMesh(const std::shared_ptr<Mesh> _mesh);
-		inline void SetMaterial(const std::shared_ptr <Material> _Mtrl, UINT _idx);
-		inline std::shared_ptr<Mesh> GetMesh(UINT _containerIdx = 0u) const;
-		inline const std::vector<std::shared_ptr<Material>>& const GetMaterials(UINT _containerIdx = 0u);
-		UINT GetMaterialCount() { return (UINT)mMaterials.size(); }
 
-		inline bool IsRenderReady() const;
-	
+		//인스턴싱 구현 전까지는 일단 Material을 복사해서 사용
+		inline void SetMaterial(const std::shared_ptr <Material> _Mtrl, UINT _idx);
+		inline Material* SetMaterialMode(UINT _idx, eMaterialMode _mode);
+
+		std::shared_ptr<Mesh> GetMesh() { return mMesh; }
+
+		inline std::shared_ptr<Material> GetSharedMaterial(UINT _idx);
+		inline Material* GetDynamicMaterial(UINT _idx);
+		inline Material* GetCurrentMaterial(UINT _idx);
+
+		inline const std::vector<tMaterialSet>& const GetMaterials() { return mMaterials; }
+		
+		UINT GetMaterialCount() { return (UINT)mMaterials.size(); }
+		bool IsRenderReady() const { return (mMesh && false == mMaterials.empty()); }
+
 	private:
-		std::vector<tMeshContainer> mMeshContainers;
+		inline void CreateDynamicMaterial(UINT _idx);
+		inline tMaterialSet* GetMaterialSet(UINT _idx);
+	private:
+		std::shared_ptr<Mesh> mMesh;
+		std::vector<tMaterialSet> mMaterials;
+		
 	};
 
 	inline void IRenderer::SetMaterial(const std::shared_ptr<Material> _Mtrl, UINT _idx)
@@ -44,43 +65,83 @@ namespace mh
 			mMaterials.resize(_idx + 1u);
 
 		mMaterials[_idx].SharedMaterial = _Mtrl;
-		mMaterials[_idx].CurrentMaterial = _Mtrl;
+		mMaterials[_idx].CurrentMaterial = mMaterials[_idx].SharedMaterial.get();
 	}
 
-	inline std::shared_ptr<Mesh> IRenderer::GetMesh(UINT _containerIdx) const
+	inline Material* IRenderer::SetMaterialMode(UINT _idx, eMaterialMode _mode)
 	{
-		std::shared_ptr<Mesh> pMesh = nullptr;
-
-		if (_containerIdx < (UINT)mMeshContainers.size())
-			pMesh = mMeshContainers[_containerIdx].pMesh;
-
-		return pMesh;
-	}
-
-	inline const std::vector<std::shared_ptr<Material>>& const GetMaterials(UINT _containerIdx)
-	{
-		if (nullptr == mMeshContainers[_containerIdx].)
+		tMaterialSet* mtrlSet = GetMaterialSet(_idx);
+		Material* mtrl = nullptr;
+		if (mtrlSet)
 		{
-			mMaterials[_idx].CurrentMaterial = mMaterials[_idx].SharedMaterial;
+			if (eMaterialMode::Shared == _mode)
+			{
+				mtrlSet->CurrentMaterial = mtrlSet->SharedMaterial.get();
+				mtrlSet->MaterialMode = _mode;
+			}
+			else if (eMaterialMode::Dynamic == _mode)
+			{
+				//Dynamic Material이 없는데 Shared Material이 있을 경우 복사해서 새로 생성
+				if (mtrlSet->SharedMaterial)
+				{
+					if (nullptr == mtrlSet->DynamicMaterial)
+					{
+						mtrlSet->DynamicMaterial = std::make_unique<Material>(mtrlSet->SharedMaterial->Clone());
+					}
+					mtrlSet->CurrentMaterial = mtrlSet->DynamicMaterial.get();
+					mtrlSet->MaterialMode = _mode;
+				}
+			}
+		}
+		mtrl = mtrlSet->CurrentMaterial;
+		return mtrl;
+	}
+
+
+	inline Material* IRenderer::GetCurrentMaterial(UINT _idx)
+	{
+		Material* retMtrl = nullptr;
+		if ((UINT)mMaterials.size() > _idx)
+		{
+			retMtrl = mMaterials[_idx].CurrentMaterial;
 		}
 
-		return mMaterials[_idx].CurrentMaterial;
+		return retMtrl;
 	}
 
-	inline bool IRenderer::IsRenderReady() const
+	inline std::shared_ptr<Material> IRenderer::GetSharedMaterial(UINT _idx)
 	{
-		bool bReady = false;
-
-		//meshContainers가 하나라도 존재 + 첫번째 메쉬의 mesh가 존재 + material도 존재 할 경우에만
-		if (
-			false == mMeshContainers.empty() &&
-			mMeshContainers[0].pMesh &&
-			false == mMeshContainers[0].pMaterials.empty(
-			))
-			bReady = true;
-
-
-		return bReady;
+		std::shared_ptr<Material> retMtrl = nullptr;
+		if ((UINT)mMaterials.size() > _idx)
+		{
+			retMtrl = mMaterials[_idx].SharedMaterial;
+		}
+		return retMtrl;
 	}
+
+	inline Material* IRenderer::GetDynamicMaterial(UINT _idx)
+	{
+		Material* retMtrl = nullptr;
+		if ((UINT)mMaterials.size() > _idx)
+		{
+			retMtrl = mMaterials[_idx].DynamicMaterial.get();
+		}
+		return retMtrl;
+	}
+
+	inline void IRenderer::CreateDynamicMaterial(UINT _idx)
+	{
+	}
+
+	inline tMaterialSet* IRenderer::GetMaterialSet(UINT _idx)
+	{
+		tMaterialSet* mtrlSet = nullptr;
+		if ((UINT)mMaterials.size() > _idx)
+		{
+			mtrlSet = &mMaterials[_idx];
+		}
+		return mtrlSet;
+	}
+
 
 }

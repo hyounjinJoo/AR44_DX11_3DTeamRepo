@@ -27,19 +27,19 @@ namespace mh
 		virtual ~GraphicsShader();
 
 		//여기 수정할 경우 CodeGenerator의 함수도 수정해 줄것
-		virtual eResult SaveJson(Json::Value* _pJVal) override;
-		virtual eResult LoadJson(const Json::Value* _pJVal) override;
+		virtual define::eResult SaveJson(Json::Value* _pJVal) override;
+		virtual define::eResult LoadJson(const Json::Value* _pJVal) override;
 
-		virtual eResult Save(const std::filesystem::path& _path) override;
-		virtual eResult Load(const std::filesystem::path& _path) override;
+		virtual define::eResult Save(const std::filesystem::path& _path) override;
+		virtual define::eResult Load(const std::filesystem::path& _path) override;
 
-		eResult CreateByCompile(eGSStage _stage, const std::filesystem::path& _FullPath, const std::string_view _funcName);
-		eResult CreateByHeader(eGSStage _stage, const unsigned char* _pByteCode, size_t _ByteCodeSize);
-		eResult CreateByCSO(eGSStage _stage, const std::filesystem::path& _FileName);
+		define::eResult CreateByCompile(eGSStage _stage, const std::filesystem::path& _FullPath, const std::string_view _funcName);
+		define::eResult CreateByHeader(eGSStage _stage, const unsigned char* _pByteCode, size_t _ByteCodeSize);
+		define::eResult CreateByCSO(eGSStage _stage, const std::filesystem::path& _FileName);
 
 		inline void AddInputLayoutDesc(const D3D11_INPUT_ELEMENT_DESC& _desc);
 		inline void SetInputLayoutDesc(const std::vector<D3D11_INPUT_ELEMENT_DESC>& _descs);
-		eResult CreateInputLayout();
+		define::eResult CreateInputLayout();
 		const std::vector<D3D11_INPUT_ELEMENT_DESC>& GetInputLayoutDescs() { return mInputLayoutDescs; }
 
 		ID3D11InputLayout* GetInputLayout() { return mInputLayout.Get(); }
@@ -68,7 +68,7 @@ namespace mh
 		
 
 	private:
-		eResult CreateShader(eGSStage _stage, const void* _pByteCode, size_t _ByteCodeSize);
+		define::eResult CreateShader(eGSStage _stage, const void* _pByteCode, size_t _ByteCodeSize);
 
 	private:
 		static std::unordered_set<std::string> mSemanticNames;

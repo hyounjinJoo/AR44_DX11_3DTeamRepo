@@ -112,8 +112,8 @@ namespace mh
 			return;
 		}
 
-		Com_Transform* tr = GetOwner()->GetComponent<Com_Transform>();
-		tr->SetConstBuffer();
+		//Com_Transform* tr = GetOwner()->GetComponent<Com_Transform>();
+		//tr->SetConstBuffer();
 
 		ConstBuffer* cb = RenderMgr::GetConstBuffer(eCBType::numberOfLight);
 

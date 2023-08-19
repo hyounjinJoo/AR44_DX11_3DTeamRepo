@@ -21,17 +21,14 @@ namespace mh
 
     }
 
-    Material::Material(const Material& _other)
-        : IRes(_other)
-        , mCB(_other.mCB)
-        , mMode(_other.mMode)
-        , mShader(_other.mShader)
-    {
-        for (int i = 0; i < (int)eTextureSlot::END; ++i)
-        {
-            mTextures[i] = _other.mTextures[i];
-        }
-    }
+    //Material::Material(const Material& _other)
+    //    : IRes(_other)
+    //    , mCB(_other.mCB)
+    //    , mMode(_other.mMode)
+    //    , mShader(_other.mShader)
+    //    , mTextures(_other.mTextures)
+    //{
+    //}
 
     Material::~Material()
     {

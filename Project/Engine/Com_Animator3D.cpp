@@ -9,7 +9,7 @@
 
 #include "Animation3DShader.h"
 #include "GameObject.h"
-
+#include "Skeleton.h"
 
 namespace mh
 {
@@ -84,6 +84,13 @@ namespace mh
 		m_bFinalMatUpdate = false;
 	}
 
+	void Com_Animator3D::SetBones(Skeleton* _pSkeleton)
+	{
+		//TODO: 여기 구현
+		MH_ASSERT(nullptr);
+		//m_pVecBones = _vecBones; m_vecFinalBoneMat.resize(m_pVecBones->size());
+	}
+
 	void Com_Animator3D::SetAnimClip(const std::vector<tMTAnimClip>* _vecAnimClip)
 	{
 		m_pVecClip = _vecAnimClip;
@@ -108,6 +115,7 @@ namespace mh
 
 			check_mesh(pMesh);
 
+			
 			pUpdateShader->SetFrameDataBuffer(pMesh->GetBoneFrameDataBuffer());
 			pUpdateShader->SetOffsetMatBuffer(pMesh->GetBoneOffsetBuffer());
 			pUpdateShader->SetOutputBuffer(m_pBoneFinalMatBuffer);

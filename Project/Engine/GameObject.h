@@ -37,7 +37,6 @@ namespace mh
 		virtual void Render();
 
 	public:
-		Com_Transform& GetTransform() { return mTransform; }
 
 		template <typename T>
 		inline T* AddComponent();

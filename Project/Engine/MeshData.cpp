@@ -165,27 +165,39 @@ namespace mh
 	}
 
 
-	GameObject* MeshData::Instantiate()
+	std::unique_ptr<GameObject> MeshData::Instantiate()
 	{
-		GameObject* pNewObj = new GameObject;
-		Com_Renderer_Mesh* Renderer = pNewObj->AddComponent<Com_Renderer_Mesh>();
+		std::unique_ptr<GameObject> uniqObj = std::make_unique<GameObject>();
+		uniqObj->AddComponent<Com_Transform>();
 
-		Renderer->SetMesh(mMesh);
-
-		for (UINT i = 0; i < mMaterials.size(); ++i)
+		if (mMeshContainers.empty())
 		{
-			Renderer->SetMaterial(mMaterials[i], i);
+			return nullptr;
 		}
 
-		if (mMesh->IsAnimMesh())
+		//사이즈가 딱 하나일 경우: GameObject 본체에 데이터를 생성
+		else if (1u == (UINT)mMeshContainers.size())
 		{
-			Com_Animator3D* Animator3D = pNewObj->AddComponent<Com_Animator3D>();
-
-			Animator3D->SetBones(mMesh->GetBones());
-			Animator3D->SetAnimClip(mMesh->GetAnimClip());
+			Com_Renderer_Mesh* renderer = uniqObj->AddComponent<Com_Renderer_Mesh>();
+			MH_ASSERT(renderer);
+			SetRenderer(renderer, 0);
 		}
 
-		return pNewObj;
+		//여러 개의 container를 가지고 있을 경우: 하나의 부모 object에 여러개의 child를 생성해서 각각 Meshrenderer에 할당
+		else
+		{
+			for (size_t i = 0; i < mMeshContainers.size(); ++i)
+			{
+				GameObject* child = new GameObject;
+				uniqObj->AddChild(child);
+				Com_Renderer_Mesh* renderer = child->AddComponent<Com_Renderer_Mesh>();
+				MH_ASSERT(renderer);
+				SetRenderer(renderer, i);
+			}
+		}
+
+		//다 됐을 경우 unique_ptr 관리 해제하고 주소 반환
+		return uniqObj;
 	}
 
 	eResult MeshData::LoadFromFBX(const std::filesystem::path& _fileName)
@@ -211,7 +223,8 @@ namespace mh
 		}
 
 		//컨테이너 갯수만큼 순회를 돌아준다.
-		for (int i = 0; i < loader.GetContainerCount(); ++i)
+		int contCount = loader.GetContainerCount();
+		for (int i = 0; i < contCount; ++i)
 		{
 			tMeshContainer meshCont{};
 
@@ -238,10 +251,19 @@ namespace mh
 				return eResult::Fail;
 			}
 
-			// ResMgr 에 메쉬 등록
 			if (nullptr != meshCont.pMesh)
 			{
-				std::fs::path strKey = _fileName;
+				//기본적으로는 컨테이너 이름을 사용
+				std::fs::path strKey = cont->strName;
+
+				//비어있을 경우 이름을 만들어준다
+				if (strKey.empty())
+				{
+					strKey = _fileName;
+					strKey += "_";
+					strKey += std::to_string(i);
+				}
+
 				//.msh로 확장자를 변경
 				strKey.replace_extension(define::strKey::Ext_Mesh);
 				//Key로 Mesh를 저장
@@ -255,11 +277,9 @@ namespace mh
 					ERROR_MESSAGE_W(L"Mesh 저장 실패.");
 					return result;
 				}
-
-
 			}
 
-			//std::vector<std::shared_ptr<Material>> vecMtrl;
+		
 
 			// 메테리얼 가져오기
 			for (UINT i = 0; i < cont->vecMtrl.size(); ++i)
@@ -271,8 +291,6 @@ namespace mh
 
 				//혹시나 없을 경우 에러
 				MH_ASSERT(pMtrl.get());
-
-				meshCont.pMaterials.push_back(pMtrl);
 			}
 
 			//다른게 다 진행됐으면 자신도 저장
@@ -289,11 +307,39 @@ namespace mh
 				return result;
 			}
 
+			//모두 문제없이 처리되었을 경우 메쉬와 재질을 ResMgr에 전부 추가한다.
+			for (size_t i = 0; i < mMeshContainers.size(); ++i)
+			{
+				ResMgr::Insert(mMeshContainers[i].pMesh->GetKey(), mMeshContainers[i].pMesh);
+				
+				for (size_t j = 0; j < mMeshContainers[j].pMaterials.size(); ++i)
+				{
+					ResMgr::Insert(mMeshContainers[i].pMaterials[j]->GetKey(), mMeshContainers[i].pMaterials[j]);
+				}
+			}
+
 			//전부 저장에 성공했을 경우 ResMgr에서 이 주소(MeshData)를 리소스에 추가한다
 			//애초에 호출한 클래스가 ResMgr임
 		}
 
 		return eResult::Success;
+	}
+
+	bool MeshData::SetRenderer(Com_Renderer_Mesh* _renderer, UINT _idx)
+	{
+		if (nullptr == _renderer)
+			return false;
+
+		else if (_idx >= (UINT)mMeshContainers.size())
+			return false;
+
+		//Mesh 또는 Material은 없을 리가 없음(생성할 때 예외처리 함)
+		_renderer->SetMesh(mMeshContainers[_idx].pMesh);
+
+		for (size_t i = 0; i < mMeshContainers[_idx].pMaterials.size(); ++i)
+		{
+			_renderer->SetMaterial(mMeshContainers[_idx].pMaterials[i], i);
+		}
 	}
 }
 

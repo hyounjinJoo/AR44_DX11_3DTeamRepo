@@ -13,6 +13,25 @@ namespace mh
 	{
 	}
 
+	IRenderer::IRenderer(const IRenderer& _other)
+		: IComponent(_other)
+		, mMesh(_other.mMesh)
+		, mMaterials{}
+	{
+		mMaterials.resize(_other.mMaterials.size());
+		for (size_t i = 0; i < mMaterials.size(); ++i)
+		{
+			//Shared Material은 공유 항목이므로 그대로 복사
+			mMaterials[i].SharedMaterial = _other.mMaterials[i].SharedMaterial;
+
+			//Dynamic Material은 고유 항목이므로 Clone해서 이쪽도 마찬가지로 고유 항목 생성
+			if (_other.mMaterials[i].DynamicMaterial)
+			{
+				mMaterials[i].DynamicMaterial = std::make_unique<Material>(_other.mMaterials[i].DynamicMaterial->Clone());
+			}
+		}
+	}
+
 	IRenderer::~IRenderer()
 	{
 	}
