@@ -20,21 +20,18 @@ namespace mh
 
 
 	GameObject::GameObject()
-		: mTransform()
-		, mComponents()
+		: mComponents()
 		, mState(eState::Active)
 		, mLayerType(define::eLayerType::None)
 		, mbDontDestroy()
 		, mName()
 	{
 		mComponents.resize((int)eComponentType::Scripts);
-		AddComponent(&mTransform);
 	}
 
 
 	GameObject::GameObject(const GameObject& _other)
 		: Entity(_other)
-		, mTransform(_other.mTransform)
 		, mComponents()
 		, mState(_other.mState)
 		, mLayerType(_other.mLayerType)
@@ -42,7 +39,6 @@ namespace mh
 		, mName(_other.mName)
 	{
 		mComponents.resize((int)eComponentType::Scripts);
-		AddComponent(&mTransform);
 
 		//TODO: Clone
 		//1. 컴포넌트 목록 복사

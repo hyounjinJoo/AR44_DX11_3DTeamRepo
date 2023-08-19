@@ -467,9 +467,8 @@
     <ClCompile Include="Animation3DShader.cpp">
       <Filter>GameObject\Component\Animator</Filter>
     </ClCompile>
-    <ClCompile Include="ILight.cpp">
-      <Filter>GameObject\Component\Light</Filter>
-    </ClCompile>
+    <ClCompile Include="ILight.cpp" />
+    <ClCompile Include="Skeleton.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application.h">
@@ -810,9 +809,8 @@
     <ClInclude Include="Animation3DShader.h">
       <Filter>GameObject\Component\Animator</Filter>
     </ClInclude>
-    <ClInclude Include="ILight.h">
-      <Filter>GameObject\Component\Light</Filter>
-    </ClInclude>
+    <ClInclude Include="ILight.h" />
+    <ClInclude Include="Skeleton.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="cpp.hint">

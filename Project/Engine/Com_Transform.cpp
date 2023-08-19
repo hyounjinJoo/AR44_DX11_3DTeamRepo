@@ -69,6 +69,11 @@ namespace mh
 		Application::AddDestroyFunc(std::bind(&Com_Transform::ClearUpdateState, this));
 	}
 
+	void Com_Transform::Render()
+	{
+		SetConstBuffer();
+	}
+
 	eResult Com_Transform::SaveJson(Json::Value* _pJson)
 	{
 		return eResult::Fail_NotImplemented;

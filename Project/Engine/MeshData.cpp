@@ -12,11 +12,10 @@
 
 #include "PathMgr.h"
 #include "json-cpp/json.h"
+#include "Skeleton.h"
 
 namespace mh
 {
-	
-
 	MeshData::MeshData()
 		: IRes(define::eResourceType::MeshData)
 	{

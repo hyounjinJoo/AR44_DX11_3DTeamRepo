@@ -88,14 +88,12 @@ namespace mh
 		define::eLayerType mLayerType;
 		bool mbDontDestroy;
 
-		Com_Transform mTransform;
 		std::vector<IComponent*>	mComponents;
 		std::vector<IScript*>		mScripts;
 
 		GameObject* mParent;
 		std::vector<GameObject*> mChilds;
 	};
-
 
 	template <typename T>
 	T* GameObject::AddComponent()
