@@ -23,6 +23,7 @@ namespace mh
 		virtual void Init() {};
 		virtual void Update() {};
 		virtual void FixedUpdate() = 0;
+		virtual void Render() {};
 
 		define::eComponentType GetComType() const { return mType; };
 

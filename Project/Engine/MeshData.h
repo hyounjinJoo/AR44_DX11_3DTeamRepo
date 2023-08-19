@@ -6,6 +6,7 @@ namespace mh
 {
 	class Mesh;
 	class Material;
+	class Skeleton;
 	class GameObject;
     class MeshData :
         public IRes
@@ -22,9 +23,10 @@ namespace mh
 		GameObject* Instantiate();
 
 	private:
-
 		std::shared_ptr<Mesh>					mMesh;
 		std::vector<std::shared_ptr<Material>>	mMaterials;
+
+		std::unique_ptr<Skeleton>				mSkeletion;
     };
 }
 

@@ -35,7 +35,7 @@ namespace mh
 		double	dWeight;
 	};
 
-	struct tContainer
+	struct tFBXContainer
 	{
 		std::string								strName;
 		std::vector<float3>						vecPos;
@@ -47,7 +47,7 @@ namespace mh
 		std::vector<float4>						vecIndices;
 		std::vector<float4>						vecWeights;
 
-		std::vector<std::vector<UINT>>				vecIdx;
+		std::vector<std::vector<UINT>>			vecIdx;
 		std::vector<tFbxMaterial>				vecMtrl;
 
 		// Animation 관련 정보
@@ -109,7 +109,7 @@ namespace mh
 
 	public:
 		int GetContainerCount() { return (int)mContainers.size(); }
-		const tContainer& GetContainer(int _iIdx) { return mContainers[_iIdx]; }
+		const tFBXContainer& GetContainer(int _iIdx) { return mContainers[_iIdx]; }
 		std::vector<tBone*>& GetBones() { return mBones; }
 		std::vector<tAnimClip*>& GetAnimClip() { return mAnimClips; }
 
@@ -120,10 +120,10 @@ namespace mh
 		void LoadMesh(fbxsdk::FbxMesh* _pFbxMesh);
 		void LoadMaterial(fbxsdk::FbxSurfaceMaterial* _pMtrlSur);
 
-		void GetTangent(fbxsdk::FbxMesh* _pMesh, tContainer* _pContainer, int _iIdx, int _iVtxOrder);
-		void GetBinormal(fbxsdk::FbxMesh* _pMesh, tContainer* _pContainer, int _iIdx, int _iVtxOrder);
-		void GetNormal(fbxsdk::FbxMesh* _pMesh, tContainer* _pContainer, int _iIdx, int _iVtxOrder);
-		void GetUV(fbxsdk::FbxMesh* _pMesh, tContainer* _pContainer, int _iIdx, int _iVtxOrder);
+		void GetTangent(fbxsdk::FbxMesh* _pMesh, tFBXContainer* _pContainer, int _iIdx, int _iVtxOrder);
+		void GetBinormal(fbxsdk::FbxMesh* _pMesh, tFBXContainer* _pContainer, int _iIdx, int _iVtxOrder);
+		void GetNormal(fbxsdk::FbxMesh* _pMesh, tFBXContainer* _pContainer, int _iIdx, int _iVtxOrder);
+		void GetUV(fbxsdk::FbxMesh* _pMesh, tFBXContainer* _pContainer, int _iIdx, int _iVtxOrder);
 
 		float4 GetMtrlData(fbxsdk::FbxSurfaceMaterial* _pSurface, const char* _pMtrlName, const char* _pMtrlFactorName);
 		std::string GetMtrlTextureName(fbxsdk::FbxSurfaceMaterial* _pSurface, const char* _pMtrlProperty);
@@ -139,23 +139,23 @@ namespace mh
 		void LoadAnimationClip();
 		void Triangulate(fbxsdk::FbxNode* _pNode);
 
-		void LoadAnimationData(fbxsdk::FbxMesh* _pMesh, tContainer* _pContainer);
-		void LoadWeightsAndIndices(fbxsdk::FbxCluster* _pCluster, int _iBoneIdx, tContainer* _pContainer);
-		void LoadOffsetMatrix(fbxsdk::FbxCluster* _pCluster, const fbxsdk::FbxAMatrix& _matNodeTransform, int _iBoneIdx, tContainer* _pContainer);
+		void LoadAnimationData(fbxsdk::FbxMesh* _pMesh, tFBXContainer* _pContainer);
+		void LoadWeightsAndIndices(fbxsdk::FbxCluster* _pCluster, int _iBoneIdx, tFBXContainer* _pContainer);
+		void LoadOffsetMatrix(fbxsdk::FbxCluster* _pCluster, const fbxsdk::FbxAMatrix& _matNodeTransform, int _iBoneIdx, tFBXContainer* _pContainer);
 		void LoadKeyframeTransform(fbxsdk::FbxNode* _pNode, fbxsdk::FbxCluster* _pCluster, const fbxsdk::FbxAMatrix& _matNodeTransform
-			, int _iBoneIdx, tContainer* _pContainer);
+			, int _iBoneIdx, tFBXContainer* _pContainer);
 
 		int FindBoneIndex(const std::string& _strBoneName);
 		fbxsdk::FbxAMatrix GetTransform(fbxsdk::FbxNode* _pNode);
 
-		void CheckWeightAndIndices(fbxsdk::FbxMesh* _pMesh, tContainer* _pContainer);
+		void CheckWeightAndIndices(fbxsdk::FbxMesh* _pMesh, tFBXContainer* _pContainer);
 
 	private:
 		fbxsdk::FbxManager*		mManager;
 		fbxsdk::FbxScene*		mScene;
 		fbxsdk::FbxImporter*	mImporter;
 
-		std::vector<tContainer>				mContainers;
+		std::vector<tFBXContainer>				mContainers;
 
 		// Animation
 		std::vector<tBone*>					mBones;

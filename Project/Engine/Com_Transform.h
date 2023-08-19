@@ -24,6 +24,7 @@ namespace mh
         //virtual void Init() override;
         //virtual void Update() override;
         virtual void FixedUpdate() override;
+        virtual void Render() override;
 
         void SetConstBuffer();
 

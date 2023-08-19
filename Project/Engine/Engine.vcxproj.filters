@@ -468,6 +468,7 @@
       <Filter>GameObject\Component\Animator</Filter>
     </ClCompile>
     <ClCompile Include="ILight.cpp" />
+    <ClCompile Include="Skeleton.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application.h">
@@ -809,6 +810,7 @@
       <Filter>GameObject\Component\Animator</Filter>
     </ClInclude>
     <ClInclude Include="ILight.h" />
+    <ClInclude Include="Skeleton.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="cpp.hint">

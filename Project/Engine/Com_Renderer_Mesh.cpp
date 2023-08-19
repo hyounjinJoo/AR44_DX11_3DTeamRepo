@@ -34,14 +34,6 @@ namespace mh
 		if (nullptr == GetMesh() || nullptr == GetMaterial(0))
 			return;
 
-		GetOwner()->GetTransform().SetConstBuffer();
-
-		//GetMesh()->BindBuffer(i);
-		//GetMaterial(i)->Bind();
-
-		//GetMesh()->Render(i);
-
-
 		//애니메이션 확인
 		IAnimator* Animator = static_cast<IAnimator*>(GetOwner()->GetComponent(define::eComponentType::Animator));
 		if (Animator)

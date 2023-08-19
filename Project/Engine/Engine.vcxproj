@@ -357,6 +357,7 @@ call Copy_HLSL.bat $(Configuration)</Command>
     <ClInclude Include="IScript.h" />
     <ClInclude Include="GraphicsShader.h" />
     <ClInclude Include="Com_Renderer_Sprite.h" />
+    <ClInclude Include="Skeleton.h" />
     <ClInclude Include="strKey_gui.h" />
     <ClInclude Include="StructBuffer.h" />
     <ClInclude Include="Texture.h" />
@@ -514,6 +515,7 @@ call Copy_HLSL.bat $(Configuration)</Command>
     <ClCompile Include="GraphicsShader.cpp" />
     <ClCompile Include="Com_Renderer_Sprite.cpp" />
     <ClCompile Include="SimpleMath.cpp" />
+    <ClCompile Include="Skeleton.cpp" />
     <ClCompile Include="StructBuffer.cpp" />
     <ClCompile Include="Texture.cpp" />
     <ClCompile Include="TimeMgr.cpp" />
