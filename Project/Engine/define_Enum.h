@@ -25,6 +25,8 @@ namespace mh::define
 
 		Fail_PathNotExist,
 
+		Fail_Empty,
+
 		//양수 = 성공
 		//이 아래로 성공 관련 변수를 저장
 		Success = 1

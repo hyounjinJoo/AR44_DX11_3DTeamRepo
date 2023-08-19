@@ -1,18 +1,13 @@
 #pragma once
 #include "IRes.h"
-#include "json-cpp/json-forwards.h"
+#include "define_Struct.h"
+#include "define_GPU.h"
 
 namespace mh
 {
 	class Mesh;
 	class Material;
 	class GameObject;
-
-	struct tMeshContainer
-	{
-		std::shared_ptr<Mesh>					pMesh;
-		std::vector<std::shared_ptr<Material>>	pMaterials;
-	};
 
 
     class MeshData :

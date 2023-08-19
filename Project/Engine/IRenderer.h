@@ -28,15 +28,14 @@ namespace mh
 
 		void SetMesh(const std::shared_ptr<Mesh> _mesh);
 		inline void SetMaterial(const std::shared_ptr <Material> _Mtrl, UINT _idx);
-		std::shared_ptr<Mesh> GetMesh() const { return mMesh; }
-		std::shared_ptr<Material> GetMaterial(UINT _idx);
+		inline std::shared_ptr<Mesh> GetMesh(UINT _containerIdx = 0u) const;
+		inline const std::vector<std::shared_ptr<Material>>& const GetMaterials(UINT _containerIdx = 0u);
 		UINT GetMaterialCount() { return (UINT)mMaterials.size(); }
 
-		bool IsRenderReady() const { return (mMesh && false == mMaterials.empty()); }
-		
+		inline bool IsRenderReady() const;
+	
 	private:
-		std::shared_ptr <Mesh> mMesh;
-		std::vector<tMaterialSet> mMaterials;
+		std::vector<tMeshContainer> mMeshContainers;
 	};
 
 	inline void IRenderer::SetMaterial(const std::shared_ptr<Material> _Mtrl, UINT _idx)
@@ -48,14 +47,40 @@ namespace mh
 		mMaterials[_idx].CurrentMaterial = _Mtrl;
 	}
 
-	inline std::shared_ptr<Material> IRenderer::GetMaterial(UINT _idx)
+	inline std::shared_ptr<Mesh> IRenderer::GetMesh(UINT _containerIdx) const
 	{
-		if (nullptr == mMaterials[_idx].CurrentMaterial)
+		std::shared_ptr<Mesh> pMesh = nullptr;
+
+		if (_containerIdx < (UINT)mMeshContainers.size())
+			pMesh = mMeshContainers[_containerIdx].pMesh;
+
+		return pMesh;
+	}
+
+	inline const std::vector<std::shared_ptr<Material>>& const GetMaterials(UINT _containerIdx)
+	{
+		if (nullptr == mMeshContainers[_containerIdx].)
 		{
 			mMaterials[_idx].CurrentMaterial = mMaterials[_idx].SharedMaterial;
 		}
 
 		return mMaterials[_idx].CurrentMaterial;
+	}
+
+	inline bool IRenderer::IsRenderReady() const
+	{
+		bool bReady = false;
+
+		//meshContainers가 하나라도 존재 + 첫번째 메쉬의 mesh가 존재 + material도 존재 할 경우에만
+		if (
+			false == mMeshContainers.empty() &&
+			mMeshContainers[0].pMesh &&
+			false == mMeshContainers[0].pMaterials.empty(
+			))
+			bReady = true;
+
+
+		return bReady;
 	}
 
 }

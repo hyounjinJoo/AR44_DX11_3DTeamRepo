@@ -8,6 +8,7 @@
 
 #include <fbxsdk/core/base/fbxtime.h>
 
+//C++ 전용 '구조체' 모음
 namespace mh::define
 {
 	struct tDesc_GPUMgr
@@ -63,7 +64,13 @@ namespace mh::define
 		void SetDataPtr(const T _pData) { pData = (void*)_pData; size = sizeof(T); }
 	};
 
-	// ============
+	struct tMeshContainer
+	{
+		std::shared_ptr<Mesh>					pMesh;
+		std::vector<std::shared_ptr<Material>>	pMaterials;
+	};
+
+// ============
 // Animation 3D
 // ============
 	//struct tFrameTranslation

@@ -52,6 +52,8 @@ namespace mh
 
 		// Animation 관련 정보
 		bool									bAnimation;
+
+		//이 정점이 특정 Bone Index로부터 얼마만큼의 추가 가중치를 받을것인지(배율)
 		std::vector<std::vector<tWeightsAndIndices>>	vecWI;
 
 		void Resize(UINT _iSize)

@@ -101,15 +101,27 @@ namespace mh
 		if (eResultFail(result))
 			return result;
 
-		//둘중 하나라도 없을 경우 저장 불가
-		if (nullptr == mMesh || mMaterials.empty())
+		//비어있을 경우 저장 불가
+		if (mMeshContainers.empty())
+		{
 			return eResult::Fail_InValid;
+		}
 
-		Json::Value& jVal = *_pJson;
+		//순회 돌아주면서 array 형태의 json에 append 해준다
+		Json::Value& jsonMeshCont = (*_pJson)[JSON_KEY(mMeshContainers)];
+		for (size_t i = 0; i < mMeshContainers.size(); ++i)
+		{
+			Json::Value jsonMeshCont = Json::Value(Json::arrayValue);
+			if (nullptr == mMeshContainers[i].pMesh || mMeshContainers[i].pMaterials.empty())
+			{
+				return eResult::Fail_InValid;
+			}
 
-		Json::MH::SaveStrKey(_pJson, JSON_KEY_PAIR(mMesh));
+			Json::MH::SaveStrKey(&jsonMeshCont, JSON_KEY(pMesh), mMeshContainers[i].pMesh);
+			Json::MH::SaveStrKeyVector(&jsonMeshCont, JSON_KEY(pMaterials), mMeshContainers[i].pMaterials);
 
-		Json::MH::SaveStrKeyVector(_pJson, JSON_KEY_PAIR(mMaterials));
+			jsonMeshCont.append(jsonMeshCont);
+		}
 
 		return eResult::Success;
 	}
@@ -122,31 +134,32 @@ namespace mh
 		eResult result = IRes::LoadJson(_pJson);
 		if (eResultFail(result))
 			return result;
-
-		const Json::Value& jVal = *_pJson;
-
-		{
-			std::string strKey = Json::MH::LoadStrKey(_pJson, JSON_KEY_PAIR(mMesh));
-			mMesh = ResMgr::Load<Mesh>(strKey);
-			if (nullptr == mMesh)
-			{
-				return eResult::Fail_Create;
-			}
-		}
 		
-		{
-			mMaterials.clear();
-			const auto& strKeys = Json::MH::LoadStrKeyVector(_pJson, JSON_KEY_PAIR(mMaterials));
-			for (size_t i = 0; i < strKeys.size(); ++i)
-			{
-				std::shared_ptr<Material> material = nullptr;
-				if (false == strKeys[i].empty())
-				{
-					material = ResMgr::Load<Material>(strKeys[i]);
-				}
+		mMeshContainers.clear();
 
-				mMaterials.push_back(material);
+		//mesh container 순회 돌아주면서 하나씩 Load
+		const Json::Value& jsonMeshCont = (*_pJson)[JSON_KEY(mMeshContainers)];
+		for (Json::ValueConstIterator iter = jsonMeshCont.begin();
+			iter != jsonMeshCont.end();
+			++iter)
+		{
+			tMeshContainer cont{};
+
+			//Mesh Load
+			std::string meshStrKey = Json::MH::LoadStrKey(&jsonMeshCont, JSON_KEY(pMesh), cont.pMesh);
+			cont.pMesh = ResMgr::Load<Mesh>(meshStrKey);
+			if (nullptr == cont.pMesh)
+				return eResult::Fail_Empty;
+
+			//Materials Load
+			const auto& materialsStrKey = Json::MH::LoadStrKeyVector(&jsonMeshCont, JSON_KEY(pMaterials), cont.pMaterials);
+			for (size_t i = 0; i < materialsStrKey.size(); ++i)
+			{
+				std::shared_ptr<Material> mtrl = ResMgr::Load<Material>(materialsStrKey[i]);
+				cont.pMaterials.push_back(mtrl);
 			}
+
+			mMeshContainers.push_back(cont);
 		}
 
 		return eResult::Success;

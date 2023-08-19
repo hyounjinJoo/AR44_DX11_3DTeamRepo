@@ -11,10 +11,11 @@ namespace mh
     public:
         Com_Transform();
 
+        //단순 Value만 저장 중이므로 기본 복사 생성자로도 충분함.
         Com_Transform(const Com_Transform& _other) = default;
         CLONE(Com_Transform);
 
-        //단순 Value만 저장 중이므로 기본 복사 생성자로도 충분함.
+        
         virtual ~Com_Transform();
 
         virtual define::eResult SaveJson(Json::Value* _pJson) override;
