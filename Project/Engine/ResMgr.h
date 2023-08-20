@@ -122,7 +122,7 @@ namespace mh
 
 		// 이미 해당 키로 리소스가 있다면, dynamic 캐스팅 해서 반환
 		if (FindRes)
-			return std::dynamic_pointer_cast<T>(FindRes);
+			return std::static_pointer_cast<T>(FindRes);
 
 		std::shared_ptr<T> NewRes = std::make_shared<T>();
 

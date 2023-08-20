@@ -40,9 +40,9 @@ namespace mh
 		}
 
 		GameObject* gameObj = mCamera->GetOwner();
-		Com_Transform& TR = gameObj->GetTransform();
+		Com_Transform* TR = gameObj->GetComponent<Com_Transform>();
 		
-		float3 cameraPosition = TR.GetRelativePos();
+		float3 cameraPosition = TR->GetRelativePos();
 		float4 position = float4(cameraPosition.x, cameraPosition.y, cameraPosition.z, 1.0f);
 
 		float scale = mCamera->GetScale();

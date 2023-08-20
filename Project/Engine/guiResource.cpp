@@ -4,7 +4,7 @@
 
 namespace gui
 {
-	guiResource::guiResource(mh::eResourceType _resType)
+	guiResource::guiResource(mh::define::eResourceType _resType)
 		: guiChild(mh::define::strKey::ArrResName[(int)_resType])
 		, mTarget()
 	{

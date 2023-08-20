@@ -18,7 +18,6 @@ std::function<LRESULT(HWND, UINT, WPARAM, LPARAM)> GameMainWindow::mImGuiWndProc
 
 BOOL GameMainWindow::Run(const tDesc_GameMainWindow& _Desc)
 {
-    DebugCheck(0);
 
     BOOL bResult = FALSE;
     bResult = Init(_Desc);
@@ -146,14 +145,7 @@ void GameMainWindow::Release()
     mMsgHandleFuncs.clear();
 }
 
-void GameMainWindow::DebugCheck(long _block)
-{
-	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
-    if (_block)
-    {
-        _CrtSetBreakAlloc(_block);
-    }
-}
+
 
 
 BOOL GameMainWindow::InitInstance(const tDesc_GameMainWindow& _Desc)

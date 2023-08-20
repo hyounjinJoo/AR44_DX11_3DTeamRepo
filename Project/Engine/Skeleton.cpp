@@ -2,10 +2,14 @@
 #include "Skeleton.h"
 
 #include "define_Util.h"
+#include "DefaultShader/SH_Resource.hlsli"
+#include "StructBuffer.h"
+#include "FBXLoader.h"
+#include "PathMgr.h"
 
-using namespace mh::define;
 namespace mh
 {
+	using namespace mh::define;
 	Skeleton::Skeleton()
 		: m_vecBones{}
 		, m_pBoneOffset{}
@@ -18,8 +22,24 @@ namespace mh
 	{
 	}
 
-	define::eResult Skeleton::Save(const std::filesystem::path& _fullPath)
+	eResult Skeleton::Save(const std::filesystem::path& _fileName)
 	{
+		std::fs::path fullPath = PathMgr::GetContentPathRelative(eResourceType::MeshData);
+		fullPath /= _fileName;
+		if (false == std::fs::exists(fullPath.parent_path()))
+		{
+			std::fs::create_directories(fullPath);
+		}
+		fullPath.replace_extension(define::strKey::Ext_Skeleton);
+
+		std::ofstream ofs(fullPath, std::ios::binary);
+		if (false == ofs.is_open())
+		{
+			ERROR_MESSAGE_W(L"Bone 저장에 실패했습니다.");
+			return eResult::Fail_OpenFile;
+		}
+
+
 		//// Animation3D 정보
 		//std::vector<define::tMTAnimClip>		m_vecAnimClip;
 		Binary::SaveValue(ofs, m_vecAnimClip.size());
@@ -31,6 +51,7 @@ namespace mh
 
 
 		//std::vector<define::tMTBone>			m_vecBones;
+		
 		Binary::SaveValue(ofs, m_vecBones.size());
 		for (size_t i = 0; i < m_vecBones.size(); ++i)
 		{
@@ -39,10 +60,24 @@ namespace mh
 			Binary::SaveValueVector(ofs, m_vecBones[i].vecKeyFrame);
 		}
 
-		return define::eResult();
+		return eResult::Success;
 	}
-	define::eResult Skeleton::Load(const std::filesystem::path& _fullPath)
+	eResult Skeleton::Load(const std::filesystem::path& _fileName)
 	{
+		std::fs::path fullPath = PathMgr::GetContentPathRelative(eResourceType::MeshData);
+		fullPath /= _fileName;
+		if (false == std::fs::exists(fullPath.parent_path()))
+		{
+			std::fs::create_directories(fullPath);
+		}
+		fullPath.replace_extension(define::strKey::Ext_Skeleton);
+
+		std::ifstream ifs(fullPath, std::ios::binary);
+		if (false == ifs.is_open())
+		{
+			ERROR_MESSAGE_W(L"Bone 저장에 실패했습니다.");
+			return eResult::Fail_OpenFile;
+		}
 
 		//// Animation3D 정보
 //std::vector<define::tMTAnimClip>		m_vecAnimClip;
@@ -119,16 +154,23 @@ namespace mh
 		//StructBuffer* m_pBoneOffset;	  // 각 뼈의 offset 행렬(각 뼈의 위치를 되돌리는 행렬) (1행 짜리)
 
 
-		return define::eResult();
+		return eResult::Success;
 	}
 
-	define::eResult Skeleton::CreateFromFBX(FBXLoader* _pFBXLoader)
+	eResult Skeleton::CreateFromFBX(FBXLoader* _fbxLoader)
 	{
-		std::vector<tBone*>& vecBone = _loader.GetBones();
+		std::vector<tBone*>& vecBone = _fbxLoader->GetBones();
+		if (vecBone.empty())
+		{
+			return eResult::Fail_Empty;
+		}
+
 		UINT iFrameCount = 0;
 		for (UINT i = 0; i < vecBone.size(); ++i)
 		{
-			tMTBone bone = {};
+			m_vecBones.push_back(tMTBone{});
+			tMTBone& bone = m_vecBones.back();
+
 			bone.Val.iDepth = vecBone[i]->iDepth;
 			bone.Val.iParentIndx = vecBone[i]->iParentIndx;
 			bone.Val.matBone = FBXLoader::GetMatrixFromFbxMatrix(vecBone[i]->matBone);
@@ -137,7 +179,9 @@ namespace mh
 
 			for (UINT j = 0; j < vecBone[i]->vecKeyFrame.size(); ++j)
 			{
-				tMTKeyFrame Keyframe = {};
+				bone.vecKeyFrame.push_back(tMTKeyFrame{});
+				tMTKeyFrame& Keyframe = bone.vecKeyFrame.back();
+
 				Keyframe.dTime = vecBone[i]->vecKeyFrame[j].dTime;
 				Keyframe.iFrame = j;
 
@@ -146,14 +190,14 @@ namespace mh
 				Keyframe.FrameTrans.vTranslate.y = (float)keyFrameTransform.mData[1];
 				Keyframe.FrameTrans.vTranslate.z = (float)keyFrameTransform.mData[2];
 				Keyframe.FrameTrans.vTranslate.w = (float)keyFrameTransform.mData[3];
-				//float4(pMesh->m_vecBones[i].vecKeyFrame[j].vTranslate, 0.f),
+				//float4(m_vecBones[i].vecKeyFrame[j].vTranslate, 0.f),
 
 				const auto& keyFrameScale = vecBone[i]->vecKeyFrame[j].matTransform.GetS();
 				Keyframe.FrameTrans.vScale.x = (float)keyFrameScale.mData[0];
 				Keyframe.FrameTrans.vScale.y = (float)keyFrameScale.mData[1];
 				Keyframe.FrameTrans.vScale.z = (float)keyFrameScale.mData[2];
 				Keyframe.FrameTrans.vScale.w = (float)keyFrameScale.mData[3];
-				//float4(pMesh->m_vecBones[i].vecKeyFrame[j].vScale, 0.f),
+				//float4(m_vecBones[i].vecKeyFrame[j].vScale, 0.f),
 
 				const auto& keyFrameQuat = vecBone[i]->vecKeyFrame[j].matTransform.GetQ();
 				Keyframe.FrameTrans.qRot.x = (float)keyFrameQuat.mData[0];
@@ -161,19 +205,23 @@ namespace mh
 				Keyframe.FrameTrans.qRot.z = (float)keyFrameQuat.mData[2];
 				Keyframe.FrameTrans.qRot.w = (float)keyFrameQuat.mData[3];
 
-				bone.vecKeyFrame.push_back(Keyframe);
+				
 			}
 
 			iFrameCount = max(iFrameCount, (UINT)bone.vecKeyFrame.size());
-
-			pMesh->m_vecBones.push_back(bone);
 		}
 
-		std::vector<tAnimClip*>& vecAnimClip = _loader.GetAnimClip();
+		//애니메이션을 로드. 없다고 에러는 아님
+		std::vector<tAnimClip*>& vecAnimClip = _fbxLoader->GetAnimClip();
+		if (vecAnimClip.empty())
+		{
+			return eResult::Success;
+		}
 
 		for (UINT i = 0; i < vecAnimClip.size(); ++i)
 		{
-			tMTAnimClip tClip = {};
+			m_vecAnimClip.push_back(tMTAnimClip{});
+			tMTAnimClip& tClip = m_vecAnimClip.back();
 
 			tClip.strAnimName = vecAnimClip[i]->strName;
 			tClip.Val.dStartTime = vecAnimClip[i]->tStartTime.GetSecondDouble();
@@ -185,50 +233,47 @@ namespace mh
 			tClip.Val.iFrameLength = tClip.Val.iEndFrame - tClip.Val.iStartFrame;
 			tClip.Val.eMode = vecAnimClip[i]->eMode;
 
-			pMesh->m_vecAnimClip.push_back(tClip);
+			
 		}
 
 		// Animation 이 있는 Mesh 경우 structuredbuffer 만들어두기
-		if (pMesh->IsAnimMesh())
+		if (IsAnimMesh())
 		{
 			// BoneOffet 행렬
 			std::vector<MATRIX> vecOffset;
 			std::vector<tFrameTranslation> vecFrameTrans;
-			vecFrameTrans.resize((UINT)pMesh->m_vecBones.size() * iFrameCount);
+			vecFrameTrans.resize((UINT)m_vecBones.size() * iFrameCount);
 
-			for (size_t i = 0; i < pMesh->m_vecBones.size(); ++i)
+			for (size_t i = 0; i < m_vecBones.size(); ++i)
 			{
-				vecOffset.push_back(pMesh->m_vecBones[i].Val.matOffset);
+				vecOffset.push_back(m_vecBones[i].Val.matOffset);
 
-				for (size_t j = 0; j < pMesh->m_vecBones[i].vecKeyFrame.size(); ++j)
+				for (size_t j = 0; j < m_vecBones[i].vecKeyFrame.size(); ++j)
 				{
-					vecFrameTrans[(UINT)pMesh->m_vecBones.size() * j + i]
-						= pMesh->m_vecBones[i].vecKeyFrame[j].FrameTrans;
+					vecFrameTrans[(UINT)m_vecBones.size() * j + i]
+						= m_vecBones[i].vecKeyFrame[j].FrameTrans;
 				}
 			}
 
 			//Create
-			pMesh->m_pBoneOffset = std::make_unique<StructBuffer>();
+			m_pBoneOffset = std::make_unique<StructBuffer>();
 			tSBufferDesc Desc{};
 			Desc.eSBufferType = eStructBufferType::READ_ONLY;
 			Desc.REGISLOT_t_SRV = Register_t_g_arrBoneMat;
-			pMesh->m_pBoneOffset->SetDesc(Desc);
-			pMesh->m_pBoneOffset->Create<MATRIX>(vecOffset.size(), vecOffset.data(), vecOffset.size());
+			m_pBoneOffset->SetDesc(Desc);
+			m_pBoneOffset->Create<MATRIX>(vecOffset.size(), vecOffset.data(), vecOffset.size());
 
 
-			pMesh->m_pBoneFrameData = std::make_unique<StructBuffer>();
+			m_pBoneFrameData = std::make_unique<StructBuffer>();
 			Desc = tSBufferDesc{};
 			Desc.REGISLOT_t_SRV = Register_t_g_arrFrameTrans;
 			Desc.eSBufferType = eStructBufferType::READ_ONLY;
-			pMesh->m_pBoneFrameData->SetDesc(Desc);
+			m_pBoneFrameData->SetDesc(Desc);
 			size_t SbufferSize = vecOffset.size() * (size_t)iFrameCount;
-			pMesh->m_pBoneFrameData->Create<tFrameTranslation>(SbufferSize, vecFrameTrans.data(), SbufferSize);
+			m_pBoneFrameData->Create<tFrameTranslation>(SbufferSize, vecFrameTrans.data(), SbufferSize);
 		}
 
-
-
-
-		return define::eResult();
+		return eResult::Success;
 	}
 }
 

@@ -103,7 +103,7 @@ namespace mh
 	}
 
 
-	void Com_Animator3D::Binds()
+	void Com_Animator3D::BindGPU()
 	{
 		if (false == m_bFinalMatUpdate)
 		{
@@ -113,11 +113,18 @@ namespace mh
 			// Bone Data
 			std::shared_ptr<Mesh> pMesh = GetOwner()->GetComponent<Com_Renderer_Mesh>()->GetMesh();
 
-			check_mesh(pMesh);
+			//메쉬와 본 하나라도 없을 경우에는 애니메이션을 재생할 수 없다
+			if (false == (pMesh && pMesh->GetSkeleton()))
+			{
+				return;
+			}
 
+			//구조화 버퍼가 정상적으로 생성되었는지 확인한다.
+			check_mesh(pMesh);
 			
-			pUpdateShader->SetFrameDataBuffer(pMesh->GetBoneFrameDataBuffer());
-			pUpdateShader->SetOffsetMatBuffer(pMesh->GetBoneOffsetBuffer());
+			Skeleton* pBone = pMesh->GetSkeleton();
+			pUpdateShader->SetFrameDataBuffer(pBone->GetBoneFrameDataBuffer());
+			pUpdateShader->SetOffsetMatBuffer(pBone->GetBoneOffsetBuffer());
 			pUpdateShader->SetOutputBuffer(m_pBoneFinalMatBuffer);
 
 			UINT iBoneCount = (UINT)m_pVecBones->size();
@@ -143,11 +150,11 @@ namespace mh
 
 		Com_Renderer_Mesh* MeshRenderer = GetOwner()->GetComponent<Com_Renderer_Mesh>();
 		UINT iMtrlCount = MeshRenderer->GetMaterialCount();
-		std::shared_ptr<Material> pMtrl = nullptr;
+		Material* pMtrl = nullptr;
 		for (UINT i = 0; i < iMtrlCount; ++i)
 		{
 			//TODO: 43기에서는 Shared Material을 받고 있음.
-			pMtrl = MeshRenderer->GetMaterial(i);
+			pMtrl = MeshRenderer->GetCurrentMaterial(i);
 
 			if (nullptr == pMtrl)
 				continue;
@@ -169,18 +176,13 @@ namespace mh
 
 	void Com_Animator3D::check_mesh(std::shared_ptr<Mesh> _pMesh)
 	{
-		UINT iBoneCount = _pMesh->GetBoneCount();
-		if (m_pBoneFinalMatBuffer->GetElemCount() != iBoneCount)
+		if (_pMesh && _pMesh->GetSkeleton())
 		{
-			m_pBoneFinalMatBuffer->Create<MATRIX>((size_t)iBoneCount, nullptr, 0);
+			UINT iBoneCount = _pMesh->GetSkeleton()->GetBoneCount();
+			if (m_pBoneFinalMatBuffer->GetElemCount() != iBoneCount)
+			{
+				m_pBoneFinalMatBuffer->Create<MATRIX>((size_t)iBoneCount, nullptr, 0);
+			}
 		}
 	}
-
-	//void Com_Animator3D::SaveToLevelFile(FILE* _pFile)
-	//{
-	//}
-
-	//void Com_Animator3D::LoadFromLevelFile(FILE* _pFile)
-	//{
-	//}
 }

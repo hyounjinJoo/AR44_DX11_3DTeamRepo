@@ -176,7 +176,9 @@ namespace mh
 		float2 size = animation->GetSpriteSize(0u);
 
 		//사이즈 수정
-		GetOwner()->GetTransform().SetSizeXY(animation->GetSpriteSize(0u));
+		Com_Transform* tr = GetOwner()->GetComponent<Com_Transform>(); 
+		if(tr)
+			tr->SetSizeXY(animation->GetSpriteSize(0u));
 
 		return true;
 	}
@@ -225,7 +227,7 @@ namespace mh
 			events->StartEvent();
 	}
 
-	void Com_Animator2D::Binds()
+	void Com_Animator2D::BindGPU()
 	{
 		if (mActiveAnimation == nullptr)
 			return;

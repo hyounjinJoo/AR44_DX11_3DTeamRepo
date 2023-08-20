@@ -50,8 +50,8 @@ namespace mh
 
 		eResult CreateFromContainer(const tFBXContainer* _fbxContainer);
 
-		virtual define::eResult Save(const std::filesystem::path& _path) override;
-		virtual define::eResult Load(const std::filesystem::path& _path) override;
+		virtual eResult Save(const std::filesystem::path& _path) override;
+		virtual eResult Load(const std::filesystem::path& _path) override;
 
 		template <typename Vertex>
 		inline bool Create(const std::vector<Vertex>& _vecVtx, const std::vector<uint>& _vecIdx);
@@ -70,7 +70,10 @@ namespace mh
 		void RenderInstanced(UINT _subSet, UINT _instanceCount) const;
 
 		//const std::vector<Vertex3D> GetVertices() { return mVertices; }
-		UINT GetSubsetCount() { return (UINT)mIndexInfos.size(); }
+		UINT GetSubsetCount() const { return (UINT)mIndexInfos.size(); }
+
+		void SetSkeleton(Skeleton* _pSkeleton) { mSkeleton = _pSkeleton; }
+		Skeleton* GetSkeleton() const { return mSkeleton; }
 
 
 	private:

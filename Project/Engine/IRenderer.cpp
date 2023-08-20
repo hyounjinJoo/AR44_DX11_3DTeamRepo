@@ -27,7 +27,7 @@ namespace mh
 			//Dynamic Material은 고유 항목이므로 Clone해서 이쪽도 마찬가지로 고유 항목 생성
 			if (_other.mMaterials[i].DynamicMaterial)
 			{
-				mMaterials[i].DynamicMaterial = std::make_unique<Material>(_other.mMaterials[i].DynamicMaterial->Clone());
+				mMaterials[i].DynamicMaterial = std::unique_ptr<Material>(_other.mMaterials[i].DynamicMaterial->Clone());
 			}
 		}
 	}

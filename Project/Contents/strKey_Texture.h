@@ -19,7 +19,6 @@ namespace mh::define::strKey::Texture
 	STRKEY evm090_00_01_BML_png = "evm090_00_01_BML.png";
 	STRKEY HPBar_png = "HPBar.png";
 	STRKEY Light_png = "Light.png";
-	STRKEY lurker_SunkenColony__bmp = "lurker(SunkenColony).bmp";
 	STRKEY Smile_png = "Smile.png";
 	STRKEY test_png = "test.png";
 	STRKEY Zelda_png = "Zelda.png";
@@ -113,16 +112,6 @@ namespace mh::define::strKey::Texture
 		STRKEY DXT1_m_slinger039_0000_XM_dds = "Player_Default.fbm/DXT1_m_slinger039_0000_XM.dds";
 		STRKEY DXT1_m_wst039_0001_BML_dds = "Player_Default.fbm/DXT1_m_wst039_0001_BML.dds";
 		STRKEY DXT1_m_wst039_0001_XM_dds = "Player_Default.fbm/DXT1_m_wst039_0001_XM.dds";
-	}
-
-	namespace Res1
-	{
-		namespace GrayCrystal_fbm
-		{
-			STRKEY stm520_012_01_00_BML_png = "Res1/GrayCrystal.fbm/stm520_012_01_00_BML.png";
-			STRKEY stm520_012_01_00_NM_png = "Res1/GrayCrystal.fbm/stm520_012_01_00_NM.png";
-		}
-
 	}
 
 }

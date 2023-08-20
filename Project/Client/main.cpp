@@ -3,11 +3,14 @@
 #include <Engine/GameMainWindow.h>
 #include <Contents/ContentsClassInitializer.h>
 
+inline void DebugCheck(long _block);
 BOOL APIENTRY wWinMain(_In_ HINSTANCE hInstance,
                      _In_opt_ HINSTANCE hPrevInstance,
                      _In_ LPWSTR    lpCmdLine,
                      _In_ int       nCmdShow)
 {
+    DebugCheck(0);
+
     tDesc_GameMainWindow Desc{};
     Desc.Inst = hInstance;
     Desc.TitleName = TEXT("Monster Hunter World");
@@ -25,8 +28,16 @@ BOOL APIENTRY wWinMain(_In_ HINSTANCE hInstance,
     Desc.GPUDesc.ResolutionY = (UINT)Desc.Height;
     Desc.GPUDesc.RefreshRate = 144u;
 
-    Desc.RunEditor = true;
+    Desc.RunEditor = false;
 
     return GameMainWindow::Run(Desc);
 }
 
+inline void DebugCheck(long _block)
+{
+    _CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
+    if (_block)
+    {
+        _CrtSetBreakAlloc(_block);
+    }
+}

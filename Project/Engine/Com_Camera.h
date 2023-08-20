@@ -43,6 +43,8 @@ namespace  mh
 		const MATRIX& GetProjectionMatrix() const { return mProjection; }
 
 	private:
+		bool FindRendererRecursive(GameObject* _pObj);
+
 		
 		void SortGameObjects();
 		void RenderDeffered();

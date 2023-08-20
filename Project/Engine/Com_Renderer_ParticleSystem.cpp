@@ -215,7 +215,7 @@ namespace mh
 		}
 
 		mMaxParticles = mBuffer->GetStride();
-		float3 pos = GetOwner()->GetTransform().GetRelativePos();
+		float3 pos = GetOwner()->GetComponent<Com_Transform>()->GetRelativePos();
 		mCBData.worldPosition = float4(pos.x, pos.y, pos.z, 1.0f);
 		mCBData.maxParticles = mMaxParticles;
 		mCBData.radius = mRadius;
@@ -238,10 +238,13 @@ namespace mh
 
 	void Com_Renderer_ParticleSystem::Render()
 	{
-		GetOwner()->GetTransform().SetConstBuffer();
+		if (false == IsRenderReady())
+			return;
+
+		GetOwner()->GetComponent<Com_Transform>()->BindGPU();
 		mBuffer->BindDataSRV(Register_t_atlasTexture, eShaderStageFlag::GS);
 
-		GetMaterial(0)->Bind();
+		GetCurrentMaterial(0)->Bind();
 		GetMesh()->RenderInstanced(0u, mMaxParticles);
 
 		mBuffer->UnBind();

@@ -194,7 +194,7 @@ namespace mh
 	template<typename T>
 	inline eComponentType GameObject::GetComponentType()
 	{
-		if constexpr (std::is_base_of_v<Com_Transform, T>)
+		if constexpr (std::is_base_of_v<ITransform, T>)
 		{
 			return eComponentType::Transform;
 		}

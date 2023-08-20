@@ -10,9 +10,6 @@ namespace gui
 
 namespace mh
 {
-	using Microsoft::WRL::ComPtr;
-	
-
 	struct tShaderCode
 	{
 		ComPtr<ID3DBlob> blob;
@@ -27,19 +24,19 @@ namespace mh
 		virtual ~GraphicsShader();
 
 		//여기 수정할 경우 CodeGenerator의 함수도 수정해 줄것
-		virtual define::eResult SaveJson(Json::Value* _pJVal) override;
-		virtual define::eResult LoadJson(const Json::Value* _pJVal) override;
+		virtual eResult SaveJson(Json::Value* _pJVal) override;
+		virtual eResult LoadJson(const Json::Value* _pJVal) override;
 
-		virtual define::eResult Save(const std::filesystem::path& _path) override;
-		virtual define::eResult Load(const std::filesystem::path& _path) override;
+		virtual eResult Save(const std::filesystem::path& _path) override;
+		virtual eResult Load(const std::filesystem::path& _path) override;
 
-		define::eResult CreateByCompile(eGSStage _stage, const std::filesystem::path& _FullPath, const std::string_view _funcName);
-		define::eResult CreateByHeader(eGSStage _stage, const unsigned char* _pByteCode, size_t _ByteCodeSize);
-		define::eResult CreateByCSO(eGSStage _stage, const std::filesystem::path& _FileName);
+		eResult CreateByCompile(define::eGSStage _stage, const std::filesystem::path& _FullPath, const std::string_view _funcName);
+		eResult CreateByHeader(define::eGSStage _stage, const unsigned char* _pByteCode, size_t _ByteCodeSize);
+		eResult CreateByCSO(define::eGSStage _stage, const std::filesystem::path& _FileName);
 
 		inline void AddInputLayoutDesc(const D3D11_INPUT_ELEMENT_DESC& _desc);
 		inline void SetInputLayoutDesc(const std::vector<D3D11_INPUT_ELEMENT_DESC>& _descs);
-		define::eResult CreateInputLayout();
+		eResult CreateInputLayout();
 		const std::vector<D3D11_INPUT_ELEMENT_DESC>& GetInputLayoutDescs() { return mInputLayoutDescs; }
 
 		ID3D11InputLayout* GetInputLayout() { return mInputLayout.Get(); }
@@ -48,27 +45,27 @@ namespace mh
 		void SetTopology(D3D11_PRIMITIVE_TOPOLOGY _topology) { mTopology = _topology; }
 		D3D11_PRIMITIVE_TOPOLOGY GetTopology() { return mTopology; }
 
-		void SetRSState(eRSType _state) { mRSType = _state; }
-		eRSType GetRSState() const { return mRSType; }
+		void SetRSState(define::eRSType _state) { mRSType = _state; }
+		define::eRSType GetRSState() const { return mRSType; }
 
-		void SetDSState(eDSType _state) { mDSType = _state; }
-		eDSType GetDSState() const { return mDSType; }
+		void SetDSState(define::eDSType _state) { mDSType = _state; }
+		define::eDSType GetDSState() const { return mDSType; }
 
-		void SetBSState(eBSType _state) { mBSType = _state; }
-		eBSType GetBSState() const { return mBSType; }
+		void SetBSState(define::eBSType _state) { mBSType = _state; }
+		define::eBSType GetBSState() const { return mBSType; }
 
 
 
-		void Binds();
+		void BindGPU();
 
 		//에디터용
 		inline void SetEditMode(bool _bEditMode) { mbEditMode = _bEditMode; }
-		inline void SetShaderKey(eGSStage _stage, const std::string_view _strKey);
-		inline const std::string& GetShaderKey(eGSStage _stage) { return mArrShaderCode[(int)_stage].strKey; }
+		inline void SetShaderKey(define::eGSStage _stage, const std::string_view _strKey);
+		inline const std::string& GetShaderKey(define::eGSStage _stage) { return mArrShaderCode[(int)_stage].strKey; }
 		
 
 	private:
-		define::eResult CreateShader(eGSStage _stage, const void* _pByteCode, size_t _ByteCodeSize);
+		eResult CreateShader(define::eGSStage _stage, const void* _pByteCode, size_t _ByteCodeSize);
 
 	private:
 		static std::unordered_set<std::string> mSemanticNames;
@@ -76,7 +73,7 @@ namespace mh
 		ComPtr<ID3D11InputLayout> mInputLayout;
 		D3D11_PRIMITIVE_TOPOLOGY mTopology;
 
-		std::array<tShaderCode, (int)eGSStage::END>  mArrShaderCode;
+		std::array<tShaderCode, (int)define::eGSStage::END>  mArrShaderCode;
 
 		ComPtr<ID3D11VertexShader>		mVS;
 		ComPtr<ID3D11HullShader>		mHS;
@@ -84,9 +81,9 @@ namespace mh
 		ComPtr<ID3D11GeometryShader>	mGS;
 		ComPtr<ID3D11PixelShader>		mPS;
 
-		eRSType mRSType;
-		eDSType mDSType;
-		eBSType mBSType;
+		define::eRSType mRSType;
+		define::eDSType mDSType;
+		define::eBSType mBSType;
 
 		ComPtr<ID3DBlob> mErrorBlob;
 
@@ -117,7 +114,7 @@ namespace mh
 	}
 
 
-	inline void GraphicsShader::SetShaderKey(eGSStage _stage, const std::string_view _strKey)
+	inline void GraphicsShader::SetShaderKey(define::eGSStage _stage, const std::string_view _strKey)
 	{
 		mArrShaderCode[(int)_stage].strKey = _strKey;
 	}

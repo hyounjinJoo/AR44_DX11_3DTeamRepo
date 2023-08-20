@@ -183,7 +183,7 @@ namespace mh
 		template<typename T>
 		static void SaveValue(std::ofstream& _ofs, const T& _val)
 		{
-			_ofs.write(reinterpret_cast<const char*>(&_val), sizeof(_val));
+			_ofs.write(reinterpret_cast<const char*>(&_val), sizeof(T));
 		}
 
 		template<typename T>

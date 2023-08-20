@@ -33,7 +33,7 @@ namespace mh
 		StructBuffer* GetFinalBoneMat() { return m_pBoneFinalMatBuffer; }
 		UINT GetBoneCount() { return (UINT)m_pVecBones->size(); }
 
-		virtual void Binds();
+		virtual void BindGPU();
 		virtual void Clear();
 
 

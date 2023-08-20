@@ -2,7 +2,7 @@
 
 #include <limits.h>
 
-namespace mh::define
+namespace mh
 {
 	enum class eResult
 	{
@@ -34,50 +34,52 @@ namespace mh::define
 	inline bool eResultSuccess(eResult _result) { return ((int)_result >= (int)eResult::Success); }
 	inline bool eResultFail(eResult _result) { return ((int)_result < (int)eResult::Success); }
 
-
-	enum class eLayerType
+	namespace define
 	{
-		None = 0,
-		Com_Camera,
-		Grid,
-		Monster,
-		Player,
+		enum class eLayerType
+		{
+			None = 0,
+			Com_Camera,
+			Grid,
+			Monster,
+			Player,
 
-		tParticle,
-		PostProcess,
-		UI,
-		END = 16,
-	};
+			tParticle,
+			PostProcess,
+			UI,
+			END = 16,
+		};
 
-	enum class eProjectionType
-	{
-		None = -1,
-		Perspective,
-		Orthographic,
-	};
+		enum class eProjectionType
+		{
+			None = -1,
+			Perspective,
+			Orthographic,
+		};
 
-	enum class eColliderType
-	{
-		None,
-		Rect,
-		Circle,
-		Box,
-		Sphere,
-		END,
-	};
+		enum class eColliderType
+		{
+			None,
+			Rect,
+			Circle,
+			Box,
+			Sphere,
+			END,
+		};
 
-	enum class eLightType
-	{
-		Directional,
-		Point,
-		Spot,
-		END,
-	};
+		enum class eLightType
+		{
+			Directional,
+			Point,
+			Spot,
+			END,
+		};
 
-	enum class eDimensionType
-	{
-		NOT_SET,
-		_2D,
-		_3D
-	};
+		enum class eDimensionType
+		{
+			NOT_SET,
+			_2D,
+			_3D
+		};
+	}
 }

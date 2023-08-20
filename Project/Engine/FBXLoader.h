@@ -104,7 +104,7 @@ namespace mh
 
 	public:
 		void Init();
-		define::eResult LoadFbx(const std::filesystem::path& _strPath);
+		eResult LoadFbx(const std::filesystem::path& _strPath);
 
 		// FbxMatrix -> Matrix
 		static MATRIX GetMatrixFromFbxMatrix(fbxsdk::FbxAMatrix& _mat);

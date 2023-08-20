@@ -15,6 +15,9 @@
 #include "Com_Renderer_Sprite.h"
 #include "Com_Transform.h"
 
+#include "Script_Player.h"
+#include "Script_Camera.h"
+
 namespace mh
 {
 	using namespace mh::define;
@@ -30,6 +33,9 @@ namespace mh
 		ComMgr::AddComConstructor<Com_Renderer_ParticleSystem>(strKey::Default::com::Com_Renderer_ParticleSystem);
 		ComMgr::AddComConstructor<Com_Renderer_Sprite>(strKey::Default::com::Com_Renderer_Sprite);
 		ComMgr::AddComConstructor<Com_Transform>(strKey::Default::com::Com_Transform);
+
+		ComMgr::AddComConstructor<Script_Player>(strKey::Default::com::Script_Player);
+		ComMgr::AddComConstructor<Script_Camera>(strKey::Default::com::Script_Camera);
 	}
 }
 

@@ -25,6 +25,8 @@ namespace mh
 		, mLayerType(define::eLayerType::None)
 		, mbDontDestroy()
 		, mName()
+		, mParent()
+		, mChilds()
 	{
 		mComponents.resize((int)eComponentType::Scripts);
 	}
@@ -37,6 +39,7 @@ namespace mh
 		, mLayerType(_other.mLayerType)
 		, mbDontDestroy(_other.mbDontDestroy)
 		, mName(_other.mName)
+		, mParent()
 	{
 		mComponents.resize((int)eComponentType::Scripts);
 
@@ -51,7 +54,7 @@ namespace mh
 		}
 
 		//2. 자녀 오브젝트 복사
-		for (size_t i = 0; i < _other.mComponents.size(); ++i)
+		for (size_t i = 0; i < _other.mChilds.size(); ++i)
 		{
 			//AddChildGameObj(_other.mFixedComponents[i]->Clone());
 		}
@@ -59,8 +62,7 @@ namespace mh
 
 	GameObject::~GameObject()
 	{
-		//Transform은 제거 X
-		for (size_t i = 1; i < mComponents.size(); ++i)
+		for (size_t i = 0; i < mComponents.size(); ++i)
 		{
 			if (nullptr == mComponents[i])
 				continue;
@@ -244,7 +246,6 @@ namespace mh
 		{
 			if (mChilds[i])
 				mChilds[i]->Init();
-			
 		}
 	}
 

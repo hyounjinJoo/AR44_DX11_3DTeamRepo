@@ -6,7 +6,6 @@
 namespace mh::define
 {
 	STRKEY ComponentPrefix = "Com_";
-
 	enum class eComponentType
 	{
 		UNKNOWN = -1,
@@ -77,6 +76,9 @@ namespace mh::define
 				STRKEY_DECLARE(Com_Renderer_ParticleSystem);
 				STRKEY_DECLARE(Com_Renderer_Sprite);
 				STRKEY_DECLARE(Com_Transform);
+
+				STRKEY_DECLARE(Script_Player);
+				STRKEY_DECLARE(Script_Camera);
 			}
 		}
 	}

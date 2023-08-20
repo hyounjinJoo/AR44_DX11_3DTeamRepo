@@ -102,7 +102,7 @@ namespace mh
 
 	void ICollider2D::Init()
 	{
-		mTransform = &(GetOwner()->GetTransform());
+		mTransform = GetOwner()->GetComponent<Com_Transform>();
 	}
 
 	void ICollider2D::Update()

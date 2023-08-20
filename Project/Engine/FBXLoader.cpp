@@ -7,11 +7,7 @@
 #include "Material.h"
 #include "define_Util.h"
 
-#ifdef _DEBUG
-#pragma comment(lib, "FBXLoader/Debug/libfbxsdk-md.lib")
-#else
-#pragma comment(lib, "FBXLoader/Release/libfbxsdk-md.lib")
-#endif
+
 
 using namespace fbxsdk;
 namespace mh
@@ -661,7 +657,6 @@ namespace mh
 
 			pAnimClip->eMode = mScene->GetGlobalSettings().GetTimeMode();
 			pAnimClip->llTimeLength = pAnimClip->tEndTime.GetFrameCount(pAnimClip->eMode) - pAnimClip->tStartTime.GetFrameCount(pAnimClip->eMode);
-
 
 
 			mAnimClips.push_back(pAnimClip);

@@ -110,17 +110,19 @@ namespace mh
 		Json::Value& jsonMeshCont = (*_pJson)[JSON_KEY(mMeshContainers)];
 		for (size_t i = 0; i < mMeshContainers.size(); ++i)
 		{
-			Json::Value jsonMeshCont = Json::Value(Json::arrayValue);
+			Json::Value arrElement;
 			if (nullptr == mMeshContainers[i].pMesh || mMeshContainers[i].pMaterials.empty())
 			{
 				return eResult::Fail_InValid;
 			}
 
-			Json::MH::SaveStrKey(&jsonMeshCont, JSON_KEY(pMesh), mMeshContainers[i].pMesh);
-			Json::MH::SaveStrKeyVector(&jsonMeshCont, JSON_KEY(pMaterials), mMeshContainers[i].pMaterials);
+			Json::MH::SaveStrKey(&arrElement, JSON_KEY(pMesh), mMeshContainers[i].pMesh);
+			Json::MH::SaveStrKeyVector(&arrElement, JSON_KEY(pMaterials), mMeshContainers[i].pMaterials);
 
-			jsonMeshCont.append(jsonMeshCont);
+			jsonMeshCont.append(arrElement);
 		}
+
+		Json::MH::SaveStrKey(_pJson, JSON_KEY_PAIR(mSkeleton));
 
 		return eResult::Success;
 	}
@@ -144,14 +146,16 @@ namespace mh
 		{
 			tMeshContainer cont{};
 
+
+			
 			//Mesh Load
-			std::string meshStrKey = Json::MH::LoadStrKey(&jsonMeshCont, JSON_KEY(pMesh), cont.pMesh);
+			std::string meshStrKey = Json::MH::LoadStrKey(&(*iter), JSON_KEY(pMesh), cont.pMesh);
 			cont.pMesh = ResMgr::Load<Mesh>(meshStrKey);
 			if (nullptr == cont.pMesh)
 				return eResult::Fail_Empty;
 
 			//Materials Load
-			const auto& materialsStrKey = Json::MH::LoadStrKeyVector(&jsonMeshCont, JSON_KEY(pMaterials), cont.pMaterials);
+			const auto& materialsStrKey = Json::MH::LoadStrKeyVector(&(*iter), JSON_KEY(pMaterials), cont.pMaterials);
 			for (size_t i = 0; i < materialsStrKey.size(); ++i)
 			{
 				std::shared_ptr<Material> mtrl = ResMgr::Load<Material>(materialsStrKey[i]);
@@ -161,11 +165,20 @@ namespace mh
 			mMeshContainers.push_back(cont);
 		}
 
+		const std::string& skeletonKey = Json::MH::LoadStrKey(_pJson, JSON_KEY_PAIR(mSkeleton));
+		if (false == skeletonKey.empty())
+		{
+			mSkeleton = std::make_unique<Skeleton>();
+			result = mSkeleton->Load(skeletonKey);
+			if (eResultFail(result))
+				return result;
+		}
+
 		return eResult::Success;
 	}
 
 
-	std::unique_ptr<GameObject> MeshData::Instantiate()
+	GameObject* MeshData::Instantiate()
 	{
 		std::unique_ptr<GameObject> uniqObj = std::make_unique<GameObject>();
 		uniqObj->AddComponent<Com_Transform>();
@@ -192,12 +205,12 @@ namespace mh
 				uniqObj->AddChild(child);
 				Com_Renderer_Mesh* renderer = child->AddComponent<Com_Renderer_Mesh>();
 				MH_ASSERT(renderer);
-				SetRenderer(renderer, i);
+				SetRenderer(renderer, (UINT)i);
 			}
 		}
 
 		//다 됐을 경우 unique_ptr 관리 해제하고 주소 반환
-		return uniqObj;
+		return uniqObj.release();
 	}
 
 	eResult MeshData::LoadFromFBX(const std::filesystem::path& _fileName)
@@ -221,6 +234,30 @@ namespace mh
 			ERROR_MESSAGE_W(L"FBX 불러오기 실패.");
 			return result;
 		}
+
+		//Bone 정보 및 애니메이션 로드
+		mSkeleton = std::make_unique<Skeleton>();
+
+		//Key 설정
+		{
+			std::fs::path strKey = _fileName;
+			strKey.replace_extension(define::strKey::Ext_Skeleton);
+			mSkeleton->SetKey(strKey.string());
+		}
+		result = mSkeleton->CreateFromFBX(&loader);
+
+		//애니메이션 정보가 없을 경우에는 도로 제거
+		if (eResult::Fail_Empty == result)
+		{
+			mSkeleton = nullptr;
+		}
+		//그 외의 이유로 실패했을 경우에는 에러
+		else if (eResultFail(result))
+		{
+			ERROR_MESSAGE_W(L"Skeleton 로드 실패.");
+			return result;
+		}
+		mSkeleton->Save(_fileName);
 
 		//컨테이너 갯수만큼 순회를 돌아준다.
 		int contCount = loader.GetContainerCount();
@@ -251,6 +288,9 @@ namespace mh
 				return eResult::Fail;
 			}
 
+			//스켈레톤 주소를 지정
+			meshCont.pMesh->SetSkeleton(mSkeleton.get());
+
 			if (nullptr != meshCont.pMesh)
 			{
 				//기본적으로는 컨테이너 이름을 사용
@@ -260,6 +300,7 @@ namespace mh
 				if (strKey.empty())
 				{
 					strKey = _fileName;
+					strKey.replace_extension("");
 					strKey += "_";
 					strKey += std::to_string(i);
 				}
@@ -279,7 +320,6 @@ namespace mh
 				}
 			}
 
-		
 
 			// 메테리얼 가져오기
 			for (UINT i = 0; i < cont->vecMtrl.size(); ++i)
@@ -291,36 +331,45 @@ namespace mh
 
 				//혹시나 없을 경우 에러
 				MH_ASSERT(pMtrl.get());
-			}
-
-			//다른게 다 진행됐으면 자신도 저장
-			//키값 만들고 세팅하고
-			std::fs::path strKeyMeshData = _fileName;
-			strKeyMeshData.replace_extension(strKey::Ext_MeshData);
-			std::string strKey = strKeyMeshData.string();
-			SetKey(strKey);
-
-			//저장함수 호출
-			result = Save(strKey);
-			if (eResultFail(result))
-			{
-				return result;
-			}
-
-			//모두 문제없이 처리되었을 경우 메쉬와 재질을 ResMgr에 전부 추가한다.
-			for (size_t i = 0; i < mMeshContainers.size(); ++i)
-			{
-				ResMgr::Insert(mMeshContainers[i].pMesh->GetKey(), mMeshContainers[i].pMesh);
 				
-				for (size_t j = 0; j < mMeshContainers[j].pMaterials.size(); ++i)
-				{
-					ResMgr::Insert(mMeshContainers[i].pMaterials[j]->GetKey(), mMeshContainers[i].pMaterials[j]);
-				}
+				meshCont.pMaterials.push_back(pMtrl);
 			}
 
-			//전부 저장에 성공했을 경우 ResMgr에서 이 주소(MeshData)를 리소스에 추가한다
-			//애초에 호출한 클래스가 ResMgr임
+
+			mMeshContainers.push_back(meshCont);
+		}//for문 끝
+
+
+
+
+		//다른게 다 진행됐으면 자신도 저장
+		//키값 만들고 세팅하고
+		std::fs::path strKeyMeshData = _fileName;
+		strKeyMeshData.replace_extension(strKey::Ext_MeshData);
+		std::string strKey = strKeyMeshData.string();
+		SetKey(strKey);
+
+		//저장함수 호출
+		result = Save(strKey);
+		if (eResultFail(result))
+		{
+			return result;
 		}
+
+		//모두 문제없이 처리되었을 경우 메쉬와 재질을 ResMgr에 전부 추가한다.
+		for (size_t i = 0; i < mMeshContainers.size(); ++i)
+		{
+			ResMgr::Insert(mMeshContainers[i].pMesh->GetKey(), mMeshContainers[i].pMesh);
+
+			//재질은 FBX Loader에서 추가가 되어있는 상태
+			//for (size_t j = 0; j < mMeshContainers[j].pMaterials.size(); ++i)
+			//{
+			//	ResMgr::Insert(mMeshContainers[i].pMaterials[j]->GetKey(), mMeshContainers[i].pMaterials[j]);
+			//}
+		}
+
+		//전부 저장에 성공했을 경우 ResMgr에서 이 주소(MeshData)를 리소스에 추가한다
+		//애초에 호출한 클래스가 ResMgr임
 
 		return eResult::Success;
 	}
@@ -338,8 +387,10 @@ namespace mh
 
 		for (size_t i = 0; i < mMeshContainers[_idx].pMaterials.size(); ++i)
 		{
-			_renderer->SetMaterial(mMeshContainers[_idx].pMaterials[i], i);
+			_renderer->SetMaterial(mMeshContainers[_idx].pMaterials[i], (UINT)i);
 		}
+
+		return true;
 	}
 }
 

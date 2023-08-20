@@ -18,7 +18,7 @@ namespace mh
 	void Com_Renderer_Mesh::Render()
 	{
 		//메쉬 또는 재질이 없을 경우 렌더링 불가능이므로 return;
-		if (nullptr == GetMesh() || nullptr == GetMaterial(0))
+		if (false == IsRenderReady())
 			return;
 
 		//애니메이션 확인
@@ -27,7 +27,7 @@ namespace mh
 		{
 			define::eDimensionType animDimType = Animator->GetDimensionType();
 
-			Animator->Binds();
+			Animator->BindGPU();
 
 			if(define::eDimensionType::_3D == animDimType)
 			{
@@ -37,7 +37,7 @@ namespace mh
 
 				for (UINT i = 0; i < materialCount; ++i)
 				{
-					std::shared_ptr<Material> mtrl = GetMaterial(i);
+					Material* mtrl = GetCurrentMaterial(i);
 					if (mtrl)
 					{
 						mtrl->SetAnim3D(true);
@@ -52,12 +52,12 @@ namespace mh
 		UINT iSubsetCount = GetMesh()->GetSubsetCount();
 		for (UINT i = 0; i < iSubsetCount; ++i)
 		{
-			if (nullptr != GetMaterial(i))
+			if (nullptr != GetCurrentMaterial(i))
 			{
 				GetMesh()->BindBuffer(i);
 
 				// 사용할 재질 업데이트
-				GetMaterial(i)->Bind();
+				GetCurrentMaterial(i)->Bind();
 
 				// 사용할 메쉬 업데이트 및 렌더링
 				GetMesh()->Render(i);

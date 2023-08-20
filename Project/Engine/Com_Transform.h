@@ -1,12 +1,12 @@
 #pragma once
-#include "IComponent.h"
+#include "ITransform.h"
 #include "SimpleMath.h"
 
 namespace mh
 {
     class GameObject;
     class Com_Transform :
-        public IComponent
+        public ITransform
     {
     public:
         Com_Transform();
@@ -15,11 +15,10 @@ namespace mh
         Com_Transform(const Com_Transform& _other) = default;
         CLONE(Com_Transform);
 
-        
         virtual ~Com_Transform();
 
-        virtual define::eResult SaveJson(Json::Value* _pJson) override;
-        virtual define::eResult LoadJson(const Json::Value* _pJson) override;
+        virtual eResult SaveJson(Json::Value* _pJson) override;
+        virtual eResult LoadJson(const Json::Value* _pJson) override;
 
     public:
         //virtual void Init() override;
@@ -27,7 +26,7 @@ namespace mh
         virtual void FixedUpdate() override;
         virtual void Render() override;
 
-        void SetConstBuffer();
+        virtual void BindGPU() override; 
 
     public:
         //inline Setter

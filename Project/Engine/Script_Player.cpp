@@ -24,32 +24,32 @@ namespace mh
 
 	void Script_Player::Update()
 	{
-		Com_Transform& tr = GetOwner()->GetTransform();
+		Com_Transform* tr = GetOwner()->GetComponent<Com_Transform>();
 
 		if (InputMgr::GetKey(eKeyCode::RIGHT))
 		{
-			float3 pos = tr.GetRelativePos();
+			float3 pos = tr->GetRelativePos();
 			pos.x += 60.0f * TimeMgr::DeltaTime();
-			tr.SetRelativePos(pos);
+			tr->SetRelativePos(pos);
 		}
 		if (InputMgr::GetKey(eKeyCode::LEFT))
 		{
-			float3 pos = tr.GetRelativePos();
+			float3 pos = tr->GetRelativePos();
 			pos.x -= 60.0f * TimeMgr::DeltaTime();
-			tr.SetRelativePos(pos);
+			tr->SetRelativePos(pos);
 		}
 
 		if (InputMgr::GetKey(eKeyCode::DOWN))
 		{
-			float rotY = tr.GetRelativeRotY();
+			float rotY = tr->GetRelativeRotY();
 			rotY -= 60.0f * TimeMgr::DeltaTime();
-			tr.SetRelativeRotY(rotY);
+			tr->SetRelativeRotY(rotY);
 		}
 		if (InputMgr::GetKey(eKeyCode::UP))
 		{
-			float rotY = tr.GetRelativeRotY();
+			float rotY = tr->GetRelativeRotY();
 			rotY += 60.0f * TimeMgr::DeltaTime();
-			tr.SetRelativeRotY(rotY);
+			tr->SetRelativeRotY(rotY);
 		}
 
 		Com_Animator2D* animator = GetOwner()->GetComponent<Com_Animator2D>();

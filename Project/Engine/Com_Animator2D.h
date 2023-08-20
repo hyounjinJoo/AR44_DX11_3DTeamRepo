@@ -60,7 +60,7 @@ namespace mh
 		tEvents* FindEvents(const std::string_view _name) const; 
 		void Play(const std::string_view _name, bool _loop = true);
 
-		virtual void Binds();
+		virtual void BindGPU();
 		virtual void Clear();
 
 		std::function<void()>& GetStartEvent(const std::string_view _name) const;

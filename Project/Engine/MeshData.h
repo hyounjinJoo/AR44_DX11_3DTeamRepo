@@ -5,17 +5,18 @@
 
 namespace mh
 {
+	class Mesh;
+	class Material;
+	class GameObject;
+	class Com_Renderer_Mesh;
+	class Skeleton;
+
 	struct tMeshContainer
 	{
 		std::shared_ptr<Mesh>					pMesh;
 		std::vector<std::shared_ptr<Material>>	pMaterials;
 	};
 
-	class Mesh;
-	class Material;
-	class GameObject;
-	class Com_Renderer_Mesh;
-	class Skeleton;
     class MeshData :
         public IRes
     {
@@ -23,15 +24,15 @@ namespace mh
 		MeshData();
 		virtual ~MeshData();
 
-		virtual define::eResult Save(const std::filesystem::path& _fileName) override;
-		virtual define::eResult Load(const std::filesystem::path& _fileName) override;
+		virtual eResult Save(const std::filesystem::path& _fileName) override;
+		virtual eResult Load(const std::filesystem::path& _fileName) override;
 
-		virtual define::eResult SaveJson(Json::Value* _pJson) override;
-		virtual define::eResult LoadJson(const Json::Value* _pJson) override;
-		std::unique_ptr<GameObject> Instantiate();
+		virtual eResult SaveJson(Json::Value* _pJson) override;
+		virtual eResult LoadJson(const Json::Value* _pJson) override;
+		GameObject* Instantiate();
 
 	private:
-		define::eResult LoadFromFBX(const std::filesystem::path& _fileName);
+		eResult LoadFromFBX(const std::filesystem::path& _fileName);
 		bool SetRenderer(Com_Renderer_Mesh* _renderer, UINT _idx);
 
 	private:

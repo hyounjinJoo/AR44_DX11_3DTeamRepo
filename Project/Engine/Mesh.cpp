@@ -14,8 +14,6 @@
 
 namespace mh
 {
-	
-
 	Mesh::Mesh()
 		: IRes(eResourceType::Mesh)
 		, mVertexBuffer{}
@@ -48,6 +46,8 @@ namespace mh
 		{
 			std::fs::create_directories(parentPath);
 		}
+
+		filePath.replace_extension(define::strKey::Ext_Mesh);
 
 		std::ofstream ofs(filePath, std::ios::binary);
 		if (false == ofs.is_open())
@@ -330,21 +330,12 @@ namespace mh
 
 
 		// 인덱스 정보
-		UINT iIdxBufferCount = (UINT)container->vecIdx.size();
+		UINT iIdxBufferCount = (UINT)_fbxContainer->vecIdx.size();
 
-		
 		for (UINT i = 0; i < iIdxBufferCount; ++i)
 		{
-			pMesh->CreateIndexBuffer(container->vecIdx[i]);
+			CreateIndexBuffer(_fbxContainer->vecIdx[i]);
 		}
-
-
-		// Animation3D가 없을 경우에는 여기서 중단
-		if (false == _fbxContainer->bAnimation)
-			return eResult::Success;
-
-		//TODO: 애니메이션 로드 함수 호출
-		MH_ASSERT(false);
 
 		return eResult::Success;
 	}

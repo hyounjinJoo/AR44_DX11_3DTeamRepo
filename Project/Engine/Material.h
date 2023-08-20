@@ -8,13 +8,12 @@
 
 namespace mh
 {
-	using namespace mh::define;
 	class Material : public IRes
 	{
 	public:
 		Material();
 
-		Material(const Material& _other) = default;
+		Material(const Material& _other);
 		CLONE(Material);
 
 		virtual ~Material();

@@ -469,6 +469,9 @@
     </ClCompile>
     <ClCompile Include="ILight.cpp" />
     <ClCompile Include="Skeleton.cpp" />
+    <ClCompile Include="ITransform.cpp">
+      <Filter>GameObject\Component\0. Transform</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application.h">
@@ -811,6 +814,9 @@
     </ClInclude>
     <ClInclude Include="ILight.h" />
     <ClInclude Include="Skeleton.h" />
+    <ClInclude Include="ITransform.h">
+      <Filter>GameObject\Component\0. Transform</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="cpp.hint">

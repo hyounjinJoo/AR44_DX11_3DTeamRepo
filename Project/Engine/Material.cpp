@@ -21,14 +21,19 @@ namespace mh
 
     }
 
-    //Material::Material(const Material& _other)
-    //    : IRes(_other)
-    //    , mCB(_other.mCB)
-    //    , mMode(_other.mMode)
-    //    , mShader(_other.mShader)
-    //    , mTextures(_other.mTextures)
-    //{
-    //}
+
+    Material::Material(const Material& _other)
+        : IRes(_other)
+        , mShader(_other.mShader)
+        , mTextures(_other.mTextures)
+        , mCB(_other.mCB)
+        , mMode(_other.mMode)
+        , mDiffuseColor(_other.mDiffuseColor)
+        , mSpecularColor(_other.mSpecularColor)
+        , mAmbientColor(_other.mAmbientColor)
+        , mEmissiveColor(_other.mEmissiveColor)
+    {
+    }
 
     Material::~Material()
     {
@@ -215,7 +220,7 @@ namespace mh
         eShaderStageFlag_ flag = eShaderStageFlag::VS | eShaderStageFlag::GS | eShaderStageFlag::PS;
         CB->BindData(flag);
 
-        mShader->Binds();
+        mShader->BindGPU();
     }
 
     void Material::Clear()

@@ -14,7 +14,7 @@ namespace mh
 		Animation3DShader();
 		virtual ~Animation3DShader();
 
-		virtual bool Binds();
+		virtual bool BindGPU();
 		virtual void Clear();
 
 

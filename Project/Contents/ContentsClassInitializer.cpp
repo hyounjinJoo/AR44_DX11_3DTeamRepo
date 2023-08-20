@@ -21,6 +21,6 @@ namespace mh
 	void ContentsClassInitializer::InitContents()
 	{
 		//예시 씬을 첫 시작으로 등록
-		SceneMgr::LoadScene(strKey::Scene::Scene_Example);
+		SceneMgr::LoadScene(strKey::Scene::Scene_Title);
 	}
 }

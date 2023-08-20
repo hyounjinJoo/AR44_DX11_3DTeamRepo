@@ -371,7 +371,7 @@ namespace mh
 		return eResult::Success;
 	}
 
-	void GraphicsShader::Binds()
+	void GraphicsShader::BindGPU()
 	{
 		auto pContext = GPUMgr::Context();
 

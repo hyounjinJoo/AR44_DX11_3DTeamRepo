@@ -20,7 +20,7 @@ namespace mh
 	}
 
 
-	bool Animation3DShader::Binds()
+	bool Animation3DShader::BindGPU()
 	{
 		if (false == (m_pFrameDataBuffer || m_pOffsetMatBuffer || m_pOutputBuffer))
 			return false;

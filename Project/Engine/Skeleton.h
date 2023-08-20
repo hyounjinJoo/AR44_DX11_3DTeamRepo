@@ -14,17 +14,17 @@ namespace mh
 		Skeleton();
 		virtual ~Skeleton();
 
-		define::eResult Save(const std::filesystem::path& _fullPath);
-		define::eResult Load(const std::filesystem::path& _fullPath);
+		eResult Save(const std::filesystem::path& _fileName);
+		eResult Load(const std::filesystem::path& _fileName);
 
-		define::eResult CreateFromFBX(FBXLoader* _pFBXLoader);
+		eResult CreateFromFBX(FBXLoader* _fbxLoader);
 
 	public:
 		//Animation 3D
 		const std::vector<define::tMTBone>* GetBones() { return &m_vecBones; }
 		UINT GetBoneCount() { return (UINT)m_vecBones.size(); }
 		const std::vector<define::tMTAnimClip>* GetAnimClip() { return &m_vecAnimClip; }
-		bool IsAnimMesh() { return !m_vecAnimClip.empty(); }
+		bool IsAnimMesh() { return (false == m_vecAnimClip.empty()); }
 
 		StructBuffer* GetBoneFrameDataBuffer() { return m_pBoneFrameData.get(); } // 전체 본 프레임 정보
 		StructBuffer* GetBoneOffsetBuffer() { return  m_pBoneOffset.get(); }	   // 각 뼈의 offset 행렬

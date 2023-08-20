@@ -14,8 +14,7 @@
 namespace mh
 {
 	Com_Transform::Com_Transform()
-		: IComponent(eComponentType::Transform)
-		, mSize(1.f, 1.f, 1.f)
+		: mSize(1.f, 1.f, 1.f)
 		, mScaleRelative(1.f, 1.f, 1.f)
 		, mIsScaleDefault(true)
 		, mbInheritScale(true)
@@ -70,7 +69,7 @@ namespace mh
 
 	void Com_Transform::Render()
 	{
-		SetConstBuffer();
+		BindGPU();
 	}
 
 	eResult Com_Transform::SaveJson(Json::Value* _pJson)
@@ -303,7 +302,7 @@ namespace mh
 		}
 	}
 
-	void Com_Transform::SetConstBuffer()
+	void Com_Transform::BindGPU()
 	{
 		tCB_Transform trCb = {};
 		trCb.world = mMatWorldFinal;

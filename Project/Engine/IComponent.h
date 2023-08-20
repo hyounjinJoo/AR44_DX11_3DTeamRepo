@@ -17,8 +17,8 @@ namespace mh
 
 		virtual ~IComponent();
 
-		virtual define::eResult SaveJson(Json::Value* _pJson) override;
-		virtual define::eResult LoadJson(const Json::Value* _pJson) override;
+		virtual eResult SaveJson(Json::Value* _pJson) override;
+		virtual eResult LoadJson(const Json::Value* _pJson) override;
 
 		virtual void Init() {};
 		virtual void Update() {};

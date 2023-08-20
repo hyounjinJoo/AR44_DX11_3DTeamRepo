@@ -90,16 +90,16 @@ namespace mh
 
 	void Com_Light3D::FixedUpdate()
 	{
-		Com_Transform& tr = GetOwner()->GetTransform();
+		Com_Transform* tr = GetOwner()->GetComponent<Com_Transform>();
 
 		if (eLightType::Point == (eLightType)mAttribute.lightType)
 		{
-			tr.SetRelativeScale(float3(mAttribute.radius * 5.f));
+			tr->SetRelativeScale(float3(mAttribute.radius * 5.f));
 		}
 
-		float3 position = tr.GetRelativePos();
+		float3 position = tr->GetRelativePos();
 		mAttribute.position = float4(position.x, position.y, position.z, 1.0f);
-		mAttribute.direction = float4(tr.Forward().x, tr.Forward().y, tr.Forward().z, 0.0f);
+		mAttribute.direction = float4(tr->Forward().x, tr->Forward().y, tr->Forward().z, 0.0f);
 
 		RenderMgr::PushLightAttribute(mAttribute);
 	}
@@ -113,7 +113,7 @@ namespace mh
 		}
 
 		//Com_Transform* tr = GetOwner()->GetComponent<Com_Transform>();
-		//tr->SetConstBuffer();
+		//tr->BindGPU();
 
 		ConstBuffer* cb = RenderMgr::GetConstBuffer(eCBType::numberOfLight);
 

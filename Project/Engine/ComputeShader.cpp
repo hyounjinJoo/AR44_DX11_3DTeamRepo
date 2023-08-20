@@ -99,7 +99,7 @@ namespace mh
 
 	void ComputeShader::OnExcute()
 	{
-		if (false == Binds())
+		if (false == BindGPU())
 			return;
 
 		//데이터 카운트가 하나라도 0일경우 계산 불가

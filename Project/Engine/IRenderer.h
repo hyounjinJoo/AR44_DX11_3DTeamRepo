@@ -44,8 +44,6 @@ namespace mh
 		inline std::shared_ptr<Material> GetSharedMaterial(UINT _idx);
 		inline Material* GetDynamicMaterial(UINT _idx);
 		inline Material* GetCurrentMaterial(UINT _idx);
-
-		inline const std::vector<tMaterialSet>& const GetMaterials() { return mMaterials; }
 		
 		UINT GetMaterialCount() { return (UINT)mMaterials.size(); }
 		bool IsRenderReady() const { return (mMesh && false == mMaterials.empty()); }
@@ -56,7 +54,6 @@ namespace mh
 	private:
 		std::shared_ptr<Mesh> mMesh;
 		std::vector<tMaterialSet> mMaterials;
-		
 	};
 
 	inline void IRenderer::SetMaterial(const std::shared_ptr<Material> _Mtrl, UINT _idx)
@@ -86,14 +83,15 @@ namespace mh
 				{
 					if (nullptr == mtrlSet->DynamicMaterial)
 					{
-						mtrlSet->DynamicMaterial = std::make_unique<Material>(mtrlSet->SharedMaterial->Clone());
+						mtrlSet->DynamicMaterial = std::unique_ptr<Material>(mtrlSet->SharedMaterial->Clone());
 					}
 					mtrlSet->CurrentMaterial = mtrlSet->DynamicMaterial.get();
 					mtrlSet->MaterialMode = _mode;
 				}
 			}
+			mtrl = mtrlSet->CurrentMaterial;
 		}
-		mtrl = mtrlSet->CurrentMaterial;
+		
 		return mtrl;
 	}
 
