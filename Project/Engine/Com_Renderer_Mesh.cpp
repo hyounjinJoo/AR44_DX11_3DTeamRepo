@@ -6,6 +6,7 @@
 #include "Com_Animator3D.h"
 #include "json-cpp/json.h"
 #include "ResMgr.h"
+#include "Skeleton.h"
 
 namespace mh
 {
@@ -63,7 +64,8 @@ namespace mh
 					if (mtrl)
 					{
 						mtrl->SetAnim3D(true);
-						mtrl->SetBoneCount(Animator3D->GetBoneCount());
+						const Skeleton* pSkeleton = Animator3D->GetSkeleton();
+						mtrl->SetBoneCount(pSkeleton->GetBoneCount());
 					}
 				}
 			}
@@ -79,7 +81,7 @@ namespace mh
 				GetMesh()->BindBuffer(i);
 
 				// 사용할 재질 업데이트
-				GetCurrentMaterial(i)->Bind();
+				GetCurrentMaterial(i)->BindData();
 
 				// 사용할 메쉬 업데이트 및 렌더링
 				GetMesh()->Render(i);
@@ -88,7 +90,7 @@ namespace mh
 
 		if (Animator)
 		{
-			Animator->Clear();
+			Animator->UnBindData();
 		}
 	}
 

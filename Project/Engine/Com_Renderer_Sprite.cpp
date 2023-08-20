@@ -55,7 +55,7 @@ namespace mh
 		//GetOwner()->GetComponent<Com_Transform>()->BindData();
 
 		GetMesh()->BindBuffer();
-		GetCurrentMaterial(0)->Bind();
+		GetCurrentMaterial(0)->BindData();
 
 		Com_Animator2D* animator = GetOwner()->GetComponent<Com_Animator2D>();
 		if (animator)
@@ -64,11 +64,11 @@ namespace mh
 		}
 
 		GetMesh()->Render();
-		GetCurrentMaterial(0)->Clear();
+		GetCurrentMaterial(0)->UnBindData();
 
 		if (animator)
 		{
-			animator->Clear();
+			animator->UnBindData();
 		}
 	}
 }

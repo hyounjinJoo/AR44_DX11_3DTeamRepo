@@ -125,7 +125,7 @@ namespace mh
 		cb->BindData(eShaderStageFlag::VS | eShaderStageFlag::PS);
 
 		mVolumeMesh->BindBuffer();
-		mLightMaterial->Bind();
+		mLightMaterial->BindData();
 		mVolumeMesh->Render();
 	}
 

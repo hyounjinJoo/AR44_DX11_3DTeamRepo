@@ -232,15 +232,15 @@ namespace mh
 		if (mActiveAnimation == nullptr)
 			return;
 
-		mActiveAnimation->BindShader();
+		mActiveAnimation->BindData();
 	}
 
-	void Com_Animator2D::Clear()
+	void Com_Animator2D::UnBindData()
 	{
 		if (mActiveAnimation == nullptr)
 			return;
 
-		mActiveAnimation->Clear();
+		mActiveAnimation->UnBindData();
 	}
 
 

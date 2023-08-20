@@ -315,7 +315,6 @@ namespace mh
 			ERROR_MESSAGE_W(
 				LR"(
 컴포넌트에 String Key가 없습니다.
-new를 써서 만들지 말고, 
 AddComponent<T> 또는 ComMgr::GetNewComponent()를 통해서 생성하세요.
 )");
 			MH_ASSERT(false == _pCom->GetKey().empty());

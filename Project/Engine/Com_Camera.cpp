@@ -96,7 +96,7 @@ namespace mh
 		std::shared_ptr<Material> mergeMaterial = ResMgr::Find<Material>(strKey::Default::material::MergeMaterial);
 		std::shared_ptr<Mesh> rectMesh = ResMgr::Find<Mesh>(strKey::Default::mesh::RectMesh);
 		rectMesh->BindBuffer();
-		mergeMaterial->Bind();
+		mergeMaterial->BindData();
 		rectMesh->Render();
 
 

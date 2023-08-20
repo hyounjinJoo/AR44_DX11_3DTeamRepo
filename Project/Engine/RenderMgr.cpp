@@ -190,7 +190,7 @@ namespace mh
 	{
 		std::shared_ptr<Texture> renderTarget = ResMgr::Find<Texture>(define::strKey::Default::texture::RenderTarget);
 			
-		//renderTarget->UnBind();
+		//renderTarget->UnBindData();
 
 		//ID3D11ShaderResourceView* srv = nullptr;
 		//GPUMgr::Context()->PSSetShaderResources()(eShaderStage::PS, 60, &srv);

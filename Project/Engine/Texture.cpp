@@ -228,7 +228,7 @@ namespace mh
 
 	void Texture::BindDataSRV(uint _SRVSlot, eShaderStageFlag_ _stageFlag)
 	{
-		UnBind();
+		UnBindData();
 	
 		mCurBoundRegister = (int)_SRVSlot;
 		mCurBoundStage = _stageFlag;
@@ -259,7 +259,7 @@ namespace mh
 
 	void Texture::BindDataUAV(uint _startSlot)
 	{
-		UnBind();
+		UnBindData();
 
 		mCurBoundView = eBufferViewType::UAV;
 		mCurBoundRegister = (int)_startSlot;
@@ -269,7 +269,7 @@ namespace mh
 	}
 
 
-	void Texture::UnBind()
+	void Texture::UnBindData()
 	{
 		switch (mCurBoundView)
 		{

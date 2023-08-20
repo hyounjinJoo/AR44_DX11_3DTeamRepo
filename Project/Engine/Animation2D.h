@@ -50,9 +50,9 @@ namespace mh
 		//아틀라스를 균일하게 조각조각 내줌
 		void CreateXY(const std::string_view _name, std::shared_ptr<Texture> _atlas, UINT _uColTotal, UINT _uRowTotal, float _duration);
 
-		void BindShader();
+		void BindData();
 		void Reset();
-		void Clear();
+		void UnBindData();
 
 		bool IsComplete() const { return mbComplete; }
 		const std::string& GetAnimationName() const { return mAnimationName; }

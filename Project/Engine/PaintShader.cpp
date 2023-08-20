@@ -27,6 +27,6 @@ namespace mh
 
 	void PaintShader::Clear()
 	{
-		mTarget->UnBind();
+		mTarget->UnBindData();
 	}
 }

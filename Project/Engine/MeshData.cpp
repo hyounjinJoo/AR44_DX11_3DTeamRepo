@@ -213,6 +213,13 @@ namespace mh
 			}
 		}
 
+		//스켈레톤 있고 + 애니메이션 데이터가 있을 경우
+		if (mSkeleton && mSkeleton->IsAnimMesh())
+		{
+			Com_Animator3D* animator = uniqObj->AddComponent<Com_Animator3D>();
+			animator->SetSkeleton(mSkeleton.get());
+		}
+
 		//다 됐을 경우 unique_ptr 관리 해제하고 주소 반환
 		return uniqObj.release();
 	}

@@ -31,7 +31,7 @@ namespace mh
 
 	void ParticleShader::Clear()
 	{
-		mBuffer->UnBind();
-		mSharedBuffer->UnBind();
+		mBuffer->UnBindData();
+		mSharedBuffer->UnBindData();
 	}
 }

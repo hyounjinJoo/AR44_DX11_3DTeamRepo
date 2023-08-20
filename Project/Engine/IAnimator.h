@@ -12,7 +12,7 @@ namespace mh
 		virtual ~IAnimator() {};
 
 		virtual void BindData() = 0;
-		virtual void Clear() = 0;
+		virtual void UnBindData() = 0;
 
 
 

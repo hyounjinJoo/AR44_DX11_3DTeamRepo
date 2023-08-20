@@ -106,27 +106,10 @@ namespace mh
 		if (eComponentType::UNKNOWN == order)
 			return nullptr;
 
-		T* pCom = nullptr;
-		if constexpr (std::is_base_of_v<IScript, T>)
-		{
-			pCom = new T;
-			pCom->SetKey(ComMgr::GetComName<T>());
-			mComponents.push_back(pCom);
-			mScripts.push_back(pCom);
-		}
-		else
-		{
-			//타입을 알 수 없거나 이미 그쪽에 컴포넌트가 들어가 있을 경우 생성 불가
-			if (eComponentType::UNKNOWN == order || nullptr != mComponents[(int)order])
-				return nullptr;
+		T* pCom = new T;
+		pCom->SetKey(ComMgr::GetComName<T>());
 
-			pCom = new T;
-			pCom->SetKey(ComMgr::GetComName<T>());
-			mComponents[(int)order] = static_cast<IComponent*>(pCom);
-		}
-
-		pCom->SetOwner(this);
-		return pCom;
+		return static_cast<T*>(AddComponent(static_cast<IComponent*>(pCom)));
 	}
 
 	inline IComponent* GameObject::AddComponent(const std::string_view _strKey)

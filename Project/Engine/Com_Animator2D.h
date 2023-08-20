@@ -60,8 +60,8 @@ namespace mh
 		tEvents* FindEvents(const std::string_view _name) const; 
 		void Play(const std::string_view _name, bool _loop = true);
 
-		virtual void BindData();
-		virtual void Clear();
+		virtual void BindData() override;
+		virtual void UnBindData() override;
 
 		std::function<void()>& GetStartEvent(const std::string_view _name) const;
 		std::function<void()>& GetCompleteEvent(const std::string_view _name) const;

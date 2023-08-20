@@ -243,9 +243,9 @@ namespace mh
 		GetOwner()->GetComponent<Com_Transform>()->BindData();
 		mBuffer->BindDataSRV(Register_t_atlasTexture, eShaderStageFlag::GS);
 
-		GetCurrentMaterial(0)->Bind();
+		GetCurrentMaterial(0)->BindData();
 		GetMesh()->RenderInstanced(0u, mMaxParticles);
 
-		mBuffer->UnBind();
+		mBuffer->UnBindData();
 	}
 }

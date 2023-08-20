@@ -26,24 +26,24 @@ namespace mh
 		virtual void FixedUpdate() override;
 
 
-		void SetBones(Skeleton* _pSkeleton);
-		void SetAnimClip(const std::vector<define::tMTAnimClip>* _vecAnimClip);
+		void SetSkeleton(Skeleton* _pSkeleton);
+		const Skeleton* GetSkeleton() const { return mSkeleton; }
+
 		void SetClipTime(int _iClipIdx, float _fTime) { m_vecClipUpdateTime[_iClipIdx] = _fTime; }
 
 		StructBuffer* GetFinalBoneMat() { return m_pBoneFinalMatBuffer; }
-		UINT GetBoneCount() { return (UINT)m_pVecBones->size(); }
+		//UINT GetBoneCount() { return (UINT)m_pVecBones->size(); }
 
 		virtual void BindData() override;
-		virtual void Clear();
-
-
+		virtual void UnBindData() override;
 
 	private:
-		void CheckMesh(std::shared_ptr<Mesh> _pMesh);
+		bool CheckMesh();
 
     private:
-        const std::vector<define::tMTBone>* m_pVecBones;
-        const std::vector<define::tMTAnimClip>* m_pVecClip;
+		Skeleton* mSkeleton;
+        //const std::vector<define::tMTBone>* m_pVecBones;
+        //const std::vector<define::tMTAnimClip>* m_pVecClip;
 
         std::vector<float>				m_vecClipUpdateTime;
         std::vector<MATRIX>				m_vecFinalBoneMat; // 텍스쳐에 전달할 최종 행렬정보

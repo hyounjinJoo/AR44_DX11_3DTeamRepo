@@ -192,7 +192,7 @@ namespace mh
 
     }
 
-    void Material::Bind()
+    void Material::BindData()
     {
         for (size_t slotIndex = 0; slotIndex < (uint)eTextureSlot::END; slotIndex++)
         {
@@ -223,7 +223,7 @@ namespace mh
         mShader->BindData();
     }
 
-    void Material::Clear()
+    void Material::UnBindData()
     {
         for (size_t slotIndex = 0; slotIndex < (uint)eTextureSlot::END; slotIndex++)
         {
@@ -232,7 +232,7 @@ namespace mh
 				continue;
 			}
 
-            mTextures[slotIndex]->UnBind();
+            mTextures[slotIndex]->UnBindData();
         }
     }
 

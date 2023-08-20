@@ -49,7 +49,7 @@ namespace mh
 
 		for (uint i = 0; i < mRenderTargetCount; ++i)
 		{
-			mRenderTargetTextures[i]->UnBind();
+			mRenderTargetTextures[i]->UnBindData();
 		}
 
 		ID3D11DepthStencilView* pDSView = nullptr;

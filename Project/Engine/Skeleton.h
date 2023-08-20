@@ -21,10 +21,10 @@ namespace mh
 
 	public:
 		//Animation 3D
-		const std::vector<define::tMTBone>* GetBones() { return &m_vecBones; }
-		UINT GetBoneCount() { return (UINT)m_vecBones.size(); }
-		const std::vector<define::tMTAnimClip>* GetAnimClip() { return &m_vecAnimClip; }
-		bool IsAnimMesh() { return (false == m_vecAnimClip.empty()); }
+		const std::vector<define::tMTBone>& GetBones() const { return m_vecBones; }
+		UINT GetBoneCount() const { return (UINT)m_vecBones.size(); }
+		const std::vector<define::tMTAnimClip>& GetAnimClip() const { return m_vecAnimClip; }
+		bool IsAnimMesh() const { return (false == m_vecAnimClip.empty()); }
 
 		StructBuffer* GetBoneFrameDataBuffer() { return m_pBoneFrameData.get(); } // 전체 본 프레임 정보
 		StructBuffer* GetBoneOffsetBuffer() { return  m_pBoneOffset.get(); }	   // 각 뼈의 offset 행렬

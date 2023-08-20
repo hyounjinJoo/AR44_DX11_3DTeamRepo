@@ -30,7 +30,7 @@ namespace mh
 
 		void BindDataSRV(uint _SRVSlot, eShaderStageFlag_ _stageFlag);
 		void BindDataUAV(uint _UAVSlot = 0u);
-		void UnBind();
+		void UnBindData();
 
 
 		void SetTexture(Microsoft::WRL::ComPtr<ID3D11Texture2D> _texture) { mTexture = _texture; }

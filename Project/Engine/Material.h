@@ -25,8 +25,8 @@ namespace mh
 		virtual eResult LoadJson(const Json::Value* _pJVal) override;
 
 		void SetData(eGPUParam _param, void* _data);
-		void Bind();
-		void Clear();
+		void BindData();
+		void UnBindData();
 
 		void SetShader(std::shared_ptr<GraphicsShader> _shader) { mShader = _shader; }
 		std::shared_ptr<GraphicsShader> GetShader() const { return mShader; }
