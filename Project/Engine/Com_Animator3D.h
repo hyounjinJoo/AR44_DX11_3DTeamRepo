@@ -33,13 +33,13 @@ namespace mh
 		StructBuffer* GetFinalBoneMat() { return m_pBoneFinalMatBuffer; }
 		UINT GetBoneCount() { return (UINT)m_pVecBones->size(); }
 
-		virtual void BindGPU();
+		virtual void BindData() override;
 		virtual void Clear();
 
 
 
 	private:
-		void check_mesh(std::shared_ptr<Mesh> _pMesh);
+		void CheckMesh(std::shared_ptr<Mesh> _pMesh);
 
     private:
         const std::vector<define::tMTBone>* m_pVecBones;

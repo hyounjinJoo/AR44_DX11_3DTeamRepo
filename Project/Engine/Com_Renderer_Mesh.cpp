@@ -49,7 +49,7 @@ namespace mh
 		{
 			define::eDimensionType animDimType = Animator->GetDimensionType();
 
-			Animator->BindGPU();
+			Animator->BindData();
 
 			if(define::eDimensionType::_3D == animDimType)
 			{

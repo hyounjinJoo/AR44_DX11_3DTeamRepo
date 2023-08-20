@@ -227,7 +227,7 @@ namespace mh
 			events->StartEvent();
 	}
 
-	void Com_Animator2D::BindGPU()
+	void Com_Animator2D::BindData()
 	{
 		if (mActiveAnimation == nullptr)
 			return;

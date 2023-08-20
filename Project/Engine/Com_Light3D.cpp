@@ -113,7 +113,7 @@ namespace mh
 		}
 
 		//Com_Transform* tr = GetOwner()->GetComponent<Com_Transform>();
-		//tr->BindGPU();
+		//tr->BindData();
 
 		ConstBuffer* cb = RenderMgr::GetConstBuffer(eCBType::numberOfLight);
 

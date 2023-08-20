@@ -220,7 +220,7 @@ namespace mh
         eShaderStageFlag_ flag = eShaderStageFlag::VS | eShaderStageFlag::GS | eShaderStageFlag::PS;
         CB->BindData(flag);
 
-        mShader->BindGPU();
+        mShader->BindData();
     }
 
     void Material::Clear()

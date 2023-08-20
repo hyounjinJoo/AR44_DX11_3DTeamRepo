@@ -69,7 +69,7 @@ namespace mh
 
 	void Com_Transform::Render()
 	{
-		BindGPU();
+		BindData();
 	}
 
 	eResult Com_Transform::SaveJson(Json::Value* _pJson)
@@ -302,7 +302,7 @@ namespace mh
 		}
 	}
 
-	void Com_Transform::BindGPU()
+	void Com_Transform::BindData()
 	{
 		tCB_Transform trCb = {};
 		trCb.world = mMatWorldFinal;

@@ -26,7 +26,7 @@ namespace mh
         virtual void FixedUpdate() override;
         virtual void Render() override;
 
-        virtual void BindGPU() override; 
+        virtual void BindData() override; 
 
     public:
         //inline Setter

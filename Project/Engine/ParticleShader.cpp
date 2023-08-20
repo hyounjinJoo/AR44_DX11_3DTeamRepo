@@ -18,7 +18,7 @@ namespace mh
 	{
 	}
 
-	bool ParticleShader::BindGPU()
+	bool ParticleShader::BindData()
 	{
 		mBuffer->BindDataUAV(0);
 		mSharedBuffer->BindDataUAV(1);

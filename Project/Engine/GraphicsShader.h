@@ -56,7 +56,7 @@ namespace mh
 
 
 
-		void BindGPU();
+		void BindData();
 
 		//에디터용
 		inline void SetEditMode(bool _bEditMode) { mbEditMode = _bEditMode; }

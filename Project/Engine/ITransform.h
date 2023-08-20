@@ -10,7 +10,7 @@ namespace mh
 		ITransform();
 		virtual ~ITransform();
 
-		virtual void BindGPU() = 0;
+		virtual void BindData() = 0;
 
 	protected:
 

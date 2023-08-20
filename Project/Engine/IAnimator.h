@@ -11,7 +11,7 @@ namespace mh
 		IAnimator(define::eDimensionType _type);
 		virtual ~IAnimator() {};
 
-		virtual void BindGPU() = 0;
+		virtual void BindData() = 0;
 		virtual void Clear() = 0;
 
 

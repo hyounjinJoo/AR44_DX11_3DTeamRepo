@@ -52,7 +52,7 @@ namespace mh
 
 	void Com_Renderer_Sprite::Render()
 	{
-		//GetOwner()->GetComponent<Com_Transform>()->BindGPU();
+		//GetOwner()->GetComponent<Com_Transform>()->BindData();
 
 		GetMesh()->BindBuffer();
 		GetCurrentMaterial(0)->Bind();
@@ -60,7 +60,7 @@ namespace mh
 		Com_Animator2D* animator = GetOwner()->GetComponent<Com_Animator2D>();
 		if (animator)
 		{
-			animator->BindGPU();
+			animator->BindData();
 		}
 
 		GetMesh()->Render();

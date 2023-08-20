@@ -240,7 +240,7 @@ namespace mh
 		if (false == IsRenderReady())
 			return;
 
-		GetOwner()->GetComponent<Com_Transform>()->BindGPU();
+		GetOwner()->GetComponent<Com_Transform>()->BindData();
 		mBuffer->BindDataSRV(Register_t_atlasTexture, eShaderStageFlag::GS);
 
 		GetCurrentMaterial(0)->Bind();

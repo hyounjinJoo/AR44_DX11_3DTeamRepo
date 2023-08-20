@@ -103,7 +103,7 @@ namespace mh
 	}
 
 
-	void Com_Animator3D::BindGPU()
+	void Com_Animator3D::BindData()
 	{
 		if (false == m_bFinalMatUpdate)
 		{
@@ -120,7 +120,7 @@ namespace mh
 			}
 
 			//구조화 버퍼가 정상적으로 생성되었는지 확인한다.
-			check_mesh(pMesh);
+			CheckMesh(pMesh);
 			
 			Skeleton* pBone = pMesh->GetSkeleton();
 			pUpdateShader->SetFrameDataBuffer(pBone->GetBoneFrameDataBuffer());
@@ -174,7 +174,7 @@ namespace mh
 	}
 
 
-	void Com_Animator3D::check_mesh(std::shared_ptr<Mesh> _pMesh)
+	void Com_Animator3D::CheckMesh(std::shared_ptr<Mesh> _pMesh)
 	{
 		if (_pMesh && _pMesh->GetSkeleton())
 		{

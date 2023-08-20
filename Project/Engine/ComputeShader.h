@@ -3,10 +3,10 @@
 #include "IShader.h"
 
 
-//1. BindGPU() 함수를 재정의해서 필요한 데이터를 바인딩하도록 설정
+//1. BindData() 함수를 재정의해서 필요한 데이터를 바인딩하도록 설정
 //2. Clear() 함수를 재정의해서 데이터 바인딩을 해제하는 함수도 재정의
 //3. 데이터의 갯수 계산. 이건 처음에 한번만 계산해주면 될 때도 있고 매번 새로 계산해줘야할때도 있음.
-//		매번 새로 계산해줘야 할 경우 BindGPU()에서 호출해주면 되고, 한번만 해주면 될 경우에는 생성자에서 해주면 됨
+//		매번 새로 계산해줘야 할 경우 BindData()에서 호출해주면 되고, 한번만 해주면 될 경우에는 생성자에서 해주면 됨
 //4. 위의 3개 완료했으면 필요한 시점에 OnExcute() 호출
 
 namespace mh
@@ -28,7 +28,7 @@ namespace mh
 		void OnExcute();
 
 	protected:
-		virtual bool BindGPU() = 0;
+		virtual bool BindData() = 0;
 		virtual void Clear() = 0;
 
 		eResult CreateShader(const void* _pByteCode, size_t _ByteCodeSize);

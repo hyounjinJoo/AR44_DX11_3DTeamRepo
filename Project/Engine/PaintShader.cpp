@@ -14,7 +14,7 @@ namespace mh
 	{
 	}
 
-	bool PaintShader::BindGPU()
+	bool PaintShader::BindData()
 	{
 		mTarget->BindDataUAV(0);
 
