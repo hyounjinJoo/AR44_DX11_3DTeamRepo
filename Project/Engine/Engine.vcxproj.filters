@@ -472,6 +472,9 @@
     <ClCompile Include="ITransform.cpp">
       <Filter>GameObject\Component\0. Transform</Filter>
     </ClCompile>
+    <ClCompile Include="Com_Renderer_MultiMesh.cpp">
+      <Filter>GameObject\Component\Renderer</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application.h">
@@ -816,6 +819,9 @@
     <ClInclude Include="Skeleton.h" />
     <ClInclude Include="ITransform.h">
       <Filter>GameObject\Component\0. Transform</Filter>
+    </ClInclude>
+    <ClInclude Include="Com_Renderer_MultiMesh.h">
+      <Filter>GameObject\Component\Renderer</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

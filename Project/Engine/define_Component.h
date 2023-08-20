@@ -73,6 +73,7 @@ namespace mh::define
 				STRKEY_DECLARE(Com_Camera);
 				STRKEY_DECLARE(Com_Light3D);
 				STRKEY_DECLARE(Com_Renderer_Mesh);
+				STRKEY_DECLARE(Com_Renderer_MultiMesh);
 				STRKEY_DECLARE(Com_Renderer_ParticleSystem);
 				STRKEY_DECLARE(Com_Renderer_Sprite);
 				STRKEY_DECLARE(Com_Transform);

@@ -1,7 +1,6 @@
-
 #include "PCH_Engine.h"
-
 #include "Com_Renderer_ParticleSystem.h"
+
 #include "Mesh.h"
 #include "ResMgr.h"
 #include "Material.h"
@@ -37,7 +36,7 @@ namespace mh
 	}
 
 	Com_Renderer_ParticleSystem::Com_Renderer_ParticleSystem(const Com_Renderer_ParticleSystem& _other)
-		: IRenderer(_other)
+		: Com_Renderer_Mesh(_other)
 		, mMaxParticles(_other.mMaxParticles)
 		, mStartSize(_other.mStartSize)
 		, mStartColor(_other.mStartColor)

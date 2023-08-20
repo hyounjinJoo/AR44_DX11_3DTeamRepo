@@ -23,7 +23,7 @@ namespace mh
 		, mbLockRotation()
 		, mbNeedMyUpdate(true)
 	{
-		//SetKey(strKey::Default::com::Com_Transform);
+		SetKey(strKey::Default::com::Com_Transform);
 	}
 
 	Com_Transform::~Com_Transform()

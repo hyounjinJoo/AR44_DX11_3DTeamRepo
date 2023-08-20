@@ -1,5 +1,5 @@
 #pragma once
-#include "IRenderer.h"
+#include "Com_Renderer_Mesh.h"
 #include "ParticleShader.h"
 #include "DefaultShader/SH_Particle.hlsli"
 
@@ -13,7 +13,7 @@ namespace mh
 
 	class StructBuffer;
 
-	class Com_Renderer_ParticleSystem : public IRenderer
+	class Com_Renderer_ParticleSystem : public Com_Renderer_Mesh
 	{
 	public:
 		Com_Renderer_ParticleSystem();

@@ -3,6 +3,7 @@
 
 #include "Components.h"
 #include "ComMgr.h"
+#include "Com_Transform.h"
 
 namespace mh
 {
@@ -43,6 +44,8 @@ namespace mh
 		
 		IComponent* AddComponent(IComponent* _pCom);
 		inline IComponent* AddComponent(const std::string_view _strKey);
+
+		Com_Transform& GetTransform() { return mTransform; }
 
 		template <typename T>
 		inline T* GetComponent();
@@ -87,6 +90,7 @@ namespace mh
 		define::eLayerType mLayerType;
 		bool mbDontDestroy;
 
+		Com_Transform				mTransform;
 		std::vector<IComponent*>	mComponents;
 		std::vector<IScript*>		mScripts;
 
@@ -118,7 +122,7 @@ namespace mh
 
 			pCom = new T;
 			pCom->SetKey(ComMgr::GetComName<T>());
-			mComponents[(int)order] = pCom;
+			mComponents[(int)order] = static_cast<IComponent*>(pCom);
 		}
 
 		pCom->SetOwner(this);

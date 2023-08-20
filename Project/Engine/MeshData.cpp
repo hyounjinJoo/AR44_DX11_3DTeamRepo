@@ -7,6 +7,7 @@
 #include "FBXLoader.h"
 #include "GameObject.h"
 #include "Com_Renderer_Mesh.h"
+#include "Com_Renderer_MultiMesh.h"
 #include "Com_Animator3D.h"
 #include "define_Util.h"
 
@@ -199,12 +200,15 @@ namespace mh
 		//여러 개의 container를 가지고 있을 경우: 하나의 부모 object에 여러개의 child를 생성해서 각각 Meshrenderer에 할당
 		else
 		{
+			//MultiMesh 컴포넌트를 집어넣어준다.
+			Com_Renderer_MultiMesh* multiMesh = uniqObj->AddComponent<Com_Renderer_MultiMesh>();
 			for (size_t i = 0; i < mMeshContainers.size(); ++i)
 			{
-				GameObject* child = new GameObject;
-				uniqObj->AddChild(child);
-				Com_Renderer_Mesh* renderer = child->AddComponent<Com_Renderer_Mesh>();
+				//ComMgr로부터 Mesh 렌더러를 받아와서 MultiMesh에 넣어준다.
+				Com_Renderer_Mesh* renderer = static_cast<Com_Renderer_Mesh*>(ComMgr::GetNewCom(define::strKey::Default::com::Com_Renderer_Mesh));
 				MH_ASSERT(renderer);
+				multiMesh->AddMeshRenderer(renderer);
+
 				SetRenderer(renderer, (UINT)i);
 			}
 		}

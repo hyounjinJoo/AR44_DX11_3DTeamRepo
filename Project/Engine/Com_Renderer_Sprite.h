@@ -1,14 +1,11 @@
 #pragma once
+#include "Com_Renderer_Mesh.h"
 
-#include "IComponent.h"
-#include "Mesh.h"
-#include "Material.h"
-#include "IRenderer.h"
 
 using namespace mh;
 namespace mh
 {
-	class Com_Renderer_Sprite : public IRenderer
+	class Com_Renderer_Sprite : public Com_Renderer_Mesh
 	{
 	public:
 		Com_Renderer_Sprite();

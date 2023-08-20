@@ -181,30 +181,30 @@ namespace mh
 	}
 
 
-	bool Com_Camera::FindRendererRecursive(GameObject* _pObj)
-	{
-		bool bRet = false;
-		if (_pObj)
-		{
-			if (_pObj->GetComponent(eComponentType::Renderer))
-			{
-				bRet = true;
-			}
-			else
-			{
-				//렌더러가 하나라도 있을 시 true 반환. 없을 시 false
-				const auto& childs = _pObj->GetChilds();
-				for (size_t i = 0; i < childs.size(); ++i)
-				{
-					bRet = FindRendererRecursive(childs[i]);
-					if (bRet)
-						break;
-				}
-			}
-		}
+	//bool Com_Camera::FindRendererRecursive(GameObject* _pObj)
+	//{
+	//	bool bRet = false;
+	//	if (_pObj)
+	//	{
+	//		if (_pObj->GetComponent(eComponentType::Renderer))
+	//		{
+	//			bRet = true;
+	//		}
+	//		else
+	//		{
+	//			//렌더러가 하나라도 있을 시 true 반환. 없을 시 false
+	//			const auto& childs = _pObj->GetChilds();
+	//			for (size_t i = 0; i < childs.size(); ++i)
+	//			{
+	//				bRet = FindRendererRecursive(childs[i]);
+	//				if (bRet)
+	//					break;
+	//			}
+	//		}
+	//	}
 
-		return bRet;
-	}
+	//	return bRet;
+	//}
 
 	void Com_Camera::SortGameObjects()
 	{
@@ -291,15 +291,15 @@ namespace mh
 
 	void Com_Camera::PushGameObjectToRenderingModes(GameObject* _gameObj)
 	{
-		if (false == FindRendererRecursive(_gameObj))
+		if (nullptr == _gameObj)
 			return;
 
-		Material* material = renderer->GetCurrentMaterial(0);
+		IRenderer* renderer = static_cast<IRenderer*>(_gameObj->GetComponent(define::eComponentType::Renderer));
 
-		if (material == nullptr)
+		if (nullptr == renderer)
 			return;
 
-		eRenderingMode mode = material->GetRenderingMode();
+		eRenderingMode mode = renderer->GetRenderingMode();
 
 		switch (mode)
 		{

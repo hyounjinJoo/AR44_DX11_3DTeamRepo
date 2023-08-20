@@ -260,6 +260,7 @@ call Copy_HLSL.bat $(Configuration)</Command>
     <ClInclude Include="Com_Animator3D.h" />
     <ClInclude Include="Com_AudioListener.h" />
     <ClInclude Include="Com_AudioSource.h" />
+    <ClInclude Include="Com_Renderer_MultiMesh.h" />
     <ClInclude Include="DefaultComInitializer.h" />
     <ClInclude Include="FBXLoader.h" />
     <ClInclude Include="GameMainWindow.h" />
@@ -382,6 +383,7 @@ call Copy_HLSL.bat $(Configuration)</Command>
     <ClCompile Include="Com_Animator3D.cpp" />
     <ClCompile Include="Com_AudioListener.cpp" />
     <ClCompile Include="Com_AudioSource.cpp" />
+    <ClCompile Include="Com_Renderer_MultiMesh.cpp" />
     <ClCompile Include="DefaultComInitializer.cpp" />
     <ClCompile Include="FBXLoader.cpp" />
     <ClCompile Include="GameMainWindow.cpp" />
