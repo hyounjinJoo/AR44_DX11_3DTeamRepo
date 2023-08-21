@@ -299,7 +299,12 @@ namespace mh
 		if (nullptr == renderer)
 			return;
 
-		eRenderingMode mode = renderer->GetRenderingMode();
+		eRenderingMode mode = eRenderingMode::None;
+		Material* mtrl = renderer->GetCurrentMaterial(0u);
+		if (mtrl)
+		{
+			mode = mtrl->GetRenderingMode();
+		}
 
 		switch (mode)
 		{

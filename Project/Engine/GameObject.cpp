@@ -1,7 +1,8 @@
 #include "PCH_Engine.h"
-
 #include "GameObject.h"
-#include "Com_Transform.h"
+
+#include "SceneMgr.h"
+#include "Layer.h"
 
 #include "json-cpp/json.h"
 #include "Prefab.h"
@@ -65,10 +66,10 @@ namespace mh
 
 	GameObject::~GameObject()
 	{
-		//Transform은 제거 X
 		for (size_t i = 0; i < mComponents.size(); ++i)
 		{
-			if (mComponents[i])
+			//컴포넌트의 주인이 자신일 경우 제거
+			if (mComponents[i] && this == mComponents[i]->GetOwner())
 				delete mComponents[i];
 		}
 
@@ -302,7 +303,7 @@ namespace mh
 
 
 
-	IComponent* GameObject::AddComponent(IComponent* _pCom)
+	IComponent* GameObject::AddComponent(IComponent* _pCom, bool _bShared)
 	{
 		if (nullptr == _pCom)
 			return nullptr;
@@ -339,8 +340,44 @@ AddComponent<T> 또는 ComMgr::GetNewComponent()를 통해서 생성하세요.
 			mComponents[(int)ComType] = _pCom;
 		}
 
-
-		_pCom->SetOwner(this);
+		if(false == _bShared)
+			_pCom->SetOwner(this);
 		return _pCom;
+	}
+
+
+	void GameObject::SetLayerRecursive(define::eLayerType _type)
+	{
+		mLayerType = _type;
+
+		for (size_t i = 0; i < mChilds.size(); ++i)
+		{
+			if (mChilds[i])
+				mChilds[i]->SetLayerRecursive(_type);
+		}
+	}
+
+	void GameObject::AddToLayerRecursive()
+	{
+		IScene* scene = SceneMgr::GetActiveScene();
+		scene->GetLayer(mLayerType).AddGameObject(this);
+
+		for (size_t i = 0; i < mChilds.size(); ++i)
+		{
+			if (mChilds[i])
+				mChilds[i]->AddToLayerRecursive();
+		}
+	}
+	void GameObject::AddToLayerRecursive(define::eLayerType _type)
+	{
+		mLayerType = _type;
+		IScene* scene = SceneMgr::GetActiveScene();
+		scene->GetLayer(mLayerType).AddGameObject(this);
+
+		for (size_t i = 0; i < mChilds.size(); ++i)
+		{
+			if (mChilds[i])
+				mChilds[i]->AddToLayerRecursive(_type);
+		}
 	}
 }

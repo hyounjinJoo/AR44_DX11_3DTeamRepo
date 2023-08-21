@@ -118,6 +118,8 @@ namespace mh
 
 	void RenderMgr::Render()
 	{
+		ClearMultiRenderTargets();
+
 		UpdateGlobalCBuffer();
 
 		BindNoiseTexture();
@@ -1299,12 +1301,14 @@ namespace mh
 		D3D11_RASTERIZER_DESC rsDesc = {};
 		rsDesc.FillMode = D3D11_FILL_MODE::D3D11_FILL_SOLID;
 		rsDesc.CullMode = D3D11_CULL_MODE::D3D11_CULL_BACK;
+		rsDesc.DepthClipEnable = TRUE;
 
 		GPUMgr::Device()->CreateRasterizerState(&rsDesc
 			, mRasterizerStates[(uint)eRSType::SolidBack].GetAddressOf());
 
 		rsDesc.FillMode = D3D11_FILL_MODE::D3D11_FILL_SOLID;
 		rsDesc.CullMode = D3D11_CULL_MODE::D3D11_CULL_FRONT;
+		rsDesc.DepthClipEnable = TRUE;
 
 		GPUMgr::Device()->CreateRasterizerState(&rsDesc
 			, mRasterizerStates[(uint)eRSType::SolidFront].GetAddressOf());
@@ -1413,7 +1417,7 @@ namespace mh
 		std::shared_ptr <Texture> spriteTexture = ResMgr::Find<Texture>(texture::DefaultSprite);
 		std::shared_ptr<GraphicsShader> spriteShader = ResMgr::Find<GraphicsShader>(shader::graphics::SpriteShader);
 		std::shared_ptr<Material> spriteMaterial = std::make_shared<Material>();
-		spriteMaterial->SetRenderingMode(eRenderingMode::Transparent);
+		spriteMaterial->SetRenderingMode(eRenderingMode::Opaque);
 		spriteMaterial->SetShader(spriteShader);
 		spriteMaterial->SetTexture(eTextureSlot::Albedo, spriteTexture);
 		ResMgr::Insert(material::SpriteMaterial, spriteMaterial);
@@ -1422,7 +1426,7 @@ namespace mh
 		std::shared_ptr <Texture> uiTexture = ResMgr::Find<Texture>(texture::HPBarTexture);
 		std::shared_ptr<GraphicsShader> uiShader = ResMgr::Find<GraphicsShader>(shader::graphics::UIShader);
 		std::shared_ptr<Material> uiMaterial = std::make_shared<Material>();
-		uiMaterial->SetRenderingMode(eRenderingMode::Transparent);
+		uiMaterial->SetRenderingMode(eRenderingMode::Opaque);
 
 		uiMaterial->SetShader(uiShader);
 		uiMaterial->SetTexture(eTextureSlot::Albedo, uiTexture);

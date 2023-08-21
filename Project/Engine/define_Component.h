@@ -23,25 +23,6 @@ namespace mh::define
 		Scripts,
 
 		END
-		
-		////Transform, // 위치 데이터 수정하는 컴포넌트
-		//Com_Camera,
-		//Mesh,
-		//Collider,
-		////Collider2,
-		//Renderer,
-		////Com_Renderer_Mesh,
-		////Com_Renderer_Sprite,
-		//Com_Animator2D,
-		//Com_Renderer_ParticleSystem,
-		//Com_AudioListener,
-		//Com_AudioSource,
-		//Com_Light3D,
-		//UI,
-		////FadeOut,FadeIn
-		//IScript,
-		//End,
-
 	};
 
 	namespace strKey
@@ -66,6 +47,9 @@ namespace mh::define
 		{
 			namespace com
 			{
+				STRKEY_DECLARE(Com_DummyTransform);
+				STRKEY_DECLARE(Com_Transform);
+
 				STRKEY_DECLARE(Com_Animator2D);
 				STRKEY_DECLARE(Com_Animator3D);
 				STRKEY_DECLARE(Com_AudioListener);
@@ -73,10 +57,10 @@ namespace mh::define
 				STRKEY_DECLARE(Com_Camera);
 				STRKEY_DECLARE(Com_Light3D);
 				STRKEY_DECLARE(Com_Renderer_Mesh);
-				STRKEY_DECLARE(Com_Renderer_MultiMesh);
+				STRKEY_DECLARE(Com_Renderer_3DAnimMesh);
 				STRKEY_DECLARE(Com_Renderer_ParticleSystem);
 				STRKEY_DECLARE(Com_Renderer_Sprite);
-				STRKEY_DECLARE(Com_Transform);
+				
 
 				STRKEY_DECLARE(Script_Player);
 				STRKEY_DECLARE(Script_Camera);

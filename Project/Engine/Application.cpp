@@ -90,10 +90,8 @@ namespace mh
 	{
 		TimeMgr::Render(mHdc);
 
-		GPUMgr::Clear();
-		RenderMgr::ClearMultiRenderTargets();
-
-		//SceneMgr::Render();
+		//최종 렌더타겟 Clear
+		GPUMgr::ClearRenderTarget();
 
 		RenderMgr::Render();
 	}

@@ -16,7 +16,7 @@ namespace mh
 		__forceinline static ComPtr<ID3D11DeviceContext>	Context() { return mContext; }
 
 	public:
-		static void Clear();// 화면 지워주기
+		static void ClearRenderTarget();// 화면 지워주기
 		static inline void Present(bool _bVSync = false);
 
 		static inline std::shared_ptr<Texture> GetRenderTargetTex();

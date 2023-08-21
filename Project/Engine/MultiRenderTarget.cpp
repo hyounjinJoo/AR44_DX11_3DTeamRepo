@@ -46,7 +46,6 @@ namespace mh
 
 	void MultiRenderTarget::Bind()
 	{
-
 		for (uint i = 0; i < mRenderTargetCount; ++i)
 		{
 			mRenderTargetTextures[i]->UnBindData();

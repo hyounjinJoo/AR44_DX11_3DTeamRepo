@@ -44,7 +44,7 @@ namespace mh
 
 		{
 			// Main Com_Camera Game Object
-			GameObject* cameraObj = object::Instantiate<GameObject>(eLayerType::Com_Camera);
+			GameObject* cameraObj = object::Instantiate(eLayerType::Com_Camera, new GameObject);
 			cameraObj->SetName("MainCamera");
 
 			Com_Transform* tr = cameraObj->AddComponent<Com_Transform>();
@@ -104,7 +104,7 @@ namespace mh
 		//}
 
 		{
-			std::shared_ptr<MeshData> data = ResMgr::Load<MeshData>("stm520_038_00.fbx");
+			std::shared_ptr<MeshData> data = ResMgr::Load<MeshData>("SB_MapRes/stm520_038_00.fbx");
 			GameObject* obj = data->Instantiate();
 			Com_Transform* tr = obj->GetComponent<Com_Transform>();
 			tr->SetRelativeScale(float3(0.5f));
@@ -131,7 +131,7 @@ namespace mh
 
 
 		{
-			GameObject* directionalLight = object::Instantiate<GameObject>(eLayerType::Player);
+			GameObject* directionalLight = object::Instantiate(eLayerType::Player, new GameObject);
 			directionalLight->SetName("directionalLight");
 
 			Com_Transform* tr = directionalLight->AddComponent<Com_Transform>();

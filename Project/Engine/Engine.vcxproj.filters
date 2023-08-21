@@ -76,42 +76,6 @@
     <Filter Include="Common\define">
       <UniqueIdentifier>{db0f6041-2434-4f35-bd27-dbe1b692a9db}</UniqueIdentifier>
     </Filter>
-    <Filter Include="GameObject\Component">
-      <UniqueIdentifier>{d54e1d46-871f-40f8-ad58-0a2d4ec246e6}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="GameObject\Component\Script">
-      <UniqueIdentifier>{5d1a9b1c-e367-41ff-827a-0670e743acf2}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="GameObject\Component\Script\Contents">
-      <UniqueIdentifier>{0c9e0d2f-bd3f-44cc-a073-834f8bdf9d93}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="GameObject\Component\Renderer">
-      <UniqueIdentifier>{6cbbc9fb-29a5-4e89-a66a-edbeee8d0a1a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="GameObject\Component\Camera">
-      <UniqueIdentifier>{d5d09f34-c98b-40e4-9959-3f7e7df27f01}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="GameObject\Component\Collider">
-      <UniqueIdentifier>{92b865c2-1040-44bb-9ddb-b9ebff3bccbe}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="GameObject\Component\Collider\2D">
-      <UniqueIdentifier>{51ad1f08-b1a8-4cce-a84d-49b9b06e11a9}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="GameObject\Component\Collider\3D">
-      <UniqueIdentifier>{6b267699-3830-4c57-89d0-68c916e6fb9a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="GameObject\Component\Animator">
-      <UniqueIdentifier>{5617f228-a6b1-4d89-8a60-2aea1ca48f8c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="GameObject\Component\Light">
-      <UniqueIdentifier>{8a4cefad-b3b9-4953-99ce-2821de45ba85}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="GameObject\Component\Audio">
-      <UniqueIdentifier>{326cbbf6-1cb8-4ba7-bc32-aa2759b923f9}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="GameObject\Component\0. Transform">
-      <UniqueIdentifier>{62546181-5d07-413f-a9e5-329a0986165d}</UniqueIdentifier>
-    </Filter>
     <Filter Include="_DefaultShader">
       <UniqueIdentifier>{f9fb54b7-eaf0-450c-b3c7-b6781de3a310}</UniqueIdentifier>
     </Filter>
@@ -175,6 +139,42 @@
     <Filter Include="_DefaultShader\Animation\3D">
       <UniqueIdentifier>{bb5fc774-25fe-4450-b656-3c85eecb7d07}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Component">
+      <UniqueIdentifier>{d54e1d46-871f-40f8-ad58-0a2d4ec246e6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Component\Script">
+      <UniqueIdentifier>{5d1a9b1c-e367-41ff-827a-0670e743acf2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Component\Script\Contents">
+      <UniqueIdentifier>{0c9e0d2f-bd3f-44cc-a073-834f8bdf9d93}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Component\Renderer">
+      <UniqueIdentifier>{6cbbc9fb-29a5-4e89-a66a-edbeee8d0a1a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Component\Camera">
+      <UniqueIdentifier>{d5d09f34-c98b-40e4-9959-3f7e7df27f01}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Component\Collider">
+      <UniqueIdentifier>{92b865c2-1040-44bb-9ddb-b9ebff3bccbe}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Component\Collider\2D">
+      <UniqueIdentifier>{51ad1f08-b1a8-4cce-a84d-49b9b06e11a9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Component\Collider\3D">
+      <UniqueIdentifier>{6b267699-3830-4c57-89d0-68c916e6fb9a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Component\Animator">
+      <UniqueIdentifier>{5617f228-a6b1-4d89-8a60-2aea1ca48f8c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Component\Light">
+      <UniqueIdentifier>{8a4cefad-b3b9-4953-99ce-2821de45ba85}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Component\Audio">
+      <UniqueIdentifier>{326cbbf6-1cb8-4ba7-bc32-aa2759b923f9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Component\0. Transform">
+      <UniqueIdentifier>{62546181-5d07-413f-a9e5-329a0986165d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Application.cpp">
@@ -196,22 +196,22 @@
       <Filter>Resource\Texture</Filter>
     </ClCompile>
     <ClCompile Include="IScript.cpp">
-      <Filter>GameObject\Component\Script</Filter>
+      <Filter>Component\Script</Filter>
     </ClCompile>
-    <ClCompile Include="Com_Renderer_Mesh.cpp">
-      <Filter>GameObject\Component\Renderer</Filter>
+    <ClCompile Include="IRenderer.cpp">
+      <Filter>Component\Renderer</Filter>
     </ClCompile>
     <ClCompile Include="Script_Player.cpp">
-      <Filter>GameObject\Component\Script\Contents</Filter>
+      <Filter>Component\Script\Contents</Filter>
     </ClCompile>
     <ClCompile Include="Com_Camera.cpp">
-      <Filter>GameObject\Component\Camera</Filter>
+      <Filter>Component\Camera</Filter>
     </ClCompile>
     <ClCompile Include="Script_Camera.cpp">
-      <Filter>GameObject\Component\Script</Filter>
+      <Filter>Component\Script</Filter>
     </ClCompile>
     <ClCompile Include="Com_Renderer_Sprite.cpp">
-      <Filter>GameObject\Component\Renderer</Filter>
+      <Filter>Component\Renderer</Filter>
     </ClCompile>
     <ClCompile Include="GridScript.cpp">
       <Filter>Resource\Script</Filter>
@@ -226,25 +226,25 @@
       <Filter>Resource\Prefab</Filter>
     </ClCompile>
     <ClCompile Include="ICollider2D.cpp">
-      <Filter>GameObject\Component\Collider\2D</Filter>
+      <Filter>Component\Collider\2D</Filter>
     </ClCompile>
     <ClCompile Include="ICollider3D.cpp">
-      <Filter>GameObject\Component\Collider\3D</Filter>
+      <Filter>Component\Collider\3D</Filter>
     </ClCompile>
     <ClCompile Include="ICollider.cpp">
-      <Filter>GameObject\Component\Collider</Filter>
+      <Filter>Component\Collider</Filter>
     </ClCompile>
     <ClCompile Include="Player.cpp">
-      <Filter>GameObject\Component\Script\Contents</Filter>
+      <Filter>Component\Script\Contents</Filter>
     </ClCompile>
     <ClCompile Include="Monster.cpp">
-      <Filter>GameObject\Component\Script\Contents</Filter>
+      <Filter>Component\Script\Contents</Filter>
     </ClCompile>
     <ClCompile Include="Animation2D.cpp">
-      <Filter>GameObject\Component\Animator</Filter>
+      <Filter>Component\Animator</Filter>
     </ClCompile>
     <ClCompile Include="Com_Animator2D.cpp">
-      <Filter>GameObject\Component\Animator</Filter>
+      <Filter>Component\Animator</Filter>
     </ClCompile>
     <ClCompile Include="PaintShader.cpp">
       <Filter>Resource\Shaders\Compute</Filter>
@@ -253,7 +253,7 @@
       <Filter>Resource\Shaders\Compute\Base</Filter>
     </ClCompile>
     <ClCompile Include="Com_Light3D.cpp">
-      <Filter>GameObject\Component\Light</Filter>
+      <Filter>Component\Light</Filter>
     </ClCompile>
     <ClCompile Include="ConstBuffer.cpp">
       <Filter>GPU\Buffer</Filter>
@@ -263,7 +263,7 @@
     </ClCompile>
     <ClCompile Include="ParticleShader.cpp" />
     <ClCompile Include="Com_AudioListener.cpp">
-      <Filter>GameObject\Component\Audio</Filter>
+      <Filter>Component\Audio</Filter>
     </ClCompile>
     <ClCompile Include="FontWrapper.cpp">
       <Filter>FontWrapper</Filter>
@@ -287,7 +287,7 @@
       <Filter>Resource\Shaders\Graphics</Filter>
     </ClCompile>
     <ClCompile Include="IComponent.cpp">
-      <Filter>GameObject\Component</Filter>
+      <Filter>Component</Filter>
     </ClCompile>
     <ClCompile Include="ResMgr.cpp">
       <Filter>Manager</Filter>
@@ -299,25 +299,22 @@
       <Filter>Manager</Filter>
     </ClCompile>
     <ClCompile Include="Com_Renderer_ParticleSystem.cpp">
-      <Filter>GameObject\Component\Renderer</Filter>
+      <Filter>Component\Renderer</Filter>
     </ClCompile>
     <ClCompile Include="IRes.cpp">
       <Filter>Resource</Filter>
-    </ClCompile>
-    <ClCompile Include="IRenderer.cpp">
-      <Filter>GameObject\Component\Renderer</Filter>
     </ClCompile>
     <ClCompile Include="ComMgr.cpp">
       <Filter>Manager</Filter>
     </ClCompile>
     <ClCompile Include="DefaultComInitializer.cpp">
-      <Filter>GameObject\Component</Filter>
+      <Filter>Component</Filter>
     </ClCompile>
     <ClCompile Include="Com_Transform.cpp">
-      <Filter>GameObject\Component\0. Transform</Filter>
+      <Filter>Component\0. Transform</Filter>
     </ClCompile>
     <ClCompile Include="Com_AudioSource.cpp">
-      <Filter>GameObject\Component\Audio</Filter>
+      <Filter>Component\Audio</Filter>
     </ClCompile>
     <ClCompile Include="AudioClip.cpp">
       <Filter>Resource\Audio</Filter>
@@ -456,21 +453,29 @@
       <Filter>Common</Filter>
     </ClCompile>
     <ClCompile Include="IAnimator.cpp">
-      <Filter>GameObject\Component\Animator</Filter>
+      <Filter>Component\Animator</Filter>
     </ClCompile>
     <ClCompile Include="Com_Animator3D.cpp">
-      <Filter>GameObject\Component\Animator</Filter>
+      <Filter>Component\Animator</Filter>
     </ClCompile>
     <ClCompile Include="Animation3DShader.cpp">
-      <Filter>GameObject\Component\Animator</Filter>
+      <Filter>Component\Animator</Filter>
     </ClCompile>
-    <ClCompile Include="ILight.cpp" />
     <ClCompile Include="Skeleton.cpp" />
     <ClCompile Include="ITransform.cpp">
-      <Filter>GameObject\Component\0. Transform</Filter>
+      <Filter>Component\0. Transform</Filter>
     </ClCompile>
-    <ClCompile Include="Com_Renderer_MultiMesh.cpp">
-      <Filter>GameObject\Component\Renderer</Filter>
+    <ClCompile Include="ILight.cpp">
+      <Filter>Component</Filter>
+    </ClCompile>
+    <ClCompile Include="Com_Renderer_Mesh.cpp">
+      <Filter>Component\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="Com_DummyTransform.cpp">
+      <Filter>Component\0. Transform</Filter>
+    </ClCompile>
+    <ClCompile Include="Com_Renderer_3DAnimMesh.cpp">
+      <Filter>Component\Renderer</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -490,7 +495,7 @@
       <Filter>Resource\Mesh</Filter>
     </ClInclude>
     <ClInclude Include="IComponent.h">
-      <Filter>GameObject\Component</Filter>
+      <Filter>Component</Filter>
     </ClInclude>
     <ClInclude Include="Material.h">
       <Filter>Resource\Material</Filter>
@@ -499,22 +504,22 @@
       <Filter>Resource\Texture</Filter>
     </ClInclude>
     <ClInclude Include="IScript.h">
-      <Filter>GameObject\Component\Script</Filter>
+      <Filter>Component\Script</Filter>
     </ClInclude>
-    <ClInclude Include="Com_Renderer_Mesh.h">
-      <Filter>GameObject\Component\Renderer</Filter>
+    <ClInclude Include="IRenderer.h">
+      <Filter>Component\Renderer</Filter>
     </ClInclude>
     <ClInclude Include="Script_Player.h">
-      <Filter>GameObject\Component\Script\Contents</Filter>
+      <Filter>Component\Script\Contents</Filter>
     </ClInclude>
     <ClInclude Include="Com_Camera.h">
-      <Filter>GameObject\Component\Camera</Filter>
+      <Filter>Component\Camera</Filter>
     </ClInclude>
     <ClInclude Include="Script_Camera.h">
-      <Filter>GameObject\Component\Script</Filter>
+      <Filter>Component\Script</Filter>
     </ClInclude>
     <ClInclude Include="Com_Renderer_Sprite.h">
-      <Filter>GameObject\Component\Renderer</Filter>
+      <Filter>Component\Renderer</Filter>
     </ClInclude>
     <ClInclude Include="GridScript.h">
       <Filter>Resource\Script</Filter>
@@ -529,25 +534,25 @@
       <Filter>Resource\Prefab</Filter>
     </ClInclude>
     <ClInclude Include="ICollider2D.h">
-      <Filter>GameObject\Component\Collider\2D</Filter>
+      <Filter>Component\Collider\2D</Filter>
     </ClInclude>
     <ClInclude Include="ICollider3D.h">
-      <Filter>GameObject\Component\Collider\3D</Filter>
+      <Filter>Component\Collider\3D</Filter>
     </ClInclude>
     <ClInclude Include="ICollider.h">
-      <Filter>GameObject\Component\Collider</Filter>
+      <Filter>Component\Collider</Filter>
     </ClInclude>
     <ClInclude Include="Player.h">
-      <Filter>GameObject\Component\Script\Contents</Filter>
+      <Filter>Component\Script\Contents</Filter>
     </ClInclude>
     <ClInclude Include="Monster.h">
-      <Filter>GameObject\Component\Script\Contents</Filter>
+      <Filter>Component\Script\Contents</Filter>
     </ClInclude>
     <ClInclude Include="Com_Animator2D.h">
-      <Filter>GameObject\Component\Animator</Filter>
+      <Filter>Component\Animator</Filter>
     </ClInclude>
     <ClInclude Include="Animation2D.h">
-      <Filter>GameObject\Component\Animator</Filter>
+      <Filter>Component\Animator</Filter>
     </ClInclude>
     <ClInclude Include="PaintShader.h">
       <Filter>Resource\Shaders\Compute</Filter>
@@ -556,7 +561,7 @@
       <Filter>Resource\Shaders\Compute\Base</Filter>
     </ClInclude>
     <ClInclude Include="Com_Light3D.h">
-      <Filter>GameObject\Component\Light</Filter>
+      <Filter>Component\Light</Filter>
     </ClInclude>
     <ClInclude Include="ConstBuffer.h">
       <Filter>GPU\Buffer</Filter>
@@ -566,7 +571,7 @@
     </ClInclude>
     <ClInclude Include="ParticleShader.h" />
     <ClInclude Include="Com_AudioListener.h">
-      <Filter>GameObject\Component\Audio</Filter>
+      <Filter>Component\Audio</Filter>
     </ClInclude>
     <ClInclude Include="FontWrapper.h">
       <Filter>FontWrapper</Filter>
@@ -617,7 +622,7 @@
       <Filter>Common\define</Filter>
     </ClInclude>
     <ClInclude Include="Components.h">
-      <Filter>GameObject\Component</Filter>
+      <Filter>Component</Filter>
     </ClInclude>
     <ClInclude Include="ResMgr.h">
       <Filter>Manager</Filter>
@@ -629,25 +634,22 @@
       <Filter>Manager</Filter>
     </ClInclude>
     <ClInclude Include="Com_Renderer_ParticleSystem.h">
-      <Filter>GameObject\Component\Renderer</Filter>
+      <Filter>Component\Renderer</Filter>
     </ClInclude>
     <ClInclude Include="IRes.h">
       <Filter>Resource</Filter>
-    </ClInclude>
-    <ClInclude Include="IRenderer.h">
-      <Filter>GameObject\Component\Renderer</Filter>
     </ClInclude>
     <ClInclude Include="ComMgr.h">
       <Filter>Manager</Filter>
     </ClInclude>
     <ClInclude Include="DefaultComInitializer.h">
-      <Filter>GameObject\Component</Filter>
+      <Filter>Component</Filter>
     </ClInclude>
     <ClInclude Include="Com_Transform.h">
-      <Filter>GameObject\Component\0. Transform</Filter>
+      <Filter>Component\0. Transform</Filter>
     </ClInclude>
     <ClInclude Include="Com_AudioSource.h">
-      <Filter>GameObject\Component\Audio</Filter>
+      <Filter>Component\Audio</Filter>
     </ClInclude>
     <ClInclude Include="AudioClip.h">
       <Filter>Resource\Audio</Filter>
@@ -804,21 +806,29 @@
       <Filter>Common</Filter>
     </ClInclude>
     <ClInclude Include="IAnimator.h">
-      <Filter>GameObject\Component\Animator</Filter>
+      <Filter>Component\Animator</Filter>
     </ClInclude>
     <ClInclude Include="Com_Animator3D.h">
-      <Filter>GameObject\Component\Animator</Filter>
+      <Filter>Component\Animator</Filter>
     </ClInclude>
     <ClInclude Include="Animation3DShader.h">
-      <Filter>GameObject\Component\Animator</Filter>
+      <Filter>Component\Animator</Filter>
     </ClInclude>
-    <ClInclude Include="ILight.h" />
     <ClInclude Include="Skeleton.h" />
     <ClInclude Include="ITransform.h">
-      <Filter>GameObject\Component\0. Transform</Filter>
+      <Filter>Component\0. Transform</Filter>
     </ClInclude>
-    <ClInclude Include="Com_Renderer_MultiMesh.h">
-      <Filter>GameObject\Component\Renderer</Filter>
+    <ClInclude Include="ILight.h">
+      <Filter>Component</Filter>
+    </ClInclude>
+    <ClInclude Include="Com_Renderer_Mesh.h">
+      <Filter>Component\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="Com_DummyTransform.h">
+      <Filter>Component\0. Transform</Filter>
+    </ClInclude>
+    <ClInclude Include="Com_Renderer_3DAnimMesh.h">
+      <Filter>Component\Renderer</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

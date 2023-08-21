@@ -16,7 +16,7 @@
 namespace gui
 {
 	guiCom_Renderer::guiCom_Renderer()
-		: guiComponent(eComponentType::Renderer)
+		: guiComponent(mh::define::eComponentType::Renderer)
 		, mMesh{}
 		, mMaterial{}
 	{

@@ -7,81 +7,18 @@
 
 namespace mh::object
 {
-	inline void Instantiate(define::eLayerType _type, GameObject* _pObj)
+	inline GameObject* Instantiate(define::eLayerType _type, GameObject* _pObj)
 	{
 		IScene* scene = SceneMgr::GetActiveScene();
-		Layer& layer = scene->GetLayer(_type);
-		layer.AddGameObject(_pObj);
-		_pObj->Init();
+
+		_pObj->AddToLayerRecursive(_type);
+
+		if(scene->IsInitialized())
+			_pObj->Init();
+
+		return _pObj;
 	}
 
-	template <typename T>
-	static T* Instantiate(define::eLayerType _type)
-	{
-		T* gameObject = new T();
-		IScene* scene = SceneMgr::GetActiveScene();
-		Layer& layer = scene->GetLayer(_type);
-		layer.AddGameObject(gameObject);
-		gameObject->Init();
-
-
-		return gameObject;
-	}
-
-	template <typename T>
-	static T* Instantiate(define::eLayerType _type, IScene* _scene)
-	{
-		T* gameObject = new T();
-		Layer& layer = _scene->GetLayer(_type);
-		layer.AddGameObject(gameObject);
-
-		return gameObject;
-	}
-
-	template <typename T>
-	static T* Instantiate(define::eLayerType _type, Com_Transform* _parent)
-	{
-		T* gameObject = new T();
-		IScene* scene = SceneMgr::GetActiveScene();
-		Layer& layer = scene->GetLayer(_type);
-		layer.AddGameObject(gameObject);
-
-		Com_Transform& tr = gameObject->GameObject::GetTransform();
-		tr.SetOwner(_parent);
-
-		return gameObject;
-	}
-
-	template <typename T>
-	static T* Instantiate(define::eLayerType _type, float3 _position, float3 _rotation)
-	{
-		T* gameObject = new T();
-		IScene* scene = SceneMgr::GetActiveScene();
-		Layer& layer = scene->GetLayer(_type);
-		layer.AddGameObject(gameObject);
-
-		Com_Transform& tr = gameObject->GameObject::GetTransform();
-		tr.SetRelativePos(_position);
-		tr.SetRelativeRotXYZ(_rotation);
-
-		return gameObject;
-	}
-
-	template <typename T>
-	static T* Instantiate(define::eLayerType _type, float3 _position, float3 _rotation, Com_Transform* _parent)
-	{
-		T* gameObject = new T();
-		IScene* scene = SceneMgr::GetActiveScene();
-		Layer& layer = scene->GetLayer(_type);
-		layer.AddGameObject(gameObject);
-
-		Com_Transform& tr = gameObject->GameObject::GetTransform();
-		tr.SetRelativePos(_position);
-		tr.SetRelativeRotXYZ(_rotation);
-		tr.SetOwner(_parent);
-
-		return gameObject;
-	}
 
 	static void Destroy(GameObject* _gameObject)
 	{

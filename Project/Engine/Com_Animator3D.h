@@ -25,7 +25,6 @@ namespace mh
 		virtual void Update() {};
 		virtual void FixedUpdate() override;
 
-
 		void SetSkeleton(Skeleton* _pSkeleton);
 		const Skeleton* GetSkeleton() const { return mSkeleton; }
 

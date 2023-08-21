@@ -84,7 +84,7 @@ namespace mh
 		}
 		const Json::Value& jVal = (*_pJVal);
 
-		auto SpriteData = Json::MH::LoadValueVector(_pJVal, JSON_KEY_PAIR(mSpriteSheet));
+		const auto& SpriteData = Json::MH::LoadValueVector(_pJVal, JSON_KEY_PAIR(mSpriteSheet));
 		mSpriteSheet = std::move(SpriteData);
 
 		

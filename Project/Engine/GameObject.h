@@ -7,6 +7,7 @@
 
 namespace mh
 {
+	class Layer;
 	class GameObject : public Entity
 	{
 		friend class GameObject;
@@ -23,7 +24,6 @@ namespace mh
 
 	public:
 		GameObject();
-
 		GameObject(const GameObject& _other);
 		CLONE(GameObject);
 
@@ -42,7 +42,7 @@ namespace mh
 		template <typename T>
 		inline T* AddComponent();
 		
-		IComponent* AddComponent(IComponent* _pCom);
+		IComponent* AddComponent(IComponent* _pCom, bool _bShared = false);
 		inline IComponent* AddComponent(const std::string_view _strKey);
 
 		//Com_Transform& GetTransform() { return mTransform; }
@@ -73,10 +73,13 @@ namespace mh
 		define::eLayerType GetLayerType() { return mLayerType; }
 		void SetLayerType(define::eLayerType _type) { mLayerType = _type; }
 
-		void AddChild(GameObject* _pObj);
-		
+		GameObject* AddChild(GameObject* _pObj);
 
-		bool IsMaster() const { return (bool)mParent; }
+		void SetLayerRecursive(define::eLayerType _type);
+		void AddToLayerRecursive();
+		void AddToLayerRecursive(define::eLayerType _type);
+
+		bool IsMaster() const { return (nullptr == mParent); }
 		GameObject* GetParent() { return mParent; }
 		const std::vector<GameObject*>& GetChilds() const { return mChilds; }
 
@@ -124,7 +127,7 @@ namespace mh
 		return AddComponent(pCom);
 	}
 
-	inline void GameObject::AddChild(GameObject* _pObj)
+	inline GameObject* GameObject::AddChild(GameObject* _pObj)
 	{
 		//nullptr이나 자기 자신을 인자로 호출했을 경우 오류 발생			
 		MH_ASSERT(_pObj && this != _pObj);
@@ -135,7 +138,10 @@ namespace mh
 
 		_pObj->SetParent(this);
 		mChilds.push_back(_pObj);
+		return _pObj;
 	}
+
+
 
 	inline void GameObject::RemoveChild(GameObject* _pObj)
 	{

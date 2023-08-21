@@ -25,7 +25,7 @@ namespace mh
 	{
 		{
 			// Main Com_Camera Game Object
-			GameObject* cameraObj = object::Instantiate<GameObject>(eLayerType::Com_Camera);
+			GameObject* cameraObj = object::Instantiate(eLayerType::Com_Camera, new GameObject);
 			cameraObj->SetName("MainCamera");
 			cameraObj->GetComponent<Com_Transform>()->SetRelativePos(float3(0.0f, 0.0f, -20.0f));
 			Com_Camera* cameraComp = cameraObj->AddComponent<Com_Camera>();
@@ -40,7 +40,7 @@ namespace mh
 
 		{
 			//Sprite 출력 테스트
-			GameObject* spriteObj = object::Instantiate<GameObject>(eLayerType::UI);
+			GameObject* spriteObj = object::Instantiate(eLayerType::UI, new GameObject);
 			spriteObj->SetName("SpriteTest");
 			spriteObj->GetComponent<Com_Transform>()->SetRelativePos(float3(0.f, 0.f, 100.f));
 

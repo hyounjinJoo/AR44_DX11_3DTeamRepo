@@ -28,50 +28,42 @@ namespace mh
 
 	Layer::~Layer()
 	{
-		for (GameObject* obj : mGameObjects)
+		auto iter = std::remove_if(mGameObjects.begin(), mGameObjects.end(),
+			[](GameObject* _obj)->bool
+			{
+				return !(_obj->IsMaster());
+			});
+		mGameObjects.erase(iter, mGameObjects.end());
+		for (size_t i = 0; i < mGameObjects.size(); ++i)
 		{
-			if (obj == nullptr)
-				continue;
-
-			delete obj;
-			obj = nullptr;
+			delete mGameObjects[i];
 		}
 	}
 
 	void Layer::Init()
 	{
-		for (GameObject* obj : mGameObjects)
+		for (size_t i = 0; i < mGameObjects.size(); ++i)
 		{
-			if (obj == nullptr)
-				continue;
-
-			obj->Init();
+			if (mGameObjects[i]->IsMaster())
+				mGameObjects[i]->Init();
 		}
 	}
 
 	void Layer::Update()
 	{
-		for (GameObject* obj : mGameObjects)
+		for (size_t i = 0; i < mGameObjects.size(); ++i)
 		{
-			if (obj == nullptr)
-				continue;
-			if (obj->GetState() != GameObject::eState::Active)
-				continue;
-
-			obj->Update();
+			if (mGameObjects[i]->IsMaster() && GameObject::eState::Active == mGameObjects[i]->GetState())
+				mGameObjects[i]->Update();
 		}
 	}
 
 	void Layer::FixedUpdate()
 	{
-		for (GameObject* obj : mGameObjects)
+		for (size_t i = 0; i < mGameObjects.size(); ++i)
 		{
-			if (obj == nullptr)
-				continue;
-			if (obj->GetState() != GameObject::eState::Active)
-				continue;
-
-			obj->FixedUpdate();
+			if (mGameObjects[i]->IsMaster() && GameObject::eState::Active == mGameObjects[i]->GetState())
+				mGameObjects[i]->FixedUpdate();
 		}
 
 		// sort z axis
@@ -81,14 +73,10 @@ namespace mh
 
 	void Layer::Render()
 	{
-		for (GameObject* obj : mGameObjects)
+		for (size_t i = 0; i < mGameObjects.size(); ++i)
 		{
-			if (obj == nullptr)
-				continue;
-			if (obj->GetState() != GameObject::eState::Active)
-				continue;
-
-			obj->Render();
+			if (GameObject::eState::Active == mGameObjects[i]->GetState())
+				mGameObjects[i]->Render();
 		}
 	}
 
