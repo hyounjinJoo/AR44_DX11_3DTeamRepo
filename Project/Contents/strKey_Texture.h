@@ -19,6 +19,7 @@ namespace mh::define::strKey::Texture
 	STRKEY evm090_00_01_BML_png = "evm090_00_01_BML.png";
 	STRKEY HPBar_png = "HPBar.png";
 	STRKEY Light_png = "Light.png";
+	STRKEY lurker_SunkenColony__bmp = "lurker(SunkenColony).bmp";
 	STRKEY Smile_png = "Smile.png";
 	STRKEY test_png = "test.png";
 	STRKEY Zelda_png = "Zelda.png";
@@ -46,6 +47,43 @@ namespace mh::define::strKey::Texture
 		STRKEY SPR_Vill_Warehouse02_Norm_tga = "FBXTex/SPR_Vill_Warehouse02_Norm.tga";
 		STRKEY SPR_Vill_Warehouse03_Diff_tga = "FBXTex/SPR_Vill_Warehouse03_Diff.tga";
 		STRKEY SPR_Vill_Warehouse03_Spec_tga = "FBXTex/SPR_Vill_Warehouse03_Spec.tga";
+	}
+
+	namespace Food_fbm
+	{
+		STRKEY evm064_00_00_BML_png = "Food.fbm/evm064_00_00_BML.png";
+		STRKEY evm170_00_00_BML_png = "Food.fbm/evm170_00_00_BML.png";
+		STRKEY evm170_00_00_NM_png = "Food.fbm/evm170_00_00_NM.png";
+		STRKEY evm170_00_01_BML_png = "Food.fbm/evm170_00_01_BML.png";
+		STRKEY evm170_00_01_NM_png = "Food.fbm/evm170_00_01_NM.png";
+		STRKEY evm571_00_00_BML_png = "Food.fbm/evm571_00_00_BML.png";
+		STRKEY evm571_00_00_NM_png = "Food.fbm/evm571_00_00_NM.png";
+		STRKEY stm730_082_05_BML_png = "Food.fbm/stm730_082_05_BML.png";
+		STRKEY stm730_082_05_NM_png = "Food.fbm/stm730_082_05_NM.png";
+		STRKEY stm730_117_00_BML_png = "Food.fbm/stm730_117_00_BML.png";
+		STRKEY stm730_117_00_NM_png = "Food.fbm/stm730_117_00_NM.png";
+		STRKEY stm730_123_00_BML_png = "Food.fbm/stm730_123_00_BML.png";
+		STRKEY stm730_123_00_NM_png = "Food.fbm/stm730_123_00_NM.png";
+		STRKEY stm730_165_00_BML_png = "Food.fbm/stm730_165_00_BML.png";
+		STRKEY stm730_165_00_NM_png = "Food.fbm/stm730_165_00_NM.png";
+		STRKEY stm730_170_00_BML_png = "Food.fbm/stm730_170_00_BML.png";
+		STRKEY stm730_170_00_NM_png = "Food.fbm/stm730_170_00_NM.png";
+		STRKEY stm730_276_00_00_BML_png = "Food.fbm/stm730_276_00_00_BML.png";
+		STRKEY stm730_276_00_00_NM_png = "Food.fbm/stm730_276_00_00_NM.png";
+		STRKEY stm730_278_00_BML_png = "Food.fbm/stm730_278_00_BML.png";
+		STRKEY stm730_278_00_NM_png = "Food.fbm/stm730_278_00_NM.png";
+		STRKEY stm740_082_00_BML_png = "Food.fbm/stm740_082_00_BML.png";
+		STRKEY stm740_082_00_NM_png = "Food.fbm/stm740_082_00_NM.png";
+		STRKEY stm760_024_00_00_BML_png = "Food.fbm/stm760_024_00_00_BML.png";
+		STRKEY stm760_024_00_00_NM_png = "Food.fbm/stm760_024_00_00_NM.png";
+		STRKEY stm760_024_00_01_BML_png = "Food.fbm/stm760_024_00_01_BML.png";
+		STRKEY stm760_024_00_01_NM_png = "Food.fbm/stm760_024_00_01_NM.png";
+		STRKEY stm760_025_00_00_BML_png = "Food.fbm/stm760_025_00_00_BML.png";
+		STRKEY stm760_025_00_00_NM_png = "Food.fbm/stm760_025_00_00_NM.png";
+		STRKEY stm760_025_00_01_BML_png = "Food.fbm/stm760_025_00_01_BML.png";
+		STRKEY stm760_025_00_01_NM_png = "Food.fbm/stm760_025_00_01_NM.png";
+		STRKEY stm760_026_00_BML_png = "Food.fbm/stm760_026_00_BML.png";
+		STRKEY stm760_026_00_NM_png = "Food.fbm/stm760_026_00_NM.png";
 	}
 
 	namespace house_fbm
@@ -112,6 +150,16 @@ namespace mh::define::strKey::Texture
 		STRKEY DXT1_m_slinger039_0000_XM_dds = "Player_Default.fbm/DXT1_m_slinger039_0000_XM.dds";
 		STRKEY DXT1_m_wst039_0001_BML_dds = "Player_Default.fbm/DXT1_m_wst039_0001_BML.dds";
 		STRKEY DXT1_m_wst039_0001_XM_dds = "Player_Default.fbm/DXT1_m_wst039_0001_XM.dds";
+	}
+
+	namespace Res1
+	{
+		namespace GrayCrystal_fbm
+		{
+			STRKEY stm520_012_01_00_BML_png = "Res1/GrayCrystal.fbm/stm520_012_01_00_BML.png";
+			STRKEY stm520_012_01_00_NM_png = "Res1/GrayCrystal.fbm/stm520_012_01_00_NM.png";
+		}
+
 	}
 
 }

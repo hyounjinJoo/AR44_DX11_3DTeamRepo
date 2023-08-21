@@ -9,6 +9,11 @@ namespace mh
 	}
 	Com_Renderer_MultiMesh::~Com_Renderer_MultiMesh()
 	{
+		for (size_t i = 0; i < mRenderers.size(); ++i)
+		{
+			if (mRenderers[i])
+				delete mRenderers[i];
+		}
 	}
 
 	void Com_Renderer_MultiMesh::AddMeshRenderer(Com_Renderer_Mesh* _pMesh)

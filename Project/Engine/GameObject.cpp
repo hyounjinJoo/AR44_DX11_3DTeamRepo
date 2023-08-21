@@ -30,7 +30,6 @@ namespace mh
 	{
 		mComponents.reserve((int)eComponentType::Scripts + 10);
 		mComponents.resize((int)eComponentType::Scripts);
-		
 	}
 
 
@@ -45,7 +44,7 @@ namespace mh
 	{
 		mComponents.reserve((int)eComponentType::Scripts + 10);
 		mComponents.resize((int)eComponentType::Scripts);
-		AddComponent(&mTransform);
+		//AddComponent(&mTransform);
 
 		//TODO: Clone
 		//1. 컴포넌트 목록 복사
@@ -67,7 +66,7 @@ namespace mh
 	GameObject::~GameObject()
 	{
 		//Transform은 제거 X
-		for (size_t i = (size_t)1; i < mComponents.size(); ++i)
+		for (size_t i = 0; i < mComponents.size(); ++i)
 		{
 			if (mComponents[i])
 				delete mComponents[i];

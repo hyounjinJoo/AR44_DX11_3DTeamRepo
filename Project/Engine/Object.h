@@ -61,8 +61,8 @@ namespace mh::object
 		layer.AddGameObject(gameObject);
 
 		Com_Transform& tr = gameObject->GameObject::GetTransform();
-		tr.SetPosition(_position);
-		tr.SetRotation(_rotation);
+		tr.SetRelativePos(_position);
+		tr.SetRelativeRotXYZ(_rotation);
 
 		return gameObject;
 	}
@@ -76,8 +76,8 @@ namespace mh::object
 		layer.AddGameObject(gameObject);
 
 		Com_Transform& tr = gameObject->GameObject::GetTransform();
-		tr.SetPosition(_position);
-		tr.SetRotation(_rotation);
+		tr.SetRelativePos(_position);
+		tr.SetRelativeRotXYZ(_rotation);
 		tr.SetOwner(_parent);
 
 		return gameObject;
