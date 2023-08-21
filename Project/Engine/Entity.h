@@ -12,6 +12,7 @@ namespace mh
 	{
 		STRKEY_DECLARE(mStrKey);
 	}
+
 	class Entity
 	{
 	public:
@@ -22,8 +23,8 @@ namespace mh
 
 		virtual ~Entity();
 
-		virtual define::eResult SaveJson(Json::Value* _pJson);
-		virtual define::eResult LoadJson(const Json::Value* _pJson);
+		virtual eResult SaveJson(Json::Value* _pJson);
+		virtual eResult LoadJson(const Json::Value* _pJson);
 
 		void SetKey(const std::string_view _strKey) { mStrKey = _strKey; }
 		const std::string& GetKey() const { return mStrKey; }
@@ -31,6 +32,7 @@ namespace mh
 
 	private:
 		std::string mStrKey;
+		
 
 		static UINT32 gIDNext;
 		const UINT32 mID;

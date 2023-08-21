@@ -1,8 +1,9 @@
-#pragma once
+		#pragma once
 #include "Entity.h"
 
 #include "Components.h"
 #include "ComMgr.h"
+#include "Com_Transform.h"
 
 namespace mh
 {
@@ -37,13 +38,14 @@ namespace mh
 		virtual void Render();
 
 	public:
-		Com_Transform& GetTransform() { return mTransform; }
 
 		template <typename T>
 		inline T* AddComponent();
 		
 		IComponent* AddComponent(IComponent* _pCom);
 		inline IComponent* AddComponent(const std::string_view _strKey);
+
+		Com_Transform& GetTransform() { return mTransform; }
 
 		template <typename T>
 		inline T* GetComponent();
@@ -88,14 +90,13 @@ namespace mh
 		define::eLayerType mLayerType;
 		bool mbDontDestroy;
 
-		Com_Transform mTransform;
+		Com_Transform				mTransform;
 		std::vector<IComponent*>	mComponents;
 		std::vector<IScript*>		mScripts;
 
 		GameObject* mParent;
 		std::vector<GameObject*> mChilds;
 	};
-
 
 	template <typename T>
 	T* GameObject::AddComponent()
@@ -105,27 +106,10 @@ namespace mh
 		if (eComponentType::UNKNOWN == order)
 			return nullptr;
 
-		T* pCom = nullptr;
-		if constexpr (std::is_base_of_v<IScript, T>)
-		{
-			pCom = new T;
-			pCom->SetKey(ComMgr::GetComName<T>());
-			mComponents.push_back(pCom);
-			mScripts.push_back(pCom);
-		}
-		else
-		{
-			//타입을 알 수 없거나 이미 그쪽에 컴포넌트가 들어가 있을 경우 생성 불가
-			if (eComponentType::UNKNOWN == order || nullptr != mComponents[(int)order])
-				return nullptr;
+		T* pCom = new T;
+		pCom->SetKey(ComMgr::GetComName<T>());
 
-			pCom = new T;
-			pCom->SetKey(ComMgr::GetComName<T>());
-			mComponents[(int)order] = pCom;
-		}
-
-		pCom->SetOwner(this);
-		return pCom;
+		return static_cast<T*>(AddComponent(static_cast<IComponent*>(pCom)));
 	}
 
 	inline IComponent* GameObject::AddComponent(const std::string_view _strKey)
@@ -197,7 +181,7 @@ namespace mh
 	template<typename T>
 	inline eComponentType GameObject::GetComponentType()
 	{
-		if constexpr (std::is_base_of_v<Com_Transform, T>)
+		if constexpr (std::is_base_of_v<ITransform, T>)
 		{
 			return eComponentType::Transform;
 		}
@@ -209,7 +193,7 @@ namespace mh
 		{
 			return eComponentType::Animator;
 		}
-		else if constexpr (std::is_base_of_v<Com_Light, T>)
+		else if constexpr (std::is_base_of_v<Com_Light3D, T>)
 		{
 			return eComponentType::Light;
 		}

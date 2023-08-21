@@ -6,7 +6,6 @@
 namespace mh::define
 {
 	STRKEY ComponentPrefix = "Com_";
-
 	enum class eComponentType
 	{
 		UNKNOWN = -1,
@@ -14,13 +13,12 @@ namespace mh::define
 		Transform,
 		Collider,
 		Animator,
-		Light,
+		Light,	
 		Camera,
+		Renderer,
 
 		AudioSource,
 		AudioListener,
-
-		Renderer,
 
 		Scripts,
 
@@ -38,7 +36,7 @@ namespace mh::define
 		//Com_Renderer_ParticleSystem,
 		//Com_AudioListener,
 		//Com_AudioSource,
-		//Com_Light,
+		//Com_Light3D,
 		//UI,
 		////FadeOut,FadeIn
 		//IScript,
@@ -73,11 +71,15 @@ namespace mh::define
 				STRKEY_DECLARE(Com_AudioListener);
 				STRKEY_DECLARE(Com_AudioSource);
 				STRKEY_DECLARE(Com_Camera);
-				STRKEY_DECLARE(Com_Light);
+				STRKEY_DECLARE(Com_Light3D);
 				STRKEY_DECLARE(Com_Renderer_Mesh);
+				STRKEY_DECLARE(Com_Renderer_MultiMesh);
 				STRKEY_DECLARE(Com_Renderer_ParticleSystem);
 				STRKEY_DECLARE(Com_Renderer_Sprite);
 				STRKEY_DECLARE(Com_Transform);
+
+				STRKEY_DECLARE(Script_Player);
+				STRKEY_DECLARE(Script_Camera);
 			}
 		}
 	}

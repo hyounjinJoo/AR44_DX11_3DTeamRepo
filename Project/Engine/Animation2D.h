@@ -47,12 +47,16 @@ namespace mh
 			, float2 _leftTop, float2 _size, float2 _offset
 			, uint _spriteLegth, float _duration);
 
-		void BindShader();
+		//아틀라스를 균일하게 조각조각 내줌
+		void CreateXY(const std::string_view _name, std::shared_ptr<Texture> _atlas, UINT _uColTotal, UINT _uRowTotal, float _duration);
+
+		void BindData();
 		void Reset();
-		void Clear();
+		void UnBindData();
 
 		bool IsComplete() const { return mbComplete; }
 		const std::string& GetAnimationName() const { return mAnimationName; }
+		inline float2 GetSpriteSize(UINT _spriteIdx);
 
 	private:
 		class Com_Animator2D* mAnimator;
@@ -63,4 +67,14 @@ namespace mh
 		float mTime;
 		bool mbComplete;
 	};
+
+	inline float2 Animation2D::GetSpriteSize(UINT _spriteIdx)
+	{
+		float2 retSize{};
+		if (_spriteIdx < (UINT)mSpriteSheet.size())
+		{
+			retSize = mSpriteSheet[_spriteIdx].AtlasSize;
+		}
+		return retSize;
+	}
 }

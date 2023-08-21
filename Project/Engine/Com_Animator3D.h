@@ -9,6 +9,7 @@ namespace mh
 {
 	class StructBuffer;
 	class Mesh;
+	class Skeleton;
 	class Com_Animator3D :
 		public IAnimator
 	{
@@ -23,27 +24,26 @@ namespace mh
 		virtual void Init() override;
 		virtual void Update() {};
 		virtual void FixedUpdate() override;
-		virtual void Render() {};
 
 
-		void SetBones(const std::vector<define::tMTBone>* _vecBones) { m_pVecBones = _vecBones; m_vecFinalBoneMat.resize(m_pVecBones->size()); }
-		void SetAnimClip(const std::vector<define::tMTAnimClip>* _vecAnimClip);
+		void SetSkeleton(Skeleton* _pSkeleton);
+		const Skeleton* GetSkeleton() const { return mSkeleton; }
+
 		void SetClipTime(int _iClipIdx, float _fTime) { m_vecClipUpdateTime[_iClipIdx] = _fTime; }
 
 		StructBuffer* GetFinalBoneMat() { return m_pBoneFinalMatBuffer; }
-		UINT GetBoneCount() { return (UINT)m_pVecBones->size(); }
+		//UINT GetBoneCount() { return (UINT)m_pVecBones->size(); }
 
-		virtual void Binds();
-		virtual void Clear();
-
-
+		virtual void BindData() override;
+		virtual void UnBindData() override;
 
 	private:
-		void check_mesh(std::shared_ptr<Mesh> _pMesh);
+		bool CheckMesh();
 
     private:
-        const std::vector<define::tMTBone>* m_pVecBones;
-        const std::vector<define::tMTAnimClip>* m_pVecClip;
+		Skeleton* mSkeleton;
+        //const std::vector<define::tMTBone>* m_pVecBones;
+        //const std::vector<define::tMTAnimClip>* m_pVecClip;
 
         std::vector<float>				m_vecClipUpdateTime;
         std::vector<MATRIX>				m_vecFinalBoneMat; // 텍스쳐에 전달할 최종 행렬정보

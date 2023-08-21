@@ -41,7 +41,7 @@ namespace mh
 
 		//Json::Value& jVal = *_pJVal;
 
-		//Json::MHSaveValue(_pJVal, JSONVAL(mType));
+		//Json::MH::SaveValue(_pJVal, JSONVAL(mType));
 
 		return eResult::Success;
 	}
@@ -63,24 +63,10 @@ namespace mh
 
 		//const Json::Value& jVal = (*_pJVal);
 
-		//Json::MHLoadValue(_pJVal, JSONVAL(mType));
+		//Json::MH::LoadValue(_pJVal, JSONVAL(mType));
 		
 		return eResult::Success;
 	}
 
-	void ICollider3D::Init()
-	{
-	}
 
-	void ICollider3D::Update()
-	{
-	}
-
-	void ICollider3D::FixedUpdate()
-	{
-	}
-
-	void ICollider3D::Render()
-	{
-	}
 }

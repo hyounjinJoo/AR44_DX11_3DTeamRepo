@@ -17,6 +17,8 @@ namespace gui
 {
 	guiCom_Renderer::guiCom_Renderer()
 		: guiComponent(eComponentType::Renderer)
+		, mMesh{}
+		, mMaterial{}
 	{
 	}
 
@@ -42,7 +44,7 @@ namespace gui
 			//	return;
 
 
-			mMaterial = meshRenderer->GetMaterial(0);
+			mMaterial = meshRenderer->GetCurrentMaterial(0);
 			mMesh = meshRenderer->GetMesh();
 		}
 	}

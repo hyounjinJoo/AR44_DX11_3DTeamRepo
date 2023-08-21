@@ -215,6 +215,8 @@ void Skinning(inout float3 _vPos, inout float3 _vTangent, inout float3 _vBinorma
 	if (_iRowIdx == -1)
 		return;
 
+	//일반적으로 인간 모델링에 한해서는 한 정점이 4개의 본에 영향을 받도록 약속해놓음.
+	//인간형 모델이 아닌 경우에는 더 많을 수 있음.
 	for (int i = 0; i < 4; ++i)
 	{
 		if (0.f == _vWeight[i])

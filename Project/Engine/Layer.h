@@ -19,7 +19,6 @@ namespace mh
 		const std::vector<GameObject*>& GetGameObjects() { return mGameObjects; }
 		std::vector<GameObject*> GetDontDestroyGameObjects();
 
-
 	private:
 		std::vector<GameObject*> mGameObjects;
 	};

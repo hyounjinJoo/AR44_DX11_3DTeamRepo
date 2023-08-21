@@ -30,13 +30,15 @@ namespace mh
 
 		void BindDataSRV(uint _SRVSlot, eShaderStageFlag_ _stageFlag);
 		void BindDataUAV(uint _UAVSlot = 0u);
-		void UnBind();
+		void UnBindData();
 
 
 		void SetTexture(Microsoft::WRL::ComPtr<ID3D11Texture2D> _texture) { mTexture = _texture; }
 
 		uint GetHeight() const { return mDesc.Height; }
 		uint GetWidth() const { return mDesc.Width; }
+		uint2 GetSizeUint() const { return uint2{ mDesc.Width, mDesc.Height }; }
+		float2 GetSizeFloat() const { return float2{ (float)mDesc.Width, (float)mDesc.Height }; }
 
 		ComPtr<ID3D11Texture2D> GetTexture() { return mTexture; }
 		ComPtr<ID3D11DepthStencilView> GetDSV() { return mDSV; }

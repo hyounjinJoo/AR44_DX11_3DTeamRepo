@@ -1,7 +1,6 @@
-
 #include "PCH_Engine.h"
-
 #include "Com_Renderer_ParticleSystem.h"
+
 #include "Mesh.h"
 #include "ResMgr.h"
 #include "Material.h"
@@ -37,7 +36,7 @@ namespace mh
 	}
 
 	Com_Renderer_ParticleSystem::Com_Renderer_ParticleSystem(const Com_Renderer_ParticleSystem& _other)
-		: IRenderer(_other)
+		: Com_Renderer_Mesh(_other)
 		, mMaxParticles(_other.mMaxParticles)
 		, mStartSize(_other.mStartSize)
 		, mStartColor(_other.mStartColor)
@@ -102,16 +101,16 @@ namespace mh
 		////누적시간
 		//float mElapsedTime;
 
-		Json::MHSaveValue(_pJVal, JSON_KEY_PAIR(mStartSize));
-		Json::MHSaveValue(_pJVal, JSON_KEY_PAIR(mStartColor));
-		Json::MHSaveValue(_pJVal, JSON_KEY_PAIR(mSimulationSpace));
-		Json::MHSaveValue(_pJVal, JSON_KEY_PAIR(mMaxParticles));
-		Json::MHSaveValue(_pJVal, JSON_KEY_PAIR(mStartLifeTime));
-		Json::MHSaveValue(_pJVal, JSON_KEY_PAIR(mFrequency));
-		Json::MHSaveValue(_pJVal, JSON_KEY_PAIR(mRadius));
-		Json::MHSaveValue(_pJVal, JSON_KEY_PAIR(mStartSpeed));
-		Json::MHSaveValue(_pJVal, JSON_KEY_PAIR(mTime));
-		Json::MHSaveValue(_pJVal, JSON_KEY_PAIR(mElapsedTime));
+		Json::MH::SaveValue(_pJVal, JSON_KEY_PAIR(mStartSize));
+		Json::MH::SaveValue(_pJVal, JSON_KEY_PAIR(mStartColor));
+		Json::MH::SaveValue(_pJVal, JSON_KEY_PAIR(mSimulationSpace));
+		Json::MH::SaveValue(_pJVal, JSON_KEY_PAIR(mMaxParticles));
+		Json::MH::SaveValue(_pJVal, JSON_KEY_PAIR(mStartLifeTime));
+		Json::MH::SaveValue(_pJVal, JSON_KEY_PAIR(mFrequency));
+		Json::MH::SaveValue(_pJVal, JSON_KEY_PAIR(mRadius));
+		Json::MH::SaveValue(_pJVal, JSON_KEY_PAIR(mStartSpeed));
+		Json::MH::SaveValue(_pJVal, JSON_KEY_PAIR(mTime));
+		Json::MH::SaveValue(_pJVal, JSON_KEY_PAIR(mElapsedTime));
 
 		return eResult::Success;
 	}
@@ -132,20 +131,20 @@ namespace mh
 			return result;
 		}
 
-		if (false == Json::MHLoadValue(_pJVal, JSON_KEY_PAIR(mStartSize)))
+		if (false == Json::MH::LoadValue(_pJVal, JSON_KEY_PAIR(mStartSize)))
 		{
 			mStartSize = float4::One;
 		}
 
-		Json::MHLoadValue(_pJVal, JSON_KEY_PAIR(mStartColor));
-		Json::MHLoadValue(_pJVal, JSON_KEY_PAIR(mSimulationSpace));
-		Json::MHLoadValue(_pJVal, JSON_KEY_PAIR(mMaxParticles));
-		Json::MHLoadValue(_pJVal, JSON_KEY_PAIR(mStartLifeTime));
-		Json::MHLoadValue(_pJVal, JSON_KEY_PAIR(mFrequency));
-		Json::MHLoadValue(_pJVal, JSON_KEY_PAIR(mRadius));
-		Json::MHLoadValue(_pJVal, JSON_KEY_PAIR(mStartSpeed));
-		Json::MHLoadValue(_pJVal, JSON_KEY_PAIR(mTime));
-		Json::MHLoadValue(_pJVal, JSON_KEY_PAIR(mElapsedTime));
+		Json::MH::LoadValue(_pJVal, JSON_KEY_PAIR(mStartColor));
+		Json::MH::LoadValue(_pJVal, JSON_KEY_PAIR(mSimulationSpace));
+		Json::MH::LoadValue(_pJVal, JSON_KEY_PAIR(mMaxParticles));
+		Json::MH::LoadValue(_pJVal, JSON_KEY_PAIR(mStartLifeTime));
+		Json::MH::LoadValue(_pJVal, JSON_KEY_PAIR(mFrequency));
+		Json::MH::LoadValue(_pJVal, JSON_KEY_PAIR(mRadius));
+		Json::MH::LoadValue(_pJVal, JSON_KEY_PAIR(mStartSpeed));
+		Json::MH::LoadValue(_pJVal, JSON_KEY_PAIR(mTime));
+		Json::MH::LoadValue(_pJVal, JSON_KEY_PAIR(mElapsedTime));
 
 		return eResult::Success;
 	}
@@ -215,7 +214,7 @@ namespace mh
 		}
 
 		mMaxParticles = mBuffer->GetStride();
-		float3 pos = GetOwner()->GetTransform().GetRelativePos();
+		float3 pos = GetOwner()->GetComponent<Com_Transform>()->GetRelativePos();
 		mCBData.worldPosition = float4(pos.x, pos.y, pos.z, 1.0f);
 		mCBData.maxParticles = mMaxParticles;
 		mCBData.radius = mRadius;
@@ -238,12 +237,15 @@ namespace mh
 
 	void Com_Renderer_ParticleSystem::Render()
 	{
-		GetOwner()->GetTransform().SetConstBuffer();
+		if (false == IsRenderReady())
+			return;
+
+		GetOwner()->GetComponent<Com_Transform>()->BindData();
 		mBuffer->BindDataSRV(Register_t_atlasTexture, eShaderStageFlag::GS);
 
-		GetMaterial(0)->Bind();
+		GetCurrentMaterial(0)->BindData();
 		GetMesh()->RenderInstanced(0u, mMaxParticles);
 
-		mBuffer->UnBind();
+		mBuffer->UnBindData();
 	}
 }

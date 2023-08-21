@@ -1,6 +1,6 @@
 #include "PCH_Engine.h"
 
-#include "Com_Light.h"
+#include "Com_Light3D.h"
 #include "Com_Transform.h"
 #include "GameObject.h"
 #include "RenderMgr.h"
@@ -14,8 +14,8 @@
 
 namespace mh
 {
-	Com_Light::Com_Light()
-		: IComponent(eComponentType::Light)
+	Com_Light3D::Com_Light3D()
+		: ILight(eDimensionType::_3D)
 		, mVolumeMesh()
 		, mLightMaterial()
 		, mIndex()
@@ -24,8 +24,8 @@ namespace mh
 
 	}
 
-	Com_Light::Com_Light(const Com_Light& _other)
-		:IComponent(eComponentType::Light)
+	Com_Light3D::Com_Light3D(const Com_Light3D& _other)
+		: ILight(_other)
 		, mIndex(_other.mIndex)
 		, mAttribute(_other.mAttribute)
 		, mVolumeMesh(_other.mVolumeMesh)
@@ -34,12 +34,12 @@ namespace mh
 		RenderMgr::AddLight(this);
 	}
 
-	Com_Light::~Com_Light()
+	Com_Light3D::~Com_Light3D()
 	{
 		RenderMgr::RemoveLight(this);
 	}
 
-	eResult Com_Light::SaveJson(Json::Value* _pJVal)
+	eResult Com_Light3D::SaveJson(Json::Value* _pJVal)
 	{
 		if (nullptr == _pJVal)
 		{
@@ -54,12 +54,12 @@ namespace mh
 
 		Json::Value& jVal = *_pJVal;
 
-		Json::MHSaveValue(_pJVal, JSON_KEY_PAIR(mAttribute));
+		Json::MH::SaveValue(_pJVal, JSON_KEY_PAIR(mAttribute));
 
 		return eResult::Success;
 	}
 
-	eResult Com_Light::LoadJson(const Json::Value* _pJVal)
+	eResult Com_Light3D::LoadJson(const Json::Value* _pJVal)
 	{
 
 		if (nullptr == _pJVal)
@@ -75,12 +75,12 @@ namespace mh
 			return result;
 		}
 	
-		Json::MHLoadValue(_pJVal, JSON_KEY_PAIR(mAttribute));
+		Json::MH::LoadValue(_pJVal, JSON_KEY_PAIR(mAttribute));
 
 		SetType((eLightType)mAttribute.lightType);
 
 		//불러오기 실패 시 기본값으로 적용
-		if (false == Json::MHLoadValue(_pJVal, JSON_KEY_PAIR(mAttribute.lightType)))
+		if (false == Json::MH::LoadValue(_pJVal, JSON_KEY_PAIR(mAttribute.lightType)))
 		{
 			mAttribute.lightType = (int)eLightType::Directional;
 		}
@@ -88,41 +88,32 @@ namespace mh
 		return eResult::Success;
 	}
 
-	void Com_Light::Init()
+	void Com_Light3D::FixedUpdate()
 	{
-
-	}
-
-	void Com_Light::Update()
-	{
-
-	}
-
-	void Com_Light::FixedUpdate()
-	{
-		Com_Transform& tr = GetOwner()->GetTransform();
+		Com_Transform* tr = GetOwner()->GetComponent<Com_Transform>();
 
 		if (eLightType::Point == (eLightType)mAttribute.lightType)
 		{
-			tr.SetRelativeScale(float3(mAttribute.radius * 5.f));
+			tr->SetRelativeScale(float3(mAttribute.radius * 5.f));
 		}
 
-		float3 position = tr.GetRelativePos();
+		float3 position = tr->GetRelativePos();
 		mAttribute.position = float4(position.x, position.y, position.z, 1.0f);
-		mAttribute.direction = float4(tr.Forward().x, tr.Forward().y, tr.Forward().z, 0.0f);
+		mAttribute.direction = float4(tr->Forward().x, tr->Forward().y, tr->Forward().z, 0.0f);
 
 		RenderMgr::PushLightAttribute(mAttribute);
 	}
 
-	void Com_Light::Render()
+
+	void Com_Light3D::Render()
 	{
 		if (nullptr == mLightMaterial)
 		{
 			return;
 		}
 
-		Com_Transform* tr = GetOwner()->GetComponent<Com_Transform>();
-		tr->SetConstBuffer();
+		//Com_Transform* tr = GetOwner()->GetComponent<Com_Transform>();
+		//tr->BindData();
 
 		ConstBuffer* cb = RenderMgr::GetConstBuffer(eCBType::numberOfLight);
 
@@ -134,12 +125,12 @@ namespace mh
 		cb->BindData(eShaderStageFlag::VS | eShaderStageFlag::PS);
 
 		mVolumeMesh->BindBuffer();
-		mLightMaterial->Bind();
+		mLightMaterial->BindData();
 		mVolumeMesh->Render();
 	}
 
 
-	void Com_Light::SetType(eLightType type)
+	void Com_Light3D::SetType(eLightType type)
 	{
 		mAttribute.lightType = (int)type;
 		if (mAttribute.lightType == (int)eLightType::Directional)

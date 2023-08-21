@@ -5,11 +5,18 @@
 
 namespace mh
 {
+	enum class eMaterialMode
+	{
+		Shared,
+		Dynamic
+	};
 	struct tMaterialSet
 	{
-		std::shared_ptr<Material> SharedMaterial;
-		std::shared_ptr<Material> DynamicMaterial;
-		std::shared_ptr<Material> CurrentMaterial;
+		std::shared_ptr<Material>	SharedMaterial;
+		std::unique_ptr<Material>	DynamicMaterial;
+		Material*					CurrentMaterial;
+
+		eMaterialMode MaterialMode;
 	};
 
 	class IRenderer : public IComponent
@@ -21,45 +28,9 @@ namespace mh
 
 		virtual ~IRenderer();
 
-		virtual eResult SaveJson(Json::Value* _pJson) override;
-		virtual eResult LoadJson(const Json::Value* _pJson) override;
-
-
-		//virtual void Init() override {};
-		//virtual void Update() {};
-		//virtual void FixedUpdate() override;
 		virtual void Render() = 0;
 
-		void SetMesh(const std::shared_ptr<Mesh> _mesh);
-		inline void SetMaterial(const std::shared_ptr <Material> _Mtrl, uint _idx);
-		std::shared_ptr<Mesh> GetMesh() const { return mMesh; }
-		std::shared_ptr<Material> GetMaterial(UINT _idx);
-		UINT GetMaterialCount() { return (UINT)mMaterials.size(); }
-
-		
-	private:
-		std::shared_ptr <Mesh> mMesh;
-		std::vector<tMaterialSet> mMaterials;
-
-		//std::shared_ptr <Material> mMaterial;
+		virtual define::eRenderingMode GetRenderingMode() = 0;
 	};
-
-		inline void IRenderer::SetMaterial(const std::shared_ptr<Material> _Mtrl, uint _idx)
-	{
-		MH_ASSERT(mMaterials.size() > _idx);
-
-		mMaterials[_idx].SharedMaterial = _Mtrl;
-		mMaterials[_idx].CurrentMaterial = _Mtrl;
-	}
-
-	inline std::shared_ptr<Material> IRenderer::GetMaterial(UINT _idx)
-	{
-		if (nullptr == mMaterials[_idx].CurrentMaterial)
-		{
-			mMaterials[_idx].CurrentMaterial = mMaterials[_idx].SharedMaterial;
-		}
-
-		return mMaterials[_idx].CurrentMaterial;
-	}
 
 }

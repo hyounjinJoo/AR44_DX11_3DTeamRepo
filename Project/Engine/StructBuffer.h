@@ -14,14 +14,14 @@ namespace mh
     {
         eStructBufferType eSBufferType;
 
-        define::eShaderStageFlag_ TargetStage;
+        define::eShaderStageFlag_ TargetStageSRV;
 
         int REGISLOT_t_SRV;
         int REGISLOT_u_UAV;
 
         tSBufferDesc()
             : eSBufferType()
-            , TargetStage(define::eShaderStageFlag::ALL)
+            , TargetStageSRV(define::eShaderStageFlag::ALL)
             , REGISLOT_t_SRV(-1)
             , REGISLOT_u_UAV(-1)
         {}
@@ -44,8 +44,8 @@ namespace mh
         void SetDesc(const tSBufferDesc& _tDesc);
 
         //Setter Getter Adder
-        void SetPipelineTarget(define::eShaderStageFlag_ _StageFlag) { mSBufferDesc.TargetStage = _StageFlag; }
-        void AddPipelineTarget(define::eShaderStageFlag_ _StageFlag) { mSBufferDesc.TargetStage |= _StageFlag; }
+        void SetPipelineTarget(define::eShaderStageFlag_ _StageFlag) { mSBufferDesc.TargetStageSRV = _StageFlag; }
+        void AddPipelineTarget(define::eShaderStageFlag_ _StageFlag) { mSBufferDesc.TargetStageSRV |= _StageFlag; }
 
         uint GetCapacity() const { return mElementCapacity; }
 
@@ -71,7 +71,7 @@ namespace mh
         //Bind buffer with UAV Mode to Compute shader 
         void BindDataUAV(int _UAVSlot = -1);
 
-        void UnBind();
+        void UnBindData();
 
     private:
         void SetDefaultDesc();

@@ -7,7 +7,7 @@
 
 //C++
 #ifdef __cplusplus
-
+#include "Simplemath.h"
 
 using float2 = mh::math::Vector2;
 using float3 = mh::math::Vector3;
@@ -118,7 +118,8 @@ RWStructuredBuffer<_structName> _bufferName : register(_registerType##_registerN
 #define SAMPLER(_bufferName, _registerType, _registerNumber)\
 SamplerState _bufferName : register(_registerType##_registerNumber)
 
-#define alignas(_Num)
+#define alignas(_Num) 
+
 #endif
 
 #endif

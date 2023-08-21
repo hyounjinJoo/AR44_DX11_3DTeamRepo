@@ -18,7 +18,7 @@ namespace mh
 	{
 	}
 
-	bool ParticleShader::Binds()
+	bool ParticleShader::BindData()
 	{
 		mBuffer->BindDataUAV(0);
 		mSharedBuffer->BindDataUAV(1);
@@ -31,7 +31,7 @@ namespace mh
 
 	void ParticleShader::Clear()
 	{
-		mBuffer->UnBind();
-		mSharedBuffer->UnBind();
+		mBuffer->UnBindData();
+		mSharedBuffer->UnBindData();
 	}
 }

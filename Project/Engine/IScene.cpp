@@ -8,53 +8,54 @@ namespace mh
 	IScene::IScene()
 		: mbInitialized()
 	{
-		mLayers.resize((uint)define::eLayerType::END);
 	}
 
 	IScene::~IScene()
 	{
-
 	}
 
-	void IScene::Init()
+	void IScene::SceneInit()
 	{
-		mbInitialized = true;
+		Init();
 		for (Layer& layer : mLayers)
 		{
 			layer.Init();
 		}
+
+		mbInitialized = true;
 	}
-	void IScene::Update()
+	void IScene::SceneUpdate()
 	{
+		Update();
+
 		for (Layer& layer : mLayers)
 		{
 			layer.Update();
 		}
 	}
-	void IScene::FixedUpdate()
+	void IScene::SceneFixedUpdate()
 	{
+		FixedUpdate();
 		for (Layer& layer : mLayers)
 		{
 			layer.FixedUpdate();
 		}
 	}
-	void IScene::Render()
+	void IScene::SceneRender()
 	{
+		Render();
 		for (Layer& layer : mLayers)
 		{
 			layer.Render();
 		}
 	}
-	void IScene::Destroy()
+	void IScene::SceneDestroy()
 	{
+		Destroy();
 		for (Layer& layer : mLayers)
 		{
 			layer.Destroy();
 		}
-	}
-
-	void IScene::OnExit()
-	{
 	}
 
 	void IScene::AddGameObject(GameObject* _gameObj, const define::eLayerType _type)

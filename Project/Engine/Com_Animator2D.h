@@ -46,7 +46,6 @@ namespace mh
 		virtual void Init() override;
 		virtual void Update() override;
 		virtual void FixedUpdate() override;
-		virtual void Render() override;
 
 		bool Create(const std::string_view _name
 			, std::shared_ptr<Texture> _atlas
@@ -55,12 +54,14 @@ namespace mh
 			, uint _spriteLength
 			, float _duration);
 
+		bool CreateXY(const std::string_view _name, std::shared_ptr<Texture> _atlas, UINT _uColTotal, UINT _uRowTotal, float _duration);
+
 		Animation2D* FindAnimation(const std::string_view _name) const;
 		tEvents* FindEvents(const std::string_view _name) const; 
 		void Play(const std::string_view _name, bool _loop = true);
 
-		virtual void Binds();
-		virtual void Clear();
+		virtual void BindData() override;
+		virtual void UnBindData() override;
 
 		std::function<void()>& GetStartEvent(const std::string_view _name) const;
 		std::function<void()>& GetCompleteEvent(const std::string_view _name) const;

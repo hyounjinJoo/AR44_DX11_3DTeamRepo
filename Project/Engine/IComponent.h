@@ -17,14 +17,13 @@ namespace mh
 
 		virtual ~IComponent();
 
-		virtual define::eResult SaveJson(Json::Value* _pJson) override;
-		virtual define::eResult LoadJson(const Json::Value* _pJson) override;
+		virtual eResult SaveJson(Json::Value* _pJson) override;
+		virtual eResult LoadJson(const Json::Value* _pJson) override;
 
-
-		virtual void Init() = 0;
-		virtual void Update() = 0;
+		virtual void Init() {};
+		virtual void Update() {};
 		virtual void FixedUpdate() = 0;
-		virtual void Render() = 0;
+		virtual void Render() {};
 
 		define::eComponentType GetComType() const { return mType; };
 

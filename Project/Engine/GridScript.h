@@ -12,8 +12,6 @@ namespace mh
 
 		virtual void Init();
 		virtual void Update();
-		virtual void FixedUpdate();
-		virtual void Render();
 
 		void SetCamera(Com_Camera* camera) { mCamera = camera; }
 

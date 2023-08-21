@@ -14,7 +14,7 @@ namespace mh
 	{
 	}
 
-	bool PaintShader::Binds()
+	bool PaintShader::BindData()
 	{
 		mTarget->BindDataUAV(0);
 
@@ -27,6 +27,6 @@ namespace mh
 
 	void PaintShader::Clear()
 	{
-		mTarget->UnBind();
+		mTarget->UnBindData();
 	}
 }

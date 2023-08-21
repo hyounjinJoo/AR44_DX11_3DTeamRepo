@@ -174,11 +174,14 @@ namespace mh
 			,float3{-0.5f, -0.5f, 0.0f}
 		};
 
-		Com_Transform& leftTr = _left->GetOwner()->GetTransform();
-		Com_Transform& rightTr = _right->GetOwner()->GetTransform();
+		Com_Transform* leftTr = _left->GetOwner()->GetComponent<Com_Transform>();
+		Com_Transform* rightTr = _right->GetOwner()->GetComponent<Com_Transform>();
+		if (false == (leftTr && rightTr))
+			return false;
 
-		MATRIX leftMat = leftTr.GetWorldMat();
-		MATRIX rightMat = rightTr.GetWorldMat();
+
+		MATRIX leftMat = leftTr->GetWorldMat();
+		MATRIX rightMat = rightTr->GetWorldMat();
 
 
 
@@ -207,7 +210,7 @@ namespace mh
 		for (int index = 0; index < 4; index++)
 			Axis[index].z = 0.0f;
 
-		float3 vc = leftTr.GetWorldPos() - rightTr.GetWorldPos();
+		float3 vc = leftTr->GetWorldPos() - rightTr->GetWorldPos();
 		vc.z = 0.0f;
 
 		float3 centerDir = vc;

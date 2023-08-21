@@ -12,7 +12,7 @@ namespace mh
 	
 	class Com_Camera;
 
-	class Com_Light;
+	class Com_Light3D;
 	class GameObject;
 	
 	
@@ -53,10 +53,10 @@ namespace mh
 
 		//Renderer
 		static void PushLightAttribute(const tLightAttribute& lightAttribute) { mLightAttributes.push_back(lightAttribute); }
-		static void AddLight(Com_Light* _pComLight) { if (_pComLight) mLights.push_back(_pComLight); }
-		static void RemoveLight(Com_Light* _pComLight);
+		static void AddLight(Com_Light3D* _pComLight) { if (_pComLight) mLights.push_back(_pComLight); }
+		static void RemoveLight(Com_Light3D* _pComLight);
 
-		static const std::vector<Com_Light*>& GetLights() { return mLights; }
+		static const std::vector<Com_Light3D*>& GetLights() { return mLights; }
 
 
 		static void BindLights();
@@ -104,7 +104,7 @@ namespace mh
 
 		static std::unique_ptr<MultiRenderTarget> mMultiRenderTargets[(uint)eMRTType::END];
 
-		static std::vector<Com_Light*>			mLights;
+		static std::vector<Com_Light3D*>			mLights;
 		static std::vector<tLightAttribute>		mLightAttributes;
 		static std::unique_ptr<StructBuffer>	mLightsBuffer;
 
