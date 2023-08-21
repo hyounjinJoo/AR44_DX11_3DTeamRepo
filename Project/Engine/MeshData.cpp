@@ -268,7 +268,8 @@ namespace mh
 			ERROR_MESSAGE_W(L"Skeleton 로드 실패.");
 			return result;
 		}
-		mSkeleton->Save(_fileName);
+		if(mSkeleton)
+			mSkeleton->Save(_fileName);
 
 		//컨테이너 갯수만큼 순회를 돌아준다.
 		int contCount = loader.GetContainerCount();

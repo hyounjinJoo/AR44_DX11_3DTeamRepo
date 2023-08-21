@@ -31,7 +31,7 @@ namespace mh
 		, mProjType(eProjectionType::None)
 		, mAspectRatio(1.0f)
 		, mNear(1.0f)
-		, mFar(1000.0f)
+		, mFar(50000.f)
 		, mScale(1.0f)
 	{
 		EnableLayerMasks();

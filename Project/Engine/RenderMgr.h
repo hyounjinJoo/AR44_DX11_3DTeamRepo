@@ -15,10 +15,6 @@ namespace mh
 	class Com_Light3D;
 	class GameObject;
 	
-	
-	using namespace mh::define;
-	using namespace Microsoft::WRL;
-
 
 	class MultiRenderTarget;
 	class RenderMgr
@@ -28,28 +24,28 @@ namespace mh
 	public:
 		static void Render();
 
-		static ConstBuffer* GetConstBuffer(eCBType _Type) { return mConstBuffers[(int)_Type].get(); }
+		static ConstBuffer* GetConstBuffer(define::eCBType _Type) { return mConstBuffers[(int)_Type].get(); }
 
 		//static void SetDataToConstBuffer(eCBType _Type, void* _pData, uint _dataCount = 1u);
 
 		static inline Com_Camera* GetMainCam() { return mMainCamera; }
-		static ComPtr<ID3D11RasterizerState>	GetRasterizerState(eRSType _Type) { return mRasterizerStates[(int)_Type]; }
-		static ComPtr<ID3D11BlendState>		GetBlendState(eBSType _Type) { return mBlendStates[(int)_Type]; }
-		static ComPtr<ID3D11DepthStencilState> GetDepthStencilState(eDSType _Type) { return mDepthStencilStates[(int)_Type]; }
+		static ComPtr<ID3D11RasterizerState>	GetRasterizerState(define::eRSType _Type) { return mRasterizerStates[(int)_Type]; }
+		static ComPtr<ID3D11BlendState>		GetBlendState(define::eBSType _Type) { return mBlendStates[(int)_Type]; }
+		static ComPtr<ID3D11DepthStencilState> GetDepthStencilState(define::eDSType _Type) { return mDepthStencilStates[(int)_Type]; }
 		
 		static void SetMainCamera(Com_Camera* _pCam) { mMainCamera = _pCam; }
 		static inline Com_Camera* GetCamera(uint _Idx);
 
 		static void RegisterCamera(Com_Camera* _pCam) { mCameras.push_back(_pCam); }
 		
-		static void AddDebugMesh(const tDebugMesh& _DebugMesh) { mDebugMeshes.push_back(_DebugMesh); }
+		static void AddDebugMesh(const define::tDebugMesh& _DebugMesh) { mDebugMeshes.push_back(_DebugMesh); }
 
-		static std::vector<tDebugMesh>& GetDebugMeshes() { return mDebugMeshes; }
+		static std::vector<define::tDebugMesh>& GetDebugMeshes() { return mDebugMeshes; }
 
 		static void SetInspectorGameObject(GameObject* _pObj) { mInspectorGameObject = _pObj; }
 		static GameObject* GetInspectorGameObject() { return mInspectorGameObject; }
 
-		inline static MultiRenderTarget* GetMultiRenderTarget(eMRTType _Type);
+		inline static MultiRenderTarget* GetMultiRenderTarget(define::eMRTType _Type);
 
 		//Renderer
 		static void PushLightAttribute(const tLightAttribute& lightAttribute) { mLightAttributes.push_back(lightAttribute); }
@@ -93,16 +89,16 @@ namespace mh
 		static Com_Camera* mMainCamera;
 		static GameObject* mInspectorGameObject;
 
-		static std::unique_ptr<ConstBuffer>		mConstBuffers[(uint)eCBType::END];
-		static ComPtr<ID3D11SamplerState>		mSamplerStates[(uint)eSamplerType::END];
-		static ComPtr<ID3D11RasterizerState>	mRasterizerStates[(uint)eRSType::END];
-		static ComPtr<ID3D11DepthStencilState>	mDepthStencilStates[(uint)eDSType::END];
-		static ComPtr<ID3D11BlendState>			mBlendStates[(uint)eBSType::END];
+		static std::unique_ptr<ConstBuffer>		mConstBuffers[(uint)define::eCBType::END];
+		static ComPtr<ID3D11SamplerState>		mSamplerStates[(uint)define::eSamplerType::END];
+		static ComPtr<ID3D11RasterizerState>	mRasterizerStates[(uint)define::eRSType::END];
+		static ComPtr<ID3D11DepthStencilState>	mDepthStencilStates[(uint)define::eDSType::END];
+		static ComPtr<ID3D11BlendState>			mBlendStates[(uint)define::eBSType::END];
 		
 		static std::vector<Com_Camera*>			mCameras;
-		static std::vector<tDebugMesh>			mDebugMeshes;
+		static std::vector<define::tDebugMesh>			mDebugMeshes;
 
-		static std::unique_ptr<MultiRenderTarget> mMultiRenderTargets[(uint)eMRTType::END];
+		static std::unique_ptr<MultiRenderTarget> mMultiRenderTargets[(uint)define::eMRTType::END];
 
 		static std::vector<Com_Light3D*>			mLights;
 		static std::vector<tLightAttribute>		mLightAttributes;
@@ -122,7 +118,7 @@ namespace mh
 		return pCam;
 	}
 
-	inline MultiRenderTarget* RenderMgr::GetMultiRenderTarget(eMRTType _Type)
+	inline MultiRenderTarget* RenderMgr::GetMultiRenderTarget(define::eMRTType _Type)
 	{
 		return mMultiRenderTargets[(int)_Type].get();
 	}

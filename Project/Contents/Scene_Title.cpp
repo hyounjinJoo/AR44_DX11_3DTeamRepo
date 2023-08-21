@@ -104,7 +104,7 @@ namespace mh
 		//}
 
 		{
-			std::shared_ptr<MeshData> data = ResMgr::Load<MeshData>("Player_Default.json");
+			std::shared_ptr<MeshData> data = ResMgr::Load<MeshData>("stm520_038_00.fbx");
 			GameObject* obj = data->Instantiate();
 			obj->SetName("fbxTextObj");
 			obj->AddComponent<Script_Player>();
@@ -133,7 +133,7 @@ namespace mh
 			directionalLight->SetName("directionalLight");
 
 			Com_Transform* tr = directionalLight->AddComponent<Com_Transform>();
-			tr->SetRelativePos(float3(0.0f, 100.0f, 0.0f));
+			tr->SetRelativePos(float3(500.f, 500.f, 0.0f));
 			tr->SetRelativeRotXYZ(float3(45.0f, 0.0f, 0.0f));
 
 			Com_Light3D* lightComp = directionalLight->AddComponent<Com_Light3D>();
@@ -143,35 +143,35 @@ namespace mh
 			lightComp->SetAmbient(float4(0.15f, 0.15f, 0.15f, 1.0f));
 		}
 
-		{
-			GameObject* pointLight = object::Instantiate<GameObject>(eLayerType::Player);
-			pointLight->SetName("PointLight1");
+		//{
+		//	GameObject* pointLight = object::Instantiate<GameObject>(eLayerType::Player);
+		//	pointLight->SetName("PointLight1");
 
-			Com_Transform* tr = pointLight->AddComponent<Com_Transform>();
-			tr->SetRelativePos(float3(0.0f, 0.0f, 0.0f));
+		//	Com_Transform* tr = pointLight->AddComponent<Com_Transform>();
+		//	tr->SetRelativePos(float3(500.f, 500.f, 0.0f));
 
-			Com_Light3D* lightComp = pointLight->AddComponent<Com_Light3D>();
-			lightComp->SetType(eLightType::Point);
-			lightComp->SetRadius(20.0f);
-			lightComp->SetDiffuse(float4(0.0f, 0.0f, 1.0f, 1.0f));
-			lightComp->SetSpecular(float4(1.0f, 1.0f, 1.0f, 1.0f));
-			lightComp->SetAmbient(float4(0.15f, 0.15f, 0.15f, 1.0f));
-		}
+		//	Com_Light3D* lightComp = pointLight->AddComponent<Com_Light3D>();
+		//	lightComp->SetType(eLightType::Point);
+		//	lightComp->SetRadius(20.0f);
+		//	lightComp->SetDiffuse(float4(0.0f, 0.0f, 1.0f, 1.0f));
+		//	lightComp->SetSpecular(float4(1.0f, 1.0f, 1.0f, 1.0f));
+		//	lightComp->SetAmbient(float4(0.15f, 0.15f, 0.15f, 1.0f));
+		//}
 
-		{
-			GameObject* pointLight = object::Instantiate<GameObject>(eLayerType::Player);
-			pointLight->SetName("PointLight2");
+		//{
+		//	GameObject* pointLight = object::Instantiate<GameObject>(eLayerType::Player);
+		//	pointLight->SetName("PointLight2");
 
-			Com_Transform* tr = pointLight->AddComponent<Com_Transform>();
-			tr->SetRelativePos(float3(-15.0f, 0.0f, 0.0f));
+		//	Com_Transform* tr = pointLight->AddComponent<Com_Transform>();
+		//	tr->SetRelativePos(float3(-500.f, -500.f, 0.0f));
 
-			Com_Light3D* lightComp = pointLight->AddComponent<Com_Light3D>();
-			lightComp->SetType(eLightType::Point);
-			lightComp->SetRadius(30.0f);
-			lightComp->SetDiffuse(float4(0.0f, 1.0f, 0.0f, 1.0f));
-			lightComp->SetSpecular(float4(1.0f, 1.0f, 1.0f, 1.0f));
-			lightComp->SetAmbient(float4(0.15f, 0.15f, 0.15f, 1.0f));
-		}
+		//	Com_Light3D* lightComp = pointLight->AddComponent<Com_Light3D>();
+		//	lightComp->SetType(eLightType::Point);
+		//	lightComp->SetRadius(30.0f);
+		//	lightComp->SetDiffuse(float4(0.0f, 1.0f, 0.0f, 1.0f));
+		//	lightComp->SetSpecular(float4(1.0f, 1.0f, 1.0f, 1.0f));
+		//	lightComp->SetAmbient(float4(0.15f, 0.15f, 0.15f, 1.0f));
+		//}
 	}
 	void Scene_Title::Update()
 	{

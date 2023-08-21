@@ -12,7 +12,7 @@ namespace mh
 {
 	Script_CameraMove::Script_CameraMove()
 		: mCamera()
-		, mCamSpeed(100.f)
+		, mCamSpeed(1000.f)
 	{
 	}
 

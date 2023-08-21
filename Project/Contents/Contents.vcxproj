@@ -210,7 +210,6 @@ start CodeGenerator_$(Configuration).exe</Command>
     <ClInclude Include="strKey_Scene.h" />
     <ClInclude Include="strKey_Script.h" />
     <ClInclude Include="strKey_Shader.h" />
-    <ClInclude Include="strKey_Texture.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="PCH_Contents.cpp">

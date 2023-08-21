@@ -16,19 +16,19 @@ TEXTURE2D(emissiveTexture, t, 3);
 
 
 // defferd
-TEXTURE2D(positionTarget, t, 4);
+TEXTURE2D(albedoTarget, t, 4);
 TEXTURE2D(normalTarget, t, 5);
-TEXTURE2D(albedoTarget, t, 6);
-TEXTURE2D(specularTarget, t, 7);
-
+TEXTURE2D(specularTarget, t, 6);
+TEXTURE2D(emissiveTarget, t, 7);
+TEXTURE2D(positionTarget, t, 8);
 
 // Light
-TEXTURE2D(diffuseLightTarget, t, 8);
-TEXTURE2D(specularLightTarget, t, 9);
+TEXTURE2D(diffuseLightTarget, t, 9);
+TEXTURE2D(specularLightTarget, t, 10);
 
 
 //Atlas texture(Animation 2D)
-TEXTURE2D(atlasTexture, t, 12);
+TEXTURE2D(atlasTexture, t, 11);
 
 //Bone Matrices(Animation 3D)
 SBUFFER(g_arrFrameTrans, tFrameTranslation, t, 16);

@@ -166,9 +166,6 @@
     <Filter Include="Common\WindowResource">
       <UniqueIdentifier>{7c2bcaa2-f3ec-46ae-9c79-07087d540363}</UniqueIdentifier>
     </Filter>
-    <Filter Include="_DefaultShader\Animation 3D">
-      <UniqueIdentifier>{d3e8caa9-5036-4c5b-9533-7c3a801fceac}</UniqueIdentifier>
-    </Filter>
     <Filter Include="_DefaultShader\Animation">
       <UniqueIdentifier>{b3488934-a992-4d5c-8fc1-1445957636b3}</UniqueIdentifier>
     </Filter>
