@@ -14,15 +14,14 @@ namespace mh
 		Com_AudioSource(const Com_AudioSource& _other) = default;
 		CLONE(Com_AudioSource);
 
-		virtual define::eResult SaveJson(Json::Value* _pJson) override;
-		virtual define::eResult LoadJson(const Json::Value* _pJson) override;
+		virtual eResult SaveJson(Json::Value* _pJson) override;
+		virtual eResult LoadJson(const Json::Value* _pJson) override;
 
 		virtual ~Com_AudioSource();
 
 		virtual void Init() override;
 		virtual void Update() override;
 		virtual void FixedUpdate() override;
-		virtual void Render() override;
 
 		void Play();
 		void Stop();

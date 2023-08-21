@@ -80,16 +80,13 @@ namespace mh
 
 	void Com_AudioSource::FixedUpdate()
 	{
-		Com_Transform& tr = GetOwner()->GetTransform();
-		float3 pos = tr.GetRelativePos();
-		float3 foward = tr.Forward();
+		Com_Transform* tr = GetOwner()->GetComponent<Com_Transform>();
+		float3 pos = tr->GetRelativePos();
+		float3 foward = tr->Forward();
 
 		mAudioClip->Set3DAttributes(pos, foward);
 	}
 
-	void Com_AudioSource::Render()
-	{
-	}
 
 	void Com_AudioSource::Play()
 	{

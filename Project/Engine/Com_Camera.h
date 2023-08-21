@@ -19,7 +19,9 @@ namespace  mh
 		virtual void Init() override;
 		virtual void Update() override;
 		virtual void FixedUpdate() override;
-		virtual void Render() override;
+
+		//이 함수는 RenderMgr가 호출
+		void Render();
 
 		void CreateViewMatrix();
 		
@@ -41,7 +43,6 @@ namespace  mh
 		const MATRIX& GetProjectionMatrix() const { return mProjection; }
 
 	private:
-		
 		void SortGameObjects();
 		void RenderDeffered();
 		void RenderOpaque();

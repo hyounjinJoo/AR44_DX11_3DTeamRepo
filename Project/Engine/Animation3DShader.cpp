@@ -20,7 +20,7 @@ namespace mh
 	}
 
 
-	bool Animation3DShader::Binds()
+	bool Animation3DShader::BindData()
 	{
 		if (false == (m_pFrameDataBuffer || m_pOffsetMatBuffer || m_pOutputBuffer))
 			return false;
@@ -50,19 +50,19 @@ namespace mh
 		// 전달한 구조화버퍼 클리어	
 		if (nullptr != m_pFrameDataBuffer)
 		{
-			m_pFrameDataBuffer->UnBind();
+			m_pFrameDataBuffer->UnBindData();
 			m_pFrameDataBuffer = nullptr;
 		}
 
 		if (nullptr != m_pOffsetMatBuffer)
 		{
-			m_pOffsetMatBuffer->UnBind();
+			m_pOffsetMatBuffer->UnBindData();
 			m_pOffsetMatBuffer = nullptr;
 		}
 
 		if (nullptr != m_pOutputBuffer)
 		{
-			m_pOutputBuffer->UnBind();
+			m_pOutputBuffer->UnBindData();
 			m_pOutputBuffer = nullptr;
 		}
 	}

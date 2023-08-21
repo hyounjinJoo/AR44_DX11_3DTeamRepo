@@ -20,29 +20,31 @@ namespace mh
 
 
 	GameObject::GameObject()
-		: mTransform()
-		, mComponents()
+		: mComponents()
 		, mState(eState::Active)
 		, mLayerType(define::eLayerType::None)
 		, mbDontDestroy()
 		, mName()
+		, mParent()
+		, mChilds()
 	{
+		mComponents.reserve((int)eComponentType::Scripts + 10);
 		mComponents.resize((int)eComponentType::Scripts);
-		AddComponent(&mTransform);
 	}
 
 
 	GameObject::GameObject(const GameObject& _other)
 		: Entity(_other)
-		, mTransform(_other.mTransform)
 		, mComponents()
 		, mState(_other.mState)
 		, mLayerType(_other.mLayerType)
 		, mbDontDestroy(_other.mbDontDestroy)
 		, mName(_other.mName)
+		, mParent()
 	{
+		mComponents.reserve((int)eComponentType::Scripts + 10);
 		mComponents.resize((int)eComponentType::Scripts);
-		AddComponent(&mTransform);
+		//AddComponent(&mTransform);
 
 		//TODO: Clone
 		//1. 컴포넌트 목록 복사
@@ -55,7 +57,7 @@ namespace mh
 		}
 
 		//2. 자녀 오브젝트 복사
-		for (size_t i = 0; i < _other.mComponents.size(); ++i)
+		for (size_t i = 0; i < _other.mChilds.size(); ++i)
 		{
 			//AddChildGameObj(_other.mFixedComponents[i]->Clone());
 		}
@@ -64,18 +66,16 @@ namespace mh
 	GameObject::~GameObject()
 	{
 		//Transform은 제거 X
-		for (size_t i = 1; i < mComponents.size(); ++i)
+		for (size_t i = 0; i < mComponents.size(); ++i)
 		{
-			if (nullptr == mComponents[i])
-				continue;
-			delete mComponents[i];
+			if (mComponents[i])
+				delete mComponents[i];
 		}
 
 		for (size_t i = 0; i < mChilds.size(); ++i)
 		{
-			if (nullptr == mChilds[i])
-				continue;
-			delete mChilds[i];
+			if (mChilds[i])
+				delete mChilds[i];
 		}
 	}
 
@@ -87,10 +87,10 @@ namespace mh
 			return Result;
 		}
 
-		Json::MHSaveValue(_pJson, JSON_KEY_PAIR(mName));
-		Json::MHSaveValue(_pJson, JSON_KEY_PAIR(mState));
-		Json::MHSaveValue(_pJson, JSON_KEY_PAIR(mLayerType));
-		Json::MHSaveValue(_pJson, JSON_KEY_PAIR(mbDontDestroy));
+		Json::MH::SaveValue(_pJson, JSON_KEY_PAIR(mName));
+		Json::MH::SaveValue(_pJson, JSON_KEY_PAIR(mState));
+		Json::MH::SaveValue(_pJson, JSON_KEY_PAIR(mLayerType));
+		Json::MH::SaveValue(_pJson, JSON_KEY_PAIR(mbDontDestroy));
 
 		{
 			(*_pJson)[strKey::Json::GameObject::mComponents] = Json::Value(Json::arrayValue);
@@ -169,10 +169,10 @@ namespace mh
 			return Result;
 		}
 
-		Json::MHLoadValue(_pJson, JSON_KEY_PAIR(mName));
-		Json::MHLoadValue(_pJson, JSON_KEY_PAIR(mState));
-		Json::MHLoadValue(_pJson, JSON_KEY_PAIR(mLayerType));
-		Json::MHLoadValue(_pJson, JSON_KEY_PAIR(mbDontDestroy));
+		Json::MH::LoadValue(_pJson, JSON_KEY_PAIR(mName));
+		Json::MH::LoadValue(_pJson, JSON_KEY_PAIR(mState));
+		Json::MH::LoadValue(_pJson, JSON_KEY_PAIR(mLayerType));
+		Json::MH::LoadValue(_pJson, JSON_KEY_PAIR(mbDontDestroy));
 
 		//컴포넌트 추가
 		if (_pJson->isMember(strKey::Json::GameObject::mComponents))
@@ -240,16 +240,14 @@ namespace mh
 	{
 		for (size_t i = 0; i < mComponents.size(); ++i)
 		{
-			if (nullptr == mComponents[i])
-				continue;
-			mComponents[i]->Init();
+			if (mComponents[i])
+				mComponents[i]->Init();
 		}
 
 		for (size_t i = 0; i < mChilds.size(); ++i)
 		{
-			if (nullptr == mChilds[i])
-				continue;
-			mChilds[i]->Init();
+			if (mChilds[i])
+				mChilds[i]->Init();
 		}
 	}
 
@@ -257,16 +255,16 @@ namespace mh
 	{
 		for (size_t i = 0; i < mComponents.size(); ++i)
 		{
-			if (nullptr == mComponents[i])
-				continue;
-			mComponents[i]->Update();
+			if (mComponents[i])
+				mComponents[i]->Update();
+			
 		}
 
 		for (size_t i = 0; i < mChilds.size(); ++i)
 		{
-			if (nullptr == mChilds[i])
-				continue;
-			mChilds[i]->Update();
+			if (mChilds[i])
+				mChilds[i]->Update();
+			
 		}
 	}
 
@@ -281,26 +279,24 @@ namespace mh
 
 		for (size_t i = 0; i < mChilds.size(); ++i)
 		{
-			if (nullptr == mChilds[i])
-				continue;
-			mChilds[i]->FixedUpdate();
+			if (mChilds[i])
+				mChilds[i]->FixedUpdate();
 		}
 	}
 
+	//이 함수는 다른 카메라가 호출함
 	void GameObject::Render()
 	{
 		for (size_t i = 0; i < mComponents.size(); ++i)
 		{
-			if (nullptr == mComponents[i])
-				continue;
-			mComponents[i]->Render();
+			if (mComponents[i])
+				mComponents[i]->Render();
 		}
 
 		for (size_t i = 0; i < mChilds.size(); ++i)
 		{
-			if (nullptr == mChilds[i])
-				continue;
-			mChilds[i]->Render();
+			if (mChilds[i])
+				mChilds[i]->Render();
 		}
 	}
 
@@ -318,7 +314,6 @@ namespace mh
 			ERROR_MESSAGE_W(
 				LR"(
 컴포넌트에 String Key가 없습니다.
-new를 써서 만들지 말고, 
 AddComponent<T> 또는 ComMgr::GetNewComponent()를 통해서 생성하세요.
 )");
 			MH_ASSERT(false == _pCom->GetKey().empty());

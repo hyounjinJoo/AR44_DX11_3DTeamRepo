@@ -10,7 +10,7 @@ namespace mh
 		ParticleShader();
 		~ParticleShader();
 
-		virtual bool Binds() override;
+		virtual bool BindData() override;
 		virtual void Clear() override;
 
 		void SetStrcutedBuffer(StructBuffer* _buffer) { mBuffer = _buffer; }

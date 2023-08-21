@@ -20,7 +20,7 @@
 #include "MultiRenderTarget.h"
 #include "Application.h"
 
-#include "Com_Light.h"
+#include "Com_Light3D.h"
 
 //컴파일된 쉐이더 헤더 모아놓은 헤더
 #include "DefaultShaders.h"
@@ -44,7 +44,7 @@ namespace mh
 
 	std::unique_ptr<MultiRenderTarget>	RenderMgr::mMultiRenderTargets[(uint)eMRTType::END]{};
 
-	std::vector<Com_Light*>				RenderMgr::mLights{};
+	std::vector<Com_Light3D*>				RenderMgr::mLights{};
 	std::vector<tLightAttribute>		RenderMgr::mLightAttributes{};
 	std::unique_ptr<StructBuffer>		RenderMgr::mLightsBuffer{};
 	std::shared_ptr<Texture>			RenderMgr::mPostProcessTexture{};
@@ -136,7 +136,7 @@ namespace mh
 	}
 
 
-	void RenderMgr::RemoveLight(Com_Light* _pComLight)
+	void RenderMgr::RemoveLight(Com_Light3D* _pComLight)
 	{
 		for (auto iter = mLights.begin(); iter != mLights.end(); ++iter)
 		{
@@ -190,7 +190,7 @@ namespace mh
 	{
 		std::shared_ptr<Texture> renderTarget = ResMgr::Find<Texture>(define::strKey::Default::texture::RenderTarget);
 			
-		//renderTarget->UnBind();
+		//renderTarget->UnBindData();
 
 		//ID3D11ShaderResourceView* srv = nullptr;
 		//GPUMgr::Context()->PSSetShaderResources()(eShaderStage::PS, 60, &srv);
@@ -209,13 +209,13 @@ namespace mh
 		{
 			if (mMultiRenderTargets[i])
 			{
-				if ((int)eMRTType::Light == i)
+				if ((int)eMRTType::Swapchain == i)
 				{
-					mMultiRenderTargets[i]->Clear(float4(0.f));
+					mMultiRenderTargets[i]->Clear(float4(0.2f));
 				}
 				else
 				{
-					mMultiRenderTargets[i]->Clear(float4(0.2f));
+					mMultiRenderTargets[i]->Clear(float4(0.f));
 				}
 			}
 				

@@ -32,6 +32,11 @@
 #pragma comment(lib, "FBXLoader/Release/libfbxsdk-md.lib")
 #endif
 
+namespace std
+{
+	namespace fs = filesystem;
+}
+
 #endif
 
 

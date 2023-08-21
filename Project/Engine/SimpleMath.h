@@ -251,7 +251,7 @@ namespace mh::math
         
 
         Vector3(const Vector3&) = default;
-        Vector3& operator=(const Vector2& _v2) { this->x = _v2.x; this->y = _v2.y; this->z = 0.f; }
+        Vector3& operator=(const Vector2& _v2) { this->x = _v2.x; this->y = _v2.y; return *this; }
         Vector3& operator=(const Vector3&) = default;
 
         Vector3(Vector3&&) = default;

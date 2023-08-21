@@ -192,6 +192,8 @@ namespace mh::define
 
 	enum class eRenderingMode
 	{
+		None = -1,
+
 		//Deffered
 		DefferdOpaque,
 		DefferdMask,
@@ -204,7 +206,7 @@ namespace mh::define
 		CutOut,
 		Transparent,
 		PostProcess,
-		None,
+		
 		END,
 	};
 

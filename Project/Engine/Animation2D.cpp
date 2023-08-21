@@ -63,9 +63,9 @@ namespace mh
 		//for (size_t i = 0; i < mSpriteSheet.size(); ++i)
 		//{
 		//	//3. 순회돌면서 하나씩 추가한다.
-		//	jVal.append(Json::MHConvertWrite(mSpriteSheet[i]));
+		//	jVal.append(Json::ConvertWrite(mSpriteSheet[i]));
 		//}
-		Json::MHSaveVector(_pJVal, JSON_KEY_PAIR(mSpriteSheet));
+		Json::MH::SaveValueVector(_pJVal, JSON_KEY_PAIR(mSpriteSheet));
 
 
 		return eResult::Success;
@@ -84,7 +84,7 @@ namespace mh
 		}
 		const Json::Value& jVal = (*_pJVal);
 
-		auto SpriteData = Json::MHGetJsonVector(_pJVal, JSON_KEY_PAIR(mSpriteSheet));
+		auto SpriteData = Json::MH::LoadValueVector(_pJVal, JSON_KEY_PAIR(mSpriteSheet));
 		mSpriteSheet = std::move(SpriteData);
 
 		
@@ -135,6 +135,9 @@ namespace mh
 		mAnimationName = _name;
 
 		mAtlas = _atlas;
+		
+	
+
 		float width = static_cast<float>(_atlas->GetWidth());
 		float height = static_cast<float>(_atlas->GetHeight());
 
@@ -147,14 +150,45 @@ namespace mh
 			sprite.Size = float2(_size.x / width, _size.y / height);
 			sprite.Offset = _offset;
 			sprite.Duration = _duration;
-			sprite.AtlasSize = float2(200.0f / width, 200.0f / height);
+			sprite.AtlasSize = float2(width, height);
 
 			mSpriteSheet.push_back(sprite);
 		}
 
 	}
 
-	void Animation2D::BindShader()
+	void Animation2D::CreateXY(const std::string_view _name, std::shared_ptr<Texture> _atlas, UINT _uColTotal, UINT _uRowTotal, float _duration)
+	{
+		mAnimationName = _name;
+
+		mAtlas = _atlas;
+
+		float RowSliceUV = 1.f / (float)_uRowTotal;
+		float ColSliceUV = 1.f / (float)_uColTotal;
+
+		float2 FrameSize = mAtlas->GetSizeFloat() / float2(_uColTotal, _uRowTotal);
+
+		//Left Top부터 열 순서대로 저장
+		for (UINT Row = 0; Row < _uRowTotal; ++Row)
+		{
+			for (UINT Col = 0; Col < _uColTotal; ++Col)
+			{
+				// API 와는 다르게 0~1 사이의 비율좌표로 위치를 표현해야한다.
+				tSprite sprite = {};
+				sprite.LeftTop.x = ColSliceUV * Col;
+				sprite.LeftTop.y = RowSliceUV * Row;
+				sprite.Size = float2{ColSliceUV, RowSliceUV};
+				sprite.Offset = float2{};
+				sprite.Duration = _duration;
+				sprite.AtlasSize = FrameSize;
+
+				mSpriteSheet.push_back(sprite);
+			}
+		}
+
+	}
+
+	void Animation2D::BindData()
 	{
 		mAtlas->BindDataSRV(Register_t_atlasTexture, eShaderStageFlag::PS);
 
@@ -178,10 +212,10 @@ namespace mh
 		mbComplete = false;
 	}
 
-	void Animation2D::Clear()
+	void Animation2D::UnBindData()
 	{
 		//Texture clear
-		Texture::Clear(12);
+		Texture::Clear(Register_t_atlasTexture);
 
 		ConstBuffer* cb = RenderMgr::GetConstBuffer(eCBType::Animation2D);
 
@@ -191,5 +225,7 @@ namespace mh
 		cb->SetData(&info);
 		cb->BindData(eShaderStageFlag::PS);
 	}
+
+
 
 }

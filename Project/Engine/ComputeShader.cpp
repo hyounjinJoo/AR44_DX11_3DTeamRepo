@@ -14,7 +14,7 @@
 
 namespace mh
 {
-	namespace stdfs = std::filesystem;
+	
 
 	ComputeShader::ComputeShader(uint3 _threadsPerGroup)
 		: IShader(define::eResourceType::ComputeShader)
@@ -33,7 +33,7 @@ namespace mh
 
 	eResult ComputeShader::Load(const std::filesystem::path& _path)
 	{
-		stdfs::path FilePath = PathMgr::GetShaderBinPath();
+		std::fs::path FilePath = PathMgr::GetShaderCSOPath();
 		FilePath /= _path;
 		FilePath.replace_extension(define::strKey::Ext_ShaderCSO);
 
@@ -99,7 +99,7 @@ namespace mh
 
 	void ComputeShader::OnExcute()
 	{
-		if (false == Binds())
+		if (false == BindData())
 			return;
 
 		//데이터 카운트가 하나라도 0일경우 계산 불가

@@ -16,7 +16,7 @@
 
 namespace mh
 {
-	namespace stdfs = std::filesystem;
+	
 
 	Texture::Texture()
 		: IRes(eResourceType::Texture)
@@ -163,20 +163,14 @@ namespace mh
 	eResult Texture::Load(const std::filesystem::path& _FileName)
 	{
 		eResult result = eResult::Fail;
-
-		stdfs::path resPath;
-
-		//만약 ".fbm"으로 끝나는 '폴더'일 경우 MeshData 경로에서 받아온다.
-		if (_FileName.parent_path().extension() == ".fbm")
+		std::fs::path resPath = PathMgr::GetContentPathRelative(GetResType());
+		if (false == std::fs::exists(resPath))
 		{
-			resPath = PathMgr::GetRelResourcePath(eResourceType::MeshData);
+			std::fs::create_directories(resPath);
+			ERROR_MESSAGE_W(L"파일이 없습니다.");
+			return eResult::Fail_PathNotExist;
 		}
-		//그렇지 않을 경우 상대 경로를 직접 만들어서 로드해준다.
-		else
-		{
-			resPath = PathMgr::GetRelResourcePath(GetResType());
-		}
-
+		
 		result = LoadFile(resPath / _FileName);
 
 		if (eResult::Success == result)
@@ -189,6 +183,12 @@ namespace mh
 
 	eResult Texture::LoadFile(const std::filesystem::path& _fullPath)
 	{
+		if (false == std::fs::exists(_fullPath))
+		{
+			ERROR_MESSAGE_W(L"파일이 존재하지 않습니다.");
+			return eResult::Fail_PathNotExist;
+		}
+
 		std::wstring Extension = _fullPath.extension().wstring();
 		StringConv::UpperCase(Extension);
 
@@ -228,7 +228,7 @@ namespace mh
 
 	void Texture::BindDataSRV(uint _SRVSlot, eShaderStageFlag_ _stageFlag)
 	{
-		UnBind();
+		UnBindData();
 	
 		mCurBoundRegister = (int)_SRVSlot;
 		mCurBoundStage = _stageFlag;
@@ -259,7 +259,7 @@ namespace mh
 
 	void Texture::BindDataUAV(uint _startSlot)
 	{
-		UnBind();
+		UnBindData();
 
 		mCurBoundView = eBufferViewType::UAV;
 		mCurBoundRegister = (int)_startSlot;
@@ -269,7 +269,7 @@ namespace mh
 	}
 
 
-	void Texture::UnBind()
+	void Texture::UnBindData()
 	{
 		switch (mCurBoundView)
 		{

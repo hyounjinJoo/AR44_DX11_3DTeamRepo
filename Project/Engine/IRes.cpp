@@ -12,7 +12,7 @@ namespace mh
 		STRKEY_DECLARE(mType);
 	}
 
-	namespace stdfs = std::filesystem;
+	
 
 	IRes::IRes(eResourceType _type)
 		: mType(_type)
@@ -25,10 +25,10 @@ namespace mh
 
 	//eResult IRes::Save(const std::filesystem::path& _path)
 	//{
-	//	stdfs::path FullPath = PathMgr::GetRelResourcePath(mType);
-	//	if (false == stdfs::exists(FullPath))
+	//	std::fs::path FullPath = PathMgr::GetContentPathRelative(mType);
+	//	if (false == std::fs::exists(FullPath))
 	//	{
-	//		if (false == stdfs::create_directories(FullPath))
+	//		if (false == std::fs::create_directories(FullPath))
 	//		{
 	//			ERROR_MESSAGE_W(L"저장을 위한 디렉토리 생성에 실패했습니다.");
 	//			return eResult::Fail_OpenFile;

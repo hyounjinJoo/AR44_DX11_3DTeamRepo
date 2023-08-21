@@ -12,7 +12,6 @@
 #include "strKey_Component.h"
 
 
-#include "Com_MyRenderer.h"
 #include "Com_TestJH.h"
 
 #define CONSTRUCTOR_T(T) ComMgr::AddComConstructor<T>(strKey::Com::##T)
@@ -22,7 +21,6 @@ namespace mh
 	using namespace mh::define;
 	void ContentsClassInitializer::InitCom()
 	{
-		CONSTRUCTOR_T(Com_MyRenderer);
 		CONSTRUCTOR_T(Com_TestJH);
 	}
 }

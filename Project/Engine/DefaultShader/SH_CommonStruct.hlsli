@@ -154,7 +154,7 @@ struct alignas(16)  tLightAttribute
 
 
 
-struct alignas(16) tFrameTrans
+struct alignas(16) tFrameTranslation
 {
 	float4 vTranslate;
 	float4 vScale;

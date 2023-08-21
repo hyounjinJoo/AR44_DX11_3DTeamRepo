@@ -3,6 +3,7 @@
 #include "Com_Animator2D.h"
 
 #include "json-cpp\json.h"
+#include "GameObject.h"
 
 namespace mh
 {
@@ -129,9 +130,7 @@ namespace mh
 	void Com_Animator2D::FixedUpdate()
 	{
 	}
-	void Com_Animator2D::Render()
-	{
-	}
+
 
 	bool Com_Animator2D::Create(const std::string_view _name, std::shared_ptr<Texture> _atlas
 		, float2 _leftTop, float2 _size, float2 _offset
@@ -152,6 +151,34 @@ namespace mh
 		tEvents* events = new tEvents();
 		events->Events.resize(_spriteLegth);
 		mEvents.insert(std::make_pair(_name, events));
+
+		return true;
+	}
+
+	bool Com_Animator2D::CreateXY(const std::string_view _name, std::shared_ptr<Texture> _atlas, UINT _uColTotal, UINT _uRowTotal, float _duration)
+	{
+		if (_atlas == nullptr)
+			return false;
+
+		Animation2D* animation = FindAnimation(_name);
+		if (animation != nullptr)
+			return false;
+
+		animation = new Animation2D();
+		animation->CreateXY(_name, _atlas, _uColTotal, _uRowTotal, _duration);
+
+		mAnimations.insert(std::make_pair(_name, animation));
+
+		tEvents* events = new tEvents();
+		events->Events.resize(_uColTotal * _uRowTotal);
+		mEvents.insert(std::make_pair(_name, events));
+
+		float2 size = animation->GetSpriteSize(0u);
+
+		//사이즈 수정
+		Com_Transform* tr = GetOwner()->GetComponent<Com_Transform>(); 
+		if(tr)
+			tr->SetSizeXY(animation->GetSpriteSize(0u));
 
 		return true;
 	}
@@ -200,20 +227,20 @@ namespace mh
 			events->StartEvent();
 	}
 
-	void Com_Animator2D::Binds()
+	void Com_Animator2D::BindData()
 	{
 		if (mActiveAnimation == nullptr)
 			return;
 
-		mActiveAnimation->BindShader();
+		mActiveAnimation->BindData();
 	}
 
-	void Com_Animator2D::Clear()
+	void Com_Animator2D::UnBindData()
 	{
 		if (mActiveAnimation == nullptr)
 			return;
 
-		mActiveAnimation->Clear();
+		mActiveAnimation->UnBindData();
 	}
 
 

@@ -31,11 +31,13 @@ TEXTURE2D(specularLightTarget, t, 9);
 TEXTURE2D(atlasTexture, t, 12);
 
 //Bone Matrices(Animation 3D)
-SBUFFER(g_arrFrameTrans, tFrameTrans, t, 16);
+SBUFFER(g_arrFrameTrans, tFrameTranslation, t, 16);
 SBUFFER(g_arrOffset, Matrix, t, 17);
 SBUFFER_RW(g_arrFinalMat, Matrix, u, 0);
 
-//StructuredBuffer<tFrameTrans> g_arrFrameTrans : register(t16);
+
+
+//StructuredBuffer<tFrameTranslation> g_arrFrameTrans : register(t16);
 //StructuredBuffer<matrix> g_arrOffset : register(t17);
 //RWStructuredBuffer<matrix> g_arrFinalMat : register(u0);
 

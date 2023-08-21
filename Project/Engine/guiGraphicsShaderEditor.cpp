@@ -9,7 +9,7 @@
 
 namespace gui
 {
-	namespace stdfs = std::filesystem;
+	
 
 	namespace strKey
 	{
@@ -373,23 +373,23 @@ namespace gui
 	{
 		struct tShaderGroup
 		{
-			std::array<stdfs::path, (int)mh::define::eGSStage::END> FileName;
+			std::array<std::fs::path, (int)mh::define::eGSStage::END> FileName;
 		};
-		std::unordered_map<stdfs::path, tShaderGroup> umapGSGroup;
+		std::unordered_map<std::fs::path, tShaderGroup> umapGSGroup;
 
-		stdfs::path shaderPath = mh::PathMgr::GetShaderBinPath();
+		std::fs::path shaderPath = mh::PathMgr::GetShaderCSOPath();
 
 		//쉐이더 바이트코드 경로 확인
-		if (false == stdfs::exists(shaderPath))
+		if (false == std::fs::exists(shaderPath))
 		{
-			stdfs::create_directories(shaderPath);
+			std::fs::create_directories(shaderPath);
 			MessageBoxW(nullptr, L"쉐이더 파일이 없습니다.", nullptr, MB_OK);
 			return false;
 		}
 
 
 		//폴더 순회 돌면서 쉐이더 분류
-		for (const auto& entry : stdfs::directory_iterator(shaderPath))
+		for (const auto& entry : std::fs::directory_iterator(shaderPath))
 		{
 			if (entry.is_directory())
 				continue;
@@ -414,19 +414,19 @@ namespace gui
 
 		//쉐이더 세팅 파일 경로 확인
 		std::vector<std::string> vecNewShaderGroup;
-		stdfs::path ShaderSettingDir = mh::PathMgr::GetRelResourcePath(mh::define::eResourceType::GraphicsShader);
-		if (false == stdfs::exists(ShaderSettingDir))
+		std::fs::path ShaderSettingDir = mh::PathMgr::GetContentPathRelative(mh::define::eResourceType::GraphicsShader);
+		if (false == std::fs::exists(ShaderSettingDir))
 		{
-			stdfs::create_directories(ShaderSettingDir);
+			std::fs::create_directories(ShaderSettingDir);
 		}
 		
 		//map을 순회 돌아주면서
 		for (const auto& iter : umapGSGroup)
 		{
-			stdfs::path ShaderFilePath = ShaderSettingDir / iter.first.filename().replace_extension(mh::define::strKey::Ext_ShaderSetting);
+			std::fs::path ShaderFilePath = ShaderSettingDir / iter.first.filename().replace_extension(mh::define::strKey::Ext_ShaderSetting);
 
 			//파일이 존재하지 않으면 json 파일 초기화 및 생성을 해준다.
-			if (false == stdfs::exists(ShaderFilePath))
+			if (false == std::fs::exists(ShaderFilePath))
 			{
 				std::ofstream ofs(ShaderFilePath);
 				if (false == ofs.is_open())
@@ -487,17 +487,17 @@ namespace gui
 
 	void guiGraphicsShaderEditor::LoadShaderSettingComboBox()
 	{
-		stdfs::path GSSettingsPath = mh::PathMgr::GetRelResourcePath(mh::define::eResourceType::GraphicsShader);
+		std::fs::path GSSettingsPath = mh::PathMgr::GetContentPathRelative(mh::define::eResourceType::GraphicsShader);
 
-		if (false == stdfs::exists(GSSettingsPath))
+		if (false == std::fs::exists(GSSettingsPath))
 		{
-			stdfs::create_directories(GSSettingsPath);
+			std::fs::create_directories(GSSettingsPath);
 			MessageBoxW(nullptr, L"쉐이더 설정 파일이 없습니다.", nullptr, MB_OK);
 			return;
 		}
 
 		std::vector<guiComboBox::tComboItem> Items;
-		for (const auto& entry : stdfs::directory_iterator(GSSettingsPath))
+		for (const auto& entry : std::fs::directory_iterator(GSSettingsPath))
 		{
 			if (entry.is_directory())
 				continue;
@@ -619,7 +619,7 @@ namespace gui
 					}
 					else
 					{
-						stdfs::path FileName = mSaveFileName;
+						std::fs::path FileName = mSaveFileName;
 
 						SaveToJson(FileName);
 

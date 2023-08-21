@@ -260,6 +260,7 @@ call Copy_HLSL.bat $(Configuration)</Command>
     <ClInclude Include="Com_Animator3D.h" />
     <ClInclude Include="Com_AudioListener.h" />
     <ClInclude Include="Com_AudioSource.h" />
+    <ClInclude Include="Com_Renderer_MultiMesh.h" />
     <ClInclude Include="DefaultComInitializer.h" />
     <ClInclude Include="FBXLoader.h" />
     <ClInclude Include="GameMainWindow.h" />
@@ -292,6 +293,7 @@ call Copy_HLSL.bat $(Configuration)</Command>
     <ClInclude Include="ICollider2D.h" />
     <ClInclude Include="CollisionMgr.h" />
     <ClInclude Include="Application.h" />
+    <ClInclude Include="ILight.h" />
     <ClInclude Include="imgui\imconfig.h" />
     <ClInclude Include="imgui\imgui.h" />
     <ClInclude Include="imgui\imgui_impl_dx11.h" />
@@ -303,6 +305,7 @@ call Copy_HLSL.bat $(Configuration)</Command>
     <ClInclude Include="imgui\imstb_truetype.h" />
     <ClInclude Include="IRenderer.h" />
     <ClInclude Include="Com_Camera.h" />
+    <ClInclude Include="ITransform.h" />
     <ClInclude Include="json-cpp\jsonSaveLoad.h" />
     <ClInclude Include="MultiRenderTarget.h" />
     <ClInclude Include="RenderMgr.h" />
@@ -336,7 +339,7 @@ call Copy_HLSL.bat $(Configuration)</Command>
     <ClInclude Include="json-cpp\json-forwards.h" />
     <ClInclude Include="json-cpp\json.h" />
     <ClInclude Include="Layer.h" />
-    <ClInclude Include="Com_Light.h" />
+    <ClInclude Include="Com_Light3D.h" />
     <ClInclude Include="Material.h" />
     <ClInclude Include="PathMgr.h" />
     <ClInclude Include="Mesh.h" />
@@ -356,6 +359,7 @@ call Copy_HLSL.bat $(Configuration)</Command>
     <ClInclude Include="IScript.h" />
     <ClInclude Include="GraphicsShader.h" />
     <ClInclude Include="Com_Renderer_Sprite.h" />
+    <ClInclude Include="Skeleton.h" />
     <ClInclude Include="strKey_gui.h" />
     <ClInclude Include="StructBuffer.h" />
     <ClInclude Include="Texture.h" />
@@ -379,6 +383,7 @@ call Copy_HLSL.bat $(Configuration)</Command>
     <ClCompile Include="Com_Animator3D.cpp" />
     <ClCompile Include="Com_AudioListener.cpp" />
     <ClCompile Include="Com_AudioSource.cpp" />
+    <ClCompile Include="Com_Renderer_MultiMesh.cpp" />
     <ClCompile Include="DefaultComInitializer.cpp" />
     <ClCompile Include="FBXLoader.cpp" />
     <ClCompile Include="GameMainWindow.cpp" />
@@ -411,6 +416,7 @@ call Copy_HLSL.bat $(Configuration)</Command>
     <ClCompile Include="ICollider2D.cpp" />
     <ClCompile Include="CollisionMgr.cpp" />
     <ClCompile Include="Application.cpp" />
+    <ClCompile Include="ILight.cpp" />
     <ClCompile Include="imgui\imgui.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
@@ -461,6 +467,7 @@ call Copy_HLSL.bat $(Configuration)</Command>
     </ClCompile>
     <ClCompile Include="IRenderer.cpp" />
     <ClCompile Include="Com_Camera.cpp" />
+    <ClCompile Include="ITransform.cpp" />
     <ClCompile Include="MultiRenderTarget.cpp" />
     <ClCompile Include="RenderMgr.cpp" />
     <ClCompile Include="Script_Camera.cpp" />
@@ -490,7 +497,7 @@ call Copy_HLSL.bat $(Configuration)</Command>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="Layer.cpp" />
-    <ClCompile Include="Com_Light.cpp" />
+    <ClCompile Include="Com_Light3D.cpp" />
     <ClCompile Include="Material.cpp" />
     <ClCompile Include="MeshData.cpp" />
     <ClCompile Include="PathMgr.cpp" />
@@ -512,6 +519,7 @@ call Copy_HLSL.bat $(Configuration)</Command>
     <ClCompile Include="GraphicsShader.cpp" />
     <ClCompile Include="Com_Renderer_Sprite.cpp" />
     <ClCompile Include="SimpleMath.cpp" />
+    <ClCompile Include="Skeleton.cpp" />
     <ClCompile Include="StructBuffer.cpp" />
     <ClCompile Include="Texture.cpp" />
     <ClCompile Include="TimeMgr.cpp" />

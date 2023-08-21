@@ -1,32 +1,32 @@
 #pragma once
-#include "IComponent.h"
+#include "ITransform.h"
 #include "SimpleMath.h"
 
 namespace mh
 {
     class GameObject;
     class Com_Transform :
-        public IComponent
+        public ITransform
     {
     public:
         Com_Transform();
 
+        //단순 Value만 저장 중이므로 기본 복사 생성자로도 충분함.
         Com_Transform(const Com_Transform& _other) = default;
         CLONE(Com_Transform);
 
-        //단순 Value만 저장 중이므로 기본 복사 생성자로도 충분함.
         virtual ~Com_Transform();
 
-        virtual define::eResult SaveJson(Json::Value* _pJson) override;
-        virtual define::eResult LoadJson(const Json::Value* _pJson) override;
+        virtual eResult SaveJson(Json::Value* _pJson) override;
+        virtual eResult LoadJson(const Json::Value* _pJson) override;
 
     public:
-        virtual void Init() override;
-        virtual void Update() override;
+        //virtual void Init() override;
+        //virtual void Update() override;
         virtual void FixedUpdate() override;
         virtual void Render() override;
 
-        void SetConstBuffer();
+        virtual void BindData() override; 
 
     public:
         //inline Setter
@@ -118,7 +118,7 @@ namespace mh
         void UpdateMyTransform();
 
         //부모의 트랜스폼 행렬을 받아서 최종적인 월드행렬을 업데이트 한다.
-        void UpdateParentMatrix();
+        void UpdateParentMatrix(const Com_Transform* _parentTransform);
 
     private:
         float3    mSize;
