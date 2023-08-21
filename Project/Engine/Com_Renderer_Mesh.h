@@ -40,6 +40,7 @@ namespace mh
 
 	private:
 		inline tMaterialSet* GetMaterialSet(UINT _idx);
+
 	private:
 		std::shared_ptr<Mesh> mMesh;
 		std::vector<tMaterialSet> mMaterials;

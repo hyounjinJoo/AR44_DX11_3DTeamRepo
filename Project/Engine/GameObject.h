@@ -45,7 +45,7 @@ namespace mh
 		IComponent* AddComponent(IComponent* _pCom);
 		inline IComponent* AddComponent(const std::string_view _strKey);
 
-		Com_Transform& GetTransform() { return mTransform; }
+		//Com_Transform& GetTransform() { return mTransform; }
 
 		template <typename T>
 		inline T* GetComponent();
@@ -90,7 +90,7 @@ namespace mh
 		define::eLayerType mLayerType;
 		bool mbDontDestroy;
 
-		Com_Transform				mTransform;
+		//Com_Transform				mTransform;
 		std::vector<IComponent*>	mComponents;
 		std::vector<IScript*>		mScripts;
 

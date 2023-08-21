@@ -105,18 +105,13 @@ namespace mh
 
 		{
 			std::shared_ptr<MeshData> data = ResMgr::Load<MeshData>("Player_Default.json");
-			//std::shared_ptr<MeshData> data = ResMgr::Load<MeshData>("house.json");
 			GameObject* obj = data->Instantiate();
 			obj->SetName("fbxTextObj");
 			obj->AddComponent<Script_Player>();
 			object::Instantiate(eLayerType::Player, obj);
-			//obj->GetTransform()
 
 			obj->AddComponent<Script_TestHJ>();
 			obj->AddComponent<Script_JH>();
-			//std::shared_ptr<MeshData> mymesh = std::make_shared<MeshData>();
-			//mymesh->Load("glass cube.fbx");
-			//mymesh->Load("cat.fbx");
 		}
 
 
