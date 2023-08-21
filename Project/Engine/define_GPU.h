@@ -21,19 +21,8 @@ namespace Microsoft::WRL
 #include "define_Macro.h"
 
 #include "DefaultShader/SH_ConstBuffer.hlsli"
+#include "DefaultShader/SH_Resource.hlsli"
 
-//#define CB_GETBINDSLOT(name) __CBUFFERBINDSLOT__##name##__
-//#define CBUFFER(name, slot) static const int CB_GETBINDSLOT(name) = slot; struct alignas(16) name
-//
-//#define CBSLOT_GLOBAL			0
-//#define CBSLOT_TRANSFORM		1
-//#define CBSLOT_MATERIAL			2
-//#define CBSLOT_GRID				3
-//#define CBSLOT_ANIMATION		4
-//#define CBSLOT_NUMBEROFLIGHT	5
-//#define CBSLOT_PARTICLESYSTEM	6
-//#define CBSLOT_NOISE			7
-//#define CBSLOT_SBUFFER			8
 
 namespace mh::define
 {
@@ -233,17 +222,19 @@ namespace mh::define
 
 	enum class eTextureSlot
 	{
-		Albedo,
-		Normal,
-		Specular,
-		Emissive,
+		Albedo = Register_t_albedoTexture,
+		Normal = Register_t_normalTexture,
+		Specular = Register_t_specularTexture,
+		Emissive = Register_t_emissiveTexture,
 
-		PositionTarget,
-		NormalTarget,
-		AlbedoTarget,
-		SpecularTarget,
-		DiffuseLightTarget,
-		SpecularLightTarget,
+		AlbedoTarget = Register_t_albedoTarget,
+		NormalTarget = Register_t_normalTarget,
+		SpecularTarget = Register_t_specularTarget,
+		EmissiveTarget = Register_t_emissiveTarget,
+		PositionTarget = Register_t_positionTarget,
+		
+		DiffuseLightTarget = Register_t_diffuseLightTarget,
+		SpecularLightTarget = Register_t_specularLightTarget,
 
 		//CubeT8,
 		//CubeT9,
@@ -251,22 +242,24 @@ namespace mh::define
 		//Array2DT10,
 		//Array2DT11,
 
-		END,
+		END = 8,
 	};
 
 	enum class eMRT_Defferd
 	{
-		PositionTarget,
-		NormalTarget,
 		AlbedoTarget,
+		NormalTarget,
 		SpecularTarget,
+		EmissiveTarget,
+		PositionTarget,
 		END
 	};
 
 	enum class eMRT_Light
 	{
 		DiffuseLightTarget,
-		SpecularLightTarget
+		SpecularLightTarget,
+		END
 	};
 
 	enum class eBufferViewType

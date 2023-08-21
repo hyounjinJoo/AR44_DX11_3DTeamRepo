@@ -2,6 +2,9 @@
 #define SH_COMMON_STRUCT
 #include "SH_Common.hlsli"
 
+
+
+
 //C++와 공동으로 사용하는 구조체 모음
 
 struct alignas(16)  tCB_Global

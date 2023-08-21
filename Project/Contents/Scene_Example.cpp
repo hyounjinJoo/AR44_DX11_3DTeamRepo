@@ -2,7 +2,6 @@
 #include "Scene_Example.h"
 
 #include "strKey_Script.h"
-#include "strKey_Texture.h"
 #include <Engine/object.h>
 #include <Engine/Com_Renderer_Sprite.h>
 #include <Engine/ResMgr.h>

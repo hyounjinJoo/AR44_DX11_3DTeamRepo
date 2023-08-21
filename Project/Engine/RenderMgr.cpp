@@ -279,24 +279,25 @@ namespace mh
 			std::shared_ptr<Texture> arrRTTex[MRT_MAX] = {};
 			std::shared_ptr<Texture> dsTex = nullptr;
 
-			std::shared_ptr<Texture> pos = std::make_shared<Texture>();
-			std::shared_ptr<Texture> normal = std::make_shared<Texture>();
-			std::shared_ptr<Texture> albedo = std::make_shared<Texture>();
-			std::shared_ptr<Texture> specular = std::make_shared<Texture>();
+			
+			//std::shared_ptr<Texture> normal = std::make_shared<Texture>();
+			//std::shared_ptr<Texture> albedo = std::make_shared<Texture>();
+			//std::shared_ptr<Texture> specular = std::make_shared<Texture>();
+			//std::shared_ptr<Texture> emissive = std::make_shared<Texture>();
 
-			arrRTTex[(int)eMRT_Defferd::PositionTarget] = pos;
-			arrRTTex[(int)eMRT_Defferd::NormalTarget] = normal;
-			arrRTTex[(int)eMRT_Defferd::AlbedoTarget] = albedo;
-			arrRTTex[(int)eMRT_Defferd::SpecularTarget] = specular;
-
-			arrRTTex[0]->Create(_ResolutionX, _ResolutionY, DXGI_FORMAT_R32G32B32A32_FLOAT
-				, D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE);
-			arrRTTex[1]->Create(_ResolutionX, _ResolutionY, DXGI_FORMAT_R32G32B32A32_FLOAT
-				, D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE);
-			arrRTTex[2]->Create(_ResolutionX, _ResolutionY, DXGI_FORMAT_R32G32B32A32_FLOAT
-				, D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE);
-			arrRTTex[3]->Create(_ResolutionX, _ResolutionY, DXGI_FORMAT_R32G32B32A32_FLOAT
-				, D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE);
+			//arrRTTex[(int)eMRT_Defferd::AlbedoTarget] = albedo;
+			//arrRTTex[(int)eMRT_Defferd::NormalTarget] = normal;
+			//arrRTTex[(int)eMRT_Defferd::SpecularTarget] = specular;
+			//arrRTTex[(int)eMRT_Defferd::EmissiveTarget] = emissive;
+			//arrRTTex[(int)eMRT_Defferd::PositionTarget] = pos;
+			
+			for (int i = 0; i < (int)eMRT_Defferd::END; ++i)
+			{
+				std::shared_ptr<Texture> defferedTex = std::make_shared<Texture>();
+				arrRTTex[i] = defferedTex;
+				arrRTTex[i]->Create(_ResolutionX, _ResolutionY, DXGI_FORMAT_R32G32B32A32_FLOAT
+					, D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE);
+			}
 
 			dsTex = GPUMgr::GetDepthStencilBufferTex();
 
@@ -312,16 +313,25 @@ namespace mh
 		// Light MRT
 		{
 			std::shared_ptr<Texture> arrRTTex[MRT_MAX] = { };
-			std::shared_ptr<Texture> diffuse = std::make_shared<Texture>();
-			std::shared_ptr<Texture> specular = std::make_shared<Texture>();
 
-			arrRTTex[(int)eMRT_Light::DiffuseLightTarget] = diffuse;
-			arrRTTex[(int)eMRT_Light::SpecularLightTarget] = specular;
+			for (int i = 0; i < (int)eMRT_Light::END; ++i)
+			{
+				std::shared_ptr<Texture> defferedTex = std::make_shared<Texture>();
+				arrRTTex[i] = defferedTex;
+				arrRTTex[i]->Create(_ResolutionX, _ResolutionY, DXGI_FORMAT_R32G32B32A32_FLOAT
+					, D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE);
+			}
 
-			arrRTTex[0]->Create(_ResolutionX, _ResolutionY, DXGI_FORMAT_R32G32B32A32_FLOAT
-				, D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE);
-			arrRTTex[1]->Create(_ResolutionX, _ResolutionY, DXGI_FORMAT_R32G32B32A32_FLOAT
-				, D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE);
+			//std::shared_ptr<Texture> diffuse = std::make_shared<Texture>();
+			//std::shared_ptr<Texture> specular = std::make_shared<Texture>();
+
+			//arrRTTex[(int)eMRT_Light::DiffuseLightTarget] = diffuse;
+			//arrRTTex[(int)eMRT_Light::SpecularLightTarget] = specular;
+
+			//arrRTTex[0]->Create(_ResolutionX, _ResolutionY, DXGI_FORMAT_R32G32B32A32_FLOAT
+			//	, D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE);
+			//arrRTTex[1]->Create(_ResolutionX, _ResolutionY, DXGI_FORMAT_R32G32B32A32_FLOAT
+			//	, D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE);
 
 			mMultiRenderTargets[(int)eMRTType::Light] = std::make_unique<MultiRenderTarget>();
 			mMultiRenderTargets[(int)eMRTType::Light]->Create(arrRTTex, nullptr);

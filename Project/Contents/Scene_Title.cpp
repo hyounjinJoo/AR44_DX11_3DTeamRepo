@@ -106,6 +106,8 @@ namespace mh
 		{
 			std::shared_ptr<MeshData> data = ResMgr::Load<MeshData>("stm520_038_00.fbx");
 			GameObject* obj = data->Instantiate();
+			Com_Transform* tr = obj->GetComponent<Com_Transform>();
+			tr->SetRelativeScale(float3(0.5f));
 			obj->SetName("fbxTextObj");
 			obj->AddComponent<Script_Player>();
 			object::Instantiate(eLayerType::Player, obj);
