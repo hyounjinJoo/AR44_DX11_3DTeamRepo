@@ -265,6 +265,7 @@ call Copy_HLSL.bat $(Configuration)</Command>
     <ClInclude Include="Com_DummyAnimator.h" />
     <ClInclude Include="Com_Renderer_Mesh.h" />
     <ClInclude Include="DefaultComInitializer.h" />
+    <ClInclude Include="EventMgr.h" />
     <ClInclude Include="FBXLoader.h" />
     <ClInclude Include="GameMainWindow.h" />
     <ClInclude Include="guiBase.h" />
@@ -390,6 +391,7 @@ call Copy_HLSL.bat $(Configuration)</Command>
     <ClCompile Include="Com_DummyAnimator.cpp" />
     <ClCompile Include="Com_Renderer_Mesh.cpp" />
     <ClCompile Include="DefaultComInitializer.cpp" />
+    <ClCompile Include="EventMgr.cpp" />
     <ClCompile Include="FBXLoader.cpp" />
     <ClCompile Include="GameMainWindow.cpp" />
     <ClCompile Include="guiBase.cpp" />

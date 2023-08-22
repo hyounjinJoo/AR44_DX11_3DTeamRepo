@@ -28,7 +28,7 @@ namespace mh::define
 
 	namespace strKey
 	{
-		STRKEY DirName_Content = "Res";
+		STRKEY DirName_Resource = "Res";
 		//리소스 이름 겸 Res 폴더 내의 폴더명으로 사용
 		STRKEY ArrResName[(int)eResourceType::END] =
 		{

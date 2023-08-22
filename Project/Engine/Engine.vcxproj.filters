@@ -480,6 +480,7 @@
     <ClCompile Include="Com_DummyAnimator.cpp">
       <Filter>Component\Animator</Filter>
     </ClCompile>
+    <ClCompile Include="EventMgr.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application.h">
@@ -836,6 +837,7 @@
     <ClInclude Include="Com_DummyAnimator.h">
       <Filter>Component\Animator</Filter>
     </ClInclude>
+    <ClInclude Include="EventMgr.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="cpp.hint">

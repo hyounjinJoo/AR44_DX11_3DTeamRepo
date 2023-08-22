@@ -5,9 +5,9 @@
 
 namespace mh
 {
-	std::filesystem::path PathMgr::mAbsolutePath{};
-	std::filesystem::path PathMgr::mRelativePath{};
-	std::filesystem::path PathMgr::mRelativePath_Res[(int)eResourceType::END]{};
+	std::filesystem::path PathMgr::mAbsoluteResPath{};
+	std::filesystem::path PathMgr::mRelativeResPath{};
+	std::filesystem::path PathMgr::mRelativePathContent[(int)eResourceType::END]{};
 	std::filesystem::path PathMgr::mRelativePath_ShaderCSO{};
 
 	void PathMgr::Init()
@@ -15,19 +15,18 @@ namespace mh
 		AtExit::AddFunc(PathMgr::Release);
 
 		//에러가 발생하지 않게 디렉토리가 없을 경우 생성해주는 작업까지 진행
-
-		mAbsolutePath = std::filesystem::current_path();
-		mAbsolutePath /= define::strKey::DirName_Content;
-		if (false == std::fs::exists(mAbsolutePath))
+		mAbsoluteResPath = std::filesystem::current_path().parent_path();
+		mAbsoluteResPath /= define::strKey::DirName_Resource;
+		if (false == std::fs::exists(mAbsoluteResPath))
 		{
-			std::fs::create_directories(mAbsolutePath);
+			std::fs::create_directories(mAbsoluteResPath);
 		}
 
-		mRelativePath = ".";
-		mRelativePath /= mh::define::strKey::DirName_Content;
-		if (false == std::fs::exists(mRelativePath))
+		mRelativeResPath = "../";
+		mRelativeResPath /= mh::define::strKey::DirName_Resource;
+		if (false == std::fs::exists(mRelativeResPath))
 		{
-			std::fs::create_directories(mRelativePath);
+			std::fs::create_directories(mRelativeResPath);
 		}
 
 		mRelativePath_ShaderCSO = ".";
@@ -39,12 +38,12 @@ namespace mh
 
 		for (int i = 0; i < (int)eResourceType::END; ++i)
 		{
-			mRelativePath_Res[i] = mRelativePath;
-			mRelativePath_Res[i] /= mh::define::strKey::ArrResName[i];
+			mRelativePathContent[i] = mRelativeResPath;
+			mRelativePathContent[i] /= mh::define::strKey::ArrResName[i];
 
-			if (false == std::fs::exists(mRelativePath_Res[i]))
+			if (false == std::fs::exists(mRelativePathContent[i]))
 			{
-				std::fs::create_directories(mRelativePath_Res[i]);
+				std::fs::create_directories(mRelativePathContent[i]);
 			}
 		}
 
@@ -52,11 +51,11 @@ namespace mh
 
 	void PathMgr::Release()
 	{
-		mAbsolutePath.clear();
-		mRelativePath.clear();
+		mAbsoluteResPath.clear();
+		mRelativeResPath.clear();
 		for (int i = 0; i < (int)eResourceType::END; ++i)
 		{
-			mRelativePath_Res[i].clear();
+			mRelativePathContent[i].clear();
 		}
 
 		mRelativePath_ShaderCSO.clear();
