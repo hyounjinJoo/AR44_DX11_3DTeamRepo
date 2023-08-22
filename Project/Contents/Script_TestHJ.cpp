@@ -1,6 +1,7 @@
 #include "PCH_Contents.h"
 #include "Script_TestHJ.h"
-
+#include <Engine/InputMgr.h>
+#include <Engine/GameObject.h>
 
 namespace mh
 {
@@ -17,6 +18,14 @@ namespace mh
 	void Script_TestHJ::Init()
 	{
 
+	}
+
+	void Script_TestHJ::Update()
+	{
+		if (InputMgr::GetKey(eKeyCode::E))
+		{
+			GetOwner()->Destroy();
+		}
 	}
 
 	int Script_TestHJ::GetHP() const

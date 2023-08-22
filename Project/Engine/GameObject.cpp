@@ -6,6 +6,7 @@
 
 #include "json-cpp/json.h"
 #include "Prefab.h"
+#include "EventMgr.h"
 
 namespace mh
 {
@@ -353,39 +354,8 @@ AddComponent<T> 또는 ComMgr::GetNewComponent()를 통해서 생성하세요.
 		return _pCom;
 	}
 
-
-	void GameObject::SetLayerRecursive(define::eLayerType _type)
+	void GameObject::Destroy()
 	{
-		mLayerType = _type;
-
-		for (size_t i = 0; i < mChilds.size(); ++i)
-		{
-			if (mChilds[i])
-				mChilds[i]->SetLayerRecursive(_type);
-		}
-	}
-
-	void GameObject::AddToLayerRecursive()
-	{
-		IScene* scene = SceneMgr::GetActiveScene();
-		scene->GetLayer(mLayerType).AddGameObject(this);
-
-		for (size_t i = 0; i < mChilds.size(); ++i)
-		{
-			if (mChilds[i])
-				mChilds[i]->AddToLayerRecursive();
-		}
-	}
-	void GameObject::AddToLayerRecursive(define::eLayerType _type)
-	{
-		mLayerType = _type;
-		IScene* scene = SceneMgr::GetActiveScene();
-		scene->GetLayer(mLayerType).AddGameObject(this);
-
-		for (size_t i = 0; i < mChilds.size(); ++i)
-		{
-			if (mChilds[i])
-				mChilds[i]->AddToLayerRecursive(_type);
-		}
+		EventMgr::DestroyGameObj(this);
 	}
 }

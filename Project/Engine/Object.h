@@ -7,29 +7,29 @@
 
 namespace mh::object
 {
-	inline GameObject* Instantiate(define::eLayerType _type, GameObject* _pObj)
-	{
-		IScene* scene = SceneMgr::GetActiveScene();
+	//inline GameObject* Instantiate(define::eLayerType _type, GameObject* _pObj)
+	//{
+	//	IScene* scene = SceneMgr::GetActiveScene();
 
-		_pObj->AddToLayerRecursive(_type);
+	//	_pObj->AddToLayerRecursive(_type);
 
-		if(scene->IsInitialized())
-			_pObj->Init();
+	//	if(scene->IsInitialized())
+	//		_pObj->Init();
 
-		return _pObj;
-	}
+	//	return _pObj;
+	//}
 
 
-	static void Destroy(GameObject* _gameObject)
-	{
-		_gameObject->Death();
-	}
+	//static void Destroy(GameObject* _gameObject)
+	//{
+	//	_gameObject->Death();
+	//}
 
-	static void DontDestroyOnLoad(GameObject* _gameObject)   //씬 이동시 이 오브젝트는 삭제하지 않는다
-	{
-		if (_gameObject == nullptr)
-			return;
+	//static void DontDestroyOnLoad(GameObject* _gameObject)   //씬 이동시 이 오브젝트는 삭제하지 않는다
+	//{
+	//	if (_gameObject == nullptr)
+	//		return;
 
-		_gameObject->DontDestroy(true);
-	}
+	//	_gameObject->DontDestroy(true);
+	//}
 }

@@ -16,10 +16,14 @@ namespace mh
 		virtual void Destroy();
 
 		void AddGameObject(GameObject* gameObject, bool _bNeedInit = false);
+		void RemoveGameObject(const GameObject* gameObject);
 		const std::vector<GameObject*>& GetGameObjects() { return mGameObjects; }
 		std::vector<GameObject*> GetDontDestroyGameObjects();
 
+		void SetLayerType(define::eLayerType _type) { mLayerType = _type; }
+
 	private:
+		define::eLayerType mLayerType;
 		std::vector<GameObject*> mGameObjects;
 	};
 

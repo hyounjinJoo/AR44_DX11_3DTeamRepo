@@ -13,12 +13,13 @@
 #include "AudioMgr.h"
 #include "FontWrapper.h"
 #include "PathMgr.h"
+#include "EventMgr.h"
 
 namespace mh
 {
 	using namespace mh::define;
 
-	std::vector<std::function<void()>> Application::mDestroyFuncs;
+	std::vector<std::function<void()>> Application::mEndFrameFuncs;
 
 
 	HWND			Application::mHwnd{};
@@ -64,6 +65,8 @@ namespace mh
 		
 		SceneMgr::Init();
 
+		EventMgr::Init();
+
 		mbInitialized = true;
 
 		return TRUE;
@@ -96,17 +99,20 @@ namespace mh
 		RenderMgr::Render();
 	}
 
-	void Application::Destroy()
+	void Application::EndFrame()
 	{
-		for (size_t i = 0; i < mDestroyFuncs.size(); ++i)
+		for (size_t i = 0; i < mEndFrameFuncs.size(); ++i)
 		{
-			if (mDestroyFuncs[i])
+			if (mEndFrameFuncs[i])
 			{
-				mDestroyFuncs[i]();
+				mEndFrameFuncs[i]();
 			}
 		}
+		mEndFrameFuncs.clear();
+		
+		SceneMgr::Destroy();
 
-		mDestroyFuncs.clear();
+		EventMgr::Update();
 	}
 
 	// Running main engine loop
@@ -115,7 +121,7 @@ namespace mh
 		Update();
 		FixedUpdate();
 		Render();
-		Destroy();
+		EndFrame();
 		
 		return mbInitialized;
 	}
@@ -127,7 +133,7 @@ namespace mh
 
 	void Application::Release()
 	{
-		Destroy();
+		//EndFrame();
 		ReleaseDC(mHwnd, mHdc);
 		mbInitialized = false;
 	}

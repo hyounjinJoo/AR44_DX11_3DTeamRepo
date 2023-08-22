@@ -28,6 +28,8 @@
 #include "Script_TestHJ.h"
 #include "Script_JH.h"
 
+#include <Engine/EventMgr.h>
+
 namespace mh
 {
 	Scene_Title::Scene_Title()
@@ -44,7 +46,7 @@ namespace mh
 
 		{
 			// Main Com_Camera Game Object
-			GameObject* cameraObj = object::Instantiate(eLayerType::Com_Camera, new GameObject);
+			GameObject* cameraObj = EventMgr::SpawnGameObject(new GameObject, eLayerType::Com_Camera);
 			cameraObj->SetName("MainCamera");
 
 			Com_Transform* tr = cameraObj->AddComponent<Com_Transform>();
@@ -110,10 +112,11 @@ namespace mh
 			tr->SetRelativeScale(float3(0.5f));
 			obj->SetName("fbxTextObj");
 			obj->AddComponent<Script_Player>();
-			object::Instantiate(eLayerType::Player, obj);
+			EventMgr::SpawnGameObject(obj, eLayerType::Player);
+			//object::Instantiate(eLayerType::Player, obj);
 
 			obj->AddComponent<Script_TestHJ>();
-			obj->AddComponent<Script_JH>();
+			//obj->AddComponent<Script_JH>();
 		}
 
 
@@ -131,7 +134,9 @@ namespace mh
 
 
 		{
-			GameObject* directionalLight = object::Instantiate(eLayerType::Player, new GameObject);
+			
+			//GameObject* directionalLight = object::Instantiate(eLayerType::Player, new GameObject);
+			GameObject* directionalLight = EventMgr::SpawnGameObject(new GameObject, eLayerType::Player);
 			directionalLight->SetName("directionalLight");
 
 			Com_Transform* tr = directionalLight->AddComponent<Com_Transform>();

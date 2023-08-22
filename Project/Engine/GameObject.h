@@ -11,6 +11,7 @@ namespace mh
 	class GameObject : public Entity
 	{
 		friend class GameObject;
+		friend class EventMgr;
 	public:
 		enum class eState
 		{
@@ -65,27 +66,28 @@ namespace mh
 		eState GetState() { return mState; }
 		
 		void Pause() { mState = eState::Paused; }
-		void Death() { mState = eState::Dead; }
+		void Destroy();
+		
 				
 		bool IsDontDestroy() { return mbDontDestroy; }
 		void DontDestroy(bool _enable) { mbDontDestroy = _enable; }
 		
-		define::eLayerType GetLayerType() { return mLayerType; }
+		define::eLayerType GetLayerType() const { return mLayerType; }
 		void SetLayerType(define::eLayerType _type) { mLayerType = _type; }
 
 		GameObject* AddChild(GameObject* _pObj);
 
-		void SetLayerRecursive(define::eLayerType _type);
-		void AddToLayerRecursive();
-		void AddToLayerRecursive(define::eLayerType _type);
+		void GetGameObjectHierarchy(std::vector<GameObject*>& _gameObjects);
 
 		bool IsMaster() const { return (nullptr == mParent); }
 		GameObject* GetParent() { return mParent; }
 		const std::vector<GameObject*>& GetChilds() const { return mChilds; }
 
-	private:
 		void SetParent(GameObject* _pObj) { mParent = _pObj; }
 		void RemoveChild(GameObject* _pObj);
+
+	protected:
+		void DestroyRecursive();
 
 	private:
 		std::string mName;
@@ -127,6 +129,17 @@ namespace mh
 		return AddComponent(pCom);
 	}
 
+
+
+	inline void GameObject::DestroyRecursive()
+	{
+		mState = eState::Dead;
+		for (size_t i = 0; i < mChilds.size(); ++i)
+		{
+			mChilds[i]->DestroyRecursive();
+		}
+	}
+
 	inline GameObject* GameObject::AddChild(GameObject* _pObj)
 	{
 		//nullptr이나 자기 자신을 인자로 호출했을 경우 오류 발생			
@@ -134,14 +147,22 @@ namespace mh
 
 		//부모 오브젝트가 있을 경우 기존의 부모 오브젝트에서 자신을 제거한 후 여기에 추가해야함
 		if (nullptr != (_pObj->GetParent()))
+		{
 			_pObj->GetParent()->RemoveChild(_pObj);
-
+		}
 		_pObj->SetParent(this);
 		mChilds.push_back(_pObj);
 		return _pObj;
 	}
 
-
+	inline void GameObject::GetGameObjectHierarchy(std::vector<GameObject*>& _gameObjects)
+	{
+		_gameObjects.push_back(this);
+		for (size_t i = 0; i < mChilds.size(); ++i)
+		{
+			mChilds[i]->GetGameObjectHierarchy(_gameObjects);
+		}
+	}
 
 	inline void GameObject::RemoveChild(GameObject* _pObj)
 	{

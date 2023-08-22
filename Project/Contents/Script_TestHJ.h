@@ -12,6 +12,7 @@ namespace mh
 		virtual ~Script_TestHJ();
 
 		virtual void Init() override;
+		virtual void Update() override;
 
 		int GetHP() const;
 

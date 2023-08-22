@@ -8,21 +8,10 @@
 
 namespace mh
 {
-	// z값 정렬 작성중
-	//static bool CompareGameObjectByZAxis(GameObject* a, GameObject* b)
-	//{
-	//	Transform* aTr = a->GetTransform();
-	//	Transform* bTr = b->GetTransform();
-
-	//	if (aTr->GetRelativePos().z <= bTr->GetRelativePos().z)
-	//	{
-	//		return true;
-	//	}
-
-	//	return false;
-	//}
 
 	Layer::Layer()
+		: mLayerType()
+		, mGameObjects{}
 	{
 	}
 
@@ -82,39 +71,25 @@ namespace mh
 
 	void Layer::Destroy()
 	{
-		std::set<GameObject*> deleteObjects;
-		// 삭제할 오브젝트들을 전부 찾아온다.
-		for (GameObject* gameObj : mGameObjects)
-		{
-			if (gameObj->GetState() == GameObject::eState::Dead)
+		std::vector<GameObject*> masterObjects;
+		auto iter = std::remove_if(mGameObjects.begin(), mGameObjects.end(),
+			[&](GameObject* _obj)->bool
 			{
-				deleteObjects.insert(gameObj);
+				bool bRet = false;
+				if (GameObject::eState::Dead == _obj->GetState())
+				{
+					if (_obj->IsMaster())
+						masterObjects.push_back(_obj);
+					bRet = true;
+				}
+				return bRet;
 			}
-		}
+		);
+		mGameObjects.erase(iter, mGameObjects.end());
 
-		// 지워야할 오브젝트들 게임 오브젝트 모음안에서 삭제
-		for (GameObjectIter iter = mGameObjects.begin()
-			; iter != mGameObjects.end()
-			; )
+		for (size_t i = 0; i < masterObjects.size(); ++i)
 		{
-			std::set<GameObject*>::iterator deleteIter
-				= deleteObjects.find(*iter);
-
-			if (deleteIter != deleteObjects.end())
-			{
-				iter = mGameObjects.erase(iter);
-			}
-			else
-			{
-				iter++;
-			}
-		}
-
-		// 삭제할 오브젝트들을 실제 램(메모리)에서 삭제
-		for (GameObject* gameObj : deleteObjects)
-		{
-			delete gameObj;
-			gameObj = nullptr;
+			delete masterObjects[i];
 		}
 	}
 
@@ -127,6 +102,23 @@ namespace mh
 
 		if (_bNeedInit)
 			gameObject->Init();
+	}
+
+	void Layer::RemoveGameObject(const GameObject* gameObject)
+	{
+		if (gameObject)
+		{
+			auto iter = mGameObjects.begin();
+			const auto& iterEnd = mGameObjects.end();
+			for (iter; iter != iterEnd; ++iter)
+			{
+				if (gameObject == (*iter))
+				{
+					mGameObjects.erase(iter);
+					break;
+				}
+			}
+		}
 	}
 	std::vector<GameObject*> Layer::GetDontDestroyGameObjects()
 	{

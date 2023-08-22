@@ -291,7 +291,7 @@ namespace mh
 
 	void Com_Camera::PushGameObjectToRenderingModes(GameObject* _gameObj)
 	{
-		if (nullptr == _gameObj)
+		if (nullptr == _gameObj || GameObject::eState::Active != _gameObj->GetState())
 			return;
 
 		IRenderer* renderer = static_cast<IRenderer*>(_gameObj->GetComponent(define::eComponentType::Renderer));
