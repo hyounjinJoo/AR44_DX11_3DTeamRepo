@@ -7,6 +7,7 @@
 #include "FBXLoader.h"
 #include "GameObject.h"
 #include "Com_DummyTransform.h"
+#include "Com_DummyAnimator.h"
 #include "Com_Renderer_3DAnimMesh.h"
 #include "Com_Animator3D.h"
 #include "define_Util.h"
@@ -212,7 +213,8 @@ namespace mh
 			for (size_t i = 0; i < mMeshContainers.size(); ++i)
 			{
 				GameObject* child = uniqObj->AddChild(new GameObject);
-				child->AddComponent(tr, true);
+				child->AddComponent<Com_DummyTransform>();
+				child->AddComponent<Com_DummyAnimator>();
 
 				//ComMgr로부터 Mesh 렌더러를 받아와서 MultiMesh에 넣어준다.
 				Com_Renderer_Mesh* renderer = nullptr;
@@ -220,7 +222,6 @@ namespace mh
 				{
 					//수동으로 애니메이터를 설정
 					auto* renderer3D = child->AddComponent<Com_Renderer_3DAnimMesh>();
-					child->AddComponent(renderer3D, true);
 					renderer = static_cast<Com_Renderer_Mesh*>(renderer3D);
 				}
 				else

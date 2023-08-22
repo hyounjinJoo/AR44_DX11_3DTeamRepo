@@ -104,6 +104,11 @@ namespace mh
 		m_bFinalMatUpdate = false;
 	}
 
+	void Com_Animator3D::Render()
+	{
+		BindData();
+	}
+
 	void Com_Animator3D::SetSkeleton(Skeleton* _pSkeleton)
 	{
 		//스켈레톤 주소를 받아서

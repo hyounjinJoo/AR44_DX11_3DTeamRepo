@@ -293,7 +293,7 @@ namespace mh
 	{
 		//CSO 파일이 있는 폴더에 접근
 		std::filesystem::path shaderBinPath = std::fs::current_path();
-		shaderBinPath /= strKey::DirName_ShaderCSO;
+		shaderBinPath /= strKey::DirName_CompiledShader;
 		shaderBinPath /= _FileName;
 
 		if (false == std::fs::exists(shaderBinPath))

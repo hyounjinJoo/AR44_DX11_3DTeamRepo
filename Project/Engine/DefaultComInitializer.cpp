@@ -16,6 +16,7 @@
 #include "Com_Renderer_3DAnimMesh.h"
 #include "Com_Renderer_ParticleSystem.h"
 #include "Com_Renderer_Sprite.h"
+#include "Com_DummyAnimator.h"
 
 
 
@@ -31,6 +32,8 @@ namespace mh
 		ComMgr::AddComConstructor<Com_Transform>(strKey::Default::com::Com_Transform);
 		ComMgr::AddComConstructor<Com_Animator2D>(strKey::Default::com::Com_Animator2D);
 		ComMgr::AddComConstructor<Com_Animator3D>(strKey::Default::com::Com_Animator3D);
+		ComMgr::AddComConstructor<Com_DummyAnimator>(strKey::Default::com::Com_DummyAnimator);
+		
 		ComMgr::AddComConstructor<Com_AudioListener>(strKey::Default::com::Com_AudioListener);
 		ComMgr::AddComConstructor<Com_AudioSource>(strKey::Default::com::Com_AudioSource);
 		ComMgr::AddComConstructor<Com_Camera>(strKey::Default::com::Com_Camera);

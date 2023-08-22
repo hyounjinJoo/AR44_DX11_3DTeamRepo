@@ -65,7 +65,7 @@ namespace mh
 		RegisterCameraInRenderer();
 	}
 
-	void Com_Camera::Render()
+	void Com_Camera::RenderCamera()
 	{
 		gView = mView;
 		gInverseView = mView.Invert();

@@ -42,7 +42,7 @@ namespace mh
 		template <typename T>
 		inline T* AddComponent();
 		
-		IComponent* AddComponent(IComponent* _pCom, bool _bShared = false);
+		IComponent* AddComponent(IComponent* _pCom);
 		inline IComponent* AddComponent(const std::string_view _strKey);
 
 		//Com_Transform& GetTransform() { return mTransform; }

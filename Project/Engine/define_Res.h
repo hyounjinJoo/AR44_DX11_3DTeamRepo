@@ -49,8 +49,8 @@ namespace mh::define
 		};
 		inline STRKEY GetResName(eResourceType _type) { return ArrResName[(int)_type]; }
 
-		STRKEY DirName_ShaderCSO = "ShaderCSO";
-		STRKEY Ext_ShaderCSO = ".cso";
+		STRKEY DirName_CompiledShader = "ShaderBin";
+		STRKEY Ext_CompiledShader = ".cso";
 		STRKEY Ext_Mesh = ".msh";
 		STRKEY Ext_MeshData = ".json";
 		STRKEY Ext_Material = ".json";

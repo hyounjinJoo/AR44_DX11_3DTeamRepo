@@ -52,6 +52,8 @@ namespace mh::define
 
 				STRKEY_DECLARE(Com_Animator2D);
 				STRKEY_DECLARE(Com_Animator3D);
+				STRKEY_DECLARE(Com_DummyAnimator);
+
 				STRKEY_DECLARE(Com_AudioListener);
 				STRKEY_DECLARE(Com_AudioSource);
 				STRKEY_DECLARE(Com_Camera);

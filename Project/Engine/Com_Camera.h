@@ -21,7 +21,7 @@ namespace  mh
 		virtual void FixedUpdate() override;
 
 		//이 함수는 RenderMgr가 호출
-		void Render();
+		void RenderCamera();
 
 		void CreateViewMatrix();
 		

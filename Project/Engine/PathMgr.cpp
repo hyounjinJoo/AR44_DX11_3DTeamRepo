@@ -31,7 +31,7 @@ namespace mh
 		}
 
 		mRelativePath_ShaderCSO = ".";
-		mRelativePath_ShaderCSO /= mh::define::strKey::DirName_ShaderCSO;
+		mRelativePath_ShaderCSO /= mh::define::strKey::DirName_CompiledShader;
 		if (false == std::fs::exists(mRelativePath_ShaderCSO))
 		{
 			std::fs::create_directories(mRelativePath_ShaderCSO);

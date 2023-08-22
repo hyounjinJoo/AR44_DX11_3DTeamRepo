@@ -69,6 +69,7 @@ namespace mh
 		if (false == mImporter->Initialize(_strPath.string().c_str(), -1, mManager->GetIOSettings()))
 		{
 			ERROR_MESSAGE_W(L"FBX 로더 초기화 실패");
+			return eResult::Fail_OpenFile;
 		}
 
 		mImporter->Import(mScene);

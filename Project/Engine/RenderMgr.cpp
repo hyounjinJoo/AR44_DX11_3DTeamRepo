@@ -130,7 +130,7 @@ namespace mh
 			if (cam == nullptr)
 				continue;
 
-			cam->Render();
+			cam->RenderCamera();
 		}
 
 		mCameras.clear();

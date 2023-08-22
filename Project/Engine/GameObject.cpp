@@ -286,6 +286,7 @@ namespace mh
 	}
 
 	//이 함수는 다른 카메라가 호출함
+	//
 	void GameObject::Render()
 	{
 		for (size_t i = 0; i < mComponents.size(); ++i)
@@ -294,16 +295,22 @@ namespace mh
 				mComponents[i]->Render();
 		}
 
-		for (size_t i = 0; i < mChilds.size(); ++i)
+		for (size_t i = 0; i < mComponents.size(); ++i)
 		{
-			if (mChilds[i])
-				mChilds[i]->Render();
+			if (mComponents[i])
+				mComponents[i]->RenderEnd();
 		}
+
+		//for (size_t i = 0; i < mChilds.size(); ++i)
+		//{
+		//	if (mChilds[i])
+		//		mChilds[i]->Render();
+		//}
 	}
 
 
 
-	IComponent* GameObject::AddComponent(IComponent* _pCom, bool _bShared)
+	IComponent* GameObject::AddComponent(IComponent* _pCom)
 	{
 		if (nullptr == _pCom)
 			return nullptr;
@@ -340,8 +347,9 @@ AddComponent<T> 또는 ComMgr::GetNewComponent()를 통해서 생성하세요.
 			mComponents[(int)ComType] = _pCom;
 		}
 
-		if(false == _bShared)
-			_pCom->SetOwner(this);
+		
+		_pCom->SetOwner(this);
+
 		return _pCom;
 	}
 
