@@ -135,12 +135,12 @@ namespace mh
 			directionalLight->SetName("directionalLight");
 
 			Com_Transform* tr = directionalLight->AddComponent<Com_Transform>();
-			tr->SetRelativePos(float3(500.f, 500.f, 0.0f));
+			tr->SetRelativePos(float3(0.0f, 100.0f, 0.0f));
 			tr->SetRelativeRotXYZ(float3(45.0f, 0.0f, 0.0f));
 
 			Com_Light3D* lightComp = directionalLight->AddComponent<Com_Light3D>();
 			lightComp->SetType(eLightType::Directional);
-			lightComp->SetDiffuse(float4(0.7f, 0.7f, 0.7f, 1.0f));
+			lightComp->SetDiffuse(float4(1.0f, 1.0f, 1.0f, 1.0f));
 			lightComp->SetSpecular(float4(1.0f, 1.0f, 1.0f, 1.0f));
 			lightComp->SetAmbient(float4(0.15f, 0.15f, 0.15f, 1.0f));
 		}

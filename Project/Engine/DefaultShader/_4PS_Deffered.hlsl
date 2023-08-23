@@ -1,7 +1,7 @@
 #include "SH_Deffered.hlsli"
 
 
-PSOut main(VSOut _in) : SV_Target
+PSOut main(VSOut _in)
 {
 	float4 vObjectColor = float4(0.4f, 0.4f, 0.4f, 1.f);
 	float4 vOutColor = float4(1.f, 1.f, 1.f, 1.f);
@@ -16,7 +16,7 @@ PSOut main(VSOut _in) : SV_Target
 	{
 		float3x3 matRot =
 		{
-			_in.ViewTanget,//X
+			_in.ViewTangent,//X
 			_in.ViewBiNormal,//Y
 			_in.ViewNormal//Z
 		};

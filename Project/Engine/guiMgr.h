@@ -17,6 +17,7 @@ namespace gui
 
 		static inline void SetEnable(bool _bEnable);
 		static inline bool GetEnable() { return mbEnable; }
+		static inline void ToggleEnable() { SetEnable(!mbEnable); }
 
 		template<typename T>
 		static T* FindGuiWindow(const std::string_view _strKey);

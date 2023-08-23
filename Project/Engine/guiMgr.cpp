@@ -17,6 +17,7 @@
 #include "Object.h"
 #include "Application.h"
 #include "GPUMgr.h"
+#include "InputMgr.h"
 
 #include "guiInspector.h"
 #include "guiGame.h"
@@ -119,6 +120,17 @@ namespace gui
 
 	void guiMgr::Run()
 	{
+		if (
+			mh::InputMgr::GetKey(mh::eKeyCode::LCTRL)
+			&&
+			mh::InputMgr::GetKey(mh::eKeyCode::LSHIFT)
+			&&
+			mh::InputMgr::GetKey(mh::eKeyCode::E)
+			)
+		{
+			gui::guiMgr::ToggleEnable();
+		}
+
 		if (false == mbEnable)
 			return;
 		Update();

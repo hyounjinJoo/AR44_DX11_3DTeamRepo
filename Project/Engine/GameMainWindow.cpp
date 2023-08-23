@@ -22,8 +22,6 @@ BOOL GameMainWindow::Run(const tDesc_GameMainWindow& _Desc)
     BOOL bResult = FALSE;
     bResult = Init(_Desc);
 
-    gui::guiMgr::SetEnable(_Desc.RunEditor);
-
     while (bResult)
     {
         bResult = Loop();
@@ -103,9 +101,6 @@ BOOL GameMainWindow::Loop()
         else
         {
             bReturn = mh::Application::Run();
-
-            gui::guiMgr::Run();
-            
             mh::Application::Present();
         }
     }

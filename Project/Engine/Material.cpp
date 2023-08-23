@@ -117,7 +117,7 @@ namespace mh
             jVal[JSON_KEY(mShader)] = mShader->GetKey();
         }
         
-        Json::MH::SaveStrKeyVector(_pJVal, JSON_KEY_PAIR(mTextures));
+        Json::MH::SavePtrStrKeyVector(_pJVal, JSON_KEY_PAIR(mTextures));
 
         //단순 Value의 경우에는 매크로로 바로 저장 가능
         Json::MH::SaveValue(_pJVal, JSON_KEY_PAIR(mCB));
@@ -143,14 +143,14 @@ namespace mh
         const Json::Value& jVal = *_pJVal;
 
         //쉐이더 데이터가 있는지 확인하고 가져온 키값으로 쉐이더를 로드
-        std::string shaderStrKey = Json::MH::LoadStrKey(_pJVal, JSON_KEY_PAIR(mShader));
+        std::string shaderStrKey = Json::MH::LoadPtrStrKey(_pJVal, JSON_KEY_PAIR(mShader));
         if (false == shaderStrKey.empty())
         {
             mShader = ResMgr::Load<GraphicsShader>(shaderStrKey);
         }
         
-        //포인터 배열은 MH::LoadStrKeyVector 함수를 통해서 Key값을 싹 받아올 수 있음.
-        const auto& vecLoad = Json::MH::LoadStrKeyVector(_pJVal, JSON_KEY_PAIR(mTextures));
+        //포인터 배열은 MH::LoadPtrStrKeyVector 함수를 통해서 Key값을 싹 받아올 수 있음.
+        const auto& vecLoad = Json::MH::LoadPtrStrKeyVector(_pJVal, JSON_KEY_PAIR(mTextures));
         for (size_t i = 0; i < vecLoad.size(); ++i)
         {
             if(false == vecLoad[i].empty())

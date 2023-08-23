@@ -2,7 +2,6 @@
 #include "IShader.h"
 #include "define_GPU.h"
 #include <unordered_set>
-#include "InputLayout.h"
 
 namespace gui
 {

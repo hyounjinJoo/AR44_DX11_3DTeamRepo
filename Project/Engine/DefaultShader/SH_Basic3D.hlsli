@@ -22,10 +22,9 @@ struct VSOut
 	float2 UV : TEXCOORD;
     
 	float3 ViewPos : POSITION;
-	float3 ViewNormal : NORMAL;
-
-	float3 ViewTanget : TANGENT;
+	float3 ViewTangent : TANGENT;
 	float3 ViewBiNormal : BINORMAL;
+	float3 ViewNormal : NORMAL;
 };
 
 #endif

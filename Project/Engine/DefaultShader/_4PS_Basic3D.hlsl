@@ -34,7 +34,7 @@ float4 main(VSOut In) : SV_Target
 
 			float3x3 matTBN =
 			{
-				In.ViewTanget,
+				In.ViewTangent,
 				In.ViewBiNormal,
 				In.ViewNormal,
 			};

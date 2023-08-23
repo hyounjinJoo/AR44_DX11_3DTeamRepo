@@ -3,6 +3,8 @@
 
 #include "define_Macro.h"
 
+#include "json-cpp/json.h"
+
 namespace gui
 {
 	guiBase::guiBase(const std::string_view _strName)
@@ -14,7 +16,6 @@ namespace gui
 	{
 	}
 
-
 	guiBase::~guiBase()
 	{
 		for (size_t i = 0; i < mChilds.size(); ++i)
@@ -22,6 +23,36 @@ namespace gui
 			if (mChilds[i])
 				delete mChilds[i];
 		}
+	}
+	mh::eResult guiBase::SaveJson(Json::Value* _pJval)
+	{
+		if (nullptr == _pJval)
+			return mh::eResult::Fail_Nullptr;
+
+		mh::eResult result = guiEntity::SaveJson(_pJval);
+		if (eResultFail(result))
+			return result;
+
+		Json::MH::SaveValue(_pJval, JSON_KEY_PAIR(mbEnable));
+
+		//Child는 구현 안했음(그냥 간단한 정보만 저장하려고 만듬)
+
+		return mh::eResult::Success;
+	}
+	mh::eResult guiBase::LoadJson(const Json::Value* _pJval)
+	{
+		if (nullptr == _pJval)
+			return mh::eResult::Fail_Nullptr;
+
+		mh::eResult result = guiEntity::LoadJson(_pJval);
+		if (eResultFail(result))
+			return result;
+
+		Json::MH::LoadValue(_pJval, JSON_KEY_PAIR(mbEnable));
+
+		//Child 저장은 구현 안했음(그냥 간단한 정보만 저장하려고 만듬)
+
+		return mh::eResult::Success;
 	}
 	void guiBase::InitRecursive()
 	{

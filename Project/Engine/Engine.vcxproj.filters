@@ -112,20 +112,8 @@
     <Filter Include="GuiEditor">
       <UniqueIdentifier>{f01415bd-35a1-4346-a2af-334b1db13884}</UniqueIdentifier>
     </Filter>
-    <Filter Include="GuiEditor\Inspector">
-      <UniqueIdentifier>{15da5104-2b2f-4459-8856-9638900e6d79}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="GuiEditor\_Widget">
-      <UniqueIdentifier>{bee12466-3d3c-47b5-bb11-8b335dcb2882}</UniqueIdentifier>
-    </Filter>
     <Filter Include="GuiEditor\_Base">
       <UniqueIdentifier>{04459d94-b375-4c1d-8734-353733b47bbf}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="GuiEditor\Resource">
-      <UniqueIdentifier>{5fbcebbb-c7b9-4ded-a1ff-723e534b0f93}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="GuiEditor\DebugObject">
-      <UniqueIdentifier>{c4101135-61a2-425a-8b62-fa43e4d50a34}</UniqueIdentifier>
     </Filter>
     <Filter Include="Common\WindowResource">
       <UniqueIdentifier>{7c2bcaa2-f3ec-46ae-9c79-07087d540363}</UniqueIdentifier>
@@ -174,6 +162,21 @@
     </Filter>
     <Filter Include="Component\0. Transform">
       <UniqueIdentifier>{62546181-5d07-413f-a9e5-329a0986165d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GuiEditor\Instances">
+      <UniqueIdentifier>{ded79648-f1d7-43d2-957c-11c1b95a2e71}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GuiEditor\Instances\Resource">
+      <UniqueIdentifier>{5fbcebbb-c7b9-4ded-a1ff-723e534b0f93}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GuiEditor\Instances\Inspector">
+      <UniqueIdentifier>{15da5104-2b2f-4459-8856-9638900e6d79}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GuiEditor\Instances\DebugObject">
+      <UniqueIdentifier>{c4101135-61a2-425a-8b62-fa43e4d50a34}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GuiEditor\_Widget">
+      <UniqueIdentifier>{bee12466-3d3c-47b5-bb11-8b335dcb2882}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -374,24 +377,6 @@
     <ClCompile Include="imgui\imgui_widgets.cpp">
       <Filter>ImGui</Filter>
     </ClCompile>
-    <ClCompile Include="guiGraphicsShaderEditor.cpp">
-      <Filter>GuiEditor</Filter>
-    </ClCompile>
-    <ClCompile Include="guiTree_GameObject.cpp">
-      <Filter>GuiEditor</Filter>
-    </ClCompile>
-    <ClCompile Include="guiConsole.cpp">
-      <Filter>GuiEditor</Filter>
-    </ClCompile>
-    <ClCompile Include="guiGame.cpp">
-      <Filter>GuiEditor</Filter>
-    </ClCompile>
-    <ClCompile Include="guiInspector.cpp">
-      <Filter>GuiEditor</Filter>
-    </ClCompile>
-    <ClCompile Include="guiMainMenu.cpp">
-      <Filter>GuiEditor</Filter>
-    </ClCompile>
     <ClCompile Include="guiMgr.cpp">
       <Filter>Manager</Filter>
     </ClCompile>
@@ -405,13 +390,13 @@
       <Filter>GuiEditor\_Base</Filter>
     </ClCompile>
     <ClCompile Include="guiCom_Transform.cpp">
-      <Filter>GuiEditor\Inspector</Filter>
+      <Filter>GuiEditor\Instances\Inspector</Filter>
     </ClCompile>
     <ClCompile Include="guiCom_Renderer.cpp">
-      <Filter>GuiEditor\Inspector</Filter>
+      <Filter>GuiEditor\Instances\Inspector</Filter>
     </ClCompile>
     <ClCompile Include="guiComponent.cpp">
-      <Filter>GuiEditor\Inspector</Filter>
+      <Filter>GuiEditor\Instances\Inspector</Filter>
     </ClCompile>
     <ClCompile Include="guiComboBox.cpp">
       <Filter>GuiEditor\_Widget</Filter>
@@ -423,25 +408,25 @@
       <Filter>GuiEditor\_Widget</Filter>
     </ClCompile>
     <ClCompile Include="guiResources.cpp">
-      <Filter>GuiEditor\Resource</Filter>
+      <Filter>GuiEditor\Instances\Resource</Filter>
     </ClCompile>
     <ClCompile Include="guiResource.cpp">
-      <Filter>GuiEditor\Resource</Filter>
+      <Filter>GuiEditor\Instances\Resource</Filter>
     </ClCompile>
     <ClCompile Include="guiDebugObject.cpp">
-      <Filter>GuiEditor\DebugObject</Filter>
+      <Filter>GuiEditor\Instances\DebugObject</Filter>
     </ClCompile>
     <ClCompile Include="guiEditorObject.cpp">
-      <Filter>GuiEditor\DebugObject</Filter>
+      <Filter>GuiEditor\Instances\DebugObject</Filter>
     </ClCompile>
     <ClCompile Include="guiTexture.cpp">
-      <Filter>GuiEditor\Resource</Filter>
+      <Filter>GuiEditor\Instances\Resource</Filter>
     </ClCompile>
     <ClCompile Include="guiMesh.cpp">
-      <Filter>GuiEditor\Resource</Filter>
+      <Filter>GuiEditor\Instances\Resource</Filter>
     </ClCompile>
     <ClCompile Include="guiMaterial.cpp">
-      <Filter>GuiEditor\Resource</Filter>
+      <Filter>GuiEditor\Instances\Resource</Filter>
     </ClCompile>
     <ClCompile Include="guiEntity.cpp">
       <Filter>GuiEditor\_Base</Filter>
@@ -483,8 +468,23 @@
     <ClCompile Include="EventMgr.cpp">
       <Filter>Manager</Filter>
     </ClCompile>
-    <ClCompile Include="InputLayout.cpp">
-      <Filter>Resource\Shaders\Graphics</Filter>
+    <ClCompile Include="guiTree_GameObject.cpp">
+      <Filter>GuiEditor\Instances</Filter>
+    </ClCompile>
+    <ClCompile Include="guiMainMenu.cpp">
+      <Filter>GuiEditor\Instances</Filter>
+    </ClCompile>
+    <ClCompile Include="guiInspector.cpp">
+      <Filter>GuiEditor\Instances</Filter>
+    </ClCompile>
+    <ClCompile Include="guiGraphicsShaderEditor.cpp">
+      <Filter>GuiEditor\Instances</Filter>
+    </ClCompile>
+    <ClCompile Include="guiGame.cpp">
+      <Filter>GuiEditor\Instances</Filter>
+    </ClCompile>
+    <ClCompile Include="guiConsole.cpp">
+      <Filter>GuiEditor\Instances</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -730,24 +730,6 @@
     <ClInclude Include="imgui\imstb_truetype.h">
       <Filter>ImGui</Filter>
     </ClInclude>
-    <ClInclude Include="guiTree_GameObject.h">
-      <Filter>GuiEditor</Filter>
-    </ClInclude>
-    <ClInclude Include="guiConsole.h">
-      <Filter>GuiEditor</Filter>
-    </ClInclude>
-    <ClInclude Include="guiGame.h">
-      <Filter>GuiEditor</Filter>
-    </ClInclude>
-    <ClInclude Include="guiGraphicsShaderEditor.h">
-      <Filter>GuiEditor</Filter>
-    </ClInclude>
-    <ClInclude Include="guiInspector.h">
-      <Filter>GuiEditor</Filter>
-    </ClInclude>
-    <ClInclude Include="guiMainMenu.h">
-      <Filter>GuiEditor</Filter>
-    </ClInclude>
     <ClInclude Include="guiMgr.h">
       <Filter>Manager</Filter>
     </ClInclude>
@@ -764,13 +746,13 @@
       <Filter>GuiEditor\_Base</Filter>
     </ClInclude>
     <ClInclude Include="guiCom_Transform.h">
-      <Filter>GuiEditor\Inspector</Filter>
+      <Filter>GuiEditor\Instances\Inspector</Filter>
     </ClInclude>
     <ClInclude Include="guiCom_Renderer.h">
-      <Filter>GuiEditor\Inspector</Filter>
+      <Filter>GuiEditor\Instances\Inspector</Filter>
     </ClInclude>
     <ClInclude Include="guiComponent.h">
-      <Filter>GuiEditor\Inspector</Filter>
+      <Filter>GuiEditor\Instances\Inspector</Filter>
     </ClInclude>
     <ClInclude Include="guiComboBox.h">
       <Filter>GuiEditor\_Widget</Filter>
@@ -782,25 +764,25 @@
       <Filter>GuiEditor\_Widget</Filter>
     </ClInclude>
     <ClInclude Include="guiResources.h">
-      <Filter>GuiEditor\Resource</Filter>
+      <Filter>GuiEditor\Instances\Resource</Filter>
     </ClInclude>
     <ClInclude Include="guiResource.h">
-      <Filter>GuiEditor\Resource</Filter>
+      <Filter>GuiEditor\Instances\Resource</Filter>
     </ClInclude>
     <ClInclude Include="guiDebugObject.h">
-      <Filter>GuiEditor\DebugObject</Filter>
+      <Filter>GuiEditor\Instances\DebugObject</Filter>
     </ClInclude>
     <ClInclude Include="guiEditorObject.h">
-      <Filter>GuiEditor\DebugObject</Filter>
+      <Filter>GuiEditor\Instances\DebugObject</Filter>
     </ClInclude>
     <ClInclude Include="guiTexture.h">
-      <Filter>GuiEditor\Resource</Filter>
+      <Filter>GuiEditor\Instances\Resource</Filter>
     </ClInclude>
     <ClInclude Include="guiMesh.h">
-      <Filter>GuiEditor\Resource</Filter>
+      <Filter>GuiEditor\Instances\Resource</Filter>
     </ClInclude>
     <ClInclude Include="guiMaterial.h">
-      <Filter>GuiEditor\Resource</Filter>
+      <Filter>GuiEditor\Instances\Resource</Filter>
     </ClInclude>
     <ClInclude Include="guiEntity.h">
       <Filter>GuiEditor\_Base</Filter>
@@ -845,8 +827,23 @@
     <ClInclude Include="EventMgr.h">
       <Filter>Manager</Filter>
     </ClInclude>
-    <ClInclude Include="InputLayout.h">
-      <Filter>Resource\Shaders\Graphics</Filter>
+    <ClInclude Include="guiTree_GameObject.h">
+      <Filter>GuiEditor\Instances</Filter>
+    </ClInclude>
+    <ClInclude Include="guiMainMenu.h">
+      <Filter>GuiEditor\Instances</Filter>
+    </ClInclude>
+    <ClInclude Include="guiInspector.h">
+      <Filter>GuiEditor\Instances</Filter>
+    </ClInclude>
+    <ClInclude Include="guiGraphicsShaderEditor.h">
+      <Filter>GuiEditor\Instances</Filter>
+    </ClInclude>
+    <ClInclude Include="guiGame.h">
+      <Filter>GuiEditor\Instances</Filter>
+    </ClInclude>
+    <ClInclude Include="guiConsole.h">
+      <Filter>GuiEditor\Instances</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
