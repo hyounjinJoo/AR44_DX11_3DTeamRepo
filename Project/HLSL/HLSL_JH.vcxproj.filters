@@ -30,5 +30,23 @@
     <None Include="SH_Sampler.hlsli">
       <Filter>Engine</Filter>
     </None>
+    <None Include="SH_Functions.hlsli">
+      <Filter>Engine</Filter>
+    </None>
+    <None Include="SH_Func_Light.hlsli">
+      <Filter>Engine</Filter>
+    </None>
+    <None Include="SH_Func_DecodeColor.hlsli">
+      <Filter>Engine</Filter>
+    </None>
+    <None Include="SH_Func_Blur.hlsli">
+      <Filter>Engine</Filter>
+    </None>
+    <None Include="SH_CommonStruct.hlsli">
+      <Filter>Engine</Filter>
+    </None>
+    <None Include="SH_Common.hlsli">
+      <Filter>Engine</Filter>
+    </None>
   </ItemGroup>
 </Project>

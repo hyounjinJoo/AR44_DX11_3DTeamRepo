@@ -30,5 +30,11 @@
     <None Include="SH_Sampler.hlsli">
       <Filter>Engine</Filter>
     </None>
+    <None Include="SH_Common.hlsli" />
+    <None Include="SH_CommonStruct.hlsli" />
+    <None Include="SH_Func_Blur.hlsli" />
+    <None Include="SH_Func_DecodeColor.hlsli" />
+    <None Include="SH_Func_Light.hlsli" />
+    <None Include="SH_Functions.hlsli" />
   </ItemGroup>
 </Project>
