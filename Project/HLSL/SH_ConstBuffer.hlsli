@@ -3,6 +3,16 @@
 
 #include "SH_CommonStruct.hlsli"
 
+
+//////////////////////////////////
+//새로운 상수버퍼 생성시 해줘야 할것
+//구조체 선언
+//CBUFFER(버퍼이름, 사용할 구조체이름, 버퍼타입, 버퍼번호) 작성
+//아래 C++ enum class에 해당 번호 추가
+//RenderMgr에서 상수버퍼 추가
+/////////////////////////////////
+
+
 //CBUFFER(버퍼이름, 사용할 구조체이름, 버퍼타입, 버퍼번호)
 CBUFFER(CB_Global, tCB_Global, b, 0);
 CBUFFER(CB_Transform, tCB_Transform, b, 1);
@@ -15,6 +25,7 @@ CBUFFER(CB_ParticleSystem, tCB_ParticleSystem, b, 7);
 CBUFFER(CB_Noise, tCB_Noise, b, 8);
 CBUFFER(CB_SBufferCount, tCB_SBufferCount, b, 9);
 CBUFFER(CB_Animation3D, tCB_Animation3D, b, 10);
+CBUFFER(CB_UniformData, tCB_UniformData, b, 11);
 
 #ifdef __cplusplus
 
@@ -33,6 +44,7 @@ namespace mh::define
 		Noise = Register_b_CB_Noise,	
 		SBufferCount = Register_b_CB_SBufferCount,
 		Animation3D = Register_b_CB_Animation3D,
+		UniformData = Register_b_CB_UniformData,
 		END
 	};
 };

@@ -25,7 +25,6 @@ namespace mh
 		static void Render();
 
 		static ConstBuffer* GetConstBuffer(define::eCBType _Type) { return mConstBuffers[(int)_Type].get(); }
-
 		//static void SetDataToConstBuffer(eCBType _Type, void* _pData, uint _dataCount = 1u);
 
 		static inline Com_Camera* GetMainCam() { return mMainCamera; }
@@ -80,7 +79,7 @@ namespace mh
 		static void CreateDepthStencilStates();
 		static void CreateBlendStates();
 		
-		static void LoadBuffer();
+		static void CreateBuffer();
 
 		static void Init();
 		static void Release();

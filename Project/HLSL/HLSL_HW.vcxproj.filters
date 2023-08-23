@@ -1,10 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <FxCompile Include="_0VS_Test.hlsl" />
-    <FxCompile Include="CS_Test.hlsl" />
-  </ItemGroup>
-  <ItemGroup>
     <Filter Include="Engine">
       <UniqueIdentifier>{19f8e468-06e3-47f2-b64a-78dd6cb8c71d}</UniqueIdentifier>
     </Filter>

@@ -19,12 +19,10 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Com_TestJH.h" />
     <ClInclude Include="Scene_Example.h" />
     <ClInclude Include="Script_JH.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Com_TestJH.cpp" />
     <ClCompile Include="Scene_Example.cpp" />
     <ClCompile Include="Script_JH.cpp" />
   </ItemGroup>
