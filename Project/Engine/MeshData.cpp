@@ -6,14 +6,16 @@
 #include "ResMgr.h"
 #include "FBXLoader.h"
 #include "GameObject.h"
-#include "Com_Renderer_Mesh.h"
-#include "Com_Renderer_MultiMesh.h"
+#include "Com_DummyTransform.h"
+#include "Com_DummyAnimator.h"
+#include "Com_Renderer_3DAnimMesh.h"
 #include "Com_Animator3D.h"
 #include "define_Util.h"
 
 #include "PathMgr.h"
 #include "json-cpp/json.h"
 #include "Skeleton.h"
+#include "object.h"
 
 namespace mh
 {
@@ -147,8 +149,6 @@ namespace mh
 		{
 			tMeshContainer cont{};
 
-
-			
 			//Mesh Load
 			std::string meshStrKey = Json::MH::LoadStrKey(&(*iter), JSON_KEY(pMesh), cont.pMesh);
 			cont.pMesh = ResMgr::Load<Mesh>(meshStrKey);
@@ -175,24 +175,55 @@ namespace mh
 				return result;
 		}
 
+		if (mSkeleton)
+		{
+			for (size_t i = 0; i < mMeshContainers.size(); ++i)
+			{
+				if (mMeshContainers[i].pMesh)
+				{
+					mMeshContainers[i].pMesh->SetSkeleton(mSkeleton.get());
+				}
+			}
+		}
+
 		return eResult::Success;
 	}
 
 
 	GameObject* MeshData::Instantiate()
 	{
-		std::unique_ptr<GameObject> uniqObj = std::make_unique<GameObject>();
-		uniqObj->AddComponent<Com_Transform>();
-
 		if (mMeshContainers.empty())
 		{
 			return nullptr;
 		}
 
-		//사이즈가 딱 하나일 경우: GameObject 본체에 데이터를 생성
-		else if (1u == (UINT)mMeshContainers.size())
+		std::unique_ptr<GameObject> uniqObj = std::make_unique<GameObject>();
+		Com_Transform* tr = uniqObj->AddComponent<Com_Transform>();
+
+		//스켈레톤 있고 + 애니메이션 데이터가 있을 경우 Animator 생성
+		Com_Animator3D* animator = nullptr;
+		if (mSkeleton && mSkeleton->IsAnimMesh())
 		{
-			Com_Renderer_Mesh* renderer = uniqObj->AddComponent<Com_Renderer_Mesh>();
+			animator = uniqObj->AddComponent<Com_Animator3D>();
+			animator->SetSkeleton(mSkeleton.get());
+		}
+
+
+		//사이즈가 딱 하나일 경우: GameObject 본체에 데이터를 생성
+		if (1u == (UINT)mMeshContainers.size())
+		{
+			Com_Renderer_Mesh* renderer = nullptr;
+			if (animator)
+			{
+				//수동으로 애니메이터를 설정
+				auto* renderer3D = uniqObj->AddComponent<Com_Renderer_3DAnimMesh>();
+				renderer = static_cast<Com_Renderer_Mesh*>(renderer3D);
+			}
+			else
+			{
+				renderer = uniqObj->AddComponent<Com_Renderer_Mesh>();
+			}
+
 			MH_ASSERT(renderer);
 			SetRenderer(renderer, 0);
 		}
@@ -200,25 +231,31 @@ namespace mh
 		//여러 개의 container를 가지고 있을 경우: 하나의 부모 object에 여러개의 child를 생성해서 각각 Meshrenderer에 할당
 		else
 		{
-			//MultiMesh 컴포넌트를 집어넣어준다.
-			Com_Renderer_MultiMesh* multiMesh = uniqObj->AddComponent<Com_Renderer_MultiMesh>();
 			for (size_t i = 0; i < mMeshContainers.size(); ++i)
 			{
-				//ComMgr로부터 Mesh 렌더러를 받아와서 MultiMesh에 넣어준다.
-				Com_Renderer_Mesh* renderer = static_cast<Com_Renderer_Mesh*>(ComMgr::GetNewCom(define::strKey::Default::com::Com_Renderer_Mesh));
-				MH_ASSERT(renderer);
-				multiMesh->AddMeshRenderer(renderer);
+				GameObject* child = uniqObj->AddChild(new GameObject);
+				child->AddComponent<Com_DummyTransform>();
+				child->AddComponent<Com_DummyAnimator>();
 
+				//ComMgr로부터 Mesh 렌더러를 받아와서 MultiMesh에 넣어준다.
+				Com_Renderer_Mesh* renderer = nullptr;
+				if (animator)
+				{
+					//수동으로 애니메이터를 설정
+					auto* renderer3D = child->AddComponent<Com_Renderer_3DAnimMesh>();
+					renderer = static_cast<Com_Renderer_Mesh*>(renderer3D);
+				}
+				else
+				{
+					renderer = child->AddComponent<Com_Renderer_Mesh>();
+				}
+				
+				MH_ASSERT(renderer);
 				SetRenderer(renderer, (UINT)i);
 			}
 		}
 
-		//스켈레톤 있고 + 애니메이션 데이터가 있을 경우
-		if (mSkeleton && mSkeleton->IsAnimMesh())
-		{
-			Com_Animator3D* animator = uniqObj->AddComponent<Com_Animator3D>();
-			animator->SetSkeleton(mSkeleton.get());
-		}
+
 
 		//다 됐을 경우 unique_ptr 관리 해제하고 주소 반환
 		return uniqObj.release();
@@ -268,7 +305,8 @@ namespace mh
 			ERROR_MESSAGE_W(L"Skeleton 로드 실패.");
 			return result;
 		}
-		mSkeleton->Save(_fileName);
+		if(mSkeleton)
+			mSkeleton->Save(_fileName);
 
 		//컨테이너 갯수만큼 순회를 돌아준다.
 		int contCount = loader.GetContainerCount();

@@ -18,7 +18,6 @@ namespace strKey_Shader
 	namespace Graphics
 	{
 		STRKEY CH = "CH.json";
-		STRKEY Test = "Test.json";
 		STRKEY HJ = "HJ.json";
 		STRKEY JH = "JH.json";
 		STRKEY TestCH = "TestCH.json";
@@ -27,7 +26,6 @@ namespace strKey_Shader
 	};
 	namespace Compute
 	{
-		STRKEY CS_Test = "CS_Test.cso";
 		STRKEY CS_TestSB = "CS_TestSB.cso";
 	};
 }

@@ -29,14 +29,8 @@ namespace mh
 		virtual void Destroy() {};
 		virtual void OnExit() {};
 		
-		
-		
+		GameObject*	AddGameObject(GameObject* _gameObj, const define::eLayerType _type);
 
-
-
-
-
-		void							AddGameObject(GameObject* _gameObj, const define::eLayerType _type);
 		Layer&							GetLayer(define::eLayerType _type) { return mLayers[(uint)_type]; }
 		std::vector<GameObject*>		GetDontDestroyGameObjects();
 		const std::vector<GameObject*>& GetGameObjects(const define::eLayerType _type);

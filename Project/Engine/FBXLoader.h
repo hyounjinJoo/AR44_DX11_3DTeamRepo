@@ -1,5 +1,7 @@
 #pragma once
 #include "Entity.h"
+
+#include <windef.h>
 #include "SimpleMath.h"
 
 #include <fbxsdk/fbxsdk.h>

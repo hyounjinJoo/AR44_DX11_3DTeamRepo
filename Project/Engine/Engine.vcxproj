@@ -260,8 +260,12 @@ call Copy_HLSL.bat $(Configuration)</Command>
     <ClInclude Include="Com_Animator3D.h" />
     <ClInclude Include="Com_AudioListener.h" />
     <ClInclude Include="Com_AudioSource.h" />
-    <ClInclude Include="Com_Renderer_MultiMesh.h" />
+    <ClInclude Include="Com_DummyTransform.h" />
+    <ClInclude Include="Com_Renderer_3DAnimMesh.h" />
+    <ClInclude Include="Com_DummyAnimator.h" />
+    <ClInclude Include="Com_Renderer_Mesh.h" />
     <ClInclude Include="DefaultComInitializer.h" />
+    <ClInclude Include="EventMgr.h" />
     <ClInclude Include="FBXLoader.h" />
     <ClInclude Include="GameMainWindow.h" />
     <ClInclude Include="guiBase.h" />
@@ -303,7 +307,6 @@ call Copy_HLSL.bat $(Configuration)</Command>
     <ClInclude Include="imgui\imstb_rectpack.h" />
     <ClInclude Include="imgui\imstb_textedit.h" />
     <ClInclude Include="imgui\imstb_truetype.h" />
-    <ClInclude Include="IRenderer.h" />
     <ClInclude Include="Com_Camera.h" />
     <ClInclude Include="ITransform.h" />
     <ClInclude Include="json-cpp\jsonSaveLoad.h" />
@@ -343,7 +346,7 @@ call Copy_HLSL.bat $(Configuration)</Command>
     <ClInclude Include="Material.h" />
     <ClInclude Include="PathMgr.h" />
     <ClInclude Include="Mesh.h" />
-    <ClInclude Include="Com_Renderer_Mesh.h" />
+    <ClInclude Include="IRenderer.h" />
     <ClInclude Include="Monster.h" />
     <ClInclude Include="Object.h" />
     <ClInclude Include="PaintShader.h" />
@@ -383,8 +386,12 @@ call Copy_HLSL.bat $(Configuration)</Command>
     <ClCompile Include="Com_Animator3D.cpp" />
     <ClCompile Include="Com_AudioListener.cpp" />
     <ClCompile Include="Com_AudioSource.cpp" />
-    <ClCompile Include="Com_Renderer_MultiMesh.cpp" />
+    <ClCompile Include="Com_DummyTransform.cpp" />
+    <ClCompile Include="Com_Renderer_3DAnimMesh.cpp" />
+    <ClCompile Include="Com_DummyAnimator.cpp" />
+    <ClCompile Include="Com_Renderer_Mesh.cpp" />
     <ClCompile Include="DefaultComInitializer.cpp" />
+    <ClCompile Include="EventMgr.cpp" />
     <ClCompile Include="FBXLoader.cpp" />
     <ClCompile Include="GameMainWindow.cpp" />
     <ClCompile Include="guiBase.cpp" />
@@ -465,7 +472,6 @@ call Copy_HLSL.bat $(Configuration)</Command>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="IRenderer.cpp" />
     <ClCompile Include="Com_Camera.cpp" />
     <ClCompile Include="ITransform.cpp" />
     <ClCompile Include="MultiRenderTarget.cpp" />
@@ -503,7 +509,7 @@ call Copy_HLSL.bat $(Configuration)</Command>
     <ClCompile Include="PathMgr.cpp" />
     <ClCompile Include="IShader.cpp" />
     <ClCompile Include="Mesh.cpp" />
-    <ClCompile Include="Com_Renderer_Mesh.cpp" />
+    <ClCompile Include="IRenderer.cpp" />
     <ClCompile Include="Monster.cpp" />
     <ClCompile Include="PaintShader.cpp" />
     <ClCompile Include="ParticleShader.cpp" />

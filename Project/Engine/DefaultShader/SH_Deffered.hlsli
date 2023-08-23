@@ -31,10 +31,12 @@ struct VSOut
 
 struct PSOut
 {
-	float4 Position : SV_Target0;
+	float4 Albedo : SV_Target0;
 	float4 Normal : SV_Target1;
-	float4 Albedo : SV_Target2;
-	float4 Data : SV_Target3;
+	float4 Specular : SV_Target2;
+	float4 Emissive : SV_Target3;
+	float4 Position : SV_Target4;
+	//float4 Data : SV_Target5;
 };
 
 #endif

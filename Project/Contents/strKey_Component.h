@@ -15,5 +15,4 @@
 
 namespace mh::define::strKey::Com
 {
-	STRKEY Com_TestJH = "Com_TestJH";
 }

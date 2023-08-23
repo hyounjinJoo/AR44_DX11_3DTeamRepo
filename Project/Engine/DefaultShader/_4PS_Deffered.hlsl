@@ -38,7 +38,8 @@ PSOut main(VSOut _in) : SV_Target
 	OutColor.Albedo = vObjectColor;
 	OutColor.Normal = float4(vViewNormal.xyz, 1.f);
 	OutColor.Position = float4(_in.ViewPos.xyz, 1.f);
-	OutColor.Data = float4(1.0f, 1.0f, 1.0f, 1.0f);
+	//OutColor.Specular = float4
+	OutColor.Emissive = float4(1.0f, 1.0f, 1.0f, 1.0f);
     
 	return OutColor;
 }

@@ -2,10 +2,10 @@
 #include "Scene_Example.h"
 
 #include "strKey_Script.h"
-#include "strKey_Texture.h"
 #include <Engine/object.h>
 #include <Engine/Com_Renderer_Sprite.h>
 #include <Engine/ResMgr.h>
+#include <Engine/EventMgr.h>
 
 namespace mh
 {
@@ -26,7 +26,8 @@ namespace mh
 	{
 		{
 			// Main Com_Camera Game Object
-			GameObject* cameraObj = object::Instantiate<GameObject>(eLayerType::Com_Camera);
+			GameObject* cameraObj = EventMgr::SpawnGameObject(new GameObject, eLayerType::Player);
+			//GameObject* cameraObj = object::Instantiate(eLayerType::Com_Camera, new GameObject);
 			cameraObj->SetName("MainCamera");
 			cameraObj->GetComponent<Com_Transform>()->SetRelativePos(float3(0.0f, 0.0f, -20.0f));
 			Com_Camera* cameraComp = cameraObj->AddComponent<Com_Camera>();
@@ -41,7 +42,8 @@ namespace mh
 
 		{
 			//Sprite 출력 테스트
-			GameObject* spriteObj = object::Instantiate<GameObject>(eLayerType::UI);
+			GameObject* spriteObj = EventMgr::SpawnGameObject(new GameObject, eLayerType::UI);
+			//GameObject* spriteObj = object::Instantiate(eLayerType::UI, new GameObject);
 			spriteObj->SetName("SpriteTest");
 			spriteObj->GetComponent<Com_Transform>()->SetRelativePos(float3(0.f, 0.f, 100.f));
 

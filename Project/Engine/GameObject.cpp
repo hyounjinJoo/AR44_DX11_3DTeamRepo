@@ -1,10 +1,12 @@
 #include "PCH_Engine.h"
-
 #include "GameObject.h"
-#include "Com_Transform.h"
+
+#include "SceneMgr.h"
+#include "Layer.h"
 
 #include "json-cpp/json.h"
 #include "Prefab.h"
+#include "EventMgr.h"
 
 namespace mh
 {
@@ -65,10 +67,10 @@ namespace mh
 
 	GameObject::~GameObject()
 	{
-		//Transform은 제거 X
 		for (size_t i = 0; i < mComponents.size(); ++i)
 		{
-			if (mComponents[i])
+			//컴포넌트의 주인이 자신일 경우 제거
+			if (mComponents[i] && this == mComponents[i]->GetOwner())
 				delete mComponents[i];
 		}
 
@@ -285,6 +287,7 @@ namespace mh
 	}
 
 	//이 함수는 다른 카메라가 호출함
+	//
 	void GameObject::Render()
 	{
 		for (size_t i = 0; i < mComponents.size(); ++i)
@@ -293,11 +296,17 @@ namespace mh
 				mComponents[i]->Render();
 		}
 
-		for (size_t i = 0; i < mChilds.size(); ++i)
+		for (size_t i = 0; i < mComponents.size(); ++i)
 		{
-			if (mChilds[i])
-				mChilds[i]->Render();
+			if (mComponents[i])
+				mComponents[i]->RenderEnd();
 		}
+
+		//for (size_t i = 0; i < mChilds.size(); ++i)
+		//{
+		//	if (mChilds[i])
+		//		mChilds[i]->Render();
+		//}
 	}
 
 
@@ -339,8 +348,14 @@ AddComponent<T> 또는 ComMgr::GetNewComponent()를 통해서 생성하세요.
 			mComponents[(int)ComType] = _pCom;
 		}
 
-
+		
 		_pCom->SetOwner(this);
+
 		return _pCom;
+	}
+
+	void GameObject::Destroy()
+	{
+		EventMgr::DestroyGameObj(this);
 	}
 }

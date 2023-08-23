@@ -3,6 +3,8 @@
 
 #include "SH_CommonStruct.hlsli"
 
+
+
 //t 버퍼
 TEXTURE2D(albedoTexture, t, 0);
 TEXTURE2D(normalTexture, t, 1);
@@ -15,20 +17,20 @@ TEXTURE2D(emissiveTexture, t, 3);
 //Texture2D emissiveTexture : register(t3);
 
 
-// defferd
+//defferd
+TEXTURE2D(albedoTarget, t, 0);
+TEXTURE2D(normalTarget, t, 1);
+TEXTURE2D(specularTarget, t, 2);
+TEXTURE2D(emissiveTarget, t, 3);
 TEXTURE2D(positionTarget, t, 4);
-TEXTURE2D(normalTarget, t, 5);
-TEXTURE2D(albedoTarget, t, 6);
-TEXTURE2D(specularTarget, t, 7);
-
 
 // Light
-TEXTURE2D(diffuseLightTarget, t, 8);
-TEXTURE2D(specularLightTarget, t, 9);
+TEXTURE2D(diffuseLightTarget, t, 5);
+TEXTURE2D(specularLightTarget, t, 6);
 
 
 //Atlas texture(Animation 2D)
-TEXTURE2D(atlasTexture, t, 12);
+TEXTURE2D(atlasTexture, t, 11);
 
 //Bone Matrices(Animation 3D)
 SBUFFER(g_arrFrameTrans, tFrameTranslation, t, 16);

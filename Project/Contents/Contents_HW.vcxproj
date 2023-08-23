@@ -22,13 +22,11 @@
     <ClCompile Include="Scene_Play.cpp" />
     <ClCompile Include="Scene_Title.cpp" />
     <ClCompile Include="Script_CameraMove.cpp" />
-    <ClCompile Include="Script_TestScript.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Scene_Play.h" />
     <ClInclude Include="Scene_Title.h" />
     <ClInclude Include="Script_CameraMove.h" />
-    <ClInclude Include="Script_TestScript.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>

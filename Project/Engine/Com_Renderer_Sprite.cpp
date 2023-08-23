@@ -1,6 +1,9 @@
 #include "PCH_Engine.h"
-
 #include "Com_Renderer_Sprite.h"
+
+#include "Mesh.h"
+#include "Material.h"
+
 #include "GameObject.h"
 #include "Com_Transform.h"
 #include "Com_Animator2D.h"
@@ -10,6 +13,7 @@
 namespace mh
 {
 	Com_Renderer_Sprite::Com_Renderer_Sprite()
+		: mAnimator()
 	{
 	}
 
@@ -29,46 +33,48 @@ namespace mh
 		std::shared_ptr<Mesh> mesh = ResMgr::Find<Mesh>(strKey::Default::mesh::RectMesh);
 		SetMesh(mesh);
 
-		//Material을 생성(임시)
-		std::shared_ptr<Material> material = std::make_shared<Material>();
-		
-		//스프라이트 쉐이더를 찾아서 material에 적용
-		std::shared_ptr<GraphicsShader> spriteShader = ResMgr::Find<GraphicsShader>(strKey::Default::shader::graphics::SpriteShader);
-		
-		//쉐이더를 지정
-		material->SetShader(spriteShader);
-		
-		//텍스처는 좀이따 렌더링할때 지정해주면 됨
-		SetMaterial(material, 0u);
+		//Sprite Material을 받아온다
+		std::shared_ptr<Material> material = ResMgr::Find<Material>(strKey::Default::material::SpriteMaterial);
+		SetMaterial(material, 0);
+
+		mAnimator = GetOwner()->GetComponent<Com_Animator2D>();
 	}
 
-	void Com_Renderer_Sprite::Update()
-	{
-	}
 
 	void Com_Renderer_Sprite::FixedUpdate()
 	{
+		IAnimator* animator = static_cast<IAnimator*>(GetOwner()->GetComponent(eComponentType::Animator));
+		if (nullptr == animator)
+		{
+			mAnimator = nullptr;
+		}
+		else if (nullptr == mAnimator && animator)
+		{
+			mAnimator = dynamic_cast<Com_Animator2D*>(animator);
+		}
 	}
 
 	void Com_Renderer_Sprite::Render()
 	{
-		//GetOwner()->GetComponent<Com_Transform>()->BindData();
+		if (false == IsRenderReady() || nullptr == mAnimator)
+			return;
 
+		//재질 바인딩
+		mAnimator->BindData();
+
+		//메쉬 바인딩
 		GetMesh()->BindBuffer();
+
+		//재질 바인딩
 		GetCurrentMaterial(0)->BindData();
 
-		Com_Animator2D* animator = GetOwner()->GetComponent<Com_Animator2D>();
-		if (animator)
-		{
-			animator->BindData();
-		}
-
+		//렌더링 하고
 		GetMesh()->Render();
+
+		//재질 언바인딩
 		GetCurrentMaterial(0)->UnBindData();
 
-		if (animator)
-		{
-			animator->UnBindData();
-		}
+		//애니메이터 언바인드
+		mAnimator->UnBindData();
 	}
 }

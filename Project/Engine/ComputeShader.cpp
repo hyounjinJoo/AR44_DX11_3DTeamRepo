@@ -35,7 +35,7 @@ namespace mh
 	{
 		std::fs::path FilePath = PathMgr::GetShaderCSOPath();
 		FilePath /= _path;
-		FilePath.replace_extension(define::strKey::Ext_ShaderCSO);
+		FilePath.replace_extension(define::strKey::Ext_CompiledShader);
 
 		return CreateByCSO(FilePath);
 	}

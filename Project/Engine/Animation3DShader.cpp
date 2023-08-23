@@ -6,6 +6,7 @@
 #include "StructBuffer.h"
 #include "DefaultShader/SH_Resource.hlsli"
 
+using namespace mh::define;
 namespace mh
 {
 	Animation3DShader::Animation3DShader()

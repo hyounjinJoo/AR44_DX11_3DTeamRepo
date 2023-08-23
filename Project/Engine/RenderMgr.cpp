@@ -69,7 +69,7 @@ namespace mh
 		CreateDepthStencilStates();
 		CreateBlendStates();
 
-		LoadBuffer();
+		CreateBuffer();
 		LoadDefaultTexture();
 		LoadDefaultMaterial();
 	}
@@ -118,6 +118,8 @@ namespace mh
 
 	void RenderMgr::Render()
 	{
+		ClearMultiRenderTargets();
+
 		UpdateGlobalCBuffer();
 
 		BindNoiseTexture();
@@ -128,7 +130,7 @@ namespace mh
 			if (cam == nullptr)
 				continue;
 
-			cam->Render();
+			cam->RenderCamera();
 		}
 
 		mCameras.clear();
@@ -279,24 +281,25 @@ namespace mh
 			std::shared_ptr<Texture> arrRTTex[MRT_MAX] = {};
 			std::shared_ptr<Texture> dsTex = nullptr;
 
-			std::shared_ptr<Texture> pos = std::make_shared<Texture>();
-			std::shared_ptr<Texture> normal = std::make_shared<Texture>();
-			std::shared_ptr<Texture> albedo = std::make_shared<Texture>();
-			std::shared_ptr<Texture> specular = std::make_shared<Texture>();
+			
+			//std::shared_ptr<Texture> normal = std::make_shared<Texture>();
+			//std::shared_ptr<Texture> albedo = std::make_shared<Texture>();
+			//std::shared_ptr<Texture> specular = std::make_shared<Texture>();
+			//std::shared_ptr<Texture> emissive = std::make_shared<Texture>();
 
-			arrRTTex[(int)eMRT_Defferd::PositionTarget] = pos;
-			arrRTTex[(int)eMRT_Defferd::NormalTarget] = normal;
-			arrRTTex[(int)eMRT_Defferd::AlbedoTarget] = albedo;
-			arrRTTex[(int)eMRT_Defferd::SpecularTarget] = specular;
-
-			arrRTTex[0]->Create(_ResolutionX, _ResolutionY, DXGI_FORMAT_R32G32B32A32_FLOAT
-				, D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE);
-			arrRTTex[1]->Create(_ResolutionX, _ResolutionY, DXGI_FORMAT_R32G32B32A32_FLOAT
-				, D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE);
-			arrRTTex[2]->Create(_ResolutionX, _ResolutionY, DXGI_FORMAT_R32G32B32A32_FLOAT
-				, D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE);
-			arrRTTex[3]->Create(_ResolutionX, _ResolutionY, DXGI_FORMAT_R32G32B32A32_FLOAT
-				, D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE);
+			//arrRTTex[(int)eMRT_Defferd::AlbedoTarget] = albedo;
+			//arrRTTex[(int)eMRT_Defferd::NormalTarget] = normal;
+			//arrRTTex[(int)eMRT_Defferd::SpecularTarget] = specular;
+			//arrRTTex[(int)eMRT_Defferd::EmissiveTarget] = emissive;
+			//arrRTTex[(int)eMRT_Defferd::PositionTarget] = pos;
+			
+			for (int i = 0; i < (int)eMRT_Defferd::END; ++i)
+			{
+				std::shared_ptr<Texture> defferedTex = std::make_shared<Texture>();
+				arrRTTex[i] = defferedTex;
+				arrRTTex[i]->Create(_ResolutionX, _ResolutionY, DXGI_FORMAT_R32G32B32A32_FLOAT
+					, D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE);
+			}
 
 			dsTex = GPUMgr::GetDepthStencilBufferTex();
 
@@ -312,16 +315,25 @@ namespace mh
 		// Light MRT
 		{
 			std::shared_ptr<Texture> arrRTTex[MRT_MAX] = { };
-			std::shared_ptr<Texture> diffuse = std::make_shared<Texture>();
-			std::shared_ptr<Texture> specular = std::make_shared<Texture>();
 
-			arrRTTex[(int)eMRT_Light::DiffuseLightTarget] = diffuse;
-			arrRTTex[(int)eMRT_Light::SpecularLightTarget] = specular;
+			for (int i = 0; i < (int)eMRT_Light::END; ++i)
+			{
+				std::shared_ptr<Texture> defferedTex = std::make_shared<Texture>();
+				arrRTTex[i] = defferedTex;
+				arrRTTex[i]->Create(_ResolutionX, _ResolutionY, DXGI_FORMAT_R32G32B32A32_FLOAT
+					, D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE);
+			}
 
-			arrRTTex[0]->Create(_ResolutionX, _ResolutionY, DXGI_FORMAT_R32G32B32A32_FLOAT
-				, D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE);
-			arrRTTex[1]->Create(_ResolutionX, _ResolutionY, DXGI_FORMAT_R32G32B32A32_FLOAT
-				, D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE);
+			//std::shared_ptr<Texture> diffuse = std::make_shared<Texture>();
+			//std::shared_ptr<Texture> specular = std::make_shared<Texture>();
+
+			//arrRTTex[(int)eMRT_Light::DiffuseLightTarget] = diffuse;
+			//arrRTTex[(int)eMRT_Light::SpecularLightTarget] = specular;
+
+			//arrRTTex[0]->Create(_ResolutionX, _ResolutionY, DXGI_FORMAT_R32G32B32A32_FLOAT
+			//	, D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE);
+			//arrRTTex[1]->Create(_ResolutionX, _ResolutionY, DXGI_FORMAT_R32G32B32A32_FLOAT
+			//	, D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE);
 
 			mMultiRenderTargets[(int)eMRTType::Light] = std::make_unique<MultiRenderTarget>();
 			mMultiRenderTargets[(int)eMRTType::Light]->Create(arrRTTex, nullptr);
@@ -1137,7 +1149,7 @@ namespace mh
 #pragma endregion
 	}
 
-	void RenderMgr::LoadBuffer()
+	void RenderMgr::CreateBuffer()
 	{
 #pragma region CONSTANT BUFFER
 		mConstBuffers[(uint)eCBType::Global] = std::make_unique<ConstBuffer>(eCBType::Global);
@@ -1176,6 +1188,9 @@ namespace mh
 
 		mConstBuffers[(uint)eCBType::Animation3D] = std::make_unique<ConstBuffer>(eCBType::Animation3D);
 		mConstBuffers[(uint)eCBType::Animation3D]->Create<tCB_Animation3D>();
+
+		mConstBuffers[(uint)eCBType::UniformData] = std::make_unique<ConstBuffer>(eCBType::UniformData);
+		mConstBuffers[(uint)eCBType::UniformData]->Create<tCB_UniformData>();
 
 #pragma endregion
 #pragma region STRUCTED BUFFER
@@ -1289,12 +1304,14 @@ namespace mh
 		D3D11_RASTERIZER_DESC rsDesc = {};
 		rsDesc.FillMode = D3D11_FILL_MODE::D3D11_FILL_SOLID;
 		rsDesc.CullMode = D3D11_CULL_MODE::D3D11_CULL_BACK;
+		rsDesc.DepthClipEnable = TRUE;
 
 		GPUMgr::Device()->CreateRasterizerState(&rsDesc
 			, mRasterizerStates[(uint)eRSType::SolidBack].GetAddressOf());
 
 		rsDesc.FillMode = D3D11_FILL_MODE::D3D11_FILL_SOLID;
 		rsDesc.CullMode = D3D11_CULL_MODE::D3D11_CULL_FRONT;
+		rsDesc.DepthClipEnable = TRUE;
 
 		GPUMgr::Device()->CreateRasterizerState(&rsDesc
 			, mRasterizerStates[(uint)eRSType::SolidFront].GetAddressOf());
@@ -1403,7 +1420,7 @@ namespace mh
 		std::shared_ptr <Texture> spriteTexture = ResMgr::Find<Texture>(texture::DefaultSprite);
 		std::shared_ptr<GraphicsShader> spriteShader = ResMgr::Find<GraphicsShader>(shader::graphics::SpriteShader);
 		std::shared_ptr<Material> spriteMaterial = std::make_shared<Material>();
-		spriteMaterial->SetRenderingMode(eRenderingMode::Transparent);
+		spriteMaterial->SetRenderingMode(eRenderingMode::Opaque);
 		spriteMaterial->SetShader(spriteShader);
 		spriteMaterial->SetTexture(eTextureSlot::Albedo, spriteTexture);
 		ResMgr::Insert(material::SpriteMaterial, spriteMaterial);
@@ -1412,7 +1429,7 @@ namespace mh
 		std::shared_ptr <Texture> uiTexture = ResMgr::Find<Texture>(texture::HPBarTexture);
 		std::shared_ptr<GraphicsShader> uiShader = ResMgr::Find<GraphicsShader>(shader::graphics::UIShader);
 		std::shared_ptr<Material> uiMaterial = std::make_shared<Material>();
-		uiMaterial->SetRenderingMode(eRenderingMode::Transparent);
+		uiMaterial->SetRenderingMode(eRenderingMode::Opaque);
 
 		uiMaterial->SetShader(uiShader);
 		uiMaterial->SetTexture(eTextureSlot::Albedo, uiTexture);

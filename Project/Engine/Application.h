@@ -27,7 +27,7 @@ namespace mh
 		static void Render();
 
 		//한 프레임 돌고 정리해야할 함수들 등록해놓으면 호출됨
-		static void Destroy();
+		static void EndFrame();
 
 		// Running main engine loop
 		static bool Run();
@@ -42,7 +42,7 @@ namespace mh
 
 		static HWND GetHwnd() { return mHwnd; }
 
-		static void AddDestroyFunc(const std::function<void()>& _Func) { mDestroyFuncs.push_back(_Func); }
+		static void AddDestroyFunc(const std::function<void()>& _Func) { mEndFrameFuncs.push_back(_Func); }
 
 		static void ShutDown() { mbInitialized = false; }
 
@@ -51,7 +51,7 @@ namespace mh
 		static HDC  mHdc;
 		static bool mbInitialized;
 
-		static std::vector<std::function<void()>> mDestroyFuncs;
+		static std::vector<std::function<void()>> mEndFrameFuncs;
 	public:
 		Application() = delete;
 		~Application() = delete;

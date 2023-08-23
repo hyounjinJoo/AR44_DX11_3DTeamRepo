@@ -101,7 +101,7 @@
     <MultiProcFXC>true</MultiProcFXC>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <OutDir>$(SolutionDir)Output\$(Configuration)\ShaderBin\</OutDir>
+    <OutDir>$(SolutionDir)Output\Bin\$(Configuration)\ShaderBin\</OutDir>
     <IntDir>$(SolutionDir)Output\Obj\$(Configuration)\$(ProjectName)\</IntDir>
     <TargetName>$(ProjectName)</TargetName>
     <MultiProcFXC>true</MultiProcFXC>

@@ -3,7 +3,6 @@
 
 #include "TimeMgr.h"
 #include "Com_Renderer_Mesh.h"
-#include "Com_Renderer_MultiMesh.h"
 #include "StructBuffer.h"
 #include "ResMgr.h"
 #include "InputMgr.h"
@@ -105,6 +104,11 @@ namespace mh
 		m_bFinalMatUpdate = false;
 	}
 
+	void Com_Animator3D::Render()
+	{
+		BindData();
+	}
+
 	void Com_Animator3D::SetSkeleton(Skeleton* _pSkeleton)
 	{
 		//스켈레톤 주소를 받아서
@@ -178,40 +182,6 @@ namespace mh
 	void Com_Animator3D::UnBindData()
 	{
 		m_pBoneFinalMatBuffer->UnBindData();
-
-		//IRenderer* renderer = static_cast<IRenderer*>(GetOwner()->GetComponent(eComponentType::Renderer));
-		//if (nullptr == renderer)
-		//	return;
-
-		//Com_Renderer_Mesh* mesh = dynamic_cast<Com_Renderer_Mesh*>(renderer);
-		//if (mesh)
-		//{
-
-		//}
-		//else
-		//{
-		//	Com_Renderer_MultiMesh* multiMesh = dynamic_cast<Com_Renderer_MultiMesh*>(renderer);
-		//	if (multiMesh)
-		//	{
-
-		//	}
-		//}
-
-
-		//Com_Renderer_Mesh* MeshRenderer = GetOwner()->GetComponent<Com_Renderer_Mesh>();
-		//UINT iMtrlCount = MeshRenderer->GetMaterialCount();
-		//Material* pMtrl = nullptr;
-		//for (UINT i = 0; i < iMtrlCount; ++i)
-		//{
-		//	//43기에서는 Shared Material을 받고 있음.
-		//	pMtrl = MeshRenderer->GetCurrentMaterial(i);
-
-		//	if (nullptr == pMtrl)
-		//		continue;
-
-		//	pMtrl->SetAnim3D(false); // Animation Mesh 알리기
-		//	pMtrl->SetBoneCount(0);
-		//}
 	}
 
 

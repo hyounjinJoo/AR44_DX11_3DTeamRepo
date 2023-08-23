@@ -2,6 +2,9 @@
 #define SH_COMMON_STRUCT
 #include "SH_Common.hlsli"
 
+
+
+
 //C++와 공동으로 사용하는 구조체 모음
 
 struct alignas(16)  tCB_Global
@@ -132,6 +135,34 @@ struct alignas(16)  tCB_Animation3D
 	float FrameRatio;
 };
 
+struct alignas(16)  tCB_UniformData
+{
+	int int_0;
+	int int_1;
+	int int_2;
+	int int_3;
+    
+	float float_0;
+	float float_1;
+	float float_2;
+	float float_3;
+    
+	float2 float2_0;
+	float2 float2_1;
+	float2 float2_2;
+	float2 float2_3;
+
+	float4 float4_0;
+	float4 float4_1;
+	float4 flaot4_2;
+	float4 float4_3;
+
+    MATRIX mat_0;
+    MATRIX mat_1;
+    MATRIX mat_2;
+    MATRIX mat_3;
+};
+
 
 struct alignas(16)  tLightColor
 {
@@ -168,6 +199,8 @@ struct alignas(16)  tSkinningInfo
 	float3 vBinormal;
 	float3 vNormal;
 };
+
+
 
 
 #endif//SH_COMMON_STRUCT
