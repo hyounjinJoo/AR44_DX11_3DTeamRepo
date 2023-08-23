@@ -2,7 +2,7 @@
 #include "Com_HWRenderer.h"
 
 #include <Engine/StructBuffer.h>
-
+#include <Engine/ResMgr.h>
 
 namespace mh
 {
@@ -28,18 +28,6 @@ namespace mh
 		//설정값을 지정
 		mMySBuffer->SetDesc(desc);
 
-		//잘 전달되는지 보기 위해 값을 지정해준다(10개)
-		for (int i = 0; i < 10; ++i)
-		{
-			ExampleStruct example{};
-			example.example0 = i;
-			example.example1 = i + 1;
-			example.example2 = i + 2;
-			example.example3 = i + 3;
-
-			mExampleStructs.push_back(example);
-		}
-
 		//<사용할 구조체>, 구조화 버퍼의 최대 크기, 초기 데이터, 데이터의 갯수
 		//여기선 지금 최대 크기와 데이터 갯수를 동일하게 해 놨음
 		
@@ -48,9 +36,49 @@ namespace mh
 
 		//초기 데이터가 없을 경우에는 nullptr을 넣어준다
 		mMySBuffer->Create<ExampleStruct>(mExampleStructs.size(), nullptr, (size_t)0);
-		mMySBuffer->SetData(mExampleStructs.data(), mExampleStructs.size());
 
-		//SRV에 데이터를 바인딩하면 데이터 연결은 완료
+
+		//출력하고 싶은 메쉬를 찾아준다.
+		//여기선 기본 리소스 중에 RectMesh를 사용할것이다.
+		std::shared_ptr<Mesh> mesh = ResMgr::Find<Mesh>(strKey::Default::mesh::RectMesh);
+		
+		//없으면 에러띄워줌
+		MH_ASSERT(mesh);
+
+		//메쉬로 설정
+		SetMesh(mesh);
+
+	}
+	void Com_HWRenderer::Update()
+	{
+		mExampleStructs.clear();
+
+		srand(time(0));
+		
+		//잘 전달되는지 보기 위해 0.f ~ 1.f 사이의 랜덤값을 지정해준다(10개)
+		for (int i = 0; i < 10; ++i)
+		{
+			ExampleStruct example{};
+			
+			example.example0 = (float)(i * rand() % 100) / 100.f;
+			example.example1 = (float)(i * rand() % 100) / 100.f;
+			example.example2 = (float)(i * rand() % 100) / 100.f;
+			example.example3 = (float)(i * rand() % 100) / 100.f;
+
+			mExampleStructs.push_back(example);
+		}
+
+		mMySBuffer->SetData(mExampleStructs.data(), mExampleStructs.size());
+	}
+	void Com_HWRenderer::Render()
+	{
+		//SRV에 데이터를 바인딩하면 데이터 연결 완료
 		mMySBuffer->BindDataSRV();
+
+		Com_Renderer_Mesh::Render();
+	}
+	void Com_HWRenderer::RenderEnd()
+	{
+		mMySBuffer->UnBindData();
 	}
 }

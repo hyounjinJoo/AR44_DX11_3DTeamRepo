@@ -18,6 +18,7 @@ namespace strKey_Shader
 	namespace Graphics
 	{
 		STRKEY CH = "CH.json";
+		STRKEY Example = "Example.json";
 		STRKEY HJ = "HJ.json";
 		STRKEY JH = "JH.json";
 		STRKEY TestCH = "TestCH.json";

@@ -47,4 +47,8 @@
     </None>
     <None Include="HW_Example.hlsli" />
   </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="_0VS_Example.hlsl" />
+    <FxCompile Include="_4PS_Example.hlsl" />
+  </ItemGroup>
 </Project>
