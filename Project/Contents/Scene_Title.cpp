@@ -25,9 +25,6 @@
 
 #include "strKey_Script.h"
 
-#include "Script_TestHJ.h"
-#include "Script_JH.h"
-
 #include <Engine/EventMgr.h>
 
 namespace mh
@@ -114,8 +111,6 @@ namespace mh
 			obj->AddComponent<Script_Player>();
 			EventMgr::SpawnGameObject(obj, eLayerType::Player);
 			//object::Instantiate(eLayerType::Player, obj);
-
-			obj->AddComponent<Script_TestHJ>();
 			//obj->AddComponent<Script_JH>();
 		}
 

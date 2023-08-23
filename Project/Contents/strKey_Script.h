@@ -16,5 +16,4 @@
 namespace mh::define::strKey::Script
 {
 	STRKEY Script_CameraMove = "Script_CameraMove";
-	STRKEY Script_JH = "Script_JH";
 }

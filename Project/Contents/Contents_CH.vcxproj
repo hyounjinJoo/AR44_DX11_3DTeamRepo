@@ -20,11 +20,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Scene_Example.h" />
-    <ClInclude Include="Script_JH.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Scene_Example.cpp" />
-    <ClCompile Include="Script_JH.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
