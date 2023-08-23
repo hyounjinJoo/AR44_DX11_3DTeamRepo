@@ -103,7 +103,7 @@ namespace mh
 		//}
 
 		{
-			std::shared_ptr<MeshData> data = ResMgr::Load<MeshData>("stm520_038_00.fbx");
+			std::shared_ptr<MeshData> data = ResMgr::Load<MeshData>("Monster.json");
 			GameObject* obj = data->Instantiate();
 			Com_Transform* tr = obj->GetComponent<Com_Transform>();
 			tr->SetRelativeScale(float3(0.5f));

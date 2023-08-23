@@ -149,8 +149,6 @@ namespace mh
 		{
 			tMeshContainer cont{};
 
-
-			
 			//Mesh Load
 			std::string meshStrKey = Json::MH::LoadStrKey(&(*iter), JSON_KEY(pMesh), cont.pMesh);
 			cont.pMesh = ResMgr::Load<Mesh>(meshStrKey);
@@ -177,6 +175,17 @@ namespace mh
 				return result;
 		}
 
+		if (mSkeleton)
+		{
+			for (size_t i = 0; i < mMeshContainers.size(); ++i)
+			{
+				if (mMeshContainers[i].pMesh)
+				{
+					mMeshContainers[i].pMesh->SetSkeleton(mSkeleton.get());
+				}
+			}
+		}
+
 		return eResult::Success;
 	}
 
@@ -199,10 +208,22 @@ namespace mh
 			animator->SetSkeleton(mSkeleton.get());
 		}
 
+
 		//사이즈가 딱 하나일 경우: GameObject 본체에 데이터를 생성
-		else if (1u == (UINT)mMeshContainers.size())
+		if (1u == (UINT)mMeshContainers.size())
 		{
-			Com_Renderer_Mesh* renderer = uniqObj->AddComponent<Com_Renderer_Mesh>();
+			Com_Renderer_Mesh* renderer = nullptr;
+			if (animator)
+			{
+				//수동으로 애니메이터를 설정
+				auto* renderer3D = uniqObj->AddComponent<Com_Renderer_3DAnimMesh>();
+				renderer = static_cast<Com_Renderer_Mesh*>(renderer3D);
+			}
+			else
+			{
+				renderer = uniqObj->AddComponent<Com_Renderer_Mesh>();
+			}
+
 			MH_ASSERT(renderer);
 			SetRenderer(renderer, 0);
 		}
