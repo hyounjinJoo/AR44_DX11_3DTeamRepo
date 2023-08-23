@@ -76,6 +76,10 @@ namespace gui
 	void guiTree_GameObject::AddGameObject(TreeWidget::tNode* parent, mh::GameObject* gameObject)
 	{
 		std::string name(gameObject->GetName());
+		if (name.empty())
+		{
+			name = "NoNameObj";
+		}
 
 		mh::define::tDataPtr data{};
 		data.SetDataPtr(gameObject);

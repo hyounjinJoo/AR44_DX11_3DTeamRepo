@@ -31,7 +31,7 @@ namespace mh
 		, mProjType(eProjectionType::None)
 		, mAspectRatio(1.0f)
 		, mNear(1.0f)
-		, mFar(1000.0f)
+		, mFar(50000.f)
 		, mScale(1.0f)
 	{
 		EnableLayerMasks();
@@ -65,7 +65,7 @@ namespace mh
 		RegisterCameraInRenderer();
 	}
 
-	void Com_Camera::Render()
+	void Com_Camera::RenderCamera()
 	{
 		gView = mView;
 		gInverseView = mView.Invert();
@@ -291,7 +291,7 @@ namespace mh
 
 	void Com_Camera::PushGameObjectToRenderingModes(GameObject* _gameObj)
 	{
-		if (nullptr == _gameObj)
+		if (nullptr == _gameObj || GameObject::eState::Active != _gameObj->GetState())
 			return;
 
 		IRenderer* renderer = static_cast<IRenderer*>(_gameObj->GetComponent(define::eComponentType::Renderer));
@@ -299,7 +299,12 @@ namespace mh
 		if (nullptr == renderer)
 			return;
 
-		eRenderingMode mode = renderer->GetRenderingMode();
+		eRenderingMode mode = eRenderingMode::None;
+		Material* mtrl = renderer->GetCurrentMaterial(0u);
+		if (mtrl)
+		{
+			mode = mtrl->GetRenderingMode();
+		}
 
 		switch (mode)
 		{

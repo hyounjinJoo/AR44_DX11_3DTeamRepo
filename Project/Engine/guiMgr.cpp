@@ -197,7 +197,7 @@ namespace gui
 		}
 		mGuiWindows.clear();
 		
-		for (auto obj : mEditorObjects)
+		for (auto& obj : mEditorObjects)
 		{
 			SAFE_DELETE(obj);
 		}

@@ -74,13 +74,13 @@ namespace mh
 
 	Com_Animator2D::~Com_Animator2D()
 	{
-		for (auto anim : mAnimations)
+		for (auto& anim : mAnimations)
 		{
 			delete anim.second;
 			anim.second = nullptr;
 		}
 
-		for (auto evt : mEvents)
+		for (auto& evt : mEvents)
 		{
 			delete evt.second;
 			evt.second = nullptr;
@@ -185,7 +185,7 @@ namespace mh
 
 	Animation2D* Com_Animator2D::FindAnimation(const std::string_view _name) const
 	{
-		const auto iter = mAnimations.find(_name);
+		const auto& iter = mAnimations.find(_name);
 
 		if (iter == mAnimations.end())
 		{
@@ -197,7 +197,7 @@ namespace mh
 	
 	Com_Animator2D::tEvents* Com_Animator2D::FindEvents(const std::string_view _name) const
 	{
-		const auto iter
+		const auto& iter
 			= mEvents.find(_name);
 
 		if (iter == mEvents.end())

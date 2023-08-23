@@ -4,15 +4,7 @@
     <ClCompile Include="PCH_Contents.cpp" />
     <ClCompile Include="*.cpp" />
     <ClCompile Include="PCH_Contents.cpp" />
-    <ClCompile Include="ContentsClassInitializer.cpp" />
-    <ClCompile Include="ContentsClassInitializer_Component.cpp" />
-    <ClCompile Include="ContentsClassInitializer_Scene.cpp" />
-    <ClCompile Include="ContentsClassInitializer_Script.cpp" />
     <ClCompile Include="PCH_Contents.cpp" />
-    <ClCompile Include="Scene_Play.cpp" />
-    <ClCompile Include="Scene_Title.cpp" />
-    <ClCompile Include="Script_CameraMove.cpp" />
-    <ClCompile Include="Script_TestScript.cpp" />
     <ClCompile Include="ContentsClassInitializer.cpp" />
     <ClCompile Include="ContentsClassInitializer_Component.cpp" />
     <ClCompile Include="ContentsClassInitializer_Scene.cpp" />
@@ -77,7 +69,6 @@
     <ClCompile Include="Scene_Title.cpp" />
     <ClCompile Include="Script_CameraMove.cpp" />
     <ClCompile Include="Script_TestScript.cpp" />
-    <ClCompile Include="Com_TestJH.cpp" />
     <ClCompile Include="ContentsClassInitializer.cpp" />
     <ClCompile Include="ContentsClassInitializer_Component.cpp" />
     <ClCompile Include="ContentsClassInitializer_Scene.cpp" />
@@ -86,8 +77,6 @@
     <ClCompile Include="Scene_Play.cpp" />
     <ClCompile Include="Scene_Title.cpp" />
     <ClCompile Include="Script_CameraMove.cpp" />
-    <ClCompile Include="Script_JH.cpp" />
-    <ClCompile Include="Script_TestHJ.cpp" />
     <ClCompile Include="Script_TestScript.cpp" />
     <ClCompile Include="Com_TestJH.cpp" />
     <ClCompile Include="ContentsClassInitializer.cpp" />
@@ -145,6 +134,17 @@
     <ClCompile Include="*.cpp" />
     <ClCompile Include="*.cpp" />
     <ClCompile Include="*.cpp" />
+    <ClCompile Include="*.cpp" />
+    <ClCompile Include="*.cpp" />
+    <ClCompile Include="*.cpp" />
+    <ClCompile Include="*.cpp" />
+    <ClCompile Include="*.cpp" />
+    <ClCompile Include="*.cpp" />
+    <ClCompile Include="*.cpp" />
+    <ClCompile Include="*.cpp" />
+    <ClCompile Include="*.cpp" />
+    <ClCompile Include="*.cpp" />
+    <ClCompile Include="*.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="strKey_Component.h">
@@ -157,9 +157,6 @@
       <Filter>Auto Generated</Filter>
     </ClInclude>
     <ClInclude Include="strKey_Shader.h">
-      <Filter>Auto Generated</Filter>
-    </ClInclude>
-    <ClInclude Include="strKey_Texture.h">
       <Filter>Auto Generated</Filter>
     </ClInclude>
     <ClInclude Include="ContentsClassInitializer.h">

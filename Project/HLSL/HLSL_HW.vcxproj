@@ -19,20 +19,6 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="CS_Test.hlsl">
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Compute</ShaderType>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Compute</ShaderType>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Compute</ShaderType>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Compute</ShaderType>
-    </FxCompile>
-    <FxCompile Include="_0VS_Test.hlsl">
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
-    </FxCompile>
-  </ItemGroup>
-  <ItemGroup>
     <None Include="SH_Blur.hlsli" />
     <None Include="SH_ConstBuffer.hlsli" />
     <None Include="SH_Func.hlsli" />
@@ -107,7 +93,7 @@
     <MultiProcFXC>true</MultiProcFXC>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <OutDir>$(SolutionDir)Output\$(Configuration)\ShaderBin\</OutDir>
+    <OutDir>$(SolutionDir)Output\Bin\$(Configuration)\ShaderBin\</OutDir>
     <IntDir>$(SolutionDir)Output\Obj\$(Configuration)\$(ProjectName)\</IntDir>
     <TargetName>$(ProjectName)</TargetName>
     <MultiProcFXC>true</MultiProcFXC>

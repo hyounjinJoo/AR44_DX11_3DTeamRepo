@@ -17,7 +17,7 @@ struct VSOut
 
 struct PS_OUT
 {
-	float4 vDiffuse : SV_Target;
+	float4 vDiffuse : SV_Target0;
 	float4 vSpecular : SV_Target1;
 };
 

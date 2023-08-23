@@ -186,12 +186,6 @@
       </Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
-  <ItemGroup>
-    <ClInclude Include="Script_TestHJ.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="Script_TestHJ.cpp" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

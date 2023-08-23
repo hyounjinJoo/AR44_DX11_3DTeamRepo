@@ -16,39 +16,39 @@ int main(int argc, char* argv[])
     constexpr const size_t TexExtSize = sizeof(TexExt) / sizeof(TexExt[0]);
 
     //Generate Texture Key
-    {
-        std::string regbase;
-        regbase += R"((.+)\.()";
+    //{
+    //    std::string regbase;
+    //    regbase += R"((.+)\.()";
 
-        for (size_t i = 0; i < TexExtSize; ++i)
-        {
-            std::string temp = TexExt[i];
-            size_t pos = temp.find('.');
-            if (std::string::npos != pos)
-            {
-                temp.erase(0, pos + 1);
-            }
-            regbase += temp;
+    //    for (size_t i = 0; i < TexExtSize; ++i)
+    //    {
+    //        std::string temp = TexExt[i];
+    //        size_t pos = temp.find('.');
+    //        if (std::string::npos != pos)
+    //        {
+    //            temp.erase(0, pos + 1);
+    //        }
+    //        regbase += temp;
 
-            if (i == TexExtSize - 1ui64)
-                regbase += ")$";
-            else
-                regbase += "|";
-        }
+    //        if (i == TexExtSize - 1ui64)
+    //            regbase += ")$";
+    //        else
+    //            regbase += "|";
+    //    }
 
-        std::regex reg(regbase, std::regex::icase);
+    //    std::regex reg(regbase, std::regex::icase);
 
-        DirTree DirTree;
-        {
-            stdfs::path DirPath = define_Preset::Path::Content::A;
-            DirPath /= mh::define::strKey::GetResName(mh::define::eResourceType::Texture);
-            DirTree.SearchRecursive(DirPath, reg);
-        }
+    //    DirTree DirTree;
+    //    {
+    //        stdfs::path DirPath = define_Preset::Path::Content::A;
+    //        DirPath /= mh::define::strKey::GetResName(mh::define::eResourceType::Texture);
+    //        DirTree.SearchRecursive(DirPath, reg);
+    //    }
 
-        stdfs::path outPath = define_Preset::Path::ContentsProj::A;
-        outPath /= "strKey_Texture.h";
-        DirTree.CreateStrKeyHeader(outPath, "Texture", false);
-    }
+    //    stdfs::path outPath = define_Preset::Path::ContentsProj::A;
+    //    outPath /= "strKey_Texture.h";
+    //    DirTree.CreateStrKeyHeader(outPath, "Texture", false);
+    //}
 
 
     //Generate Compute Shader Key

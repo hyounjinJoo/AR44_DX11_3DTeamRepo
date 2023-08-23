@@ -38,7 +38,7 @@ namespace mh
 	{
 		enum class eLayerType
 		{
-			None = 0,
+			None = -1,
 			Com_Camera,
 			Grid,
 			Monster,
@@ -47,7 +47,8 @@ namespace mh
 			tParticle,
 			PostProcess,
 			UI,
-			END = 16,
+
+			END
 		};
 
 		enum class eProjectionType
