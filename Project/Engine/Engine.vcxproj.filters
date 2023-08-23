@@ -483,6 +483,9 @@
     <ClCompile Include="EventMgr.cpp">
       <Filter>Manager</Filter>
     </ClCompile>
+    <ClCompile Include="InputLayout.cpp">
+      <Filter>Resource\Shaders\Graphics</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application.h">
@@ -841,6 +844,9 @@
     </ClInclude>
     <ClInclude Include="EventMgr.h">
       <Filter>Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="InputLayout.h">
+      <Filter>Resource\Shaders\Graphics</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

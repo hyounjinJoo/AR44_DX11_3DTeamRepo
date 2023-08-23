@@ -864,14 +864,14 @@ namespace mh
 		vecLayoutDesc.push_back(LayoutDesc);
 		LayoutDesc = D3D11_INPUT_ELEMENT_DESC{};
 
-		LayoutDesc.AlignedByteOffset = 16;
-		LayoutDesc.Format = DXGI_FORMAT_R32G32B32A32_FLOAT;
-		LayoutDesc.InputSlot = 0;
-		LayoutDesc.InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
-		LayoutDesc.SemanticName = "COLOR";
-		LayoutDesc.SemanticIndex = 0;
-		vecLayoutDesc.push_back(LayoutDesc);
-		LayoutDesc = D3D11_INPUT_ELEMENT_DESC{};
+		//LayoutDesc.AlignedByteOffset = 16;
+		//LayoutDesc.Format = DXGI_FORMAT_R32G32B32A32_FLOAT;
+		//LayoutDesc.InputSlot = 0;
+		//LayoutDesc.InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
+		//LayoutDesc.SemanticName = "COLOR";
+		//LayoutDesc.SemanticIndex = 0;
+		//vecLayoutDesc.push_back(LayoutDesc);
+		//LayoutDesc = D3D11_INPUT_ELEMENT_DESC{};
 
 		LayoutDesc.AlignedByteOffset = 32;
 		LayoutDesc.Format = DXGI_FORMAT_R32G32_FLOAT;

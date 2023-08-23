@@ -8,8 +8,9 @@ struct VSIn
 	float4 Position : POSITION;
 	float2 UV : TEXCOORD;
 	float3 Tangent : TANGENT;
-	float3 Normal : NORMAL;
 	float3 BiNormal : BINORMAL;
+	float3 Normal : NORMAL;
+	
 	
 	float4 vWeights : BLENDWEIGHT;
 	float4 vIndices : BLENDINDICES;
