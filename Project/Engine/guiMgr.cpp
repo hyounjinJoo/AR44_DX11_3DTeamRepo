@@ -49,7 +49,7 @@ namespace gui
 	bool guiMgr::mbEnable{};
 	bool guiMgr::mbInitialized{};
 
-	std::unique_ptr<Json::Value> mJsonUIData{};
+	std::unique_ptr<Json::Value> guiMgr::mJsonUIData{};
 
 	using namespace mh::define;
 	using namespace mh::math;

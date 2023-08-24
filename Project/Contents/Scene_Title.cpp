@@ -103,7 +103,7 @@ namespace mh
 		//}
 
 		{
-			std::shared_ptr<MeshData> data = ResMgr::Load<MeshData>("House.fbx");
+			std::shared_ptr<MeshData> data = ResMgr::Load<MeshData>("Player_Default.json");
 			GameObject* obj = data->Instantiate();
 			Com_Transform* tr = obj->GetComponent<Com_Transform>();
 			tr->SetRelativeScale(float3(0.5f));
