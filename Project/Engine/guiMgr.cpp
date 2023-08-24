@@ -18,6 +18,7 @@
 #include "Application.h"
 #include "GPUMgr.h"
 #include "InputMgr.h"
+#include "PathMgr.h"
 
 #include "guiInspector.h"
 #include "guiGame.h"
@@ -35,7 +36,7 @@
 #include "guiDebugObject.h"
 #include "guiEditorObject.h"
 
-
+#include "json-cpp/json.h"
 
 extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 namespace gui
@@ -46,11 +47,12 @@ namespace gui
 	std::vector<DebugObject*> guiMgr::mDebugObjects{};
 
 	bool guiMgr::mbEnable{};
-	bool guiMgr::mbInitialized;
+	bool guiMgr::mbInitialized{};
+
+	std::unique_ptr<Json::Value> mJsonUIData{};
 
 	using namespace mh::define;
 	using namespace mh::math;
-
 	
 	void guiMgr::Init()
 	{
@@ -106,11 +108,21 @@ namespace gui
 		AddGuiWindow<guiResources>();
 
 		AddGuiWindow<guiGraphicsShaderEditor>();
-		//guiGraphicsShaderEditor* Editor = new guiGraphicsShaderEditor;
-		//mWidgets.insert(std::make_pair("Graphics Shader Editor", Editor));
 
-		//ListWidget* listWidget = new ListWidget();
-		//mWidgets.insert(std::make_pair("ListWidget", listWidget));
+		//TODO: 여기
+		//const std::fs::path& resPath = mh::PathMgr::Get
+
+		//for (const auto& iter : mGuiWindows)
+		//{
+		//	assert(nullptr != iter.second);
+
+		//	if (nullptr != iter.second->GetParent())
+		//		continue;
+
+		//	iter.second->SaveRecursive(m_SavedUIData);
+
+		//	vecUI.push_back(iter.second);
+		//}
 
 		for (const auto& iter : mGuiWindows)
 		{
@@ -192,18 +204,18 @@ namespace gui
 		if (mbEnable == false)
 			return;
 
-		//for (auto& iter : mGuiWindows)
-		//{
-		//	if (iter.second && nullptr == iter.second->GetParent())
-		//	{
-		//		SAFE_DELETE(iter.second);
-		//	}
-		//}
+		
 
 		for (const auto& guiPair : mGuiWindows)
 		{
 			if (guiPair.second)
 			{
+				if (guiPair.second->IsSaveEnable())
+				{
+					//한 파일에 몰아서 저장
+					Json::Value& saveVal = (*mJsonUIData.get())[guiPair.first];
+					guiPair.second->SaveJson(&saveVal);
+				}
 				delete guiPair.second;
 			}
 		}
@@ -284,6 +296,30 @@ namespace gui
 		ImGui_ImplWin32_Init(mh::Application::GetHwnd());
 		ImGui_ImplDX11_Init(mh::GPUMgr::Device().Get()
 			, mh::GPUMgr::Context().Get());
+
+
+
+		//설정 파일들 로드
+		//TODO: 여기
+		//std::filesystem::path origDir = mh::PathMgr::GetInst()->GetPathRel_Content();
+
+		//origDir /= DIRECTORY_NAME::SAVED_SETTING;
+		//std::filesystem::path fullPath = origDir / "imgui.ini";
+		//io.IniFilename = NULL;
+
+		//ImGui::LoadIniSettingsFromDisk(fullPath.string().c_str());
+
+		//fullPath.clear();
+		//fullPath = origDir;
+		//fullPath /= "ImGuiSave.json";
+
+		//std::ifstream loadfile(fullPath);
+		//if (true == loadfile.is_open())
+		//{
+		//	loadfile >> m_SavedUIData;
+		//	loadfile.close();
+		//}
+
 
 		// Load Fonts
 		// - If no fonts are loaded, dear imgui will use the default font. You can also load multiple fonts and use ImGui::PushFont()/PopFont() to select them.

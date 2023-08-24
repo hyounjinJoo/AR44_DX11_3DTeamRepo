@@ -4,6 +4,7 @@
 #include "define_Struct.h"
 #include "define_Macro.h"
 #include <unordered_map>
+#include "json-cpp/json-forwards.h"
 
 namespace gui
 {
@@ -61,6 +62,8 @@ namespace gui
 
 		static bool mbEnable;
 		static bool mbInitialized;
+
+		static std::unique_ptr<Json::Value> mJsonUIData;
 	};
 
 	inline void guiMgr::SetEnable(bool _bEnable)
