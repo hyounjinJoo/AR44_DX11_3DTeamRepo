@@ -38,9 +38,15 @@
 
 #include "json-cpp/json.h"
 
+
+
 extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 namespace gui
 {
+	constexpr const char* imguiSaveINI = "imgui.ini";
+	constexpr const char* imguiSaveJSON = "imgui.json";
+
+
 	std::unordered_map<std::string, guiBase*, mh::define::tUmap_StringViewHasher, std::equal_to<>> guiMgr::mGuiWindows{};
 	//std::vector<guiBase*> guiMgr::mGuiWindows{};
 	std::vector<EditorObject*> guiMgr::mEditorObjects{};
@@ -109,20 +115,6 @@ namespace gui
 
 		AddGuiWindow<guiGraphicsShaderEditor>();
 
-		//TODO: 여기
-		//const std::fs::path& resPath = mh::PathMgr::Get
-
-		//for (const auto& iter : mGuiWindows)
-		//{
-		//	assert(nullptr != iter.second);
-
-		//	if (nullptr != iter.second->GetParent())
-		//		continue;
-
-		//	iter.second->SaveRecursive(m_SavedUIData);
-
-		//	vecUI.push_back(iter.second);
-		//}
 
 		for (const auto& iter : mGuiWindows)
 		{
@@ -137,7 +129,7 @@ namespace gui
 			&&
 			mh::InputMgr::GetKey(mh::eKeyCode::LSHIFT)
 			&&
-			mh::InputMgr::GetKey(mh::eKeyCode::E)
+			mh::InputMgr::GetKeyDown(mh::eKeyCode::E)
 			)
 		{
 			gui::guiMgr::ToggleEnable();
@@ -148,6 +140,8 @@ namespace gui
 		Update();
 		FixedUpdate();
 		Render();
+
+		mbInitialized = true;
 	}
 
 
@@ -172,14 +166,6 @@ namespace gui
 		{
 			guiPair.second->FixedUpdate();
 		}
-
-		//for (const auto& pair : mGuiWindows)
-		//{
-		//	if (nullptr == pair.second->GetParent())
-		//	{
-		//		pair.second->FixedUpdate();
-		//	}
-		//}
 	}
 
 	void guiMgr::Render()
@@ -201,11 +187,17 @@ namespace gui
 
 	void guiMgr::Release()
 	{
-		if (mbEnable == false)
+		if (false == mbInitialized)
 			return;
 
-		
+		//IMGUI 내부 세팅 저장
+		const std::fs::path& saveDir = mh::PathMgr::GetResPathRelative();
+		std::fs::path savePath = saveDir / imguiSaveINI;
+		ImGui::SaveIniSettingsToDisk(savePath.string().c_str());
 
+		//IMGUI 프로젝트 세팅 저장
+		savePath.remove_filename();
+		savePath /= imguiSaveJSON;
 		for (const auto& guiPair : mGuiWindows)
 		{
 			if (guiPair.second)
@@ -220,6 +212,17 @@ namespace gui
 			}
 		}
 		mGuiWindows.clear();
+
+
+		//json 저장
+		std::ofstream ofs(savePath);
+		if (ofs.is_open())
+		{
+			ofs << (*mJsonUIData.get());
+			ofs.close();
+		}
+		mJsonUIData.reset();
+
 		
 		for (auto& obj : mEditorObjects)
 		{
@@ -262,6 +265,18 @@ namespace gui
 		debugObj->Render();
 	}
 
+	Json::Value* guiMgr::CheckJsonSaved(const std::string& _strKey)
+	{
+		Json::Value* retJson = nullptr;
+
+		if (mJsonUIData->isMember(_strKey))
+		{
+			retJson = &((*mJsonUIData)[_strKey]);
+		}
+
+		return retJson;
+	}
+
 	void guiMgr::ImGuiInitialize()
 	{
 		// Setup Dear ImGui context
@@ -291,6 +306,27 @@ namespace gui
 			style.WindowRounding = 0.0f;
 			style.Colors[ImGuiCol_WindowBg].w = 1.0f;
 		}
+
+		//내부 세팅 로드
+		const std::fs::path& saveDir = mh::PathMgr::GetResPathRelative();
+		std::fs::path savePath = saveDir / imguiSaveINI;
+		if (std::fs::exists(savePath))
+		{
+			ImGui::LoadIniSettingsFromDisk(savePath.string().c_str());
+		}
+		
+
+		//프로젝트 세팅 로드
+		mJsonUIData = std::make_unique<Json::Value>();
+		savePath.remove_filename();
+		savePath /= imguiSaveJSON;
+		std::ifstream ifs(savePath);
+		if (ifs.is_open())
+		{
+			ifs >> *mJsonUIData;
+			ifs.close();
+		}
+
 
 		// Setup Platform/Renderer backends
 		ImGui_ImplWin32_Init(mh::Application::GetHwnd());

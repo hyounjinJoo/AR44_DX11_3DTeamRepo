@@ -142,7 +142,7 @@ namespace mh
 			lightComp->SetType(eLightType::Directional);
 			lightComp->SetDiffuse(float4(1.0f, 1.0f, 1.0f, 1.0f));
 			lightComp->SetSpecular(float4(1.0f, 1.0f, 1.0f, 1.0f));
-			lightComp->SetAmbient(float4(0.15f, 0.15f, 0.15f, 1.0f));
+			lightComp->SetAmbient(float4(0.3f, 0.3f, 0.3f, 1.0f));
 		}
 
 		//{

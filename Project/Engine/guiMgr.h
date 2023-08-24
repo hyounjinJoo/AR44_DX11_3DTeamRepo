@@ -45,7 +45,9 @@ namespace gui
 		
 		static void DebugRender(mh::define::tDebugMesh& mesh);
 
-	private:
+		static Json::Value* CheckJsonSaved(const std::string& _strKey);
+
+		//=================== IMGUI ===========================
 		static void ImGuiInitialize();
 		static void ImGuiRelease();
 
@@ -60,7 +62,10 @@ namespace gui
 		static std::vector<EditorObject*> mEditorObjects;
 		static std::vector<DebugObject*> mDebugObjects;
 
+		//현재 GUI를 표시할지 여부
 		static bool mbEnable;
+
+		//GUI가 최초 1회 초기화 되었는지 여부
 		static bool mbInitialized;
 
 		static std::unique_ptr<Json::Value> mJsonUIData;
@@ -101,6 +106,13 @@ namespace gui
 		static_assert(false == std::is_base_of_v<guiChild, T>);
 
 		T* retPtr = new T;
+
+		Json::Value* pJval = CheckJsonSaved(retPtr->GetName());
+		if (pJval)
+		{
+			retPtr->LoadJson(pJval);
+		}
+
 		AddGuiWindow(static_cast<guiBase*>(retPtr));
 		return retPtr;
 	}
