@@ -28,6 +28,7 @@
 #include "guiConsole.h"
 #include "guiList.h"
 #include "guiTree_GameObject.h"
+#include "guiFBXConverter.h"
 
 
 
@@ -88,6 +89,7 @@ namespace gui
 		renderer->SetMaterial(material, 0);
 		renderer->SetMesh(circleMesh);
 
+
 		//그리드 이쪽으로 옮겨줘야 한다.
 		// Grid Object
 		//EditorObject* gridObject = new EditorObject();
@@ -101,19 +103,7 @@ namespace gui
 
 		ImGuiInitialize();
 
-		AddGuiWindow<guiMainMenu>();
-
-		AddGuiWindow<guiInspector>();
-
-		//AddGuiWindow<guiGame>();
-		////Game* game = new Game();
-		////mWidgets.insert(std::make_pair("Game", game));
-
-		AddGuiWindow<guiTree_GameObject>();
-
-		AddGuiWindow<guiResources>();
-
-		AddGuiWindow<guiGraphicsShaderEditor>();
+		InitGuiWindows();
 
 
 		for (const auto& iter : mGuiWindows)
@@ -275,6 +265,21 @@ namespace gui
 		}
 
 		return retJson;
+	}
+
+	void guiMgr::InitGuiWindows()
+	{
+		AddGuiWindow<guiMainMenu>();
+
+		AddGuiWindow<guiInspector>();
+
+		AddGuiWindow<guiTree_GameObject>();
+
+		AddGuiWindow<guiResources>();
+
+		AddGuiWindow<guiGraphicsShaderEditor>();
+
+		AddGuiWindow<guiFBXConverter>();
 	}
 
 	void guiMgr::ImGuiInitialize()

@@ -35,7 +35,11 @@ namespace gui
 
 		Json::MH::SaveValue(_pJval, JSON_KEY_PAIR(mbEnable));
 
-		//Child는 구현 안했음(그냥 간단한 정보만 저장하려고 만듬)
+		for (size_t i = 0; i < mChilds.size(); ++i)
+		{
+			if (mChilds[i])
+				mChilds[i]->SaveJson(_pJval);
+		}
 
 		return mh::eResult::Success;
 	}
@@ -50,7 +54,11 @@ namespace gui
 
 		Json::MH::LoadValue(_pJval, JSON_KEY_PAIR(mbEnable));
 
-		//Child 저장은 구현 안했음(그냥 간단한 정보만 저장하려고 만듬)
+		for (size_t i = 0; i < mChilds.size(); ++i)
+		{
+			if (mChilds[i])
+				mChilds[i]->LoadJson(_pJval);
+		}
 
 		return mh::eResult::Success;
 	}

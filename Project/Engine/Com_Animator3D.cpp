@@ -184,6 +184,32 @@ namespace mh
 		m_pBoneFinalMatBuffer->UnBindData();
 	}
 
+	void Com_Animator3D::Play(const std::string_view _animName)
+	{
+		
+		if (mSkeleton)
+		{
+			const auto& clips = mSkeleton->GetAnimClip();
+			for(size_t i = 0; i < clips.size(); ++i)
+			{
+				if (_animName == clips[i].strAnimName)
+				{
+					m_iCurClip = i;
+
+					//m_iFrameCount = 0;
+					//m_dCurTime = 0.f;
+					//m_iCurClip; 
+
+					//m_iFrameIdx = 0; 
+					//m_iNextFrameIdx = 1; 
+					//m_fRatio = 1.f;
+
+					break;
+				}
+			}
+		}
+	}
+
 
 
 	bool Com_Animator3D::CheckMesh()

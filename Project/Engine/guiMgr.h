@@ -45,7 +45,10 @@ namespace gui
 		
 		static void DebugRender(mh::define::tDebugMesh& mesh);
 
+		//Window 이름으로 저장된 Json 값이 있을 경우 로드함
 		static Json::Value* CheckJsonSaved(const std::string& _strKey);
+
+		static void InitGuiWindows();
 
 		//=================== IMGUI ===========================
 		static void ImGuiInitialize();

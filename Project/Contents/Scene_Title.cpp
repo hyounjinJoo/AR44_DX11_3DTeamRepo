@@ -19,6 +19,7 @@
 #include <Engine/CollisionMgr.h>
 #include <Engine/Com_Animator2D.h>
 #include <Engine/Com_Light3D.h>
+#include <Engine/Com_Animator3D.h>
 #include <Engine/PaintShader.h>
 #include <Engine/Com_Renderer_ParticleSystem.h>
 #include <Engine/Prefab.h>
@@ -103,13 +104,18 @@ namespace mh
 		//}
 
 		{
-			std::shared_ptr<MeshData> data = ResMgr::Load<MeshData>("Player_Default.json");
+			std::shared_ptr<MeshData> data = ResMgr::Load<MeshData>("nergigante00_final.json");
 			GameObject* obj = data->Instantiate();
 			Com_Transform* tr = obj->GetComponent<Com_Transform>();
 			tr->SetRelativeScale(float3(0.5f));
 			obj->SetName("fbxTextObj");
 			obj->AddComponent<Script_Player>();
 			EventMgr::SpawnGameObject(obj, eLayerType::Player);
+
+			Com_Animator3D* animator = obj->GetComponent<Com_Animator3D>();
+			animator->Play("NlaTrack.010");
+
+			//
 			//object::Instantiate(eLayerType::Player, obj);
 			//obj->AddComponent<Script_JH>();
 		}

@@ -486,6 +486,7 @@
     <ClCompile Include="guiConsole.cpp">
       <Filter>GuiEditor\Instances</Filter>
     </ClCompile>
+    <ClCompile Include="guiFBXConverter.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application.h">
@@ -845,6 +846,7 @@
     <ClInclude Include="guiConsole.h">
       <Filter>GuiEditor\Instances</Filter>
     </ClInclude>
+    <ClInclude Include="guiFBXConverter.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="cpp.hint">

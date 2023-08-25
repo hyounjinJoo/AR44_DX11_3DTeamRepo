@@ -278,6 +278,7 @@ call Copy_HLSL.bat $(Configuration)</Command>
     <ClInclude Include="guiDebugObject.h" />
     <ClInclude Include="guiEditorObject.h" />
     <ClInclude Include="guiEntity.h" />
+    <ClInclude Include="guiFBXConverter.h" />
     <ClInclude Include="guiGame.h" />
     <ClInclude Include="guiGraphicsShaderEditor.h" />
     <ClInclude Include="guiInspector.h" />
@@ -404,6 +405,7 @@ call Copy_HLSL.bat $(Configuration)</Command>
     <ClCompile Include="guiDebugObject.cpp" />
     <ClCompile Include="guiEditorObject.cpp" />
     <ClCompile Include="guiEntity.cpp" />
+    <ClCompile Include="guiFBXConverter.cpp" />
     <ClCompile Include="guiGame.cpp" />
     <ClCompile Include="guiGraphicsShaderEditor.cpp" />
     <ClCompile Include="guiInspector.cpp" />

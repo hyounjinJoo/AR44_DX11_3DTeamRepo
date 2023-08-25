@@ -30,6 +30,8 @@ namespace gui
 
 		void InputElementEditModal();
 
+		void CreateSTDInputLayout(const mh::define::eDimensionType _dimType);
+
 		void SaveModal();
 		void LoadModal();
 
