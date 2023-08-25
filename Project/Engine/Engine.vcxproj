@@ -284,7 +284,7 @@ call Copy_HLSL.bat $(Configuration)</Command>
     <ClInclude Include="guiInspector.h" />
     <ClInclude Include="guiList.h" />
     <ClInclude Include="guiMainMenu.h" />
-    <ClInclude Include="guiMaterial.h" />
+    <ClInclude Include="guiMaterialEditor.h" />
     <ClInclude Include="guiMesh.h" />
     <ClInclude Include="guiMgr.h" />
     <ClInclude Include="guiResource.h" />
@@ -338,6 +338,7 @@ call Copy_HLSL.bat $(Configuration)</Command>
     <ClInclude Include="InputMgr.h" />
     <ClInclude Include="MeshData.h" />
     <ClInclude Include="IShader.h" />
+    <ClInclude Include="Shader_Common.h" />
     <ClInclude Include="SimpleMath.h" />
     <ClInclude Include="Singleton.h" />
     <ClInclude Include="json-cpp\json-forwards.h" />
@@ -411,7 +412,7 @@ call Copy_HLSL.bat $(Configuration)</Command>
     <ClCompile Include="guiInspector.cpp" />
     <ClCompile Include="guiList.cpp" />
     <ClCompile Include="guiMainMenu.cpp" />
-    <ClCompile Include="guiMaterial.cpp" />
+    <ClCompile Include="guiMaterialEditor.cpp" />
     <ClCompile Include="guiMesh.cpp" />
     <ClCompile Include="guiMgr.cpp" />
     <ClCompile Include="guiResource.cpp" />
@@ -536,6 +537,7 @@ call Copy_HLSL.bat $(Configuration)</Command>
   </ItemGroup>
   <ItemGroup>
     <None Include="cpp.hint" />
+    <None Include="DefaultShader\SH_Animation2D.hlsli" />
     <None Include="DefaultShader\SH_Basic3D.hlsli" />
     <None Include="DefaultShader\SH_Functions.hlsli" />
     <None Include="DefaultShader\SH_Func_Animation3D.hlsli" />

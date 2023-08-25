@@ -29,13 +29,10 @@
 #include "guiList.h"
 #include "guiTree_GameObject.h"
 #include "guiFBXConverter.h"
-
-
-
 #include "guiGraphicsShaderEditor.h"
-
 #include "guiDebugObject.h"
 #include "guiEditorObject.h"
+#include "guiMaterialEditor.h"
 
 #include "json-cpp/json.h"
 
@@ -280,6 +277,8 @@ namespace gui
 		AddGuiWindow<guiGraphicsShaderEditor>();
 
 		AddGuiWindow<guiFBXConverter>();
+
+		AddGuiWindow<guiMaterialEditor>();
 	}
 
 	void guiMgr::ImGuiInitialize()

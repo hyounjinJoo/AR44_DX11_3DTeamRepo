@@ -1,10 +1,10 @@
 #ifndef SH_DEFFERED
 #define SH_DEFFERED
-
 #include "SH_Globals.hlsli"
+
+
+#ifndef __cplusplus
 #include "SH_Func_Animation3D.hlsli"
-
-
 struct VSIn
 {
 	float4 Position : POSITION;
@@ -40,5 +40,6 @@ struct PSOut
 	float4 Position : SV_Target4;
 	//float4 Data : SV_Target5;
 };
+#endif//__cplusplus
 
 #endif

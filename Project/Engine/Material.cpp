@@ -17,8 +17,9 @@ namespace mh
         : IRes(eResourceType::Material)
         , mCB{}
         , mMode(eRenderingMode::Opaque)
+        , mShader{}
+        , mTextures{}
     {
-
     }
 
 
@@ -28,10 +29,6 @@ namespace mh
         , mTextures(_other.mTextures)
         , mCB(_other.mCB)
         , mMode(_other.mMode)
-        , mDiffuseColor(_other.mDiffuseColor)
-        , mSpecularColor(_other.mSpecularColor)
-        , mAmbientColor(_other.mAmbientColor)
-        , mEmissiveColor(_other.mEmissiveColor)
     {
     }
 
@@ -111,6 +108,11 @@ namespace mh
         //레퍼런스로 바꾸고
         Json::Value& jVal = *_pJVal;
 
+        //단순 Value의 경우에는 매크로로 바로 저장 가능
+        Json::MH::SaveValue(_pJVal, JSON_KEY_PAIR(mCB));
+        Json::MH::SaveValue(_pJVal, JSON_KEY_PAIR(mMode));
+
+
         //포인터의 경우에는 포인터 자체를 저장하는게 아니라 Key를 저장
         if (mShader)
         {
@@ -119,9 +121,7 @@ namespace mh
         
         Json::MH::SavePtrStrKeyVector(_pJVal, JSON_KEY_PAIR(mTextures));
 
-        //단순 Value의 경우에는 매크로로 바로 저장 가능
-        Json::MH::SaveValue(_pJVal, JSON_KEY_PAIR(mCB));
-        Json::MH::SaveValue(_pJVal, JSON_KEY_PAIR(mMode));
+
 
         return eResult::Success;
     }
@@ -142,26 +142,30 @@ namespace mh
         }
         const Json::Value& jVal = *_pJVal;
 
+        //단순 Value의 경우에는 함수로 바로 불러오기 가능
+        Json::MH::LoadValue(_pJVal, JSON_KEY_PAIR(mMode));
+        Json::MH::LoadValue(_pJVal, JSON_KEY_PAIR(mCB));
+
         //쉐이더 데이터가 있는지 확인하고 가져온 키값으로 쉐이더를 로드
         std::string shaderStrKey = Json::MH::LoadPtrStrKey(_pJVal, JSON_KEY_PAIR(mShader));
         if (false == shaderStrKey.empty())
         {
-            mShader = ResMgr::Load<GraphicsShader>(shaderStrKey);
+            SetShader(ResMgr::Load<GraphicsShader>(shaderStrKey));
         }
         
         //포인터 배열은 MH::LoadPtrStrKeyVector 함수를 통해서 Key값을 싹 받아올 수 있음.
         const auto& vecLoad = Json::MH::LoadPtrStrKeyVector(_pJVal, JSON_KEY_PAIR(mTextures));
         for (size_t i = 0; i < vecLoad.size(); ++i)
         {
-            if(false == vecLoad[i].empty())
-                mTextures[i] = ResMgr::Load<Texture>(vecLoad[i]);
+            if (false == vecLoad[i].empty())
+            {
+                SetTexture((eTextureSlot)i, ResMgr::Load<Texture>(vecLoad[i]));
+            }
         }
 
-        //단순 Value의 경우에는 함수로 바로 불러오기 가능
-        Json::MH::LoadValue(_pJVal, JSON_KEY_PAIR(mMode));
-        Json::MH::LoadValue(_pJVal, JSON_KEY_PAIR(mCB));
 
-        return eResult();
+
+        return eResult::Success;
     }
 
     void Material::SetData(eGPUParam _param, void* _data)
@@ -196,25 +200,17 @@ namespace mh
     {
         for (size_t slotIndex = 0; slotIndex < (uint)eTextureSlot::END; slotIndex++)
         {
-            if (mTextures[slotIndex] == nullptr)
+            if (mTextures[slotIndex])
             {
-				continue;
+                mTextures[slotIndex]->BindDataSRV((uint)slotIndex, eShaderStageFlag::ALL);
             }
-
-            mTextures[slotIndex]->BindDataSRV((uint)slotIndex, eShaderStageFlag::ALL);
+            else
+            {
+                Texture::ClearSRV((UINT)slotIndex);
+            }
         }
 
-        if (mTextures[(uint)eTextureSlot::Albedo])
-        {
-            mCB.usedAlbedo = TRUE;
-        }
-
-        if (mTextures[(uint)eTextureSlot::Normal])
-        {
-            mCB.usedNormal = TRUE;
-        }
-
-        ConstBuffer* CB = RenderMgr::GetConstBuffer(eCBType::Material);
+        static ConstBuffer* CB = RenderMgr::GetConstBuffer(eCBType::Material);
         CB->SetData(&mCB);
 
         eShaderStageFlag_ flag = eShaderStageFlag::VS | eShaderStageFlag::GS | eShaderStageFlag::PS;
@@ -227,13 +223,8 @@ namespace mh
     {
         for (size_t slotIndex = 0; slotIndex < (uint)eTextureSlot::END; slotIndex++)
         {
-            if (mTextures[slotIndex] == nullptr)
-			{
-				continue;
-			}
-
-            mTextures[slotIndex]->UnBindData();
+            if (mTextures[slotIndex])
+                mTextures[slotIndex]->UnBindData();
         }
     }
-
 }

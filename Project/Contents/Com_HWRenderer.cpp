@@ -53,7 +53,7 @@ namespace mh
 	{
 		mExampleStructs.clear();
 
-		srand(time(0));
+		srand((unsigned int)time(nullptr));
 		
 		//잘 전달되는지 보기 위해 0.f ~ 1.f 사이의 랜덤값을 지정해준다(10개)
 		for (int i = 0; i < 10; ++i)

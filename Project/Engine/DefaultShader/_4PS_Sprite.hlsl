@@ -1,32 +1,10 @@
-#include "SH_Globals.hlsli"
-#include "SH_Func_Light.hlsli"
-struct VSIn
-{
-    float4 Pos : POSITION;
-    float4 Color : COLOR;
-    float2 UV : TEXCOORD;
-};
-
-struct VSOut
-{
-    float4 Pos : SV_Position;
-    float3 WorldPos : POSITION;
-    float4 Color : COLOR;
-    float2 UV : TEXCOORD;
-};
-
-//cbuffer time
-//int 0
+#include "SH_Animation2D.hlsli"
 
 float4 main(VSOut In) : SV_Target
 {
-   
     float4 color = (float) 0.0f;
-    
-	
-    
+  
     //color.a += time;
-    
     if (CB_Animation2D.animationType == 1) // 2D
     {
 		float2 vUV = In.UV;
@@ -36,9 +14,7 @@ float4 main(VSOut In) : SV_Target
         
 		////텍스처 버퍼 8개 중 현재 그리고자 하는 텍스처 버퍼 번호를 받아와서 샘플링해준다.
 		//int idx = Data.MTRL_SCALAR_STD2D_ANIM_TEXATLAS_IDX;
-		color = atlasTexture.Sample(anisotropicSampler, RealUV);
-        
-        
+		color = AtlasTexture.Sample(anisotropicSampler, RealUV);
         
 		//float2 diff = (CB_Animation2D.atlasSize - CB_Animation2D.spriteSize) / 2.0f;
 		//float2 UV = (CB_Animation2D.leftTop - diff - CB_Animation2D.offset) + (CB_Animation2D.atlasSize * In.UV);
@@ -58,8 +34,8 @@ float4 main(VSOut In) : SV_Target
     else 
     {
         //UV.x = -UV.x;
-        color = albedoTexture.Sample(anisotropicSampler, In.UV);
-    }
+		color = float4(1.f, 1.f, 0.f, 1.f);
+	}
     
     
     // noise, paper burn effect

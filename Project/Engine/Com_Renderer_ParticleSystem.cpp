@@ -239,9 +239,9 @@ namespace mh
 	{
 		if (false == IsRenderReady())
 			return;
-
+		
 		GetOwner()->GetComponent<Com_Transform>()->BindData();
-		mBuffer->BindDataSRV(Register_t_atlasTexture, eShaderStageFlag::GS);
+		mBuffer->BindDataSRV(Register_t_AtlasTexture, eShaderStageFlag::GS);
 
 		GetCurrentMaterial(0)->BindData();
 		GetMesh()->RenderInstanced(0u, mMaxParticles);

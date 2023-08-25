@@ -1,6 +1,8 @@
 #pragma once
 #include <string>
 #include <fstream>
+#include <filesystem>
+#include <vector>
 #include "base64.h"
 
 
@@ -233,6 +235,12 @@ namespace mh
 		Binary() = delete;
 		~Binary() = delete;
 	};
+
+
+	std::filesystem::path WindowFileDialog(const std::filesystem::path& _baseDirectory, const std::filesystem::path& _extension);
+
+
+	std::filesystem::path WindowFileDialog(const std::filesystem::path& _baseDirectory, const std::vector<std::filesystem::path>& _extensions);
 }
 
 

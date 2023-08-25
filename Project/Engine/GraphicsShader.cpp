@@ -167,7 +167,7 @@ namespace mh
 			//에딧 모드가 아닐 경우에만 로드
 			for (size_t i = 0; i < mArrShaderCode.size(); ++i)
 			{
-				if (false == mbEditMode)
+				if (false == mbEditMode && false == vecStrKey[i].empty())
 				{
 					CreateByCSO((eGSStage)i, vecStrKey[i]);
 					if ((size_t)eGSStage::END == i)

@@ -194,7 +194,7 @@ namespace mh
 			{
 				if (_animName == clips[i].strAnimName)
 				{
-					m_iCurClip = i;
+					m_iCurClip = (int)i;
 
 					//m_iFrameCount = 0;
 					//m_dCurTime = 0.f;

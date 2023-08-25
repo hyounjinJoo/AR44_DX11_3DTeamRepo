@@ -1,8 +1,9 @@
 #ifndef SH_BASIC3D
 #define SH_BASIC3D
 #include "SH_Globals.hlsli"
-#include "SH_Func_Light.hlsli"
 
+#ifndef __cplusplus
+#include "SH_Func_Light.hlsli"
 struct VSIn
 {
 	float4 Position : POSITION;
@@ -26,5 +27,5 @@ struct VSOut
 	float3 ViewBiNormal : BINORMAL;
 	float3 ViewNormal : NORMAL;
 };
-
+#endif //__cplusplus
 #endif

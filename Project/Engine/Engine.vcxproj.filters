@@ -425,7 +425,7 @@
     <ClCompile Include="guiMesh.cpp">
       <Filter>GuiEditor\Instances\Resource</Filter>
     </ClCompile>
-    <ClCompile Include="guiMaterial.cpp">
+    <ClCompile Include="guiMaterialEditor.cpp">
       <Filter>GuiEditor\Instances\Resource</Filter>
     </ClCompile>
     <ClCompile Include="guiEntity.cpp">
@@ -782,7 +782,7 @@
     <ClInclude Include="guiMesh.h">
       <Filter>GuiEditor\Instances\Resource</Filter>
     </ClInclude>
-    <ClInclude Include="guiMaterial.h">
+    <ClInclude Include="guiMaterialEditor.h">
       <Filter>GuiEditor\Instances\Resource</Filter>
     </ClInclude>
     <ClInclude Include="guiEntity.h">
@@ -847,6 +847,9 @@
       <Filter>GuiEditor\Instances</Filter>
     </ClInclude>
     <ClInclude Include="guiFBXConverter.h" />
+    <ClInclude Include="Shader_Common.h">
+      <Filter>Common\define</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="cpp.hint">
@@ -911,6 +914,9 @@
     </None>
     <None Include="DefaultShader\SH_Func_Animation3D.hlsli">
       <Filter>_DefaultShader</Filter>
+    </None>
+    <None Include="DefaultShader\SH_Animation2D.hlsli">
+      <Filter>_DefaultShader\Animation\2D</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>

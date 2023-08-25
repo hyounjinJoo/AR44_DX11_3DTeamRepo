@@ -22,16 +22,16 @@ float4 main(VSOut In) : SV_Target
 	float4 OutColor = (float4) 0.0f;
 	float2 UV = In.Position.xy / CB_Global.fResolution;
     
-	float4 viewPos = positionTarget.Sample(anisotropicSampler, UV);
+	float4 viewPos = PositionTarget.Sample(anisotropicSampler, UV);
 	if (0.0f == viewPos.a)
 		discard;
     
     
-	OutColor = albedoTarget.Sample(anisotropicSampler, UV);
+	OutColor = AlbedoTarget.Sample(anisotropicSampler, UV);
     
     
-	float4 vDiffuse = diffuseLightTarget.Sample(anisotropicSampler, UV);
-	float4 vSpecular = specularLightTarget.Sample(anisotropicSampler, UV);
+	float4 vDiffuse = DiffuseLightTarget.Sample(anisotropicSampler, UV);
+	float4 vSpecular = SpecularLightTarget.Sample(anisotropicSampler, UV);
     
 	OutColor.rgb = (OutColor.rgb * vDiffuse.rgb) + vSpecular.rgb;
     
