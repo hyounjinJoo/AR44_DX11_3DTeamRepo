@@ -175,6 +175,12 @@
     <Filter Include="Component\0. Transform">
       <UniqueIdentifier>{62546181-5d07-413f-a9e5-329a0986165d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="BrainTree">
+      <UniqueIdentifier>{9f929c3a-2797-410f-ba34-0afdda3b44c2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="BrainTree\example">
+      <UniqueIdentifier>{0779c46a-601a-434f-a7bd-493e0dc8231c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Application.cpp">
@@ -482,6 +488,9 @@
     </ClCompile>
     <ClCompile Include="EventMgr.cpp">
       <Filter>Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="BrainTree\example\Example01_Simple.cpp">
+      <Filter>BrainTree\example</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -841,6 +850,9 @@
     </ClInclude>
     <ClInclude Include="EventMgr.h">
       <Filter>Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="BrainTree\BrainTree.h">
+      <Filter>BrainTree</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
