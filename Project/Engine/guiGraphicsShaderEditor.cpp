@@ -9,8 +9,6 @@
 
 namespace gui
 {
-	
-
 	namespace strKey
 	{
 		constexpr const char* DXGI_FORMAT_String[] =
@@ -728,8 +726,6 @@ namespace gui
 
 				ImGui::EndPopup();
 			}
-
-			//ImGui::EndPopup();
 		}
 	}
 

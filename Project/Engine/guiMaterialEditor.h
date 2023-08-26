@@ -27,6 +27,21 @@ namespace gui
 		void UpdateTextureList();
 		void UpdateRenderingMode();
 		void UpdateMtrlConstBuffer();
+		void UpdateSaveLoad();
+
+		bool CheckSavePossible();
+		void SaveToFile();
+		void LoadFromFile();
+
+		void NewMaterial();
+
+		enum class eContext
+		{
+			None,
+			SaveToFile,
+			LoadFromFile
+		};
+		
 
 	private:
 		std::shared_ptr<mh::Material>	mTargetMaterial;
@@ -39,6 +54,15 @@ namespace gui
 		guiComboBox		mCurrentMaterialsCombo;
 
 		guiComboBox		mRenderingModeCombo;
+
+		//현재 어떤 창을 띄우는 상태인지
+		eContext mCurContext;
+
+		//저장할 파일명 저장용 변수
+		std::string mSaveLoadFileName;
+
+		//현재 엔진에 로드되어있는 재질 목록 표시용
+		guiComboBox		mCurrentLoadedMtrl;
 	};
 }
 

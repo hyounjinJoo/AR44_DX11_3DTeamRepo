@@ -39,7 +39,7 @@ namespace gui
 			files.push_back(".fbx");
 			files.push_back(".msh");
 
-			mh::WindowFileDialog(std::fs::current_path(), files);
+			mh::WinAPI::FileDialog(std::fs::current_path(), files);
 
 			//////풀경로를 받아올 주소 변수를 만들어주고
 			//std::basic_string<TCHAR> stringPath;

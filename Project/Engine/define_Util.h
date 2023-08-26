@@ -236,11 +236,18 @@ namespace mh
 		~Binary() = delete;
 	};
 
+	class WinAPI
+	{
+	public:
+		static std::filesystem::path FileDialog(const std::filesystem::path& _baseDirectory, const std::filesystem::path& _extension);
 
-	std::filesystem::path WindowFileDialog(const std::filesystem::path& _baseDirectory, const std::filesystem::path& _extension);
+		static std::filesystem::path FileDialog(const std::filesystem::path& _baseDirectory, const std::vector<std::filesystem::path>& _extensions);
+	private:
+		WinAPI() = delete;
+		~WinAPI() = delete;
+	};
 
 
-	std::filesystem::path WindowFileDialog(const std::filesystem::path& _baseDirectory, const std::vector<std::filesystem::path>& _extensions);
 }
 
 

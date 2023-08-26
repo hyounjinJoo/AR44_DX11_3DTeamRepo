@@ -104,7 +104,7 @@ namespace mh
 		//}
 
 		{
-			std::shared_ptr<MeshData> data = ResMgr::Load<MeshData>("nergigante00_final.json");
+			std::shared_ptr<MeshData> data = ResMgr::Load<MeshData>("House.fbx");
 			GameObject* obj = data->Instantiate();
 			Com_Transform* tr = obj->GetComponent<Com_Transform>();
 			tr->SetRelativeScale(float3(0.5f));
@@ -113,7 +113,8 @@ namespace mh
 			EventMgr::SpawnGameObject(obj, eLayerType::Player);
 
 			Com_Animator3D* animator = obj->GetComponent<Com_Animator3D>();
-			animator->Play("NlaTrack.010");
+			if(animator)
+				animator->Play("NlaTrack.010");
 
 			//
 			//object::Instantiate(eLayerType::Player, obj);

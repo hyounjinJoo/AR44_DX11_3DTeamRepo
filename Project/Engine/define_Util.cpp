@@ -53,13 +53,13 @@ std::string StringConv::ConvertUnicodeToUTF8(const std::wstring_view _src)
 }
 
 
-std::filesystem::path mh::WindowFileDialog(const std::filesystem::path& _baseDirectory, const std::filesystem::path& _extension)
+std::filesystem::path mh::WinAPI::FileDialog(const std::filesystem::path& _baseDirectory, const std::filesystem::path& _extension)
 {
 	std::vector<std::filesystem::path> extensions = { _extension };
-	return WindowFileDialog(_baseDirectory, extensions);
+	return FileDialog(_baseDirectory, extensions);
 }
 
-std::filesystem::path mh::WindowFileDialog(const std::filesystem::path& _baseDirectory, const std::vector<std::filesystem::path>& _extensions)
+std::filesystem::path mh::WinAPI::FileDialog(const std::filesystem::path& _baseDirectory, const std::vector<std::filesystem::path>& _extensions)
 {
 	//풀경로를 받아올 주소 변수를 만들어주고
 	std::basic_string<TCHAR> stringPath;
