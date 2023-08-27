@@ -159,7 +159,7 @@ namespace mh
 
 	eResult Skeleton::CreateFromFBX(FBXLoader* _fbxLoader)
 	{
-		std::vector<tBone*>& vecBone = _fbxLoader->GetBones();
+		std::vector<tFBXBone*>& vecBone = _fbxLoader->GetBones();
 		if (vecBone.empty())
 		{
 			return eResult::Fail_Empty;
@@ -212,7 +212,7 @@ namespace mh
 		}
 
 		//애니메이션을 로드. 없다고 에러는 아님
-		std::vector<tAnimClip*>& vecAnimClip = _fbxLoader->GetAnimClip();
+		std::vector<tFBXAnimClip*>& vecAnimClip = _fbxLoader->GetAnimClip();
 		if (vecAnimClip.empty())
 		{
 			return eResult::Success;

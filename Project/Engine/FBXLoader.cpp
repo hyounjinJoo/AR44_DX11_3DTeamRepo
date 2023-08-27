@@ -16,90 +16,142 @@ namespace mh
 	
 
 	FBXLoader::FBXLoader()
-		: mManager(NULL)
-		, mScene(NULL)
-		, mImporter(NULL)
+		: mManager()
+		, mScene()
+		, mBones{}
+		, mAnimNames{}
+		, mAnimClips{}
+		, mbMixamo{}
 	{
 	}
 
 	FBXLoader::~FBXLoader()
 	{
-		mScene->Destroy();
-		mManager->Destroy();
+		Reset();
+	}
 
-		for (size_t i = 0; i < mBones.size(); ++i)
-		{
-			if (nullptr != mBones[i])
-				delete mBones[i];
-		}
-
-		for (size_t i = 0; i < mAnimClips.size(); ++i)
-		{
-			if (nullptr != mAnimClips[i])
-				delete mAnimClips[i];
-		}
+	void FBXLoader::Reset()
+	{
+		mContainers.clear();
+		mBones.clear();
 
 		for (int i = 0; i < mAnimNames.Size(); ++i)
 		{
-			if (nullptr != mAnimNames[i])
+			if (mAnimNames[i])
+			{
+				mAnimNames[i]->Clear();
 				delete mAnimNames[i];
+			}
+		}
+		mAnimNames.Clear();
+
+		mAnimClips.clear();
+		mbMixamo = false;
+
+		if (mScene)
+		{
+			mScene->Destroy();
+			mScene = nullptr;
+		}
+		if (mManager)
+		{
+			mManager->Destroy();
+			mManager = nullptr;
 		}
 	}
 
-	void FBXLoader::Init()
+	eResult FBXLoader::LoadFbx(const std::fs::path& _strPath, bool _bStatic)
 	{
-		mManager = FbxManager::Create();
-		if (NULL == mManager)
-			assert(NULL);
+		Reset();
 
-		FbxIOSettings* pIOSettings = FbxIOSettings::Create(mManager, IOSROOT);
-		mManager->SetIOSettings(pIOSettings);
+		if (false == std::fs::exists(_strPath))
+		{
+			return eResult::Fail_PathNotExist;
+		}
+		
+		mManager = FbxManager::Create();
+		if (nullptr == mManager)
+		{
+			assert(nullptr);
+			Reset();
+			return eResult::Fail_Nullptr;
+		}
+		
+		mManager->SetIOSettings(FbxIOSettings::Create(mManager, IOSROOT));
 
 		mScene = FbxScene::Create(mManager, "");
-		if (NULL == mScene)
-			assert(NULL);
-	}
+		if (nullptr == mScene)
+		{
+			assert(nullptr);
+			Reset();
+			return eResult::Fail_Nullptr;
+		}
 
-	eResult FBXLoader::LoadFbx(const std::fs::path& _strPath)
-	{
-		mContainers.clear();
+		fbxsdk::FbxImporter* importer = FbxImporter::Create(mManager, "");
 
-		mImporter = FbxImporter::Create(mManager, "");
-
-		if (false == mImporter->Initialize(_strPath.string().c_str(), -1, mManager->GetIOSettings()))
+		if (false == importer->Initialize(_strPath.string().c_str(), -1, mManager->GetIOSettings()))
 		{
 			ERROR_MESSAGE_W(L"FBX 로더 초기화 실패");
+			Reset();
+			if (importer)
+			{
+				importer->Destroy();
+			}
 			return eResult::Fail_OpenFile;
 		}
 
-		mImporter->Import(mScene);
+		importer->Import(mScene);
 
-		//Former
+
+		//축 정보 변경
+		//이전 코드
 		//FbxAxisSystem originAxis = FbxAxisSystem::eMax;
 		//originAxis = mScene->GetGlobalSettings().GetAxisSystem();
 		//FbxAxisSystem DesireAxis = FbxAxisSystem::DirectX;
 		//DesireAxis.ConvertScene(mScene);
 		//originAxis = mScene->GetGlobalSettings().GetAxisSystem();
 
-		//Latter
-		mScene->GetGlobalSettings().SetAxisSystem(FbxAxisSystem::Max);
+		//새로운 코드
+		if (mScene->GetGlobalSettings().GetAxisSystem() != FbxAxisSystem::Max)
+			mScene->GetGlobalSettings().SetAxisSystem(FbxAxisSystem::Max);
 
-		// Bone 정보 읽기
-		LoadSkeleton(mScene->GetRootNode());
+		//전체 노드 갯수를 구해서 vector 크기를 예약 시켜놓는다.(이게 최대 수치임)
+		int childCount = GetAllNodesCountRecursive(mScene->GetRootNode()) + 1;
+		mContainers.reserve(childCount);
 
-		// Animation 이름정보 
-		mScene->FillAnimStackNameArray(mAnimNames);
 
-		// Animation Clip 정보
-		LoadAnimationClip();
+		//static 메쉬로 불러오기 설정이 아닐 경우
+		if (false == _bStatic)
+		{
+			//애니메이션 이름을 쭉 받아온다.
+			mScene->FillAnimStackNameArray(mAnimNames);
+
+			if (mAnimNames.GetCount() > 0)
+			{
+				LoadAnimationClip();
+
+				// 본 정보를 읽어온다.
+				mBones.reserve(childCount);
+				LoadSkeleton(mScene->GetRootNode());
+				
+
+				// 클립이 가지고 있는 프레임을 본 개수만큼 resize 해준다.
+				// 원래 Animation Clip에서 하던것이다.
+				for (size_t i = 0; i < mAnimClips.size(); ++i)
+				{
+					mAnimClips[i].vecBoneKeyFrame.resize(mBones.size());
+				}
+			}
+		}
 
 		// 삼각화(Triangulate)
 		Triangulate(mScene->GetRootNode());
 
 		// 메쉬 데이터 얻기
-		LoadMeshDataFromNode(mScene->GetRootNode());
+		LoadMeshContainer(mScene->GetRootNode());
 
-		mImporter->Destroy();
+		importer->Destroy();
+		importer = nullptr;
 
 		// 필요한 텍스쳐 로드
 		LoadTexture();
@@ -125,20 +177,18 @@ namespace mh
 
 
 
-	void FBXLoader::LoadMeshDataFromNode(FbxNode* _pNode)
+	void FBXLoader::LoadMeshContainer(FbxNode* _pNode, bool _bStatic)
 	{
 		// 노드의 메쉬정보 읽기
 		FbxNodeAttribute* pAttr = _pNode->GetNodeAttribute();
 
-
-		if (pAttr && FbxNodeAttribute::eMesh == pAttr->GetAttributeType())
+		if (pAttr && pAttr->GetAttributeType() == FbxNodeAttribute::eMesh)
 		{
-			FbxAMatrix matGlobal = _pNode->EvaluateGlobalTransform();
-			matGlobal.GetR();
-
-			FbxMesh* pMesh = _pNode->GetMesh();
-			if (NULL != pMesh)
-				LoadMesh(pMesh);
+			//FbxAMatrix matGlobal = _pNode->EvaluateGlobalTransform();
+			//matGlobal.GetR();
+			FbxMesh* mesh = _pNode->GetMesh();
+			if (mesh)
+				LoadMesh(mesh, _bStatic);
 		}
 
 		// 해당 노드의 재질정보 읽기
@@ -156,63 +206,98 @@ namespace mh
 		int iChildCnt = _pNode->GetChildCount();
 		for (int i = 0; i < iChildCnt; ++i)
 		{
-			LoadMeshDataFromNode(_pNode->GetChild(i));
+			LoadMeshContainer(_pNode->GetChild(i));
 		}
 	}
 
-	void FBXLoader::LoadMesh(FbxMesh* _pFbxMesh)
+	void FBXLoader::LoadMesh(FbxMesh* _pFBXMesh, bool _bStatic)
 	{
 		mContainers.push_back(tFBXContainer{});
-		tFBXContainer& Container = mContainers[mContainers.size() - 1];
+		tFBXContainer& Container = mContainers.back();
 
-		std::string strName = _pFbxMesh->GetName();
+		Container.Name = _pFBXMesh->GetName();
 
-		Container.strName = strName;
+		// ControlPoint 는 위치정보를 담고 있는 배열이다.
+		// 이 배열의 개수는 곧 정점의 개수가 된다.
+		// 정점에 대응되는 요소들을 Resize 해준다
+		int iVtxCnt = _pFBXMesh->GetControlPointsCount();
+		Container.ResizeVertices(iVtxCnt);
 
-		int iVtxCnt = _pFbxMesh->GetControlPointsCount();
-		Container.Resize(iVtxCnt);
-
-		FbxVector4* pFbxPos = _pFbxMesh->GetControlPoints();
-
+		// 내부적으로 FbxVector4타입의 배열로 저장하고 있기 때문에 배열의 
+		// 시작주소를 얻어온다.
+		FbxVector4* pFbxPos = _pFBXMesh->GetControlPoints();
 		for (int i = 0; i < iVtxCnt; ++i)
 		{
-			Container.vecPos[i].x = (float)pFbxPos[i].mData[0];
-			Container.vecPos[i].y = (float)pFbxPos[i].mData[2];
-			Container.vecPos[i].z = (float)pFbxPos[i].mData[1];
+			// y와 z축이 바뀌어 있으므로 변경해준다.
+			Container.vecPosition[i].x = (float)pFbxPos[i].mData[0];
+			Container.vecPosition[i].y = (float)pFbxPos[i].mData[2];
+			Container.vecPosition[i].z = (float)pFbxPos[i].mData[1];
 		}
 
 		// 폴리곤 개수
-		int iPolyCnt = _pFbxMesh->GetPolygonCount();
+		int polygonCount = _pFBXMesh->GetPolygonCount();
 
 		// 재질의 개수 ( ==> SubSet 개수 ==> Index Buffer Count)
-		int iMtrlCnt = _pFbxMesh->GetNode()->GetMaterialCount();
-		Container.vecIdx.resize(iMtrlCnt);
+		int materialCount = _pFBXMesh->GetNode()->GetMaterialCount();
+		if (0 == materialCount)
+		{
+			materialCount = 1;
+		}
+		Container.vecIndexBuffers.resize(materialCount);
 
-		// 정점 정보가 속한 subset 을 알기위해서...
-		FbxGeometryElementMaterial* pMtrl = _pFbxMesh->GetElementMaterial();
+		// 정점 정보가 속한 subset 을 알기위해서 재질 정보를 얻어온다.
+		FbxGeometryElementMaterial* material = _pFBXMesh->GetElementMaterial();
+
+		//몇번째 인덱스인지
+		int idxID = 0;
+
+		//삼각형 수만큼 반복한다.
+		for (int i = 0; i < polygonCount; ++i)
+		{
+			//이 폴리곤을 구성하는 정점의 수를 얻어온다.
+			//삼각화를 진행한 상태이므로 3개가 들어오게 될것이다.
+			int polygonSize = _pFBXMesh->GetPolygonSize(i);
+			MH_ASSERT(3 == polygonSize);
+
+			int idx[3] = {};
+			for (int j = 0; j < polygonSize; ++j)
+			{
+				//현재 삼각형을 구성하고 있는 버텍스정보 내에서의 인덱스를 구한다.(->해당 정점이 실제 몇번째 인덱스인지)
+				int controlIndex = _pFBXMesh->GetPolygonVertex(i, j);
+				idx[j] = controlIndex;
+
+				GetTangent(_pFBXMesh, &Container, idxID, controlIndex);
+				GetBinormal(_pFBXMesh, &Container, idxID, controlIndex);
+				GetNormal(_pFBXMesh, &Container, idxID, controlIndex);
+
+				GetUV(_pFBXMesh, &Container, ,)
+
+			}
+		}
+
 
 		// 폴리곤을 구성하는 정점 개수
-		int iPolySize = _pFbxMesh->GetPolygonSize(0);
+		int iPolySize = _pFBXMesh->GetPolygonSize(0);
 		if (3 != iPolySize)
 			assert(NULL); // Polygon 구성 정점이 3개가 아닌 경우
 
 		UINT arrIdx[3] = {};
 		UINT iVtxOrder = 0; // 폴리곤 순서로 접근하는 순번
 
-		for (int i = 0; i < iPolyCnt; ++i)
+		for (int i = 0; i < polygonCount; ++i)
 		{
 			for (int j = 0; j < iPolySize; ++j)
 			{
 				// i 번째 폴리곤에, j 번째 정점
-				int iIdx = _pFbxMesh->GetPolygonVertex(i, j);
+				int iIdx = _pFBXMesh->GetPolygonVertex(i, j);
 				arrIdx[j] = iIdx;
 
 				//노말 정보를 받아오기
-				GetTangent(_pFbxMesh, &Container, iIdx, iVtxOrder);
-				GetBinormal(_pFbxMesh, &Container, iIdx, iVtxOrder);
-				GetNormal(_pFbxMesh, &Container, iIdx, iVtxOrder);
+				GetTangent(_pFBXMesh, &Container, iIdx, iVtxOrder);
+				GetBinormal(_pFBXMesh, &Container, iIdx, iVtxOrder);
+				GetNormal(_pFBXMesh, &Container, iIdx, iVtxOrder);
 
-				GetUV(_pFbxMesh, &Container, iIdx, _pFbxMesh->GetTextureUVIndex(i, j));
+				GetUV(_pFBXMesh, &Container, iIdx, _pFBXMesh->GetTextureUVIndex(i, j));
 
 				++iVtxOrder;
 			}
@@ -222,42 +307,42 @@ namespace mh
 			Container.vecIdx[iSubsetIdx].push_back(arrIdx[1]);
 		}
 
-		LoadAnimationData(_pFbxMesh, &Container);
+		LoadAnimationData(_pFBXMesh, &Container);
 	}
 
 	void FBXLoader::LoadMaterial(FbxSurfaceMaterial* _pMtrlSur)
 	{
-		tFbxMaterial tMtrlInfo{};
+		tFBXMaterial tMtrlInfo{};
 
 		std::string str = _pMtrlSur->GetName();
 		
 		tMtrlInfo.strMtrlName = str;
 
 		// Diff
-		tMtrlInfo.tMtrl.vDiff = GetMtrlData(_pMtrlSur
+		tMtrlInfo.tMtrl.DiffuseColor = GetMtrlData(_pMtrlSur
 			, FbxSurfaceMaterial::sDiffuse
 			, FbxSurfaceMaterial::sDiffuseFactor);
 
 		// Amb
-		tMtrlInfo.tMtrl.vAmb = GetMtrlData(_pMtrlSur
+		tMtrlInfo.tMtrl.AmbientColor = GetMtrlData(_pMtrlSur
 			, FbxSurfaceMaterial::sAmbient
 			, FbxSurfaceMaterial::sAmbientFactor);
 
 		// Spec
-		tMtrlInfo.tMtrl.vSpec = GetMtrlData(_pMtrlSur
+		tMtrlInfo.tMtrl.SpecularColor = GetMtrlData(_pMtrlSur
 			, FbxSurfaceMaterial::sSpecular
 			, FbxSurfaceMaterial::sSpecularFactor);
 
 		// Emisv
-		tMtrlInfo.tMtrl.vEmv = GetMtrlData(_pMtrlSur
+		tMtrlInfo.tMtrl.EmissiveColor = GetMtrlData(_pMtrlSur
 			, FbxSurfaceMaterial::sEmissive
 			, FbxSurfaceMaterial::sEmissiveFactor);
 
 		// Texture Name
-		tMtrlInfo.strDiff = GetMtrlTextureName(_pMtrlSur, FbxSurfaceMaterial::sDiffuse);
-		tMtrlInfo.strNormal = GetMtrlTextureName(_pMtrlSur, FbxSurfaceMaterial::sNormalMap);
-		tMtrlInfo.strSpec = GetMtrlTextureName(_pMtrlSur, FbxSurfaceMaterial::sSpecular);
-		tMtrlInfo.strEmis = GetMtrlTextureName(_pMtrlSur, FbxSurfaceMaterial::sEmissive);
+		tMtrlInfo.strDiffuseTex = GetMtrlTextureName(_pMtrlSur, FbxSurfaceMaterial::sDiffuse);
+		tMtrlInfo.strNormalTex = GetMtrlTextureName(_pMtrlSur, FbxSurfaceMaterial::sNormalMap);
+		tMtrlInfo.strSpecularTex = GetMtrlTextureName(_pMtrlSur, FbxSurfaceMaterial::sSpecular);
+		tMtrlInfo.strEmissiveTex = GetMtrlTextureName(_pMtrlSur, FbxSurfaceMaterial::sEmissive);
 
 
 		mContainers.back().vecMtrl.push_back(tMtrlInfo);
@@ -488,10 +573,10 @@ namespace mh
 		{
 			for (UINT j = 0; j < mContainers[i].vecMtrl.size(); ++j)
 			{
-				CopyAndLoadTex(mContainers[i].vecMtrl[j].strDiff);
-				CopyAndLoadTex(mContainers[i].vecMtrl[j].strNormal);
-				CopyAndLoadTex(mContainers[i].vecMtrl[j].strSpec);
-				CopyAndLoadTex(mContainers[i].vecMtrl[j].strEmis);
+				CopyAndLoadTex(mContainers[i].vecMtrl[j].strDiffuseTex);
+				CopyAndLoadTex(mContainers[i].vecMtrl[j].strNormalTex);
+				CopyAndLoadTex(mContainers[i].vecMtrl[j].strSpecularTex);
+				CopyAndLoadTex(mContainers[i].vecMtrl[j].strEmissiveTex);
 			}
 		}
 		
@@ -550,7 +635,7 @@ namespace mh
 
 				
 				{
-					std::shared_ptr<Texture> pTex = ResMgr::Load<Texture>(mContainers[i].vecMtrl[j].strDiff);
+					std::shared_ptr<Texture> pTex = ResMgr::Load<Texture>(mContainers[i].vecMtrl[j].strDiffuseTex);
 					if (nullptr != pTex)
 					{
 						pMaterial->SetTexture(eTextureSlot::Albedo, pTex);
@@ -559,7 +644,7 @@ namespace mh
 
 					
 				{
-					std::shared_ptr<Texture> pTex = ResMgr::Load<Texture>(mContainers[i].vecMtrl[j].strNormal);
+					std::shared_ptr<Texture> pTex = ResMgr::Load<Texture>(mContainers[i].vecMtrl[j].strNormalTex);
 					if (nullptr != pTex)
 					{
 						pMaterial->SetTexture(eTextureSlot::Normal, pTex);
@@ -567,7 +652,7 @@ namespace mh
 				}
 
 				{
-					std::shared_ptr<Texture> pTex = ResMgr::Load<Texture>(mContainers[i].vecMtrl[j].strSpec);
+					std::shared_ptr<Texture> pTex = ResMgr::Load<Texture>(mContainers[i].vecMtrl[j].strSpecularTex);
 					if (nullptr != pTex)
 					{
 						pMaterial->SetTexture(eTextureSlot::Specular, pTex);
@@ -575,7 +660,7 @@ namespace mh
 				}
 
 				{
-					std::shared_ptr<Texture> pTex = ResMgr::Find<Texture>(mContainers[i].vecMtrl[j].strEmis);
+					std::shared_ptr<Texture> pTex = ResMgr::Find<Texture>(mContainers[i].vecMtrl[j].strEmissiveTex);
 					if (nullptr != pTex)
 					{
 						pMaterial->SetTexture(eTextureSlot::Emissive, pTex);
@@ -585,10 +670,10 @@ namespace mh
 
 
 				pMaterial->SetMaterialCoefficient(
-					mContainers[i].vecMtrl[j].tMtrl.vDiff
-					, mContainers[i].vecMtrl[j].tMtrl.vSpec
-					, mContainers[i].vecMtrl[j].tMtrl.vAmb
-					, mContainers[i].vecMtrl[j].tMtrl.vEmv);
+					mContainers[i].vecMtrl[j].tMtrl.DiffuseColor
+					, mContainers[i].vecMtrl[j].tMtrl.SpecularColor
+					, mContainers[i].vecMtrl[j].tMtrl.AmbientColor
+					, mContainers[i].vecMtrl[j].tMtrl.EmissiveColor);
 
 				eResult result = pMaterial->Save(strMtrlKey);
 
@@ -605,62 +690,80 @@ namespace mh
 
 	void FBXLoader::LoadSkeleton(FbxNode* _pNode)
 	{
-		int iChildCount = _pNode->GetChildCount();
+		mBones.reserve(200);
 
-		LoadSkeletonRecursive(_pNode, 0, 0, -1);
+
+		//Root 노드는 Skeletal Node가 될 수 없다
+		//https://download.autodesk.com/us/fbx/20102/fbx_sdk_help/index.html?url=WS8e4c2438b09b7f9c-5fe157071197ccd9b09-7ffe.htm,topicNumber=d0e4048
+		int childCount = _pNode->GetChildCount();
+		for (int i = 0; i < childCount; ++i)
+		{
+			LoaeBoneRecursive(_pNode->GetChild(i), 0, 0, -1);
+		}
 	}
 
-	void FBXLoader::LoadSkeletonRecursive(FbxNode* _pNode, int _iDepth, int _iIdx, int _iParentIdx)
+	void FBXLoader::LoaeBoneRecursive(FbxNode* _pNode, int _iDepth, int _iIdx, int _iParentIdx)
 	{
 		FbxNodeAttribute* pAttr = _pNode->GetNodeAttribute();
 
 		if (pAttr && pAttr->GetAttributeType() == FbxNodeAttribute::eSkeleton)
 		{
-			tBone* pBone = new tBone;
+			mBones.push_back(tFBXBone{});
+			tFBXBone& bone = mBones.back();
 
-			pBone->strBoneName = _pNode->GetName();
-			pBone->iDepth = _iDepth++;
-			pBone->iParentIndx = _iParentIdx;
+			bone.strBoneName = _pNode->GetName();
+			if (mbMixamo)
+			{
+				bone.strBoneName.erase(0, 10);
+			}
 
-			mBones.push_back(pBone);
+			bone.iDepth = _iDepth;
+			bone.iParentIndx = _iParentIdx;
 		}
 
 		int iChildCount = _pNode->GetChildCount();
 		for (int i = 0; i < iChildCount; ++i)
 		{
-			LoadSkeletonRecursive(_pNode->GetChild(i), _iDepth, (int)mBones.size(), _iIdx);
+			LoaeBoneRecursive(_pNode->GetChild(i), _iDepth + 1, (int)mBones.size(), _iIdx);
 		}
 	}
 
 	void FBXLoader::LoadAnimationClip()
 	{
 		int iAnimCount = mAnimNames.GetCount();
+		mAnimClips.reserve(iAnimCount);
+
+		FbxTime::EMode timeMode = mScene->GetGlobalSettings().GetTimeMode();
 
 		for (int i = 0; i < iAnimCount; ++i)
 		{
 			FbxAnimStack* pAnimStack = mScene->FindMember<FbxAnimStack>(mAnimNames[i]->Buffer());
 
+			if (nullptr == pAnimStack)
+				continue;
 
 			//FbxAnimEvaluator* pevaluator = mScene->GetAnimationEvaluator();
 			//mScene->SetCurrentAnimationStack();
 
+			mAnimClips.push_back(tFBXAnimClip{});
+			tFBXAnimClip& clip = mAnimClips.back();
 
-			if (!pAnimStack)
-				continue;
+			clip.strName = pAnimStack->GetName();
+			
+			//믹사모인지 확인
+			if ("mixamo.com" == clip.strName)
+			{
+				mbMixamo = true;
+			}
 
-			tAnimClip* pAnimClip = new tAnimClip;
-
-			pAnimClip->strName = pAnimStack->GetName();
-
-			FbxTakeInfo* pTakeInfo = mScene->GetTakeInfo(pAnimStack->GetName());
-			pAnimClip->tStartTime = pTakeInfo->mLocalTimeSpan.GetStart();
-			pAnimClip->tEndTime = pTakeInfo->mLocalTimeSpan.GetStop();
-
-			pAnimClip->eMode = mScene->GetGlobalSettings().GetTimeMode();
-			pAnimClip->llTimeLength = pAnimClip->tEndTime.GetFrameCount(pAnimClip->eMode) - pAnimClip->tStartTime.GetFrameCount(pAnimClip->eMode);
-
-
-			mAnimClips.push_back(pAnimClip);
+			FbxTakeInfo* take = mScene->GetTakeInfo(clip.strName.c_str());
+			clip.StartTime = take->mLocalTimeSpan.GetStart();
+			clip.EndTime = take->mLocalTimeSpan.GetStop();
+			
+			// GetFrameCount 함수를 호출하고  time모드를 넣어주면 시간을 프레임으로
+			// 변환해준다. 몇프레임 짜리 애니메이션 인지를 구해준다.
+			clip.TimeLength = clip.EndTime.GetFrameCount(timeMode) - clip.StartTime.GetFrameCount(timeMode);
+			clip.TimeMode = timeMode;
 		}
 	}
 
@@ -740,7 +843,7 @@ namespace mh
 
 	void FBXLoader::CheckWeightAndIndices(FbxMesh* _pMesh, tFBXContainer* _pContainer)
 	{
-		std::vector<std::vector<tWeightsAndIndices>>::iterator iter = _pContainer->vecWI.begin();
+		std::vector<std::vector<tFBXWeight>>::iterator iter = _pContainer->vecWI.begin();
 
 		int iVtxIdx = 0;
 		for (iter; iter != _pContainer->vecWI.end(); ++iter, ++iVtxIdx)
@@ -749,7 +852,7 @@ namespace mh
 			{
 				// 가중치 값 순으로 내림차순 정렬
 				sort((*iter).begin(), (*iter).end()
-					, [](const tWeightsAndIndices& left, const tWeightsAndIndices& right)
+					, [](const tFBXWeight& left, const tFBXWeight& right)
 					{
 						return left.dWeight > right.dWeight;
 					}
@@ -790,6 +893,21 @@ namespace mh
 		}
 	}
 
+	int FBXLoader::GetAllNodesCountRecursive(fbxsdk::FbxNode* _pNode)
+	{
+		int size = _pNode->GetChildCount();
+
+		int retInt = size;
+		for (int i = 0; i < size; ++i)
+		{
+			retInt += GetAllNodesCountRecursive(_pNode->GetChild(i));
+		}
+
+		return retInt;
+	}
+
+
+
 	void FBXLoader::LoadKeyframeTransform(FbxNode* _pNode, FbxCluster* _pCluster
 		, const FbxAMatrix& _matNodeTransform, int _iBoneIdx, tFBXContainer* _pContainer)
 	{
@@ -815,7 +933,7 @@ namespace mh
 
 		for (FbxLongLong i = llStartFrame; i < llEndFrame; ++i)
 		{
-			tKeyFrame tFrame = {};
+			tFBXKeyFrame tFrame = {};
 			FbxTime   tTime = 0;
 
 			tTime.SetFrame(i, eTimeMode);
@@ -869,7 +987,7 @@ namespace mh
 
 		for (int i = 0; i < iIndicesCount; ++i)
 		{
-			tWeightsAndIndices tWI = {};
+			tFBXWeight tWI = {};
 
 			// 각 정점에게 본 인덱스 정보와, 가중치 값을 알린다.
 			tWI.iBoneIdx = _iBoneIdx;
