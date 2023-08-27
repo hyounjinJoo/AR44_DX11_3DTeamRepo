@@ -133,10 +133,16 @@ struct alignas(16) tCB_SBufferCount
 
 struct alignas(16)  tCB_Animation3D
 {
-	int BoneCount;
-	int CurFrameIdx;
-	int NextFrameIdx;
-	float FrameRatio;
+	int			g_AnimBoneCount;
+	int			g_AnimCurrentFrame;
+	int			g_AnimNextFrame;
+	float		g_AnimRatio;
+	int			g_AnimFrameCount;
+	int			g_AnimRowIndex;
+	BOOL		g_AnimChangeAnimation;
+	float		g_AnimChangeRatio;
+	int			g_AnimChangeFrameCount;
+	float3		g_AnimEmpty;
 };
 
 struct alignas(16)  tCB_UniformData
@@ -189,7 +195,7 @@ struct alignas(16)  tLightAttribute
 
 
 
-struct alignas(16) tFrameTranslation
+struct alignas(16) tAnimFrameTranslation
 {
 	float4 vTranslate;
 	float4 vScale;
@@ -198,13 +204,21 @@ struct alignas(16) tFrameTranslation
 
 struct alignas(16)  tSkinningInfo
 {
-	float3 vPos;
-	float3 vTangent;
-	float3 vBinormal;
-	float3 vNormal;
+	float3 Pos;
+	float3 Tangent;
+	float3 Binormal;
+	float3 Normal;
 };
 
-
+struct tOutputBoneInfo
+{
+	MATRIX matBone;
+	float3 Pos;
+	float Empty1;
+	float3 Scale;
+	float Empty2;
+	float4 Rot;
+};
 
 
 #endif//SH_COMMON_STRUCT

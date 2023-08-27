@@ -26,6 +26,10 @@ namespace mh
 		float4 SpecularColor{};
 		float4 AmbientColor{};
 		float4 EmissiveColor{};
+
+		float	SpecularPower{};
+		float	TransparencyFactor{};
+		float	Shininess{};
 	};
 
 	struct tFBXWeight
@@ -81,7 +85,7 @@ namespace mh
 		double				Time{};
 	};
 
-	struct tFBXBoneKeyFrame
+	struct tFBXKeyFramesPerBone
 	{
 		int							BoneIndex;
 		std::vector<tFBXKeyFrame>	vecKeyFrame;
@@ -97,8 +101,8 @@ namespace mh
 		fbxsdk::FbxLongLong	TimeLength{};
 		fbxsdk::FbxTime::EMode TimeMode{};
 
-		//
-		std::vector<tFBXBoneKeyFrame> vecBoneKeyFrame{};
+		//각 본 별 키프레임 데이터
+		std::vector<tFBXKeyFramesPerBone> vecBoneKeyFrame{};
 	};
 
 	class FBXLoader :
@@ -116,7 +120,6 @@ namespace mh
 		// FbxMatrix -> Matrix(FBX(double) 포맷에서 프로젝트 포맷(float)으로 변환해서 반환해준다
 		static MATRIX GetMatrixFromFbxMatrix(const fbxsdk::FbxAMatrix& _mat);
 
-		//index 번호가 유효하지 않을 상황에 대비해서 주소로 반환
 		const std::vector<tFBXContainer>& GetContainers() const { return mContainers; }
 		const std::vector<tFBXBone>& GetBones() const { return mBones; }
 		const std::vector<tFBXAnimClip>& GetAnimClip() const { return mAnimClips; }
@@ -126,10 +129,10 @@ namespace mh
 		void LoadMesh(fbxsdk::FbxMesh* _pFBXMesh, bool _bStatic);
 		void LoadMaterial(fbxsdk::FbxSurfaceMaterial* _pMtrlSur);
 
-		void GetTangent(fbxsdk::FbxMesh* _pMesh, tFBXContainer* _pContainer, int _iIdx, int _iVtxOrder);
-		void GetBinormal(fbxsdk::FbxMesh* _pMesh, tFBXContainer* _pContainer, int _iIdx, int _iVtxOrder);
-		void GetNormal(fbxsdk::FbxMesh* _pMesh, tFBXContainer* _pContainer, int _iIdx, int _iVtxOrder);
-		void GetUV(fbxsdk::FbxMesh* _pMesh, tFBXContainer* _pContainer, int _iIdx, int _iVtxOrder);
+		void GetTangent(fbxsdk::FbxMesh* _pMesh, tFBXContainer& _pContainer, int _vertexIdx, int _iVtxOrder);
+		void GetBinormal(fbxsdk::FbxMesh* _pMesh, tFBXContainer& _pContainer, int _vertexIdx, int _iVtxOrder);
+		void GetNormal(fbxsdk::FbxMesh* _pMesh, tFBXContainer& _pContainer, int _vertexIdx, int _iVtxOrder);
+		void GetUV(fbxsdk::FbxMesh* _pMesh, tFBXContainer& _pContainer, int _vertexIdx, int _iVtxOrder);
 
 		float4 GetMtrlData(fbxsdk::FbxSurfaceMaterial* _pSurface, const char* _pMtrlName, const char* _pMtrlFactorName);
 		std::string GetMtrlTextureName(fbxsdk::FbxSurfaceMaterial* _pSurface, const char* _pMtrlProperty);
@@ -141,20 +144,20 @@ namespace mh
 
 		// Animation
 		void LoadSkeleton(fbxsdk::FbxNode* _pNode);
-		void LoaeBoneRecursive(fbxsdk::FbxNode* _pNode, int _iDepth, int _iIdx, int _iParentIdx);
+		void LoadBoneRecursive(fbxsdk::FbxNode* _pNode, int _iDepth, int _iIdx, int _iParentIdx);
 		void LoadAnimationClip();
 		void Triangulate(fbxsdk::FbxNode* _pNode);
 
-		void LoadAnimationData(fbxsdk::FbxMesh* _pMesh, tFBXContainer* _pContainer);
-		void LoadWeightsAndIndices(fbxsdk::FbxCluster* _pCluster, int _iBoneIdx, tFBXContainer* _pContainer);
-		void LoadOffsetMatrix(fbxsdk::FbxCluster* _pCluster, const fbxsdk::FbxAMatrix& _matNodeTransform, int _iBoneIdx, tFBXContainer* _pContainer);
+		void LoadAnimationData(fbxsdk::FbxMesh* _pMesh, tFBXContainer& _pContainer);
+		void LoadWeightsAndIndices(fbxsdk::FbxCluster* _pCluster, int _bondIndex, tFBXContainer& _pContainer);
+		void LoadOffsetMatrix(fbxsdk::FbxCluster* _pCluster, const fbxsdk::FbxAMatrix& _matNodeTransform, int _bondIndex, tFBXContainer& _pContainer);
 		void LoadKeyframeTransform(fbxsdk::FbxNode* _pNode, fbxsdk::FbxCluster* _pCluster, const fbxsdk::FbxAMatrix& _matNodeTransform
-			, int _iBoneIdx, tFBXContainer* _pContainer);
+			, int _bondIndex, tFBXContainer& _pContainer);
 
 		int FindBoneIndex(const std::string& _strBoneName);
 		fbxsdk::FbxAMatrix GetTransform(fbxsdk::FbxNode* _pNode);
 
-		void CheckWeightAndIndices(fbxsdk::FbxMesh* _pMesh, tFBXContainer* _pContainer);
+		void CheckWeightAndIndices(fbxsdk::FbxMesh* _pMesh, tFBXContainer& _pContainer);
 
 		int GetAllNodesCountRecursive(fbxsdk::FbxNode* _pNode);
 
@@ -170,17 +173,6 @@ namespace mh
 		std::vector<tFBXAnimClip>				mAnimClips;
 		bool									mbMixamo;
 	};
-
-
-	inline const tFBXContainer* FBXLoader::GetContainer(int _iIdx) const
-	{
-		const tFBXContainer* pCont = nullptr;
-		if (_iIdx < (int)mContainers.size())
-		{
-			pCont = &mContainers[_iIdx];
-		}
-		return pCont;
-	}
 }
 
 

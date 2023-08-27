@@ -57,11 +57,10 @@ namespace mh
 
 	void Com_Animator3D::Init()
 	{
-		//m_pBoneFinalMatBuffer->BindDataSRV(Register_t_g_arrBoneMat, eShaderStageFlag::VS);
 		tSBufferDesc desc{};
-		desc.REGISLOT_t_SRV = Register_t_g_arrBoneMat;
+		desc.REGISLOT_t_SRV = Register_t_g_BoneMatrixArray;
 		desc.TargetStageSRV = eShaderStageFlag::VS;
-		desc.REGISLOT_u_UAV = Register_u_g_arrFinalMat;
+		desc.REGISLOT_u_UAV = Register_u_g_FinalBoneMatrixArray;
 		desc.eSBufferType = eStructBufferType::READ_WRITE;
 
 		m_pBoneFinalMatBuffer->SetDesc(desc);
@@ -184,31 +183,6 @@ namespace mh
 		m_pBoneFinalMatBuffer->UnBindData();
 	}
 
-	void Com_Animator3D::Play(const std::string_view _animName)
-	{
-		
-		if (mSkeleton)
-		{
-			const auto& clips = mSkeleton->GetAnimClip();
-			for(size_t i = 0; i < clips.size(); ++i)
-			{
-				if (_animName == clips[i].strAnimName)
-				{
-					m_iCurClip = (int)i;
-
-					//m_iFrameCount = 0;
-					//m_dCurTime = 0.f;
-					//m_iCurClip; 
-
-					//m_iFrameIdx = 0; 
-					//m_iNextFrameIdx = 1; 
-					//m_fRatio = 1.f;
-
-					break;
-				}
-			}
-		}
-	}
 
 
 

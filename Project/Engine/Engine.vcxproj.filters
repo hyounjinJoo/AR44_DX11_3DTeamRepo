@@ -22,9 +22,6 @@
     <Filter Include="Resource\Mesh">
       <UniqueIdentifier>{5ddde7d6-5dbf-4474-8ff2-f014eaefe47e}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Resource\Manager">
-      <UniqueIdentifier>{566c056d-bc1c-4a66-9874-1eb8b38721ee}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Resource\Material">
       <UniqueIdentifier>{b120460a-4944-428f-b9a0-e7253c288eab}</UniqueIdentifier>
     </Filter>
@@ -178,6 +175,9 @@
     <Filter Include="GuiEditor\_Widget">
       <UniqueIdentifier>{bee12466-3d3c-47b5-bb11-8b335dcb2882}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Resource\Animation">
+      <UniqueIdentifier>{fa962df9-8edc-4f9e-8aad-0262d0039dc4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Application.cpp">
@@ -242,9 +242,6 @@
     </ClCompile>
     <ClCompile Include="Monster.cpp">
       <Filter>Component\Script\Contents</Filter>
-    </ClCompile>
-    <ClCompile Include="Animation2D.cpp">
-      <Filter>Component\Animator</Filter>
     </ClCompile>
     <ClCompile Include="Com_Animator2D.cpp">
       <Filter>Component\Animator</Filter>
@@ -487,6 +484,12 @@
       <Filter>GuiEditor\Instances</Filter>
     </ClCompile>
     <ClCompile Include="guiFBXConverter.cpp" />
+    <ClCompile Include="Animation2D.cpp">
+      <Filter>Resource\Animation</Filter>
+    </ClCompile>
+    <ClCompile Include="Animation3D.cpp">
+      <Filter>Resource\Animation</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application.h">
@@ -559,9 +562,6 @@
       <Filter>Component\Script\Contents</Filter>
     </ClInclude>
     <ClInclude Include="Com_Animator2D.h">
-      <Filter>Component\Animator</Filter>
-    </ClInclude>
-    <ClInclude Include="Animation2D.h">
       <Filter>Component\Animator</Filter>
     </ClInclude>
     <ClInclude Include="PaintShader.h">
@@ -849,6 +849,12 @@
     <ClInclude Include="guiFBXConverter.h" />
     <ClInclude Include="Shader_Common.h">
       <Filter>Common\define</Filter>
+    </ClInclude>
+    <ClInclude Include="Animation2D.h">
+      <Filter>Resource\Animation</Filter>
+    </ClInclude>
+    <ClInclude Include="Animation3D.h">
+      <Filter>Resource\Animation</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
