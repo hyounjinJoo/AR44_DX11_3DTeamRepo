@@ -37,8 +37,7 @@ namespace mh
 
 	private:
 		std::vector<tMeshContainer> mMeshContainers;
-		std::unique_ptr<Skeleton> mSkeleton;
-		std::shared_ptr<
+		std::shared_ptr<Skeleton> mSkeleton;
     };
 
 }

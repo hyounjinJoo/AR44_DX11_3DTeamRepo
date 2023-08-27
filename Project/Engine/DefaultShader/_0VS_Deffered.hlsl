@@ -12,7 +12,7 @@ VSOut main(VSIn _in)
 	}
 	else
 	{
-		info.Pos = _in.Position;
+		info.Pos = _in.Position.xyz;
 		info.Tangent = _in.Tangent;
 		info.Binormal = _in.BiNormal;
 		info.Normal = _in.Normal;

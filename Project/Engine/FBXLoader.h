@@ -102,7 +102,7 @@ namespace mh
 		fbxsdk::FbxTime::EMode TimeMode{};
 
 		//각 본 별 키프레임 데이터
-		std::vector<tFBXKeyFramesPerBone> vecBoneKeyFrame{};
+		std::vector<tFBXKeyFramesPerBone> KeyFramesPerBone{};
 	};
 
 	class FBXLoader :

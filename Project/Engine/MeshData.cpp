@@ -169,7 +169,7 @@ namespace mh
 		const std::string& skeletonKey = Json::MH::LoadPtrStrKey(_pJson, JSON_KEY_PAIR(mSkeleton));
 		if (false == skeletonKey.empty())
 		{
-			mSkeleton = std::make_unique<Skeleton>();
+			mSkeleton = std::make_shared<Skeleton>();
 			result = mSkeleton->Load(skeletonKey);
 			if (eResultFail(result))
 				return result;
@@ -202,7 +202,7 @@ namespace mh
 
 		//스켈레톤 있고 + 애니메이션 데이터가 있을 경우 Animator 생성
 		Com_Animator3D* animator = nullptr;
-		if (mSkeleton && mSkeleton->IsAnimMesh())
+		if (mSkeleton)
 		{
 			animator = uniqObj->AddComponent<Com_Animator3D>();
 			animator->SetSkeleton(mSkeleton.get());
@@ -278,7 +278,7 @@ namespace mh
 		}
 
 		//Bone 정보 로드
-		mSkeleton = std::make_unique<Skeleton>();
+		mSkeleton = std::make_shared<Skeleton>();
 
 		//Key 설정
 		{

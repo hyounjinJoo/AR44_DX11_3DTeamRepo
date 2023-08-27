@@ -29,7 +29,7 @@ namespace mh
 		, m_iNextFrameIdx(0)
 		, m_fRatio(0.f)
 	{
-		m_pBoneFinalMatBuffer = new StructBuffer;
+		m_pBoneFinalMatBuffer = std::make_unique<StructBuffer>();
 	}
 
 	Com_Animator3D::Com_Animator3D(const Com_Animator3D& _other)
@@ -46,13 +46,14 @@ namespace mh
 		, m_iNextFrameIdx(_other.m_iNextFrameIdx)
 		, m_fRatio(_other.m_fRatio)
 	{
-		m_pBoneFinalMatBuffer = new StructBuffer;
+		if (_other.m_pBoneFinalMatBuffer)
+		{
+			m_pBoneFinalMatBuffer = std::unique_ptr<StructBuffer>(_other.m_pBoneFinalMatBuffer->Clone());
+		}
 	}
 
 	Com_Animator3D::~Com_Animator3D()
 	{
-		if (m_pBoneFinalMatBuffer)
-			delete m_pBoneFinalMatBuffer;
 	}
 
 	void Com_Animator3D::Init()
@@ -70,7 +71,7 @@ namespace mh
 	void Com_Animator3D::FixedUpdate()
 	{
 		//골격정보가 없거나 애니메이션 메쉬가 아닐경우 return
-		if (nullptr == mSkeleton || false == mSkeleton->IsAnimMesh())
+		if (nullptr == mSkeleton)
 			return;
 
 		const auto& animClips = mSkeleton->GetAnimClip();
@@ -117,7 +118,7 @@ namespace mh
 			//최종 Bone별 행렬이 저장될 Vector 크기를 재조정
 			m_vecFinalBoneMat.resize(mSkeleton->GetBoneCount());
 
-			if (mSkeleton->IsAnimMesh())
+			if (mSkeleton)
 			{
 				const auto& animClip = mSkeleton->GetAnimClip();
 				m_vecClipUpdateTime.resize(animClip.size());

@@ -72,8 +72,8 @@ namespace mh
 		//const std::vector<Vertex3D> GetVertices() { return mVertices; }
 		UINT GetSubsetCount() const { return (UINT)mIndexInfos.size(); }
 
-		void SetSkeleton(Skeleton* _pSkeleton) { mSkeleton = _pSkeleton; }
-		Skeleton* GetSkeleton() const { return mSkeleton; }
+		void SetSkeleton(std::shared_ptr<Skeleton> _pSkeleton) { mSkeleton = _pSkeleton; }
+		std::weak_ptr<Skeleton> GetSkeleton() const { return mSkeleton; }
 
 
 	private:
@@ -96,7 +96,7 @@ namespace mh
 		std::vector<tIndexInfo>		mIndexInfos;
 
 		//주소는 MeshData에서 관리
-		Skeleton* mSkeleton;
+		std::weak_ptr<Skeleton> mSkeleton;
 	};
 
 

@@ -44,8 +44,6 @@ namespace mh
 
     private:
 		Skeleton* mSkeleton;
-        //const std::vector<define::tMTBone>* m_pVecBones;
-        //const std::vector<define::tMTAnimClip>* m_pVecClip;
 
         std::vector<float>				m_vecClipUpdateTime;
         std::vector<MATRIX>				m_vecFinalBoneMat; // 텍스쳐에 전달할 최종 행렬정보
@@ -57,7 +55,7 @@ namespace mh
         int								m_iNextFrameIdx; // 클립의 다음 프레임
         float							m_fRatio;	// 프레임 사이 비율
 
-        StructBuffer*					m_pBoneFinalMatBuffer;  // 특정 프레임의 최종 행렬
+        std::unique_ptr<StructBuffer>	m_pBoneFinalMatBuffer;  // 특정 프레임의 최종 행렬
         bool							m_bFinalMatUpdate; // 최종행렬 연산 수행여부
 	};
 }

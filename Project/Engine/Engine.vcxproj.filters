@@ -906,9 +906,6 @@
     <None Include="DefaultShader\SH_Merge.hlsli">
       <Filter>_DefaultShader\Deffered</Filter>
     </None>
-    <None Include="DefaultShader\SH_Basic3D.hlsli">
-      <Filter>_DefaultShader\Basic3D</Filter>
-    </None>
     <None Include="SimpleMath.inl">
       <Filter>Common\Math</Filter>
     </None>
@@ -923,6 +920,9 @@
     </None>
     <None Include="DefaultShader\SH_Animation2D.hlsli">
       <Filter>_DefaultShader\Animation\2D</Filter>
+    </None>
+    <None Include="DefaultShader\SH_Basic3D.hlsli">
+      <Filter>_DefaultShader\Basic3D</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>

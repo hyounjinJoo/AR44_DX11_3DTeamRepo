@@ -43,7 +43,7 @@ namespace mh
 
 
     private:
-        bool CreateKeyFrameBuffer(const std::vector<tAnimFrameTranslation>& _vecAnimFrameTranslations);
+        bool CreateKeyFrameSBuffer(const std::vector<tAnimFrameTranslation>& _vecAnimFrameTranslations);
 
     private:
         std::string                 mAnimationName;

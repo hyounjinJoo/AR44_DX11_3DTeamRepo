@@ -114,19 +114,21 @@ namespace mh
 		const auto& animClip = _fbxLoader->GetAnimClip();
 		for (size_t i = 0; i < animClip.size(); ++i)
 		{
-			std::unique_ptr<Animation3D> anim = std::make_unique<Animation3D>();
-			eResult result = anim->LoadFromFBX(&animClip[i]);
+			Animation3D anim{};
+			eResult result = anim.LoadFromFBX(&animClip[i]);
 			if (eResultFail(result))
 			{
 				ERROR_MESSAGE_W(L"애니메이션 생성 실패");
 				return result;
 			}
 			
-			mMapAnimations.insert(std::make_pair(anim->GetAnimationName(), anim.release()));
+			std::string animName = anim.GetAnimationName();
+			mMapAnimations.emplace(std::make_pair(animName, anim));
 		}
 
 		return eResult::Success;
 	}
+
 	void Skeleton::CreateBoneOffsetSBuffer()
 	{
 		// BoneOffet 행렬
@@ -144,6 +146,17 @@ namespace mh
 		Desc.REGISLOT_t_SRV = Register_t_g_OffsetArray;
 		m_pBoneOffset->SetDesc(Desc);
 		m_pBoneOffset->Create<MATRIX>(vecOffset.size(), vecOffset.data(), vecOffset.size());
+	}
+
+	const Animation3D* Skeleton::GetAnimation(const std::string& _strAnimName)
+	{
+		Animation3D* retPtr = nullptr;
+		const auto& iter = mMapAnimations.find(_strAnimName);
+		if (iter != mMapAnimations.end())
+		{
+			retPtr = &(iter->second);
+		}
+		return retPtr;
 	}
 }
 

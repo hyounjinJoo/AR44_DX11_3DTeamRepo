@@ -139,7 +139,7 @@ namespace mh
 				// 원래 Animation Clip에서 하던것이다.
 				for (size_t i = 0; i < mAnimClips.size(); ++i)
 				{
-					mAnimClips[i].vecBoneKeyFrame.resize(mBones.size());
+					mAnimClips[i].KeyFramesPerBone.resize(mBones.size());
 				}
 			}
 		}
@@ -951,7 +951,7 @@ namespace mh
 			FbxLongLong	Start = mAnimClips[i].StartTime.GetFrameCount(mAnimClips[i].TimeMode);
 			FbxLongLong	End = mAnimClips[i].EndTime.GetFrameCount(mAnimClips[i].TimeMode);
 
-			mAnimClips[i].vecBoneKeyFrame[_bondIndex].BoneIndex = _bondIndex;
+			mAnimClips[i].KeyFramesPerBone[_bondIndex].BoneIndex = _bondIndex;
 
 			// 전체 프레임 수만큼 반복한다.
 			for (FbxLongLong j = Start; j <= End; ++j)
@@ -976,7 +976,7 @@ namespace mh
 				KeyFrame.Time = Time.GetSecondDouble();
 				KeyFrame.matTransform = matCur;
 
-				mAnimClips[i].vecBoneKeyFrame[_bondIndex].vecKeyFrame.push_back(KeyFrame);
+				mAnimClips[i].KeyFramesPerBone[_bondIndex].vecKeyFrame.push_back(KeyFrame);
 			}
 		}
 	}

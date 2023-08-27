@@ -29,8 +29,6 @@ extern mh::Application gApplication;
 
 namespace mh
 {
-	
-
 	Com_Camera*							RenderMgr::mMainCamera{};
 	GameObject*							RenderMgr::mInspectorGameObject{};
 
