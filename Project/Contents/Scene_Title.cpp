@@ -23,8 +23,10 @@
 #include <Engine/PaintShader.h>
 #include <Engine/Com_Renderer_ParticleSystem.h>
 #include <Engine/Prefab.h>
+#include "Com_HWRenderer.h"
 
 #include "strKey_Script.h"
+#include "strKey_Component.h"
 
 #include <Engine/EventMgr.h>
 
@@ -57,11 +59,6 @@ namespace mh
 
 			RenderMgr::SetMainCamera(cameraComp);
 		}
-
-
-
-
-
 
 
 		//포워드 렌더링으로 그려지는 오브젝트

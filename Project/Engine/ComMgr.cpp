@@ -12,13 +12,14 @@ namespace mh
 
 	IComponent* ComMgr::GetNewCom(const std::string_view _strKey)
 	{
+		IComponent* com = nullptr;
 		const auto& iter = mUmapComConstructor.find(_strKey);
-		if (iter == mUmapComConstructor.end())
-			return nullptr;
-
-		IComponent* pCom = iter->second();
-		pCom->SetKey(_strKey);
-		return pCom;
+		if (iter != mUmapComConstructor.end())
+		{
+			com = iter->second();
+			com->SetKey(iter->first);
+		}
+		return com;
 	}
 
 	const std::string_view ComMgr::GetComName(const std::type_info& _typeid_T_)
@@ -38,5 +39,6 @@ namespace mh
 		mUmapComConstructor.clear();
 		mUmapComName.clear();
 	}
+
 }
 

@@ -27,11 +27,15 @@ namespace mh
 
 		define::eComponentType GetComType() const { return mType; };
 
+		void SetComTypeID(UINT32 _comTypeID) { mComTypeID = _comTypeID; }
+		UINT32 GetComTypeID() const { return mComTypeID; };
+
 		GameObject* GetOwner() const { return mOwner; }
 		void SetOwner(GameObject* _owner) { mOwner = _owner; }
 
 	private:
 		const define::eComponentType mType;
+		UINT32 mComTypeID;
 		GameObject* mOwner;
 	};
 }

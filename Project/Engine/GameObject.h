@@ -119,6 +119,7 @@ namespace mh
 			return nullptr;
 
 		T* pCom = new T;
+		pCom->SetComTypeID(ComMgr::GetComTypeID<T>());
 		pCom->SetKey(ComMgr::GetComName<T>());
 
 		return static_cast<T*>(AddComponent(static_cast<IComponent*>(pCom)));
@@ -212,7 +213,19 @@ namespace mh
 		else
 		{
 			eComponentType ComType = GetComponentType<T>();
-			pCom = dynamic_cast<T*>(mComponents[(int)ComType]);
+			if (mComponents[(int)ComType])
+			{
+				//일단 ID값으로 비교 후 일치 시 static_cast해도 안전
+				if (ComMgr::GetComTypeID<T>() == mComponents[(int)ComType]->GetComTypeID())
+				{
+					pCom = static_cast<T*>(mComponents[(int)ComType]);
+				}
+				//최후의 수단으로 dynamic_cast 해본다
+				else
+				{
+					pCom = dynamic_cast<T*>(mComponents[(int)ComType]);
+				}
+			}
 		}
 
 		return pCom;
