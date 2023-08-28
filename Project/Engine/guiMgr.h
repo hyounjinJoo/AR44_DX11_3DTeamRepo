@@ -5,6 +5,7 @@
 #include "define_Macro.h"
 #include <unordered_map>
 #include "json-cpp/json-forwards.h"
+#include "ImGuizmo.h"
 
 namespace gui
 {
@@ -72,6 +73,10 @@ namespace gui
 		static bool mbInitialized;
 
 		static std::unique_ptr<Json::Value> mJsonUIData;
+
+	private:
+		static ImGuizmo::OPERATION mCurrentGizmoOperation;
+		static void RenderGuizmo();
 	};
 
 	inline void guiMgr::SetEnable(bool _bEnable)
