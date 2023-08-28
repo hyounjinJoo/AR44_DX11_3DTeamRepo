@@ -16,18 +16,4 @@ namespace mh
 	{
 	}
 
-	void IScript::Init()
-	{
-	}
-
-	void IScript::Update()
-	{
-	}
-
-	void IScript::FixedUpdate()
-	{
-	}
-	void IScript::Render()
-	{
-	}
 }

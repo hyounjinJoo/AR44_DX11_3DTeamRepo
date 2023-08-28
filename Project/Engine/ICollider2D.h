@@ -4,8 +4,6 @@
 
 namespace mh
 {
-	
-
 	class Com_Transform;
 	class ICollider2D : public ICollider
 	{
@@ -22,7 +20,7 @@ namespace mh
 		virtual void Init() override;
 		virtual void Update() override;
 		virtual void FixedUpdate() override;
-		virtual void Render() override;
+
 
 		virtual void OnCollisionEnter(ICollider2D* _collider);
 		virtual void OnCollisionStay(ICollider2D* _collider);
@@ -38,7 +36,7 @@ namespace mh
 		void SetRadius(float _radius) { mRadius = _radius; }
 		bool IsTriiger() const { return mbTrigger; }
 		uint GetID() const { return mID; }
-		float3 GetPosition() const { return mPosition; }
+		float3 GetRelativePos() const { return mPosition; }
 		float2 GetSize() const { return mSize; }
 
 	private:

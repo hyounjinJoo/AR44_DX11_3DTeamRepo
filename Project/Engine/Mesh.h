@@ -1,10 +1,10 @@
 #pragma once
-#include "define_GPU.h"
 #include "IRes.h"
+#include "define_GPU.h"
+#include "define_Struct.h"
 
 namespace mh
 {
-	using namespace mh;
 	struct Vertex2D
 	{
 		float4 Pos;
@@ -16,28 +16,41 @@ namespace mh
 		float4 Pos;
 		float4 Color;
 		float2 UV;
-		float3 Tangent;
-		float3 BiNormal;
-		float3 Normal;
+		float3 Tangent;	//접선 벡터
+		float3 Normal;	//법선 벡터
+		float3 BiNormal;//종법선 벡터
+
+		//Animation 가중치 및 인덱스
+		float4 Weights;
+		float4 Indices;
 	};
 
 	struct tIndexInfo
 	{
 		ComPtr<ID3D11Buffer>    IndexBuffer;
-		D3D11_BUFFER_DESC       tIBDesc;
-		UINT				    IdxCount;
-		void*					 pIdxSysMem;
+
+		struct Value
+		{
+			D3D11_BUFFER_DESC       tIBDesc;
+			UINT				    IdxCount;
+		} Val;
+
+		std::vector<UINT>		IdxSysMem;
 	};
 
 	class FBXLoader;
+	class StructBuffer;
+	class Skeleton;
+	struct tFBXContainer;
 	class Mesh : public IRes 
 	{
 	public:
 		Mesh();
 		virtual ~Mesh();
 
-		static std::shared_ptr<Mesh> CreateFromContainer(FBXLoader* _loader);
+		eResult CreateFromContainer(const tFBXContainer* _fbxContainer);
 
+		virtual eResult Save(const std::filesystem::path& _path) override;
 		virtual eResult Load(const std::filesystem::path& _path) override;
 
 		template <typename Vertex>
@@ -45,26 +58,45 @@ namespace mh
 
 		template <typename Vertex>
 		inline bool CreateVertexBuffer(const std::vector<Vertex>& _vecVtx);
-		bool CreateVertexBuffer(void* _data, size_t _dataStride, size_t _count);
+		bool CreateVertexBuffer(const void* _data, size_t _dataStride, size_t _dataCount);
 
-		bool CreateIndexBuffer(void* _data, size_t _count);
+		bool CreateIndexBuffer(const UINT* _data, size_t _dataCount);
+		inline bool CreateIndexBuffer(const std::vector<UINT>& _indices);
 
 		void BindBuffer(UINT _subSet = 0u) const;
 		void Render(UINT _subSet = 0u) const;
+		void RenderAllMeshes() const;
 		
 		void RenderInstanced(UINT _subSet, UINT _instanceCount) const;
 
-		const std::vector<Vertex3D> GetVertices() { return mVertices; }
-		UINT GetSubsetCount() { return (UINT)mIndexInfos.size(); }
+		//const std::vector<Vertex3D> GetVertices() { return mVertices; }
+		UINT GetSubsetCount() const { return (UINT)mIndexInfos.size(); }
+
+		void SetSkeleton(Skeleton* _pSkeleton) { mSkeleton = _pSkeleton; }
+		Skeleton* GetSkeleton() const { return mSkeleton; }
+
+
+	private:
+		//버퍼를 만들지 않고 단순 데이터만 집어넣음
+		bool SetVertexBufferData(const void* _data, size_t _dataStride, size_t _dataCount);
+		bool SetIndexBufferData(const UINT* _data, size_t _dataCount);
+
+		bool CreateVertexBuffer();
+		bool CreateIndexBuffer();
+
+		//void CreateAnimSBuffer();
 
 	private:
 		Microsoft::WRL::ComPtr<ID3D11Buffer> mVertexBuffer;
 		D3D11_BUFFER_DESC mVBDesc;
-		uint mVertexByteStride;
-		uint mVertexCount;
-		std::vector<Vertex3D> mVertices;
-
+		UINT mVertexByteStride;
+		UINT mVertexCount;
+		std::vector<unsigned char> mVertexSysMem;
+		
 		std::vector<tIndexInfo>		mIndexInfos;
+
+		//주소는 MeshData에서 관리
+		Skeleton* mSkeleton;
 	};
 
 
@@ -76,7 +108,7 @@ namespace mh
 			return false;
 		}
 
-		if (false == CreateIndexBuffer((void*)_vecIdx.data(), _vecIdx.size()))
+		if (false == CreateIndexBuffer((UINT*)_vecIdx.data(), _vecIdx.size()))
 		{
 			return false;
 		}
@@ -86,6 +118,11 @@ namespace mh
 	template<typename Vertex>
 	inline bool Mesh::CreateVertexBuffer(const std::vector<Vertex>& _vecVtx)
 	{
-		return CreateVertexBuffer((void*)_vecVtx.data(), sizeof(Vertex), _vecVtx.size());
+		return CreateVertexBuffer(static_cast<const void*>(_vecVtx.data()), sizeof(Vertex), _vecVtx.size());
 	}
+	inline bool Mesh::CreateIndexBuffer(const std::vector<UINT>& _indices)
+	{
+		return CreateIndexBuffer(static_cast<const UINT*>(_indices.data()), _indices.size());
+	}
+
 }

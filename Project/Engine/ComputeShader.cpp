@@ -4,47 +4,40 @@
 
 #include "ComputeShader.h"
 #include "GPUMgr.h"
+#include "RenderMgr.h"
+#include "ConstBuffer.h"
 
 #include "define_GPU.h"
 #include "define_Res.h"
 
+
+
 namespace mh
 {
-	namespace stdfs = std::filesystem;
+	
 
-	ComputeShader::ComputeShader(uint _threadGroupX, uint _threadGroupY, uint _threadGroupZ)
+	ComputeShader::ComputeShader(uint3 _threadsPerGroup)
 		: IShader(define::eResourceType::ComputeShader)
 		, mCSBlob(nullptr)
 		, mCS(nullptr)
-		, mThreadGroupCountX(_threadGroupX)
-		, mThreadGroupCountY(_threadGroupY)
-		, mThreadGroupCountZ(_threadGroupZ)
-		, mGroupX(0)
-		, mGroupY(0)
-		, mGroupZ(0)
+		, mCB_ComputeShader{ _threadsPerGroup,  }
 	{
+		//스레드가 하나라도 0이 들어있으면 안됨
+		MH_ASSERT(_threadsPerGroup.x && _threadsPerGroup.y && _threadsPerGroup.z);
+
 	}
-	ComputeShader::ComputeShader()
-		: IShader(define::eResourceType::ComputeShader)
-		, mCSBlob(nullptr)
-		, mCS(nullptr)
-		, mThreadGroupCountX(0)
-		, mThreadGroupCountY(0)
-		, mThreadGroupCountZ(0)
-		, mGroupX(0)
-		, mGroupY(0)
-		, mGroupZ(0)
-	{
-		mThreadGroupCountX = 32;
-		mThreadGroupCountY = 32;
-		mThreadGroupCountZ = 1;
-	}
+
 	ComputeShader::~ComputeShader()
 	{
 	}
+
 	eResult ComputeShader::Load(const std::filesystem::path& _path)
 	{
-		return eResult::Fail_NotImplemented;
+		std::fs::path FilePath = PathMgr::GetShaderCSOPath();
+		FilePath /= _path;
+		FilePath.replace_extension(define::strKey::Ext_CompiledShader);
+
+		return CreateByCSO(FilePath);
 	}
 	eResult ComputeShader::CreateByCompile(const std::filesystem::path& _FullPath, const std::string_view _funcName)
 	{
@@ -106,21 +99,38 @@ namespace mh
 
 	void ComputeShader::OnExcute()
 	{
-		Binds();
+		if (false == BindData())
+			return;
 
-		auto pContext = GPUMgr::Context();
-		pContext->CSSetShader(mCS.Get(), nullptr, 0);
-		pContext->Dispatch(mGroupX, mGroupY, mGroupZ);
+		//데이터 카운트가 하나라도 0일경우 계산 불가
+		 if (false == (
+			 mCB_ComputeShader.TotalDataCount.x && 
+			 mCB_ComputeShader.TotalDataCount.y && 
+			 mCB_ComputeShader.TotalDataCount.z))
+		 {
+			 Clear();
+			 return;
+		 }
+			
+		
+		//상수버퍼를 통해 데이터 수를 업로드
+		static ConstBuffer* const pCB = RenderMgr::GetConstBuffer(define::eCBType::ComputeShader);
+		pCB->SetData(&mCB_ComputeShader);
+		pCB->BindData();
 
+		//쉐이더 바인딩
+		GPUMgr::Context()->CSSetShader(mCS.Get(), nullptr, 0);
+		GPUMgr::Context()->Dispatch(mCB_ComputeShader.NumGroup.x, mCB_ComputeShader.NumGroup.y, mCB_ComputeShader.NumGroup.z);
+
+		//데이터 정리
 		Clear();
 	}
 
-	void ComputeShader::Binds()
-	{
-	}
-	void ComputeShader::Clear()
-	{
-	}
+
+
+
+
+
 	eResult ComputeShader::CreateShader(const void* _pByteCode, size_t _ByteCodeSize)
 	{
 		eResult result = eResult::Fail_Create;

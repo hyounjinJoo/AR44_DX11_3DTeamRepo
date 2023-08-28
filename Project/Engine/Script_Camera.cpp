@@ -23,38 +23,35 @@ namespace mh
 
 	void Script_Camera::Update()
 	{
-		Com_Transform& tr = GetOwner()->GetTransform();
+		Com_Transform* tr = GetOwner()->GetComponent<Com_Transform>();
 
-		float3 pos = tr.GetPosition();
+		float3 pos = tr->GetRelativePos();
 
 		if (InputMgr::GetKeyState(eKeyCode::D) == eKeyState::PRESSED)
 		{
-			pos += 100.0f * tr.Right() * TimeMgr::DeltaTime();
+			pos += 100.0f * tr->Right() * TimeMgr::DeltaTime();
 		}
 		else if (InputMgr::GetKeyState(eKeyCode::A) == eKeyState::PRESSED)
 		{
-			pos += 100.0f * -tr.Right() * TimeMgr::DeltaTime();
+			pos += 100.0f * -tr->Right() * TimeMgr::DeltaTime();
 		}
 		else if (InputMgr::GetKeyState(eKeyCode::W) == eKeyState::PRESSED)
 		{
-			pos += 100.0f * tr.Forward() * TimeMgr::DeltaTime();
+			pos += 100.0f * tr->Forward() * TimeMgr::DeltaTime();
 		}
 		else if (InputMgr::GetKeyState(eKeyCode::S) == eKeyState::PRESSED)
 		{
-			pos += 100.0f * -tr.Forward() * TimeMgr::DeltaTime();
+			pos += 100.0f * -tr->Forward() * TimeMgr::DeltaTime();
 		}
 		else if (InputMgr::GetKeyState(eKeyCode::Q) == eKeyState::PRESSED)
 		{
-			pos += 100.0f * tr.Up() * TimeMgr::DeltaTime();
+			pos += 100.0f * tr->Up() * TimeMgr::DeltaTime();
 		}
 		else if (InputMgr::GetKeyState(eKeyCode::E) == eKeyState::PRESSED)
 		{
-			pos += 100.0f * -tr.Up() * TimeMgr::DeltaTime();
+			pos += 100.0f * -tr->Up() * TimeMgr::DeltaTime();
 		}
 
-		tr.SetPosition(pos);
-	}
-	void Script_Camera::Render()
-	{
+		tr->SetRelativePos(pos);
 	}
 }

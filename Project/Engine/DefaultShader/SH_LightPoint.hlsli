@@ -1,7 +1,8 @@
 #ifndef SH_LIGHTPOINT
 #define SH_LIGHTPOINT
-
 #include "SH_Globals.hlsli"
+#include "SH_Func_Light.hlsli"
+#include "SH_Func_DecodeColor.hlsli"
 
 struct VSIn
 {
@@ -16,7 +17,7 @@ struct VSOut
 
 struct PS_OUT
 {
-	float4 vDiffuse : SV_Target;
+	float4 vDiffuse : SV_Target0;
 	float4 vSpecular : SV_Target1;
 };
 

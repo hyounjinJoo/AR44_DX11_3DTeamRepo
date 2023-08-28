@@ -8,7 +8,7 @@
 namespace mh
 {
 	ParticleShader::ParticleShader()
-		: ComputeShader(128, 1, 1)
+		: ComputeShader(uint3(128, 1, 1))
 		, mBuffer(nullptr)
 		, mSharedBuffer(nullptr)
 	{
@@ -18,19 +18,20 @@ namespace mh
 	{
 	}
 
-	void ParticleShader::Binds()
+	bool ParticleShader::BindData()
 	{
 		mBuffer->BindDataUAV(0);
 		mSharedBuffer->BindDataUAV(1);
 
-		mGroupX = mBuffer->GetStride() / mThreadGroupCountX + 1;
-		mGroupY = 1;
-		mGroupZ = 1;
+		uint3 dataCounts = { mBuffer->GetStride(), 1u, 1u };
+		CalculateGroupCount(dataCounts);
+
+		return true;
 	}
 
 	void ParticleShader::Clear()
 	{
-		mBuffer->UnBind();
-		mSharedBuffer->UnBind();
+		mBuffer->UnBindData();
+		mSharedBuffer->UnBindData();
 	}
 }

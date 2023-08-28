@@ -221,7 +221,7 @@ namespace mh
 		mViewPort.MinDepth = (FLOAT)0.f;
 		mViewPort.MaxDepth = (FLOAT)1.f;
 
-		int2 winSize = Application::GetWIndowSize();
+		int2 winSize = Application::GetWindowSize();
 
 		mViewPort.Width = (FLOAT)winSize.x;
 		mViewPort.Height = (FLOAT)winSize.y;
@@ -231,9 +231,9 @@ namespace mh
 
 
 
-	void GPUMgr::Clear()
+	void GPUMgr::ClearRenderTarget()
 	{
-		FLOAT backgroundColor[4] = { 0.5f, 0.5f, 0.5f, 1.0f };
+		constexpr FLOAT backgroundColor[4] = { 0.5f, 0.5f, 0.5f, 1.0f };
 		mContext->ClearRenderTargetView(mRenderTargetTexture->GetRTV().Get(), backgroundColor);
 		mContext->ClearDepthStencilView(mDepthStencilBufferTexture->GetDSV().Get(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.f, 0);
 	}

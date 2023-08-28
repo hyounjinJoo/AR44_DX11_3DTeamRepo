@@ -16,7 +16,7 @@
 
 namespace mh
 {
-	namespace stdfs = std::filesystem;
+	
 
 	Texture::Texture()
 		: IRes(eResourceType::Texture)
@@ -40,7 +40,7 @@ namespace mh
 
 	}
 
-	void Texture::Clear(uint _startSlot)
+	void Texture::ClearSRV(UINT _startSlot)
 	{
 		ID3D11ShaderResourceView* srv = nullptr;
 
@@ -55,7 +55,7 @@ namespace mh
 
 	void Texture::ClearAll()
 	{
-		for (int i = 0; i < (int)eTextureSlot::End; ++i)
+		for (int i = 0; i < (int)eTextureSlot::END; ++i)
 		{
 			ID3D11ShaderResourceView* srv = nullptr;
 
@@ -162,9 +162,16 @@ namespace mh
 
 	eResult Texture::Load(const std::filesystem::path& _FileName)
 	{
-		stdfs::path FullPath = PathMgr::GetRelResourcePath(GetResType());
-
-		eResult result = LoadFile(FullPath / _FileName);
+		eResult result = eResult::Fail;
+		std::fs::path resPath = PathMgr::GetContentPathRelative(GetResType());
+		if (false == std::fs::exists(resPath))
+		{
+			std::fs::create_directories(resPath);
+			ERROR_MESSAGE_W(L"파일이 없습니다.");
+			return eResult::Fail_PathNotExist;
+		}
+		
+		result = LoadFile(resPath / _FileName);
 
 		if (eResult::Success == result)
 		{
@@ -176,6 +183,15 @@ namespace mh
 
 	eResult Texture::LoadFile(const std::filesystem::path& _fullPath)
 	{
+		if (false == std::fs::exists(_fullPath))
+		{
+
+			std::fs::path curpath = std::fs::current_path();
+
+			ERROR_MESSAGE_W(L"파일이 존재하지 않습니다.");
+			return eResult::Fail_PathNotExist;
+		}
+
 		std::wstring Extension = _fullPath.extension().wstring();
 		StringConv::UpperCase(Extension);
 
@@ -215,7 +231,7 @@ namespace mh
 
 	void Texture::BindDataSRV(uint _SRVSlot, eShaderStageFlag_ _stageFlag)
 	{
-		UnBind();
+		UnBindData();
 	
 		mCurBoundRegister = (int)_SRVSlot;
 		mCurBoundStage = _stageFlag;
@@ -246,7 +262,7 @@ namespace mh
 
 	void Texture::BindDataUAV(uint _startSlot)
 	{
-		UnBind();
+		UnBindData();
 
 		mCurBoundView = eBufferViewType::UAV;
 		mCurBoundRegister = (int)_startSlot;
@@ -256,7 +272,7 @@ namespace mh
 	}
 
 
-	void Texture::UnBind()
+	void Texture::UnBindData()
 	{
 		switch (mCurBoundView)
 		{

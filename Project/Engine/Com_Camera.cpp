@@ -12,6 +12,7 @@
 #include "IRenderer.h"
 #include "SceneMgr.h"
 #include "ResMgr.h"
+#include "Com_Light3D.h"
 
 #include "MultiRenderTarget.h"
 
@@ -30,7 +31,7 @@ namespace mh
 		, mProjType(eProjectionType::None)
 		, mAspectRatio(1.0f)
 		, mNear(1.0f)
-		, mFar(1000.0f)
+		, mFar(50000.f)
 		, mScale(1.0f)
 	{
 		EnableLayerMasks();
@@ -42,7 +43,7 @@ namespace mh
 
 	void Com_Camera::Init()
 	{
-		RegisterCameraInRenderer();
+		//RegisterCameraInRenderer();
 	}
 
 	void Com_Camera::Update()
@@ -64,7 +65,7 @@ namespace mh
 		RegisterCameraInRenderer();
 	}
 
-	void Com_Camera::Render()
+	void Com_Camera::RenderCamera()
 	{
 		gView = mView;
 		gInverseView = mView.Invert();
@@ -89,11 +90,13 @@ namespace mh
 
 		// Forward render
 		RenderMgr::GetMultiRenderTarget(eMRTType::Swapchain)->Bind();
+
+
 		//// defferd + swapchain merge
 		std::shared_ptr<Material> mergeMaterial = ResMgr::Find<Material>(strKey::Default::material::MergeMaterial);
 		std::shared_ptr<Mesh> rectMesh = ResMgr::Find<Mesh>(strKey::Default::mesh::RectMesh);
 		rectMesh->BindBuffer();
-		mergeMaterial->Bind();
+		mergeMaterial->BindData();
 		rectMesh->Render();
 
 
@@ -105,17 +108,17 @@ namespace mh
 
 	void Com_Camera::CreateViewMatrix()
 	{
-		Com_Transform& tr = GetOwner()->GetTransform();
-		float3 pos = tr.GetPosition();
+		Com_Transform* tr = GetOwner()->GetComponent<Com_Transform>();
+		float3 pos = tr->GetRelativePos();
 
 		// Crate Translate view matrix
 		mView = MATRIX::Identity;
 		mView *= MATRIX::CreateTranslation(-pos);
 		//회전 정보
 
-		float3 up = tr.Up();
-		float3 right = tr.Right();
-		float3 foward = tr.Forward();
+		float3 up = tr->Up();
+		float3 right = tr->Right();
+		float3 foward = tr->Forward();
 
 		MATRIX viewRotate;
 		viewRotate._11 = right.x; viewRotate._12 = up.x; viewRotate._13 = foward.x;
@@ -178,6 +181,31 @@ namespace mh
 	}
 
 
+	//bool Com_Camera::FindRendererRecursive(GameObject* _pObj)
+	//{
+	//	bool bRet = false;
+	//	if (_pObj)
+	//	{
+	//		if (_pObj->GetComponent(eComponentType::Renderer))
+	//		{
+	//			bRet = true;
+	//		}
+	//		else
+	//		{
+	//			//렌더러가 하나라도 있을 시 true 반환. 없을 시 false
+	//			const auto& childs = _pObj->GetChilds();
+	//			for (size_t i = 0; i < childs.size(); ++i)
+	//			{
+	//				bRet = FindRendererRecursive(childs[i]);
+	//				if (bRet)
+	//					break;
+	//			}
+	//		}
+	//	}
+
+	//	return bRet;
+	//}
+
 	void Com_Camera::SortGameObjects()
 	{
 		mDefferedOpaqueGameObjects.clear();
@@ -187,7 +215,7 @@ namespace mh
 		mPostProcessGameObjects.clear();
 
 		IScene* scene = SceneMgr::GetActiveScene();
-		for (int index = 0; index < (uint)define::eLayerType::End; index++)
+		for (int index = 0; index < (uint)define::eLayerType::END; index++)
 		{
 			if (mLayerMasks[index] == true)
 			{
@@ -263,16 +291,20 @@ namespace mh
 
 	void Com_Camera::PushGameObjectToRenderingModes(GameObject* _gameObj)
 	{
-		IRenderer* renderer
-			= _gameObj->GetComponent<IRenderer>();
-		if (renderer == nullptr)
+		if (nullptr == _gameObj || GameObject::eState::Active != _gameObj->GetState())
 			return;
 
-		std::shared_ptr<Material> material = renderer->GetMaterial(0);
-		//if (material == nullptr)
-		//	continue;
+		IRenderer* renderer = static_cast<IRenderer*>(_gameObj->GetComponent(define::eComponentType::Renderer));
 
-		eRenderingMode mode = material->GetRenderingMode();
+		if (nullptr == renderer)
+			return;
+
+		eRenderingMode mode = eRenderingMode::None;
+		Material* mtrl = renderer->GetCurrentMaterial(0u);
+		if (mtrl)
+		{
+			mode = mtrl->GetRenderingMode();
+		}
 
 		switch (mode)
 		{

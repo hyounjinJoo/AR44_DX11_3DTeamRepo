@@ -4,6 +4,7 @@
 #include "json-cpp/json-forwards.h"
 
 #include <filesystem>
+#include <string>
 
 namespace mh
 {
@@ -12,7 +13,6 @@ namespace mh
 		STRKEY_DECLARE(mStrKey);
 	}
 
-	using namespace define;
 	class Entity
 	{
 	public:
@@ -32,30 +32,15 @@ namespace mh
 
 	private:
 		std::string mStrKey;
+		
 
-		static UINT32 gNextID;
+		static UINT32 gIDNext;
 		const UINT32 mID;
 	};
 }
 
-namespace gui
-{
-	class Entity
-	{
-	public:
-		Entity();
-		Entity(const char* _StrKey);
-		Entity(const Entity& _other);
-		virtual ~Entity();
 
-		void SetKey(const std::string_view _StrKey) { mStrKey = _StrKey; }
-		const std::string& GetKey() const { return mStrKey; }
-		UINT32 GetID() const { return mID; }
 
-	private:
-		std::string mStrKey;
-		const UINT32 mID;
-	};
-}
+
 
 

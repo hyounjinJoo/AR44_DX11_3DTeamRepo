@@ -10,6 +10,7 @@
 #include "ConstBuffer.h"
 #include "PaintShader.h"
 #include "ParticleShader.h"
+#include "Animation3DShader.h"
 
 #include "SceneMgr.h"
 
@@ -19,7 +20,7 @@
 #include "MultiRenderTarget.h"
 #include "Application.h"
 
-#include "Com_Light.h"
+#include "Com_Light3D.h"
 
 //컴파일된 쉐이더 헤더 모아놓은 헤더
 #include "DefaultShaders.h"
@@ -33,17 +34,17 @@ namespace mh
 	Com_Camera*							RenderMgr::mMainCamera{};
 	GameObject*							RenderMgr::mInspectorGameObject{};
 
-	std::unique_ptr<ConstBuffer>		RenderMgr::mConstBuffers[(uint)eCBType::End]{};
-	ComPtr<ID3D11SamplerState>			RenderMgr::mSamplerStates[(uint)eSamplerType::End]{};
-	ComPtr<ID3D11RasterizerState>		RenderMgr::mRasterizerStates[(uint)eRSType::End]{};
-	ComPtr<ID3D11DepthStencilState>		RenderMgr::mDepthStencilStates[(uint)eDSType::End]{};
-	ComPtr<ID3D11BlendState>			RenderMgr::mBlendStates[(uint)eBSType::End]{};
+	std::unique_ptr<ConstBuffer>		RenderMgr::mConstBuffers[(uint)eCBType::END]{};
+	ComPtr<ID3D11SamplerState>			RenderMgr::mSamplerStates[(uint)eSamplerType::END]{};
+	ComPtr<ID3D11RasterizerState>		RenderMgr::mRasterizerStates[(uint)eRSType::END]{};
+	ComPtr<ID3D11DepthStencilState>		RenderMgr::mDepthStencilStates[(uint)eDSType::END]{};
+	ComPtr<ID3D11BlendState>			RenderMgr::mBlendStates[(uint)eBSType::END]{};
 	std::vector<Com_Camera*>			RenderMgr::mCameras{};
 	std::vector<tDebugMesh>				RenderMgr::mDebugMeshes{};
 
-	std::unique_ptr<MultiRenderTarget>	RenderMgr::mMultiRenderTargets[(uint)eMRTType::End]{};
+	std::unique_ptr<MultiRenderTarget>	RenderMgr::mMultiRenderTargets[(uint)eMRTType::END]{};
 
-	std::vector<Com_Light*>				RenderMgr::mLights{};
+	std::vector<Com_Light3D*>				RenderMgr::mLights{};
 	std::vector<tLightAttribute>		RenderMgr::mLightAttributes{};
 	std::unique_ptr<StructBuffer>		RenderMgr::mLightsBuffer{};
 	std::shared_ptr<Texture>			RenderMgr::mPostProcessTexture{};
@@ -68,7 +69,7 @@ namespace mh
 		CreateDepthStencilStates();
 		CreateBlendStates();
 
-		LoadBuffer();
+		CreateBuffer();
 		LoadDefaultTexture();
 		LoadDefaultMaterial();
 	}
@@ -77,23 +78,23 @@ namespace mh
 	{
 		mMainCamera = nullptr;
 		mInspectorGameObject = nullptr;
-		for (int i = 0; i < (int)eCBType::End; ++i)
+		for (int i = 0; i < (int)eCBType::END; ++i)
 		{
 			mConstBuffers->reset();
 		}
-		for (int i = 0; i < (int)eSamplerType::End; ++i)
+		for (int i = 0; i < (int)eSamplerType::END; ++i)
 		{
 			mSamplerStates[i] = nullptr;
 		}
-		for (int i = 0; i < (int)eRSType::End; ++i)
+		for (int i = 0; i < (int)eRSType::END; ++i)
 		{
 			mRasterizerStates[i] = nullptr;
 		}
-		for (int i = 0; i < (int)eDSType::End; ++i)
+		for (int i = 0; i < (int)eDSType::END; ++i)
 		{
 			mDepthStencilStates[i] = nullptr;
 		}
-		for (int i = 0; i < (int)eBSType::End; ++i)
+		for (int i = 0; i < (int)eBSType::END; ++i)
 		{
 			mBlendStates[i] = nullptr;
 		}
@@ -108,7 +109,7 @@ namespace mh
 		mLightsBuffer.reset();
 		mPostProcessTexture = nullptr;
 
-		for (int i = 0; i < (int)eMRTType::End; ++i)
+		for (int i = 0; i < (int)eMRTType::END; ++i)
 		{
 			mMultiRenderTargets[i].reset();
 		}
@@ -117,6 +118,8 @@ namespace mh
 
 	void RenderMgr::Render()
 	{
+		ClearMultiRenderTargets();
+
 		UpdateGlobalCBuffer();
 
 		BindNoiseTexture();
@@ -127,7 +130,7 @@ namespace mh
 			if (cam == nullptr)
 				continue;
 
-			cam->Render();
+			cam->RenderCamera();
 		}
 
 		mCameras.clear();
@@ -135,7 +138,7 @@ namespace mh
 	}
 
 
-	void RenderMgr::RemoveLight(Com_Light* _pComLight)
+	void RenderMgr::RemoveLight(Com_Light3D* _pComLight)
 	{
 		for (auto iter = mLights.begin(); iter != mLights.end(); ++iter)
 		{
@@ -153,26 +156,27 @@ namespace mh
 
 		eShaderStageFlag_ Flag = eShaderStageFlag::VS | eShaderStageFlag::PS;
 
-		mLightsBuffer->BindDataSRV(13, Flag);
+		mLightsBuffer->BindDataSRV(Register_t_lightAttributes, Flag);
 
-		LightCB trCb = {};
-		trCb.NumberOfLight = (uint)mLightAttributes.size();
+		
+		tCB_NumberOfLight trCb = {};
+		trCb.numberOfLight = (uint)mLightAttributes.size();
 
 		for (size_t i = 0; i < mLights.size(); i++)
 		{
 			mLights[i]->SetIndex((uint)i);
 		}
 
-		ConstBuffer* cb = mConstBuffers[(uint)eCBType::Light].get();
+		ConstBuffer* cb = mConstBuffers[(uint)eCBType::numberOfLight].get();
 		cb->SetData(&trCb);
 		cb->BindData(Flag);
 	}
 	void RenderMgr::BindNoiseTexture()
 	{
 		std::shared_ptr<Texture> noise = ResMgr::Find<Texture>(define::strKey::Default::texture::noise_03);
-		noise->BindDataSRV(16u, eShaderStageFlag::ALL);
+		noise->BindDataSRV(Register_t_NoiseTexture, eShaderStageFlag::ALL);
 
-		NoiseCB info = {};
+		tCB_Noise info = {};
 		info.NoiseSize.x = (float)noise->GetWidth();
 		info.NoiseSize.y = (float)noise->GetHeight();
 
@@ -188,7 +192,7 @@ namespace mh
 	{
 		std::shared_ptr<Texture> renderTarget = ResMgr::Find<Texture>(define::strKey::Default::texture::RenderTarget);
 			
-		//renderTarget->UnBind();
+		//renderTarget->UnBindData();
 
 		//ID3D11ShaderResourceView* srv = nullptr;
 		//GPUMgr::Context()->PSSetShaderResources()(eShaderStage::PS, 60, &srv);
@@ -198,22 +202,22 @@ namespace mh
 
 		GPUMgr::Context()->CopyResource(dest, source);
 
-		mPostProcessTexture->BindDataSRV(60u, eShaderStageFlag::PS);
+		mPostProcessTexture->BindDataSRV(Register_t_postProcessTexture, eShaderStageFlag::PS);
 	}
 
 	void RenderMgr::ClearMultiRenderTargets()
 	{
-		for (int i = 0; i < (int)eMRTType::End; ++i)
+		for (int i = 0; i < (int)eMRTType::END; ++i)
 		{
 			if (mMultiRenderTargets[i])
 			{
-				if ((int)eMRTType::Light == i)
+				if ((int)eMRTType::Swapchain == i)
 				{
-					mMultiRenderTargets[i]->Clear(float4(0.f));
+					mMultiRenderTargets[i]->Clear(float4(0.2f));
 				}
 				else
 				{
-					mMultiRenderTargets[i]->Clear(float4(0.2f));
+					mMultiRenderTargets[i]->Clear(float4(0.f));
 				}
 			}
 				
@@ -222,7 +226,7 @@ namespace mh
 
 	void RenderMgr::UpdateGlobalCBuffer()
 	{
-		GlobalCB cb{};
+		tCB_Global cb{};
 		cb.uResolution.x = GPUMgr::GetResolutionX();
 		cb.uResolution.y = GPUMgr::GetResolutionY();
 		cb.fResolution.x = (float)cb.uResolution.x;
@@ -277,24 +281,25 @@ namespace mh
 			std::shared_ptr<Texture> arrRTTex[MRT_MAX] = {};
 			std::shared_ptr<Texture> dsTex = nullptr;
 
-			std::shared_ptr<Texture> pos = std::make_shared<Texture>();
-			std::shared_ptr<Texture> normal = std::make_shared<Texture>();
-			std::shared_ptr<Texture> albedo = std::make_shared<Texture>();
-			std::shared_ptr<Texture> specular = std::make_shared<Texture>();
+			
+			//std::shared_ptr<Texture> normal = std::make_shared<Texture>();
+			//std::shared_ptr<Texture> albedo = std::make_shared<Texture>();
+			//std::shared_ptr<Texture> specular = std::make_shared<Texture>();
+			//std::shared_ptr<Texture> emissive = std::make_shared<Texture>();
 
-			arrRTTex[(int)eMRT_Defferd::PositionTarget] = pos;
-			arrRTTex[(int)eMRT_Defferd::NormalTarget] = normal;
-			arrRTTex[(int)eMRT_Defferd::AlbedoTarget] = albedo;
-			arrRTTex[(int)eMRT_Defferd::SpecularTarget] = specular;
-
-			arrRTTex[0]->Create(_ResolutionX, _ResolutionY, DXGI_FORMAT_R32G32B32A32_FLOAT
-				, D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE);
-			arrRTTex[1]->Create(_ResolutionX, _ResolutionY, DXGI_FORMAT_R32G32B32A32_FLOAT
-				, D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE);
-			arrRTTex[2]->Create(_ResolutionX, _ResolutionY, DXGI_FORMAT_R32G32B32A32_FLOAT
-				, D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE);
-			arrRTTex[3]->Create(_ResolutionX, _ResolutionY, DXGI_FORMAT_R32G32B32A32_FLOAT
-				, D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE);
+			//arrRTTex[(int)eMRT_Defferd::AlbedoTarget] = albedo;
+			//arrRTTex[(int)eMRT_Defferd::NormalTarget] = normal;
+			//arrRTTex[(int)eMRT_Defferd::SpecularTarget] = specular;
+			//arrRTTex[(int)eMRT_Defferd::EmissiveTarget] = emissive;
+			//arrRTTex[(int)eMRT_Defferd::PositionTarget] = pos;
+			
+			for (int i = 0; i < (int)eMRT_Defferd::END; ++i)
+			{
+				std::shared_ptr<Texture> defferedTex = std::make_shared<Texture>();
+				arrRTTex[i] = defferedTex;
+				arrRTTex[i]->Create(_ResolutionX, _ResolutionY, DXGI_FORMAT_R32G32B32A32_FLOAT
+					, D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE);
+			}
 
 			dsTex = GPUMgr::GetDepthStencilBufferTex();
 
@@ -310,16 +315,25 @@ namespace mh
 		// Light MRT
 		{
 			std::shared_ptr<Texture> arrRTTex[MRT_MAX] = { };
-			std::shared_ptr<Texture> diffuse = std::make_shared<Texture>();
-			std::shared_ptr<Texture> specular = std::make_shared<Texture>();
 
-			arrRTTex[(int)eMRT_Light::DiffuseLightTarget] = diffuse;
-			arrRTTex[(int)eMRT_Light::SpecularLightTarget] = specular;
+			for (int i = 0; i < (int)eMRT_Light::END; ++i)
+			{
+				std::shared_ptr<Texture> defferedTex = std::make_shared<Texture>();
+				arrRTTex[i] = defferedTex;
+				arrRTTex[i]->Create(_ResolutionX, _ResolutionY, DXGI_FORMAT_R32G32B32A32_FLOAT
+					, D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE);
+			}
 
-			arrRTTex[0]->Create(_ResolutionX, _ResolutionY, DXGI_FORMAT_R32G32B32A32_FLOAT
-				, D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE);
-			arrRTTex[1]->Create(_ResolutionX, _ResolutionY, DXGI_FORMAT_R32G32B32A32_FLOAT
-				, D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE);
+			//std::shared_ptr<Texture> diffuse = std::make_shared<Texture>();
+			//std::shared_ptr<Texture> specular = std::make_shared<Texture>();
+
+			//arrRTTex[(int)eMRT_Light::DiffuseLightTarget] = diffuse;
+			//arrRTTex[(int)eMRT_Light::SpecularLightTarget] = specular;
+
+			//arrRTTex[0]->Create(_ResolutionX, _ResolutionY, DXGI_FORMAT_R32G32B32A32_FLOAT
+			//	, D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE);
+			//arrRTTex[1]->Create(_ResolutionX, _ResolutionY, DXGI_FORMAT_R32G32B32A32_FLOAT
+			//	, D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE);
 
 			mMultiRenderTargets[(int)eMRTType::Light] = std::make_unique<MultiRenderTarget>();
 			mMultiRenderTargets[(int)eMRTType::Light]->Create(arrRTTex, nullptr);
@@ -787,7 +801,7 @@ namespace mh
 			// 인덱스
 			// 북극점
 			std::vector<uint> indices;
-			indices.reserve(2000);
+			indices.reserve(10000);
 			for (uint i = 0; i < iSliceCount; ++i)
 			{
 				indices.push_back(0);
@@ -850,15 +864,6 @@ namespace mh
 		vecLayoutDesc.push_back(LayoutDesc);
 		LayoutDesc = D3D11_INPUT_ELEMENT_DESC{};
 
-		LayoutDesc.AlignedByteOffset = 16;
-		LayoutDesc.Format = DXGI_FORMAT_R32G32B32A32_FLOAT;
-		LayoutDesc.InputSlot = 0;
-		LayoutDesc.InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
-		LayoutDesc.SemanticName = "COLOR";
-		LayoutDesc.SemanticIndex = 0;
-		vecLayoutDesc.push_back(LayoutDesc);
-		LayoutDesc = D3D11_INPUT_ELEMENT_DESC{};
-
 		LayoutDesc.AlignedByteOffset = 32;
 		LayoutDesc.Format = DXGI_FORMAT_R32G32_FLOAT;
 		LayoutDesc.InputSlot = 0;
@@ -876,7 +881,8 @@ namespace mh
 			TriangleShader->SetEngineDefaultRes(true);
 			TriangleShader->CreateByHeader(eGSStage::VS, _0VS_Triangle, sizeof(_0VS_Triangle));
 			TriangleShader->CreateByHeader(eGSStage::PS, _4PS_Triangle, sizeof(_4PS_Triangle));
-			TriangleShader->CreateInputLayout(vecLayoutDesc);
+			TriangleShader->SetInputLayoutDesc(vecLayoutDesc);
+			TriangleShader->CreateInputLayout();
 
 			ResMgr::Insert(strKey::Default::shader::graphics::RectShader, TriangleShader);
 		}
@@ -888,7 +894,8 @@ namespace mh
 			spriteShader->CreateByHeader(eGSStage::VS, _0VS_Sprite, sizeof(_0VS_Sprite));
 			spriteShader->CreateByHeader(eGSStage::PS, _4PS_Sprite, sizeof(_4PS_Sprite));
 			spriteShader->SetRSState(eRSType::SolidNone);
-			spriteShader->CreateInputLayout(vecLayoutDesc);
+			spriteShader->SetInputLayoutDesc(vecLayoutDesc);
+			spriteShader->CreateInputLayout();
 
 
 			ResMgr::Insert(strKey::Default::shader::graphics::SpriteShader, spriteShader);
@@ -901,7 +908,8 @@ namespace mh
 			uiShader->SetEngineDefaultRes(true);
 			uiShader->CreateByHeader(eGSStage::VS, _0VS_UserInterface, sizeof(_0VS_UserInterface));
 			uiShader->CreateByHeader(eGSStage::PS, _4PS_UserInterface, sizeof(_4PS_UserInterface));
-			uiShader->CreateInputLayout(vecLayoutDesc);
+			uiShader->SetInputLayoutDesc(vecLayoutDesc);
+			uiShader->CreateInputLayout();
 
 
 			ResMgr::Insert(strKey::Default::shader::graphics::UIShader, uiShader);
@@ -914,7 +922,8 @@ namespace mh
 			gridShader->SetEngineDefaultRes(true);
 			gridShader->CreateByHeader(eGSStage::VS, _0VS_Grid, sizeof(_0VS_Grid));
 			gridShader->CreateByHeader(eGSStage::PS, _4PS_Grid, sizeof(_4PS_Grid));
-			gridShader->CreateInputLayout(vecLayoutDesc);
+			gridShader->SetInputLayoutDesc(vecLayoutDesc);
+			gridShader->CreateInputLayout();
 
 			gridShader->SetRSState(eRSType::SolidNone);
 			gridShader->SetDSState(eDSType::NoWrite);
@@ -930,7 +939,8 @@ namespace mh
 			debugShader->SetEngineDefaultRes(true);
 			debugShader->CreateByHeader(eGSStage::VS, _0VS_Debug, sizeof(_0VS_Debug));
 			debugShader->CreateByHeader(eGSStage::PS, _4PS_Debug, sizeof(_4PS_Debug));
-			debugShader->CreateInputLayout(vecLayoutDesc);
+			debugShader->SetInputLayoutDesc(vecLayoutDesc);
+			debugShader->CreateInputLayout();
 
 			//debugShader->Create(eShaderStage::VS, "DebugVS.hlsl", "main");
 			//debugShader->Create(eShaderStage::PS, "DebugPS.hlsl", "main");
@@ -960,7 +970,9 @@ namespace mh
 			particleShader->CreateByHeader(eGSStage::VS, _0VS_Particle, sizeof(_0VS_Particle));
 			particleShader->CreateByHeader(eGSStage::GS, _3GS_Particle, sizeof(_3GS_Particle));
 			particleShader->CreateByHeader(eGSStage::PS, _4PS_Particle, sizeof(_4PS_Particle));
-			particleShader->CreateInputLayout(vecLayoutDesc);
+			particleShader->SetInputLayoutDesc(vecLayoutDesc);
+			particleShader->CreateInputLayout();
+
 
 			particleShader->SetRSState(eRSType::SolidNone);
 			particleShader->SetDSState(eDSType::NoWrite);
@@ -980,7 +992,8 @@ namespace mh
 			postProcessShader->SetEngineDefaultRes(true);
 			postProcessShader->CreateByHeader(eGSStage::VS, _0VS_PostProcess, sizeof(_0VS_PostProcess));
 			postProcessShader->CreateByHeader(eGSStage::PS, _4PS_PostProcess, sizeof(_4PS_PostProcess));
-			postProcessShader->CreateInputLayout(vecLayoutDesc);
+			postProcessShader->SetInputLayoutDesc(vecLayoutDesc);
+			postProcessShader->CreateInputLayout();
 
 			postProcessShader->SetDSState(eDSType::NoWrite);
 			ResMgr::Insert(strKey::Default::shader::graphics::PostProcessShader, postProcessShader);
@@ -1016,6 +1029,25 @@ namespace mh
 		LayoutDesc.SemanticIndex = 0;
 		vecLayoutDesc.push_back(LayoutDesc);
 
+		LayoutDesc = D3D11_INPUT_ELEMENT_DESC{};
+		LayoutDesc.AlignedByteOffset = 76;
+		LayoutDesc.Format = DXGI_FORMAT_R32G32B32A32_FLOAT;
+		LayoutDesc.InputSlot = 0;
+		LayoutDesc.InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
+		LayoutDesc.SemanticName = "BLENDWEIGHT";
+		LayoutDesc.SemanticIndex = 0;
+		vecLayoutDesc.push_back(LayoutDesc);
+
+		LayoutDesc = D3D11_INPUT_ELEMENT_DESC{};
+		LayoutDesc.AlignedByteOffset = 92;
+		LayoutDesc.Format = DXGI_FORMAT_R32G32B32A32_FLOAT;
+		LayoutDesc.InputSlot = 0;
+		LayoutDesc.InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
+		LayoutDesc.SemanticName = "BLENDINDICES";
+		LayoutDesc.SemanticIndex = 0;
+		vecLayoutDesc.push_back(LayoutDesc);
+
+
 #pragma endregion
 
 #pragma region BASIC 3D
@@ -1025,7 +1057,8 @@ namespace mh
 
 			basic3DShader->CreateByHeader(eGSStage::VS, _0VS_Basic3D, sizeof(_0VS_Basic3D));
 			basic3DShader->CreateByHeader(eGSStage::PS, _4PS_Basic3D, sizeof(_4PS_Basic3D));
-			basic3DShader->CreateInputLayout(vecLayoutDesc);
+			basic3DShader->SetInputLayoutDesc(vecLayoutDesc);
+			basic3DShader->CreateInputLayout();
 
 			ResMgr::Insert(strKey::Default::shader::graphics::Basic3DShader, basic3DShader);
 		}
@@ -1038,7 +1071,8 @@ namespace mh
 		defferedShader->CreateByHeader(eGSStage::VS, _0VS_Deffered, sizeof(_0VS_Deffered));
 		defferedShader->CreateByHeader(eGSStage::PS, _4PS_Deffered, sizeof(_4PS_Deffered));
 
-		defferedShader->CreateInputLayout(vecLayoutDesc);
+		defferedShader->SetInputLayoutDesc(vecLayoutDesc);
+		defferedShader->CreateInputLayout();
 
 		ResMgr::Insert(strKey::Default::shader::graphics::DefferedShader, defferedShader);
 
@@ -1052,7 +1086,8 @@ namespace mh
 			lightShader->CreateByHeader(eGSStage::VS, _0VS_LightDir, sizeof(_0VS_LightDir));
 			lightShader->CreateByHeader(eGSStage::PS, _4PS_LightDir, sizeof(_4PS_LightDir));
 
-			lightShader->CreateInputLayout(vecLayoutDesc);
+			lightShader->SetInputLayoutDesc(vecLayoutDesc);
+			lightShader->CreateInputLayout();
 
 			lightShader->SetRSState(eRSType::SolidBack);
 			lightShader->SetDSState(eDSType::None);
@@ -1066,7 +1101,8 @@ namespace mh
 			lightShader->CreateByHeader(eGSStage::VS, _0VS_LightPoint, sizeof(_0VS_LightPoint));
 			lightShader->CreateByHeader(eGSStage::PS, _4PS_LightPoint, sizeof(_4PS_LightPoint));
 
-			lightShader->CreateInputLayout(vecLayoutDesc);
+			lightShader->SetInputLayoutDesc(vecLayoutDesc);
+			lightShader->CreateInputLayout();
 
 			lightShader->SetRSState(eRSType::SolidFront);
 			lightShader->SetDSState(eDSType::None);
@@ -1080,10 +1116,12 @@ namespace mh
 
 #pragma region MERGE
 		std::shared_ptr<GraphicsShader> MergeShader = std::make_shared<GraphicsShader>();
+		MergeShader->SetEngineDefaultRes(true);
 		MergeShader->CreateByHeader(eGSStage::VS, _0VS_Merge, sizeof(_0VS_Merge));
 		MergeShader->CreateByHeader(eGSStage::PS, _4PS_Merge, sizeof(_4PS_Merge));
 
-		MergeShader->CreateInputLayout(vecLayoutDesc);
+		MergeShader->SetInputLayoutDesc(vecLayoutDesc);
+		MergeShader->CreateInputLayout();
 
 		MergeShader->SetRSState(eRSType::SolidBack);
 		MergeShader->SetDSState(eDSType::None);
@@ -1091,40 +1129,59 @@ namespace mh
 
 		ResMgr::Insert(strKey::Default::shader::graphics::MergeShader, MergeShader);
 #pragma endregion
+
+
+#pragma region ANIMATION 3D
+		std::shared_ptr<Animation3DShader> Anim3DShader = std::make_shared<Animation3DShader>();
+		Anim3DShader->SetEngineDefaultRes(true);
+		Anim3DShader->CreateByHeader(CS_Animation3D, sizeof(CS_Animation3D));
+
+		ResMgr::Insert(strKey::Default::shader::compute::Animation3D, Anim3DShader);
+#pragma endregion
 	}
 
-	void RenderMgr::LoadBuffer()
+	void RenderMgr::CreateBuffer()
 	{
 #pragma region CONSTANT BUFFER
 		mConstBuffers[(uint)eCBType::Global] = std::make_unique<ConstBuffer>(eCBType::Global);
-		mConstBuffers[(uint)eCBType::Global]->Create(sizeof(GlobalCB));
+		mConstBuffers[(uint)eCBType::Global]->Create(sizeof(tCB_Global));
 		mConstBuffers[(uint)eCBType::Global]->SetPresetTargetStage(eShaderStageFlag::ALL);
 
 		UpdateGlobalCBuffer();
 
 		mConstBuffers[(uint)eCBType::Transform] = std::make_unique<ConstBuffer>(eCBType::Transform);
-		mConstBuffers[(uint)eCBType::Transform]->Create(sizeof(TransformCB));
+		mConstBuffers[(uint)eCBType::Transform]->Create(sizeof(tCB_Transform));
+
+		mConstBuffers[(uint)eCBType::ComputeShader] = std::make_unique<ConstBuffer>(eCBType::ComputeShader);
+		mConstBuffers[(uint)eCBType::ComputeShader]->Create<tCB_ComputeShader>(1u);
+		mConstBuffers[(uint)eCBType::ComputeShader]->SetPresetTargetStage(eShaderStageFlag::CS);
 
 		mConstBuffers[(uint)eCBType::Material] = std::make_unique<ConstBuffer>(eCBType::Material);
-		mConstBuffers[(uint)eCBType::Material]->Create(sizeof(MaterialCB));
+		mConstBuffers[(uint)eCBType::Material]->Create(sizeof(tCB_MaterialData));
 
 		mConstBuffers[(uint)eCBType::Grid] = std::make_unique<ConstBuffer>(eCBType::Grid);
-		mConstBuffers[(uint)eCBType::Grid]->Create(sizeof(GridCB));
+		mConstBuffers[(uint)eCBType::Grid]->Create(sizeof(tCB_Grid));
 
-		mConstBuffers[(uint)eCBType::Animation] = std::make_unique<ConstBuffer>(eCBType::Animation);
-		mConstBuffers[(uint)eCBType::Animation]->Create(sizeof(AnimationCB));
+		mConstBuffers[(uint)eCBType::Animation2D] = std::make_unique<ConstBuffer>(eCBType::Animation2D);
+		mConstBuffers[(uint)eCBType::Animation2D]->Create(sizeof(tCB_Animation2D));
 
-		mConstBuffers[(uint)eCBType::Light] = std::make_unique<ConstBuffer>(eCBType::Light);
-		mConstBuffers[(uint)eCBType::Light]->Create(sizeof(LightCB));
+		mConstBuffers[(uint)eCBType::numberOfLight] = std::make_unique<ConstBuffer>(eCBType::numberOfLight);
+		mConstBuffers[(uint)eCBType::numberOfLight]->Create(sizeof(tCB_NumberOfLight));
 
 		mConstBuffers[(uint)eCBType::ParticleSystem] = std::make_unique<ConstBuffer>(eCBType::ParticleSystem);
-		mConstBuffers[(uint)eCBType::ParticleSystem]->Create(sizeof(ParticleSystemCB));
+		mConstBuffers[(uint)eCBType::ParticleSystem]->Create(sizeof(tCB_ParticleSystem));
 
 		mConstBuffers[(uint)eCBType::Noise] = std::make_unique<ConstBuffer>(eCBType::Noise);
-		mConstBuffers[(uint)eCBType::Noise]->Create(sizeof(NoiseCB));
+		mConstBuffers[(uint)eCBType::Noise]->Create(sizeof(tCB_Noise));
 
-		mConstBuffers[(uint)eCBType::SBuffer] = std::make_unique<ConstBuffer>(eCBType::SBuffer);
-		mConstBuffers[(uint)eCBType::SBuffer]->Create<SBufferCB>();
+		mConstBuffers[(uint)eCBType::SBufferCount] = std::make_unique<ConstBuffer>(eCBType::SBufferCount);
+		mConstBuffers[(uint)eCBType::SBufferCount]->Create<tCB_SBufferCount>();
+
+		mConstBuffers[(uint)eCBType::Animation3D] = std::make_unique<ConstBuffer>(eCBType::Animation3D);
+		mConstBuffers[(uint)eCBType::Animation3D]->Create<tCB_Animation3D>();
+
+		mConstBuffers[(uint)eCBType::UniformData] = std::make_unique<ConstBuffer>(eCBType::UniformData);
+		mConstBuffers[(uint)eCBType::UniformData]->Create<tCB_UniformData>();
 
 #pragma endregion
 #pragma region STRUCTED BUFFER
@@ -1184,7 +1241,7 @@ namespace mh
 		//noise
 		std::shared_ptr<Texture> mNoiseTex = std::make_shared<Texture>();
 		mNoiseTex->Create(GPUMgr::GetResolutionX(), GPUMgr::GetResolutionY(), DXGI_FORMAT_R8G8B8A8_UNORM, D3D11_BIND_SHADER_RESOURCE);
-		mNoiseTex->BindDataSRV(eShaderStageFlag::PS, 60);
+		mNoiseTex->BindDataSRV(Register_t_NoiseTexture, eShaderStageFlag::PS);
 	}
 
 
@@ -1238,12 +1295,14 @@ namespace mh
 		D3D11_RASTERIZER_DESC rsDesc = {};
 		rsDesc.FillMode = D3D11_FILL_MODE::D3D11_FILL_SOLID;
 		rsDesc.CullMode = D3D11_CULL_MODE::D3D11_CULL_BACK;
+		rsDesc.DepthClipEnable = TRUE;
 
 		GPUMgr::Device()->CreateRasterizerState(&rsDesc
 			, mRasterizerStates[(uint)eRSType::SolidBack].GetAddressOf());
 
 		rsDesc.FillMode = D3D11_FILL_MODE::D3D11_FILL_SOLID;
 		rsDesc.CullMode = D3D11_CULL_MODE::D3D11_CULL_FRONT;
+		rsDesc.DepthClipEnable = TRUE;
 
 		GPUMgr::Device()->CreateRasterizerState(&rsDesc
 			, mRasterizerStates[(uint)eRSType::SolidFront].GetAddressOf());
@@ -1306,7 +1365,6 @@ namespace mh
 		dsDesc.DepthFunc = D3D11_COMPARISON_FUNC::D3D11_COMPARISON_LESS_EQUAL;
 		dsDesc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK::D3D11_DEPTH_WRITE_MASK_ALL;
 		dsDesc.StencilEnable = false;
-
 		GPUMgr::Device()->CreateDepthStencilState(&dsDesc
 			, mDepthStencilStates[(uint)eDSType::Less].GetAddressOf());
 
@@ -1353,7 +1411,7 @@ namespace mh
 		std::shared_ptr <Texture> spriteTexture = ResMgr::Find<Texture>(texture::DefaultSprite);
 		std::shared_ptr<GraphicsShader> spriteShader = ResMgr::Find<GraphicsShader>(shader::graphics::SpriteShader);
 		std::shared_ptr<Material> spriteMaterial = std::make_shared<Material>();
-		spriteMaterial->SetRenderingMode(eRenderingMode::Transparent);
+		spriteMaterial->SetRenderingMode(eRenderingMode::Opaque);
 		spriteMaterial->SetShader(spriteShader);
 		spriteMaterial->SetTexture(eTextureSlot::Albedo, spriteTexture);
 		ResMgr::Insert(material::SpriteMaterial, spriteMaterial);
@@ -1362,7 +1420,7 @@ namespace mh
 		std::shared_ptr <Texture> uiTexture = ResMgr::Find<Texture>(texture::HPBarTexture);
 		std::shared_ptr<GraphicsShader> uiShader = ResMgr::Find<GraphicsShader>(shader::graphics::UIShader);
 		std::shared_ptr<Material> uiMaterial = std::make_shared<Material>();
-		uiMaterial->SetRenderingMode(eRenderingMode::Transparent);
+		uiMaterial->SetRenderingMode(eRenderingMode::Opaque);
 
 		uiMaterial->SetShader(uiShader);
 		uiMaterial->SetTexture(eTextureSlot::Albedo, uiTexture);

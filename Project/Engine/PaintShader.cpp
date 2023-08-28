@@ -1,11 +1,11 @@
 #include "PCH_Engine.h"
-
 #include "PaintShader.h"
+
 
 namespace mh
 {
 	PaintShader::PaintShader()
-		: ComputeShader()
+		: ComputeShader(uint3{32, 32, 1})
 		, mTarget(nullptr)
 	{
 	}
@@ -14,17 +14,19 @@ namespace mh
 	{
 	}
 
-	void PaintShader::Binds()
+	bool PaintShader::BindData()
 	{
 		mTarget->BindDataUAV(0);
 
-		mGroupX = static_cast<uint>(mTarget->GetWidth() / mThreadGroupCountX + 1);
-		mGroupY = static_cast<uint>(mTarget->GetHeight() / mThreadGroupCountY + 1);
-		mGroupZ = 1;
+		uint3 dataCounts = { mTarget->GetWidth(), mTarget->GetHeight(), 1u };
+
+		CalculateGroupCount(dataCounts);
+
+		return true;
 	}
 
 	void PaintShader::Clear()
 	{
-		mTarget->UnBind();
+		mTarget->UnBindData();
 	}
 }

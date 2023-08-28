@@ -8,60 +8,91 @@ namespace mh
 	IScene::IScene()
 		: mbInitialized()
 	{
-		mLayers.resize((uint)define::eLayerType::End);
+		for (size_t i = 0; i < mLayers.size(); ++i)
+		{
+			mLayers[i].SetLayerType((eLayerType)i);
+		}
 	}
 
 	IScene::~IScene()
 	{
-
 	}
 
-	void IScene::Init()
+	void IScene::SceneInit()
 	{
-		mbInitialized = true;
+		Init();
 		for (Layer& layer : mLayers)
 		{
 			layer.Init();
 		}
+
+		mbInitialized = true;
 	}
-	void IScene::Update()
+	void IScene::SceneUpdate()
 	{
+		Update();
+
 		for (Layer& layer : mLayers)
 		{
 			layer.Update();
 		}
 	}
-	void IScene::FixedUpdate()
+	void IScene::SceneFixedUpdate()
 	{
+		FixedUpdate();
 		for (Layer& layer : mLayers)
 		{
 			layer.FixedUpdate();
 		}
 	}
-	void IScene::Render()
+	void IScene::SceneRender()
 	{
+		Render();
 		for (Layer& layer : mLayers)
 		{
 			layer.Render();
 		}
 	}
-	void IScene::Destroy()
+	void IScene::SceneDestroy()
 	{
+		Destroy();
 		for (Layer& layer : mLayers)
 		{
 			layer.Destroy();
 		}
 	}
 
-	void IScene::OnExit()
+	GameObject* IScene::AddGameObject(GameObject* _gameObj, const define::eLayerType _type)
 	{
+		if (_gameObj)
+		{
+			if (define::eLayerType::None == _type)
+			{
+				ERROR_MESSAGE_W(L"레이어를 설정하지 않았습니다.");
+				SAFE_DELETE(_gameObj);
+				MH_ASSERT(_gameObj);
+			}
+			else
+			{
+				std::vector<GameObject*> gameObjs{};
+				_gameObj->GetGameObjectHierarchy(gameObjs);
+
+				for (size_t i = 0; i < gameObjs.size(); ++i)
+				{
+					eLayerType type = gameObjs[i]->GetLayerType();
+					if (eLayerType::None != type)
+					{
+						mLayers[(int)type].RemoveGameObject(gameObjs[i]);
+					}
+
+					gameObjs[i]->SetLayerType(_type);
+					mLayers[(int)_type].AddGameObject(gameObjs[i], mbInitialized);
+				}
+			}
+		}
+		return _gameObj;
 	}
 
-	void IScene::AddGameObject(GameObject* _gameObj, const define::eLayerType _type)
-	{
-		mLayers[(uint)_type].AddGameObject(_gameObj, mbInitialized);
-		_gameObj->SetLayerType(_type);
-	}
 	
 	std::vector<GameObject*> IScene::GetDontDestroyGameObjects()
 	{

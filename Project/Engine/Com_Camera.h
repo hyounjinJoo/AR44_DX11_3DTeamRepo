@@ -19,7 +19,9 @@ namespace  mh
 		virtual void Init() override;
 		virtual void Update() override;
 		virtual void FixedUpdate() override;
-		virtual void Render() override;
+
+		//이 함수는 RenderMgr가 호출
+		void RenderCamera();
 
 		void CreateViewMatrix();
 		
@@ -41,7 +43,6 @@ namespace  mh
 		const MATRIX& GetProjectionMatrix() const { return mProjection; }
 
 	private:
-		
 		void SortGameObjects();
 		void RenderDeffered();
 		void RenderOpaque();
@@ -65,7 +66,7 @@ namespace  mh
 		float mFar;
 		float mScale;
 
-		std::bitset<(uint)define::eLayerType::End> mLayerMasks;
+		std::bitset<(uint)define::eLayerType::END> mLayerMasks;
 		std::vector<GameObject*> mDefferedOpaqueGameObjects;
 		std::vector<GameObject*> mOpaqueGameObjects;
 		std::vector<GameObject*> mCutoutGameObjects;

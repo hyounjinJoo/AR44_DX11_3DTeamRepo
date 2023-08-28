@@ -30,7 +30,7 @@ namespace mh
 
 	eResult AudioClip::Load(const std::filesystem::path& _path)
 	{
-		std::filesystem::path FullPath = PathMgr::GetRelResourcePath(GetResType());
+		std::filesystem::path FullPath = PathMgr::GetContentPathRelative(GetResType());
 		FullPath /= _path;
 
 

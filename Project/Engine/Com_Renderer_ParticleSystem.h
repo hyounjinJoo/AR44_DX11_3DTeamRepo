@@ -1,6 +1,7 @@
 #pragma once
-#include "IRenderer.h"
+#include "Com_Renderer_Mesh.h"
 #include "ParticleShader.h"
+#include "DefaultShader/SH_Particle.hlsli"
 
 namespace mh
 {
@@ -12,7 +13,7 @@ namespace mh
 
 	class StructBuffer;
 
-	class Com_Renderer_ParticleSystem : public IRenderer
+	class Com_Renderer_ParticleSystem : public Com_Renderer_Mesh
 	{
 	public:
 		Com_Renderer_ParticleSystem();
@@ -36,7 +37,7 @@ namespace mh
 #pragma endregion
 #pragma region tParticle GraphicsShader 관련 변수 선언
 		std::shared_ptr<ParticleShader> mCS;
-		ParticleSystemCB mCBData;
+		tCB_ParticleSystem mCBData;
 #pragma endregion
 #pragma region tParticle System 관련 변수 선언
 		float4 mStartSize;

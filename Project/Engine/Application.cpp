@@ -13,10 +13,14 @@
 #include "AudioMgr.h"
 #include "FontWrapper.h"
 #include "PathMgr.h"
+#include "EventMgr.h"
+#include "guiMgr.h"
 
 namespace mh
 {
 	using namespace mh::define;
+
+	std::vector<std::function<void()>> Application::mEndFrameFuncs;
 
 
 	HWND			Application::mHwnd{};
@@ -62,6 +66,10 @@ namespace mh
 		
 		SceneMgr::Init();
 
+		EventMgr::Init();
+
+		mbInitialized = true;
+
 		return TRUE;
 	}
 
@@ -86,15 +94,26 @@ namespace mh
 	{
 		TimeMgr::Render(mHdc);
 
-		GPUMgr::Clear();
-	
-		RenderMgr::ClearMultiRenderTargets();
+		//최종 렌더타겟 Clear
+		GPUMgr::ClearRenderTarget();
 
 		RenderMgr::Render();
 	}
 
-	void Application::Destroy()
+	void Application::EndFrame()
 	{
+		for (size_t i = 0; i < mEndFrameFuncs.size(); ++i)
+		{
+			if (mEndFrameFuncs[i])
+			{
+				mEndFrameFuncs[i]();
+			}
+		}
+		mEndFrameFuncs.clear();
+		
+		SceneMgr::Destroy();
+
+		EventMgr::Update();
 	}
 
 	// Running main engine loop
@@ -103,21 +122,23 @@ namespace mh
 		Update();
 		FixedUpdate();
 		Render();
-		Destroy();
+		EndFrame();
+
+		gui::guiMgr::Run();
 		
-		//TODO: Engine 내부에서 종료할 방법 만들기
-		//이걸 false로 반환하면 꺼지도록 짜놓음
-		return true;
+		return mbInitialized;
 	}
 
 	void Application::Present()
 	{
-		GPUMgr::Present();
+		GPUMgr::Present(true);
 	}
 
 	void Application::Release()
 	{
+		//EndFrame();
 		ReleaseDC(mHwnd, mHdc);
+		mbInitialized = false;
 	}
 
 	void Application::SetWindowPos(int _LeftWindowPos, int _TopWindowPos)
@@ -144,7 +165,7 @@ namespace mh
 		::UpdateWindow(mHwnd);
 	}
 
-	int2 Application::GetWIndowSize()
+	int2 Application::GetWindowSize()
 	{
 		//클라이언트 영역과 윈도우 영역의 차이를 구해서 정확한 창 크기를 설정(해상도가 조금이라도 차이나면 문제 발생함)
 		RECT rcClient{};

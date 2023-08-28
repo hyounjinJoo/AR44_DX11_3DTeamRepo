@@ -1,8 +1,16 @@
 #include "PCH_Engine.h"
-
 #include "IRenderer.h"
-#include "json-cpp\json.h"
+
+#include "Mesh.h"
+#include "Material.h"
+
+#include "GameObject.h"
+#include "Com_Transform.h"
+#include "Com_Animator2D.h"
+#include "Com_Animator3D.h"
+#include "json-cpp/json.h"
 #include "ResMgr.h"
+#include "Skeleton.h"
 
 namespace mh
 {
@@ -15,6 +23,25 @@ namespace mh
 
 	IRenderer::~IRenderer()
 	{
+	}
+
+	IRenderer::IRenderer(const IRenderer& _other)
+		: IComponent(_other)
+		, mMesh(_other.mMesh)
+		, mMaterials{}
+	{
+		mMaterials.resize(_other.mMaterials.size());
+		for (size_t i = 0; i < mMaterials.size(); ++i)
+		{
+			//Shared Material은 공유 항목이므로 그대로 복사
+			mMaterials[i].SharedMaterial = _other.mMaterials[i].SharedMaterial;
+
+			//Dynamic Material은 고유 항목이므로 Clone해서 이쪽도 마찬가지로 고유 항목 생성
+			if (_other.mMaterials[i].DynamicMaterial)
+			{
+				mMaterials[i].DynamicMaterial = std::unique_ptr<Material>(_other.mMaterials[i].DynamicMaterial->Clone());
+			}
+		}
 	}
 
 	eResult IRenderer::SaveJson(Json::Value* _pJson)
@@ -41,7 +68,7 @@ namespace mh
 		//{
 		//	jVal[JSON_KEY(mMaterial)] = mMaterial->GetKey();
 		//}
-		
+
 		return eResult::Success;
 	}
 
@@ -72,6 +99,8 @@ namespace mh
 		return eResult::Success;
 	}
 
+
+
 	void IRenderer::SetMesh(const std::shared_ptr<Mesh> _mesh)
 	{
 		mMesh = _mesh;
@@ -87,8 +116,4 @@ namespace mh
 			mMaterials.resize(mMesh->GetSubsetCount());
 	}
 
-
 }
-
-
-

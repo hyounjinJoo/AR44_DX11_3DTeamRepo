@@ -5,7 +5,7 @@
 #include "GameObject.h"
 #include "InputMgr.h"
 #include "TimeMgr.h"
-#include "Com_Animator.h"
+#include "Com_Animator2D.h"
 
 namespace mh
 {
@@ -24,43 +24,39 @@ namespace mh
 
 	void Script_Player::Update()
 	{
-		Com_Transform& tr = GetOwner()->GetTransform();
+		Com_Transform* tr = GetOwner()->GetComponent<Com_Transform>();
 
 		if (InputMgr::GetKey(eKeyCode::RIGHT))
 		{
-			float3 pos = tr.GetPosition();
+			float3 pos = tr->GetRelativePos();
 			pos.x += 60.0f * TimeMgr::DeltaTime();
-			tr.SetPosition(pos);
+			tr->SetRelativePos(pos);
 		}
 		if (InputMgr::GetKey(eKeyCode::LEFT))
 		{
-			float3 pos = tr.GetPosition();
+			float3 pos = tr->GetRelativePos();
 			pos.x -= 60.0f * TimeMgr::DeltaTime();
-			tr.SetPosition(pos);
+			tr->SetRelativePos(pos);
 		}
 
 		if (InputMgr::GetKey(eKeyCode::DOWN))
 		{
-			float3 pos = tr.GetRotation();
-			pos.y -= 60.0f * TimeMgr::DeltaTime();
-			tr.SetRotation(pos);
+			float rotY = tr->GetRelativeRotY();
+			rotY -= 60.0f * TimeMgr::DeltaTime();
+			tr->SetRelativeRotY(rotY);
 		}
 		if (InputMgr::GetKey(eKeyCode::UP))
 		{
-			float3 pos = tr.GetRotation();
-			pos.y += 60.0f * TimeMgr::DeltaTime();
-			tr.SetRotation(pos);
+			float rotY = tr->GetRelativeRotY();
+			rotY += 60.0f * TimeMgr::DeltaTime();
+			tr->SetRelativeRotY(rotY);
 		}
 
-		Com_Animator* animator = GetOwner()->GetComponent<Com_Animator>();
+		Com_Animator2D* animator = GetOwner()->GetComponent<Com_Animator2D>();
 		if (InputMgr::GetKey(eKeyCode::N_1))
 		{
 			animator->Play("MoveDown");
 		}
-	}
-
-	void Script_Player::Render()
-	{
 	}
 
 	void Script_Player::OnCollisionEnter(ICollider2D* _collider)

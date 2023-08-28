@@ -7,6 +7,8 @@
 
 namespace mh
 {
+	using namespace mh::define;
+
 	StructBuffer::StructBuffer()
 		: GPUBuffer(eBufferType::Struct)
 		, mSBufferDesc()
@@ -63,7 +65,7 @@ namespace mh
 
 	StructBuffer::~StructBuffer()
 	{
-		UnBind();
+		UnBindData();
 	}
 
 
@@ -91,7 +93,7 @@ namespace mh
 		}
 
 		//재할당 하기 전 바인딩된 리소스가 있다면 unbind
-		UnBind();
+		UnBindData();
 
 		//상수버퍼와는 다르게 버퍼 재할당이 가능함. 먼저 기존 버퍼의 할당을 해제한다.(ComPtr을 통해 관리가 이루어지므로 nullptr로 바꿔주면 됨.)
 		mElementStride = (uint)_uElemStride;
@@ -118,7 +120,6 @@ namespace mh
 				Data.SysMemPitch = mElementStride * (uint)_uElemCount;
 				Data.SysMemSlicePitch = mBufferDesc.StructureByteStride;
 				pData = &Data;
-				mCurBoundView = eBufferViewType::SRV;
 			}
 
 
@@ -176,7 +177,7 @@ namespace mh
 
 		//g_arrSBufferShareData의 자신의 인덱스에 해당하는 위치에 이번에 업데이트된 구조체의 갯수를 삽입
 		//상수 버퍼의 바인딩은 BindData()를 하는 시점에 해준다.
-		SBufferCB cb = {};
+		tCB_SBufferCount cb = {};
 		cb.SBufferDataCount = mElementCount;
 
 
@@ -297,7 +298,7 @@ namespace mh
 
 	void StructBuffer::BindDataSRV(int _SRVSlot, eShaderStageFlag_ _stageFlag)
 	{
-		UnBind();
+		UnBindData();
 
 		mCurBoundView = eBufferViewType::SRV;
 
@@ -305,11 +306,12 @@ namespace mh
 		{
 			_SRVSlot = (int)mSBufferDesc.REGISLOT_t_SRV;
 		}
+
 		mCurBoundRegister = _SRVSlot;
 
 		if (eShaderStageFlag::NONE == _stageFlag)
 		{
-			_stageFlag = mSBufferDesc.TargetStage;
+			_stageFlag = mSBufferDesc.TargetStageSRV;
 		}
 
 		
@@ -354,7 +356,7 @@ namespace mh
 		//읽기 쓰기 다 가능한 상태가 아닐경우 assert
 		MH_ASSERT(eStructBufferType::READ_WRITE == mSBufferDesc.eSBufferType);
 
-		UnBind();
+		UnBindData();
 
 		mCurBoundView = eBufferViewType::UAV;
 
@@ -364,7 +366,7 @@ namespace mh
 		}
 		mCurBoundRegister = _UAVSlot;
 
-		//mSBufferDesc.TargetStage |= eShaderStageFlag::CS;
+		//mSBufferDesc.TargetStageSRV |= eShaderStageFlag::CS;
 		BindConstBuffer(eShaderStageFlag::CS);
 
 		uint Offset = -1;
@@ -399,7 +401,7 @@ namespace mh
 			mBufferDesc.BindFlags = D3D11_BIND_UNORDERED_ACCESS | D3D11_BIND_SHADER_RESOURCE;
 
 			//READ_WRITE로 사용하겠다는 건 컴퓨트쉐이더를 사용하겠다는 의미 -> 실수 방지를 위해 플래그에 컴퓨트쉐이더 추가
-			mSBufferDesc.TargetStage |= eShaderStageFlag::CS;
+			mSBufferDesc.TargetStageSRV |= eShaderStageFlag::CS;
 
 			break;
 		default:
@@ -415,9 +417,9 @@ namespace mh
 	{
 		//구조체 정보를 담은 상수버퍼에 바인딩한 구조체 갯수를 넣어서 전달
 		//상수버퍼의 주소는 한번 실행되면 변하지 않으므로 static, const 형태로 선언.
-		static ConstBuffer* pStructCBuffer = RenderMgr::GetConstBuffer(eCBType::SBuffer);
+		static ConstBuffer* pStructCBuffer = RenderMgr::GetConstBuffer(eCBType::SBufferCount);
 
-		SBufferCB cb = {};
+		tCB_SBufferCount cb = {};
 		cb.SBufferDataCount = mElementCount;
 
 		pStructCBuffer->SetData(&cb);
@@ -478,7 +480,7 @@ namespace mh
 		return bResult;
 	}
 
-	void StructBuffer::UnBind()
+	void StructBuffer::UnBindData()
 	{
 		switch (mCurBoundView)
 		{
@@ -490,32 +492,32 @@ namespace mh
 			auto pContext = GPUMgr::Context();
 
 			ID3D11ShaderResourceView* pView = nullptr;
-			if (eShaderStageFlag::VS & mSBufferDesc.TargetStage)
+			if (eShaderStageFlag::VS & mSBufferDesc.TargetStageSRV)
 			{
 				pContext->VSSetShaderResources(mCurBoundRegister, 1, &pView);
 			}
 
-			if (eShaderStageFlag::HS & mSBufferDesc.TargetStage)
+			if (eShaderStageFlag::HS & mSBufferDesc.TargetStageSRV)
 			{
 				pContext->HSSetShaderResources(mCurBoundRegister, 1, &pView);
 			}
 
-			if (eShaderStageFlag::DS & mSBufferDesc.TargetStage)
+			if (eShaderStageFlag::DS & mSBufferDesc.TargetStageSRV)
 			{
 				pContext->DSSetShaderResources(mCurBoundRegister, 1, &pView);
 			}
 
-			if (eShaderStageFlag::GS & mSBufferDesc.TargetStage)
+			if (eShaderStageFlag::GS & mSBufferDesc.TargetStageSRV)
 			{
 				pContext->GSSetShaderResources(mCurBoundRegister, 1, &pView);
 			}
 
-			if (eShaderStageFlag::PS & mSBufferDesc.TargetStage)
+			if (eShaderStageFlag::PS & mSBufferDesc.TargetStageSRV)
 			{
 				pContext->PSSetShaderResources(mCurBoundRegister, 1, &pView);
 			}
 
-			if (eShaderStageFlag::CS & mSBufferDesc.TargetStage)
+			if (eShaderStageFlag::CS & mSBufferDesc.TargetStageSRV)
 			{
 				pContext->CSSetShaderResources(mCurBoundRegister, 1, &pView);
 			}

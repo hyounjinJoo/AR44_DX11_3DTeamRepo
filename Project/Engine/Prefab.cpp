@@ -12,7 +12,7 @@ namespace mh
 		STRKEY_DECLARE(mPrefab);
 	}
 
-	namespace stdfs = std::filesystem;
+	
 
 	Prefab::Prefab()
 		: IRes(eResourceType::Prefab)
@@ -38,17 +38,17 @@ namespace mh
 
 		//키 값을 json을 제외한 파일명으로 설정
 		{
-			stdfs::path strKey = _fileName;
+			std::fs::path strKey = _fileName;
 			strKey.replace_extension("");
 			mPrefab->SetKey(strKey.string());
 		}
 
 		//혹시나 경로에 해당하는 폴더 경로가 없을 시에 throw error가 돼서 프로그램이 강제 종료되므로
 		//폴더 경로를 직접 만들어준다.
-		stdfs::path SavePath = PathMgr::GetRelResourcePath(GetResType());
-		if (false == stdfs::exists(SavePath))
+		std::fs::path SavePath = PathMgr::GetContentPathRelative(GetResType());
+		if (false == std::fs::exists(SavePath))
 		{
-			if (false == stdfs::create_directories(SavePath))
+			if (false == std::fs::create_directories(SavePath))
 			{
 				ERROR_MESSAGE_W(L"파일 저장을 위한 디렉토리 생성에 실패했습니다.");
 				return eResult::Fail_OpenFile;
@@ -93,11 +93,11 @@ namespace mh
 			return eResult::Fail;
 		}
 
-		stdfs::path LoadPath = PathMgr::GetRelResourcePath(GetResType());
+		std::fs::path LoadPath = PathMgr::GetContentPathRelative(GetResType());
 		LoadPath /= _FilePath;
 		LoadPath.replace_extension(".json");
 
-		if (false == stdfs::exists(LoadPath))
+		if (false == std::fs::exists(LoadPath))
 		{
 			ERROR_MESSAGE_W(L"로드할 파일을 찾지 못했습니다.");
 			return eResult::Fail_OpenFile;

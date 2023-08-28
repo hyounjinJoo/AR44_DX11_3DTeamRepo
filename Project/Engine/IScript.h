@@ -13,10 +13,9 @@ namespace mh
 		IScript(const IScript& _other) = default;
 		virtual ~IScript();
 
-		virtual void Init();
-		virtual void Update();
-		virtual void FixedUpdate();
-		virtual void Render();
+		virtual void Init() override {};
+		virtual void Update() override {};
+		virtual void FixedUpdate() final {};
 
 		virtual void OnCollisionEnter(ICollider2D* _collider) {};
 		virtual void OnCollisionStay(ICollider2D* _collider) {};

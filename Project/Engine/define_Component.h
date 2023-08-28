@@ -5,8 +5,8 @@
 
 namespace mh::define
 {
-	STRKEY ComponentPrefix = "Com_";
 
+	STRKEY ComponentPrefix = "Com_";
 	enum class eComponentType
 	{
 		UNKNOWN = -1,
@@ -14,68 +14,60 @@ namespace mh::define
 		Transform,
 		Collider,
 		Animator,
-		Light,
+		Light,	
 		Camera,
+		Renderer,
 
 		AudioSource,
 		AudioListener,
 
-		Renderer,
-
 		Scripts,
 
 		END
-		
-		////Transform, // 위치 데이터 수정하는 컴포넌트
-		//Com_Camera,
-		//Mesh,
-		//Collider,
-		////Collider2,
-		//Renderer,
-		////Com_Renderer_Mesh,
-		////Com_Renderer_Sprite,
-		//Com_Animator,
-		//Com_Renderer_ParticleSystem,
-		//Com_AudioListener,
-		//Com_AudioSource,
-		//Com_Light,
-		//UI,
-		////FadeOut,FadeIn
-		//IScript,
-		//End,
-
 	};
 
-	STRKEY ArrComName[(int)eComponentType::END] =
+	namespace strKey
 	{
-		"Transform",
-		"Collider",
-		"Animator",
-		"Light",
-		"Camera",
-
-		"AudioSource",
-		"AudioListener",
-
-		"Renderer",
-
-		"Scripts"
-	};
-
-
-	namespace strKey::Default
-	{
-		namespace com
+		STRKEY ArrComName[(int)eComponentType::END] =
 		{
-			STRKEY_DECLARE(Com_Animator);
-			STRKEY_DECLARE(Com_AudioListener);
-			STRKEY_DECLARE(Com_AudioSource);
-			STRKEY_DECLARE(Com_Camera);
-			STRKEY_DECLARE(Com_Light);
-			STRKEY_DECLARE(Com_Renderer_Mesh);
-			STRKEY_DECLARE(Com_Renderer_ParticleSystem);
-			STRKEY_DECLARE(Com_Renderer_Sprite);
-			STRKEY_DECLARE(Com_Transform);
+			"Transform",
+			"Collider",
+			"Animator",
+			"Light",
+			"Camera",
+
+			"AudioSource",
+			"AudioListener",
+
+			"Renderer",
+
+			"Scripts"
+		};
+
+		namespace Default
+		{
+			namespace com
+			{
+				STRKEY_DECLARE(Com_DummyTransform);
+				STRKEY_DECLARE(Com_Transform);
+
+				STRKEY_DECLARE(Com_Animator2D);
+				STRKEY_DECLARE(Com_Animator3D);
+				STRKEY_DECLARE(Com_DummyAnimator);
+
+				STRKEY_DECLARE(Com_AudioListener);
+				STRKEY_DECLARE(Com_AudioSource);
+				STRKEY_DECLARE(Com_Camera);
+				STRKEY_DECLARE(Com_Light3D);
+				STRKEY_DECLARE(Com_Renderer_Mesh);
+				STRKEY_DECLARE(Com_Renderer_3DAnimMesh);
+				STRKEY_DECLARE(Com_Renderer_ParticleSystem);
+				STRKEY_DECLARE(Com_Renderer_Sprite);
+				
+
+				STRKEY_DECLARE(Script_Player);
+				STRKEY_DECLARE(Script_Camera);
+			}
 		}
 	}
 }

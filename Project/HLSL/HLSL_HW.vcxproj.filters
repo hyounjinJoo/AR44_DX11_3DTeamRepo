@@ -1,0 +1,54 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Engine">
+      <UniqueIdentifier>{19f8e468-06e3-47f2-b64a-78dd6cb8c71d}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="SH_Blur.hlsli">
+      <Filter>Engine</Filter>
+    </None>
+    <None Include="SH_ConstBuffer.hlsli">
+      <Filter>Engine</Filter>
+    </None>
+    <None Include="SH_Func.hlsli">
+      <Filter>Engine</Filter>
+    </None>
+    <None Include="SH_Globals.hlsli">
+      <Filter>Engine</Filter>
+    </None>
+    <None Include="SH_Light.hlsli">
+      <Filter>Engine</Filter>
+    </None>
+    <None Include="SH_Resource.hlsli">
+      <Filter>Engine</Filter>
+    </None>
+    <None Include="SH_Sampler.hlsli">
+      <Filter>Engine</Filter>
+    </None>
+    <None Include="SH_CommonStruct.hlsli">
+      <Filter>Engine</Filter>
+    </None>
+    <None Include="SH_Common.hlsli">
+      <Filter>Engine</Filter>
+    </None>
+    <None Include="SH_Func_Blur.hlsli">
+      <Filter>Engine</Filter>
+    </None>
+    <None Include="SH_Func_DecodeColor.hlsli">
+      <Filter>Engine</Filter>
+    </None>
+    <None Include="SH_Func_Light.hlsli">
+      <Filter>Engine</Filter>
+    </None>
+    <None Include="SH_Functions.hlsli">
+      <Filter>Engine</Filter>
+    </None>
+    <None Include="HW_Example.hlsli" />
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="_0VS_Example.hlsl" />
+    <FxCompile Include="_4PS_Example.hlsl" />
+  </ItemGroup>
+</Project>

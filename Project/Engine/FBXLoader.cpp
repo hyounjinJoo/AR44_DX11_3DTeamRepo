@@ -7,10 +7,13 @@
 #include "Material.h"
 #include "define_Util.h"
 
+
+
+using namespace fbxsdk;
 namespace mh
 {
-	using namespace fbxsdk;
-	namespace stdfs = std::filesystem;
+	
+	
 
 	FBXLoader::FBXLoader()
 		: mManager(NULL)
@@ -57,26 +60,28 @@ namespace mh
 			assert(NULL);
 	}
 
-	void FBXLoader::LoadFbx(const std::wstring& _strPath)
+	eResult FBXLoader::LoadFbx(const std::fs::path& _strPath)
 	{
 		mContainers.clear();
 
 		mImporter = FbxImporter::Create(mManager, "");
 
-		//std::wstring str = wstring_convert<codecvt_utf8<wchar_t>>().from_bytes(strName.c_str());
-		std::string strPath = StringConv::ConvertUnicodeToUTF8(_strPath);
-
-		if (!mImporter->Initialize(strPath.c_str(), -1, mManager->GetIOSettings()))
-			assert(nullptr);
+		if (false == mImporter->Initialize(_strPath.string().c_str(), -1, mManager->GetIOSettings()))
+		{
+			ERROR_MESSAGE_W(L"FBX 로더 초기화 실패");
+			return eResult::Fail_OpenFile;
+		}
 
 		mImporter->Import(mScene);
 
-		/*FbxAxisSystem originAxis = FbxAxisSystem::eMax;
-		originAxis = mScene->GetGlobalSettings().GetAxisSystem();
-		FbxAxisSystem DesireAxis = FbxAxisSystem::DirectX;
-		DesireAxis.ConvertScene(mScene);
-		originAxis = mScene->GetGlobalSettings().GetAxisSystem();*/
+		//Former
+		//FbxAxisSystem originAxis = FbxAxisSystem::eMax;
+		//originAxis = mScene->GetGlobalSettings().GetAxisSystem();
+		//FbxAxisSystem DesireAxis = FbxAxisSystem::DirectX;
+		//DesireAxis.ConvertScene(mScene);
+		//originAxis = mScene->GetGlobalSettings().GetAxisSystem();
 
+		//Latter
 		mScene->GetGlobalSettings().SetAxisSystem(FbxAxisSystem::Max);
 
 		// Bone 정보 읽기
@@ -100,8 +105,25 @@ namespace mh
 		LoadTexture();
 
 		// 필요한 메테리얼 생성
-		CreateMaterial();
+		CreateMaterial(_strPath);
+
+		return eResult::Success;
 	}
+
+	MATRIX FBXLoader::GetMatrixFromFbxMatrix(fbxsdk::FbxAMatrix& _mat)
+	{
+		MATRIX mat;
+		for (int i = 0; i < 4; ++i)
+		{
+			for (int j = 0; j < 4; ++j)
+			{
+				mat.m[i][j] = (float)_mat.Get(i, j);
+			}
+		}
+		return mat;
+	}
+
+
 
 	void FBXLoader::LoadMeshDataFromNode(FbxNode* _pNode)
 	{
@@ -140,12 +162,12 @@ namespace mh
 
 	void FBXLoader::LoadMesh(FbxMesh* _pFbxMesh)
 	{
-		mContainers.push_back(tContainer{});
-		tContainer& Container = mContainers[mContainers.size() - 1];
+		mContainers.push_back(tFBXContainer{});
+		tFBXContainer& Container = mContainers[mContainers.size() - 1];
 
 		std::string strName = _pFbxMesh->GetName();
 
-		Container.strName = StringConv::ConvertUTF8ToUnicode(strName);
+		Container.strName = strName;
 
 		int iVtxCnt = _pFbxMesh->GetControlPointsCount();
 		Container.Resize(iVtxCnt);
@@ -185,9 +207,11 @@ namespace mh
 				int iIdx = _pFbxMesh->GetPolygonVertex(i, j);
 				arrIdx[j] = iIdx;
 
+				//노말 정보를 받아오기
 				GetTangent(_pFbxMesh, &Container, iIdx, iVtxOrder);
 				GetBinormal(_pFbxMesh, &Container, iIdx, iVtxOrder);
 				GetNormal(_pFbxMesh, &Container, iIdx, iVtxOrder);
+
 				GetUV(_pFbxMesh, &Container, iIdx, _pFbxMesh->GetTextureUVIndex(i, j));
 
 				++iVtxOrder;
@@ -207,7 +231,7 @@ namespace mh
 
 		std::string str = _pMtrlSur->GetName();
 		
-		tMtrlInfo.strMtrlName = StringConv::ConvertUTF8ToUnicode(str);
+		tMtrlInfo.strMtrlName = str;
 
 		// Diff
 		tMtrlInfo.tMtrl.vDiff = GetMtrlData(_pMtrlSur
@@ -240,13 +264,15 @@ namespace mh
 	}
 
 	void FBXLoader::GetTangent(FbxMesh* _pMesh
-		, tContainer* _pContainer
+		, tFBXContainer* _pContainer
 		, int _iIdx		 /*해당 정점의 인덱스*/
 		, int _iVtxOrder /*폴리곤 단위로 접근하는 순서*/)
 	{
+
 		int iTangentCnt = _pMesh->GetElementTangentCount();
-		if (1 != iTangentCnt)
-			assert(NULL); // 정점 1개가 포함하는 탄젠트 정보가 2개 이상이다.
+		//MH_ASSERT(1 == iTangentCnt);// 정점 1개가 포함하는 탄젠트 정보가 2개 이상이다.
+		if (iTangentCnt < 1)
+			return;
 
 		// 탄젠트 data 의 시작 주소
 		FbxGeometryElementTangent* pTangent = _pMesh->GetElementTangent();
@@ -274,11 +300,13 @@ namespace mh
 		_pContainer->vecTangent[_iIdx].z = (float)vTangent.mData[1];
 	}
 
-	void FBXLoader::GetBinormal(FbxMesh* _pMesh, tContainer* _pContainer, int _iIdx, int _iVtxOrder)
+	void FBXLoader::GetBinormal(FbxMesh* _pMesh, tFBXContainer* _pContainer, int _iIdx, int _iVtxOrder)
 	{
 		int iBinormalCnt = _pMesh->GetElementBinormalCount();
-		if (1 != iBinormalCnt)
-			assert(NULL); // 정점 1개가 포함하는 종법선 정보가 2개 이상이다.
+		//if (1 != iBinormalCnt)
+		//	assert(NULL); // 정점 1개가 포함하는 종법선 정보가 2개 이상이다.
+		if (iBinormalCnt < 1)
+			return;
 
 		// 종법선 data 의 시작 주소
 		FbxGeometryElementBinormal* pBinormal = _pMesh->GetElementBinormal();
@@ -306,11 +334,14 @@ namespace mh
 		_pContainer->vecBinormal[_iIdx].z = (float)vBinormal.mData[1];
 	}
 
-	void FBXLoader::GetNormal(FbxMesh* _pMesh, tContainer* _pContainer, int _iIdx, int _iVtxOrder)
+	void FBXLoader::GetNormal(FbxMesh* _pMesh, tFBXContainer* _pContainer, int _iIdx, int _iVtxOrder)
 	{
 		int iNormalCnt = _pMesh->GetElementNormalCount();
-		if (1 != iNormalCnt)
-			assert(NULL); // 정점 1개가 포함하는 종법선 정보가 2개 이상이다.
+
+		//if (1 != iNormalCnt)
+		//	assert(NULL); // 정점 1개가 포함하는 종법선 정보가 2개 이상이다.
+		if (iNormalCnt < 1)
+			return;
 
 		// 종법선 data 의 시작 주소
 		FbxGeometryElementNormal* pNormal = _pMesh->GetElementNormal();
@@ -338,7 +369,7 @@ namespace mh
 		_pContainer->vecNormal[_iIdx].z = (float)vNormal.mData[1];
 	}
 
-	void FBXLoader::GetUV(FbxMesh* _pMesh, tContainer* _pContainer, int _iIdx, int _iUVIndex)
+	void FBXLoader::GetUV(FbxMesh* _pMesh, tFBXContainer* _pContainer, int _iIdx, int _iUVIndex)
 	{
 		FbxGeometryElementUV* pUV = _pMesh->GetElementUV();
 
@@ -374,9 +405,9 @@ namespace mh
 		return vRetVal;
 	}
 
-	std::wstring FBXLoader::GetMtrlTextureName(FbxSurfaceMaterial* _pSurface, const char* _pMtrlProperty)
+	std::string FBXLoader::GetMtrlTextureName(FbxSurfaceMaterial* _pSurface, const char* _pMtrlProperty)
 	{
-		std::string strName;
+		std::string retStr;
 
 		FbxProperty TextureProperty = _pSurface->FindProperty(_pMtrlProperty);
 		if (TextureProperty.IsValid())
@@ -386,114 +417,140 @@ namespace mh
 			if (1 <= iCnt)
 			{
 				FbxFileTexture* pFbxTex = TextureProperty.GetSrcObject<FbxFileTexture>(0);
-				if (NULL != pFbxTex)
-					strName = pFbxTex->GetFileName();
+				if (nullptr != pFbxTex)
+				{
+					std::fs::path fullPath = pFbxTex->GetFileName();
+
+					//절대 주소가 있을 경우 상대 주소를 만들어서 저장
+					if (std::fs::exists(fullPath))
+					{
+						static std::fs::path resPath = PathMgr::GetContentPathAbsolute(eResourceType::MeshData);
+
+						fullPath = fullPath.lexically_relative(resPath);
+
+						retStr = fullPath.string();
+					}
+				}
 			}
 		}
-		return StringConv::ConvertUTF8ToUnicode(strName);
+
+		return retStr;
 	}
 
 	void FBXLoader::LoadTexture()
 	{
-		const stdfs::path& path_content = PathMgr::GetRelResourcePath(eResourceType::Texture);
+		//일단 텍스처를 Texture 컨텐츠 폴더로 옮겨준다.
+		const std::fs::path& fbxPath = PathMgr::GetContentPathRelative(eResourceType::MeshData);
+		const std::fs::path& texPath = PathMgr::GetContentPathRelative(eResourceType::Texture);
 
-		//Todo: FBXTex STRKEY로 변경
-		stdfs::path path_fbx_texture = path_content / "FBXTex";
-		if (false == exists(path_fbx_texture))
-		{
-			create_directory(path_fbx_texture);
-		}
+		//텍스처 폴더 발견 시 최초 한번 Texture 폴더로 이동시키기 위한 코드
+		std::fs::path srcPathToDelete{};
+		auto CopyAndLoadTex = 
+			[&](std::string& _TextureRelativePath)->void
+			{
+				//비어있을경우 return
+				if (_TextureRelativePath.empty())
+					return;
 
-		stdfs::path path_origin;
-		stdfs::path path_filename;
-		stdfs::path path_dest;
+				//이동 원본 경로와 목표 경로를 만들어준다.
+				std::fs::path srcPath = fbxPath / _TextureRelativePath;
+				std::fs::path destPath = texPath / _TextureRelativePath;
 
+				//src에 파일이 있는데 dest에 없을 경우 복사
+				if (std::fs::exists(srcPath) && false == std::fs::exists(destPath))
+				{
+					std::fs::path destDir = destPath;
+					destDir.remove_filename();
+					if (false == std::fs::exists(destDir))
+					{
+						std::fs::create_directories(destDir);
+					}
+
+					//파일을 복사하고 
+					std::fs::copy(srcPath, destPath);
+				}
+
+				//바로 Texture Load. 로드 실패 시 false 반환
+				if (nullptr == ResMgr::Load<Texture>(_TextureRelativePath))
+				{
+					_TextureRelativePath.clear();
+					return;
+				}
+				else if (srcPathToDelete.empty())
+				{
+					srcPathToDelete = srcPath;
+					srcPathToDelete.remove_filename();
+				}
+			};
+
+		//순회를 돌며 텍스처 확인 후 이동시키고 로드까지 완료시킨다.
 		for (UINT i = 0; i < mContainers.size(); ++i)
 		{
 			for (UINT j = 0; j < mContainers[i].vecMtrl.size(); ++j)
 			{
-				std::vector<stdfs::path> vecPath;
-				vecPath.push_back(mContainers[i].vecMtrl[j].strDiff.c_str());
-				vecPath.push_back(mContainers[i].vecMtrl[j].strNormal.c_str());
-				vecPath.push_back(mContainers[i].vecMtrl[j].strSpec.c_str());
-				vecPath.push_back(mContainers[i].vecMtrl[j].strEmis.c_str());
-
-				for (size_t k = 0; k < vecPath.size(); ++k)
-				{
-					if (vecPath[k].filename().empty())
-						continue;
-
-					path_origin = vecPath[k];
-					path_filename = vecPath[k].filename();
-					path_dest = path_fbx_texture / path_filename.wstring();
-
-					if (false == exists(path_dest))
-					{
-						copy(path_origin, path_dest);
-					}
-
-					stdfs::path loadPath = "FBXTex";
-					loadPath /= path_filename;
-					ResMgr::Load<Texture>(loadPath);
-
-					switch (k)
-					{
-					case 0: mContainers[i].vecMtrl[j].strDiff = path_dest; break;
-					case 1: mContainers[i].vecMtrl[j].strNormal = path_dest; break;
-					case 2: mContainers[i].vecMtrl[j].strSpec = path_dest; break;
-					case 3: mContainers[i].vecMtrl[j].strEmis = path_dest; break;
-					}
-				}
+				CopyAndLoadTex(mContainers[i].vecMtrl[j].strDiff);
+				CopyAndLoadTex(mContainers[i].vecMtrl[j].strNormal);
+				CopyAndLoadTex(mContainers[i].vecMtrl[j].strSpec);
+				CopyAndLoadTex(mContainers[i].vecMtrl[j].strEmis);
 			}
-			path_origin = path_origin.parent_path();
-			remove_all(path_origin);
+		}
+		
+		//순회 다돌았는데 원본 폴더 경로 있으면 제거
+		if (std::fs::exists(srcPathToDelete))
+		{
+			std::fs::remove_all(srcPathToDelete);
 		}
 	}
 
-	void FBXLoader::CreateMaterial()
+	void FBXLoader::CreateMaterial(const std::filesystem::path& _strPath)
 	{
-		std::wstring strMtrlName;
-		std::wstring strPath;
+		//std::string strMtrlKey;
+		//std::string strPath;
 
 		for (UINT i = 0; i < mContainers.size(); ++i)
 		{
 			for (UINT j = 0; j < mContainers[i].vecMtrl.size(); ++j)
 			{
-				// Material 이름짓기
-				strMtrlName = mContainers[i].vecMtrl[j].strMtrlName;
-				if (strMtrlName.empty())
-					strMtrlName = stdfs::path(mContainers[i].vecMtrl[j].strDiff).stem();
+				std::fs::path strMtrlKey = mContainers[i].vecMtrl[j].strMtrlName;
+				if (strMtrlKey.empty())
+				{
+					//파일 이름에서 확장자 제거하고 이름만 받아옴
+					strMtrlKey = _strPath.stem();
 
-				strPath = L"material\\";
-				strPath += strMtrlName + L".mtrl";
+					//번호 붙여줌
+					strMtrlKey += "_Mtrl";
+					strMtrlKey += std::to_string(j);
+				}
+				
+				//.json 확장자 붙여 줌
+				strMtrlKey.replace_extension(strKey::Ext_Material);
+
+				//strPath = "material\\";
+				//strPath += strMtrlKey + ".mtrl";
 
 				// 재질 이름
-				mContainers[i].vecMtrl[j].strMtrlName = strPath;
+				mContainers[i].vecMtrl[j].strMtrlName = strMtrlKey.string();
 
-				std::string strName = StringConv::ConvertUnicodeToUTF8(strPath);
+				//std::string strName = strPath;
 
 				// 이미 로딩된 재질이면 로딩된 것을 사용
-				std::shared_ptr<Material> pMaterial = ResMgr::Find<Material>(strName);
+				std::shared_ptr<Material> pMaterial = ResMgr::Find<Material>(mContainers[i].vecMtrl[j].strMtrlName);
 				if (nullptr != pMaterial)
 					continue;
 
 				pMaterial = std::make_shared<Material>();
 
 				// 상대경로가 곧 키
-				pMaterial->SetKey(strName);
+				pMaterial->SetKey(mContainers[i].vecMtrl[j].strMtrlName);
 
+
+				//일단 기본 설정은 Deffered Shader 적용하는 걸로. 나중에 바꿀 것
 				pMaterial->SetRenderingMode(eRenderingMode::DefferdOpaque);
-
 				pMaterial->SetShader(ResMgr::Find<GraphicsShader>(strKey::Default::shader::graphics::DefferedShader));
 
 				
-				const stdfs::path& TexPath = PathMgr::GetRelResourcePath(eResourceType::Texture);
 				{
-					stdfs::path strTexKey = StringConv::ConvertUnicodeToUTF8(mContainers[i].vecMtrl[j].strDiff);
-					std::string relPath = strTexKey.lexically_relative(TexPath).string();
-
-					//TODO: 여기 지저분한거 수정
-					std::shared_ptr<Texture> pTex = ResMgr::Find<Texture>(relPath);
+					std::shared_ptr<Texture> pTex = ResMgr::Load<Texture>(mContainers[i].vecMtrl[j].strDiff);
 					if (nullptr != pTex)
 					{
 						pMaterial->SetTexture(eTextureSlot::Albedo, pTex);
@@ -502,20 +559,15 @@ namespace mh
 
 					
 				{
-					stdfs::path strTexKey = StringConv::ConvertUnicodeToUTF8(mContainers[i].vecMtrl[j].strNormal);
-					std::string relPath = strTexKey.lexically_relative(TexPath).string();
-					std::shared_ptr<Texture> pTex = ResMgr::Find<Texture>(relPath);
+					std::shared_ptr<Texture> pTex = ResMgr::Load<Texture>(mContainers[i].vecMtrl[j].strNormal);
 					if (nullptr != pTex)
 					{
 						pMaterial->SetTexture(eTextureSlot::Normal, pTex);
-
 					}
 				}
 
 				{
-					stdfs::path strTexKey = StringConv::ConvertUnicodeToUTF8(mContainers[i].vecMtrl[j].strSpec);
-					std::string relPath = strTexKey.lexically_relative(TexPath).string();
-					std::shared_ptr<Texture> pTex = ResMgr::Find<Texture>(relPath);
+					std::shared_ptr<Texture> pTex = ResMgr::Load<Texture>(mContainers[i].vecMtrl[j].strSpec);
 					if (nullptr != pTex)
 					{
 						pMaterial->SetTexture(eTextureSlot::Specular, pTex);
@@ -523,9 +575,7 @@ namespace mh
 				}
 
 				{
-					stdfs::path strTexKey = StringConv::ConvertUnicodeToUTF8(mContainers[i].vecMtrl[j].strEmis);
-					std::string relPath = strTexKey.lexically_relative(TexPath).string();
-					std::shared_ptr<Texture> pTex = ResMgr::Find<Texture>(relPath);
+					std::shared_ptr<Texture> pTex = ResMgr::Find<Texture>(mContainers[i].vecMtrl[j].strEmis);
 					if (nullptr != pTex)
 					{
 						pMaterial->SetTexture(eTextureSlot::Emissive, pTex);
@@ -540,8 +590,15 @@ namespace mh
 					, mContainers[i].vecMtrl[j].tMtrl.vAmb
 					, mContainers[i].vecMtrl[j].tMtrl.vEmv);
 
+				eResult result = pMaterial->Save(strMtrlKey);
+
+				if (eResultFail(result))
+				{
+					ERROR_MESSAGE_W(L"FBX 변환 에러: Material 저장 실패");
+				}
+
 				ResMgr::Insert(pMaterial->GetKey(), pMaterial);
-				//pMaterial->Save(strPath);
+				
 			}
 		}
 	}
@@ -550,10 +607,10 @@ namespace mh
 	{
 		int iChildCount = _pNode->GetChildCount();
 
-		LoadSkeleton_Re(_pNode, 0, 0, -1);
+		LoadSkeletonRecursive(_pNode, 0, 0, -1);
 	}
 
-	void FBXLoader::LoadSkeleton_Re(FbxNode* _pNode, int _iDepth, int _iIdx, int _iParentIdx)
+	void FBXLoader::LoadSkeletonRecursive(FbxNode* _pNode, int _iDepth, int _iIdx, int _iParentIdx)
 	{
 		FbxNodeAttribute* pAttr = _pNode->GetNodeAttribute();
 
@@ -561,9 +618,7 @@ namespace mh
 		{
 			tBone* pBone = new tBone;
 
-			std::string strBoneName = _pNode->GetName();
-
-			pBone->strBoneName = StringConv::ConvertUTF8ToUnicode(strBoneName);
+			pBone->strBoneName = _pNode->GetName();
 			pBone->iDepth = _iDepth++;
 			pBone->iParentIndx = _iParentIdx;
 
@@ -573,7 +628,7 @@ namespace mh
 		int iChildCount = _pNode->GetChildCount();
 		for (int i = 0; i < iChildCount; ++i)
 		{
-			LoadSkeleton_Re(_pNode->GetChild(i), _iDepth, (int)mBones.size(), _iIdx);
+			LoadSkeletonRecursive(_pNode->GetChild(i), _iDepth, (int)mBones.size(), _iIdx);
 		}
 	}
 
@@ -595,9 +650,7 @@ namespace mh
 
 			tAnimClip* pAnimClip = new tAnimClip;
 
-			std::string strClipName = pAnimStack->GetName();
-
-			pAnimClip->strName = StringConv::ConvertUTF8ToUnicode(strClipName);
+			pAnimClip->strName = pAnimStack->GetName();
 
 			FbxTakeInfo* pTakeInfo = mScene->GetTakeInfo(pAnimStack->GetName());
 			pAnimClip->tStartTime = pTakeInfo->mLocalTimeSpan.GetStart();
@@ -605,7 +658,6 @@ namespace mh
 
 			pAnimClip->eMode = mScene->GetGlobalSettings().GetTimeMode();
 			pAnimClip->llTimeLength = pAnimClip->tEndTime.GetFrameCount(pAnimClip->eMode) - pAnimClip->tStartTime.GetFrameCount(pAnimClip->eMode);
-
 
 
 			mAnimClips.push_back(pAnimClip);
@@ -633,7 +685,7 @@ namespace mh
 		}
 	}
 
-	void FBXLoader::LoadAnimationData(FbxMesh* _pMesh, tContainer* _pContainer)
+	void FBXLoader::LoadAnimationData(FbxMesh* _pMesh, tFBXContainer* _pContainer)
 	{
 		// Animation Data 로드할 필요가 없음
 		int iSkinCount = _pMesh->GetDeformerCount(FbxDeformer::eSkin);
@@ -686,7 +738,7 @@ namespace mh
 	}
 
 
-	void FBXLoader::CheckWeightAndIndices(FbxMesh* _pMesh, tContainer* _pContainer)
+	void FBXLoader::CheckWeightAndIndices(FbxMesh* _pMesh, tFBXContainer* _pContainer)
 	{
 		std::vector<std::vector<tWeightsAndIndices>>::iterator iter = _pContainer->vecWI.begin();
 
@@ -739,7 +791,7 @@ namespace mh
 	}
 
 	void FBXLoader::LoadKeyframeTransform(FbxNode* _pNode, FbxCluster* _pCluster
-		, const FbxAMatrix& _matNodeTransform, int _iBoneIdx, tContainer* _pContainer)
+		, const FbxAMatrix& _matNodeTransform, int _iBoneIdx, tFBXContainer* _pContainer)
 	{
 		if (mAnimClips.empty())
 			return;
@@ -781,7 +833,7 @@ namespace mh
 
 	void FBXLoader::LoadOffsetMatrix(FbxCluster* _pCluster
 		, const FbxAMatrix& _matNodeTransform
-		, int _iBoneIdx, tContainer* _pContainer)
+		, int _iBoneIdx, tFBXContainer* _pContainer)
 	{
 		FbxAMatrix matClusterTrans;
 		FbxAMatrix matClusterLinkTrans;
@@ -811,7 +863,7 @@ namespace mh
 
 	void FBXLoader::LoadWeightsAndIndices(FbxCluster* _pCluster
 		, int _iBoneIdx
-		, tContainer* _pContainer)
+		, tFBXContainer* _pContainer)
 	{
 		int iIndicesCount = _pCluster->GetControlPointIndicesCount();
 
@@ -833,11 +885,9 @@ namespace mh
 
 	int FBXLoader::FindBoneIndex(const std::string& _strBoneName)
 	{
-		std::wstring strBoneName = std::wstring(_strBoneName.begin(), _strBoneName.end());
-
 		for (UINT i = 0; i < mBones.size(); ++i)
 		{
-			if (mBones[i]->strBoneName == strBoneName)
+			if (mBones[i]->strBoneName == _strBoneName)
 				return i;
 		}
 

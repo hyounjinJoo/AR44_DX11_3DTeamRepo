@@ -9,7 +9,21 @@
 
 namespace mh
 {
-	namespace stdfs = std::filesystem;
+	std::unordered_set<std::string> GraphicsShader::mSemanticNames{};
+
+	struct D3D11InputElementDescWithoutName
+	{
+		UINT SemanticIndex;
+		DXGI_FORMAT Format;
+		UINT InputSlot;
+		UINT AlignedByteOffset;
+		D3D11_INPUT_CLASSIFICATION InputSlotClass;
+		UINT InstanceDataStepRate;
+	};
+
+
+
+	
 	using namespace mh::define;
 
 	GraphicsShader::GraphicsShader()
@@ -18,8 +32,9 @@ namespace mh
 		, mTopology(D3D11_PRIMITIVE_TOPOLOGY::D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST)
 		, mRSType(eRSType::SolidBack)
 		, mDSType(eDSType::Less)
-		, mBSType(eBSType::AlphaBlend)
+		, mBSType(eBSType::Default)
 		, mErrorBlob()
+		, mbEditMode(false)
 	{
 	}
 
@@ -41,11 +56,38 @@ namespace mh
 		}
 		Json::Value& jVal = *_pJVal;
 
+		Json::Value& jsonInputLayouts = jVal[JSON_KEY(mInputLayoutDescs)];
 		//Input Layout Desc
-		Json::MHSaveVector(_pJVal, JSON_KEY_PAIR(mVecInputLayoutDesc));
+		for (size_t i = 0; i < mInputLayoutDescs.size(); ++i)
+		{
+			Json::Value InputElement{};
+
+			std::string strSemanticName;
+			if (mInputLayoutDescs[i].SemanticName)
+			{
+				strSemanticName = mInputLayoutDescs[i].SemanticName;
+			}
+			InputElement.append(strSemanticName);
+
+			D3D11InputElementDescWithoutName desc{};
+			desc.SemanticIndex = mInputLayoutDescs[i].SemanticIndex;
+			desc.Format = mInputLayoutDescs[i].Format;
+			desc.InputSlot = mInputLayoutDescs[i].InputSlot;
+			desc.AlignedByteOffset = mInputLayoutDescs[i].AlignedByteOffset;
+			desc.InputSlotClass = mInputLayoutDescs[i].InputSlotClass;
+			desc.InstanceDataStepRate = mInputLayoutDescs[i].InstanceDataStepRate;
+
+			std::string converted = Json::MH::ConvertWrite(desc);
+
+			InputElement.append(converted);
+
+			jsonInputLayouts.append(InputElement);
+		}
+
+		//Json::MH::SaveValueVector(_pJVal, JSON_KEY_PAIR(mInputLayoutDescs));
 
 		//토폴로지
-		Json::MHSaveValue(_pJVal, JSON_KEY_PAIR(mTopology));
+		Json::MH::SaveValue(_pJVal, JSON_KEY_PAIR(mTopology));
 
 		//쉐이더 파일명
 		{
@@ -57,9 +99,9 @@ namespace mh
 		}
 
 		//래스터라이저 상태
-		Json::MHSaveValue(_pJVal, JSON_KEY_PAIR(mRSType));
-		Json::MHSaveValue(_pJVal, JSON_KEY_PAIR(mDSType));
-		Json::MHSaveValue(_pJVal, JSON_KEY_PAIR(mBSType));
+		Json::MH::SaveValue(_pJVal, JSON_KEY_PAIR(mRSType));
+		Json::MH::SaveValue(_pJVal, JSON_KEY_PAIR(mDSType));
+		Json::MH::SaveValue(_pJVal, JSON_KEY_PAIR(mBSType));
 
 		return eResult::Success;
 	}
@@ -78,36 +120,117 @@ namespace mh
 		const Json::Value& jVal = *_pJVal;
 
 		//Input Layout Desc
-		mVecInputLayoutDesc = Json::MHGetJsonVector(_pJVal, JSON_KEY_PAIR(mVecInputLayoutDesc));
-
-		//토폴로지
-		Json::MHLoadValue(_pJVal, JSON_KEY_PAIR(mTopology));
-
-		//쉐이더
+		mInputLayoutDescs.clear();
+		if (jVal.isMember(JSON_KEY(mInputLayoutDescs)))
 		{
-			const std::vector<std::string>& vecStrKey = Json::MHGetJsonVectorPtr(_pJVal, JSON_KEY(mArrShaderCode));
-			for (size_t i = 0; i < vecStrKey.size(); ++i)
+			const Json::Value& jsonInputLayouts = jVal[JSON_KEY(mInputLayoutDescs)];
+
+			if (jsonInputLayouts.isArray())
 			{
-				CreateByCSO((eGSStage)i, vecStrKey[i]);
-				if ((size_t)eGSStage::END == i)
-					break;
+				for (
+					Json::ValueConstIterator iter = jsonInputLayouts.begin();
+					iter != jsonInputLayouts.end();
+					++iter
+					)
+				{
+					if (2 > iter->size())
+					{
+						NOTIFICATION_W(L"Input Layout Desc 정보가 누락되어 있습니다.");
+						return eResult::Fail_InValid;
+					}
+
+					const auto& pair = mSemanticNames.insert((*iter)[0].asString());
+
+					D3D11InputElementDescWithoutName descValue = Json::MH::ConvertRead<D3D11InputElementDescWithoutName>((*iter)[1]);
+
+					D3D11_INPUT_ELEMENT_DESC desc{};
+					desc.SemanticName = pair.first->c_str();
+					desc.SemanticIndex = descValue.SemanticIndex;
+					desc.Format = descValue.Format;
+					desc.InputSlot = descValue.InputSlot;
+					desc.AlignedByteOffset = descValue.AlignedByteOffset;
+					desc.InputSlotClass = descValue.InputSlotClass;
+					desc.InstanceDataStepRate = descValue.InstanceDataStepRate;
+
+					mInputLayoutDescs.push_back(desc);
+				}
 			}
 		}
 
+		//토폴로지
+		Json::MH::LoadValue(_pJVal, JSON_KEY_PAIR(mTopology));
+
+		//쉐이더
+		{
+			const std::vector<std::string>& vecStrKey = Json::MH::LoadPtrStrKeyVector(_pJVal, JSON_KEY_PAIR(mArrShaderCode));
+
+			//에딧 모드가 아닐 경우에만 로드
+			for (size_t i = 0; i < mArrShaderCode.size(); ++i)
+			{
+				if (false == mbEditMode && false == vecStrKey[i].empty())
+				{
+					CreateByCSO((eGSStage)i, vecStrKey[i]);
+					if ((size_t)eGSStage::END == i)
+						break;
+				}
+				else
+				{
+					mArrShaderCode[i].strKey = vecStrKey[i];
+				}
+			}
+
+		}
+
 		//RS, DS, BS
-		Json::MHLoadValue(_pJVal, JSON_KEY_PAIR(mRSType));
-		Json::MHLoadValue(_pJVal, JSON_KEY_PAIR(mDSType));
-		Json::MHLoadValue(_pJVal, JSON_KEY_PAIR(mBSType));
+		Json::MH::LoadValue(_pJVal, JSON_KEY_PAIR(mRSType));
+		Json::MH::LoadValue(_pJVal, JSON_KEY_PAIR(mDSType));
+		Json::MH::LoadValue(_pJVal, JSON_KEY_PAIR(mBSType));
+
+		return eResult::Success;
+	}
+
+	eResult GraphicsShader::Save(const std::filesystem::path& _path)
+	{
+		std::fs::path FilePath = PathMgr::GetContentPathRelative(eResourceType::GraphicsShader);
+		FilePath /= _path;
+		FilePath.replace_extension(define::strKey::Ext_ShaderSetting);
+
+		Json::Value jVal;
+		eResult result = SaveJson(&jVal);
+		if (eResultFail(result))
+			return result;
+
+		std::ofstream ofs(FilePath);
+		if (false == ofs.is_open())
+			return eResult::Fail_OpenFile;
+
+		ofs << jVal;
+
+		ofs.close();
 
 		return eResult::Success;
 	}
 
 	eResult GraphicsShader::Load(const std::filesystem::path& _path)
 	{
-		return eResult::Fail_NotImplemented;
+		std::fs::path FilePath = PathMgr::GetContentPathRelative(eResourceType::GraphicsShader);
+		FilePath /= _path;
+		FilePath.replace_extension(define::strKey::Ext_ShaderSetting);
+
+		std::ifstream ifs(FilePath);
+		if (false == ifs.is_open())
+			return eResult::Fail_OpenFile;
+
+		Json::Value jVal{};
+		ifs >> jVal;
+		ifs.close();
+
+		eResult result = LoadJson(&jVal);
+
+		return result;
 	}
 
-	eResult GraphicsShader::CreateByCompile(eGSStage _stage, const stdfs::path& _FullPath, const std::string_view _funcName)
+	eResult GraphicsShader::CreateByCompile(eGSStage _stage, const std::fs::path& _FullPath, const std::string_view _funcName)
 	{
 		mArrShaderCode[(int)_stage] = {};
 
@@ -166,14 +289,14 @@ namespace mh
 		return CreateShader(_stage, pCode, DestSize);
 	}
 
-	eResult GraphicsShader::CreateByCSO(eGSStage _stage, const stdfs::path& _FileName)
+	eResult GraphicsShader::CreateByCSO(eGSStage _stage, const std::fs::path& _FileName)
 	{
 		//CSO 파일이 있는 폴더에 접근
-		std::filesystem::path shaderBinPath = stdfs::current_path();
-		shaderBinPath /= strKey::DirName_ShaderBin;
+		std::filesystem::path shaderBinPath = std::fs::current_path();
+		shaderBinPath /= strKey::DirName_CompiledShader;
 		shaderBinPath /= _FileName;
 
-		if (false == stdfs::exists(shaderBinPath))
+		if (false == std::fs::exists(shaderBinPath))
 		{
 			return eResult::Fail_PathNotExist;
 		}
@@ -217,7 +340,7 @@ namespace mh
 		return Result;
 	}
 
-	eResult GraphicsShader::CreateInputLayout(const std::vector<D3D11_INPUT_ELEMENT_DESC>& _VecLayoutDesc)
+	eResult GraphicsShader::CreateInputLayout()
 	{
 		ID3DBlob* VSBlobData = mArrShaderCode[(int)eGSStage::VS].blob.Get();
 
@@ -226,12 +349,15 @@ namespace mh
 			ERROR_MESSAGE_W(L"정점 쉐이더가 준비되지 않아서 Input Layout을 생성할 수 없습니다.");
 			return eResult::Fail_Create;
 		}
-
-		mVecInputLayoutDesc = _VecLayoutDesc;
+		else if (mInputLayoutDescs.empty())
+		{
+			ERROR_MESSAGE_W(L"입력 레이아웃이 설정되어있지 않아 Input Layout을 생성할 수 없습니다.");
+			return eResult::Fail_Create;
+		}
 
 		if (FAILED(GPUMgr::Device()->CreateInputLayout(
-			mVecInputLayoutDesc.data(),
-			(uint)mVecInputLayoutDesc.size(),
+			mInputLayoutDescs.data(),
+			(uint)mInputLayoutDescs.size(),
 			VSBlobData->GetBufferPointer(),
 			VSBlobData->GetBufferSize(),
 			mInputLayout.ReleaseAndGetAddressOf()
@@ -245,7 +371,7 @@ namespace mh
 		return eResult::Success;
 	}
 
-	void GraphicsShader::Binds()
+	void GraphicsShader::BindData()
 	{
 		auto pContext = GPUMgr::Context();
 
@@ -263,7 +389,7 @@ namespace mh
 		ID3D11BlendState*			bs = RenderMgr::GetBlendState(mBSType).Get();
 
 		pContext->RSSetState(rs);
-		pContext->OMSetDepthStencilState(ds, 0u);
+		pContext->OMSetDepthStencilState(ds, 10u);
 
 		constexpr float blendFactor[4] = { 0.f, 0.f, 0.f, 0.f };
 		pContext->OMSetBlendState(bs, blendFactor, UINT_MAX);

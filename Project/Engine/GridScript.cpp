@@ -40,9 +40,9 @@ namespace mh
 		}
 
 		GameObject* gameObj = mCamera->GetOwner();
-		Com_Transform& TR = gameObj->GetTransform();
+		Com_Transform* TR = gameObj->GetComponent<Com_Transform>();
 		
-		float3 cameraPosition = TR.GetPosition();
+		float3 cameraPosition = TR->GetRelativePos();
 		float4 position = float4(cameraPosition.x, cameraPosition.y, cameraPosition.z, 1.0f);
 
 		float scale = mCamera->GetScale();
@@ -55,21 +55,15 @@ namespace mh
 
 		// Constant buffer
 		ConstBuffer* CB = RenderMgr::GetConstBuffer(eCBType::Grid);
-		GridCB data;
-		data.CameraPosition = position;
-		data.CameraScale = float2(scale, scale);
-		data.Resolution = resolution;
+		tCB_Grid data;
+		data.cameraPosition = position;
+		data.cameraScale = float2(scale, scale);
+		data.resolution = resolution;
 		
 		CB->SetData(&data);
 		CB->BindData(eShaderStageFlag::VS | eShaderStageFlag::PS);
  	}
 
-	void GridScript::FixedUpdate()
-	{
-	}
 
-	void GridScript::Render()
-	{
-	}
 
 }

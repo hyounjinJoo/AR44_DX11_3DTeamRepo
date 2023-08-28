@@ -18,5 +18,6 @@
   </PropertyGroup>
   <PropertyGroup>
     <ShowAllFiles>false</ShowAllFiles>
+    <RESOURCE_FILE>Engine.rc</RESOURCE_FILE>
   </PropertyGroup>
 </Project>

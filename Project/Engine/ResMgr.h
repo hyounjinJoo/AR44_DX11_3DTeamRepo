@@ -26,7 +26,7 @@ namespace mh
 {
 	using namespace mh::define;
 	using namespace mh;
-	namespace stdfs = std::filesystem;
+	
 
 	class ResMgr
 	{
@@ -54,7 +54,7 @@ namespace mh
 		static void Release();
 	
 	private:
-		static std::unordered_map<std::string, std::shared_ptr<IRes>, tUmap_StringViewHasher, std::equal_to<>> mArrRes[(int)eResourceType::End];
+		static std::unordered_map<std::string, std::shared_ptr<IRes>, tUmap_StringViewHasher, std::equal_to<>> mArrRes[(int)eResourceType::END];
 	};
 
 
@@ -96,7 +96,7 @@ namespace mh
 			return eResourceType::ComputeShader;
 		}
 		
-		return eResourceType::End;
+		return eResourceType::END;
 	}
 
 	template<typename T>
@@ -117,23 +117,22 @@ namespace mh
 		{
 			strKey = _fileName.string();
 		}
-			
 
+		std::shared_ptr<IRes> FindRes = Find(GetResType<T>(), strKey);
 
-		std::shared_ptr<T> pRes = Find<T>(strKey);
+		// 이미 해당 키로 리소스가 있다면, dynamic 캐스팅 해서 반환
+		if (FindRes)
+			return std::static_pointer_cast<T>(FindRes);
 
-		// 이미 해당 키로 리소스가 있다면, 반환
-		if (nullptr != pRes)
-			return pRes;
+		std::shared_ptr<T> NewRes = std::make_shared<T>();
 
-		pRes = std::make_shared<T>();
-
-		if (FAILED(pRes->Load(_fileName)))
+		//Load 실패 시 nullptr 반환
+		if (FAILED(NewRes->Load(_fileName)))
 			return nullptr;
 
-		Insert(strKey, pRes);
+		Insert(strKey, NewRes);
 
-		return pRes;
+		return NewRes;
 	}
 
 	template<typename T>

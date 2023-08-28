@@ -54,12 +54,12 @@ namespace mh
 
 		Json::Value& jVal = *_pJVal;
 
-		Json::MHSaveValue(_pJVal, JSON_KEY_PAIR(mType));
-		Json::MHSaveValue(_pJVal, JSON_KEY_PAIR(mSize));
-		Json::MHSaveValue(_pJVal, JSON_KEY_PAIR(mCenter));
-		Json::MHSaveValue(_pJVal, JSON_KEY_PAIR(mPosition));
-		Json::MHSaveValue(_pJVal, JSON_KEY_PAIR(mRadius));
-		Json::MHSaveValue(_pJVal, JSON_KEY_PAIR(mbTrigger));
+		Json::MH::SaveValue(_pJVal, JSON_KEY_PAIR(mType));
+		Json::MH::SaveValue(_pJVal, JSON_KEY_PAIR(mSize));
+		Json::MH::SaveValue(_pJVal, JSON_KEY_PAIR(mCenter));
+		Json::MH::SaveValue(_pJVal, JSON_KEY_PAIR(mPosition));
+		Json::MH::SaveValue(_pJVal, JSON_KEY_PAIR(mRadius));
+		Json::MH::SaveValue(_pJVal, JSON_KEY_PAIR(mbTrigger));
 
 		return eResult::Success;
 	}
@@ -79,12 +79,12 @@ namespace mh
 
 		const Json::Value& jVal = (*_pJVal);
 
-		Json::MHLoadValue(_pJVal, JSON_KEY_PAIR(mType));
-		Json::MHLoadValue(_pJVal, JSON_KEY_PAIR(mSize));
-		Json::MHLoadValue(_pJVal, JSON_KEY_PAIR(mCenter));
-		Json::MHLoadValue(_pJVal, JSON_KEY_PAIR(mPosition));
-		Json::MHLoadValue(_pJVal, JSON_KEY_PAIR(mRadius));
-		Json::MHLoadValue(_pJVal, JSON_KEY_PAIR(mbTrigger));
+		Json::MH::LoadValue(_pJVal, JSON_KEY_PAIR(mType));
+		Json::MH::LoadValue(_pJVal, JSON_KEY_PAIR(mSize));
+		Json::MH::LoadValue(_pJVal, JSON_KEY_PAIR(mCenter));
+		Json::MH::LoadValue(_pJVal, JSON_KEY_PAIR(mPosition));
+		Json::MH::LoadValue(_pJVal, JSON_KEY_PAIR(mRadius));
+		Json::MH::LoadValue(_pJVal, JSON_KEY_PAIR(mbTrigger));
 
 		mID = gColliderNumber++;
 
@@ -102,7 +102,7 @@ namespace mh
 
 	void ICollider2D::Init()
 	{
-		mTransform = &(GetOwner()->GetTransform());
+		mTransform = GetOwner()->GetComponent<Com_Transform>();
 	}
 
 	void ICollider2D::Update()
@@ -111,12 +111,12 @@ namespace mh
 
 	void ICollider2D::FixedUpdate()
 	{
-		float3 scale = mTransform->GetScale();
+		float3 scale = mTransform->GetRelativeScale();
 		scale *= float3(mSize.x, mSize.y, 1.0f);
 
-		float3 rotation = mTransform->GetRotation();
+		float3 rotation = mTransform->GetRelativeRotXYZ();
 
-		float3 position = mTransform->GetPosition();
+		float3 position = mTransform->GetRelativePos();
 		float3 colliderPos = position + float3(mCenter.x, mCenter.y, 0.0f);
 		mPosition = colliderPos;
 
@@ -141,9 +141,6 @@ namespace mh
 		RenderMgr::AddDebugMesh(meshAttribute);
 	}
 
-	void ICollider2D::Render()
-	{
-	}
 
 	void ICollider2D::OnCollisionEnter(ICollider2D* _collider)
 	{

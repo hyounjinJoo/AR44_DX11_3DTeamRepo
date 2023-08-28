@@ -34,25 +34,25 @@ namespace mh
 	void SceneMgr::Update()
 	{
 		if(mActiveScene)
-			mActiveScene->Update();
+			mActiveScene->SceneUpdate();
 	}
 
 	void SceneMgr::FixedUpdate()
 	{
 		if (mActiveScene)
-			mActiveScene->FixedUpdate();
+			mActiveScene->SceneFixedUpdate();
 	}
 
 	void SceneMgr::Render()
 	{
 		if (mActiveScene)
-			mActiveScene->Render();
+			mActiveScene->SceneRender();
 	}
 	
 	void SceneMgr::Destroy()
 	{
 		if (mActiveScene)
-			mActiveScene->Destroy();
+			mActiveScene->SceneDestroy();
 	}
 
 	void SceneMgr::Release()
@@ -106,6 +106,6 @@ namespace mh
 		//OnEnter 호출
 		mActiveScene->OnEnter();
 
-		mActiveScene->Init();
+		mActiveScene->SceneInit();
 	}
 }
