@@ -20,6 +20,8 @@ namespace mh
 
 	void IScene::SceneInit()
 	{
+		if (mbInitialized)
+			return;
 		mbInitialized = true;
 		Init();
 		for (Layer& layer : mLayers)
@@ -62,20 +64,6 @@ namespace mh
 	}
 
 
-	void IScene::MoveGameObjectLayer(const define::eLayerType _targetLayer, GameObject* _gameObj)
-	{
-		MH_ASSERT(eLayerType::None != _targetLayer && _gameObj);
-
-		eLayerType prevLayer = _gameObj->GetLayerType();
-		if (define::eLayerType::None != prevLayer)
-		{
-			GetLayer(prevLayer).RemoveGameObject(_gameObj);
-		}
-
-		//새 레이어에 넣어준다.
-		//Move이므로 초기화 함수는 호출하지 않음
-		GetLayer(_targetLayer).AddGameObject(_gameObj, false);
-	}
 
 
 

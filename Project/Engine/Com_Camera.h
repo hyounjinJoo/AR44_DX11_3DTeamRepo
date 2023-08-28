@@ -11,8 +11,9 @@ namespace  mh
 		Com_Camera();
 		virtual ~Com_Camera();
 
-		__forceinline static MATRIX& GetGpuViewMatrix() { return gView; }
-		__forceinline static MATRIX& GetGpuProjectionMatrix() { return gProjection; }
+		__forceinline static const MATRIX& GetGpuViewMatrix() { return gView; }
+		__forceinline static const MATRIX& GetGpuViewInvMatrix() { return gViewInverse; }
+		__forceinline static const MATRIX& GetGpuProjectionMatrix() { return gProjection; }
 		__forceinline static void SetGpuViewMatrix(MATRIX _view) { gView = _view; }
 		__forceinline static void SetGpuProjectionMatrix(MATRIX _projection) { gProjection = _projection; }
 
@@ -53,10 +54,11 @@ namespace  mh
 
 	private:
 		static MATRIX gView;
-		static MATRIX gInverseView;
+		static MATRIX gViewInverse;
 		static MATRIX gProjection;
 
 		MATRIX mView;
+		MATRIX mViewInverse;
 		MATRIX mProjection;
 
 		define::eProjectionType mProjType;

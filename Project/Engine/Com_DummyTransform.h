@@ -16,8 +16,7 @@ namespace mh
 
         virtual void Init() override;
         virtual void FixedUpdate() override {};
-        virtual void Render() override;
-        virtual void BindData() override {};
+        virtual void BindData() override;
 
     private:
         Com_Transform* mParentTransform;

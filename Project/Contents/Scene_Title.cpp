@@ -42,7 +42,7 @@ namespace mh
 
 		{
 			// Main Com_Camera Game Object
-			GameObject* cameraObj = EventMgr::SpawnGameObject(new GameObject, eLayerType::Com_Camera);
+			GameObject* cameraObj = EventMgr::SpawnGameObject(eLayerType::Com_Camera);
 			cameraObj->SetName("MainCamera");
 
 			Com_Transform* tr = cameraObj->AddComponent<Com_Transform>();
@@ -109,7 +109,7 @@ namespace mh
 			tr->SetRelativeScale(float3(0.5f));
 			obj->SetName("fbxTextObj");
 			obj->AddComponent<Script_Player>();
-			EventMgr::SpawnGameObject(obj, eLayerType::Player);
+			EventMgr::SpawnGameObject(eLayerType::Player, obj);
 
 			//Com_Animator3D* animator = obj->GetComponent<Com_Animator3D>();
 			//if(animator)
@@ -137,7 +137,7 @@ namespace mh
 		{
 			
 			//GameObject* directionalLight = object::Instantiate(eLayerType::Player, new GameObject);
-			GameObject* directionalLight = EventMgr::SpawnGameObject(new GameObject, eLayerType::Player);
+			GameObject* directionalLight = EventMgr::SpawnGameObject(eLayerType::Player);
 			directionalLight->SetName("directionalLight");
 
 			Com_Transform* tr = directionalLight->AddComponent<Com_Transform>();

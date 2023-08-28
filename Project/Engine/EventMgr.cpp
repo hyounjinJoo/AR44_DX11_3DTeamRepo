@@ -52,15 +52,14 @@ namespace mh
 	void EventMgr::SpawnNewGameObj(const tEvent& _event)
 	{
 		GameObject* Obj = reinterpret_cast<GameObject*>(_event.lParam);
-
-		//오브젝트가 nullptr일 경우 return
-		if (nullptr == Obj)
-			return;
-
-		//레이어가 설정되지 않았을 경우 return
 		eLayerType layerType = static_cast<eLayerType>(_event.wParam);
+
+		//오브젝트가 nullptr일 경우
+		//레이어가 설정되지 않았을 경우
+		//ASSERT
+		MH_ASSERT(eLayerType::None != layerType && Obj);
 			
-		SceneMgr::GetActiveScene()->AddNewGameObjectHierarchy(layerType, Obj);
+		SceneMgr::GetActiveScene()->AddGameObjectHierarchy(layerType, Obj);
 		mbLevelModified = true;
 	}
 
@@ -96,7 +95,26 @@ namespace mh
 		if (pParent && pChild)
 		{
 			pParent->AddChild(pChild);
-			SceneMgr::GetActiveScene()->AddNewGameObjectHierarchy(pParent->GetLayerType(), pChild);
+			
+			//새 오브젝트일 경우(start되지 않은 오브젝트일 경우 새 오브젝트라고 간주)
+			if (false == pChild->IsStarted())
+			{
+				//부모의 레이어에 일괄적으로 넣어준다
+				SceneMgr::GetActiveScene()->AddGameObjectHierarchy(pParent->GetLayerType(), pChild);
+			}
+
+			//이미 게임 안에 생성되었던 오브젝트라면 레이어만 옮겨준다
+			else
+			{
+				std::vector<GameObject*> gameObjs;
+				pChild->GetGameObjectHierarchy(gameObjs);
+				IScene* scene = SceneMgr::GetActiveScene();
+				for (size_t i = 0; i < gameObjs.size(); ++i)
+				{
+					SceneMgr::GetActiveScene()->MoveGameObjectLayer(pParent->GetLayerType(), pChild);
+				}
+			}
+
 		}
 	}
 
@@ -168,9 +186,10 @@ namespace mh
 
 			//Scene 시작 안됐을 경우 바로 넣어준다
 			IScene* scene = SceneMgr::GetActiveScene();
-			if (scene && false == scene->IsInitialized())
+			MH_ASSERT(scene);
+			if (false == scene->IsInitialized())
 			{
-				scene->AddNewGameObject(_layer, _gameObj);
+				scene->AddGameObject(_layer, _gameObj);
 			}
 
 			//Scene 시작됐을 경우에는 지연 삽입
@@ -179,19 +198,24 @@ namespace mh
 				tEvent evn{};
 				evn.Type = eEventType::SpawnGameObj;
 				evn.lParam = reinterpret_cast<DWORD_PTR>(_gameObj);
-				evn.wParam = static_cast<DWORD_PTR>(_gameObj->GetLayerType());
+				evn.wParam = static_cast<DWORD_PTR>(_layer);
 				mEvents.push_back(evn);
 			}
 		}
 		return _gameObj;
 	}
 
+
 	void EventMgr::MoveGameObjectLayer(define::eLayerType _layer, GameObject* _gameObj)
 	{
 		MH_ASSERT(define::eLayerType::None != _layer && _gameObj);
 		tEvent evn{};
+		//lParam = GameObject Pointer
+		//wParam = Target Layer
 		evn.Type = eEventType::MoveGameObjLayer;
-		//evn.lP
+		evn.lParam = reinterpret_cast<DWORD_PTR>(_gameObj);
+		evn.wParam = static_cast<DWORD_PTR>(_layer);
+		mEvents.push_back(evn);
 	}
 
 

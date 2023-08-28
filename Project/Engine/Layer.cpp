@@ -102,7 +102,10 @@ namespace mh
 		gameObject->SetLayerType(mLayerType);
 
 		if (_bNeedInit)
+		{
 			gameObject->Init();
+		}
+			
 	}
 
 	void Layer::RemoveGameObject(const GameObject* gameObject)

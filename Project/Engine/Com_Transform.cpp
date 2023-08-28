@@ -22,8 +22,8 @@ namespace mh
 		, mbSizeUpdated(true)
 		, mbLockRotation()
 		, mbNeedMyUpdate(true)
+		, mCB_Transform()
 	{
-		SetKey(strKey::Default::com::Com_Transform);
 	}
 
 	Com_Transform::~Com_Transform()
@@ -62,14 +62,13 @@ namespace mh
 
 			//자신의 사이즈가 반영된 최종 월드행렬을 계산
 			mMatWorldFinal = MATRIX::CreateScale(mSize) * mMatWorldWithoutSize;
+
+
+			mCB_Transform.world = mMatWorldFinal;
+			mCB_Transform.inverseWorld = mMatWorldFinal.Invert();
 		}
 
 		Application::AddEndFrameFunc(std::bind(&Com_Transform::ClearUpdateState, this));
-	}
-
-	void Com_Transform::Render()
-	{
-		BindData();
 	}
 
 	eResult Com_Transform::SaveJson(Json::Value* _pJson)
@@ -304,20 +303,14 @@ namespace mh
 
 	void Com_Transform::BindData()
 	{
-		tCB_Transform trCb = {};
-		trCb.world = mMatWorldFinal;
-		trCb.inverseWorld = mMatWorldFinal.Invert();
-
-		trCb.view = Com_Camera::GetGpuViewMatrix();
-		trCb.inverseView = trCb.view.Invert();
-
-		trCb.projection = Com_Camera::GetGpuProjectionMatrix();
-
-		trCb.WorldView = trCb.world * trCb.view;
-		trCb.WVP = trCb.WorldView * trCb.projection;
+		mCB_Transform.view = Com_Camera::GetGpuViewMatrix();
+		mCB_Transform.inverseView = Com_Camera::GetGpuViewInvMatrix();
+		mCB_Transform.projection = Com_Camera::GetGpuProjectionMatrix();
+		mCB_Transform.WorldView = mCB_Transform.world * mCB_Transform.view;
+		mCB_Transform.WVP = mCB_Transform.WorldView * mCB_Transform.projection;
 
 		ConstBuffer* cb = RenderMgr::GetConstBuffer(eCBType::Transform);
-		cb->SetData(&trCb);
+		cb->SetData(&mCB_Transform);
 		cb->BindData(eShaderStageFlag::ALL);
 	}
 }

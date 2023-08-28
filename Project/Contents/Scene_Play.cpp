@@ -29,7 +29,7 @@ namespace mh
 
 	void Scene_Play::Init()
 	{
-		GameObject* cameraObj = EventMgr::SpawnGameObject(new GameObject, eLayerType::Com_Camera);
+		GameObject* cameraObj = EventMgr::SpawnGameObject(eLayerType::Com_Camera);
 		//GameObject* cameraObj = object::Instantiate(eLayerType::Com_Camera, new GameObject);
 		Com_Camera* cameraComp = cameraObj->AddComponent<Com_Camera>();
 		cameraComp->TurnLayerMask(eLayerType::UI, false);

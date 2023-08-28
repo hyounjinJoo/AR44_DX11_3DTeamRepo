@@ -814,7 +814,7 @@ namespace mh
 	void RenderMgr::LoadDefaultShader()
 	{
 #pragma region 기본 입력 레이아웃
-		std::vector<D3D11_INPUT_ELEMENT_DESC> vecLayoutDesc;
+		std::vector<D3D11_INPUT_ELEMENT_DESC> vecLayoutDesc2D;
 		D3D11_INPUT_ELEMENT_DESC LayoutDesc{};
 
 		LayoutDesc.AlignedByteOffset = 0;
@@ -823,7 +823,7 @@ namespace mh
 		LayoutDesc.InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
 		LayoutDesc.SemanticName = "POSITION";
 		LayoutDesc.SemanticIndex = 0;
-		vecLayoutDesc.push_back(LayoutDesc);
+		vecLayoutDesc2D.push_back(LayoutDesc);
 		LayoutDesc = D3D11_INPUT_ELEMENT_DESC{};
 
 		LayoutDesc.AlignedByteOffset = 32;
@@ -832,7 +832,7 @@ namespace mh
 		LayoutDesc.InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
 		LayoutDesc.SemanticName = "TEXCOORD";
 		LayoutDesc.SemanticIndex = 0;
-		vecLayoutDesc.push_back(LayoutDesc);
+		vecLayoutDesc2D.push_back(LayoutDesc);
 		LayoutDesc = D3D11_INPUT_ELEMENT_DESC{};
 #pragma endregion
 
@@ -843,7 +843,7 @@ namespace mh
 			TriangleShader->SetEngineDefaultRes(true);
 			TriangleShader->CreateByHeader(eGSStage::VS, _0VS_Triangle, sizeof(_0VS_Triangle));
 			TriangleShader->CreateByHeader(eGSStage::PS, _4PS_Triangle, sizeof(_4PS_Triangle));
-			TriangleShader->SetInputLayoutDesc(vecLayoutDesc);
+			TriangleShader->SetInputLayoutDesc(vecLayoutDesc2D);
 			TriangleShader->CreateInputLayout();
 
 			ResMgr::Insert(strKey::Default::shader::graphics::RectShader, TriangleShader);
@@ -856,7 +856,7 @@ namespace mh
 			spriteShader->CreateByHeader(eGSStage::VS, _0VS_Sprite, sizeof(_0VS_Sprite));
 			spriteShader->CreateByHeader(eGSStage::PS, _4PS_Sprite, sizeof(_4PS_Sprite));
 			spriteShader->SetRSState(eRSType::SolidNone);
-			spriteShader->SetInputLayoutDesc(vecLayoutDesc);
+			spriteShader->SetInputLayoutDesc(vecLayoutDesc2D);
 			spriteShader->CreateInputLayout();
 
 
@@ -870,7 +870,7 @@ namespace mh
 			uiShader->SetEngineDefaultRes(true);
 			uiShader->CreateByHeader(eGSStage::VS, _0VS_UserInterface, sizeof(_0VS_UserInterface));
 			uiShader->CreateByHeader(eGSStage::PS, _4PS_UserInterface, sizeof(_4PS_UserInterface));
-			uiShader->SetInputLayoutDesc(vecLayoutDesc);
+			uiShader->SetInputLayoutDesc(vecLayoutDesc2D);
 			uiShader->CreateInputLayout();
 
 
@@ -884,7 +884,7 @@ namespace mh
 			gridShader->SetEngineDefaultRes(true);
 			gridShader->CreateByHeader(eGSStage::VS, _0VS_Grid, sizeof(_0VS_Grid));
 			gridShader->CreateByHeader(eGSStage::PS, _4PS_Grid, sizeof(_4PS_Grid));
-			gridShader->SetInputLayoutDesc(vecLayoutDesc);
+			gridShader->SetInputLayoutDesc(vecLayoutDesc2D);
 			gridShader->CreateInputLayout();
 
 			gridShader->SetRSState(eRSType::SolidNone);
@@ -901,7 +901,7 @@ namespace mh
 			debugShader->SetEngineDefaultRes(true);
 			debugShader->CreateByHeader(eGSStage::VS, _0VS_Debug, sizeof(_0VS_Debug));
 			debugShader->CreateByHeader(eGSStage::PS, _4PS_Debug, sizeof(_4PS_Debug));
-			debugShader->SetInputLayoutDesc(vecLayoutDesc);
+			debugShader->SetInputLayoutDesc(vecLayoutDesc2D);
 			debugShader->CreateInputLayout();
 
 			//debugShader->Create(eShaderStage::VS, "DebugVS.hlsl", "main");
@@ -932,7 +932,7 @@ namespace mh
 			particleShader->CreateByHeader(eGSStage::VS, _0VS_Particle, sizeof(_0VS_Particle));
 			particleShader->CreateByHeader(eGSStage::GS, _3GS_Particle, sizeof(_3GS_Particle));
 			particleShader->CreateByHeader(eGSStage::PS, _4PS_Particle, sizeof(_4PS_Particle));
-			particleShader->SetInputLayoutDesc(vecLayoutDesc);
+			particleShader->SetInputLayoutDesc(vecLayoutDesc2D);
 			particleShader->CreateInputLayout();
 
 
@@ -954,7 +954,7 @@ namespace mh
 			postProcessShader->SetEngineDefaultRes(true);
 			postProcessShader->CreateByHeader(eGSStage::VS, _0VS_PostProcess, sizeof(_0VS_PostProcess));
 			postProcessShader->CreateByHeader(eGSStage::PS, _4PS_PostProcess, sizeof(_4PS_PostProcess));
-			postProcessShader->SetInputLayoutDesc(vecLayoutDesc);
+			postProcessShader->SetInputLayoutDesc(vecLayoutDesc2D);
 			postProcessShader->CreateInputLayout();
 
 			postProcessShader->SetDSState(eDSType::NoWrite);
@@ -963,6 +963,7 @@ namespace mh
 #pragma endregion
 
 #pragma region 3D 기본 입력 레이아웃
+		std::vector<D3D11_INPUT_ELEMENT_DESC> vecLayoutDesc3D = vecLayoutDesc2D;
 
 		LayoutDesc = D3D11_INPUT_ELEMENT_DESC{};
 		LayoutDesc.AlignedByteOffset = 40;
@@ -971,7 +972,7 @@ namespace mh
 		LayoutDesc.InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
 		LayoutDesc.SemanticName = "TANGENT";
 		LayoutDesc.SemanticIndex = 0;
-		vecLayoutDesc.push_back(LayoutDesc);
+		vecLayoutDesc3D.push_back(LayoutDesc);
 		
 		LayoutDesc = D3D11_INPUT_ELEMENT_DESC{};
 		LayoutDesc.AlignedByteOffset = 52;
@@ -980,7 +981,7 @@ namespace mh
 		LayoutDesc.InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
 		LayoutDesc.SemanticName = "BINORMAL";
 		LayoutDesc.SemanticIndex = 0;
-		vecLayoutDesc.push_back(LayoutDesc);
+		vecLayoutDesc3D.push_back(LayoutDesc);
 		
 		LayoutDesc = D3D11_INPUT_ELEMENT_DESC{};
 		LayoutDesc.AlignedByteOffset = 64;
@@ -989,7 +990,7 @@ namespace mh
 		LayoutDesc.InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
 		LayoutDesc.SemanticName = "NORMAL";
 		LayoutDesc.SemanticIndex = 0;
-		vecLayoutDesc.push_back(LayoutDesc);
+		vecLayoutDesc3D.push_back(LayoutDesc);
 
 		LayoutDesc = D3D11_INPUT_ELEMENT_DESC{};
 		LayoutDesc.AlignedByteOffset = 76;
@@ -998,7 +999,7 @@ namespace mh
 		LayoutDesc.InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
 		LayoutDesc.SemanticName = "BLENDWEIGHT";
 		LayoutDesc.SemanticIndex = 0;
-		vecLayoutDesc.push_back(LayoutDesc);
+		vecLayoutDesc3D.push_back(LayoutDesc);
 
 		LayoutDesc = D3D11_INPUT_ELEMENT_DESC{};
 		LayoutDesc.AlignedByteOffset = 92;
@@ -1007,7 +1008,7 @@ namespace mh
 		LayoutDesc.InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
 		LayoutDesc.SemanticName = "BLENDINDICES";
 		LayoutDesc.SemanticIndex = 0;
-		vecLayoutDesc.push_back(LayoutDesc);
+		vecLayoutDesc3D.push_back(LayoutDesc);
 
 
 #pragma endregion
@@ -1019,7 +1020,7 @@ namespace mh
 
 			basic3DShader->CreateByHeader(eGSStage::VS, _0VS_Basic3D, sizeof(_0VS_Basic3D));
 			basic3DShader->CreateByHeader(eGSStage::PS, _4PS_Basic3D, sizeof(_4PS_Basic3D));
-			basic3DShader->SetInputLayoutDesc(vecLayoutDesc);
+			basic3DShader->SetInputLayoutDesc(vecLayoutDesc3D);
 			basic3DShader->CreateInputLayout();
 
 			ResMgr::Insert(strKey::Default::shader::graphics::Basic3DShader, basic3DShader);
@@ -1033,7 +1034,7 @@ namespace mh
 		defferedShader->CreateByHeader(eGSStage::VS, _0VS_Deffered, sizeof(_0VS_Deffered));
 		defferedShader->CreateByHeader(eGSStage::PS, _4PS_Deffered, sizeof(_4PS_Deffered));
 
-		defferedShader->SetInputLayoutDesc(vecLayoutDesc);
+		defferedShader->SetInputLayoutDesc(vecLayoutDesc3D);
 		defferedShader->CreateInputLayout();
 
 		ResMgr::Insert(strKey::Default::shader::graphics::DefferedShader, defferedShader);
@@ -1048,7 +1049,7 @@ namespace mh
 			lightShader->CreateByHeader(eGSStage::VS, _0VS_LightDir, sizeof(_0VS_LightDir));
 			lightShader->CreateByHeader(eGSStage::PS, _4PS_LightDir, sizeof(_4PS_LightDir));
 
-			lightShader->SetInputLayoutDesc(vecLayoutDesc);
+			lightShader->SetInputLayoutDesc(vecLayoutDesc2D);
 			lightShader->CreateInputLayout();
 
 			lightShader->SetRSState(eRSType::SolidBack);
@@ -1063,7 +1064,7 @@ namespace mh
 			lightShader->CreateByHeader(eGSStage::VS, _0VS_LightPoint, sizeof(_0VS_LightPoint));
 			lightShader->CreateByHeader(eGSStage::PS, _4PS_LightPoint, sizeof(_4PS_LightPoint));
 
-			lightShader->SetInputLayoutDesc(vecLayoutDesc);
+			lightShader->SetInputLayoutDesc(vecLayoutDesc3D);
 			lightShader->CreateInputLayout();
 
 			lightShader->SetRSState(eRSType::SolidFront);
@@ -1077,19 +1078,30 @@ namespace mh
 
 
 #pragma region MERGE
-		std::shared_ptr<GraphicsShader> MergeShader = std::make_shared<GraphicsShader>();
-		MergeShader->SetEngineDefaultRes(true);
-		MergeShader->CreateByHeader(eGSStage::VS, _0VS_Merge, sizeof(_0VS_Merge));
-		MergeShader->CreateByHeader(eGSStage::PS, _4PS_Merge, sizeof(_4PS_Merge));
+		{
+			LayoutDesc = D3D11_INPUT_ELEMENT_DESC{};
+			LayoutDesc.AlignedByteOffset = 0;
+			LayoutDesc.Format = DXGI_FORMAT_R32G32B32A32_FLOAT;
+			LayoutDesc.InputSlot = 0;
+			LayoutDesc.InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
+			LayoutDesc.SemanticName = "POSITION";
+			LayoutDesc.SemanticIndex = 0;
 
-		MergeShader->SetInputLayoutDesc(vecLayoutDesc);
-		MergeShader->CreateInputLayout();
+			std::shared_ptr<GraphicsShader> MergeShader = std::make_shared<GraphicsShader>();
+			MergeShader->SetEngineDefaultRes(true);
+			MergeShader->CreateByHeader(eGSStage::VS, _0VS_Merge, sizeof(_0VS_Merge));
+			MergeShader->CreateByHeader(eGSStage::PS, _4PS_Merge, sizeof(_4PS_Merge));
 
-		MergeShader->SetRSState(eRSType::SolidBack);
-		MergeShader->SetDSState(eDSType::None);
-		MergeShader->SetBSState(eBSType::Default);
+			MergeShader->AddInputLayoutDesc(LayoutDesc);
+			MergeShader->CreateInputLayout();
 
-		ResMgr::Insert(strKey::Default::shader::graphics::MergeShader, MergeShader);
+			MergeShader->SetRSState(eRSType::SolidBack);
+			MergeShader->SetDSState(eDSType::None);
+			MergeShader->SetBSState(eBSType::Default);
+
+			ResMgr::Insert(strKey::Default::shader::graphics::MergeShader, MergeShader);
+		}
+
 #pragma endregion
 
 

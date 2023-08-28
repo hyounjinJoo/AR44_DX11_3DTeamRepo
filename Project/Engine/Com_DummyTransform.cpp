@@ -23,11 +23,10 @@ namespace mh
 		}
 	}
 
-	void Com_DummyTransform::Render()
+	void Com_DummyTransform::BindData()
 	{
-		if(mParentTransform)
-			mParentTransform->Render();
+		if (mParentTransform)
+			mParentTransform->BindData();
 	}
-
 }
 

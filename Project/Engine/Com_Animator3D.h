@@ -25,7 +25,6 @@ namespace mh
 		virtual void Init() override;
 		virtual void Update() {};
 		virtual void FixedUpdate() override;
-		virtual void Render() override;
 
 		void SetSkeleton(std::shared_ptr<Skeleton> _pSkeleton);
 		const Skeleton* GetSkeleton() const { return mSkeleton.get(); }

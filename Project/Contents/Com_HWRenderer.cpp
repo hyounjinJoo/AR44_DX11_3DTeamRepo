@@ -76,9 +76,7 @@ namespace mh
 		mMySBuffer->BindDataSRV();
 
 		Com_Renderer_Mesh::Render();
-	}
-	void Com_HWRenderer::RenderEnd()
-	{
+
 		mMySBuffer->UnBindData();
 	}
 }

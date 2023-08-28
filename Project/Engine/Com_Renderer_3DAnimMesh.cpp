@@ -37,21 +37,8 @@ namespace mh
 
 				// 사용할 메쉬 업데이트 및 렌더링
 				GetMesh()->Render(i);
-			}
-		}
-	}
 
-	void Com_Renderer_3DAnimMesh::RenderEnd()
-	{
-		//순회돌면서 데이터를 되돌려줌
-		UINT materialCount = GetMaterialCount();
-		for (UINT i = 0; i < materialCount; ++i)
-		{
-			Material* mtrl = GetCurrentMaterial(i);
-			if (mtrl)
-			{
-				mtrl->SetAnim3D(false);
-				mtrl->SetBoneCount(0);
+				mtrl->UnBindData();
 			}
 		}
 	}

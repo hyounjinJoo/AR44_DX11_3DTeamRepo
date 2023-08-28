@@ -12,6 +12,9 @@ namespace mh
 		if (false == IsRenderReady())
 			return;
 
+		ITransform* tr = static_cast<ITransform*>(GetOwner()->GetComponent(eComponentType::Transform));
+		tr->BindData();
+
 		//Render
 		UINT iSubsetCount = GetMesh()->GetSubsetCount();
 		for (UINT i = 0; i < iSubsetCount; ++i)

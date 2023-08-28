@@ -87,6 +87,9 @@ namespace mh
 		void SetParent(GameObject* _pObj) { mParent = _pObj; }
 		void RemoveChild(GameObject* _pObj);
 
+		bool IsInitialized() const { return mbInitalized; }
+		bool IsStarted() const { return mbStarted; }
+
 	protected:
 		void DestroyRecursive();
 
@@ -105,6 +108,7 @@ namespace mh
 		bool mbStarted;
 		bool mbDontDestroy;
 	};
+
 
 	template <typename T>
 	T* GameObject::AddComponent()
@@ -143,26 +147,26 @@ namespace mh
 		}
 	}
 
-	inline GameObject* GameObject::AddChild(GameObject* _pObj)
+	inline GameObject* GameObject::AddChild(GameObject* _pChild)
 	{
 		//nullptr이나 자기 자신을 인자로 호출했을 경우 오류 발생			
-		MH_ASSERT(_pObj && this != _pObj);
+		MH_ASSERT(_pChild && this != _pChild);
 
 		//부모 오브젝트가 있을 경우 기존의 부모 오브젝트에서 자신을 제거한 후 여기에 추가해야함
-		GameObject* parent = _pObj->GetParent();
+		GameObject* parent = _pChild->GetParent();
 		if (parent)
 		{
-			parent->RemoveChild(_pObj);
+			parent->RemoveChild(_pChild);
 		}
-		_pObj->SetParent(this);
-		mChilds.push_back(_pObj);
+		_pChild->SetParent(this);
+		mChilds.push_back(_pChild);
 
-		if (mbInitalized)
+		if (mbInitalized && false == _pChild->IsInitialized())
 		{
-			_pObj->Init();
+			_pChild->Init();
 		}
 
-		return _pObj;
+		return _pChild;
 	}
 
 	inline void GameObject::GetGameObjectHierarchy(std::vector<GameObject*>& _gameObjects)

@@ -31,7 +31,6 @@ namespace mh
 		, mbInitalized()
 		, mbStarted()
 		, mbDontDestroy()
-
 	{
 		mComponents.reserve((int)eComponentType::Scripts + 10);
 		mComponents.resize((int)eComponentType::Scripts);
@@ -245,8 +244,10 @@ namespace mh
 	
 	void GameObject::Init()
 	{
-		mbInitalized = true;
+		if (mbInitalized)
+			return;
 
+		mbInitalized = true;
 		for (size_t i = 0; i < mComponents.size(); ++i)
 		{
 			if (mComponents[i])

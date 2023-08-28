@@ -108,11 +108,7 @@ namespace mh
 		// 컴퓨트 쉐이더 연산여부
 		m_bFinalMatUpdate = false;
 	}
-
-	void Com_Animator3D::Render()
-	{
-		BindData();
-	}
+	
 
 	void Com_Animator3D::SetSkeleton(std::shared_ptr<Skeleton> _pSkeleton)
 	{
@@ -139,17 +135,6 @@ namespace mh
 
 		return isPlayed;
 	}
-
-	//void Com_Animator3D::SetAnimClip(const std::vector<tMTAnimClip>* _vecAnimClip)
-	//{
-	//	m_pVecClip = _vecAnimClip;
-	//	m_vecClipUpdateTime.resize(m_pVecClip->size());
-
-	//	// 테스트 코드
-	//	/*static float fTime = 0.f;
-	//	fTime += 1.f;
-	//	m_vecClipUpdateTime[0] = fTime;*/
-	//}
 
 
 	void Com_Animator3D::BindData()
