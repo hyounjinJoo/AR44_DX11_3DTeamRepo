@@ -20,6 +20,7 @@ namespace mh::define
 		AudioSource,
 		AudioListener,
 
+		BehaviorTree,
 		Scripts,
 
 		END
@@ -34,12 +35,12 @@ namespace mh::define
 			"Animator",
 			"Light",
 			"Camera",
+			"Renderer",
 
 			"AudioSource",
 			"AudioListener",
 
-			"Renderer",
-
+			"BehaviorTree",
 			"Scripts"
 		};
 
