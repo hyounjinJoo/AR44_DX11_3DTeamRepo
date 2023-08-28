@@ -1,28 +1,28 @@
 #include "SH_Deffered.hlsli"
 
 
-PSOut main(VSOut _in) : SV_Target
+PSOut main(VSOut _in)
 {
 	float4 vObjectColor = float4(0.4f, 0.4f, 0.4f, 1.f);
 	float4 vOutColor = float4(1.f, 1.f, 1.f, 1.f);
 	float3 vViewNormal = _in.ViewNormal;
     
-	if (CB_MaterialData.usedAlbedo == 1)
+	if (CB_MaterialData.IsAlbedoTex == 1)
 	{
-		vObjectColor = albedoTexture.Sample(anisotropicSampler, _in.UV);
+		vObjectColor = AlbedoTexture.Sample(anisotropicSampler, _in.UV);
 	}
     
-	if (CB_MaterialData.usedNormal == 1)
+	if (CB_MaterialData.IsNormalTex == 1)
 	{
 		float3x3 matRot =
 		{
-			_in.ViewTanget,//X
+			_in.ViewTangent,//X
 			_in.ViewBiNormal,//Y
 			_in.ViewNormal//Z
 		};
 
 		// 물체의 표면에 적용될 탄젠트 공간 기준 방향벡터를 가져온다.
-		float3 vNormal = normalTexture.Sample(anisotropicSampler, _in.UV).xyz;
+		float3 vNormal = NormalTexture.Sample(anisotropicSampler, _in.UV).xyz;
 		
 		//Normal 값은 0.f과 1.f 사이(0 ~ 255) -> -1 ~ 1 사이로 변환한다.
 		// 0~1값을 -1~1의 값으로 변환 후 

@@ -222,19 +222,19 @@ namespace mh::define
 
 	enum class eTextureSlot
 	{
-		Albedo = Register_t_albedoTexture,
-		Normal = Register_t_normalTexture,
-		Specular = Register_t_specularTexture,
-		Emissive = Register_t_emissiveTexture,
+		Albedo = Register_t_AlbedoTexture,
+		Normal = Register_t_NormalTexture,
+		Specular = Register_t_SpecularTexture,
+		Emissive = Register_t_EmissiveTexture,
 
-		AlbedoTarget = Register_t_albedoTarget,
-		NormalTarget = Register_t_normalTarget,
-		SpecularTarget = Register_t_specularTarget,
-		EmissiveTarget = Register_t_emissiveTarget,
-		PositionTarget = Register_t_positionTarget,
+		AlbedoTarget = Register_t_AlbedoTarget,
+		NormalTarget = Register_t_NormalTarget,
+		SpecularTarget = Register_t_SpecularTarget,
+		EmissiveTarget = Register_t_EmissiveTarget,
+		PositionTarget = Register_t_PositionTarget,
 		
-		DiffuseLightTarget = Register_t_diffuseLightTarget,
-		SpecularLightTarget = Register_t_specularLightTarget,
+		DiffuseLightTarget = Register_t_DiffuseLightTarget,
+		SpecularLightTarget = Register_t_SpecularLightTarget,
 
 		//CubeT8,
 		//CubeT9,

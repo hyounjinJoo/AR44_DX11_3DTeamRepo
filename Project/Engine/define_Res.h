@@ -55,6 +55,16 @@ namespace mh::define
 		STRKEY Ext_MeshData = ".json";
 		STRKEY Ext_Material = ".json";
 		STRKEY Ext_Skeleton = ".bne";
+		STRKEY Ext_Tex[] =
+		{
+			
+			".png",
+			".dds",
+			".tga",
+			".bmp",
+			".jpg",
+		};
+		constexpr size_t Ext_Tex_Size = sizeof(Ext_Tex) / sizeof(const char*);
 
 		namespace Default
 		{

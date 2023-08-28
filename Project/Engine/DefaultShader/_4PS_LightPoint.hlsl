@@ -13,7 +13,7 @@ PS_OUT main(VSOut _in)
 	PS_OUT output = (PS_OUT) 0.f;
     
 	float2 vUV = _in.Position.xy / CB_Global.fResolution;
-	float4 vViewPos = positionTarget.Sample(anisotropicSampler, vUV);
+	float4 vViewPos = PositionTarget.Sample(anisotropicSampler, vUV);
     
 	if (0.f == vViewPos.a)
 		discard;
@@ -26,12 +26,12 @@ PS_OUT main(VSOut _in)
 		discard;
 	}
     
-	float4 vViewNormal = normalTarget.Sample(anisotropicSampler, vUV);
+	float4 vViewNormal = NormalTarget.Sample(anisotropicSampler, vUV);
         
 	tLightColor lightcolor = (tLightColor) 0.f;
 	CalculateLight3D(vViewPos.xyz, vViewNormal.xyz, CB_NumberOfLight.indexOfLight, lightcolor);
     
-	float SpecCoef = specularTarget.Sample(anisotropicSampler, vUV).x;
+	float SpecCoef = SpecularTarget.Sample(anisotropicSampler, vUV).x;
 	float4 vSpec = DecodeColor(SpecCoef);
 
 	output.vDiffuse = lightcolor.diffuse + lightcolor.ambient;

@@ -2,14 +2,12 @@
 #include "Com_Renderer_3DAnimMesh.h"
 
 #include "GameObject.h"
-#include "Com_Animator3D.h"
 #include "Skeleton.h"
-
+#
 
 namespace mh
 {
 	Com_Renderer_3DAnimMesh::Com_Renderer_3DAnimMesh()
-		: mAnimator()
 	{
 	}
 
@@ -17,19 +15,10 @@ namespace mh
 	{
 	}
 
-	void Com_Renderer_3DAnimMesh::Init()
-	{
-		if(nullptr == mAnimator)
-			mAnimator = GetOwner()->GetComponent<Com_Animator3D>();
-	}
-
-
 	void Com_Renderer_3DAnimMesh::Render()
 	{
-		if (false == IsRenderReady() || nullptr == mAnimator)
+		if (false == IsRenderReady())
 			return;
-
-		mAnimator->BindData();
 
 		//Render
 		UINT iSubsetCount = GetMesh()->GetSubsetCount();
@@ -50,7 +39,10 @@ namespace mh
 				GetMesh()->Render(i);
 			}
 		}
+	}
 
+	void Com_Renderer_3DAnimMesh::RenderEnd()
+	{
 		//순회돌면서 데이터를 되돌려줌
 		UINT materialCount = GetMaterialCount();
 		for (UINT i = 0; i < materialCount; ++i)
@@ -62,8 +54,6 @@ namespace mh
 				mtrl->SetBoneCount(0);
 			}
 		}
-
-		mAnimator->UnBindData();
 	}
 }
 

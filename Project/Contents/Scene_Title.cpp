@@ -19,6 +19,7 @@
 #include <Engine/CollisionMgr.h>
 #include <Engine/Com_Animator2D.h>
 #include <Engine/Com_Light3D.h>
+#include <Engine/Com_Animator3D.h>
 #include <Engine/PaintShader.h>
 #include <Engine/Com_Renderer_ParticleSystem.h>
 #include <Engine/Prefab.h>
@@ -103,13 +104,19 @@ namespace mh
 		//}
 
 		{
-			std::shared_ptr<MeshData> data = ResMgr::Load<MeshData>("Monster.json");
+			std::shared_ptr<MeshData> data = ResMgr::Load<MeshData>("House.fbx");
 			GameObject* obj = data->Instantiate();
 			Com_Transform* tr = obj->GetComponent<Com_Transform>();
 			tr->SetRelativeScale(float3(0.5f));
 			obj->SetName("fbxTextObj");
 			obj->AddComponent<Script_Player>();
 			EventMgr::SpawnGameObject(obj, eLayerType::Player);
+
+			Com_Animator3D* animator = obj->GetComponent<Com_Animator3D>();
+			if(animator)
+				animator->Play("NlaTrack.010");
+
+			//
 			//object::Instantiate(eLayerType::Player, obj);
 			//obj->AddComponent<Script_JH>();
 		}
@@ -135,14 +142,14 @@ namespace mh
 			directionalLight->SetName("directionalLight");
 
 			Com_Transform* tr = directionalLight->AddComponent<Com_Transform>();
-			tr->SetRelativePos(float3(500.f, 500.f, 0.0f));
+			tr->SetRelativePos(float3(0.0f, 100.0f, 0.0f));
 			tr->SetRelativeRotXYZ(float3(45.0f, 0.0f, 0.0f));
 
 			Com_Light3D* lightComp = directionalLight->AddComponent<Com_Light3D>();
 			lightComp->SetType(eLightType::Directional);
-			lightComp->SetDiffuse(float4(0.7f, 0.7f, 0.7f, 1.0f));
+			lightComp->SetDiffuse(float4(1.0f, 1.0f, 1.0f, 1.0f));
 			lightComp->SetSpecular(float4(1.0f, 1.0f, 1.0f, 1.0f));
-			lightComp->SetAmbient(float4(0.15f, 0.15f, 0.15f, 1.0f));
+			lightComp->SetAmbient(float4(0.3f, 0.3f, 0.3f, 1.0f));
 		}
 
 		//{

@@ -14,6 +14,7 @@
 #include "FontWrapper.h"
 #include "PathMgr.h"
 #include "EventMgr.h"
+#include "guiMgr.h"
 
 namespace mh
 {
@@ -122,6 +123,8 @@ namespace mh
 		FixedUpdate();
 		Render();
 		EndFrame();
+
+		gui::guiMgr::Run();
 		
 		return mbInitialized;
 	}

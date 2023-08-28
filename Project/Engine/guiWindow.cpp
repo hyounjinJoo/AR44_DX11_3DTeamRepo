@@ -9,6 +9,7 @@ namespace gui
 		, mWindowFlag()
 		//, mSize()
 	{
+		SetSaveEnable(true);
 	}
 	guiWindow::~guiWindow()
 	{

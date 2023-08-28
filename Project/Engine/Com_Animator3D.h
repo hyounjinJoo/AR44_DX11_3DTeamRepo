@@ -37,6 +37,8 @@ namespace mh
 		virtual void BindData() override;
 		virtual void UnBindData() override;
 
+		void Play(const std::string_view _animName);
+
 	private:
 		bool CheckMesh();
 

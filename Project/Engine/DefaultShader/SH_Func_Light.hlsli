@@ -1,5 +1,7 @@
 #ifndef SH_FUNC_LIGHT
 #define SH_FUNC_LIGHT
+
+
 #ifndef __cplusplus//HLSL
 #include "SH_Globals.hlsli"
 //StructuredBuffer<LightAttribute> lightAttributes3D : register(t14);

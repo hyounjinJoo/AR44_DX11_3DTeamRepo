@@ -119,13 +119,13 @@ namespace mh
 				return eResult::Fail_InValid;
 			}
 
-			Json::MH::SaveStrKey(&arrElement, JSON_KEY(pMesh), mMeshContainers[i].pMesh);
-			Json::MH::SaveStrKeyVector(&arrElement, JSON_KEY(pMaterials), mMeshContainers[i].pMaterials);
+			Json::MH::SavePtrStrKey(&arrElement, JSON_KEY(pMesh), mMeshContainers[i].pMesh);
+			Json::MH::SavePtrStrKeyVector(&arrElement, JSON_KEY(pMaterials), mMeshContainers[i].pMaterials);
 
 			jsonMeshCont.append(arrElement);
 		}
 
-		Json::MH::SaveStrKey(_pJson, JSON_KEY_PAIR(mSkeleton));
+		Json::MH::SavePtrStrKey(_pJson, JSON_KEY_PAIR(mSkeleton));
 
 		return eResult::Success;
 	}
@@ -150,13 +150,13 @@ namespace mh
 			tMeshContainer cont{};
 
 			//Mesh Load
-			std::string meshStrKey = Json::MH::LoadStrKey(&(*iter), JSON_KEY(pMesh), cont.pMesh);
+			std::string meshStrKey = Json::MH::LoadPtrStrKey(&(*iter), JSON_KEY(pMesh), cont.pMesh);
 			cont.pMesh = ResMgr::Load<Mesh>(meshStrKey);
 			if (nullptr == cont.pMesh)
 				return eResult::Fail_Empty;
 
 			//Materials Load
-			const auto& materialsStrKey = Json::MH::LoadStrKeyVector(&(*iter), JSON_KEY(pMaterials), cont.pMaterials);
+			const auto& materialsStrKey = Json::MH::LoadPtrStrKeyVector(&(*iter), JSON_KEY(pMaterials), cont.pMaterials);
 			for (size_t i = 0; i < materialsStrKey.size(); ++i)
 			{
 				std::shared_ptr<Material> mtrl = ResMgr::Load<Material>(materialsStrKey[i]);
@@ -166,7 +166,7 @@ namespace mh
 			mMeshContainers.push_back(cont);
 		}
 
-		const std::string& skeletonKey = Json::MH::LoadStrKey(_pJson, JSON_KEY_PAIR(mSkeleton));
+		const std::string& skeletonKey = Json::MH::LoadPtrStrKey(_pJson, JSON_KEY_PAIR(mSkeleton));
 		if (false == skeletonKey.empty())
 		{
 			mSkeleton = std::make_unique<Skeleton>();
