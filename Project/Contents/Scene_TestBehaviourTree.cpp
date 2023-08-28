@@ -1,6 +1,7 @@
 #include "PCH_Contents.h"
 
 #include "Scene_TestBehaviourTree.h"
+#include <Engine\EventMgr.h>
 
 namespace mh
 {
@@ -15,11 +16,13 @@ namespace mh
 
 	void Scene_TestBehaviourTree::OnEnter()
 	{
-		IScene::OnEnter();
 	}
 
 	void Scene_TestBehaviourTree::Init()
 	{
+		GameObject* testObj = EventMgr::SpawnGameObject(new GameObject, eLayerType::Player);
+
+
 		IScene::Init();
 	}
 
