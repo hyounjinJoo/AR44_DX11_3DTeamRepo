@@ -20,6 +20,11 @@ namespace mh
 
 	Skeleton::~Skeleton()
 	{
+		for (auto& iter : mMapAnimations)
+		{
+			if (iter.second)
+				delete iter.second;
+		}
 	}
 
 	eResult Skeleton::Save(const std::filesystem::path& _fileName)
@@ -111,19 +116,43 @@ namespace mh
 		}
 		CreateBoneOffsetSBuffer();
 
-		const auto& animClip = _fbxLoader->GetAnimClip();
+		const auto& animClip = _fbxLoader->GetAnimations();
 		for (size_t i = 0; i < animClip.size(); ++i)
 		{
-			Animation3D anim{};
-			eResult result = anim.LoadFromFBX(&animClip[i]);
+			std::unique_ptr<Animation3D> anim = std::make_unique<Animation3D>();
+
+			eResult result = anim->LoadFromFBX(this, &animClip[i]);
 			if (eResultFail(result))
 			{
 				ERROR_MESSAGE_W(L"애니메이션 생성 실패");
 				return result;
 			}
 			
-			std::string animName = anim.GetAnimationName();
-			mMapAnimations.emplace(std::make_pair(animName, anim));
+			std::string animName = anim->GetKey();
+			if (animName.empty())
+			{
+				//애니메이션이 1000개를 넘을거같진 않으니 3자리까지만 고정
+				size_t numAnim = animClip.size();
+				int digits = 3;
+				do
+				{
+					numAnim /= (size_t)10;
+					--digits;
+				} while (numAnim);
+
+				if (digits < 0)
+					digits = 0;
+
+				animName = "Anim_";
+				for (int i = 0; i < digits; ++i)
+				{
+					animName += "0";
+				}
+				
+				animName += std::to_string(i);
+			}
+
+			mMapAnimations.insert(std::make_pair(animName, anim.release()));
 		}
 
 		return eResult::Success;
@@ -148,13 +177,13 @@ namespace mh
 		m_pBoneOffset->Create<MATRIX>(vecOffset.size(), vecOffset.data(), vecOffset.size());
 	}
 
-	const Animation3D* Skeleton::GetAnimation(const std::string& _strAnimName)
+	const Animation3D* Skeleton::FindAnimation(const std::string& _strAnimName)
 	{
 		Animation3D* retPtr = nullptr;
 		const auto& iter = mMapAnimations.find(_strAnimName);
 		if (iter != mMapAnimations.end())
 		{
-			retPtr = &(iter->second);
+			retPtr = iter->second;
 		}
 		return retPtr;
 	}

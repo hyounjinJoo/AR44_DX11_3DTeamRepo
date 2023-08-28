@@ -367,25 +367,21 @@ namespace mh
 
 			//RECT
 			vtx2d.Pos = float4(-0.5f, 0.5f, 0.0f, 1.0f);
-			vtx2d.Color = float4(0.f, 1.f, 0.f, 1.f);
 			vtx2d.UV = float2(0.f, 0.f);
 			VecVtx2D.push_back(vtx2d);
 			vtx2d = Vertex2D{};
 
 			vtx2d.Pos = float4(0.5f, 0.5f, 0.0f, 1.0f);
-			vtx2d.Color = float4(1.f, 1.f, 1.f, 1.f);
 			vtx2d.UV = float2(1.0f, 0.0f);
 			VecVtx2D.push_back(vtx2d);
 			vtx2d = Vertex2D{};
 
 			vtx2d.Pos = float4(0.5f, -0.5f, 0.0f, 1.0f);
-			vtx2d.Color = float4(1.f, 0.f, 0.f, 1.f);
 			vtx2d.UV = float2(1.0f, 1.0f);
 			VecVtx2D.push_back(vtx2d);
 			vtx2d = Vertex2D{};
 
 			vtx2d.Pos = float4(-0.5f, -0.5f, 0.0f, 1.0f);
-			vtx2d.Color = float4(0.f, 0.f, 1.f, 1.f);
 			vtx2d.UV = float2(0.0f, 1.0f);
 			VecVtx2D.push_back(vtx2d);
 			vtx2d = Vertex2D{};
@@ -406,25 +402,21 @@ namespace mh
 #pragma region DEBUG RECTMESH
 
 			vtx2d.Pos = float4(-0.5f, 0.5f, -0.00001f, 1.0f);
-			vtx2d.Color = float4(0.f, 1.f, 0.f, 1.f);
 			vtx2d.UV = float2(0.f, 0.f);
 			VecVtx2D.push_back(vtx2d);
 			vtx2d = Vertex2D{};
 
 			vtx2d.Pos = float4(0.5f, 0.5f, -0.00001f, 1.0f);
-			vtx2d.Color = float4(1.f, 1.f, 1.f, 1.f);
 			vtx2d.UV = float2(1.0f, 0.0f);
 			VecVtx2D.push_back(vtx2d);
 			vtx2d = Vertex2D{};
 
 			vtx2d.Pos = float4(0.5f, -0.5f, -0.00001f, 1.0f);
-			vtx2d.Color = float4(1.f, 0.f, 0.f, 1.f);
 			vtx2d.UV = float2(1.0f, 1.0f);
 			VecVtx2D.push_back(vtx2d);
 			vtx2d = Vertex2D{};
 
 			vtx2d.Pos = float4(-0.5f, -0.5f, -0.00001f, 1.0f);
-			vtx2d.Color = float4(0.f, 0.f, 1.f, 1.f);
 			vtx2d.UV = float2(0.0f, 1.0f);
 			VecVtx2D.push_back(vtx2d);
 			vtx2d = Vertex2D{};
@@ -443,7 +435,6 @@ namespace mh
 
 			Vertex2D center{};
 			center.Pos = float4(0.0f, 0.0f, 0.f, 1.0f);
-			center.Color = float4(0.0f, 0.0f, 0.0f, 1.0f);
 			center.UV = float2(0.5f, 0.5f);
 			VecVtx2D.push_back(center);
 
@@ -494,7 +485,6 @@ namespace mh
 			
 			// 윗면
 			vtx3d.Pos = float4(-0.5f, 0.5f, 0.5f, 1.0f);
-			vtx3d.Color = float4(1.f, 1.f, 1.f, 1.f);
 			vtx3d.UV = float2(0.f, 0.f);
 			vtx3d.Normal = float3(0.f, 1.f, 0.f);
 			vtx3d.Tangent = float3(1.0f, 0.0f, 0.0f);
@@ -503,7 +493,6 @@ namespace mh
 			vtx3d = {};
 
 			vtx3d.Pos = float4(0.5f, 0.5f, 0.5f, 1.0f);
-			vtx3d.Color = float4(1.f, 1.f, 1.f, 1.f);
 			vtx3d.UV = float2(1.f, 0.f);
 			vtx3d.Normal = float3(0.f, 1.f, 0.f);
 			vtx3d.Tangent = float3(1.0f, 0.0f, 0.0f);
@@ -512,7 +501,6 @@ namespace mh
 			vtx3d = {};
 
 			vtx3d.Pos = float4(0.5f, 0.5f, -0.5f, 1.0f);
-			vtx3d.Color = float4(1.f, 1.f, 1.f, 1.f);
 			vtx3d.UV = float2(0.f, 1.f);
 			vtx3d.Normal = float3(0.f, 1.f, 0.f);
 			vtx3d.Tangent = float3(1.0f, 0.0f, 0.0f);
@@ -521,7 +509,6 @@ namespace mh
 			vtx3d = {};
 
 			vtx3d.Pos = float4(-0.5f, 0.5f, -0.5f, 1.0f);
-			vtx3d.Color = float4(1.f, 1.f, 1.f, 1.f);
 			vtx3d.UV = float2(1.f, 1.f);
 			vtx3d.Normal = float3(0.f, 1.f, 0.f);
 			vtx3d.Tangent = float3(1.0f, 0.0f, 0.0f);
@@ -530,7 +517,6 @@ namespace mh
 			vtx3d = {};
 
 			vtx3d.Pos = float4(-0.5f, -0.5f, -0.5f, 1.0f);
-			vtx3d.Color = float4(1.f, 0.f, 0.f, 1.f);
 			vtx3d.UV = float2(0.f, 0.f);
 			vtx3d.Normal = float3(0.f, -1.f, 0.f);
 			vtx3d.Tangent = float3(-1.0f, 0.0f, 0.0f);
@@ -539,7 +525,6 @@ namespace mh
 			vtx3d = {};
 
 			vtx3d.Pos = float4(0.5f, -0.5f, -0.5f, 1.0f);
-			vtx3d.Color = float4(1.f, 0.f, 0.f, 1.f);
 			vtx3d.UV = float2(1.f, 0.f);
 			vtx3d.Normal = float3(0.f, -1.f, 0.f);
 			vtx3d.Tangent = float3(-1.0f, 0.0f, 0.0f);
@@ -548,7 +533,6 @@ namespace mh
 			vtx3d = {};
 
 			vtx3d.Pos = float4(0.5f, -0.5f, 0.5f, 1.0f);
-			vtx3d.Color = float4(1.f, 0.f, 0.f, 1.f);
 			vtx3d.UV = float2(0.f, 1.f);
 			vtx3d.Normal = float3(0.f, -1.f, 0.f);
 			vtx3d.Tangent = float3(-1.0f, 0.0f, 0.0f);
@@ -557,7 +541,6 @@ namespace mh
 			vtx3d = {};
 
 			vtx3d.Pos = float4(-0.5f, -0.5f, 0.5f, 1.0f);
-			vtx3d.Color = float4(1.f, 0.f, 0.f, 1.f);
 			vtx3d.UV = float2(1.f, 1.f);
 			vtx3d.Normal = float3(0.f, -1.f, 0.f);
 			vtx3d.Tangent = float3(-1.0f, 0.0f, 0.0f);
@@ -566,7 +549,6 @@ namespace mh
 			vtx3d = {};
 
 			vtx3d.Pos = float4(-0.5f, 0.5f, 0.5f, 1.0f);
-			vtx3d.Color = float4(0.f, 1.f, 0.f, 1.f);
 			vtx3d.UV = float2(0.f, 0.f);
 			vtx3d.Normal = float3(-1.f, 0.f, 0.f);
 			vtx3d.Tangent = float3(0.0f, 1.0f, 0.0f);
@@ -575,7 +557,6 @@ namespace mh
 			vtx3d = {};
 
 			vtx3d.Pos = float4(-0.5f, 0.5f, -0.5f, 1.0f);
-			vtx3d.Color = float4(0.f, 1.f, 0.f, 1.f);
 			vtx3d.UV = float2(1.f, 0.f);
 			vtx3d.Normal = float3(-1.f, 0.f, 0.f);
 			vtx3d.Tangent = float3(0.0f, 1.0f, 0.0f);
@@ -584,7 +565,6 @@ namespace mh
 			vtx3d = {};
 
 			vtx3d.Pos = float4(-0.5f, -0.5f, -0.5f, 1.0f);
-			vtx3d.Color = float4(0.f, 1.f, 0.f, 1.f);
 			vtx3d.UV = float2(0.f, 1.f);
 			vtx3d.Normal = float3(-1.f, 0.f, 0.f);
 			vtx3d.Tangent = float3(0.0f, 1.0f, 0.0f);
@@ -593,7 +573,6 @@ namespace mh
 			vtx3d = {};
 
 			vtx3d.Pos = float4(-0.5f, -0.5f, 0.5f, 1.0f);
-			vtx3d.Color = float4(0.f, 1.f, 0.f, 1.f);
 			vtx3d.UV = float2(1.f, 1.f);
 			vtx3d.Normal = float3(-1.f, 0.f, 0.f);
 			vtx3d.Tangent = float3(0.0f, 1.0f, 0.0f);
@@ -602,7 +581,6 @@ namespace mh
 			vtx3d = {};
 
 			vtx3d.Pos = float4(0.5f, 0.5f, -0.5f, 1.0f);
-			vtx3d.Color = float4(0.f, 0.f, 1.f, 1.f);
 			vtx3d.UV = float2(0.f, 0.f);
 			vtx3d.Normal = float3(1.f, 0.f, 0.f);
 			vtx3d.Tangent = float3(0.0f, -1.0f, 0.0f);
@@ -611,7 +589,6 @@ namespace mh
 			vtx3d = {};
 
 			vtx3d.Pos = float4(0.5f, 0.5f, 0.5f, 1.0f);
-			vtx3d.Color = float4(0.f, 0.f, 1.f, 1.f);
 			vtx3d.UV = float2(1.f, 0.f);
 			vtx3d.Normal = float3(1.f, 0.f, 0.f);
 			vtx3d.Tangent = float3(0.0f, -1.0f, 0.0f);
@@ -620,7 +597,6 @@ namespace mh
 			vtx3d = {};
 
 			vtx3d.Pos = float4(0.5f, -0.5f, 0.5f, 1.0f);
-			vtx3d.Color = float4(0.f, 0.f, 1.f, 1.f);
 			vtx3d.UV = float2(0.f, 1.f);
 			vtx3d.Normal = float3(1.f, 0.f, 0.f);
 			vtx3d.Tangent = float3(0.0f, -1.0f, 0.0f);
@@ -629,7 +605,6 @@ namespace mh
 			vtx3d = {};
 
 			vtx3d.Pos = float4(0.5f, -0.5f, -0.5f, 1.0f);
-			vtx3d.Color = float4(0.f, 0.f, 1.f, 1.f);
 			vtx3d.UV = float2(1.f, 1.f);
 			vtx3d.Normal = float3(1.f, 0.f, 0.f);
 			vtx3d.Tangent = float3(0.0f, -1.0f, 0.0f);
@@ -638,7 +613,6 @@ namespace mh
 			vtx3d = {};
 
 			vtx3d.Pos = float4(0.5f, 0.5f, 0.5f, 1.0f);
-			vtx3d.Color = float4(1.f, 1.f, 0.f, 1.f);
 			vtx3d.UV = float2(0.f, 0.f);
 			vtx3d.Normal = float3(0.f, 0.f, 1.f);
 			vtx3d.Tangent = float3(1.0f, 0.0f, 0.0f);
@@ -647,7 +621,6 @@ namespace mh
 			vtx3d = {};
 
 			vtx3d.Pos = float4(-0.5f, 0.5f, 0.5f, 1.0f);
-			vtx3d.Color = float4(1.f, 1.f, 0.f, 1.f);
 			vtx3d.UV = float2(1.f, 0.f);
 			vtx3d.Normal = float3(0.f, 0.f, 1.f);
 			vtx3d.Tangent = float3(1.0f, 0.0f, 0.0f);
@@ -656,7 +629,6 @@ namespace mh
 			vtx3d = {};
 
 			vtx3d.Pos = float4(-0.5f, -0.5f, 0.5f, 1.0f);
-			vtx3d.Color = float4(1.f, 1.f, 0.f, 1.f);
 			vtx3d.UV = float2(0.f, 1.f);
 			vtx3d.Normal = float3(0.f, 0.f, 1.f);
 			vtx3d.Tangent = float3(1.0f, 0.0f, 0.0f);
@@ -665,7 +637,6 @@ namespace mh
 			vtx3d = {};
 
 			vtx3d.Pos = float4(0.5f, -0.5f, 0.5f, 1.0f);
-			vtx3d.Color = float4(1.f, 1.f, 0.f, 1.f);
 			vtx3d.UV = float2(1.f, 1.f);
 			vtx3d.Normal = float3(0.f, 0.f, 1.f);
 			vtx3d.Tangent = float3(1.0f, 0.0f, 0.0f);
@@ -674,7 +645,6 @@ namespace mh
 			vtx3d = {};
 
 			vtx3d.Pos = float4(-0.5f, 0.5f, -0.5f, 1.0f);;
-			vtx3d.Color = float4(1.f, 0.f, 1.f, 1.f);
 			vtx3d.UV = float2(0.f, 0.f);
 			vtx3d.Normal = float3(0.f, 0.f, -1.f);
 			vtx3d.Tangent = float3(1.0f, 0.0f, 0.0f);
@@ -683,7 +653,6 @@ namespace mh
 			vtx3d = {};
 
 			vtx3d.Pos = float4(0.5f, 0.5f, -0.5f, 1.0f);
-			vtx3d.Color = float4(1.f, 0.f, 1.f, 1.f);
 			vtx3d.UV = float2(1.f, 0.f);
 			vtx3d.Normal = float3(0.f, 0.f, -1.f);
 			vtx3d.Tangent = float3(1.0f, 0.0f, 0.0f);
@@ -692,7 +661,6 @@ namespace mh
 			vtx3d = {};
 
 			vtx3d.Pos = float4(0.5f, -0.5f, -0.5f, 1.0f);
-			vtx3d.Color = float4(1.f, 0.f, 1.f, 1.f);
 			vtx3d.UV = float2(0.f, 1.f);
 			vtx3d.Normal = float3(0.f, 0.f, -1.f);
 			vtx3d.Tangent = float3(1.0f, 0.0f, 0.0f);
@@ -701,7 +669,6 @@ namespace mh
 			vtx3d = {};
 
 			vtx3d.Pos = float4(-0.5f, -0.5f, -0.5f, 1.0f);
-			vtx3d.Color = float4(1.f, 0.f, 1.f, 1.f);
 			vtx3d.UV = float2(1.f, 1.f);
 			vtx3d.Normal = float3(0.f, 0.f, -1.f);
 			vtx3d.Tangent = float3(1.0f, 0.0f, 0.0f);
@@ -739,7 +706,6 @@ namespace mh
 			// Top
 			vtx3d.Pos = float4(0.0f, fRadius, 0.0f, 1.0f);
 			vtx3d.UV = float2(0.5f, 0.f);
-			vtx3d.Color = float4(1.f, 1.f, 1.f, 1.f);
 			vtx3d.Normal = float3(0.0f, fRadius, 0.0f);
 			vtx3d.Normal.Normalize();
 			vtx3d.Tangent = float3(1.f, 0.f, 0.f);
@@ -768,7 +734,6 @@ namespace mh
 						, fRadius * cosf(i * fStackAngle)
 						, fRadius * sinf(i * fStackAngle) * sinf(j * fSliceAngle), 1.0f);
 					vtx3d.UV = float2(fUVXStep * j, fUVYStep * i);
-					vtx3d.Color = float4(1.f, 1.f, 1.f, 1.f);
 					vtx3d.Normal = float3(vtx3d.Pos);
 					//v.Normal.Normalize();
 
@@ -788,7 +753,6 @@ namespace mh
 			// Bottom
 			vtx3d.Pos = float4(0.f, -fRadius, 0.f, 1.0f);
 			vtx3d.UV = float2(0.5f, 1.f);
-			vtx3d.Color = float4(1.f, 1.f, 1.f, 1.f);
 			vtx3d.Normal = float3(vtx3d.Pos.x, vtx3d.Pos.y, vtx3d.Pos.z);
 			vtx3d.Normal.Normalize();
 

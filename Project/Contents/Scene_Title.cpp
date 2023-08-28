@@ -40,8 +40,6 @@ namespace mh
 	{
 		IScene::Init();
 
-
-
 		{
 			// Main Com_Camera Game Object
 			GameObject* cameraObj = EventMgr::SpawnGameObject(new GameObject, eLayerType::Com_Camera);
@@ -104,7 +102,8 @@ namespace mh
 		//}
 
 		{
-			std::shared_ptr<MeshData> data = ResMgr::Load<MeshData>("House.fbx");
+			std::shared_ptr<MeshData> data = ResMgr::Load<MeshData>("../Res/MeshData/House.fbx");
+			
 			GameObject* obj = data->Instantiate();
 			Com_Transform* tr = obj->GetComponent<Com_Transform>();
 			tr->SetRelativeScale(float3(0.5f));
@@ -112,9 +111,9 @@ namespace mh
 			obj->AddComponent<Script_Player>();
 			EventMgr::SpawnGameObject(obj, eLayerType::Player);
 
-			Com_Animator3D* animator = obj->GetComponent<Com_Animator3D>();
-			if(animator)
-				animator->Play("NlaTrack.010");
+			//Com_Animator3D* animator = obj->GetComponent<Com_Animator3D>();
+			//if(animator)
+			//	animator->Play("NlaTrack.010");
 
 			//
 			//object::Instantiate(eLayerType::Player, obj);

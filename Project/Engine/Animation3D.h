@@ -7,10 +7,10 @@ namespace mh
 {
     struct tKeyFrame
     {
-        double  Time{};
-        float3  Scale{};
-        float4  RotQuat{};
-        float3  Pos{};
+        double              Time{};
+        float3              Scale{};
+        math::Quaternion    RotQuat{};
+        float3              Pos{};
     };
 
     struct tKeyFramesPerBone
@@ -22,48 +22,57 @@ namespace mh
 
     struct tFBXAnimClip;
     class StructBuffer;
-
+    class Skeleton;
 	class Animation3D :
 		public Entity
 	{
 	public:
 		Animation3D();
+
+        Animation3D(const Animation3D& _other) = delete;
+        Animation3D(Animation3D&& _move);
+
         virtual ~Animation3D();
 
     public:
         void BindData();
         void UnBindData();
 
+        eResult LoadFromFBX(Skeleton* _skeleton, const tFBXAnimClip* _clip);
 
-        eResult LoadFromFBX(const tFBXAnimClip* _clip);
-        bool IsSequenceEnd() const { return m_End; }
-        
-        const std::vector<tKeyFramesPerBone>& GetKeyFrames() { return mKeyFramesPerBone; }
-        const std::string& GetAnimationName() const { return mAnimationName; }
-
+        int GetStartFrame() const { return mValues.iStartFrame; }
+        int GetEndFrame() const { return mValues.iEndFrame; }
+        int GetFrameLength() const { return mValues.iFrameLength; }
+        double GetStartTime() const { return mValues.dStartTime; }
+        double GetEndTIme() const { return mValues.dEndTime; }
+        double GetTimeLength() const { return mValues.dTimeLength; }
+        float GetUpdateTime() const { return mValues.fUpdateTime; }
+        int GetFPS() const { return mValues.iFramePerSec; }
+        std::weak_ptr<Skeleton> GetSkeleton() const { return m_OwnerSkeleton; }
 
     private:
-        bool CreateKeyFrameSBuffer(const std::vector<tAnimFrameTranslation>& _vecAnimFrameTranslations);
+        bool CreateKeyFrameSBuffer(const std::vector<tAnimKeyframeTranslation>& _vecAnimFrameTranslations);
 
     private:
-        std::string                 mAnimationName;
-        float						m_StartTime;
-        float						m_EndTime;
-        float						m_TimeLength;
-        float						m_FrameTime;
-        float						m_PlayTime;
-        float						m_PlayScale;
-        int							m_StartFrame;
-        int							m_EndFrame;
-        int							m_FrameCount;   //전체 프레임 카운트 수
-        int							m_FrameMode;
-        int							m_ChangeFrame;
-        bool						m_End;
+        struct Value//저장을 위해서 별도의 struct 안에 넣어놓음
+        {
+            int				iStartFrame;
+            int				iEndFrame;
+            int				iFrameLength;
 
-        //시스템 메모리 저장용 키프레임 데이터
-        //순서 = 본 번호, 내부에는 각 본 별 키프레임 데이터가 저장되어 있음.
-        std::vector<tKeyFramesPerBone>	mKeyFramesPerBone;
-        std::unique_ptr<StructBuffer> m_KeyFrameBuffer;
+            double			dStartTime;
+            double			dEndTime;
+            double			dTimeLength;
+            float			fUpdateTime; // 이거 안씀
+
+            int         	iFramePerSec;
+        } mValues;
+
+        std::weak_ptr<Skeleton>                 m_OwnerSkeleton;
+
+        //이중 배열 형태임
+        std::vector<tKeyFramesPerBone>          m_KeyFrames;
+        std::unique_ptr<StructBuffer>			m_SBufferKeyFrame;
 	};
 }
 

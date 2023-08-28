@@ -195,7 +195,7 @@ struct alignas(16)  tLightAttribute
 
 
 
-struct alignas(16) tAnimFrameTranslation
+struct alignas(16) tAnimKeyframeTranslation
 {
 	float4 vTranslate;
 	float4 vScale;

@@ -8,13 +8,11 @@ namespace mh
 	struct Vertex2D
 	{
 		float4 Pos;
-		float4 Color;
 		float2 UV;
 	};
 	struct Vertex3D
 	{
 		float4 Pos;
-		float4 Color;
 		float2 UV;
 		float3 Tangent;	//접선 벡터
 		float3 Normal;	//법선 벡터
@@ -73,7 +71,7 @@ namespace mh
 		UINT GetSubsetCount() const { return (UINT)mIndexInfos.size(); }
 
 		void SetSkeleton(std::shared_ptr<Skeleton> _pSkeleton) { mSkeleton = _pSkeleton; }
-		std::weak_ptr<Skeleton> GetSkeleton() const { return mSkeleton; }
+		std::shared_ptr<Skeleton> GetSkeleton() const { return mSkeleton; }
 
 
 	private:
@@ -96,7 +94,7 @@ namespace mh
 		std::vector<tIndexInfo>		mIndexInfos;
 
 		//주소는 MeshData에서 관리
-		std::weak_ptr<Skeleton> mSkeleton;
+		std::shared_ptr<Skeleton> mSkeleton;
 	};
 
 

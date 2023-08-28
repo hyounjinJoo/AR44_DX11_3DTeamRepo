@@ -318,12 +318,15 @@ namespace mh
 		{
 			vecVtx3d[i].Pos = float4(_fbxContainer->vecPosition[i], 1.f);
 			vecVtx3d[i].UV = _fbxContainer->vecUV[i];
-			vecVtx3d[i].Color = float4(1.f, 0.f, 1.f, 1.f);
 			vecVtx3d[i].Normal = _fbxContainer->vecNormal[i];
 			vecVtx3d[i].Tangent = _fbxContainer->vecTangent[i];
 			vecVtx3d[i].BiNormal = _fbxContainer->vecBinormal[i];
-			vecVtx3d[i].Weights = _fbxContainer->vecBlendWeight[i];
-			vecVtx3d[i].Indices = _fbxContainer->vecBlendIndex[i];
+
+			if (_fbxContainer->bAnimation)
+			{
+				vecVtx3d[i].Weights = _fbxContainer->vecBlendWeight[i];
+				vecVtx3d[i].Indices = _fbxContainer->vecBlendIndex[i];
+			}
 		}
 		//std::shared_ptr<Mesh> pMesh = std::make_shared<Mesh>();
 		CreateVertexBuffer<Vertex3D>(vecVtx3d);

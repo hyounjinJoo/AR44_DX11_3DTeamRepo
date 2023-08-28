@@ -2,132 +2,157 @@
 #include "Animation3D.h"
 #include "FBXLoader.h"
 #include "StructBuffer.h"
+#include "Skeleton.h"
 
 namespace mh
 {
 	Animation3D::Animation3D()
-        : mAnimationName{}
-        , m_StartTime{}
-		, m_EndTime{}
-		, m_TimeLength{}
-		, m_FrameTime{}
-		, m_PlayTime{}
-		, m_PlayScale{}
-		, m_StartFrame{}
-		, m_EndFrame{}
-		, m_FrameCount{}
-		, m_FrameMode{}
-		, m_ChangeFrame{}
-		, m_End{}
-		, mKeyFramesPerBone{}
-		, m_KeyFrameBuffer{}
+        : mValues{}
+        , m_KeyFrames{}
+        , m_SBufferKeyFrame{}
 	{
 	}
-	Animation3D::~Animation3D()
+    Animation3D::Animation3D(Animation3D&& _move)
+        : Entity(_move)
+        , mValues(_move.mValues)
+        , m_OwnerSkeleton(_move.m_OwnerSkeleton)
+        , m_KeyFrames(_move.m_KeyFrames)
+        , m_SBufferKeyFrame(std::move(_move.m_SBufferKeyFrame))
+    {
+    }
+    Animation3D::~Animation3D()
 	{
 	}
     void Animation3D::BindData()
     {
-        MH_ASSERT(m_KeyFrameBuffer);
-        m_KeyFrameBuffer->BindDataSRV();
+        MH_ASSERT(m_SBufferKeyFrame);
+        m_SBufferKeyFrame->BindDataSRV();
     }
     void Animation3D::UnBindData()
     {
-        m_KeyFrameBuffer->UnBindData();
+        m_SBufferKeyFrame->UnBindData();
     }
-	eResult Animation3D::LoadFromFBX(const tFBXAnimClip* _clip)
+	eResult Animation3D::LoadFromFBX(Skeleton* _skeleton, const tFBXAnimClip* _clip)
 	{
-		if (nullptr == _clip)
+		if (nullptr == _skeleton || nullptr == _clip)
 			return eResult::Fail_Nullptr;
 
-		mAnimationName = _clip->strName;
+        m_OwnerSkeleton = std::shared_ptr<Skeleton>(_skeleton);
 
-		switch (_clip->TimeMode)
-		{
-		case fbxsdk::FbxTime::eFrames24:
-			m_FrameMode = 24;
-			break;
-		case fbxsdk::FbxTime::eFrames30:
-			m_FrameMode = 30;
-			break;
-		case fbxsdk::FbxTime::eFrames60:
-			m_FrameMode = 60;
-			break;
-		}
+        SetKey(_clip->strName);
 
-        // FbxAnimationClip에 있는 starttime 과 endtime 을 이용하여 keyframe 을 얻어온다.
-        m_StartFrame = (int)_clip->StartTime.GetFrameCount(_clip->TimeMode);
-        m_EndFrame = (int)_clip->EndTime.GetFrameCount(_clip->TimeMode);
-        m_FrameCount = (int)(m_EndFrame - m_StartFrame + 1);
+        switch (_clip->TimeMode)
+        {
+        case fbxsdk::FbxTime::eDefaultMode:
+            mValues.iFramePerSec = 30;
+            break;
+        case fbxsdk::FbxTime::eFrames120:
+            mValues.iFramePerSec = 120;
+            break;
+        case fbxsdk::FbxTime::eFrames100:
+            mValues.iFramePerSec = 100;
+            break;
+        case fbxsdk::FbxTime::eFrames60:
+            mValues.iFramePerSec = 60;
+            break;
+        case fbxsdk::FbxTime::eFrames50:
+            mValues.iFramePerSec = 50;
+            break;
+        case fbxsdk::FbxTime::eFrames48:
+            mValues.iFramePerSec = 48;
+            break;
+        case fbxsdk::FbxTime::eFrames30:
+            [[FallThrough]]
+        case fbxsdk::FbxTime::eFrames30Drop:
+            [[FallThrough]]
+        case fbxsdk::FbxTime::eNTSCDropFrame:
+            [[FallThrough]]
+        case fbxsdk::FbxTime::eNTSCFullFrame:
+            mValues.iFramePerSec = 30;
+            break;
+        case fbxsdk::FbxTime::ePAL:
+            mValues.iFramePerSec = 25;
+            break;
+        case fbxsdk::FbxTime::eFrames24:
+            mValues.iFramePerSec = 24;
+            break;
+        case fbxsdk::FbxTime::eFrames1000:
+            mValues.iFramePerSec = 1000;
+            break;
+        case fbxsdk::FbxTime::eCustom:
+            mValues.iFramePerSec = 30;
+            break;
+        case fbxsdk::FbxTime::eFrames96:
+            mValues.iFramePerSec = 96;
+            break;
+        case fbxsdk::FbxTime::eFrames72:
+            mValues.iFramePerSec = 72;
+            break;
+        default:
+            mValues.iFramePerSec = 60;
+            break;
+        }
 
-        // 시간 정보를 저장해준다.
-        m_StartTime = 0.f;
-        m_EndTime = m_PlayTime;
-        m_TimeLength = m_PlayTime;
+        mValues.dStartTime = _clip->StartTime.GetSecondDouble();
+        mValues.dEndTime = _clip->StartTime.GetSecondDouble();
 
-        m_FrameTime = m_PlayTime / m_FrameCount;
+        mValues.iStartFrame = (int)_clip->StartTime.GetFrameCount(_clip->TimeMode);
+        mValues.iEndFrame = (int)_clip->EndTime.GetFrameCount(_clip->TimeMode);
+        mValues.iFrameLength = (int)(mValues.iEndFrame - mValues.iStartFrame + 1);//+1 -> 0프레임부터 시작이므로
+        MH_ASSERT(mValues.iFrameLength <= 0);
 
 
-
-
-        //GPU로 보낼 데이터
-        std::vector<tAnimFrameTranslation>	vecFrameTrans;
-
-        //GPU로 보낼 데이터를 작성
-        //GPU는 이중 배열 같은걸 지원 안함
-        //그러니까 1차원 배열 형태로 애니메이션 데이터를 보내야 함
+        //본의 사이즈 * 프레임 수 만큼 사이즈를 설정
+        //그러므로 CPU 메모리에서는 이중 배열 형태로 저장해 놓고
         // 본 3개 키프레임 5개일 경우
         // 본0키0|본0키1|본0키2|본0키3|본0키4|
         // 본1키0|본1키1|본1키2|본1키3|본1키4|
         // 본2키0|본2키1|본2키2|본2키3|본2키4
         //그러므로 하나의 애니메이션은 본의 갯수 * 키프레임 갯수가 된다
-        vecFrameTrans.resize(_clip->KeyFramesPerBone.size() * (size_t)m_FrameCount);
-
-
-        // 키 프레임 수만큼 반복하며 각각의 프레임을 보간할 행렬 정보를 위치, 크기, 회전정보로 뽑아온다.
-        mKeyFramesPerBone.reserve(_clip->KeyFramesPerBone.size());
-        for (size_t i = 0; i < _clip->KeyFramesPerBone.size(); ++i)
+        std::vector<tAnimKeyframeTranslation>	vecFrameTrans;//GPU
+        m_KeyFrames.resize(_clip->KeyFramesPerBone.size());//CPU
+        for (size_t i = 0; i < m_KeyFrames.size(); ++i)
         {
-            mKeyFramesPerBone.push_back(tKeyFramesPerBone{});
-            tKeyFramesPerBone& keyFramesPerBone = mKeyFramesPerBone.back();
+            m_KeyFrames[i].BoneIndex = _clip->KeyFramesPerBone[i].BoneIndex;
+            m_KeyFrames[i].vecKeyFrame.resize(_clip->KeyFramesPerBone[i].vecKeyFrame.size());
 
-            keyFramesPerBone.BoneIndex = _clip->KeyFramesPerBone[i].BoneIndex;
-
-            // 아래부터 키프레임 정보를 저장한다.
-            keyFramesPerBone.vecKeyFrame.reserve(_clip->KeyFramesPerBone[i].vecKeyFrame.size());
-            for (size_t j = 0; j < _clip->KeyFramesPerBone[i].vecKeyFrame.size(); ++j)
+            //GPU로 보낼 데이터 세팅
+            //GPU는 이중 배열 같은걸 지원 안함
+            //GPU 메모리는 이걸 1차원 배열 형태로 펴서 데이터를 보내준다
+            //그러니까 1차원 배열 형태로 애니메이션 데이터를 보내야 함
+            
+            vecFrameTrans.resize(m_KeyFrames.size() * m_KeyFrames[i].vecKeyFrame.size());
+            for(size_t j = 0; j < m_KeyFrames[i].vecKeyFrame.size(); ++j)
             {
-                keyFramesPerBone.vecKeyFrame.push_back(tKeyFrame{});
-                tKeyFrame& keyFrame = keyFramesPerBone.vecKeyFrame.back();
-                keyFrame.Time = j * m_FrameTime;
+                //우리 포맷 키프레임
+                tKeyFrame& projKeyFrame = m_KeyFrames[i].vecKeyFrame[j];
+                //FBX 포맷 키프레임
+                const tFBXKeyFrame& fbxKeyFrame = _clip->KeyFramesPerBone[i].vecKeyFrame[j];
 
-                // 현재 본의 키 프레임에 해당하는 행렬 정보를 얻어온다.
-                fbxsdk::FbxAMatrix		mat = _clip->KeyFramesPerBone[i].vecKeyFrame[j].matTransform;
+                //포맷을 변환해줘야 한다. double -> float
 
-                // 행렬로부터 위치, 크기, 회전 정보를 얻어온다.
-                fbxsdk::FbxVector4 Pos = mat.GetT();
-                fbxsdk::FbxVector4 Scale = mat.GetS();
-                fbxsdk::FbxQuaternion Rot = mat.GetQ();
+                const fbxsdk::FbxVector4& fbxPos = fbxKeyFrame.matTransform.GetT();
+                projKeyFrame.Pos.x = (float)fbxPos.mData[0];
+                projKeyFrame.Pos.y = (float)fbxPos.mData[1];
+                projKeyFrame.Pos.z = (float)fbxPos.mData[2];
 
-                keyFrame.Scale = 
-                    float3((float)Scale.mData[0], (float)Scale.mData[1], (float)Scale.mData[2]);
-                keyFrame.Pos = 
-                    float3((float)Pos.mData[0], (float)Pos.mData[1], (float)Pos.mData[2]);
-                keyFrame.RotQuat = 
-                    float4((float)Rot.mData[0], (float)Rot.mData[1], (float)Rot.mData[2], (float)Rot.mData[3]);
+                const fbxsdk::FbxVector4& fbxScale = fbxKeyFrame.matTransform.GetS();
+                projKeyFrame.Scale.x = (float)fbxScale.mData[0];
+                projKeyFrame.Scale.y = (float)fbxScale.mData[1];
+                projKeyFrame.Scale.z = (float)fbxScale.mData[2];
+
+                const fbxsdk::FbxQuaternion& fbxQuat = fbxKeyFrame.matTransform.GetQ();
+                projKeyFrame.RotQuat.x = (float)fbxQuat.mData[0];
+                projKeyFrame.RotQuat.y = (float)fbxQuat.mData[1];
+                projKeyFrame.RotQuat.z = (float)fbxQuat.mData[2];
+                projKeyFrame.RotQuat.w = (float)fbxQuat.mData[3];
 
 
-                //GPU에 보낼 데이터 생성
-                if (j < (size_t)m_FrameCount)
-                {
-                    vecFrameTrans[i * m_FrameCount + j].vScale =
-                        float4(keyFrame.Scale.x, keyFrame.Scale.y, keyFrame.Scale.z, 1.f);
-
-                    vecFrameTrans[i * m_FrameCount + j].vTranslate =
-                        float4(keyFrame.Pos.x, keyFrame.Pos.y, keyFrame.Pos.z, 1.f);
-
-                    vecFrameTrans[i * m_FrameCount + j].qRot = keyFrame.RotQuat;
-                }
+                //i번째 본의 j 키프레임 데이터
+                size_t indexIn1DArray = m_KeyFrames.size() * i + j;
+                vecFrameTrans[indexIn1DArray].vTranslate =  float4(projKeyFrame.Pos, 1.f);
+                vecFrameTrans[indexIn1DArray].vScale =      float4(projKeyFrame.Scale, 1.f);
+                vecFrameTrans[indexIn1DArray].qRot =        projKeyFrame.RotQuat;
             }
         }
 
@@ -138,18 +163,23 @@ namespace mh
 
 		return eResult::Success;
 	}
-    bool Animation3D::CreateKeyFrameSBuffer(const std::vector<tAnimFrameTranslation>& _vecAnimFrameTranslations)
+    bool Animation3D::CreateKeyFrameSBuffer(const std::vector<tAnimKeyframeTranslation>& _vecAnimFrameTranslations)
     {
         MH_ASSERT(false == _vecAnimFrameTranslations.empty());
 
-        m_KeyFrameBuffer = std::make_unique<StructBuffer>();
+        m_SBufferKeyFrame = std::make_unique<StructBuffer>();
         tSBufferDesc desc{};
         desc.eSBufferType = eStructBufferType::READ_ONLY;
         desc.REGISLOT_t_SRV = Register_t_g_FrameTransArray;
         desc.TargetStageSRV = define::eShaderStageFlag::CS;
-        m_KeyFrameBuffer->SetDesc(desc);
+        m_SBufferKeyFrame->SetDesc(desc);
 
-        m_KeyFrameBuffer->Create<tAnimFrameTranslation>
-            (_vecAnimFrameTranslations.size(), _vecAnimFrameTranslations.data(), _vecAnimFrameTranslations.size());
+        if (FAILED(m_SBufferKeyFrame->Create<tAnimKeyframeTranslation>
+            (_vecAnimFrameTranslations.size(), _vecAnimFrameTranslations.data(), _vecAnimFrameTranslations.size())))
+        {
+            return false;
+        }
+
+        return true;
     }
 }

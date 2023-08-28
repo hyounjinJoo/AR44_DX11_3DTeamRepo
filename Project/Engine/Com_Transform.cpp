@@ -64,7 +64,7 @@ namespace mh
 			mMatWorldFinal = MATRIX::CreateScale(mSize) * mMatWorldWithoutSize;
 		}
 
-		Application::AddDestroyFunc(std::bind(&Com_Transform::ClearUpdateState, this));
+		Application::AddEndFrameFunc(std::bind(&Com_Transform::ClearUpdateState, this));
 	}
 
 	void Com_Transform::Render()

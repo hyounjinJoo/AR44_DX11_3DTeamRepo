@@ -41,9 +41,9 @@ TEXTURE2D(SpecularLightTarget, t, 6);
 
 
 //Bone Matrices(Animation 3D)
-SBUFFER(g_FrameTransArray, tAnimFrameTranslation, t, 16);
+SBUFFER(g_FrameTransArray, tAnimKeyframeTranslation, t, 16);
 SBUFFER(g_OffsetArray, Matrix, t, 17);
-SBUFFER(g_ChangeFrameTransArray, tAnimFrameTranslation, t, 18);
+SBUFFER(g_ChangeFrameTransArray, tAnimKeyframeTranslation, t, 18);
 
 //최종 행렬이 저장되는 구조화버퍼
 SBUFFER(g_BoneMatrixArray, Matrix, t, 19);

@@ -69,7 +69,7 @@ namespace mh::define
 // ============
 // Animation 3D
 // ============
-	//struct tAnimFrameTranslation
+	//struct tAnimKeyframeTranslation
 	//{
 	//	float4	vTranslate;
 	//	float4	vScale;
@@ -80,7 +80,7 @@ namespace mh::define
 	{
 		double	dTime;
 		int		iFrame;
-		tAnimFrameTranslation  FrameTrans;
+		tAnimKeyframeTranslation  FrameTrans;
 	};
 
 	struct tMTBone

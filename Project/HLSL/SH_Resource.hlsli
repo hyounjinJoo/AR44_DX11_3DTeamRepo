@@ -38,17 +38,22 @@ TEXTURE2D(DiffuseLightTarget, t, 5);
 TEXTURE2D(SpecularLightTarget, t, 6);
 
 
+
+
 //Bone Matrices(Animation 3D)
-SBUFFER(g_arrFrameTrans, tFrameTranslation, t, 16);
-SBUFFER(g_arrOffset, Matrix, t, 17);
-SBUFFER_RW(g_arrFinalMat, Matrix, u, 0);
+SBUFFER(g_FrameTransArray, tAnimKeyframeTranslation, t, 16);
+SBUFFER(g_OffsetArray, Matrix, t, 17);
+SBUFFER(g_ChangeFrameTransArray, tAnimKeyframeTranslation, t, 18);
+
+//최종 행렬이 저장되는 구조화버퍼
+SBUFFER(g_BoneMatrixArray, Matrix, t, 19);
+//SBUFFER(g_InstancingBoneMatrixArray, Matrix, t, 18);
+SBUFFER_RW(g_FinalBoneMatrixArray, Matrix, u, 0);
+
+SBUFFER_RW(g_BoneSocketMatrixArray, tOutputBoneInfo, u, 1);
+SBUFFER_RW(g_InstancingBoneMatrixArray, Matrix, u, 2);
 
 
-//StructuredBuffer<tFrameTranslation> g_arrFrameTrans : register(t16);
-//StructuredBuffer<matrix> g_arrOffset : register(t17);
-//RWStructuredBuffer<matrix> g_arrFinalMat : register(u0);
-
-SBUFFER(g_arrBoneMat, Matrix, t, 30);
 
 
 // Light

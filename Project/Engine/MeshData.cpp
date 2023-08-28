@@ -59,7 +59,7 @@ namespace mh
 		//FBX일 경우에는 FBXLoader를 통해서 가져온다.
 		if (".FBX" == ext)
 		{
-			eResult result = LoadFromFBX(_filePath);
+			eResult result = LoadFromFBX(_filePath, true);
 			if (eResultFail(result))
 				return result;
 		}
@@ -181,7 +181,7 @@ namespace mh
 			{
 				if (mMeshContainers[i].pMesh)
 				{
-					mMeshContainers[i].pMesh->SetSkeleton(mSkeleton.get());
+					mMeshContainers[i].pMesh->SetSkeleton(mSkeleton);
 				}
 			}
 		}
@@ -205,7 +205,7 @@ namespace mh
 		if (mSkeleton)
 		{
 			animator = uniqObj->AddComponent<Com_Animator3D>();
-			animator->SetSkeleton(mSkeleton.get());
+			animator->SetSkeleton(mSkeleton);
 		}
 
 
@@ -320,7 +320,8 @@ namespace mh
 			}
 
 			//스켈레톤 주소를 지정
-			meshCont.pMesh->SetSkeleton(mSkeleton.get());
+			meshCont.pMesh->SetSkeleton(mSkeleton);
+
 
 			if (nullptr != meshCont.pMesh)
 			{
@@ -353,11 +354,11 @@ namespace mh
 
 
 			// 메테리얼 가져오기
-			for (UINT i = 0; i < containers[i].vecMtrl.size(); ++i)
+			for (UINT j = 0; j < containers[i].vecMtrl.size(); ++j)
 			{
 				//Material의 경우 FBX Loader에서 만들어 놨음
 				// 예외처리 (material 이름이 입력 안되어있을 수도 있다.)
-				std::string strKey = containers[i].vecMtrl[i].strMtrlName;
+				std::string strKey = containers[i].vecMtrl[j].strMtrlName;
 				std::shared_ptr<Material> pMtrl = ResMgr::Find<Material>(strKey);
 
 				//혹시나 없을 경우 에러
