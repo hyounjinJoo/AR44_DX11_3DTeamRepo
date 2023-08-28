@@ -40,7 +40,7 @@ namespace mh
 
 	}
 
-	void Texture::Clear(uint _startSlot)
+	void Texture::ClearSRV(UINT _startSlot)
 	{
 		ID3D11ShaderResourceView* srv = nullptr;
 
@@ -185,6 +185,9 @@ namespace mh
 	{
 		if (false == std::fs::exists(_fullPath))
 		{
+
+			std::fs::path curpath = std::fs::current_path();
+
 			ERROR_MESSAGE_W(L"파일이 존재하지 않습니다.");
 			return eResult::Fail_PathNotExist;
 		}

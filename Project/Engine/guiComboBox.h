@@ -31,6 +31,7 @@ namespace gui
 		void SetImguiComboFlag(ImGuiComboFlags _Flags) { mComboFlags = _Flags; }
 
 		void AddItem(const tComboItem& _tItem) { mItems.push_back(_tItem); }
+		void AddItem(const std::string& _strItemName) { mItems.push_back(tComboItem{ _strItemName, }); }
 
 		//새로 들어온 벡터값으로 값을 교체
 		void SetItems(const std::vector<std::string>& _strItems);
@@ -48,6 +49,9 @@ namespace gui
 
 		void SetClickCallback(std::function<void(const tComboItem&)> _pFunc) { mCallback = _pFunc; }
 
+		bool IsSelectionChanged() const { return mbSelectionChanged; }
+
+
 	private:
 		bool IsIndexValid() const;
 
@@ -60,6 +64,9 @@ namespace gui
 
 		//함수 호출 대상
 		std::function<void(const tComboItem&)> mCallback;
+
+		//선택된 항목이 바뀌었는지(1프레임만 유지)
+		bool mbSelectionChanged;
 	};
 
 	inline bool guiComboBox::IsIndexValid() const

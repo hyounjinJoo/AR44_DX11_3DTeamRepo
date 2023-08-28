@@ -19,13 +19,34 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <None Include="HW_Example.hlsli" />
     <None Include="SH_Blur.hlsli" />
+    <None Include="SH_Common.hlsli" />
+    <None Include="SH_CommonStruct.hlsli" />
     <None Include="SH_ConstBuffer.hlsli" />
     <None Include="SH_Func.hlsli" />
+    <None Include="SH_Functions.hlsli" />
+    <None Include="SH_Func_Blur.hlsli" />
+    <None Include="SH_Func_DecodeColor.hlsli" />
+    <None Include="SH_Func_Light.hlsli" />
     <None Include="SH_Globals.hlsli" />
     <None Include="SH_Light.hlsli" />
     <None Include="SH_Resource.hlsli" />
     <None Include="SH_Sampler.hlsli" />
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="_0VS_Example.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
+    </FxCompile>
+    <FxCompile Include="_4PS_Example.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
+    </FxCompile>
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>

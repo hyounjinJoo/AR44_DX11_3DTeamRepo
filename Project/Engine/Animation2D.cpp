@@ -190,7 +190,7 @@ namespace mh
 
 	void Animation2D::BindData()
 	{
-		mAtlas->BindDataSRV(Register_t_atlasTexture, eShaderStageFlag::PS);
+		mAtlas->BindDataSRV(Register_t_AtlasTexture, eShaderStageFlag::PS);
 
 		ConstBuffer* cb = RenderMgr::GetConstBuffer(eCBType::Animation2D);
 
@@ -215,7 +215,7 @@ namespace mh
 	void Animation2D::UnBindData()
 	{
 		//Texture clear
-		Texture::Clear(Register_t_atlasTexture);
+		Texture::ClearSRV(Register_t_AtlasTexture);
 
 		ConstBuffer* cb = RenderMgr::GetConstBuffer(eCBType::Animation2D);
 

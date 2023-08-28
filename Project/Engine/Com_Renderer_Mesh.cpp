@@ -29,4 +29,19 @@ namespace mh
 			}
 		}
 	}
+	void Com_Renderer_Mesh::RenderEnd()
+	{
+		if (false == IsRenderReady())
+			return;
+
+		UINT iSubsetCount = GetMesh()->GetSubsetCount();
+		for (UINT i = 0; i < iSubsetCount; ++i)
+		{
+			if (nullptr != GetCurrentMaterial(i))
+			{
+				//재질 바인딩
+				GetCurrentMaterial(i)->UnBindData();
+			}
+		}
+	}
 }

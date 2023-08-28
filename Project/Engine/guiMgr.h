@@ -4,6 +4,7 @@
 #include "define_Struct.h"
 #include "define_Macro.h"
 #include <unordered_map>
+#include "json-cpp/json-forwards.h"
 
 namespace gui
 {
@@ -17,6 +18,7 @@ namespace gui
 
 		static inline void SetEnable(bool _bEnable);
 		static inline bool GetEnable() { return mbEnable; }
+		static inline void ToggleEnable() { SetEnable(!mbEnable); }
 
 		template<typename T>
 		static T* FindGuiWindow(const std::string_view _strKey);
@@ -43,7 +45,12 @@ namespace gui
 		
 		static void DebugRender(mh::define::tDebugMesh& mesh);
 
-	private:
+		//Window 이름으로 저장된 Json 값이 있을 경우 로드함
+		static Json::Value* CheckJsonSaved(const std::string& _strKey);
+
+		static void InitGuiWindows();
+
+		//=================== IMGUI ===========================
 		static void ImGuiInitialize();
 		static void ImGuiRelease();
 
@@ -58,8 +65,13 @@ namespace gui
 		static std::vector<EditorObject*> mEditorObjects;
 		static std::vector<DebugObject*> mDebugObjects;
 
+		//현재 GUI를 표시할지 여부
 		static bool mbEnable;
+
+		//GUI가 최초 1회 초기화 되었는지 여부
 		static bool mbInitialized;
+
+		static std::unique_ptr<Json::Value> mJsonUIData;
 	};
 
 	inline void guiMgr::SetEnable(bool _bEnable)
@@ -97,6 +109,13 @@ namespace gui
 		static_assert(false == std::is_base_of_v<guiChild, T>);
 
 		T* retPtr = new T;
+
+		Json::Value* pJval = CheckJsonSaved(retPtr->GetName());
+		if (pJval)
+		{
+			retPtr->LoadJson(pJval);
+		}
+
 		AddGuiWindow(static_cast<guiBase*>(retPtr));
 		return retPtr;
 	}

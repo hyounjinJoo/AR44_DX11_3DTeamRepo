@@ -162,12 +162,12 @@ namespace mh
 
 		//쉐이더
 		{
-			const std::vector<std::string>& vecStrKey = Json::MH::LoadStrKeyVector(_pJVal, JSON_KEY_PAIR(mArrShaderCode));
+			const std::vector<std::string>& vecStrKey = Json::MH::LoadPtrStrKeyVector(_pJVal, JSON_KEY_PAIR(mArrShaderCode));
 
 			//에딧 모드가 아닐 경우에만 로드
 			for (size_t i = 0; i < mArrShaderCode.size(); ++i)
 			{
-				if (false == mbEditMode)
+				if (false == mbEditMode && false == vecStrKey[i].empty())
 				{
 					CreateByCSO((eGSStage)i, vecStrKey[i]);
 					if ((size_t)eGSStage::END == i)
