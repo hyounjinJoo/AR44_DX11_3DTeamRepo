@@ -252,6 +252,10 @@ call Copy_HLSL.bat $(Configuration)</Command>
     <ClInclude Include="Animation2D.h" />
     <ClInclude Include="Animation3DShader.h" />
     <ClInclude Include="base64.h" />
+    <ClInclude Include="Com_BehaviorTree.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
     <ClInclude Include="BrainTree\BrainTree.h" />
     <ClInclude Include="ComMgr.h" />
     <ClInclude Include="Components.h" />
@@ -379,6 +383,10 @@ call Copy_HLSL.bat $(Configuration)</Command>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="Com_BehaviorTree.cpp">
+      <SubType>
+      </SubType>
     </ClCompile>
     <ClCompile Include="BrainTree\example\Example01_Simple.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>

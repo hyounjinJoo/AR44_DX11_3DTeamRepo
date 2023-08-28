@@ -181,6 +181,9 @@
     <Filter Include="BrainTree\example">
       <UniqueIdentifier>{0779c46a-601a-434f-a7bd-493e0dc8231c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Component\BehaviorTree">
+      <UniqueIdentifier>{9f2824fc-8560-461f-bea1-12574c1a86ed}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Application.cpp">
@@ -491,6 +494,9 @@
     </ClCompile>
     <ClCompile Include="BrainTree\example\Example01_Simple.cpp">
       <Filter>BrainTree\example</Filter>
+    </ClCompile>
+    <ClCompile Include="Com_BehaviorTree.cpp">
+      <Filter>Component\BehaviorTree</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -853,6 +859,9 @@
     </ClInclude>
     <ClInclude Include="BrainTree\BrainTree.h">
       <Filter>BrainTree</Filter>
+    </ClInclude>
+    <ClInclude Include="Com_BehaviorTree.h">
+      <Filter>Component\BehaviorTree</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
