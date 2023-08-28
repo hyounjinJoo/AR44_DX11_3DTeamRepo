@@ -299,6 +299,7 @@ call Copy_HLSL.bat $(Configuration)</Command>
     <ClInclude Include="CollisionMgr.h" />
     <ClInclude Include="Application.h" />
     <ClInclude Include="ILight.h" />
+    <ClInclude Include="ImGuizmo.h" />
     <ClInclude Include="imgui\imconfig.h" />
     <ClInclude Include="imgui\imgui.h" />
     <ClInclude Include="imgui\imgui_impl_dx11.h" />
@@ -427,6 +428,9 @@ call Copy_HLSL.bat $(Configuration)</Command>
     <ClCompile Include="CollisionMgr.cpp" />
     <ClCompile Include="Application.cpp" />
     <ClCompile Include="ILight.cpp" />
+    <ClCompile Include="ImGuizmo.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
     <ClCompile Include="imgui\imgui.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>

@@ -55,6 +55,8 @@ namespace gui
 
 	std::unique_ptr<Json::Value> guiMgr::mJsonUIData{};
 
+	ImGuizmo::OPERATION guiMgr::mCurrentGizmoOperation = ImGuizmo::TRANSLATE;
+
 	using namespace mh::define;
 	using namespace mh::math;
 	
@@ -120,6 +122,16 @@ namespace gui
 			)
 		{
 			gui::guiMgr::ToggleEnable();
+		}
+
+
+		if (mh::InputMgr::GetKey(mh::eKeyCode::Z))
+		{
+			mCurrentGizmoOperation = ImGuizmo::SCALE;
+		}
+		if (mh::InputMgr::GetKey(mh::eKeyCode::X))
+		{
+			mCurrentGizmoOperation = ImGuizmo::TRANSLATE;
 		}
 
 		if (false == mbEnable)
@@ -387,6 +399,9 @@ namespace gui
 		ImGui_ImplDX11_NewFrame();
 		ImGui_ImplWin32_NewFrame();
 		ImGui::NewFrame();
+		ImGuizmo::BeginFrame();
+		RenderGuizmo();
+
 		ImGuiIO io = ImGui::GetIO();
 	}
 
@@ -426,6 +441,103 @@ namespace gui
 		if (mbInitialized)
 		{
 			_pBase->InitRecursive();
+		}
+	}
+
+	void guiMgr::RenderGuizmo()
+	{
+		mh::GameObject* targetgameobject = mh::RenderMgr::GetInspectorGameObject();
+
+		if (!targetgameobject)
+		{
+			return;
+		}
+
+		mh::Com_Camera* mainCam = mh::RenderMgr::GetMainCam();
+
+		if (!mainCam)
+		{
+			return;
+		}
+
+		//ImGuizmo::SetOrthographic(false);
+		//ImGuizmo::SetDrawlist(ImGui::GetForegroundDrawList());
+
+		constexpr float kOffsetX = 60.f;
+		constexpr float kOffsetY = 45.f;
+		const float		x = ImGui::GetWindowPos().x - 60;
+		const float		y = ImGui::GetWindowPos().y - 45;
+		const float		width = ImGui::GetWindowViewport()->Size.x;
+		const float		height = ImGui::GetWindowViewport()->Size.y;
+		ImGuizmo::SetRect(x, y, width, height);
+
+		MATRIX view = mainCam->GetViewMatrix();
+		MATRIX projection = mainCam->GetProjectionMatrix();
+		MATRIX worldMatrix = targetgameobject->GetComponent<mh::Com_Transform>()->GetWorldMat();
+
+		float matrixTranslation[3], matrixRotation[3], matrixScale[3];
+		ImGuizmo::DecomposeMatrixToComponents(&worldMatrix.m[0][0], matrixTranslation, matrixRotation, matrixScale);
+
+		MATRIX matTranslation = MATRIX::CreateTranslation(matrixTranslation[0], matrixTranslation[1], matrixTranslation[2]);
+		MATRIX matRotation = MATRIX::CreateFromYawPitchRoll(matrixRotation[1], matrixRotation[0], matrixRotation[2]);
+		MATRIX matScale = MATRIX::CreateScale(matrixScale[0], matrixScale[1], matrixScale[2]);
+
+		worldMatrix = matScale * matRotation * matTranslation;
+
+		ImGuizmo::Manipulate(&view.m[0][0], &projection.m[0][0], mCurrentGizmoOperation, ImGuizmo::WORLD, &worldMatrix.m[0][0]);
+
+		if (ImGuizmo::IsUsing())
+		{
+
+			Vector3 position{};
+			Quaternion rotation{};
+			Vector3 scale{};
+			worldMatrix.Decompose(scale, rotation, position);
+
+			mh::Com_Transform* transformComponent = targetgameobject->GetComponent<mh::Com_Transform>();
+
+			if (mCurrentGizmoOperation == ImGuizmo::TRANSLATE)
+			{
+				transformComponent->SetRelativePos(position);
+			}
+			else if (mCurrentGizmoOperation == ImGuizmo::ROTATE)
+			{
+				// 회전 작동 오류있음
+				// 현재사용 X
+				Matrix mat = Matrix::CreateFromQuaternion(rotation);
+				float x, y, z;
+
+				if (mat._13 > 0.998f)
+				{
+					y = atan2f(mat._21, mat._22);
+					x = XM_PI / 2.0f;
+					z = 0;
+				}
+				else if (mat._13 < -0.998f)
+				{
+					y = atan2f(mat._21, mat._22);
+					x = -XM_PI / 2.0f;
+					z = 0;
+				}
+				else
+				{
+					y = atan2f(-mat._23, mat._33);
+					x = asinf(mat._13);
+					z = atan2f(-mat._12, mat._11);
+				}
+
+				Vector3 axisRotation(x, y, z);
+				transformComponent->SetRelativeRotXYZ(axisRotation);
+
+			}
+			else if (mCurrentGizmoOperation == ImGuizmo::SCALE)
+			{
+				transformComponent->SetRelativeScale(scale);
+			}
+			else
+			{
+				return;
+			}
 		}
 	}
 
