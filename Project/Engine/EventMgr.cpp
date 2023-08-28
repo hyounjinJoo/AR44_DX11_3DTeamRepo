@@ -60,7 +60,7 @@ namespace mh
 		//레이어가 설정되지 않았을 경우 return
 		eLayerType layerType = static_cast<eLayerType>(_event.wParam);
 			
-		SceneMgr::GetActiveScene()->AddGameObject(Obj, layerType);
+		SceneMgr::GetActiveScene()->AddNewGameObjectHierarchy(layerType, Obj);
 		mbLevelModified = true;
 	}
 
@@ -96,9 +96,18 @@ namespace mh
 		if (pParent && pChild)
 		{
 			pParent->AddChild(pChild);
-			SceneMgr::GetActiveScene()->AddGameObject(pChild, pParent->GetLayerType());
+			SceneMgr::GetActiveScene()->AddNewGameObjectHierarchy(pParent->GetLayerType(), pChild);
 		}
-			
+	}
+
+	void EventMgr::MoveGameObjLayer(const tEvent& _event)
+	{
+		GameObject* pObj = reinterpret_cast<GameObject*>(_event.lParam);
+		define::eLayerType targetLayer = static_cast<define::eLayerType>(_event.wParam);
+		
+		IScene* scene = SceneMgr::GetActiveScene();
+		if (scene)
+			scene->MoveGameObjectLayer(targetLayer, pObj);
 	}
 
 
@@ -116,6 +125,9 @@ namespace mh
 				break;
 			case eEventType::AddChild:
 				AddChildGameObj(mEvents[i]);
+				break;
+			case eEventType::MoveGameObjLayer:
+				MoveGameObjLayer(mEvents[i]);
 				break;
 
 			default:
@@ -144,7 +156,7 @@ namespace mh
 	}
 
 
-	GameObject* EventMgr::SpawnGameObject(GameObject* _gameObj, define::eLayerType _layer)
+	GameObject* EventMgr::SpawnGameObject(define::eLayerType _layer, GameObject* _gameObj)
 	{
 		if (_gameObj)
 		{
@@ -158,9 +170,10 @@ namespace mh
 			IScene* scene = SceneMgr::GetActiveScene();
 			if (scene && false == scene->IsInitialized())
 			{
-				scene->AddGameObject(_gameObj, _layer);
+				scene->AddNewGameObject(_layer, _gameObj);
 			}
 
+			//Scene 시작됐을 경우에는 지연 삽입
 			else
 			{
 				tEvent evn{};
@@ -171,6 +184,22 @@ namespace mh
 			}
 		}
 		return _gameObj;
+	}
+
+	void EventMgr::MoveGameObjectLayer(define::eLayerType _layer, GameObject* _gameObj)
+	{
+		MH_ASSERT(define::eLayerType::None != _layer && _gameObj);
+		tEvent evn{};
+		evn.Type = eEventType::MoveGameObjLayer;
+		//evn.lP
+	}
+
+
+	GameObject* EventMgr::SpawnGameObject(define::eLayerType _layer)
+	{
+		std::unique_ptr<GameObject> _obj = std::make_unique<GameObject>();
+		SpawnGameObject(_layer, _obj.get());
+		return _obj.release();
 	}
 
 

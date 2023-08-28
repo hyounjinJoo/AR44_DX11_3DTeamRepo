@@ -21,10 +21,9 @@ namespace mh
 		virtual eResult LoadJson(const Json::Value* _pJson) override;
 
 		virtual void Init() {};
+		virtual void Start() {};
 		virtual void Update() {};
 		virtual void FixedUpdate() = 0;
-		virtual void Render() {};
-		virtual void RenderEnd() {};
 
 		define::eComponentType GetComType() const { return mType; };
 

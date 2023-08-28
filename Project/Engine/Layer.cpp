@@ -99,6 +99,7 @@ namespace mh
 			return;
 
 		mGameObjects.push_back(gameObject);
+		gameObject->SetLayerType(mLayerType);
 
 		if (_bNeedInit)
 			gameObject->Init();

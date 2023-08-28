@@ -162,9 +162,6 @@ namespace mh
                 SetTexture((eTextureSlot)i, ResMgr::Load<Texture>(vecLoad[i]));
             }
         }
-
-
-
         return eResult::Success;
     }
 

@@ -25,10 +25,13 @@ namespace mh
 		: mComponents()
 		, mState(eState::Active)
 		, mLayerType(define::eLayerType::None)
-		, mbDontDestroy()
 		, mName()
 		, mParent()
 		, mChilds()
+		, mbInitalized()
+		, mbStarted()
+		, mbDontDestroy()
+
 	{
 		mComponents.reserve((int)eComponentType::Scripts + 10);
 		mComponents.resize((int)eComponentType::Scripts);
@@ -40,9 +43,11 @@ namespace mh
 		, mComponents()
 		, mState(_other.mState)
 		, mLayerType(_other.mLayerType)
-		, mbDontDestroy(_other.mbDontDestroy)
 		, mName(_other.mName)
 		, mParent()
+		, mbInitalized(_other.mbInitalized)
+		, mbStarted(_other.mbStarted)
+		, mbDontDestroy(_other.mbDontDestroy)
 	{
 		mComponents.reserve((int)eComponentType::Scripts + 10);
 		mComponents.resize((int)eComponentType::Scripts);
@@ -240,6 +245,8 @@ namespace mh
 	
 	void GameObject::Init()
 	{
+		mbInitalized = true;
+
 		for (size_t i = 0; i < mComponents.size(); ++i)
 		{
 			if (mComponents[i])
@@ -253,20 +260,40 @@ namespace mh
 		}
 	}
 
+	void GameObject::Start()
+	{
+		mbStarted = true;
+		for (size_t i = 0; i < mComponents.size(); ++i)
+		{
+			if (mComponents[i])
+				mComponents[i]->Start();
+		}
+
+		for (size_t i = 0; i < mChilds.size(); ++i)
+		{
+			if (mChilds[i])
+				mChilds[i]->Start();
+		}
+	}
+
 	void GameObject::Update()
 	{
+		if (false == mbStarted)
+		{
+			Start();
+		}
+			
+
 		for (size_t i = 0; i < mComponents.size(); ++i)
 		{
 			if (mComponents[i])
 				mComponents[i]->Update();
-			
 		}
 
 		for (size_t i = 0; i < mChilds.size(); ++i)
 		{
 			if (mChilds[i])
 				mChilds[i]->Update();
-			
 		}
 	}
 
@@ -290,23 +317,10 @@ namespace mh
 	//
 	void GameObject::Render()
 	{
-		for (size_t i = 0; i < mComponents.size(); ++i)
+		if (mComponents[(int)eComponentType::Renderer])
 		{
-			if (mComponents[i])
-				mComponents[i]->Render();
+			static_cast<IRenderer*>(mComponents[(int)eComponentType::Renderer])->Render();
 		}
-
-		for (size_t i = 0; i < mComponents.size(); ++i)
-		{
-			if (mComponents[i])
-				mComponents[i]->RenderEnd();
-		}
-
-		//for (size_t i = 0; i < mChilds.size(); ++i)
-		//{
-		//	if (mChilds[i])
-		//		mChilds[i]->Render();
-		//}
 	}
 
 

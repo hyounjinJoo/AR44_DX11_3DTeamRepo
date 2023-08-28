@@ -34,6 +34,7 @@ namespace mh
 		virtual eResult LoadJson(const Json::Value* _pJson) override;
 		
 		virtual void Init();
+		virtual void Start();
 		virtual void Update();
 		virtual void FixedUpdate();
 		virtual void Render();
@@ -93,14 +94,16 @@ namespace mh
 		std::string mName;
 		eState mState;
 		define::eLayerType mLayerType;
-		bool mbDontDestroy;
 
-		//Com_Transform				mTransform;
 		std::vector<IComponent*>	mComponents;
 		std::vector<IScript*>		mScripts;
 
 		GameObject* mParent;
 		std::vector<GameObject*> mChilds;
+
+		bool mbInitalized;
+		bool mbStarted;
+		bool mbDontDestroy;
 	};
 
 	template <typename T>
@@ -146,12 +149,19 @@ namespace mh
 		MH_ASSERT(_pObj && this != _pObj);
 
 		//부모 오브젝트가 있을 경우 기존의 부모 오브젝트에서 자신을 제거한 후 여기에 추가해야함
-		if (nullptr != (_pObj->GetParent()))
+		GameObject* parent = _pObj->GetParent();
+		if (parent)
 		{
-			_pObj->GetParent()->RemoveChild(_pObj);
+			parent->RemoveChild(_pObj);
 		}
 		_pObj->SetParent(this);
 		mChilds.push_back(_pObj);
+
+		if (mbInitalized)
+		{
+			_pObj->Init();
+		}
+
 		return _pObj;
 	}
 
