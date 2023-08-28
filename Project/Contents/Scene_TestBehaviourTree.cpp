@@ -2,6 +2,8 @@
 
 #include "Scene_TestBehaviourTree.h"
 #include <Engine\EventMgr.h>
+#include <Engine\Com_BehaviorTree.h>
+#include <Engine\BrainTree\example\Example01_Simple.cpp>
 
 namespace mh
 {
@@ -21,7 +23,11 @@ namespace mh
 	void Scene_TestBehaviourTree::Init()
 	{
 		GameObject* testObj = EventMgr::SpawnGameObject(new GameObject, eLayerType::Player);
+		Com_BehaviorTree* testBT = testObj->AddComponent<Com_BehaviorTree>();
 
+		auto repeater = std::make_shared<BrainTree::Repeater>(5);
+		repeater->setChild(std::make_shared<BrainTree::SayHello>());
+		testBT->GetBT()->setRoot(repeater);
 
 		IScene::Init();
 	}

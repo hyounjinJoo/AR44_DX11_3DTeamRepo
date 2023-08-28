@@ -66,13 +66,14 @@ namespace BrainTree
         Status status = Status::Invalid;
     };
 
-    // 
+    // Composite 노드의 Base 클래스
     class Composite : public Node
     {
     public:
         Composite() : it(children.begin()) {}
         virtual ~Composite() {}
 
+        // 하위에 추가될 Node가 추가된다. 각 노드는 Action이 될 수도 다른 Composite가 될 수도, Decorator가 될 수도 있다.
         void addChild(Node::Ptr child) { children.push_back(child); }
         bool hasChildren() const { return !children.empty(); }
 
@@ -81,6 +82,7 @@ namespace BrainTree
         std::vector<Node::Ptr>::iterator it;
     };
 
+    // Decorator는 
     class Decorator : public Node
     {
     public:
@@ -178,6 +180,7 @@ namespace BrainTree
 
         Status update() { return root->tick(); }
 
+        Node::Ptr getRoot() { return root; }
         void setRoot(const Node::Ptr& node) { root = node; }
         Blackboard::Ptr getBlackboard() const { return blackboard; }
 

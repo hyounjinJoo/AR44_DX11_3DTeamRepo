@@ -1,13 +1,15 @@
-#include <iostream>
 #include "../BrainTree.h"
+#include <Windows.h>
 
 namespace BrainTree
 {
     class SayHello : public Node
     {
         Status update() override
-        {
-            std::cout << "Hello, World!" << std::endl;
+		{
+			char Text[256];
+			sprintf_s(Text, "Test\n");
+			OutputDebugStringA(Text);
             return Node::Status::Success;
         }
     };
