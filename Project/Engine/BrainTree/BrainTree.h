@@ -2,6 +2,8 @@
 // Copyright 2015-2018 Par Arvidsson. All rights reserved.
 // Licensed under the MIT license (https://github.com/arvidsson/BrainTree/blob/master/LICENSE).
 
+// 주석 작성 : JHJ
+// 작성 일자 : 230828 ~ 230829
 #pragma once
 
 #include <memory>
@@ -29,7 +31,7 @@ namespace BrainTree
 
         virtual ~Node() {}
 
-        // 하위 노드에서 무조건 재정의해서 사용하도록 강제
+        // 하위 노드에서 update()의 경우 무조건 재정의 필요
         virtual Status update() = 0;
         virtual void initialize() {}
         virtual void terminate(Status s) {}
@@ -82,7 +84,8 @@ namespace BrainTree
         std::vector<Node::Ptr>::iterator it;
     };
 
-    // Decorator는 
+    // Decorator는 반복, 성공할 때까지 반복, 실패할 때까지 반복 등의 하위 Node의 동작결과를
+    // 수식하는 역할을 한다.
     class Decorator : public Node
     {
     public:
@@ -96,6 +99,7 @@ namespace BrainTree
     };
 #pragma endregion
 
+    // Behavior Tree에서 각 노드가 공유할 수 있는 데이터를 담는 역할을 한다.
     class Blackboard
     {
     public:
@@ -159,6 +163,8 @@ namespace BrainTree
         std::unordered_map<std::string, std::string> strings;
     };
 
+    // 실제 동작을 나타낼 노드. 재정의하여 사용하면 된다.
+    // update() 가 실제 동작이 된다.
     class Leaf : public Node
     {
     public:
@@ -172,6 +178,7 @@ namespace BrainTree
         Blackboard::Ptr blackboard;
     };
 
+    // BehaviorTree를 나타낸다. 반드시 root가 설정되어야 한다.
     class BehaviorTree : public Node
     {
     public:
@@ -314,6 +321,10 @@ namespace BrainTree
     // If a child succeeds or runs, the selector returns the same status.
     // In the next tick, it will try to run each child in order again.
     // If all children fails, only then does the selector fail.
+    // Selector composite는 각 하위 노드를 순서대로 선택(실행)한다.
+    // 하위 노드가 성공하거나 동작 중인 상태라면, Selector는 그 상태를 반환한다.
+    // 다음 tick에서, Selector는 각 하위 노드를 순서대로 실행하려고 시도한다.
+    // 모든 하위 노드들이 실패한 경우에만 Selector가 실패한다.
     class Selector : public Composite
     {
     public:
@@ -343,7 +354,11 @@ namespace BrainTree
     // The Sequence composite ticks each child node in order.
     // If a child fails or runs, the sequence returns the same status.
     // In the next tick, it will try to run each child in order again.
-    // If all children succeeds, only then does the sequence succeed.
+	// If all children succeeds, only then does the sequence succeed.
+	// Sequence composite는 각 하위 노드를 순서대로 선택(실행)한다.
+	// 하위 노드가 실패하거나 동작 중인 상태라면, Sequence는 그 상태를 반환한다.
+	// 다음 tick에서, Sequence는 각 하위 노드를 순서대로 실행하려고 시도한다.
+	// 모든 하위 노드들이 성공한 경우에만 Sequence가 성공한다.
     class Sequence : public Composite
     {
     public:
@@ -374,6 +389,10 @@ namespace BrainTree
     // If a child succeeds or runs, the stateful selector returns the same status.
     // In the next tick, it will try to run the next child or start from the beginning again.
     // If all children fails, only then does the stateful selector fail.
+    // StatefulSelector(상태 저장 선택기) Composite는 각 하위 노드를 순서대로 tick(실행)하고 이전에 tick하려고 했던 하위 노드를 기억한다.
+    // 하위 노드가 성공하거나 실행되면 StatefulSelector는 하위노드의 반환값과 동일한 상태값을 반환한다.
+    // 다음 tick에서는 다음 하위 노드를 실행하거나 처음부터 다시 시작하려고 시도한다.
+    // 모든 하위 노드가 실패하면 StatefulSelector가 실패한다.
     class StatefulSelector : public Composite
     {
     public:
@@ -400,6 +419,10 @@ namespace BrainTree
     // If a child fails or runs, the stateful sequence returns the same status.
     // In the next tick, it will try to run the next child or start from the beginning again.
     // If all children succeeds, only then does the stateful sequence succeed.
+	// StatefulSequence(상태 저장 시퀀스) Composite는 각 하위 노드를 순서대로 tick(실행)하고 이전에 tick하려고 했던 하위 노드를 기억한다.
+	// 하위 노드가 실패하거나 실행되면 StatefulSequence는 하위노드의 반환값과 동일한 상태값을 반환한다.
+	// 다음 tick에서는 다음 하위 노드를 실행하거나 처음부터 다시 시작하려고 시도한다.
+	// 모든 하위 노드가 성공하면 StatefulSequence가 성공한다.
     class MemSequence : public Composite
     {
     public:
@@ -422,6 +445,8 @@ namespace BrainTree
         }
     };
 
+    // 최소 성공 수, 최소 실패 수, 모두 성공, 모두 실패와 같은 조건을 설정하여
+    // 시퀀스의 수행 결과를 반환하는 시퀀스
     class ParallelSequence : public Composite
     {
     public:
@@ -482,7 +507,9 @@ namespace BrainTree
         int minFail = 0;
     };
 #pragma endregion
+#pragma region Decorator
     // The Succeeder decorator returns success, regardless of what happens to the child.
+    // Succeeder decorator는 하위 노드의 수행결과를 무시하고 Success 상태를 반환한다.
     class Succeeder : public Decorator
     {
     public:
@@ -494,6 +521,7 @@ namespace BrainTree
     };
 
     // The Failer decorator returns failure, regardless of what happens to the child.
+    // Failer decorator는 하위 노드의 수행결과를 무시하고 Failure 상태를 반환한다.
     class Failer : public Decorator
     {
     public:
@@ -506,6 +534,8 @@ namespace BrainTree
 
     // The Inverter decorator inverts the child node's status, i.e. failure becomes success and success becomes failure.
     // If the child runs, the Inverter returns the status that it is running too.
+    // 하위 노드의 수행값과 반대되는 상태를 반환한다.
+    // 단, 하위 노드가 수행 중인 상태라면 수행 중인 상태(run)을 반환한다.
     class Inverter : public Decorator
     {
     public:
@@ -525,6 +555,8 @@ namespace BrainTree
     };
 
     // The Repeater decorator repeats infinitely or to a limit until the child returns success.
+    // Repeater decorator는 하위 노드가 성공을 반환할 때까지 무한히 반복하거나
+    // 제한된 실행 수에 도달할 때까지 하위 노드를 수행한다.
     class Repeater : public Decorator
     {
     public:
@@ -552,6 +584,7 @@ namespace BrainTree
     };
 
     // The UntilSuccess decorator repeats until the child returns success and then returns success.
+    // 하위노드가 Success를 반환할 때까지 수행한다.
     class UntilSuccess : public Decorator
     {
     public:
@@ -568,6 +601,7 @@ namespace BrainTree
     };
 
     // The UntilFailure decorator repeats until the child returns fail and then returns success.
+    // 하위노드가 Failure를 반환할 때까지 수행한다.
     class UntilFailure : public Decorator
     {
     public:
@@ -582,5 +616,5 @@ namespace BrainTree
             }
         }
     };
-
+#pragma endregion
 } // namespace BrainTree

@@ -184,6 +184,9 @@
     <Filter Include="Component\BehaviorTree">
       <UniqueIdentifier>{9f2824fc-8560-461f-bea1-12574c1a86ed}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Component\BehaviorTree\BaseNode">
+      <UniqueIdentifier>{7b0e1310-896b-4a53-ad81-2637d639de31}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Application.cpp">
@@ -497,6 +500,9 @@
     </ClCompile>
     <ClCompile Include="Com_BehaviorTree.cpp">
       <Filter>Component\BehaviorTree</Filter>
+    </ClCompile>
+    <ClCompile Include="BTActionExample.cpp">
+      <Filter>Component\BehaviorTree\BaseNode</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -862,6 +868,9 @@
     </ClInclude>
     <ClInclude Include="Com_BehaviorTree.h">
       <Filter>Component\BehaviorTree</Filter>
+    </ClInclude>
+    <ClInclude Include="BTActionExample.h">
+      <Filter>Component\BehaviorTree\BaseNode</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
