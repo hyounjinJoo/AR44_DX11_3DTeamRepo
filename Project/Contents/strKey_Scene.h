@@ -17,6 +17,7 @@ namespace mh::define::strKey::Scene
 {
 	STRKEY Scene_Example = "Scene_Example";
 	STRKEY Scene_Play = "Scene_Play";
+	STRKEY Scene_Stage01 = "Scene_Stage01";
 	STRKEY Scene_TestBehaviourTree = "Scene_TestBehaviourTree";
 	STRKEY Scene_Title = "Scene_Title";
 }
