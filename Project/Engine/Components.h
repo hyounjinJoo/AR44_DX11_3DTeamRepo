@@ -13,5 +13,6 @@
 #include "ICollider3D.h"
 
 #include "IRenderer.h"
+#include "Com_BehaviorTree.h"
 
 #include "IScript.h"

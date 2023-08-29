@@ -626,7 +626,7 @@ namespace gui
 		mInputLayoutDescs.push_back(LayoutDesc);
 		LayoutDesc = D3D11_INPUT_ELEMENT_DESC{};
 
-		LayoutDesc.AlignedByteOffset = 32;
+		LayoutDesc.AlignedByteOffset = 16;
 		LayoutDesc.Format = DXGI_FORMAT_R32G32_FLOAT;
 		LayoutDesc.InputSlot = 0;
 		LayoutDesc.InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
@@ -638,7 +638,7 @@ namespace gui
 		if (_dimType == mh::define::eDimensionType::_3D)
 		{
 			LayoutDesc = D3D11_INPUT_ELEMENT_DESC{};
-			LayoutDesc.AlignedByteOffset = 40;
+			LayoutDesc.AlignedByteOffset = 24;
 			LayoutDesc.Format = DXGI_FORMAT_R32G32B32_FLOAT;
 			LayoutDesc.InputSlot = 0;
 			LayoutDesc.InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
@@ -647,7 +647,7 @@ namespace gui
 			mInputLayoutDescs.push_back(LayoutDesc);
 
 			LayoutDesc = D3D11_INPUT_ELEMENT_DESC{};
-			LayoutDesc.AlignedByteOffset = 52;
+			LayoutDesc.AlignedByteOffset = 36;
 			LayoutDesc.Format = DXGI_FORMAT_R32G32B32_FLOAT;
 			LayoutDesc.InputSlot = 0;
 			LayoutDesc.InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
@@ -656,7 +656,7 @@ namespace gui
 			mInputLayoutDescs.push_back(LayoutDesc);
 
 			LayoutDesc = D3D11_INPUT_ELEMENT_DESC{};
-			LayoutDesc.AlignedByteOffset = 64;
+			LayoutDesc.AlignedByteOffset = 48;
 			LayoutDesc.Format = DXGI_FORMAT_R32G32B32_FLOAT;
 			LayoutDesc.InputSlot = 0;
 			LayoutDesc.InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
@@ -665,7 +665,7 @@ namespace gui
 			mInputLayoutDescs.push_back(LayoutDesc);
 
 			LayoutDesc = D3D11_INPUT_ELEMENT_DESC{};
-			LayoutDesc.AlignedByteOffset = 76;
+			LayoutDesc.AlignedByteOffset = 60;
 			LayoutDesc.Format = DXGI_FORMAT_R32G32B32A32_FLOAT;
 			LayoutDesc.InputSlot = 0;
 			LayoutDesc.InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
@@ -674,7 +674,7 @@ namespace gui
 			mInputLayoutDescs.push_back(LayoutDesc);
 
 			LayoutDesc = D3D11_INPUT_ELEMENT_DESC{};
-			LayoutDesc.AlignedByteOffset = 92;
+			LayoutDesc.AlignedByteOffset = 76;
 			LayoutDesc.Format = DXGI_FORMAT_R32G32B32A32_FLOAT;
 			LayoutDesc.InputSlot = 0;
 			LayoutDesc.InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
@@ -689,8 +689,8 @@ namespace gui
 		if (mbSaveModal)
 		{
 			ImGui::SetNextWindowSize(ImVec2{ 400.f, 500.f });
-			ImGui::OpenPopup("Edit Layout Element");
-			if (ImGui::BeginPopupModal("Edit Layout Element"))
+			ImGui::OpenPopup("Save Shader");
+			if (ImGui::BeginPopupModal("Save Shader"))
 			{
 				ImGui::InputText("Shader Name", &mSaveFileName);
 
@@ -735,8 +735,8 @@ namespace gui
 		{
 			ImGui::SetNextWindowSize(ImVec2{ 400.f, 500.f });
 			
-			ImGui::OpenPopup("Edit Layout Element");
-			if (ImGui::BeginPopupModal("Edit Layout Element"))
+			ImGui::OpenPopup("Load Shader");
+			if (ImGui::BeginPopupModal("Load Shader"))
 			{
 				mLoadFileCombo.FixedUpdate();
 
@@ -859,6 +859,10 @@ namespace gui
 		if (mh::eResultSuccess(shader.Save(_filePath)))
 		{
 			LoadShaderSettingComboBox();
+		}
+		else
+		{
+			ERROR_MESSAGE_W(L"저장에 실패했습니다.");
 		}
 	}
 

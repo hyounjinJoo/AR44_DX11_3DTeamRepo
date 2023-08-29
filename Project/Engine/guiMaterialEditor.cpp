@@ -185,7 +185,9 @@ namespace gui
 
 			ImGui::SameLine();
 
-			if (ImGui::Button("Load"))
+			std::string ButtonName = "Load##";
+			ButtonName += std::to_string(i);
+			if (ImGui::Button(ButtonName.c_str()))
 			{
 				const std::fs::path& texPath = mh::PathMgr::GetContentPathAbsolute(mh::define::eResourceType::Texture);
 				
@@ -198,6 +200,7 @@ namespace gui
 				if (false == receivedPath.empty())
 				{
 					receivedPath = receivedPath.lexically_relative(texPath);
+
 					std::shared_ptr<mh::Texture> tex = mh::ResMgr::Load<mh::Texture>(receivedPath);
 					if (tex)
 					{
@@ -211,11 +214,13 @@ namespace gui
 
 			}
 			ImGui::SameLine();
-			if (ImGui::Button("Remove"))
+
+			ButtonName = "Remove##";
+			ButtonName += std::to_string(i);
+			if (ImGui::Button(ButtonName.c_str()))
 			{
 				mTargetMaterial->SetTexture((mh::define::eTextureSlot)i, nullptr);
 			}
-
 		}
 	}
 	void guiMaterialEditor::UpdateRenderingMode()

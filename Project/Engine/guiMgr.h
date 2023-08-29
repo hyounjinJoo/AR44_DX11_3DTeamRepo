@@ -5,6 +5,7 @@
 #include "define_Macro.h"
 #include <unordered_map>
 #include "json-cpp/json-forwards.h"
+#include "ImGuizmo.h"
 
 namespace gui
 {
@@ -59,6 +60,8 @@ namespace gui
 		
 		static void AddGuiWindow(guiBase* _pBase);
 
+		static inline std::string CreateUniqueImGuiKey(const std::string_view _str, int i);
+
 	private:
 		static std::unordered_map<std::string, guiBase*, mh::define::tUmap_StringViewHasher, std::equal_to<>> mGuiWindows;
 
@@ -72,6 +75,10 @@ namespace gui
 		static bool mbInitialized;
 
 		static std::unique_ptr<Json::Value> mJsonUIData;
+
+	private:
+		static ImGuizmo::OPERATION mCurrentGizmoOperation;
+		static void RenderGuizmo();
 	};
 
 	inline void guiMgr::SetEnable(bool _bEnable)
@@ -118,6 +125,16 @@ namespace gui
 
 		AddGuiWindow(static_cast<guiBase*>(retPtr));
 		return retPtr;
+	}
+
+	inline std::string guiMgr::CreateUniqueImGuiKey(const std::string_view _str, int i)
+	{
+		std::string uniqStr;
+		uniqStr.reserve(_str.size() + 5);
+		uniqStr += _str;
+		uniqStr += "##";
+		uniqStr += std::to_string(i);
+		return uniqStr;
 	}
 }
 

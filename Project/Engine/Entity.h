@@ -21,6 +21,8 @@ namespace mh
 		Entity(const Entity& _other);
 		virtual Entity* Clone() { ERROR_MESSAGE_W(L"이 클래스는 Clone할수 없습니다."); return nullptr; }
 
+		Entity(Entity&& _move);
+
 		virtual ~Entity();
 
 		virtual eResult SaveJson(Json::Value* _pJson);

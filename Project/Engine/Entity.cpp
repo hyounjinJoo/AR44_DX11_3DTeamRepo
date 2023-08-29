@@ -21,6 +21,14 @@ namespace mh
 		, mStrKey(_other.mStrKey)
 	{
 	}
+	Entity::Entity(Entity&& _move)
+		: mStrKey(_move.mStrKey)
+		, mID(_move.mID)
+	{
+	}
+	Entity::~Entity()
+	{
+	}
 	eResult Entity::SaveJson(Json::Value* _pJson)
 	{
 		//nullptr 확인
@@ -60,7 +68,5 @@ namespace mh
 
 		return eResult::Success;
 	}
-	Entity::~Entity()
-	{
-	}
+
 }

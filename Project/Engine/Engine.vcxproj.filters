@@ -22,9 +22,6 @@
     <Filter Include="Resource\Mesh">
       <UniqueIdentifier>{5ddde7d6-5dbf-4474-8ff2-f014eaefe47e}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Resource\Manager">
-      <UniqueIdentifier>{566c056d-bc1c-4a66-9874-1eb8b38721ee}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Resource\Material">
       <UniqueIdentifier>{b120460a-4944-428f-b9a0-e7253c288eab}</UniqueIdentifier>
     </Filter>
@@ -160,9 +157,6 @@
     <Filter Include="Component\Audio">
       <UniqueIdentifier>{326cbbf6-1cb8-4ba7-bc32-aa2759b923f9}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Component\0. Transform">
-      <UniqueIdentifier>{62546181-5d07-413f-a9e5-329a0986165d}</UniqueIdentifier>
-    </Filter>
     <Filter Include="GuiEditor\Instances">
       <UniqueIdentifier>{ded79648-f1d7-43d2-957c-11c1b95a2e71}</UniqueIdentifier>
     </Filter>
@@ -177,6 +171,12 @@
     </Filter>
     <Filter Include="GuiEditor\_Widget">
       <UniqueIdentifier>{bee12466-3d3c-47b5-bb11-8b335dcb2882}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource\Animation">
+      <UniqueIdentifier>{fa962df9-8edc-4f9e-8aad-0262d0039dc4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Component\Transform">
+      <UniqueIdentifier>{62546181-5d07-413f-a9e5-329a0986165d}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -242,9 +242,6 @@
     </ClCompile>
     <ClCompile Include="Monster.cpp">
       <Filter>Component\Script\Contents</Filter>
-    </ClCompile>
-    <ClCompile Include="Animation2D.cpp">
-      <Filter>Component\Animator</Filter>
     </ClCompile>
     <ClCompile Include="Com_Animator2D.cpp">
       <Filter>Component\Animator</Filter>
@@ -314,7 +311,7 @@
       <Filter>Component</Filter>
     </ClCompile>
     <ClCompile Include="Com_Transform.cpp">
-      <Filter>Component\0. Transform</Filter>
+      <Filter>Component\Transform</Filter>
     </ClCompile>
     <ClCompile Include="Com_AudioSource.cpp">
       <Filter>Component\Audio</Filter>
@@ -448,7 +445,7 @@
     </ClCompile>
     <ClCompile Include="Skeleton.cpp" />
     <ClCompile Include="ITransform.cpp">
-      <Filter>Component\0. Transform</Filter>
+      <Filter>Component\Transform</Filter>
     </ClCompile>
     <ClCompile Include="ILight.cpp">
       <Filter>Component</Filter>
@@ -457,7 +454,7 @@
       <Filter>Component\Renderer</Filter>
     </ClCompile>
     <ClCompile Include="Com_DummyTransform.cpp">
-      <Filter>Component\0. Transform</Filter>
+      <Filter>Component\Transform</Filter>
     </ClCompile>
     <ClCompile Include="Com_Renderer_3DAnimMesh.cpp">
       <Filter>Component\Renderer</Filter>
@@ -487,6 +484,22 @@
       <Filter>GuiEditor\Instances</Filter>
     </ClCompile>
     <ClCompile Include="guiFBXConverter.cpp" />
+    <ClCompile Include="Animation2D.cpp">
+      <Filter>Resource\Animation</Filter>
+    </ClCompile>
+    <ClCompile Include="Animation3D.cpp">
+      <Filter>Resource\Animation</Filter>
+    </ClCompile>
+    <ClCompile Include="Com_Renderer_UIBase.cpp">
+      <Filter>Component\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="ImGuizmo.cpp">
+      <Filter>ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="Com_BehaviorTree.cpp">
+      <Filter>Component</Filter>
+    </ClCompile>
+    <ClCompile Include="BTActionExample.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application.h">
@@ -559,9 +572,6 @@
       <Filter>Component\Script\Contents</Filter>
     </ClInclude>
     <ClInclude Include="Com_Animator2D.h">
-      <Filter>Component\Animator</Filter>
-    </ClInclude>
-    <ClInclude Include="Animation2D.h">
       <Filter>Component\Animator</Filter>
     </ClInclude>
     <ClInclude Include="PaintShader.h">
@@ -656,7 +666,7 @@
       <Filter>Component</Filter>
     </ClInclude>
     <ClInclude Include="Com_Transform.h">
-      <Filter>Component\0. Transform</Filter>
+      <Filter>Component\Transform</Filter>
     </ClInclude>
     <ClInclude Include="Com_AudioSource.h">
       <Filter>Component\Audio</Filter>
@@ -808,7 +818,7 @@
     </ClInclude>
     <ClInclude Include="Skeleton.h" />
     <ClInclude Include="ITransform.h">
-      <Filter>Component\0. Transform</Filter>
+      <Filter>Component\Transform</Filter>
     </ClInclude>
     <ClInclude Include="ILight.h">
       <Filter>Component</Filter>
@@ -817,7 +827,7 @@
       <Filter>Component\Renderer</Filter>
     </ClInclude>
     <ClInclude Include="Com_DummyTransform.h">
-      <Filter>Component\0. Transform</Filter>
+      <Filter>Component\Transform</Filter>
     </ClInclude>
     <ClInclude Include="Com_Renderer_3DAnimMesh.h">
       <Filter>Component\Renderer</Filter>
@@ -850,6 +860,22 @@
     <ClInclude Include="Shader_Common.h">
       <Filter>Common\define</Filter>
     </ClInclude>
+    <ClInclude Include="Animation2D.h">
+      <Filter>Resource\Animation</Filter>
+    </ClInclude>
+    <ClInclude Include="Animation3D.h">
+      <Filter>Resource\Animation</Filter>
+    </ClInclude>
+    <ClInclude Include="Com_Renderer_UIBase.h">
+      <Filter>Component\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="ImGuizmo.h">
+      <Filter>ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="Com_BehaviorTree.h">
+      <Filter>Component</Filter>
+    </ClInclude>
+    <ClInclude Include="BTActionExample.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="cpp.hint">
@@ -900,9 +926,6 @@
     <None Include="DefaultShader\SH_Merge.hlsli">
       <Filter>_DefaultShader\Deffered</Filter>
     </None>
-    <None Include="DefaultShader\SH_Basic3D.hlsli">
-      <Filter>_DefaultShader\Basic3D</Filter>
-    </None>
     <None Include="SimpleMath.inl">
       <Filter>Common\Math</Filter>
     </None>
@@ -917,6 +940,12 @@
     </None>
     <None Include="DefaultShader\SH_Animation2D.hlsli">
       <Filter>_DefaultShader\Animation\2D</Filter>
+    </None>
+    <None Include="DefaultShader\SH_Basic3D.hlsli">
+      <Filter>_DefaultShader\Basic3D</Filter>
+    </None>
+    <None Include="DefaultShader\SH_UserInterFace.hlsli">
+      <Filter>_DefaultShader\UI</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>

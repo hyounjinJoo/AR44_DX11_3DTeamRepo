@@ -23,8 +23,13 @@
 #include <Engine/PaintShader.h>
 #include <Engine/Com_Renderer_ParticleSystem.h>
 #include <Engine/Prefab.h>
+#include <Engine/Com_Renderer_UIBase.h>
+#include <Contents/Script_UIBase.h>
+#include <Contents/Script_UIGauge.h>
 
 #include "strKey_Script.h"
+#include "strKey_Component.h"
+
 
 #include <Engine/EventMgr.h>
 
@@ -40,11 +45,9 @@ namespace mh
 	{
 		IScene::Init();
 
-
-
 		{
 			// Main Com_Camera Game Object
-			GameObject* cameraObj = EventMgr::SpawnGameObject(new GameObject, eLayerType::Com_Camera);
+			GameObject* cameraObj = EventMgr::SpawnGameObject(eLayerType::Com_Camera);
 			cameraObj->SetName("MainCamera");
 
 			Com_Transform* tr = cameraObj->AddComponent<Com_Transform>();
@@ -60,127 +63,87 @@ namespace mh
 			RenderMgr::SetMainCamera(cameraComp);
 		}
 
-
-
-
-
-
-
-		//포워드 렌더링으로 그려지는 오브젝트
-		//{
-		//	GameObject* player = object::Instantiate<GameObject>(eLayerType::Player);
-		//	player->GetComponent<Com_Transform>()->SetRelativePos(float3(0.0f, 0.0f, 10.0f));
-		//	player->GetComponent<Com_Transform>()->SetScale(float3(5.0f, 5.0f, 5.0f));
-		//	//player->GetComponent<Com_Transform>()->SetRelativeRotXYZ(float3(15.0f, 45.0f, 0.0f));
-		//	player->SetName("Player");
-		//	Com_Renderer_Mesh* mr = player->AddComponent<Com_Renderer_Mesh>();
-		//	mr->SetMaterial(ResMgr::Find<Material>(strKey::Default::material::Basic3DMaterial), 0);
-		//	mr->SetMesh(ResMgr::Find<Mesh>(strKey::Default::mesh::CubeMesh));
-		//	player->AddComponent<Script_Player>();
-
-		//	auto* AudioSource = player->AddComponent<Com_AudioSource>();
-		//	
-		//	auto TestClip = ResMgr::Load<AudioClip>("Test.mp3");
-		//	AudioSource->SetClip(TestClip);
-
-		//	auto* Animator = player->AddComponent<Com_Animator>();
-
-		//	//Prefab forSave{};
-		//	//forSave.RegisterPrefab(player, true);
-		//	//forSave.Save("TestPrefab.json");
-		//}
-
-		//디퍼드 렌더링으로 그려지는 오브젝트
-		//{
-		//	GameObject* player = object::Instantiate<GameObject>(eLayerType::Player);
-		//	player->GetComponent<Com_Transform>()->SetRelativePos(float3(-15.0f, 0.0f, 10.0f));
-		//	player->GetComponent<Com_Transform>()->SetScale(float3(5.0f, 5.0f, 5.0f));
-		//	//player->GetComponent<Transform>()->SetRelativeRotXYZ(float3(15.0f, 45.0f, 0.0f));
-		//	player->SetName("Player");
-		//	Com_Renderer_Mesh* mr = player->AddComponent<Com_Renderer_Mesh>();
-		//	mr->SetMaterial(ResMgr::Find<Material>(strKey::Default::material::DefferedMaterial), 0);
-		//	mr->SetMesh(ResMgr::Find<Mesh>(strKey::Default::mesh::CubeMesh));
-		//	player->AddComponent<Script_Player>();
-		//}
-
 		{
-			std::shared_ptr<MeshData> data = ResMgr::Load<MeshData>("House.fbx");
-			GameObject* obj = data->Instantiate();
-			Com_Transform* tr = obj->GetComponent<Com_Transform>();
-			tr->SetRelativeScale(float3(0.5f));
-			obj->SetName("fbxTextObj");
-			obj->AddComponent<Script_Player>();
-			EventMgr::SpawnGameObject(obj, eLayerType::Player);
+			// Main Com_Camera Game Object
+			GameObject* cameraObj = EventMgr::SpawnGameObject(eLayerType::Com_Camera);
+			cameraObj->SetName("UICam");
 
-			Com_Animator3D* animator = obj->GetComponent<Com_Animator3D>();
-			if(animator)
-				animator->Play("NlaTrack.010");
+			Com_Transform* tr = cameraObj->AddComponent<Com_Transform>();
+			tr->SetRelativePos(float3(0.0f, 0.0f, -20.0f));
 
-			//
-			//object::Instantiate(eLayerType::Player, obj);
-			//obj->AddComponent<Script_JH>();
+			Com_Camera* cameraComp = cameraObj->AddComponent<Com_Camera>();
+			cameraComp->SetProjectionType(define::eProjectionType::Orthographic);
+
+			//다른 레이어는 전부 끈다음
+			cameraComp->DisableLayerMasks();
+
+			//UI 레이어만 촬영하도록 설정한다.
+			cameraComp->TurnLayerMask(eLayerType::UI, true);
 		}
 
 
-		//{
-		//	GameObject* player = object::Instantiate<GameObject>(eLayerType::Player);
-		//	player->GetComponent<Com_Transform>()->SetRelativePos(float3(-15.0f, 0.0f, 10.0f));
-		//	player->GetComponent<Com_Transform>()->SetScale(float3(5.0f, 5.0f, 5.0f));
-		//	//player->GetComponent<Transform>()->SetRelativeRotXYZ(float3(15.0f, 45.0f, 0.0f));
-		//	player->SetName("Player");
-		//	Com_Renderer_Mesh* mr = player->AddComponent<Com_Renderer_Mesh>();
-		//	mr->SetMaterial(ResMgr::Find<Material>(strKey::Default::material::DefferedMaterial), 0);
-		//	mr->SetMesh(ResMgr::Find<Mesh>(strKey::Default::mesh::CubeMesh));
-		//	player->AddComponent<Script_Player>();
-		//}
+		{
+			GameObject* baseUI = EventMgr::SpawnGameObject(eLayerType::UI);
+			baseUI->SetName("BaseUI");
+			Com_Transform* tr = baseUI->AddComponent<Com_Transform>();
+			tr->SetSize(float3(100.f, 100.f, 1.f));
+
+			//UI 스크립트 추가
+			//Base를 추가하게 되면 단순 이미지 한 장을 출력하는 UI가 생성됨
+			Script_UIBase* ui = baseUI->AddComponent<Script_UIBase>();
+
+			std::shared_ptr<Texture> smileTex = ResMgr::Load<Texture>("Smile.png");
+			ui->SetTexture(define::eTextureSlot::Tex_0, smileTex);
+		}
 
 
 		{
-			
-			//GameObject* directionalLight = object::Instantiate(eLayerType::Player, new GameObject);
-			GameObject* directionalLight = EventMgr::SpawnGameObject(new GameObject, eLayerType::Player);
-			directionalLight->SetName("directionalLight");
+			GameObject* GaugeUI = EventMgr::SpawnGameObject(eLayerType::UI);
+			GaugeUI->SetName("GaugeUI");
+			Com_Transform* tr = GaugeUI->AddComponent<Com_Transform>();
+			tr->SetSize(float3(100.f, 10.f, 1.f));
+			tr->SetRelativePosXY(float2(100.f, 100.f));
 
-			Com_Transform* tr = directionalLight->AddComponent<Com_Transform>();
-			tr->SetRelativePos(float3(0.0f, 100.0f, 0.0f));
-			tr->SetRelativeRotXYZ(float3(45.0f, 0.0f, 0.0f));
 
-			Com_Light3D* lightComp = directionalLight->AddComponent<Com_Light3D>();
-			lightComp->SetType(eLightType::Directional);
-			lightComp->SetDiffuse(float4(1.0f, 1.0f, 1.0f, 1.0f));
-			lightComp->SetSpecular(float4(1.0f, 1.0f, 1.0f, 1.0f));
-			lightComp->SetAmbient(float4(0.3f, 0.3f, 0.3f, 1.0f));
+			//게이지 UI 생성(마찬가지로 스크립트만 추가하면 Gauge UI 모드로 세팅이 됨)
+			Script_UIGauge* gauge = GaugeUI->AddComponent<Script_UIGauge>();
+
+
+			gauge->SetGaugeRemain(0.5f);
+			std::shared_ptr<Texture> magenta = ResMgr::Load<Texture>("Durability_3.png");
+			gauge->SetTexture(define::eTextureSlot::Tex_0, magenta);
 		}
 
-		//{
-		//	GameObject* pointLight = object::Instantiate<GameObject>(eLayerType::Player);
-		//	pointLight->SetName("PointLight1");
+		//게이지 UI는 단순하게 쉐이더를 교체해주는 것만으로도 설정이 가능하므로 BaseUI 컴포넌트를 쓰고, 쉐이더만 교체
+		{
+			GameObject* customGauge = EventMgr::SpawnGameObject(eLayerType::UI);
+			customGauge->SetName("GaugeUI");
+			Com_Transform* tr = customGauge->AddComponent<Com_Transform>();
 
-		//	Com_Transform* tr = pointLight->AddComponent<Com_Transform>();
-		//	tr->SetRelativePos(float3(500.f, 500.f, 0.0f));
+			//게이지 UI 생성(마찬가지로 스크립트만 추가하면 Gauge UI 모드로 세팅이 됨)
+			Script_UIGauge* gauge = customGauge->AddComponent<Script_UIGauge>();
+			gauge->SetGaugeRemain(0.5f);
 
-		//	Com_Light3D* lightComp = pointLight->AddComponent<Com_Light3D>();
-		//	lightComp->SetType(eLightType::Point);
-		//	lightComp->SetRadius(20.0f);
-		//	lightComp->SetDiffuse(float4(0.0f, 0.0f, 1.0f, 1.0f));
-		//	lightComp->SetSpecular(float4(1.0f, 1.0f, 1.0f, 1.0f));
-		//	lightComp->SetAmbient(float4(0.15f, 0.15f, 0.15f, 1.0f));
-		//}
+			//커스텀한 게이지 재질을 직접 수동으로 설정해줄수도 있음
+			//커스텀 픽셀 쉐이더 + 알파 블렌딩
+			std::shared_ptr<Material> mtrl = ResMgr::Load<Material>("UI/CustomGauge.json");
+			gauge->SetCustomMaterial(mtrl);
 
-		//{
-		//	GameObject* pointLight = object::Instantiate<GameObject>(eLayerType::Player);
-		//	pointLight->SetName("PointLight2");
+			tr->SetSize(float3(100.f, 30.f, 1.f));
+			tr->SetRelativePosXY(float2(200.f, 200.f));
+		}
 
-		//	Com_Transform* tr = pointLight->AddComponent<Com_Transform>();
-		//	tr->SetRelativePos(float3(-500.f, -500.f, 0.0f));
 
-		//	Com_Light3D* lightComp = pointLight->AddComponent<Com_Light3D>();
-		//	lightComp->SetType(eLightType::Point);
-		//	lightComp->SetRadius(30.0f);
-		//	lightComp->SetDiffuse(float4(0.0f, 1.0f, 0.0f, 1.0f));
-		//	lightComp->SetSpecular(float4(1.0f, 1.0f, 1.0f, 1.0f));
-		//	lightComp->SetAmbient(float4(0.15f, 0.15f, 0.15f, 1.0f));
-		//}
+		
+		{
+			std::shared_ptr<MeshData> meshdata = ResMgr::Load<MeshData>("House.fbx");
+			GameObject* house = meshdata->Instantiate();
+
+
+			//house->AddComponent<Com_Transform>();
+
+			EventMgr::SpawnGameObject(define::eLayerType::Player, house);
+		}
 	}
 	void Scene_Title::Update()
 	{

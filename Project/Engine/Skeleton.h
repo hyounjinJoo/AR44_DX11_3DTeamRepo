@@ -1,6 +1,7 @@
 #pragma once
 #include "Entity.h"
 #include "define_Struct.h"
+#include "Animation3D.h"
 
 //MeshData에 종속된 클래스
 namespace mh
@@ -23,19 +24,29 @@ namespace mh
 		//Animation 3D
 		const std::vector<define::tMTBone>& GetBones() const { return m_vecBones; }
 		UINT GetBoneCount() const { return (UINT)m_vecBones.size(); }
-		const std::vector<define::tMTAnimClip>& GetAnimClip() const { return m_vecAnimClip; }
-		bool IsAnimMesh() const { return (false == m_vecAnimClip.empty()); }
-
-		StructBuffer* GetBoneFrameDataBuffer() { return m_pBoneFrameData.get(); } // 전체 본 프레임 정보
 		StructBuffer* GetBoneOffsetBuffer() { return  m_pBoneOffset.get(); }	   // 각 뼈의 offset 행렬
 
-	private:
-		std::vector<define::tMTBone>			m_vecBones;
-		std::unique_ptr<StructBuffer>			m_pBoneOffset;	  // 각 뼈의 offset 행렬(각 뼈의 위치를 되돌리는 행렬) (1행 짜리)
+		const std::unordered_map<std::string, Animation3D*>& GetAnimations() const { return mMapAnimations; }
+		bool IsAnimMesh() const { return (false == mMapAnimations.empty()); }
 
-		//Animation3D 정보
-		std::vector<define::tMTAnimClip>		m_vecAnimClip;
-		std::unique_ptr<StructBuffer>			m_pBoneFrameData;   // 전체 본 프레임 정보(크기, 이동, 회전) (프레임 개수만큼)
+		inline const std::unordered_map<std::string, Animation3D*>&
+			GetMapAnimations() const { return mMapAnimations; }
+
+		const Animation3D* FindAnimation(const std::string& _strAnimName);
+
+
+	private:
+		void CreateBoneOffsetSBuffer();
+
+	private:
+		std::vector<define::tMTBone>					m_vecBones;
+		std::unique_ptr<StructBuffer>					m_pBoneOffset;	  // 각 뼈의 offset 행렬(각 뼈의 위치를 되돌리는 행렬) (1행 짜리)
+
+
+		std::unordered_map<std::string, Animation3D*>	mMapAnimations;
+		//스켈레톤이 가지고 있는 애니메이션중 가장 많은 프레임수를 저장
+		//Animator에서 구조화버퍼를 만들 떄 사용
+		size_t											mAnimationMaxFrameSize;
 	};
 }
 

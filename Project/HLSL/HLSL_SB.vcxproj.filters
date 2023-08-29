@@ -1,40 +1,43 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <FxCompile Include="_4PS_SB.hlsl" />
-  </ItemGroup>
-  <ItemGroup>
-    <Filter Include="Engine">
-      <UniqueIdentifier>{b99e6559-e3ad-4aa6-b9f9-9bb7e94ee756}</UniqueIdentifier>
+    <Filter Include="Default Headers">
+      <UniqueIdentifier>{281e1c03-b763-44d8-964d-135904f11116}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <None Include="SH_Blur.hlsli">
-      <Filter>Engine</Filter>
+    <None Include="SH_Common.hlsli">
+      <Filter>Default Headers</Filter>
+    </None>
+    <None Include="SH_CommonStruct.hlsli">
+      <Filter>Default Headers</Filter>
     </None>
     <None Include="SH_ConstBuffer.hlsli">
-      <Filter>Engine</Filter>
+      <Filter>Default Headers</Filter>
     </None>
-    <None Include="SH_Func.hlsli">
-      <Filter>Engine</Filter>
+    <None Include="SH_Func_Blur.hlsli">
+      <Filter>Default Headers</Filter>
+    </None>
+    <None Include="SH_Func_DecodeColor.hlsli">
+      <Filter>Default Headers</Filter>
+    </None>
+    <None Include="SH_Func_Light.hlsli">
+      <Filter>Default Headers</Filter>
+    </None>
+    <None Include="SH_Functions.hlsli">
+      <Filter>Default Headers</Filter>
     </None>
     <None Include="SH_Globals.hlsli">
-      <Filter>Engine</Filter>
-    </None>
-    <None Include="SH_Light.hlsli">
-      <Filter>Engine</Filter>
+      <Filter>Default Headers</Filter>
     </None>
     <None Include="SH_Resource.hlsli">
-      <Filter>Engine</Filter>
+      <Filter>Default Headers</Filter>
     </None>
     <None Include="SH_Sampler.hlsli">
-      <Filter>Engine</Filter>
+      <Filter>Default Headers</Filter>
     </None>
-    <None Include="SH_Common.hlsli" />
-    <None Include="SH_CommonStruct.hlsli" />
-    <None Include="SH_Func_Blur.hlsli" />
-    <None Include="SH_Func_DecodeColor.hlsli" />
-    <None Include="SH_Func_Light.hlsli" />
-    <None Include="SH_Functions.hlsli" />
+    <None Include="SH_UserInterFace.hlsli">
+      <Filter>Default Headers</Filter>
+    </None>
   </ItemGroup>
 </Project>

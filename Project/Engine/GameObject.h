@@ -34,6 +34,7 @@ namespace mh
 		virtual eResult LoadJson(const Json::Value* _pJson) override;
 		
 		virtual void Init();
+		virtual void Start();
 		virtual void Update();
 		virtual void FixedUpdate();
 		virtual void Render();
@@ -86,6 +87,9 @@ namespace mh
 		void SetParent(GameObject* _pObj) { mParent = _pObj; }
 		void RemoveChild(GameObject* _pObj);
 
+		bool IsInitialized() const { return mbInitalized; }
+		bool IsStarted() const { return mbStarted; }
+
 	protected:
 		void DestroyRecursive();
 
@@ -93,15 +97,18 @@ namespace mh
 		std::string mName;
 		eState mState;
 		define::eLayerType mLayerType;
-		bool mbDontDestroy;
 
-		//Com_Transform				mTransform;
 		std::vector<IComponent*>	mComponents;
 		std::vector<IScript*>		mScripts;
 
 		GameObject* mParent;
 		std::vector<GameObject*> mChilds;
+
+		bool mbInitalized;
+		bool mbStarted;
+		bool mbDontDestroy;
 	};
+
 
 	template <typename T>
 	T* GameObject::AddComponent()
@@ -112,6 +119,7 @@ namespace mh
 			return nullptr;
 
 		T* pCom = new T;
+		pCom->SetComTypeID(ComMgr::GetComTypeID<T>());
 		pCom->SetKey(ComMgr::GetComName<T>());
 
 		return static_cast<T*>(AddComponent(static_cast<IComponent*>(pCom)));
@@ -140,19 +148,26 @@ namespace mh
 		}
 	}
 
-	inline GameObject* GameObject::AddChild(GameObject* _pObj)
+	inline GameObject* GameObject::AddChild(GameObject* _pChild)
 	{
 		//nullptr이나 자기 자신을 인자로 호출했을 경우 오류 발생			
-		MH_ASSERT(_pObj && this != _pObj);
+		MH_ASSERT(_pChild && this != _pChild);
 
 		//부모 오브젝트가 있을 경우 기존의 부모 오브젝트에서 자신을 제거한 후 여기에 추가해야함
-		if (nullptr != (_pObj->GetParent()))
+		GameObject* parent = _pChild->GetParent();
+		if (parent)
 		{
-			_pObj->GetParent()->RemoveChild(_pObj);
+			parent->RemoveChild(_pChild);
 		}
-		_pObj->SetParent(this);
-		mChilds.push_back(_pObj);
-		return _pObj;
+		_pChild->SetParent(this);
+		mChilds.push_back(_pChild);
+
+		if (mbInitalized && false == _pChild->IsInitialized())
+		{
+			_pChild->Init();
+		}
+
+		return _pChild;
 	}
 
 	inline void GameObject::GetGameObjectHierarchy(std::vector<GameObject*>& _gameObjects)
@@ -198,7 +213,19 @@ namespace mh
 		else
 		{
 			eComponentType ComType = GetComponentType<T>();
-			pCom = dynamic_cast<T*>(mComponents[(int)ComType]);
+			if (mComponents[(int)ComType])
+			{
+				//일단 ID값으로 비교 후 일치 시 static_cast해도 안전
+				if (ComMgr::GetComTypeID<T>() == mComponents[(int)ComType]->GetComTypeID())
+				{
+					pCom = static_cast<T*>(mComponents[(int)ComType]);
+				}
+				//최후의 수단으로 dynamic_cast 해본다
+				else
+				{
+					pCom = dynamic_cast<T*>(mComponents[(int)ComType]);
+				}
+			}
 		}
 
 		return pCom;
@@ -239,6 +266,10 @@ namespace mh
 		else if constexpr (std::is_base_of_v<IRenderer, T>)
 		{
 			return eComponentType::Renderer;
+		}
+		else if constexpr (std::is_base_of_v<Com_BehaviorTree, T>)
+		{
+			return eComponentType::BehaviorTree;
 		}
 		else if constexpr (std::is_base_of_v<IScript, T>)
 		{

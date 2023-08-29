@@ -26,17 +26,16 @@ namespace mh
 		}
 	}
 
-
-	void Com_DummyAnimator::Render()
+	void Com_DummyAnimator::BindData()
 	{
 		if (mParentAnimator)
-			mParentAnimator->Render();
+			mParentAnimator->BindData();
 	}
 
-	void Com_DummyAnimator::RenderEnd()
+	void Com_DummyAnimator::UnBindData()
 	{
 		if (mParentAnimator)
-			mParentAnimator->RenderEnd();
+			mParentAnimator->UnBindData();
 	}
 }
 

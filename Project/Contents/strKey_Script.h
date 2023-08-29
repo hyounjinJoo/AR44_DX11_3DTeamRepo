@@ -16,4 +16,7 @@
 namespace mh::define::strKey::Script
 {
 	STRKEY Script_CameraMove = "Script_CameraMove";
+	STRKEY Script_UIBase = "Script_UIBase";
+	STRKEY Script_UIButton = "Script_UIButton";
+	STRKEY Script_UIGauge = "Script_UIGauge";
 }
