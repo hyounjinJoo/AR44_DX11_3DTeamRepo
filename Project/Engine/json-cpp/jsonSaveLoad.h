@@ -119,7 +119,7 @@ namespace Json
 		}
 
 		template <typename T>
-		static void SaveStrKey(Json::Value* _pJson, const char* _strKey, const T& _srcT)
+		static void SavePtrStrKey(Json::Value* _pJson, const char* _strKey, const T& _srcT)
 		{
 			static_assert(
 				true == std::is_pointer_v<T> ||
@@ -167,7 +167,7 @@ namespace Json
 			(true == std::is_vector_v<T> ||
 				true == std::is_std_array_v<T>)
 			, int>* = nullptr>
-		static void SaveStrKeyVector(Json::Value* _pJson, const char* _strKey, const T& _srcT)
+		static void SavePtrStrKeyVector(Json::Value* _pJson, const char* _strKey, const T& _srcT)
 		{
 			using valType = T::value_type;
 
@@ -230,7 +230,7 @@ namespace Json
 		}
 
 		template <typename T>
-		static std::string LoadStrKey(const Json::Value* _pJson, const char* _strKey, const T& _destT)
+		static std::string LoadPtrStrKey(const Json::Value* _pJson, const char* _strKey, const T& _destT)
 		{
 			std::string resultStr{};
 			if (_pJson->isMember(_strKey))
@@ -273,7 +273,7 @@ namespace Json
 			true == std::is_std_array_v<T> ||
 			true == std::is_array_v<T>
 			), bool>* = nullptr>
-		static std::vector<std::string> LoadStrKeyVector(const Json::Value* _pJson, const char* _strKey, const T& _tSrc)
+		static std::vector<std::string> LoadPtrStrKeyVector(const Json::Value* _pJson, const char* _strKey, const T& _tSrc)
 		{
 			std::vector<std::string> retVec;
 

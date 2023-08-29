@@ -11,6 +11,7 @@ namespace mh
         virtual ~Com_Renderer_Mesh() {};
 
         virtual void Render() override;
+        virtual void RenderEnd() override;
 
 
     private:

@@ -30,15 +30,19 @@ struct alignas(16) tCB_Transform
 
 struct alignas(16) tCB_MaterialData
 {
+	BOOL bTex_0;
+	BOOL bTex_1;
+	BOOL bTex_2;
+	BOOL bTex_3;
+	BOOL bTex_4;
+	BOOL bTex_5;
+	BOOL bTex_6;
+	BOOL bTex_7;
+	
 	float4 Diff;
 	float4 Spec;
 	float4 Amb;
 	float4 Emv;
-
-	BOOL usedAlbedo;
-	BOOL usedNormal;
-	BOOL usedSpecular;
-	BOOL usedEmissive;
 	
 	// 3D Animation 정보
 	BOOL bAnim;

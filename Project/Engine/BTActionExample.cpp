@@ -21,5 +21,6 @@ namespace mh
 		// There is no need to Call Parent's update() function.
 		// Parent's update() is pure virtual function.
 		// this is main logic function.
+		return BrainTree::Node::Status::Success;
 	}
 }

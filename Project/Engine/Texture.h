@@ -15,7 +15,7 @@ namespace mh
 		Texture();
 		virtual ~Texture();
 
-		static void Clear(uint _startSlot);
+		static void ClearSRV(UINT _startSlot);
 		static void ClearAll();
 
 		//생성 관련 함수

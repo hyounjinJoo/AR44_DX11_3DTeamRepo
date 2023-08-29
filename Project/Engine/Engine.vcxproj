@@ -287,12 +287,13 @@ call Copy_HLSL.bat $(Configuration)</Command>
     <ClInclude Include="guiDebugObject.h" />
     <ClInclude Include="guiEditorObject.h" />
     <ClInclude Include="guiEntity.h" />
+    <ClInclude Include="guiFBXConverter.h" />
     <ClInclude Include="guiGame.h" />
     <ClInclude Include="guiGraphicsShaderEditor.h" />
     <ClInclude Include="guiInspector.h" />
     <ClInclude Include="guiList.h" />
     <ClInclude Include="guiMainMenu.h" />
-    <ClInclude Include="guiMaterial.h" />
+    <ClInclude Include="guiMaterialEditor.h" />
     <ClInclude Include="guiMesh.h" />
     <ClInclude Include="guiMgr.h" />
     <ClInclude Include="guiResource.h" />
@@ -307,6 +308,7 @@ call Copy_HLSL.bat $(Configuration)</Command>
     <ClInclude Include="CollisionMgr.h" />
     <ClInclude Include="Application.h" />
     <ClInclude Include="ILight.h" />
+    <ClInclude Include="ImGuizmo.h" />
     <ClInclude Include="imgui\imconfig.h" />
     <ClInclude Include="imgui\imgui.h" />
     <ClInclude Include="imgui\imgui_impl_dx11.h" />
@@ -346,6 +348,7 @@ call Copy_HLSL.bat $(Configuration)</Command>
     <ClInclude Include="InputMgr.h" />
     <ClInclude Include="MeshData.h" />
     <ClInclude Include="IShader.h" />
+    <ClInclude Include="Shader_Common.h" />
     <ClInclude Include="SimpleMath.h" />
     <ClInclude Include="Singleton.h" />
     <ClInclude Include="json-cpp\json-forwards.h" />
@@ -391,6 +394,8 @@ call Copy_HLSL.bat $(Configuration)</Command>
     <ClCompile Include="BTActionExample.cpp">
       <SubType>
       </SubType>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="Com_BehaviorTree.cpp">
       <SubType>
@@ -425,12 +430,13 @@ call Copy_HLSL.bat $(Configuration)</Command>
     <ClCompile Include="guiDebugObject.cpp" />
     <ClCompile Include="guiEditorObject.cpp" />
     <ClCompile Include="guiEntity.cpp" />
+    <ClCompile Include="guiFBXConverter.cpp" />
     <ClCompile Include="guiGame.cpp" />
     <ClCompile Include="guiGraphicsShaderEditor.cpp" />
     <ClCompile Include="guiInspector.cpp" />
     <ClCompile Include="guiList.cpp" />
     <ClCompile Include="guiMainMenu.cpp" />
-    <ClCompile Include="guiMaterial.cpp" />
+    <ClCompile Include="guiMaterialEditor.cpp" />
     <ClCompile Include="guiMesh.cpp" />
     <ClCompile Include="guiMgr.cpp" />
     <ClCompile Include="guiResource.cpp" />
@@ -445,6 +451,9 @@ call Copy_HLSL.bat $(Configuration)</Command>
     <ClCompile Include="CollisionMgr.cpp" />
     <ClCompile Include="Application.cpp" />
     <ClCompile Include="ILight.cpp" />
+    <ClCompile Include="ImGuizmo.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
     <ClCompile Include="imgui\imgui.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
@@ -555,6 +564,7 @@ call Copy_HLSL.bat $(Configuration)</Command>
   </ItemGroup>
   <ItemGroup>
     <None Include="cpp.hint" />
+    <None Include="DefaultShader\SH_Animation2D.hlsli" />
     <None Include="DefaultShader\SH_Basic3D.hlsli" />
     <None Include="DefaultShader\SH_Functions.hlsli" />
     <None Include="DefaultShader\SH_Func_Animation3D.hlsli" />

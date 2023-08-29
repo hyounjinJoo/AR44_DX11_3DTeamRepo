@@ -9,8 +9,6 @@
 
 namespace gui
 {
-	
-
 	namespace strKey
 	{
 		constexpr const char* DXGI_FORMAT_String[] =
@@ -260,7 +258,7 @@ namespace gui
 
 		for (size_t i = 0; i < mInputLayoutDescs.size(); ++i)
 		{
-			
+			//Delete 버튼
 			std::string Delete = cDelete;
 			Delete += std::to_string(i);
 			if (ImGui::Button(Delete.c_str()))
@@ -273,7 +271,8 @@ namespace gui
 			}
 
 			ImGui::SameLine();
-
+			
+			//Edit 버튼
 			std::string Edit = cEdit;
 			Edit += std::to_string(i);
 			if (ImGui::Button(Edit.c_str()))
@@ -309,12 +308,27 @@ namespace gui
 
 		InputElementEditModal();
 
-		if(ImGui::Button("Add Input Layout Desc"))
+		if(ImGui::Button("Add Input Layout Desc", ImVec2(0.f, 40.f)))
 		{
 			D3D11_INPUT_ELEMENT_DESC desc{};
 			desc.SemanticIndex = (UINT)mInputLayoutDescs.size();
 			mInputLayoutDescs.emplace_back(desc);
 		}
+
+
+		if(ImGui::Button("Standard 2D Input Layout", ImVec2(0.f, 40.f)))
+		{
+			CreateSTDInputLayout(mh::define::eDimensionType::_2D);
+		}
+
+		ImGui::SameLine();
+
+		if (ImGui::Button("Standard 3D Input Layout", ImVec2(0.f, 40.f)))
+		{
+			CreateSTDInputLayout(mh::define::eDimensionType::_3D);
+		}
+
+		ImGui::Separator();
 
 		//토폴로지 업데이트
 		mTopologyCombo.FixedUpdate();
@@ -597,6 +611,79 @@ namespace gui
 		}
 	}
 
+	void guiGraphicsShaderEditor::CreateSTDInputLayout(mh::define::eDimensionType _dimType)
+	{
+		mInputLayoutDescs.clear();
+
+		D3D11_INPUT_ELEMENT_DESC LayoutDesc{};
+
+		LayoutDesc.AlignedByteOffset = 0;
+		LayoutDesc.Format = DXGI_FORMAT_R32G32B32A32_FLOAT;
+		LayoutDesc.InputSlot = 0;
+		LayoutDesc.InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
+		LayoutDesc.SemanticName = "POSITION";
+		LayoutDesc.SemanticIndex = 0;
+		mInputLayoutDescs.push_back(LayoutDesc);
+		LayoutDesc = D3D11_INPUT_ELEMENT_DESC{};
+
+		LayoutDesc.AlignedByteOffset = 32;
+		LayoutDesc.Format = DXGI_FORMAT_R32G32_FLOAT;
+		LayoutDesc.InputSlot = 0;
+		LayoutDesc.InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
+		LayoutDesc.SemanticName = "TEXCOORD";
+		LayoutDesc.SemanticIndex = 0;
+		mInputLayoutDescs.push_back(LayoutDesc);
+		LayoutDesc = D3D11_INPUT_ELEMENT_DESC{};
+
+		if (_dimType == mh::define::eDimensionType::_3D)
+		{
+			LayoutDesc = D3D11_INPUT_ELEMENT_DESC{};
+			LayoutDesc.AlignedByteOffset = 40;
+			LayoutDesc.Format = DXGI_FORMAT_R32G32B32_FLOAT;
+			LayoutDesc.InputSlot = 0;
+			LayoutDesc.InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
+			LayoutDesc.SemanticName = "TANGENT";
+			LayoutDesc.SemanticIndex = 0;
+			mInputLayoutDescs.push_back(LayoutDesc);
+
+			LayoutDesc = D3D11_INPUT_ELEMENT_DESC{};
+			LayoutDesc.AlignedByteOffset = 52;
+			LayoutDesc.Format = DXGI_FORMAT_R32G32B32_FLOAT;
+			LayoutDesc.InputSlot = 0;
+			LayoutDesc.InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
+			LayoutDesc.SemanticName = "BINORMAL";
+			LayoutDesc.SemanticIndex = 0;
+			mInputLayoutDescs.push_back(LayoutDesc);
+
+			LayoutDesc = D3D11_INPUT_ELEMENT_DESC{};
+			LayoutDesc.AlignedByteOffset = 64;
+			LayoutDesc.Format = DXGI_FORMAT_R32G32B32_FLOAT;
+			LayoutDesc.InputSlot = 0;
+			LayoutDesc.InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
+			LayoutDesc.SemanticName = "NORMAL";
+			LayoutDesc.SemanticIndex = 0;
+			mInputLayoutDescs.push_back(LayoutDesc);
+
+			LayoutDesc = D3D11_INPUT_ELEMENT_DESC{};
+			LayoutDesc.AlignedByteOffset = 76;
+			LayoutDesc.Format = DXGI_FORMAT_R32G32B32A32_FLOAT;
+			LayoutDesc.InputSlot = 0;
+			LayoutDesc.InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
+			LayoutDesc.SemanticName = "BLENDWEIGHT";
+			LayoutDesc.SemanticIndex = 0;
+			mInputLayoutDescs.push_back(LayoutDesc);
+
+			LayoutDesc = D3D11_INPUT_ELEMENT_DESC{};
+			LayoutDesc.AlignedByteOffset = 92;
+			LayoutDesc.Format = DXGI_FORMAT_R32G32B32A32_FLOAT;
+			LayoutDesc.InputSlot = 0;
+			LayoutDesc.InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
+			LayoutDesc.SemanticName = "BLENDINDICES";
+			LayoutDesc.SemanticIndex = 0;
+			mInputLayoutDescs.push_back(LayoutDesc);
+		}
+	}
+
 	void guiGraphicsShaderEditor::SaveModal()
 	{
 		if (mbSaveModal)
@@ -639,8 +726,6 @@ namespace gui
 
 				ImGui::EndPopup();
 			}
-
-			//ImGui::EndPopup();
 		}
 	}
 

@@ -20,8 +20,6 @@ struct tDesc_GameMainWindow
 	std::vector<std::function<void()>> ExternalInitFuncs;
 
 	mh::define::tDesc_GPUMgr GPUDesc;
-
-	bool RunEditor;
 };
 
 struct tUmap_LightHashFunc32

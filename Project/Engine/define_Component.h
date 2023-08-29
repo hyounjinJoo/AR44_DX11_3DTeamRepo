@@ -5,6 +5,7 @@
 
 namespace mh::define
 {
+
 	STRKEY ComponentPrefix = "Com_";
 	enum class eComponentType
 	{

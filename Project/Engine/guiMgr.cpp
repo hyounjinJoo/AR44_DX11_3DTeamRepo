@@ -17,6 +17,8 @@
 #include "Object.h"
 #include "Application.h"
 #include "GPUMgr.h"
+#include "InputMgr.h"
+#include "PathMgr.h"
 
 #include "guiInspector.h"
 #include "guiGame.h"
@@ -26,30 +28,37 @@
 #include "guiConsole.h"
 #include "guiList.h"
 #include "guiTree_GameObject.h"
-
-
-
+#include "guiFBXConverter.h"
 #include "guiGraphicsShaderEditor.h"
-
 #include "guiDebugObject.h"
 #include "guiEditorObject.h"
+#include "guiMaterialEditor.h"
+
+#include "json-cpp/json.h"
 
 
 
 extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 namespace gui
 {
+	constexpr const char* imguiSaveINI = "imgui.ini";
+	constexpr const char* imguiSaveJSON = "imgui.json";
+
+
 	std::unordered_map<std::string, guiBase*, mh::define::tUmap_StringViewHasher, std::equal_to<>> guiMgr::mGuiWindows{};
 	//std::vector<guiBase*> guiMgr::mGuiWindows{};
 	std::vector<EditorObject*> guiMgr::mEditorObjects{};
 	std::vector<DebugObject*> guiMgr::mDebugObjects{};
 
 	bool guiMgr::mbEnable{};
-	bool guiMgr::mbInitialized;
+	bool guiMgr::mbInitialized{};
+
+	std::unique_ptr<Json::Value> guiMgr::mJsonUIData{};
+
+	ImGuizmo::OPERATION guiMgr::mCurrentGizmoOperation = ImGuizmo::TRANSLATE;
 
 	using namespace mh::define;
 	using namespace mh::math;
-
 	
 	void guiMgr::Init()
 	{
@@ -79,6 +88,7 @@ namespace gui
 		renderer->SetMaterial(material, 0);
 		renderer->SetMesh(circleMesh);
 
+
 		//그리드 이쪽으로 옮겨줘야 한다.
 		// Grid Object
 		//EditorObject* gridObject = new EditorObject();
@@ -92,24 +102,8 @@ namespace gui
 
 		ImGuiInitialize();
 
-		AddGuiWindow<guiMainMenu>();
+		InitGuiWindows();
 
-		AddGuiWindow<guiInspector>();
-
-		//AddGuiWindow<guiGame>();
-		////Game* game = new Game();
-		////mWidgets.insert(std::make_pair("Game", game));
-
-		AddGuiWindow<guiTree_GameObject>();
-
-		AddGuiWindow<guiResources>();
-
-		AddGuiWindow<guiGraphicsShaderEditor>();
-		//guiGraphicsShaderEditor* Editor = new guiGraphicsShaderEditor;
-		//mWidgets.insert(std::make_pair("Graphics Shader Editor", Editor));
-
-		//ListWidget* listWidget = new ListWidget();
-		//mWidgets.insert(std::make_pair("ListWidget", listWidget));
 
 		for (const auto& iter : mGuiWindows)
 		{
@@ -119,11 +113,34 @@ namespace gui
 
 	void guiMgr::Run()
 	{
+		if (
+			mh::InputMgr::GetKey(mh::eKeyCode::LCTRL)
+			&&
+			mh::InputMgr::GetKey(mh::eKeyCode::LSHIFT)
+			&&
+			mh::InputMgr::GetKeyDown(mh::eKeyCode::E)
+			)
+		{
+			gui::guiMgr::ToggleEnable();
+		}
+
+
+		if (mh::InputMgr::GetKey(mh::eKeyCode::Z))
+		{
+			mCurrentGizmoOperation = ImGuizmo::SCALE;
+		}
+		if (mh::InputMgr::GetKey(mh::eKeyCode::X))
+		{
+			mCurrentGizmoOperation = ImGuizmo::TRANSLATE;
+		}
+
 		if (false == mbEnable)
 			return;
 		Update();
 		FixedUpdate();
 		Render();
+
+		mbInitialized = true;
 	}
 
 
@@ -148,14 +165,6 @@ namespace gui
 		{
 			guiPair.second->FixedUpdate();
 		}
-
-		//for (const auto& pair : mGuiWindows)
-		//{
-		//	if (nullptr == pair.second->GetParent())
-		//	{
-		//		pair.second->FixedUpdate();
-		//	}
-		//}
 	}
 
 	void guiMgr::Render()
@@ -177,25 +186,42 @@ namespace gui
 
 	void guiMgr::Release()
 	{
-		if (mbEnable == false)
+		if (false == mbInitialized)
 			return;
 
-		//for (auto& iter : mGuiWindows)
-		//{
-		//	if (iter.second && nullptr == iter.second->GetParent())
-		//	{
-		//		SAFE_DELETE(iter.second);
-		//	}
-		//}
+		//IMGUI 내부 세팅 저장
+		const std::fs::path& saveDir = mh::PathMgr::GetResPathRelative();
+		std::fs::path savePath = saveDir / imguiSaveINI;
+		ImGui::SaveIniSettingsToDisk(savePath.string().c_str());
 
+		//IMGUI 프로젝트 세팅 저장
+		savePath.remove_filename();
+		savePath /= imguiSaveJSON;
 		for (const auto& guiPair : mGuiWindows)
 		{
 			if (guiPair.second)
 			{
+				if (guiPair.second->IsSaveEnable())
+				{
+					//한 파일에 몰아서 저장
+					Json::Value& saveVal = (*mJsonUIData.get())[guiPair.first];
+					guiPair.second->SaveJson(&saveVal);
+				}
 				delete guiPair.second;
 			}
 		}
 		mGuiWindows.clear();
+
+
+		//json 저장
+		std::ofstream ofs(savePath);
+		if (ofs.is_open())
+		{
+			ofs << (*mJsonUIData.get());
+			ofs.close();
+		}
+		mJsonUIData.reset();
+
 		
 		for (auto& obj : mEditorObjects)
 		{
@@ -238,6 +264,35 @@ namespace gui
 		debugObj->Render();
 	}
 
+	Json::Value* guiMgr::CheckJsonSaved(const std::string& _strKey)
+	{
+		Json::Value* retJson = nullptr;
+
+		if (mJsonUIData->isMember(_strKey))
+		{
+			retJson = &((*mJsonUIData)[_strKey]);
+		}
+
+		return retJson;
+	}
+
+	void guiMgr::InitGuiWindows()
+	{
+		AddGuiWindow<guiMainMenu>();
+
+		AddGuiWindow<guiInspector>();
+
+		AddGuiWindow<guiTree_GameObject>();
+
+		AddGuiWindow<guiResources>();
+
+		AddGuiWindow<guiGraphicsShaderEditor>();
+
+		AddGuiWindow<guiFBXConverter>();
+
+		AddGuiWindow<guiMaterialEditor>();
+	}
+
 	void guiMgr::ImGuiInitialize()
 	{
 		// Setup Dear ImGui context
@@ -268,10 +323,55 @@ namespace gui
 			style.Colors[ImGuiCol_WindowBg].w = 1.0f;
 		}
 
+		//내부 세팅 로드
+		const std::fs::path& saveDir = mh::PathMgr::GetResPathRelative();
+		std::fs::path savePath = saveDir / imguiSaveINI;
+		if (std::fs::exists(savePath))
+		{
+			ImGui::LoadIniSettingsFromDisk(savePath.string().c_str());
+		}
+		
+
+		//프로젝트 세팅 로드
+		mJsonUIData = std::make_unique<Json::Value>();
+		savePath.remove_filename();
+		savePath /= imguiSaveJSON;
+		std::ifstream ifs(savePath);
+		if (ifs.is_open())
+		{
+			ifs >> *mJsonUIData;
+			ifs.close();
+		}
+
+
 		// Setup Platform/Renderer backends
 		ImGui_ImplWin32_Init(mh::Application::GetHwnd());
 		ImGui_ImplDX11_Init(mh::GPUMgr::Device().Get()
 			, mh::GPUMgr::Context().Get());
+
+
+
+		//설정 파일들 로드
+		//TODO: 여기
+		//std::filesystem::path origDir = mh::PathMgr::GetInst()->GetPathRel_Content();
+
+		//origDir /= DIRECTORY_NAME::SAVED_SETTING;
+		//std::filesystem::path fullPath = origDir / "imgui.ini";
+		//io.IniFilename = NULL;
+
+		//ImGui::LoadIniSettingsFromDisk(fullPath.string().c_str());
+
+		//fullPath.clear();
+		//fullPath = origDir;
+		//fullPath /= "ImGuiSave.json";
+
+		//std::ifstream loadfile(fullPath);
+		//if (true == loadfile.is_open())
+		//{
+		//	loadfile >> m_SavedUIData;
+		//	loadfile.close();
+		//}
+
 
 		// Load Fonts
 		// - If no fonts are loaded, dear imgui will use the default font. You can also load multiple fonts and use ImGui::PushFont()/PopFont() to select them.
@@ -299,6 +399,9 @@ namespace gui
 		ImGui_ImplDX11_NewFrame();
 		ImGui_ImplWin32_NewFrame();
 		ImGui::NewFrame();
+		ImGuizmo::BeginFrame();
+		RenderGuizmo();
+
 		ImGuiIO io = ImGui::GetIO();
 	}
 
@@ -338,6 +441,103 @@ namespace gui
 		if (mbInitialized)
 		{
 			_pBase->InitRecursive();
+		}
+	}
+
+	void guiMgr::RenderGuizmo()
+	{
+		mh::GameObject* targetgameobject = mh::RenderMgr::GetInspectorGameObject();
+
+		if (!targetgameobject)
+		{
+			return;
+		}
+
+		mh::Com_Camera* mainCam = mh::RenderMgr::GetMainCam();
+
+		if (!mainCam)
+		{
+			return;
+		}
+
+		//ImGuizmo::SetOrthographic(false);
+		//ImGuizmo::SetDrawlist(ImGui::GetForegroundDrawList());
+
+		constexpr float kOffsetX = 60.f;
+		constexpr float kOffsetY = 45.f;
+		const float		x = ImGui::GetWindowPos().x - 60;
+		const float		y = ImGui::GetWindowPos().y - 45;
+		const float		width = ImGui::GetWindowViewport()->Size.x;
+		const float		height = ImGui::GetWindowViewport()->Size.y;
+		ImGuizmo::SetRect(x, y, width, height);
+
+		MATRIX view = mainCam->GetViewMatrix();
+		MATRIX projection = mainCam->GetProjectionMatrix();
+		MATRIX worldMatrix = targetgameobject->GetComponent<mh::Com_Transform>()->GetWorldMat();
+
+		float matrixTranslation[3], matrixRotation[3], matrixScale[3];
+		ImGuizmo::DecomposeMatrixToComponents(&worldMatrix.m[0][0], matrixTranslation, matrixRotation, matrixScale);
+
+		MATRIX matTranslation = MATRIX::CreateTranslation(matrixTranslation[0], matrixTranslation[1], matrixTranslation[2]);
+		MATRIX matRotation = MATRIX::CreateFromYawPitchRoll(matrixRotation[1], matrixRotation[0], matrixRotation[2]);
+		MATRIX matScale = MATRIX::CreateScale(matrixScale[0], matrixScale[1], matrixScale[2]);
+
+		worldMatrix = matScale * matRotation * matTranslation;
+
+		ImGuizmo::Manipulate(&view.m[0][0], &projection.m[0][0], mCurrentGizmoOperation, ImGuizmo::WORLD, &worldMatrix.m[0][0]);
+
+		if (ImGuizmo::IsUsing())
+		{
+
+			Vector3 position{};
+			Quaternion rotation{};
+			Vector3 scale{};
+			worldMatrix.Decompose(scale, rotation, position);
+
+			mh::Com_Transform* transformComponent = targetgameobject->GetComponent<mh::Com_Transform>();
+
+			if (mCurrentGizmoOperation == ImGuizmo::TRANSLATE)
+			{
+				transformComponent->SetRelativePos(position);
+			}
+			else if (mCurrentGizmoOperation == ImGuizmo::ROTATE)
+			{
+				// 회전 작동 오류있음
+				// 현재사용 X
+				Matrix mat = Matrix::CreateFromQuaternion(rotation);
+				float x, y, z;
+
+				if (mat._13 > 0.998f)
+				{
+					y = atan2f(mat._21, mat._22);
+					x = XM_PI / 2.0f;
+					z = 0;
+				}
+				else if (mat._13 < -0.998f)
+				{
+					y = atan2f(mat._21, mat._22);
+					x = -XM_PI / 2.0f;
+					z = 0;
+				}
+				else
+				{
+					y = atan2f(-mat._23, mat._33);
+					x = asinf(mat._13);
+					z = atan2f(-mat._12, mat._11);
+				}
+
+				Vector3 axisRotation(x, y, z);
+				transformComponent->SetRelativeRotXYZ(axisRotation);
+
+			}
+			else if (mCurrentGizmoOperation == ImGuizmo::SCALE)
+			{
+				transformComponent->SetRelativeScale(scale);
+			}
+			else
+			{
+				return;
+			}
 		}
 	}
 

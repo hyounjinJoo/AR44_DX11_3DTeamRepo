@@ -32,5 +32,11 @@ namespace mh
 		if (mParentAnimator)
 			mParentAnimator->Render();
 	}
+
+	void Com_DummyAnimator::RenderEnd()
+	{
+		if (mParentAnimator)
+			mParentAnimator->RenderEnd();
+	}
 }
 

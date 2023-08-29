@@ -3,40 +3,45 @@
 
 #include "SH_CommonStruct.hlsli"
 
-
-
 //t 버퍼
-TEXTURE2D(albedoTexture, t, 0);
-TEXTURE2D(normalTexture, t, 1);
-TEXTURE2D(specularTexture, t, 2);
-TEXTURE2D(emissiveTexture, t, 3);
-// Material Default Texture
-//Texture2D albedoTexture : register(t0);
-//Texture2D normalTexture : register(t1);
-//Texture2D specularTexture : register(t2);
-//Texture2D emissiveTexture : register(t3);
+
+//Material Default Texture
+TEXTURE2D(Tex_0, t, 0);
+TEXTURE2D(Tex_1, t, 1);
+TEXTURE2D(Tex_2, t, 2);
+TEXTURE2D(Tex_3, t, 3);
+TEXTURE2D(Tex_4, t, 4);
+TEXTURE2D(Tex_5, t, 5);
+TEXTURE2D(Tex_6, t, 6);
+TEXTURE2D(Tex_7, t, 7);
 
 
-//defferd
-TEXTURE2D(albedoTarget, t, 0);
-TEXTURE2D(normalTarget, t, 1);
-TEXTURE2D(specularTarget, t, 2);
-TEXTURE2D(emissiveTarget, t, 3);
-TEXTURE2D(positionTarget, t, 4);
 
-// Light
-TEXTURE2D(diffuseLightTarget, t, 5);
-TEXTURE2D(specularLightTarget, t, 6);
+//3D Material
+TEXTURE2D(AlbedoTexture, t, 0);
+TEXTURE2D(NormalTexture, t, 1);
+TEXTURE2D(SpecularTexture, t, 2);
+TEXTURE2D(EmissiveTexture, t, 3);
+#define IsAlbedoTex bTex_0
+#define IsNormalTex bTex_1
+#define IsSpecularTex bTex_2
+#define IsEmissiveTex bTex_3
 
 
-//Atlas texture(Animation 2D)
-TEXTURE2D(atlasTexture, t, 11);
+//Deffered + Light MRT
+TEXTURE2D(AlbedoTarget, t, 0);
+TEXTURE2D(NormalTarget, t, 1);
+TEXTURE2D(SpecularTarget, t, 2);
+TEXTURE2D(EmissiveTarget, t, 3);
+TEXTURE2D(PositionTarget, t, 4);
+TEXTURE2D(DiffuseLightTarget, t, 5);
+TEXTURE2D(SpecularLightTarget, t, 6);
+
 
 //Bone Matrices(Animation 3D)
 SBUFFER(g_arrFrameTrans, tFrameTranslation, t, 16);
 SBUFFER(g_arrOffset, Matrix, t, 17);
 SBUFFER_RW(g_arrFinalMat, Matrix, u, 0);
-
 
 
 //StructuredBuffer<tFrameTranslation> g_arrFrameTrans : register(t16);

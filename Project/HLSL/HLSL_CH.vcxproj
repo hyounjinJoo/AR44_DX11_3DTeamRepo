@@ -28,8 +28,14 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="SH_Blur.hlsli" />
+    <None Include="SH_Common.hlsli" />
+    <None Include="SH_CommonStruct.hlsli" />
     <None Include="SH_ConstBuffer.hlsli" />
     <None Include="SH_Func.hlsli" />
+    <None Include="SH_Functions.hlsli" />
+    <None Include="SH_Func_Blur.hlsli" />
+    <None Include="SH_Func_DecodeColor.hlsli" />
+    <None Include="SH_Func_Light.hlsli" />
     <None Include="SH_Globals.hlsli" />
     <None Include="SH_Light.hlsli" />
     <None Include="SH_Resource.hlsli" />

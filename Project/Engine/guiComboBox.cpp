@@ -12,6 +12,7 @@ namespace gui
 		, mCurrentSelected(-1)
 		, mComboFlags()
 		, mCallback()
+		, mbSelectionChanged()
 	{
 
 	}
@@ -20,6 +21,8 @@ namespace gui
 	}
 	bool guiComboBox::BeginUI()
 	{
+		mbSelectionChanged = false;
+
 		std::string Preview;
 		if (IsIndexValid())
 			Preview = mItems[mCurrentSelected].strName;
@@ -28,6 +31,8 @@ namespace gui
 	}
 	void guiComboBox::UpdateUI()
 	{
+		
+
 		for (int n = 0; n < (int)mItems.size(); ++n)
 		{
 			bool isSelected = (mCurrentSelected == n);
@@ -36,6 +41,7 @@ namespace gui
 			if (true == ImGui::Selectable(mItems[n].strName.c_str(), isSelected))
 			{
 				mCurrentSelected = n;
+				mbSelectionChanged = true;
 
 				if (mCallback)
 					mCallback(mItems[n]);
