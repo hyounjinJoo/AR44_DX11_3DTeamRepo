@@ -253,6 +253,7 @@ call Copy_HLSL.bat $(Configuration)</Command>
     <ClInclude Include="Animation3D.h" />
     <ClInclude Include="Animation3DShader.h" />
     <ClInclude Include="base64.h" />
+    <ClInclude Include="BTActionExample.h" />
     <ClInclude Include="ComMgr.h" />
     <ClInclude Include="Components.h" />
     <ClInclude Include="Com_Animator2D.h" />
@@ -261,6 +262,7 @@ call Copy_HLSL.bat $(Configuration)</Command>
     <ClInclude Include="Com_Animator3D.h" />
     <ClInclude Include="Com_AudioListener.h" />
     <ClInclude Include="Com_AudioSource.h" />
+    <ClInclude Include="Com_BehaviorTree.h" />
     <ClInclude Include="Com_DummyTransform.h" />
     <ClInclude Include="Com_Renderer_3DAnimMesh.h" />
     <ClInclude Include="Com_DummyAnimator.h" />
@@ -301,6 +303,7 @@ call Copy_HLSL.bat $(Configuration)</Command>
     <ClInclude Include="CollisionMgr.h" />
     <ClInclude Include="Application.h" />
     <ClInclude Include="ILight.h" />
+    <ClInclude Include="ImGuizmo.h" />
     <ClInclude Include="imgui\imconfig.h" />
     <ClInclude Include="imgui\imgui.h" />
     <ClInclude Include="imgui\imgui_impl_dx11.h" />
@@ -384,6 +387,7 @@ call Copy_HLSL.bat $(Configuration)</Command>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="BTActionExample.cpp" />
     <ClCompile Include="ComMgr.cpp" />
     <ClCompile Include="Com_Animator2D.cpp" />
     <ClCompile Include="AtExit.cpp" />
@@ -391,6 +395,7 @@ call Copy_HLSL.bat $(Configuration)</Command>
     <ClCompile Include="Com_Animator3D.cpp" />
     <ClCompile Include="Com_AudioListener.cpp" />
     <ClCompile Include="Com_AudioSource.cpp" />
+    <ClCompile Include="Com_BehaviorTree.cpp" />
     <ClCompile Include="Com_DummyTransform.cpp" />
     <ClCompile Include="Com_Renderer_3DAnimMesh.cpp" />
     <ClCompile Include="Com_DummyAnimator.cpp" />
@@ -431,6 +436,9 @@ call Copy_HLSL.bat $(Configuration)</Command>
     <ClCompile Include="CollisionMgr.cpp" />
     <ClCompile Include="Application.cpp" />
     <ClCompile Include="ILight.cpp" />
+    <ClCompile Include="ImGuizmo.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
     <ClCompile Include="imgui\imgui.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>

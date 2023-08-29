@@ -5,6 +5,7 @@
 
 namespace mh::define
 {
+
 	STRKEY ComponentPrefix = "Com_";
 	enum class eComponentType
 	{
@@ -20,6 +21,7 @@ namespace mh::define
 		AudioSource,
 		AudioListener,
 
+		BehaviorTree,
 		Scripts,
 
 		END
@@ -34,12 +36,12 @@ namespace mh::define
 			"Animator",
 			"Light",
 			"Camera",
+			"Renderer",
 
 			"AudioSource",
 			"AudioListener",
 
-			"Renderer",
-
+			"BehaviorTree",
 			"Scripts"
 		};
 
@@ -62,6 +64,8 @@ namespace mh::define
 				STRKEY_DECLARE(Com_Renderer_3DAnimMesh);
 				STRKEY_DECLARE(Com_Renderer_ParticleSystem);
 				STRKEY_DECLARE(Com_Renderer_Sprite);
+
+				STRKEY_DECLARE(Com_BehaviorTree);				
 				STRKEY_DECLARE(Com_Renderer_UIBase);
 				
 

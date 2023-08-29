@@ -267,6 +267,10 @@ namespace mh
 		{
 			return eComponentType::Renderer;
 		}
+		else if constexpr (std::is_base_of_v<Com_BehaviorTree, T>)
+		{
+			return eComponentType::BehaviorTree;
+		}
 		else if constexpr (std::is_base_of_v<IScript, T>)
 		{
 			return eComponentType::Scripts;

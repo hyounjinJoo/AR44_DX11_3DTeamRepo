@@ -493,6 +493,13 @@
     <ClCompile Include="Com_Renderer_UIBase.cpp">
       <Filter>Component\Renderer</Filter>
     </ClCompile>
+    <ClCompile Include="ImGuizmo.cpp">
+      <Filter>ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="Com_BehaviorTree.cpp">
+      <Filter>Component</Filter>
+    </ClCompile>
+    <ClCompile Include="BTActionExample.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application.h">
@@ -862,6 +869,13 @@
     <ClInclude Include="Com_Renderer_UIBase.h">
       <Filter>Component\Renderer</Filter>
     </ClInclude>
+    <ClInclude Include="ImGuizmo.h">
+      <Filter>ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="Com_BehaviorTree.h">
+      <Filter>Component</Filter>
+    </ClInclude>
+    <ClInclude Include="BTActionExample.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="cpp.hint">

@@ -18,6 +18,7 @@
 #include "Com_Renderer_Sprite.h"
 #include "Com_DummyAnimator.h"
 #include "Com_Renderer_UIBase.h"
+#include "Com_BehaviorTree.h"
 
 #include "Script_Player.h"
 #include "Script_Camera.h"
@@ -43,6 +44,8 @@ namespace mh
 		ComMgr::AddComConstructor<Com_Renderer_Sprite>(strKey::Default::com::Com_Renderer_Sprite);
 		ComMgr::AddComConstructor<Com_Renderer_UIBase>(strKey::Default::com::Com_Renderer_UIBase);
 		
+
+		ComMgr::AddComConstructor<Com_BehaviorTree>(strKey::Default::com::Com_BehaviorTree);		
 
 		ComMgr::AddComConstructor<Script_Player>(strKey::Default::com::Script_Player);
 		ComMgr::AddComConstructor<Script_Camera>(strKey::Default::com::Script_Camera);
