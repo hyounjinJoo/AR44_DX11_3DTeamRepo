@@ -186,6 +186,16 @@ namespace mh
 		Json::MH::LoadValue(_pJVal, JSON_KEY_PAIR(mDSType));
 		Json::MH::LoadValue(_pJVal, JSON_KEY_PAIR(mBSType));
 
+		if (false == mbEditMode)
+		{
+			result = CreateInputLayout();
+			if (eResultFail(result))
+			{
+				return result;
+			}
+		}
+
+
 		return eResult::Success;
 	}
 
@@ -193,19 +203,30 @@ namespace mh
 	{
 		std::fs::path FilePath = PathMgr::GetContentPathRelative(eResourceType::GraphicsShader);
 		FilePath /= _path;
+		{
+			std::fs::path fileDir = FilePath.parent_path();
+			if (false == std::fs::exists(fileDir))
+			{
+				std::fs::create_directories(fileDir);
+			}
+		}
 		FilePath.replace_extension(define::strKey::Ext_ShaderSetting);
 
+		//파일 열고
+		std::ofstream ofs(FilePath);
+		if (false == ofs.is_open())
+			return eResult::Fail_OpenFile;
+
+		//json 저장하고
 		Json::Value jVal;
 		eResult result = SaveJson(&jVal);
 		if (eResultFail(result))
 			return result;
 
-		std::ofstream ofs(FilePath);
-		if (false == ofs.is_open())
-			return eResult::Fail_OpenFile;
-
+		//파일로 저장
 		ofs << jVal;
 
+		//닫아주기
 		ofs.close();
 
 		return eResult::Success;
@@ -292,8 +313,7 @@ namespace mh
 	eResult GraphicsShader::CreateByCSO(eGSStage _stage, const std::fs::path& _FileName)
 	{
 		//CSO 파일이 있는 폴더에 접근
-		std::filesystem::path shaderBinPath = std::fs::current_path();
-		shaderBinPath /= strKey::DirName_CompiledShader;
+		std::filesystem::path shaderBinPath = PathMgr::GetShaderCSOPath();
 		shaderBinPath /= _FileName;
 
 		if (false == std::fs::exists(shaderBinPath))
@@ -336,6 +356,8 @@ namespace mh
 			ERROR_MESSAGE_W(L"쉐이더 생성 실패.");
 			return Result;
 		}
+
+		mArrShaderCode[(int)_stage] = sCode;
 
 		return Result;
 	}

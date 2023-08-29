@@ -19,31 +19,17 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="_1HS_JH.hlsl">
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Hull</ShaderType>
-      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Hull</ShaderType>
-      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">5.0</ShaderModel>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Hull</ShaderType>
-      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">5.0</ShaderModel>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Hull</ShaderType>
-      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
-    </FxCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="SH_Blur.hlsli" />
     <None Include="SH_Common.hlsli" />
     <None Include="SH_CommonStruct.hlsli" />
     <None Include="SH_ConstBuffer.hlsli" />
-    <None Include="SH_Func.hlsli" />
     <None Include="SH_Functions.hlsli" />
     <None Include="SH_Func_Blur.hlsli" />
     <None Include="SH_Func_DecodeColor.hlsli" />
     <None Include="SH_Func_Light.hlsli" />
     <None Include="SH_Globals.hlsli" />
-    <None Include="SH_Light.hlsli" />
     <None Include="SH_Resource.hlsli" />
     <None Include="SH_Sampler.hlsli" />
+    <None Include="SH_UserInterFace.hlsli" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>

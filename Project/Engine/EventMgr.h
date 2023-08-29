@@ -27,12 +27,12 @@ namespace mh
         static GameObject* SpawnGameObject(define::eLayerType _layer);
 
         //기본적으로 자신을 포함한 Child 게임오브젝트를 동일한 레이어에 넣도록 설정하였음.
-        //만약 특정 자식 오브젝트만 다른 레이어에 넣고 싶을 경우 MoveLayer 함수를 사용할 것
+        //만약 특정 자식 오브젝트만 다른 레이어에 넣고 싶을 경우 ChangeGameObjectLayer 함수를 사용할 것
         static GameObject* SpawnGameObject(define::eLayerType _layer, GameObject* _gameObj);
 
-        static void        MoveGameObjectLayer(define::eLayerType _layer, GameObject* _gameObj);
+        static void        ChangeGameObjectLayer(define::eLayerType _layer, GameObject* _gameObj);
 
-        static void DestroyGameObj(GameObject* _pObject);
+        static void         DestroyGameObj(GameObject* _pObject);
 
         //게임 진행 중에는 반드시 이 함수를 통해서 child를 집어넣을것
         //새로운 게임오브젝트일 경우 반드시 SpawnGameObject도 해줘야 함

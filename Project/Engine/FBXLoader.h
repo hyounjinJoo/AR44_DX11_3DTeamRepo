@@ -87,8 +87,8 @@ namespace mh
 
 	struct tFBXKeyFramesPerBone
 	{
-		int							BoneIndex;
-		std::vector<tFBXKeyFrame>	vecKeyFrame;
+		int							BoneIndex{};
+		std::vector<tFBXKeyFrame>	vecKeyFrame{};
 	};
 
 

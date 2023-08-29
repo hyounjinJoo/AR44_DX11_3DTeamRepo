@@ -62,6 +62,7 @@ namespace mh::define
 				STRKEY_DECLARE(Com_Renderer_3DAnimMesh);
 				STRKEY_DECLARE(Com_Renderer_ParticleSystem);
 				STRKEY_DECLARE(Com_Renderer_Sprite);
+				STRKEY_DECLARE(Com_Renderer_UIBase);
 				
 
 				STRKEY_DECLARE(Script_Player);

@@ -157,9 +157,6 @@
     <Filter Include="Component\Audio">
       <UniqueIdentifier>{326cbbf6-1cb8-4ba7-bc32-aa2759b923f9}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Component\0. Transform">
-      <UniqueIdentifier>{62546181-5d07-413f-a9e5-329a0986165d}</UniqueIdentifier>
-    </Filter>
     <Filter Include="GuiEditor\Instances">
       <UniqueIdentifier>{ded79648-f1d7-43d2-957c-11c1b95a2e71}</UniqueIdentifier>
     </Filter>
@@ -177,6 +174,9 @@
     </Filter>
     <Filter Include="Resource\Animation">
       <UniqueIdentifier>{fa962df9-8edc-4f9e-8aad-0262d0039dc4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Component\Transform">
+      <UniqueIdentifier>{62546181-5d07-413f-a9e5-329a0986165d}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -311,7 +311,7 @@
       <Filter>Component</Filter>
     </ClCompile>
     <ClCompile Include="Com_Transform.cpp">
-      <Filter>Component\0. Transform</Filter>
+      <Filter>Component\Transform</Filter>
     </ClCompile>
     <ClCompile Include="Com_AudioSource.cpp">
       <Filter>Component\Audio</Filter>
@@ -445,7 +445,7 @@
     </ClCompile>
     <ClCompile Include="Skeleton.cpp" />
     <ClCompile Include="ITransform.cpp">
-      <Filter>Component\0. Transform</Filter>
+      <Filter>Component\Transform</Filter>
     </ClCompile>
     <ClCompile Include="ILight.cpp">
       <Filter>Component</Filter>
@@ -454,7 +454,7 @@
       <Filter>Component\Renderer</Filter>
     </ClCompile>
     <ClCompile Include="Com_DummyTransform.cpp">
-      <Filter>Component\0. Transform</Filter>
+      <Filter>Component\Transform</Filter>
     </ClCompile>
     <ClCompile Include="Com_Renderer_3DAnimMesh.cpp">
       <Filter>Component\Renderer</Filter>
@@ -489,6 +489,9 @@
     </ClCompile>
     <ClCompile Include="Animation3D.cpp">
       <Filter>Resource\Animation</Filter>
+    </ClCompile>
+    <ClCompile Include="Com_Renderer_UIBase.cpp">
+      <Filter>Component\Renderer</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -656,7 +659,7 @@
       <Filter>Component</Filter>
     </ClInclude>
     <ClInclude Include="Com_Transform.h">
-      <Filter>Component\0. Transform</Filter>
+      <Filter>Component\Transform</Filter>
     </ClInclude>
     <ClInclude Include="Com_AudioSource.h">
       <Filter>Component\Audio</Filter>
@@ -808,7 +811,7 @@
     </ClInclude>
     <ClInclude Include="Skeleton.h" />
     <ClInclude Include="ITransform.h">
-      <Filter>Component\0. Transform</Filter>
+      <Filter>Component\Transform</Filter>
     </ClInclude>
     <ClInclude Include="ILight.h">
       <Filter>Component</Filter>
@@ -817,7 +820,7 @@
       <Filter>Component\Renderer</Filter>
     </ClInclude>
     <ClInclude Include="Com_DummyTransform.h">
-      <Filter>Component\0. Transform</Filter>
+      <Filter>Component\Transform</Filter>
     </ClInclude>
     <ClInclude Include="Com_Renderer_3DAnimMesh.h">
       <Filter>Component\Renderer</Filter>
@@ -855,6 +858,9 @@
     </ClInclude>
     <ClInclude Include="Animation3D.h">
       <Filter>Resource\Animation</Filter>
+    </ClInclude>
+    <ClInclude Include="Com_Renderer_UIBase.h">
+      <Filter>Component\Renderer</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -923,6 +929,9 @@
     </None>
     <None Include="DefaultShader\SH_Basic3D.hlsli">
       <Filter>_DefaultShader\Basic3D</Filter>
+    </None>
+    <None Include="DefaultShader\SH_UserInterFace.hlsli">
+      <Filter>_DefaultShader\UI</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>

@@ -19,13 +19,11 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Com_HWRenderer.cpp" />
     <ClCompile Include="Scene_Play.cpp" />
     <ClCompile Include="Scene_Title.cpp" />
     <ClCompile Include="Script_CameraMove.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Com_HWRenderer.h" />
     <ClInclude Include="Scene_Play.h" />
     <ClInclude Include="Scene_Title.h" />
     <ClInclude Include="Script_CameraMove.h" />

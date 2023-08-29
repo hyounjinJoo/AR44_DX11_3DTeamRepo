@@ -93,19 +93,14 @@ namespace mh
 		}
 	}
 
-	void Layer::AddGameObject(GameObject* gameObject, bool _bNeedInit)
+	void Layer::AddGameObject(GameObject* gameObject)
 	{
 		if (gameObject == nullptr)
 			return;
 
 		mGameObjects.push_back(gameObject);
 		gameObject->SetLayerType(mLayerType);
-
-		if (_bNeedInit)
-		{
-			gameObject->Init();
-		}
-			
+		gameObject->Init();
 	}
 
 	void Layer::RemoveGameObject(const GameObject* gameObject)

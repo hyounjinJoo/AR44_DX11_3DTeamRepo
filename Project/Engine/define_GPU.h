@@ -222,6 +222,16 @@ namespace mh::define
 
 	enum class eTextureSlot
 	{
+		Tex_0,
+		Tex_1,
+		Tex_2,
+		Tex_3,
+		Tex_4,
+		Tex_5,
+		Tex_6,
+		Tex_7,
+
+
 		Albedo = Register_t_AlbedoTexture,
 		Normal = Register_t_NormalTexture,
 		Specular = Register_t_SpecularTexture,

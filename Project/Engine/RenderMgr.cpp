@@ -813,7 +813,7 @@ namespace mh
 
 	void RenderMgr::LoadDefaultShader()
 	{
-#pragma region 기본 입력 레이아웃
+#pragma region 2D LAYOUT
 		std::vector<D3D11_INPUT_ELEMENT_DESC> vecLayoutDesc2D;
 		D3D11_INPUT_ELEMENT_DESC LayoutDesc{};
 
@@ -826,7 +826,7 @@ namespace mh
 		vecLayoutDesc2D.push_back(LayoutDesc);
 		LayoutDesc = D3D11_INPUT_ELEMENT_DESC{};
 
-		LayoutDesc.AlignedByteOffset = 32;
+		LayoutDesc.AlignedByteOffset = 16;
 		LayoutDesc.Format = DXGI_FORMAT_R32G32_FLOAT;
 		LayoutDesc.InputSlot = 0;
 		LayoutDesc.InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
@@ -966,7 +966,7 @@ namespace mh
 		std::vector<D3D11_INPUT_ELEMENT_DESC> vecLayoutDesc3D = vecLayoutDesc2D;
 
 		LayoutDesc = D3D11_INPUT_ELEMENT_DESC{};
-		LayoutDesc.AlignedByteOffset = 40;
+		LayoutDesc.AlignedByteOffset = 24;
 		LayoutDesc.Format = DXGI_FORMAT_R32G32B32_FLOAT;
 		LayoutDesc.InputSlot = 0;
 		LayoutDesc.InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
@@ -975,7 +975,7 @@ namespace mh
 		vecLayoutDesc3D.push_back(LayoutDesc);
 		
 		LayoutDesc = D3D11_INPUT_ELEMENT_DESC{};
-		LayoutDesc.AlignedByteOffset = 52;
+		LayoutDesc.AlignedByteOffset = 36;
 		LayoutDesc.Format = DXGI_FORMAT_R32G32B32_FLOAT;
 		LayoutDesc.InputSlot = 0;
 		LayoutDesc.InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
@@ -984,7 +984,7 @@ namespace mh
 		vecLayoutDesc3D.push_back(LayoutDesc);
 		
 		LayoutDesc = D3D11_INPUT_ELEMENT_DESC{};
-		LayoutDesc.AlignedByteOffset = 64;
+		LayoutDesc.AlignedByteOffset = 48;
 		LayoutDesc.Format = DXGI_FORMAT_R32G32B32_FLOAT;
 		LayoutDesc.InputSlot = 0;
 		LayoutDesc.InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
@@ -993,7 +993,7 @@ namespace mh
 		vecLayoutDesc3D.push_back(LayoutDesc);
 
 		LayoutDesc = D3D11_INPUT_ELEMENT_DESC{};
-		LayoutDesc.AlignedByteOffset = 76;
+		LayoutDesc.AlignedByteOffset = 60;
 		LayoutDesc.Format = DXGI_FORMAT_R32G32B32A32_FLOAT;
 		LayoutDesc.InputSlot = 0;
 		LayoutDesc.InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
@@ -1002,7 +1002,7 @@ namespace mh
 		vecLayoutDesc3D.push_back(LayoutDesc);
 
 		LayoutDesc = D3D11_INPUT_ELEMENT_DESC{};
-		LayoutDesc.AlignedByteOffset = 92;
+		LayoutDesc.AlignedByteOffset = 76;
 		LayoutDesc.Format = DXGI_FORMAT_R32G32B32A32_FLOAT;
 		LayoutDesc.InputSlot = 0;
 		LayoutDesc.InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
@@ -1391,13 +1391,10 @@ namespace mh
 		ResMgr::Insert(material::SpriteMaterial, spriteMaterial);
 #pragma endregion
 #pragma region UI
-		std::shared_ptr <Texture> uiTexture = ResMgr::Find<Texture>(texture::HPBarTexture);
 		std::shared_ptr<GraphicsShader> uiShader = ResMgr::Find<GraphicsShader>(shader::graphics::UIShader);
 		std::shared_ptr<Material> uiMaterial = std::make_shared<Material>();
 		uiMaterial->SetRenderingMode(eRenderingMode::Opaque);
-
 		uiMaterial->SetShader(uiShader);
-		uiMaterial->SetTexture(eTextureSlot::Albedo, uiTexture);
 		ResMgr::Insert(material::UIMaterial, uiMaterial);
 #pragma endregion
 #pragma region GRID

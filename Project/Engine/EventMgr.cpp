@@ -58,7 +58,7 @@ namespace mh
 		//레이어가 설정되지 않았을 경우
 		//ASSERT
 		MH_ASSERT(eLayerType::None != layerType && Obj);
-			
+
 		SceneMgr::GetActiveScene()->AddGameObjectHierarchy(layerType, Obj);
 		mbLevelModified = true;
 	}
@@ -95,7 +95,7 @@ namespace mh
 		if (pParent && pChild)
 		{
 			pParent->AddChild(pChild);
-			
+
 			//새 오브젝트일 경우(start되지 않은 오브젝트일 경우 새 오브젝트라고 간주)
 			if (false == pChild->IsStarted())
 			{
@@ -111,7 +111,7 @@ namespace mh
 				IScene* scene = SceneMgr::GetActiveScene();
 				for (size_t i = 0; i < gameObjs.size(); ++i)
 				{
-					SceneMgr::GetActiveScene()->MoveGameObjectLayer(pParent->GetLayerType(), pChild);
+					SceneMgr::GetActiveScene()->ChangeGameObjectLayer(pParent->GetLayerType(), pChild);
 				}
 			}
 
@@ -122,10 +122,10 @@ namespace mh
 	{
 		GameObject* pObj = reinterpret_cast<GameObject*>(_event.lParam);
 		define::eLayerType targetLayer = static_cast<define::eLayerType>(_event.wParam);
-		
+
 		IScene* scene = SceneMgr::GetActiveScene();
 		if (scene)
-			scene->MoveGameObjectLayer(targetLayer, pObj);
+			scene->ChangeGameObjectLayer(targetLayer, pObj);
 	}
 
 
@@ -176,37 +176,35 @@ namespace mh
 
 	GameObject* EventMgr::SpawnGameObject(define::eLayerType _layer, GameObject* _gameObj)
 	{
-		if (_gameObj)
+		MH_ASSERT(
+			define::eLayerType::None != _layer ||
+			nullptr != _gameObj ||
+			define::eLayerType::None == _gameObj->GetLayerType()
+		);
+
+		//Scene 시작 안됐을 경우 바로 넣어준다
+		IScene* scene = SceneMgr::GetActiveScene();
+		MH_ASSERT(scene);
+		if (false == scene->IsInitialized())
 		{
-			if (define::eLayerType::None == _layer)
-			{
-				ERROR_MESSAGE_W(L"레이어를 설정하지 않았습니다.");
-				SAFE_DELETE(_gameObj);
-			}
-
-			//Scene 시작 안됐을 경우 바로 넣어준다
-			IScene* scene = SceneMgr::GetActiveScene();
-			MH_ASSERT(scene);
-			if (false == scene->IsInitialized())
-			{
-				scene->AddGameObject(_layer, _gameObj);
-			}
-
-			//Scene 시작됐을 경우에는 지연 삽입
-			else
-			{
-				tEvent evn{};
-				evn.Type = eEventType::SpawnGameObj;
-				evn.lParam = reinterpret_cast<DWORD_PTR>(_gameObj);
-				evn.wParam = static_cast<DWORD_PTR>(_layer);
-				mEvents.push_back(evn);
-			}
+			scene->AddGameObject(_layer, _gameObj);
 		}
+
+		//Scene 시작됐을 경우에는 지연 삽입
+		else
+		{
+			tEvent evn{};
+			evn.Type = eEventType::SpawnGameObj;
+			evn.lParam = reinterpret_cast<DWORD_PTR>(_gameObj);
+			evn.wParam = static_cast<DWORD_PTR>(_layer);
+			mEvents.push_back(evn);
+		}
+
 		return _gameObj;
 	}
 
 
-	void EventMgr::MoveGameObjectLayer(define::eLayerType _layer, GameObject* _gameObj)
+	void EventMgr::ChangeGameObjectLayer(define::eLayerType _layer, GameObject* _gameObj)
 	{
 		MH_ASSERT(define::eLayerType::None != _layer && _gameObj);
 		tEvent evn{};

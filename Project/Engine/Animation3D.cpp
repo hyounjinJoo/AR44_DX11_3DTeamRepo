@@ -62,11 +62,11 @@ namespace mh
             mValues.iFramePerSec = 48;
             break;
         case fbxsdk::FbxTime::eFrames30:
-            [[FallThrough]]
+            [[fallthrough]];
         case fbxsdk::FbxTime::eFrames30Drop:
-            [[FallThrough]]
+            [[fallthrough]];
         case fbxsdk::FbxTime::eNTSCDropFrame:
-            [[FallThrough]]
+            [[fallthrough]];
         case fbxsdk::FbxTime::eNTSCFullFrame:
             mValues.iFramePerSec = 30;
             break;

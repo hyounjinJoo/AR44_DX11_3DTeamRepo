@@ -32,10 +32,9 @@ namespace mh
         static inline UINT32 GetNextComTypeID();
 
     private:
-
         static std::unordered_map<std::string_view, std::function<IComponent* ()>> mUmapComConstructor;
         static std::unordered_map<std::type_index, const std::string_view>         mUmapComName;
-    }; 
+    };
 
     template <typename T>
     static inline void ComMgr::AddComConstructor(const std::string_view _strKey)

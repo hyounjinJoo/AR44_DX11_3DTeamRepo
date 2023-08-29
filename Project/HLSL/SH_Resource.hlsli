@@ -16,7 +16,6 @@ TEXTURE2D(Tex_6, t, 6);
 TEXTURE2D(Tex_7, t, 7);
 
 
-
 //3D Material
 TEXTURE2D(AlbedoTexture, t, 0);
 TEXTURE2D(NormalTexture, t, 1);

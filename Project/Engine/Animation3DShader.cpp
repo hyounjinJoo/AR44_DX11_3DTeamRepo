@@ -36,7 +36,7 @@ namespace mh
 		pAnimCB->BindData();
 
 		uint3 DataCounts{};
-		DataCounts.x = mAnim3DData.g_AnimBoneCount;
+		DataCounts.x = mAnim3DData.BoneCount;
 		DataCounts.y = 1;
 		DataCounts.z = 1;
 		

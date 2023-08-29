@@ -261,16 +261,19 @@ namespace mh
 		return uniqObj.release();
 	}
 
-	eResult MeshData::LoadFromFBX(const std::filesystem::path& _fullPath, bool _bStatic)
+	eResult MeshData::LoadFromFBX(const std::filesystem::path& _filePath, bool _bStatic)
 	{
-		if (false == std::fs::exists(_fullPath))
+		const std::fs::path& path = PathMgr::GetContentPathAbsolute(eResourceType::MeshData);
+		std::fs::path fullPath = path / _filePath;
+
+		if (false == std::fs::exists(fullPath))
 		{
 			ERROR_MESSAGE_W(L"파일을 찾지 못했습니다.");
 			return eResult::Fail_PathNotExist;
 		}
 
 		FBXLoader loader{};
-		eResult result = loader.LoadFbx(_fullPath, _bStatic);
+		eResult result = loader.LoadFbx(fullPath, _bStatic);
 		if (eResultFail(result))
 		{
 			ERROR_MESSAGE_W(L"FBX 불러오기 실패.");
@@ -282,7 +285,7 @@ namespace mh
 
 		//Key 설정
 		{
-			std::fs::path strKey = _fullPath;
+			std::fs::path strKey = _filePath;
 			strKey.replace_extension(define::strKey::Ext_Skeleton);
 			mSkeleton->SetKey(strKey.string());
 		}
@@ -300,7 +303,7 @@ namespace mh
 			return result;
 		}
 		if(mSkeleton)
-			mSkeleton->Save(_fullPath);
+			mSkeleton->Save(_filePath);
 
 
 
@@ -331,7 +334,7 @@ namespace mh
 				//비어있을 경우 이름을 만들어준다
 				if (strKey.empty())
 				{
-					strKey = _fullPath;
+					strKey = _filePath;
 					strKey.replace_extension("");
 					strKey += "_";
 					strKey += std::to_string(i);
@@ -378,7 +381,7 @@ namespace mh
 
 		//다른게 다 진행됐으면 자신도 저장
 		//키값 만들고 세팅하고
-		std::fs::path strKeyMeshData = _fullPath;
+		std::fs::path strKeyMeshData = _filePath;
 		strKeyMeshData.replace_extension(strKey::Ext_MeshData);
 		std::string strKey = strKeyMeshData.string();
 		SetKey(strKey);

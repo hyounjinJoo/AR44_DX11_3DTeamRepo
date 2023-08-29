@@ -265,6 +265,7 @@ call Copy_HLSL.bat $(Configuration)</Command>
     <ClInclude Include="Com_Renderer_3DAnimMesh.h" />
     <ClInclude Include="Com_DummyAnimator.h" />
     <ClInclude Include="Com_Renderer_Mesh.h" />
+    <ClInclude Include="Com_Renderer_UIBase.h" />
     <ClInclude Include="DefaultComInitializer.h" />
     <ClInclude Include="EventMgr.h" />
     <ClInclude Include="FBXLoader.h" />
@@ -394,6 +395,7 @@ call Copy_HLSL.bat $(Configuration)</Command>
     <ClCompile Include="Com_Renderer_3DAnimMesh.cpp" />
     <ClCompile Include="Com_DummyAnimator.cpp" />
     <ClCompile Include="Com_Renderer_Mesh.cpp" />
+    <ClCompile Include="Com_Renderer_UIBase.cpp" />
     <ClCompile Include="DefaultComInitializer.cpp" />
     <ClCompile Include="EventMgr.cpp" />
     <ClCompile Include="FBXLoader.cpp" />
@@ -559,6 +561,7 @@ call Copy_HLSL.bat $(Configuration)</Command>
     <None Include="DefaultShader\SH_PostProcess.hlsli" />
     <None Include="DefaultShader\SH_Resource.hlsli" />
     <None Include="DefaultShader\SH_Sampler.hlsli" />
+    <None Include="DefaultShader\SH_UserInterFace.hlsli" />
     <None Include="SimpleMath.inl" />
   </ItemGroup>
   <ItemGroup>

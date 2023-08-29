@@ -429,6 +429,8 @@ namespace gui
 		}
 	}
 
+
+
 	void guiMgr::ImGuiRelease()
 	{
 		// Cleanup

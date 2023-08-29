@@ -126,5 +126,15 @@ std::filesystem::path mh::WinAPI::FileDialog(const std::filesystem::path& _baseD
 		stringPath.clear();
 	}
 
+#ifdef UNICODE
+	size_t pos = stringPath.find(L'\0');
+#else
+	size_t pos = stringPath.find('\0');
+#endif
+	if (pos != std::basic_string<TCHAR>::npos)
+	{
+		stringPath.resize(pos);
+	}
+
 	return stringPath;
 }
