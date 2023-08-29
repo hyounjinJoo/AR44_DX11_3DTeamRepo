@@ -252,6 +252,15 @@ call Copy_HLSL.bat $(Configuration)</Command>
     <ClInclude Include="Animation2D.h" />
     <ClInclude Include="Animation3DShader.h" />
     <ClInclude Include="base64.h" />
+    <ClInclude Include="BTActionExample.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
+    <ClInclude Include="Com_BehaviorTree.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
+    <ClInclude Include="BrainTree\BrainTree.h" />
     <ClInclude Include="ComMgr.h" />
     <ClInclude Include="Components.h" />
     <ClInclude Include="Com_Animator2D.h" />
@@ -379,6 +388,20 @@ call Copy_HLSL.bat $(Configuration)</Command>
     <ClCompile Include="base64.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="BTActionExample.cpp">
+      <SubType>
+      </SubType>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="Com_BehaviorTree.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
+    <ClCompile Include="BrainTree\example\Example01_Simple.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>

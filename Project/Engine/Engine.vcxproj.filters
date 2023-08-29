@@ -178,6 +178,18 @@
     <Filter Include="GuiEditor\_Widget">
       <UniqueIdentifier>{bee12466-3d3c-47b5-bb11-8b335dcb2882}</UniqueIdentifier>
     </Filter>
+    <Filter Include="BrainTree">
+      <UniqueIdentifier>{9f929c3a-2797-410f-ba34-0afdda3b44c2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="BrainTree\example">
+      <UniqueIdentifier>{0779c46a-601a-434f-a7bd-493e0dc8231c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Component\BehaviorTree">
+      <UniqueIdentifier>{9f2824fc-8560-461f-bea1-12574c1a86ed}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Component\BehaviorTree\BaseNode">
+      <UniqueIdentifier>{7b0e1310-896b-4a53-ad81-2637d639de31}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Application.cpp">
@@ -489,6 +501,15 @@
     <ClCompile Include="guiFBXConverter.cpp" />
     <ClCompile Include="ImGuizmo.cpp">
       <Filter>ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="BrainTree\example\Example01_Simple.cpp">
+      <Filter>BrainTree\example</Filter>
+    </ClCompile>
+    <ClCompile Include="Com_BehaviorTree.cpp">
+      <Filter>Component\BehaviorTree</Filter>
+    </ClCompile>
+    <ClCompile Include="BTActionExample.cpp">
+      <Filter>Component\BehaviorTree\BaseNode</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -855,6 +876,15 @@
     </ClInclude>
     <ClInclude Include="ImGuizmo.h">
       <Filter>ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="BrainTree\BrainTree.h">
+      <Filter>BrainTree</Filter>
+    </ClInclude>
+    <ClInclude Include="Com_BehaviorTree.h">
+      <Filter>Component\BehaviorTree</Filter>
+    </ClInclude>
+    <ClInclude Include="BTActionExample.h">
+      <Filter>Component\BehaviorTree\BaseNode</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
