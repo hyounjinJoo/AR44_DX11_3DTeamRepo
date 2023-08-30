@@ -25,7 +25,7 @@ namespace mh
 		return true;
 	}
 
-	void PaintShader::Clear()
+	void PaintShader::UnBindData()
 	{
 		mTarget->UnBindData();
 	}

@@ -77,7 +77,7 @@ namespace mh
 	
 		Json::MH::LoadValue(_pJVal, JSON_KEY_PAIR(mAttribute));
 
-		SetType((eLightType)mAttribute.lightType);
+		SetLightType((eLightType)mAttribute.lightType);
 
 		//불러오기 실패 시 기본값으로 적용
 		if (false == Json::MH::LoadValue(_pJVal, JSON_KEY_PAIR(mAttribute.lightType)))
@@ -130,7 +130,7 @@ namespace mh
 	}
 
 
-	void Com_Light3D::SetType(eLightType type)
+	void Com_Light3D::SetLightType(eLightType type)
 	{
 		mAttribute.lightType = (int)type;
 		if (mAttribute.lightType == (int)eLightType::Directional)

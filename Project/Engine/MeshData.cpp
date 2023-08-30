@@ -59,7 +59,7 @@ namespace mh
 		//FBX일 경우에는 FBXLoader를 통해서 가져온다.
 		if (".FBX" == ext)
 		{
-			eResult result = LoadFromFBX(_filePath, true);
+			eResult result = LoadFromFBX(_filePath, false);
 			if (eResultFail(result))
 				return result;
 		}

@@ -7,14 +7,15 @@
 [numthreads(256, 1, 1)]
 void main(int3 _threadID : SV_DispatchThreadID)
 {
+	//ThreadID.x = 본의 인덱스
 	if (CB_Animation3D.BoneCount <= _threadID.x)
 		return;
 
 	float4 ZeroRot = float4(0.f, 0.f, 0.f, 1.f);
-	matrix matBone = (matrix) 0.f;
+	matrix matBone = 0.f;
 
-	uint FrameIndex = _threadID.x * CB_Animation3D.FrameCount + CB_Animation3D.CurrentFrame;
-	uint FrameNextIndex = _threadID.x * CB_Animation3D.FrameCount + CB_Animation3D.NextFrame;
+	int FrameIndex = _threadID.x * CB_Animation3D.FrameLength + CB_Animation3D.CurrentFrame;
+	int FrameNextIndex = _threadID.x * CB_Animation3D.FrameLength + CB_Animation3D.NextFrame;
 
 	float4 Scale = lerp(g_FrameTransArray[FrameIndex].vScale, g_FrameTransArray[FrameNextIndex].vScale, CB_Animation3D.FrameRatio);
 	float4 Pos = lerp(g_FrameTransArray[FrameIndex].vTranslate, g_FrameTransArray[FrameNextIndex].vTranslate, CB_Animation3D.FrameRatio);

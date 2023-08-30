@@ -11,6 +11,7 @@ namespace mh
 {
 	Animation3DShader::Animation3DShader()
 		: ComputeShader(uint3(256u, 1u, 1u))
+		, mAnim3DData()
 		, m_pFrameDataBuffer()
 		, m_pOffsetMatBuffer()
 		, m_pOutputBuffer()
@@ -46,7 +47,7 @@ namespace mh
 	}
 
 
-	void Animation3DShader::Clear()
+	void Animation3DShader::UnBindData()
 	{
 		// 전달한 구조화버퍼 클리어	
 		if (nullptr != m_pFrameDataBuffer)

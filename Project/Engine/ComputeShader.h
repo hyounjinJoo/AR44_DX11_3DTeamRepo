@@ -29,7 +29,7 @@ namespace mh
 
 	protected:
 		virtual bool BindData() = 0;
-		virtual void Clear() = 0;
+		virtual void UnBindData() = 0;
 
 		eResult CreateShader(const void* _pByteCode, size_t _ByteCodeSize);
 

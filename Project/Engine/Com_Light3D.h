@@ -32,7 +32,7 @@ namespace mh
 		void SetDiffuse(const float4& diffuse) { mAttribute.color.diffuse = diffuse; }
 		void SetSpecular(const float4& spec) { mAttribute.color.specular = spec; }
 		void SetAmbient(const float4& ambient) { mAttribute.color.ambient = ambient; }
-		void SetType(define::eLightType type);
+		void SetLightType(define::eLightType type);
 		void SetRadius(float radius) { mAttribute.radius = radius; }
 		void SetAngle(float angle) { mAttribute.angle = angle; }
 		const float4& GetDiffuse() { mAttribute.color.diffuse; }

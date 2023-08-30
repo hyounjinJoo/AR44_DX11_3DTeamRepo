@@ -108,7 +108,7 @@ namespace mh
 			 mCB_ComputeShader.TotalDataCount.y && 
 			 mCB_ComputeShader.TotalDataCount.z))
 		 {
-			 Clear();
+			 UnBindData();
 			 return;
 		 }
 			
@@ -123,7 +123,7 @@ namespace mh
 		GPUMgr::Context()->Dispatch(mCB_ComputeShader.NumGroup.x, mCB_ComputeShader.NumGroup.y, mCB_ComputeShader.NumGroup.z);
 
 		//데이터 정리
-		Clear();
+		UnBindData();
 	}
 
 

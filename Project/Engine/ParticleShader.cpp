@@ -29,7 +29,7 @@ namespace mh
 		return true;
 	}
 
-	void ParticleShader::Clear()
+	void ParticleShader::UnBindData()
 	{
 		mBuffer->UnBindData();
 		mSharedBuffer->UnBindData();

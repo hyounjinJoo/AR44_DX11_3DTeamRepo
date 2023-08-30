@@ -48,7 +48,8 @@ namespace mh
         double GetTimeLength() const { return mValues.dTimeLength; }
         float GetUpdateTime() const { return mValues.fUpdateTime; }
         int GetFPS() const { return mValues.iFramePerSec; }
-        std::weak_ptr<Skeleton> GetSkeleton() const { return m_OwnerSkeleton; }
+        Skeleton* GetSkeleton() const { return m_OwnerSkeleton; }
+        StructBuffer* GetKeyFrameSBuffer() const { return m_SBufferKeyFrame.get(); }
 
     private:
         bool CreateKeyFrameSBuffer(const std::vector<tAnimKeyframeTranslation>& _vecAnimFrameTranslations);
@@ -68,10 +69,10 @@ namespace mh
             int         	iFramePerSec;
         } mValues;
 
-        std::weak_ptr<Skeleton>                 m_OwnerSkeleton;
+        Skeleton*                 m_OwnerSkeleton;
 
         //이중 배열 형태임
-        std::vector<tKeyFramesPerBone>          m_KeyFrames;
+        std::vector<tKeyFramesPerBone>          m_KeyFramesPerBone;
         std::unique_ptr<StructBuffer>			m_SBufferKeyFrame;
 	};
 }

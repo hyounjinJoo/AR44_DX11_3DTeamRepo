@@ -718,14 +718,16 @@ namespace mh
 				bone.strBoneName.erase(0, 10);
 			}
 
-			bone.Depth = _iDepth;
+			bone.Depth = _iDepth++;
 			bone.ParentIndx = _iParentIdx;
+
+			//Bone Matrix는 애니메이션에서 로드함
 		}
 
 		int iChildCount = _pNode->GetChildCount();
 		for (int i = 0; i < iChildCount; ++i)
 		{
-			LoadBoneRecursive(_pNode->GetChild(i), _iDepth + 1, (int)mBones.size(), _iIdx);
+			LoadBoneRecursive(_pNode->GetChild(i), _iDepth, (int)mBones.size(), _iIdx);
 		}
 	}
 
@@ -825,7 +827,7 @@ namespace mh
 				for (int j = 0; j < clusterCount; ++j)
 				{
 					fbxsdk::FbxCluster* cluster = skin->GetCluster(j);
-					if (cluster->GetLink())
+					if (nullptr == cluster->GetLink())
 						continue;
 
 					std::string boneName = cluster->GetLink()->GetName();

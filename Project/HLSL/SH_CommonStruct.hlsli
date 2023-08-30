@@ -134,7 +134,7 @@ struct alignas(16)  tCB_Animation3D
 	int			CurrentFrame;
 	int			NextFrame;
 	float		FrameRatio;
-	int			FrameCount;
+	int			FrameLength;
 	int			RowIndex;
 	BOOL		bChangingAnim;
 	float		ChangeRatio;

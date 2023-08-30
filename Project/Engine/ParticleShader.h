@@ -11,7 +11,7 @@ namespace mh
 		~ParticleShader();
 
 		virtual bool BindData() override;
-		virtual void Clear() override;
+		virtual void UnBindData() override;
 
 		void SetStrcutedBuffer(StructBuffer* _buffer) { mBuffer = _buffer; }
 		void SetSharedStrutedBuffer(StructBuffer* _buffer) { mSharedBuffer = _buffer; }

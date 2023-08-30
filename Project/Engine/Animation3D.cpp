@@ -8,7 +8,8 @@ namespace mh
 {
 	Animation3D::Animation3D()
         : mValues{}
-        , m_KeyFrames{}
+        , m_OwnerSkeleton{}
+        , m_KeyFramesPerBone{}
         , m_SBufferKeyFrame{}
 	{
 	}
@@ -16,7 +17,7 @@ namespace mh
         : Entity(_move)
         , mValues(_move.mValues)
         , m_OwnerSkeleton(_move.m_OwnerSkeleton)
-        , m_KeyFrames(_move.m_KeyFrames)
+        , m_KeyFramesPerBone(_move.m_KeyFramesPerBone)
         , m_SBufferKeyFrame(std::move(_move.m_SBufferKeyFrame))
     {
     }
@@ -37,7 +38,7 @@ namespace mh
 		if (nullptr == _skeleton || nullptr == _clip)
 			return eResult::Fail_Nullptr;
 
-        m_OwnerSkeleton = std::shared_ptr<Skeleton>(_skeleton);
+        m_OwnerSkeleton = _skeleton;
 
         SetKey(_clip->strName);
 
@@ -94,12 +95,13 @@ namespace mh
         }
 
         mValues.dStartTime = _clip->StartTime.GetSecondDouble();
-        mValues.dEndTime = _clip->StartTime.GetSecondDouble();
+        mValues.dEndTime = _clip->EndTime.GetSecondDouble();
+        mValues.dTimeLength = mValues.dEndTime - mValues.dStartTime;
 
         mValues.iStartFrame = (int)_clip->StartTime.GetFrameCount(_clip->TimeMode);
         mValues.iEndFrame = (int)_clip->EndTime.GetFrameCount(_clip->TimeMode);
         mValues.iFrameLength = (int)(mValues.iEndFrame - mValues.iStartFrame + 1);//+1 -> 0프레임부터 시작이므로
-        MH_ASSERT(mValues.iFrameLength <= 0);
+        MH_ASSERT(mValues.iFrameLength >= 0);
 
 
         //본의 사이즈 * 프레임 수 만큼 사이즈를 설정
@@ -110,22 +112,28 @@ namespace mh
         // 본2키0|본2키1|본2키2|본2키3|본2키4
         //그러므로 하나의 애니메이션은 본의 갯수 * 키프레임 갯수가 된다
         std::vector<tAnimKeyframeTranslation>	vecFrameTrans;//GPU
-        m_KeyFrames.resize(_clip->KeyFramesPerBone.size());//CPU
-        for (size_t i = 0; i < m_KeyFrames.size(); ++i)
+        size_t boneCount = _clip->KeyFramesPerBone.size();
+        m_KeyFramesPerBone.resize(boneCount);//CPU
+        for (size_t i = 0; i < boneCount; ++i)
         {
-            m_KeyFrames[i].BoneIndex = _clip->KeyFramesPerBone[i].BoneIndex;
-            m_KeyFrames[i].vecKeyFrame.resize(_clip->KeyFramesPerBone[i].vecKeyFrame.size());
+            m_KeyFramesPerBone[i].BoneIndex = _clip->KeyFramesPerBone[i].BoneIndex;
+            //m_KeyFramesPerBone[i].vecKeyFrame.resize(_clip->KeyFramesPerBone[i].vecKeyFrame.size());
+            m_KeyFramesPerBone[i].vecKeyFrame.resize(mValues.iFrameLength);
 
             //GPU로 보낼 데이터 세팅
             //GPU는 이중 배열 같은걸 지원 안함
             //GPU 메모리는 이걸 1차원 배열 형태로 펴서 데이터를 보내준다
             //그러니까 1차원 배열 형태로 애니메이션 데이터를 보내야 함
             
-            vecFrameTrans.resize(m_KeyFrames.size() * m_KeyFrames[i].vecKeyFrame.size());
-            for(size_t j = 0; j < m_KeyFrames[i].vecKeyFrame.size(); ++j)
+            //FBX가 왜인지는 모르겠지만 키프레임이 비정상적으로 로딩되는 경우가 있어서 
+            //키프레임 갯수는 고정된 프레임 수로 생성해준다
+            //본의 사이즈 * 프레임 수(2차 배열 -> 1차 배열)
+            
+            vecFrameTrans.resize(boneCount * mValues.iFrameLength);
+            for(size_t j = 0; j < mValues.iFrameLength; ++j)
             {
                 //우리 포맷 키프레임
-                tKeyFrame& projKeyFrame = m_KeyFrames[i].vecKeyFrame[j];
+                tKeyFrame& projKeyFrame = m_KeyFramesPerBone[i].vecKeyFrame[j];
                 //FBX 포맷 키프레임
                 const tFBXKeyFrame& fbxKeyFrame = _clip->KeyFramesPerBone[i].vecKeyFrame[j];
 
@@ -147,9 +155,10 @@ namespace mh
                 projKeyFrame.RotQuat.z = (float)fbxQuat.mData[2];
                 projKeyFrame.RotQuat.w = (float)fbxQuat.mData[3];
 
+                
 
                 //i번째 본의 j 키프레임 데이터
-                size_t indexIn1DArray = m_KeyFrames.size() * i + j;
+                size_t indexIn1DArray = mValues.iFrameLength * i + j;
                 vecFrameTrans[indexIn1DArray].vTranslate =  float4(projKeyFrame.Pos, 1.f);
                 vecFrameTrans[indexIn1DArray].vScale =      float4(projKeyFrame.Scale, 1.f);
                 vecFrameTrans[indexIn1DArray].qRot =        projKeyFrame.RotQuat;

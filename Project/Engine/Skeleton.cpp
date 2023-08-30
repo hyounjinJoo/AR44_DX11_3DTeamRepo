@@ -15,6 +15,7 @@ namespace mh
 		: m_vecBones{}
 		, m_pBoneOffset{}
 		, mMapAnimations{}
+		, mAnimationMaxFrameSize()
 	{
 	}
 
@@ -103,6 +104,7 @@ namespace mh
 		}
 
 		UINT iFrameCount = 0;
+		m_vecBones.reserve(vecBone.size());
 		for (UINT i = 0; i < vecBone.size(); ++i)
 		{
 			m_vecBones.push_back(tMTBone{});

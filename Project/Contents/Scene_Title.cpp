@@ -64,6 +64,37 @@ namespace mh
 		}
 
 		{
+			GameObject* dirLight = EventMgr::SpawnGameObject(eLayerType::Player);
+			dirLight->AddComponent<Com_Transform>();
+
+			Com_Light3D* light3d = dirLight->AddComponent<Com_Light3D>();
+			light3d->SetLightType(eLightType::Directional);
+			light3d->SetDiffuse(float4(0.3f, 0.3f, 0.3f, 1.f));
+			light3d->SetAmbient(float4(0.3f, 0.3f, 0.3f, 1.f));
+		}
+
+
+		{
+			std::shared_ptr<MeshData> meshdata = ResMgr::Load<MeshData>("Player_Default.FBX");
+			GameObject* house = meshdata->Instantiate();
+
+			house->GetComponent<Com_Animator3D>()->Play("Take 001");
+			
+			//house->AddComponent<Com_Transform>();
+
+			EventMgr::SpawnGameObject(define::eLayerType::Player, house);
+		}
+
+
+
+
+
+
+
+
+
+
+		{
 			// Main Com_Camera Game Object
 			GameObject* cameraObj = EventMgr::SpawnGameObject(eLayerType::Com_Camera);
 			cameraObj->SetName("UICam");
@@ -135,15 +166,7 @@ namespace mh
 
 
 		
-		{
-			std::shared_ptr<MeshData> meshdata = ResMgr::Load<MeshData>("House.fbx");
-			GameObject* house = meshdata->Instantiate();
 
-
-			//house->AddComponent<Com_Transform>();
-
-			EventMgr::SpawnGameObject(define::eLayerType::Player, house);
-		}
 	}
 	void Scene_Title::Update()
 	{
