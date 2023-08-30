@@ -9,6 +9,8 @@
 #include <DirectXCollision.h>
 #endif
 
+#include <PhysX/PxPhysicsAPI.h>
+
 using namespace DirectX;
 using namespace DirectX::PackedVector;
 
@@ -247,8 +249,15 @@ namespace mh::math
         explicit Vector3(_In_reads_(3) const float* pArray) noexcept : XMFLOAT3(pArray) {}
         Vector3(FXMVECTOR V) noexcept { XMStoreFloat3(this, V); }
         Vector3(const XMFLOAT3& V) noexcept { this->x = V.x; this->y = V.y; this->z = V.z; }
+        Vector3(const struct PxVec3& V) noexcept;
         explicit Vector3(const XMVECTORF32& F) noexcept { this->x = F.f[0]; this->y = F.f[1]; this->z = F.f[2]; }
         
+        Vector3(const physx::PxVec3& V)
+        {
+            x = V.x;
+            y = V.y;
+            z = V.z;
+        }
 
         Vector3(const Vector3&) = default;
         Vector3& operator=(const Vector2& _v2) { this->x = _v2.x; this->y = _v2.y; return *this; }
@@ -272,6 +281,16 @@ namespace mh::math
         Vector3& operator*= (const Vector3& V) noexcept;
         Vector3& operator*= (float S) noexcept;
         Vector3& operator/= (float S) noexcept;
+
+        operator physx::PxVec3()
+        {
+            return physx::PxVec3(x, y, z);
+        }
+
+        operator physx::PxVec3() const
+        {
+            return physx::PxVec3(x, y, z);
+        }
 
         // Unary operators
         Vector3 operator+ () const noexcept { return *this; }
@@ -723,6 +742,14 @@ namespace mh::math
         Quaternion(FXMVECTOR V) noexcept { XMStoreFloat4(this, V); }
         Quaternion(const XMFLOAT4& q) noexcept { this->x = q.x; this->y = q.y; this->z = q.z; this->w = q.w; }
         explicit Quaternion(const XMVECTORF32& F) noexcept { this->x = F.f[0]; this->y = F.f[1]; this->z = F.f[2]; this->w = F.f[3]; }
+
+        Quaternion(const physx::PxQuat& q)
+        {
+            x = q.x;
+            y = q.y;
+            z = q.z;
+            w = q.w;
+        }
 
         Quaternion(const Quaternion&) = default;
         Quaternion& operator=(const Quaternion&) = default;

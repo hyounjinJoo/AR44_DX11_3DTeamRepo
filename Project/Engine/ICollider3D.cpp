@@ -68,5 +68,29 @@ namespace mh
 		return eResult::Success;
 	}
 
+	void ICollider3D::OnCollisionEnter(ICollider3D* _otherCollider)
+	{
+	}
+
+	void ICollider3D::OnCollisionStay(ICollider3D* _otherCollider)
+	{
+	}
+
+	void ICollider3D::OnCollisionExit(ICollider3D* _otherCollider)
+	{
+	}
+
+	void ICollider3D::OnTriggerEnter(ICollider3D* _otherCollider)
+	{
+	}
+
+	void ICollider3D::OnTriggerStay(ICollider3D* _otherCollider)
+	{
+	}
+
+	void ICollider3D::OnTriggerExit(ICollider3D* _otherCollider)
+	{
+	}
+
 
 }

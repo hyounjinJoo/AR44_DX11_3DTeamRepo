@@ -57,4 +57,8 @@ namespace mh
 
 		return eResult::Success;
 	}
+	bool IComponent::IsPhysicsObject()
+	{
+		return GetOwner()->IsPhysicsObject();
+	}
 }

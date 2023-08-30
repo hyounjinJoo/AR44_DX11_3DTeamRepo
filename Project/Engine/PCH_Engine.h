@@ -75,3 +75,11 @@ namespace std
 #endif
 
 
+static void AssertEx(bool _expression, const std::wstring& _message)
+{
+	if (_expression)
+		return;
+
+	MessageBoxW(NULL, _message.c_str(), L"Assert", MB_OK);
+	assert(_expression);
+}

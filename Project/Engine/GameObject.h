@@ -4,6 +4,7 @@
 #include "Components.h"
 #include "ComMgr.h"
 #include "Com_Transform.h"
+#include "Com_RigidBody.h"
 
 namespace mh
 {
@@ -90,6 +91,9 @@ namespace mh
 		bool IsInitialized() const { return mbInitalized; }
 		bool IsStarted() const { return mbStarted; }
 
+		/* 물리적 객체인지를 검사하는 함수 */
+		bool IsPhysicsObject();
+
 	protected:
 		void DestroyRecursive();
 
@@ -138,6 +142,15 @@ namespace mh
 	}
 
 
+
+	inline bool GameObject::IsPhysicsObject()
+	{
+		Com_RigidBody* rigidBody = GetComponent<Com_RigidBody>();
+		if (nullptr == rigidBody)
+			return false;
+
+		return rigidBody->IsAppliedPhysics();
+	}
 
 	inline void GameObject::DestroyRecursive()
 	{

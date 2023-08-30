@@ -1,6 +1,9 @@
 #pragma once
 #include "ITransform.h"
 #include "DefaultShader/SH_CommonStruct.hlsli"
+#include "TimeMgr.h"
+
+
 
 namespace mh
 {
@@ -104,6 +107,7 @@ namespace mh
         const MATRIX& GetWorldMatWithoutSize() const { return mMatWorldWithoutSize; }
         const MATRIX& GetWorldMat() const { return mMatWorldFinal; }
 
+        void Move(const float3& _velocity);
 
         //호출 시점: GameObject에서 FinalTick() 순회 끝난 이후
         //갱신 여부를 전부 끔
@@ -213,6 +217,30 @@ namespace mh
     inline float3 Com_Transform::GetWorldRot(define::eAxis3D _eAxis) const
     {
         return mMatWorldWithoutSize.Axis((define::eAxis4D)_eAxis).Normalize();
+    }
+
+    inline void Com_Transform::Move(const float3& _velocity)
+    {
+        if (true == IsPhysicsObject())
+        {
+            Com_RigidBody* rigidBody = GetOwner()->GetComponent<Com_RigidBody>();
+            PxTransform transform = rigidBody->GetPhysicsTransform();
+            transform.p += _velocity * TimeMgr::DeltaTime();
+
+            define::eActorType eActorType = rigidBody->GetActorType();
+
+            if (define::eActorType::Kinematic == eActorType)
+                rigidBody->GetDynamicActor()->setKinematicTarget(transform);
+            else if (define::eActorType::Dynamic == eActorType)
+                rigidBody->GetDynamicActor()->setGlobalPose(transform);
+            else
+                AssertEx(false, L"Transform::Move() - Static Actor에 대한 Move 호출");
+        }
+
+        else
+        {
+            mPosRelative += _velocity * TimeMgr::DeltaTime();
+        }
     }
 
     inline void Com_Transform::ClearUpdateState()

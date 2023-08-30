@@ -64,6 +64,84 @@ namespace mh::define
 		void SetDataPtr(const T _pData) { pData = (void*)_pData; size = sizeof(T); }
 	};
 
+	struct tPhysicsInfo
+	{
+		tPhysicsInfo()
+			: eActorType(define::eActorType::Static)
+			, eGeometryType(define::eGeometryType::Box)
+			, size(float3(1.f, 1.f, 1.f))
+			, massProperties(tMassProperties())
+			, pGeometries(nullptr)
+			, filterData{}
+		{
+		}
+
+		define::eActorType eActorType;
+		define::eGeometryType eGeometryType;
+		float3 size;
+		tMassProperties massProperties;
+		Geometries* pGeometries;
+		physx::PxFilterData filterData;
+	};
+
+	struct tMassProperties
+	{
+		tMassProperties(float _staticFriction = 0.5f, float _dynamicFriction = 0.2f, float _restitution = 0.603f)
+			: staticFriction(_staticFriction)
+			, dynamicFriction(_dynamicFriction)
+			, restitution(_restitution)
+		{ }
+
+		float staticFriction;
+		float dynamicFriction;
+		float restitution;
+	};
+
+	struct Geometries
+	{
+		Geometries(define::eGeometryType eGeometryType, float3 vBoxHalfSize)
+			: eGeomType(define::eGeometryType::Box)
+		{
+			if (define::eGeometryType::Box == eGeometryType)
+			{
+				boxGeom = physx::PxBoxGeometry(vBoxHalfSize);
+			}
+		}
+
+		Geometries(define::eGeometryType eGeometryType, float fRadius, float fHalfHeight)
+			: eGeomType(define::eGeometryType::Capsule)
+		{
+			if (define::eGeometryType::Capsule == eGeometryType)
+			{
+				capsuleGeom = physx::PxCapsuleGeometry(fRadius, fHalfHeight);
+			}
+		}
+
+		Geometries(define::eGeometryType eGeometryType, float fRadius)
+			: eGeomType(define::eGeometryType::Sphere)
+		{
+			if (define::eGeometryType::Sphere == eGeometryType)
+			{
+				sphereGeom = physx::PxSphereGeometry(fRadius);
+			}
+		}
+
+		Geometries(define::eGeometryType eGeometryType)
+			: eGeomType(define::eGeometryType::Plane)
+		{
+			// RigidStatic일 떄,
+			if (define::eGeometryType::Plane == eGeometryType)
+			{
+				planeGeom = physx::PxPlaneGeometry();
+			}
+		}
+
+		physx::PxBoxGeometry boxGeom;
+		physx::PxCapsuleGeometry capsuleGeom;
+		physx::PxPlaneGeometry planeGeom;
+		physx::PxSphereGeometry sphereGeom;
+		define::eGeometryType eGeomType;
+	};
 
 
 // ============

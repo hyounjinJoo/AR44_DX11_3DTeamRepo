@@ -33,6 +33,8 @@ namespace mh
 		GameObject* GetOwner() const { return mOwner; }
 		void SetOwner(GameObject* _owner) { mOwner = _owner; }
 
+		bool IsPhysicsObject();
+
 	private:
 		const define::eComponentType mType;
 		UINT32 mComTypeID;

@@ -6,6 +6,8 @@
 #include "SimpleMath.h"
 #include "define_Struct.h"
 
+#include "Physics.h"
+
 namespace mh
 {
 	class Application
@@ -46,10 +48,14 @@ namespace mh
 
 		static void ShutDown() { mbInitialized = false; }
 
+		static Physics* GetPhysics() { return mPhysics; }
+
 	private:
 		static HWND mHwnd;
 		static HDC  mHdc;
 		static bool mbInitialized;
+
+		static Physics* mPhysics;
 
 		static std::vector<std::function<void()>> mEndFrameFuncs;
 	public:

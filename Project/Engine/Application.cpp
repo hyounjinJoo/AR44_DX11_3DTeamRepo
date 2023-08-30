@@ -47,9 +47,12 @@ namespace mh
 			return FALSE;
 		}
 
+		mPhysics = new Physics;
 
 		PathMgr::Init();
 
+		
+		mPhysics->Initialize();
 		AudioMgr::Init();
 		FontWrapper::Init();
 

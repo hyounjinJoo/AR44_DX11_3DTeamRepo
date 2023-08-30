@@ -82,5 +82,32 @@ namespace mh
 			_2D,
 			_3D
 		};
+
+		enum class eActorType
+		{
+			Static,
+			Dynamic,
+			Kinematic,
+			Character,
+		};
+
+		enum class eGeometryType
+		{
+			Sphere,
+			Box,
+			Capsule,
+			Plane
+		};
+
+		enum class eModelType
+		{
+			StaticModel,
+			DynamicModel,
+		};
+
+		enum
+		{
+			LAYER_TYPE_COUNT = static_cast<int>(eLayerType::END),
+		};
 	}
 }

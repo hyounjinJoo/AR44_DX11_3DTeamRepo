@@ -500,6 +500,9 @@
       <Filter>Component</Filter>
     </ClCompile>
     <ClCompile Include="BTActionExample.cpp" />
+    <ClCompile Include="Physics.cpp" />
+    <ClCompile Include="ContactCallback.cpp" />
+    <ClCompile Include="Com_RigidBody.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application.h">
@@ -876,6 +879,9 @@
       <Filter>Component</Filter>
     </ClInclude>
     <ClInclude Include="BTActionExample.h" />
+    <ClInclude Include="Physics.h" />
+    <ClInclude Include="ContactCallback.h" />
+    <ClInclude Include="Com_RigidBody.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="cpp.hint">
