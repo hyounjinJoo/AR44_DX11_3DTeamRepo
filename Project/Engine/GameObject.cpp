@@ -364,7 +364,12 @@ AddComponent<T> 또는 ComMgr::GetNewComponent()를 통해서 생성하세요.
 
 		
 		_pCom->SetOwner(this);
-		_pCom->RequireComponent();
+
+		//초기화되기 이전일 경우에만 RequireComponent를 실행
+		if (false == mbInitalized)
+		{
+			_pCom->RequireComponent();
+		}
 		return _pCom;
 	}
 
