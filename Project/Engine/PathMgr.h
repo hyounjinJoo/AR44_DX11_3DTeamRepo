@@ -1,7 +1,9 @@
 #pragma once
-
 #include <filesystem>
-
+namespace std
+{
+	namespace fs = filesystem;
+}
 
 #include "define_Res.h"
 
@@ -25,6 +27,8 @@ namespace mh
 
 		static const std::filesystem::path& GetShaderCSOPath() { return mRelativePath_ShaderCSO; }
 
+		static inline bool CheckExist(const std::filesystem::path& _fullPath);
+
 	private:
 		static void Release();
 
@@ -41,5 +45,16 @@ namespace mh
 		return mAbsoluteResPath / define::strKey::ArrResName[(int)_eResType];
 	}
 
+	inline bool PathMgr::CheckExist(const std::filesystem::path& _fullPath)
+	{
+		bool bRet = std::fs::exists(_fullPath);
+		if (false == bRet)
+		{
+			std::wstring errorMsg = _fullPath.wstring();
+			errorMsg += L"\n파일을 찾지 못했습니다.";
+			ERROR_MESSAGE_W(errorMsg.c_str());
+		}
+		return bRet;
+	}
 }
 

@@ -29,9 +29,9 @@ namespace mh
 	private:
 		tCB_Animation3D mAnim3DData;
 
-		StructBuffer* m_pFrameDataBuffer;			// t13
-		StructBuffer* m_pOffsetMatBuffer;			// t14 
-		StructBuffer* m_pOutputBuffer;				// u0
+		StructBuffer* m_pFrameDataBuffer;
+		StructBuffer* m_pOffsetMatBuffer;
+		StructBuffer* m_pOutputBuffer;
     };
 }
 

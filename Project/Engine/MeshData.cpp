@@ -28,13 +28,13 @@ namespace mh
 	{
 	}
 
-	eResult MeshData::Save(const std::filesystem::path& _fileName)
+	eResult MeshData::Save(const std::fs::path& _filePath, const std::fs::path& _basePath)
 	{
 		std::fs::path fullPath = PathMgr::GetContentPathRelative(GetResType());
 		if (false == std::fs::exists(fullPath))
 			std::fs::create_directories(fullPath);
 
-		fullPath /= _fileName;
+		fullPath /= _filePath;
 		fullPath.replace_extension(strKey::Ext_MeshData);
 
 		std::ofstream ofs(fullPath);
@@ -52,47 +52,33 @@ namespace mh
 		return eResult::Success;
 	}
 
-	eResult MeshData::Load(const std::filesystem::path& _filePath)
+	eResult MeshData::Load(const std::fs::path& _filePath, const std::fs::path& _basePath)
 	{
-		std::string ext = StringConv::UpperCaseReturn(_filePath.extension().string());
-
-		//FBX일 경우에는 FBXLoader를 통해서 가져온다.
-		if (".FBX" == ext)
+		std::fs::path fullPath = CreateFullPath(_filePath, _basePath);
+		if (false == PathMgr::CheckExist(fullPath))
 		{
-			eResult result = LoadFromFBX(_filePath, false);
-			if (eResultFail(result))
-				return result;
+			return eResult::Fail_OpenFile;
 		}
 
-		//그렇지 않을 경우 json을 통해 로드
-		else if (".JSON" == ext)
+		Json::Value jVal;
+		std::ifstream ifs(fullPath);
+		if (false == ifs.is_open())
 		{
-			std::fs::path fullPath = PathMgr::GetContentPathRelative(eResourceType::MeshData);
-			fullPath /= _filePath;
-			if (false == std::fs::exists(fullPath.parent_path()))
-			{
-				if (false == std::fs::create_directories(fullPath))
-				{
-					ERROR_MESSAGE_W(L"경로 정보가 이상합니다.");
-					return eResult::Fail_PathNotExist;
-				}
-			}
-
-			Json::Value jVal;
-			std::ifstream ifs(fullPath);
-			if (false == ifs.is_open())
-			{
-				return eResult::Fail_OpenFile;
-			}
-
-			ifs >> jVal;
-			ifs.close();
-			eResult result = LoadJson(&jVal);
-			if (eResultFail(result))
-				return result;
+			return eResult::Fail_OpenFile;
 		}
+
+		ifs >> jVal;
+		ifs.close();
+		eResult result = LoadJson(&jVal);
+		if (eResultFail(result))
+			return result;
 
 		return eResult::Success;
+	}
+
+	eResult MeshData::ConvertFBX(const std::fs::path& _fbxAbsPath, bool _bStatic, const std::fs::path& _dirAndFileName)
+	{
+		return eResult();
 	}
 
 	eResult MeshData::SaveJson(Json::Value* _pJson)
@@ -263,17 +249,14 @@ namespace mh
 
 	eResult MeshData::LoadFromFBX(const std::filesystem::path& _filePath, bool _bStatic)
 	{
-		const std::fs::path& path = PathMgr::GetContentPathAbsolute(eResourceType::MeshData);
-		std::fs::path fullPath = path / _filePath;
-
-		if (false == std::fs::exists(fullPath))
+		if (false == std::fs::exists(_filePath))
 		{
 			ERROR_MESSAGE_W(L"파일을 찾지 못했습니다.");
 			return eResult::Fail_PathNotExist;
 		}
 
 		FBXLoader loader{};
-		eResult result = loader.LoadFbx(fullPath, _bStatic);
+		eResult result = loader.LoadFbx(_filePath, _bStatic);
 		if (eResultFail(result))
 		{
 			ERROR_MESSAGE_W(L"FBX 불러오기 실패.");

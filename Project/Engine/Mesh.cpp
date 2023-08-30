@@ -35,21 +35,12 @@ namespace mh
 		}
 	}
 
-	eResult Mesh::Save(const std::filesystem::path& _path)
+	eResult Mesh::Save(const std::fs::path& _filePath, const std::fs::path& _basePath)
 	{
-		std::fs::path filePath = PathMgr::GetContentPathRelative(GetResType());
-		filePath /= _path;
+		std::fs::path fullPath = CreateFullPath(_filePath, _basePath);
 
-		const std::fs::path& parentPath = filePath.parent_path();
-		//폴더 없으면 폴더 생성
-		if (false == std::fs::exists(parentPath))
-		{
-			std::fs::create_directories(parentPath);
-		}
 
-		filePath.replace_extension(define::strKey::Ext_Mesh);
-
-		std::ofstream ofs(filePath, std::ios::binary);
+		std::ofstream ofs(fullPath, std::ios::binary);
 		if (false == ofs.is_open())
 		{
 			return eResult::Fail_OpenFile;
@@ -92,21 +83,15 @@ namespace mh
 		return eResult::Success;
 	}
 
-	eResult Mesh::Load(const std::filesystem::path& _path)
+	eResult Mesh::Load(const std::fs::path& _filePath, const std::fs::path& _basePath)
 	{
-		std::fs::path filePath = PathMgr::GetContentPathRelative(GetResType());
-
-		//폴더 없으면 폴더 생성
-		if (false == std::fs::exists(filePath))
+		std::fs::path fullPath = CreateFullPath(_filePath, _basePath);
+		if (false == PathMgr::CheckExist(fullPath))
 		{
-			std::fs::create_directories(filePath);
-			ERROR_MESSAGE_W(L"파일이 없습니다.");
-			return eResult::Fail_PathNotExist;
+			return eResult::Fail_OpenFile;
 		}
-		// 파일 경로 만들기
-		filePath /= _path;
 
-		std::ifstream ifs(filePath, std::ios::binary);
+		std::ifstream ifs(fullPath, std::ios::binary);
 		if (false == ifs.is_open())
 			return eResult::Fail_OpenFile;
 

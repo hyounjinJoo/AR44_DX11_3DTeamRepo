@@ -1,6 +1,5 @@
 #include "PCH_Engine.h"
 #include "PathMgr.h"
-
 #include "AtExit.h"
 
 namespace mh
@@ -48,6 +47,7 @@ namespace mh
 		}
 
 	}
+
 
 	void PathMgr::Release()
 	{

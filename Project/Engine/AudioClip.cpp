@@ -28,13 +28,15 @@ namespace mh
 		mSound = nullptr;
 	}
 
-	eResult AudioClip::Load(const std::filesystem::path& _path)
+	eResult AudioClip::Load(const std::fs::path& _filePath, const std::fs::path& _basePath)
 	{
-		std::filesystem::path FullPath = PathMgr::GetContentPathRelative(GetResType());
-		FullPath /= _path;
+		std::fs::path fullPath = CreateFullPath(_filePath, _basePath);
+		if (false == PathMgr::CheckExist(fullPath))
+		{
+			return eResult::Fail_OpenFile;
+		}
 
-
-		if (false == AudioMgr::CreateSound(FullPath, &mSound))
+		if (false == AudioMgr::CreateSound(fullPath, &mSound))
 			return eResult::Fail_Create;
 
 		mSound->set3DMinMaxDistance(mMinDistance, mMaxDistance);

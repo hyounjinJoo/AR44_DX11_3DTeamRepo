@@ -30,13 +30,15 @@ namespace mh
 		Animation3D();
 
         Animation3D(const Animation3D& _other) = delete;
-        Animation3D(Animation3D&& _move);
 
         virtual ~Animation3D();
 
     public:
         void BindData();
         void UnBindData();
+
+        eResult Save(const std::filesystem::path& _filePath);
+        eResult Load(const std::filesystem::path& _filePath);
 
         eResult LoadFromFBX(Skeleton* _skeleton, const tFBXAnimClip* _clip);
 
@@ -55,6 +57,8 @@ namespace mh
         bool CreateKeyFrameSBuffer(const std::vector<tAnimKeyframeTranslation>& _vecAnimFrameTranslations);
 
     private:
+        Skeleton* m_OwnerSkeleton;
+
         struct Value//저장을 위해서 별도의 struct 안에 넣어놓음
         {
             int				iStartFrame;
@@ -69,7 +73,6 @@ namespace mh
             int         	iFramePerSec;
         } mValues;
 
-        Skeleton*                 m_OwnerSkeleton;
 
         //이중 배열 형태임
         std::vector<tKeyFramesPerBone>          m_KeyFramesPerBone;

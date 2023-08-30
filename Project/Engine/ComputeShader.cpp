@@ -31,13 +31,15 @@ namespace mh
 	{
 	}
 
-	eResult ComputeShader::Load(const std::filesystem::path& _path)
+	eResult ComputeShader::Load(const std::filesystem::path& _filePath, const std::filesystem::path& _basePath)
 	{
-		std::fs::path FilePath = PathMgr::GetShaderCSOPath();
-		FilePath /= _path;
-		FilePath.replace_extension(define::strKey::Ext_CompiledShader);
+		std::fs::path fullPath = CreateFullPath(_filePath, _basePath);
+		if (false == PathMgr::CheckExist(fullPath))
+		{
+			return eResult::Fail_OpenFile;
+		}
 
-		return CreateByCSO(FilePath);
+		return CreateByCSO(fullPath);
 	}
 	eResult ComputeShader::CreateByCompile(const std::filesystem::path& _FullPath, const std::string_view _funcName)
 	{

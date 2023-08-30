@@ -65,14 +65,6 @@
 
 #endif
 
-
-
-
-namespace std
-{
-	namespace fs = filesystem;
-}
-
 #endif
 
 

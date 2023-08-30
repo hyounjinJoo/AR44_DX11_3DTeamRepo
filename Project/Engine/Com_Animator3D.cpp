@@ -22,7 +22,7 @@ namespace mh
 		//, m_pVecClip(nullptr)
 		, mSkeleton()
 		, m_dCurTime(0.)
-		, m_iFrameCount(30)
+		, m_iFramePerSecond(30)
 		, m_pBoneFinalMatBuffer(nullptr)
 		, m_bFinalMatUpdate(false)
 		, m_iFrameIdx(0)
@@ -40,7 +40,7 @@ namespace mh
 		//, m_pVecClip(_other.m_pVecClip)
 		, mSkeleton()
 		, m_dCurTime(_other.m_dCurTime)
-		, m_iFrameCount(_other.m_iFrameCount)
+		, m_iFramePerSecond(_other.m_iFramePerSecond)
 		, m_pBoneFinalMatBuffer(nullptr)
 		, m_bFinalMatUpdate(false)
 		, m_iFrameIdx(_other.m_iFrameIdx)
@@ -93,7 +93,7 @@ namespace mh
 		m_dCurTime = mCurrentAnim->GetStartTime() + (double)m_fClipUpdateTime;
 
 		// 현재 프레임 인덱스 구하기
-		double dFrameIdx = m_dCurTime * (double)m_iFrameCount;
+		double dFrameIdx = m_dCurTime * (double)m_iFramePerSecond;
 		m_iFrameIdx = (int)dFrameIdx;
 
 		//만약 이미 마지막 프레임에 도달했을 경우 현재 프레임 유지
@@ -130,6 +130,7 @@ namespace mh
 			mCurrentAnim = mSkeleton->FindAnimation(_strAnimName);
 			if (mCurrentAnim)
 			{
+				m_iFramePerSecond = mCurrentAnim->GetFPS();
 				isPlayed = true;
 			}
 		}
@@ -146,19 +147,10 @@ namespace mh
 			static std::shared_ptr<Animation3DShader> pUpdateShader = ResMgr::Load<Animation3DShader>(define::strKey::Default::shader::compute::Animation3D);
 
 
-			// Bone Data
-			//std::shared_ptr<Mesh> pMesh = GetOwner()->GetComponent<Com_Renderer_Mesh>()->GetMesh();
-			//메쉬와 본 하나라도 없을 경우에는 애니메이션을 재생할 수 없다
-			//if (false == (pMesh && pMesh->GetSkeleton()))
-			//{
-			//	return;
-			//}
-
 			//구조화 버퍼가 정상적으로 생성되었는지 확인한다.
 			if (false == CheckMesh())
 				return;
 			
-			//Skeleton* pBone = pMesh->GetSkeleton();
 			pUpdateShader->SetFrameDataBuffer(mCurrentAnim->GetKeyFrameSBuffer());
 			pUpdateShader->SetOffsetMatBuffer(mSkeleton->GetBoneOffsetBuffer());
 			pUpdateShader->SetOutputBuffer(m_pBoneFinalMatBuffer.get());

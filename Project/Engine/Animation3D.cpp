@@ -3,6 +3,8 @@
 #include "FBXLoader.h"
 #include "StructBuffer.h"
 #include "Skeleton.h"
+#include "PathMgr.h"
+#include "define_Util.h"
 
 namespace mh
 {
@@ -13,14 +15,7 @@ namespace mh
         , m_SBufferKeyFrame{}
 	{
 	}
-    Animation3D::Animation3D(Animation3D&& _move)
-        : Entity(_move)
-        , mValues(_move.mValues)
-        , m_OwnerSkeleton(_move.m_OwnerSkeleton)
-        , m_KeyFramesPerBone(_move.m_KeyFramesPerBone)
-        , m_SBufferKeyFrame(std::move(_move.m_SBufferKeyFrame))
-    {
-    }
+
     Animation3D::~Animation3D()
 	{
 	}
@@ -32,6 +27,22 @@ namespace mh
     void Animation3D::UnBindData()
     {
         m_SBufferKeyFrame->UnBindData();
+    }
+    eResult Animation3D::Save(const std::filesystem::path& _filePath)
+    {
+        
+
+        std::fs::path filePath = PathMgr::GetContentPathRelative(eResourceType::MeshData);
+
+        
+
+
+
+        return eResult();
+    }
+    eResult Animation3D::Load(const std::filesystem::path& _filePath)
+    {
+        return eResult();
     }
 	eResult Animation3D::LoadFromFBX(Skeleton* _skeleton, const tFBXAnimClip* _clip)
 	{

@@ -15,8 +15,8 @@ namespace mh
 		Skeleton();
 		virtual ~Skeleton();
 
-		eResult Save(const std::filesystem::path& _fileName);
-		eResult Load(const std::filesystem::path& _fileName);
+		eResult Save(const std::filesystem::path& _filePath);
+		eResult Load(const std::filesystem::path& _filePath);
 		eResult CreateFromFBX(FBXLoader* _fbxLoader);
 
 	public:

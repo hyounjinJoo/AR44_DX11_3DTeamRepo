@@ -28,10 +28,10 @@ namespace mh
 		}
 	}
 
-	eResult Skeleton::Save(const std::filesystem::path& _fileName)
+	eResult Skeleton::Save(const std::filesystem::path& _filePath)
 	{
 		std::fs::path fullPath = PathMgr::GetContentPathRelative(eResourceType::MeshData);
-		fullPath /= _fileName;
+		fullPath /= _filePath;
 		if (false == std::fs::exists(fullPath.parent_path()))
 		{
 			std::fs::create_directories(fullPath);
@@ -54,10 +54,10 @@ namespace mh
 
 		return eResult::Success;
 	}
-	eResult Skeleton::Load(const std::filesystem::path& _fileName)
+	eResult Skeleton::Load(const std::filesystem::path& _filePath)
 	{
 		std::fs::path fullPath = PathMgr::GetContentPathRelative(eResourceType::MeshData);
-		fullPath /= _fileName;
+		fullPath /= _filePath;
 		if (false == std::fs::exists(fullPath.parent_path()))
 		{
 			std::fs::create_directories(fullPath);

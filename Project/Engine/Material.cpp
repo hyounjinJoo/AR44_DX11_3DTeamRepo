@@ -36,14 +36,13 @@ namespace mh
     {
     }
 
-    eResult Material::Save(const std::filesystem::path& _path)
+    eResult Material::Save(const std::fs::path& _filePath, const std::fs::path& _basePath)
     {
-        std::fs::path fullPath = PathMgr::GetContentPathRelative(GetResType());
-        if (false == std::fs::exists(fullPath))
+        std::fs::path fullPath = CreateFullPath(_filePath, _basePath);
+        if (fullPath.empty())
         {
-            std::fs::create_directories(fullPath);
+            return eResult::Fail_OpenFile;
         }
-        fullPath /= _path;
 
         std::ofstream ofs(fullPath);
         if (false == ofs.is_open())
@@ -60,16 +59,13 @@ namespace mh
         return eResult::Success;
     }
 
-    eResult Material::Load(const std::filesystem::path& _path)
+    eResult Material::Load(const std::fs::path& _filePath, const std::fs::path& _basePath)
     {
-        std::fs::path fullPath = PathMgr::GetContentPathRelative(GetResType());
-        if (false == std::fs::exists(fullPath))
+        std::fs::path fullPath = CreateFullPath(_filePath, _basePath);
+        if (false == PathMgr::CheckExist(fullPath))
         {
-            std::fs::create_directories(fullPath);
-            ERROR_MESSAGE_W(L"Material 폴더가 없습니다.");
-            return eResult::Fail_PathNotExist;
+            return eResult::Fail_OpenFile;
         }
-        fullPath /= _path;
 
         std::ifstream ifs(fullPath);
         if (false == ifs.is_open())

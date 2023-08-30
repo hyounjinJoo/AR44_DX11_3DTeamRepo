@@ -38,10 +38,6 @@ namespace mh
 	{
 	}
 
-	eResult Animation2D::Load(const std::filesystem::path& _fileName)
-	{
-		return eResult();
-	}
 
 	eResult Animation2D::SaveJson(Json::Value* _pJVal)
 	{

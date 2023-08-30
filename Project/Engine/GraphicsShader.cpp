@@ -199,21 +199,22 @@ namespace mh
 		return eResult::Success;
 	}
 
-	eResult GraphicsShader::Save(const std::filesystem::path& _path)
+	eResult GraphicsShader::Save(const std::fs::path& _filePath, const std::fs::path& _basePath)
 	{
-		std::fs::path FilePath = PathMgr::GetContentPathRelative(eResourceType::GraphicsShader);
-		FilePath /= _path;
+		std::fs::path fullPath = CreateFullPath(_filePath, _basePath);
+
+		fullPath.replace_extension(define::strKey::Ext_ShaderSetting);
+
+		if (false == std::fs::exists(fullPath))
 		{
-			std::fs::path fileDir = FilePath.parent_path();
-			if (false == std::fs::exists(fileDir))
-			{
-				std::fs::create_directories(fileDir);
-			}
+			ERROR_MESSAGE_W(L"파일을 찾지 못했습니다.");
+			fullPath.clear();
 		}
-		FilePath.replace_extension(define::strKey::Ext_ShaderSetting);
+
+		
 
 		//파일 열고
-		std::ofstream ofs(FilePath);
+		std::ofstream ofs(fullPath);
 		if (false == ofs.is_open())
 			return eResult::Fail_OpenFile;
 
@@ -232,13 +233,16 @@ namespace mh
 		return eResult::Success;
 	}
 
-	eResult GraphicsShader::Load(const std::filesystem::path& _path)
+	eResult GraphicsShader::Load(const std::fs::path& _filePath, const std::fs::path& _basePath)
 	{
-		std::fs::path FilePath = PathMgr::GetContentPathRelative(eResourceType::GraphicsShader);
-		FilePath /= _path;
-		FilePath.replace_extension(define::strKey::Ext_ShaderSetting);
+		std::fs::path fullPath = CreateFullPath(_filePath, _basePath);
+		fullPath.replace_extension(define::strKey::Ext_ShaderSetting);
+		if (false == PathMgr::CheckExist(fullPath))
+		{
+			return eResult::Fail_OpenFile;
+		}
 
-		std::ifstream ifs(FilePath);
+		std::ifstream ifs(fullPath);
 		if (false == ifs.is_open())
 			return eResult::Fail_OpenFile;
 

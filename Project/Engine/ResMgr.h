@@ -36,7 +36,7 @@ namespace mh
 		static eResourceType GetResType();
 
 		template <typename T>
-		static std::shared_ptr<T> Load(const std::filesystem::path& _fileName, const std::string_view _strKey = "");
+		static std::shared_ptr<T> Load(const std::filesystem::path& _filePath, const std::string_view _strKey = "");
 
 		template <typename T>
 		static std::shared_ptr<T> Find(const std::string_view _strKey);
@@ -101,12 +101,12 @@ namespace mh
 	}
 
 	template<typename T>
-	inline std::shared_ptr<T> ResMgr::Load(const std::filesystem::path& _fileName, const std::string_view _strKey)
+	inline std::shared_ptr<T> ResMgr::Load(const std::filesystem::path& _filePath, const std::string_view _strKey)
 	{
 		//IRes를 상속받는 클래스가 아닐 경우 컴파일 중지
 		static_assert(std::is_base_of<IRes, T>::value);
 
-		if (_fileName.empty())
+		if (_filePath.empty())
 		{
 			return nullptr;
 		}
@@ -116,7 +116,7 @@ namespace mh
 		//Key가 비어있을 경우 파일명을 키값으로 사용한다.
 		if (strKey.empty())
 		{
-			strKey = _fileName.string();
+			strKey = _filePath.string();
 		}
 
 		std::shared_ptr<IRes> FindRes = Find(GetResType<T>(), strKey);
@@ -128,7 +128,7 @@ namespace mh
 		std::shared_ptr<T> NewRes = std::make_shared<T>();
 
 		//Load 실패 시 nullptr 반환
-		if (FAILED(NewRes->Load(_fileName)))
+		if (FAILED(NewRes->Load(_filePath)))
 			return nullptr;
 
 		Insert(strKey, NewRes);
