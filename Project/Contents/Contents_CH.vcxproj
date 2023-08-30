@@ -19,10 +19,14 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Scene_Example.h" />
+    <ClInclude Include="Script_UIButton.h" />
+    <ClInclude Include="Script_UIBase.h" />
+    <ClInclude Include="Script_UIGauge.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Scene_Example.cpp" />
+    <ClCompile Include="Script_UIButton.cpp" />
+    <ClCompile Include="Script_UIBase.cpp" />
+    <ClCompile Include="Script_UIGauge.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>

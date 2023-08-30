@@ -27,9 +27,9 @@ namespace mh
 			return false;
 
 		// 구조화버퍼 전달
-		m_pFrameDataBuffer->BindDataSRV(Register_t_g_arrFrameTrans, eShaderStageFlag::CS); // t16
-		m_pOffsetMatBuffer->BindDataSRV(Register_t_g_arrOffset, eShaderStageFlag::CS); // t17
-		m_pOutputBuffer->BindDataUAV(Register_u_g_arrFinalMat);   // u0
+		m_pFrameDataBuffer->BindDataSRV(Register_t_g_FrameTransArray, eShaderStageFlag::CS); // t16
+		m_pOffsetMatBuffer->BindDataSRV(Register_t_g_OffsetArray, eShaderStageFlag::CS); // t17
+		m_pOutputBuffer->BindDataUAV(Register_u_g_FinalBoneMatrixArray);   // u0
 
 		ConstBuffer* pAnimCB = RenderMgr::GetConstBuffer(eCBType::Animation3D);
 		pAnimCB->SetData(&mAnim3DData);

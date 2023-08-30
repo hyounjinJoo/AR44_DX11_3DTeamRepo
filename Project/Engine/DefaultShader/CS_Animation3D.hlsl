@@ -2,33 +2,43 @@
 #include "SH_ConstBuffer.hlsli"
 #include "SH_Resource.hlsli"
 
+
+
 [numthreads(256, 1, 1)]
-void main(int3 _iThreadIdx : SV_DispatchThreadID)
+void main(int3 _threadID : SV_DispatchThreadID)
 {
-	//Total Data Count.x = Bone Count
-	if (CB_ComputeShader.TotalDataCount.x <= (uint)_iThreadIdx.x)
+	if (CB_Animation3D.BoneCount <= _threadID.x)
 		return;
 
-    // 오프셋 행렬을 곱하여 최종 본행렬을 만들어낸다.		
-	float4 vQZero = float4(0.f, 0.f, 0.f, 1.f);
+	float4 ZeroRot = float4(0.f, 0.f, 0.f, 1.f);
 	matrix matBone = (matrix) 0.f;
 
-    // Frame Data Index == Bone Count * Frame Count + _iThreadIdx.x
-	uint iFrameDataIndex = CB_ComputeShader.TotalDataCount.x * CB_Animation3D.CurFrameIdx + _iThreadIdx.x;
-	uint iNextFrameDataIdx = CB_ComputeShader.TotalDataCount.x * (CB_Animation3D.CurFrameIdx + 1) + _iThreadIdx.x;
+	uint FrameIndex = _threadID.x * CB_Animation3D.FrameCount + CB_Animation3D.CurrentFrame;
+	uint FrameNextIndex = _threadID.x * CB_Animation3D.FrameCount + CB_Animation3D.NextFrame;
 
-	float4 vScale = lerp(g_arrFrameTrans[iFrameDataIndex].vScale, g_arrFrameTrans[iNextFrameDataIdx].vScale, CB_Animation3D.FrameRatio);
-	float4 vTrans = lerp(g_arrFrameTrans[iFrameDataIndex].vTranslate, g_arrFrameTrans[iNextFrameDataIdx].vTranslate, CB_Animation3D.FrameRatio);
-	float4 qRot = QuternionLerp(g_arrFrameTrans[iFrameDataIndex].qRot, g_arrFrameTrans[iNextFrameDataIdx].qRot, CB_Animation3D.FrameRatio);
+	float4 Scale = lerp(g_FrameTransArray[FrameIndex].vScale, g_FrameTransArray[FrameNextIndex].vScale, CB_Animation3D.FrameRatio);
+	float4 Pos = lerp(g_FrameTransArray[FrameIndex].vTranslate, g_FrameTransArray[FrameNextIndex].vTranslate, CB_Animation3D.FrameRatio);
+	float4 Rot = QuternionLerp(g_FrameTransArray[FrameIndex].qRot, g_FrameTransArray[FrameNextIndex].qRot, CB_Animation3D.FrameRatio);
 
-    // 최종 본행렬 연산
-	MatrixAffineTransformation(vScale, vQZero, qRot, vTrans, matBone);
+	if (CB_Animation3D.bChangingAnim == TRUE)
+	{
+		uint ChangeFrameIndex = _threadID.x * CB_Animation3D.ChangeFrameCount;
 
-    // 최종 본행렬 연산    
-    //MatrixAffineTransformation(g_arrFrameTrans[iFrameDataIndex].vScale, vQZero, g_arrFrameTrans[iFrameDataIndex].qRot, g_arrFrameTrans[iFrameDataIndex].vTranslate, matBone);
+		Scale = lerp(Scale, g_ChangeFrameTransArray[ChangeFrameIndex].vScale, CB_Animation3D.ChangeRatio);
+		Pos = lerp(Pos, g_ChangeFrameTransArray[ChangeFrameIndex].vTranslate, CB_Animation3D.ChangeRatio);
+		Rot = QuternionLerp(Rot, g_ChangeFrameTransArray[ChangeFrameIndex].qRot, CB_Animation3D.ChangeRatio);
+	}
 
-	matrix matOffset = transpose(g_arrOffset[_iThreadIdx.x]);
+	MatrixAffineTransformation(Scale, ZeroRot, Rot, Pos, matBone);
 
-    // 구조화버퍼에 결과값 저장
-	g_arrFinalMat[_iThreadIdx.x] = mul(matOffset, matBone);
+	matrix matOffset = transpose(g_OffsetArray[_threadID.x]);
+
+	g_FinalBoneMatrixArray[_threadID.x] = mul(matOffset, matBone);
+	//g_BoneSocketMatrixArray[_threadID.x].matBone = transpose(matBone);
+
+	//g_BoneSocketMatrixArray[_threadID.x].Scale = Scale.xyz;
+	//g_BoneSocketMatrixArray[_threadID.x].Rot = Rot;
+	//g_BoneSocketMatrixArray[_threadID.x].Pos = Pos.xyz;
+
+	//g_InstancingBoneMatrixArray[CB_Animation3D.RowIndex * CB_Animation3D.BoneCount + _threadID.x] = mul(matOffset, matBone);
 }

@@ -13,88 +13,96 @@ namespace mh
 // Struct of FBX 
 //===============
 // Material 계수
-	struct tMtrlData
+
+	struct tFBXMaterial
 	{
-		float4 vDiff;
-		float4 vSpec;
-		float4 vAmb;
-		float4 vEmv;
+		std::string		strMtrlName{};
+		std::string		strDiffuseTex{};
+		std::string		strNormalTex{};
+		std::string		strSpecularTex{};
+		std::string		strEmissiveTex{};
+
+		float4 DiffuseColor{};
+		float4 SpecularColor{};
+		float4 AmbientColor{};
+		float4 EmissiveColor{};
+
+		float	SpecularPower{};
+		float	TransparencyFactor{};
+		float	Shininess{};
 	};
 
-	struct tFbxMaterial
+	struct tFBXWeight
 	{
-		tMtrlData			tMtrl;
-		std::string		strMtrlName;
-		std::string		strDiff;
-		std::string		strNormal;
-		std::string		strSpec;
-		std::string		strEmis;
-	};
-
-	struct tWeightsAndIndices
-	{
-		int		iBoneIdx;
-		double	dWeight;
+		int		BoneIdx{};
+		double	Weight{};
 	};
 
 	struct tFBXContainer
 	{
-		std::string								strName;
-		std::vector<float3>						vecPos;
-		std::vector<float3>						vecTangent;
-		std::vector<float3>						vecBinormal;
-		std::vector<float3>						vecNormal;
-		std::vector<float2>						vecUV;
+		std::string								Name{};
+		std::vector<float3>						vecPosition{};
+		std::vector<float2>						vecUV{};
 
-		std::vector<float4>						vecIndices;
-		std::vector<float4>						vecWeights;
+		std::vector<float3>						vecTangent{};
+		std::vector<float3>						vecBinormal{};
+		std::vector<float3>						vecNormal{};
 
-		std::vector<std::vector<UINT>>			vecIdx;
-		std::vector<tFbxMaterial>				vecMtrl;
+		std::vector<float4>						vecBlendIndex{};
+		std::vector<float4>						vecBlendWeight{};
 
-		// Animation 관련 정보
-		bool									bAnimation;
+		std::vector<std::vector<UINT>>			vecIndexBuffers{};
+		std::vector<tFBXMaterial>				vecMtrl{};
 
 		//이 정점이 특정 Bone Index로부터 얼마만큼의 추가 가중치를 받을것인지(배율)
-		std::vector<std::vector<tWeightsAndIndices>>	vecWI;
+		std::unordered_map<int, std::vector<tFBXWeight>>	mapWeights{};
 
-		void Resize(UINT _iSize)
+		bool bBump{};
+		bool bAnimation{};
+
+		void ResizeVertices(int _iSize)
 		{
-			vecPos.resize(_iSize);
+			vecPosition.resize(_iSize);
+			vecUV.resize(_iSize);
 			vecTangent.resize(_iSize);
 			vecBinormal.resize(_iSize);
 			vecNormal.resize(_iSize);
-			vecUV.resize(_iSize);
-			vecIndices.resize(_iSize);
-			vecWeights.resize(_iSize);
-			vecWI.resize(_iSize);
 		}
 	};
 
-	struct tKeyFrame
+	struct tFBXBone
 	{
-		fbxsdk::FbxAMatrix  matTransform;
-		double				dTime;
-	};
-
-	struct tBone
-	{
-		std::string				strBoneName{};
-		int					iDepth{};			// 계층구조 깊이
-		int					iParentIndx{};	// 부모 Bone 의 인덱스
+		std::string					strBoneName{};
+		int							Depth{};			// 계층구조 깊이
+		int							ParentIndx{};	// 부모 Bone 의 인덱스
 		fbxsdk::FbxAMatrix			matOffset{};		// Offset 행렬( -> 뿌리 -> Local)
 		fbxsdk::FbxAMatrix			matBone{};
-		std::vector<tKeyFrame>	vecKeyFrame{};
 	};
 
-	struct tAnimClip
+	struct tFBXKeyFrame
+	{
+		fbxsdk::FbxAMatrix  matTransform{};
+		double				Time{};
+	};
+
+	struct tFBXKeyFramesPerBone
+	{
+		int							BoneIndex{};
+		std::vector<tFBXKeyFrame>	vecKeyFrame{};
+	};
+
+
+	struct tFBXAnimClip
 	{
 		std::string		strName{};
-		fbxsdk::FbxTime		tStartTime{};
-		fbxsdk::FbxTime		tEndTime{};
+		fbxsdk::FbxTime		StartTime{};
+		fbxsdk::FbxTime		EndTime{};
 		
-		fbxsdk::FbxLongLong	llTimeLength{};
-		fbxsdk::FbxTime::EMode eMode{};
+		fbxsdk::FbxLongLong	TimeLength{};
+		fbxsdk::FbxTime::EMode TimeMode{};
+
+		//각 본 별 키프레임 데이터
+		std::vector<tFBXKeyFramesPerBone> KeyFramesPerBone{};
 	};
 
 	class FBXLoader :
@@ -105,29 +113,26 @@ namespace mh
 		virtual ~FBXLoader();
 
 	public:
-		void Init();
-		eResult LoadFbx(const std::filesystem::path& _strPath);
+		void Reset();
 
-		// FbxMatrix -> Matrix
-		static MATRIX GetMatrixFromFbxMatrix(fbxsdk::FbxAMatrix& _mat);
+		eResult LoadFbx(const std::filesystem::path& _strPath, bool _bStatic = true);
 
-	public:
-		int GetContainerCount() { return (int)mContainers.size(); }
+		// FbxMatrix -> Matrix(FBX(double) 포맷에서 프로젝트 포맷(float)으로 변환해서 반환해준다
+		static MATRIX GetMatrixFromFbxMatrix(const fbxsdk::FbxAMatrix& _mat);
 
-		//index 번호가 유효하지 않을 상황에 대비해서 주소로 반환
-		inline const tFBXContainer* GetContainer(int _iIdx) const;
-		std::vector<tBone*>& GetBones() { return mBones; }
-		std::vector<tAnimClip*>& GetAnimClip() { return mAnimClips; }
+		const std::vector<tFBXContainer>& GetContainers() const { return mContainers; }
+		const std::vector<tFBXBone>& GetBones() const { return mBones; }
+		const std::vector<tFBXAnimClip>& GetAnimations() const { return mAnimClips; }
 
 	private:
-		void LoadMeshDataFromNode(fbxsdk::FbxNode* _pRoot);
-		void LoadMesh(fbxsdk::FbxMesh* _pFbxMesh);
+		void LoadMeshContainer(fbxsdk::FbxNode* _pRoot, bool _bStatic);
+		void LoadMesh(fbxsdk::FbxMesh* _pFBXMesh, bool _bStatic);
 		void LoadMaterial(fbxsdk::FbxSurfaceMaterial* _pMtrlSur);
 
-		void GetTangent(fbxsdk::FbxMesh* _pMesh, tFBXContainer* _pContainer, int _iIdx, int _iVtxOrder);
-		void GetBinormal(fbxsdk::FbxMesh* _pMesh, tFBXContainer* _pContainer, int _iIdx, int _iVtxOrder);
-		void GetNormal(fbxsdk::FbxMesh* _pMesh, tFBXContainer* _pContainer, int _iIdx, int _iVtxOrder);
-		void GetUV(fbxsdk::FbxMesh* _pMesh, tFBXContainer* _pContainer, int _iIdx, int _iVtxOrder);
+		void GetTangent(fbxsdk::FbxMesh* _pMesh, tFBXContainer& _pContainer, int _vertexIdx, int _iVtxOrder);
+		void GetBinormal(fbxsdk::FbxMesh* _pMesh, tFBXContainer& _pContainer, int _vertexIdx, int _iVtxOrder);
+		void GetNormal(fbxsdk::FbxMesh* _pMesh, tFBXContainer& _pContainer, int _vertexIdx, int _iVtxOrder);
+		void GetUV(fbxsdk::FbxMesh* _pMesh, tFBXContainer& _pContainer, int _vertexIdx, int _iVtxOrder);
 
 		float4 GetMtrlData(fbxsdk::FbxSurfaceMaterial* _pSurface, const char* _pMtrlName, const char* _pMtrlFactorName);
 		std::string GetMtrlTextureName(fbxsdk::FbxSurfaceMaterial* _pSurface, const char* _pMtrlProperty);
@@ -139,44 +144,35 @@ namespace mh
 
 		// Animation
 		void LoadSkeleton(fbxsdk::FbxNode* _pNode);
-		void LoadSkeletonRecursive(fbxsdk::FbxNode* _pNode, int _iDepth, int _iIdx, int _iParentIdx);
+		void LoadBoneRecursive(fbxsdk::FbxNode* _pNode, int _iDepth, int _iIdx, int _iParentIdx);
 		void LoadAnimationClip();
 		void Triangulate(fbxsdk::FbxNode* _pNode);
 
-		void LoadAnimationData(fbxsdk::FbxMesh* _pMesh, tFBXContainer* _pContainer);
-		void LoadWeightsAndIndices(fbxsdk::FbxCluster* _pCluster, int _iBoneIdx, tFBXContainer* _pContainer);
-		void LoadOffsetMatrix(fbxsdk::FbxCluster* _pCluster, const fbxsdk::FbxAMatrix& _matNodeTransform, int _iBoneIdx, tFBXContainer* _pContainer);
+		void LoadAnimationData(fbxsdk::FbxMesh* _pMesh, tFBXContainer& _pContainer);
+		void LoadWeightsAndIndices(fbxsdk::FbxCluster* _pCluster, int _bondIndex, tFBXContainer& _pContainer);
+		void LoadOffsetMatrix(fbxsdk::FbxCluster* _pCluster, const fbxsdk::FbxAMatrix& _matNodeTransform, int _bondIndex, tFBXContainer& _pContainer);
 		void LoadKeyframeTransform(fbxsdk::FbxNode* _pNode, fbxsdk::FbxCluster* _pCluster, const fbxsdk::FbxAMatrix& _matNodeTransform
-			, int _iBoneIdx, tFBXContainer* _pContainer);
+			, int _bondIndex, tFBXContainer& _pContainer);
 
 		int FindBoneIndex(const std::string& _strBoneName);
 		fbxsdk::FbxAMatrix GetTransform(fbxsdk::FbxNode* _pNode);
 
-		void CheckWeightAndIndices(fbxsdk::FbxMesh* _pMesh, tFBXContainer* _pContainer);
+		void CheckWeightAndIndices(fbxsdk::FbxMesh* _pMesh, tFBXContainer& _pContainer);
+
+		int GetAllNodesCountRecursive(fbxsdk::FbxNode* _pNode);
 
 	private:
 		fbxsdk::FbxManager*		mManager;
-		fbxsdk::FbxScene*		mScene;
-		fbxsdk::FbxImporter*	mImporter;
+		fbxsdk::FbxScene*			mScene;
 
 		std::vector<tFBXContainer>				mContainers;
 
 		// Animation
-		std::vector<tBone*>					mBones;
-		fbxsdk::FbxArray<fbxsdk::FbxString*>			mAnimNames;
-		std::vector<tAnimClip*>				mAnimClips;
+		std::vector<tFBXBone>					mBones;
+		fbxsdk::FbxArray<fbxsdk::FbxString*>	mAnimNames;
+		std::vector<tFBXAnimClip>				mAnimClips;
+		bool									mbMixamo;
 	};
-
-
-	inline const tFBXContainer* FBXLoader::GetContainer(int _iIdx) const
-	{
-		const tFBXContainer* pCont = nullptr;
-		if (_iIdx < (int)mContainers.size())
-		{
-			pCont = &mContainers[_iIdx];
-		}
-		return pCont;
-	}
 }
 
 

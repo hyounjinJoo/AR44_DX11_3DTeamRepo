@@ -12,7 +12,6 @@ namespace mh
 
 		virtual void FixedUpdate() override {};
 		virtual void Render() override;
-		virtual void RenderEnd() override;
 	};
 }
 

@@ -10,6 +10,7 @@ namespace mh
 
 	IComponent::IComponent(define::eComponentType _type)
 		: mType(_type)
+		, mComTypeID()
 		, mOwner(nullptr)
 	{
 	}

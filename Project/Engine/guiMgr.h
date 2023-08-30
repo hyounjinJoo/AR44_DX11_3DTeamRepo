@@ -60,6 +60,8 @@ namespace gui
 		
 		static void AddGuiWindow(guiBase* _pBase);
 
+		static inline std::string CreateUniqueImGuiKey(const std::string_view _str, int i);
+
 	private:
 		static std::unordered_map<std::string, guiBase*, mh::define::tUmap_StringViewHasher, std::equal_to<>> mGuiWindows;
 
@@ -123,6 +125,16 @@ namespace gui
 
 		AddGuiWindow(static_cast<guiBase*>(retPtr));
 		return retPtr;
+	}
+
+	inline std::string guiMgr::CreateUniqueImGuiKey(const std::string_view _str, int i)
+	{
+		std::string uniqStr;
+		uniqStr.reserve(_str.size() + 5);
+		uniqStr += _str;
+		uniqStr += "##";
+		uniqStr += std::to_string(i);
+		return uniqStr;
 	}
 }
 

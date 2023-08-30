@@ -4,6 +4,7 @@ SH_ConstBuffer.hlsli
 SH_Resource.hlsli
 SH_Sampler.hlsli
 SH_Globals.hlsli
+SH_UserInterFace.hlsli
 
 SH_Func_Light.hlsli
 SH_Func_Blur.hlsli

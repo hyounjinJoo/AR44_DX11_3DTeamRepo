@@ -20,13 +20,14 @@ namespace mh
 
 	void IScene::SceneInit()
 	{
+		if (mbInitialized)
+			return;
+		mbInitialized = true;
 		Init();
 		for (Layer& layer : mLayers)
 		{
 			layer.Init();
 		}
-
-		mbInitialized = true;
 	}
 	void IScene::SceneUpdate()
 	{
@@ -62,38 +63,10 @@ namespace mh
 		}
 	}
 
-	GameObject* IScene::AddGameObject(GameObject* _gameObj, const define::eLayerType _type)
-	{
-		if (_gameObj)
-		{
-			if (define::eLayerType::None == _type)
-			{
-				ERROR_MESSAGE_W(L"레이어를 설정하지 않았습니다.");
-				SAFE_DELETE(_gameObj);
-				MH_ASSERT(_gameObj);
-			}
-			else
-			{
-				std::vector<GameObject*> gameObjs{};
-				_gameObj->GetGameObjectHierarchy(gameObjs);
 
-				for (size_t i = 0; i < gameObjs.size(); ++i)
-				{
-					eLayerType type = gameObjs[i]->GetLayerType();
-					if (eLayerType::None != type)
-					{
-						mLayers[(int)type].RemoveGameObject(gameObjs[i]);
-					}
 
-					gameObjs[i]->SetLayerType(_type);
-					mLayers[(int)_type].AddGameObject(gameObjs[i], mbInitialized);
-				}
-			}
-		}
-		return _gameObj;
-	}
 
-	
+
 	std::vector<GameObject*> IScene::GetDontDestroyGameObjects()
 	{
 		std::vector<GameObject*> gameObjects;

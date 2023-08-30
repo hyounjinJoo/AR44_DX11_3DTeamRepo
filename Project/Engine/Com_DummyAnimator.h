@@ -13,11 +13,9 @@ namespace mh
 		
 		virtual void Init() override;
 		virtual void FixedUpdate() override {};
-		virtual void Render() override;
-		virtual void RenderEnd() override;
 
-		virtual void BindData() override {}
-		virtual void UnBindData() override {}
+		virtual void BindData() override;
+		virtual void UnBindData() override;
 
 	private:
 		Com_Animator3D* mParentAnimator;

@@ -66,6 +66,7 @@ namespace mh
 		if ((UINT)mMaterials.size() <= _idx)
 			mMaterials.resize(_idx + 1u);
 
+		mMaterials[_idx] = {};
 		mMaterials[_idx].SharedMaterial = _Mtrl;
 		mMaterials[_idx].CurrentMaterial = mMaterials[_idx].SharedMaterial.get();
 	}

@@ -99,8 +99,7 @@ namespace mh
 		//dontdestroy 오브젝트 추가
 		for (GameObject* obj : gameObjs)
 		{
-			eLayerType type = obj->GetLayerType();
-			mActiveScene->AddGameObject(obj, type);
+			mActiveScene->AddGameObject(obj->GetLayerType(), obj);
 		}
 
 		//OnEnter 호출

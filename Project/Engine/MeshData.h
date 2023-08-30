@@ -32,12 +32,12 @@ namespace mh
 		GameObject* Instantiate();
 
 	private:
-		eResult LoadFromFBX(const std::filesystem::path& _fileName);
+		eResult LoadFromFBX(const std::filesystem::path& _fullPath, bool _bStatic);
 		bool SetRenderer(Com_Renderer_Mesh* _renderer, UINT _idx);
 
 	private:
 		std::vector<tMeshContainer> mMeshContainers;
-		std::unique_ptr<Skeleton> mSkeleton;
+		std::shared_ptr<Skeleton> mSkeleton;
     };
 
 }

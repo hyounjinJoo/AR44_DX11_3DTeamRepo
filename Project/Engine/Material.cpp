@@ -118,10 +118,7 @@ namespace mh
         {
             jVal[JSON_KEY(mShader)] = mShader->GetKey();
         }
-        
         Json::MH::SavePtrStrKeyVector(_pJVal, JSON_KEY_PAIR(mTextures));
-
-
 
         return eResult::Success;
     }
@@ -162,9 +159,6 @@ namespace mh
                 SetTexture((eTextureSlot)i, ResMgr::Load<Texture>(vecLoad[i]));
             }
         }
-
-
-
         return eResult::Success;
     }
 

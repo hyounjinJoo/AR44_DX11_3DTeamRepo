@@ -12,6 +12,9 @@ namespace mh
 		if (false == IsRenderReady())
 			return;
 
+		ITransform* tr = static_cast<ITransform*>(GetOwner()->GetComponent(eComponentType::Transform));
+		tr->BindData();
+
 		//Render
 		UINT iSubsetCount = GetMesh()->GetSubsetCount();
 		for (UINT i = 0; i < iSubsetCount; ++i)
@@ -26,20 +29,8 @@ namespace mh
 
 				//메쉬 렌더링
 				GetMesh()->Render(i);
-			}
-		}
-	}
-	void Com_Renderer_Mesh::RenderEnd()
-	{
-		if (false == IsRenderReady())
-			return;
 
-		UINT iSubsetCount = GetMesh()->GetSubsetCount();
-		for (UINT i = 0; i < iSubsetCount; ++i)
-		{
-			if (nullptr != GetCurrentMaterial(i))
-			{
-				//재질 바인딩
+				//데이터 연결 해제
 				GetCurrentMaterial(i)->UnBindData();
 			}
 		}

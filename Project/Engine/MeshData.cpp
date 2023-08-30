@@ -59,7 +59,7 @@ namespace mh
 		//FBX일 경우에는 FBXLoader를 통해서 가져온다.
 		if (".FBX" == ext)
 		{
-			eResult result = LoadFromFBX(_filePath);
+			eResult result = LoadFromFBX(_filePath, true);
 			if (eResultFail(result))
 				return result;
 		}
@@ -169,7 +169,7 @@ namespace mh
 		const std::string& skeletonKey = Json::MH::LoadPtrStrKey(_pJson, JSON_KEY_PAIR(mSkeleton));
 		if (false == skeletonKey.empty())
 		{
-			mSkeleton = std::make_unique<Skeleton>();
+			mSkeleton = std::make_shared<Skeleton>();
 			result = mSkeleton->Load(skeletonKey);
 			if (eResultFail(result))
 				return result;
@@ -181,7 +181,7 @@ namespace mh
 			{
 				if (mMeshContainers[i].pMesh)
 				{
-					mMeshContainers[i].pMesh->SetSkeleton(mSkeleton.get());
+					mMeshContainers[i].pMesh->SetSkeleton(mSkeleton);
 				}
 			}
 		}
@@ -202,10 +202,10 @@ namespace mh
 
 		//스켈레톤 있고 + 애니메이션 데이터가 있을 경우 Animator 생성
 		Com_Animator3D* animator = nullptr;
-		if (mSkeleton && mSkeleton->IsAnimMesh())
+		if (mSkeleton)
 		{
 			animator = uniqObj->AddComponent<Com_Animator3D>();
-			animator->SetSkeleton(mSkeleton.get());
+			animator->SetSkeleton(mSkeleton);
 		}
 
 
@@ -261,34 +261,31 @@ namespace mh
 		return uniqObj.release();
 	}
 
-	eResult MeshData::LoadFromFBX(const std::filesystem::path& _fileName)
+	eResult MeshData::LoadFromFBX(const std::filesystem::path& _filePath, bool _bStatic)
 	{
-		std::fs::path fullPath = PathMgr::GetContentPathRelative(eResourceType::MeshData);
-		fullPath /= _fileName;
-		if (false == std::fs::exists(fullPath.parent_path()))
+		const std::fs::path& path = PathMgr::GetContentPathAbsolute(eResourceType::MeshData);
+		std::fs::path fullPath = path / _filePath;
+
+		if (false == std::fs::exists(fullPath))
 		{
-			if (false == std::fs::create_directories(fullPath))
-			{
-				ERROR_MESSAGE_W(L"경로 정보가 이상합니다.");
-				return eResult::Fail_PathNotExist;
-			}
+			ERROR_MESSAGE_W(L"파일을 찾지 못했습니다.");
+			return eResult::Fail_PathNotExist;
 		}
 
 		FBXLoader loader{};
-		loader.Init();
-		eResult result = loader.LoadFbx(fullPath);
+		eResult result = loader.LoadFbx(fullPath, _bStatic);
 		if (eResultFail(result))
 		{
 			ERROR_MESSAGE_W(L"FBX 불러오기 실패.");
 			return result;
 		}
 
-		//Bone 정보 및 애니메이션 로드
-		mSkeleton = std::make_unique<Skeleton>();
+		//Bone 정보 로드
+		mSkeleton = std::make_shared<Skeleton>();
 
 		//Key 설정
 		{
-			std::fs::path strKey = _fileName;
+			std::fs::path strKey = _filePath;
 			strKey.replace_extension(define::strKey::Ext_Skeleton);
 			mSkeleton->SetKey(strKey.string());
 		}
@@ -306,31 +303,19 @@ namespace mh
 			return result;
 		}
 		if(mSkeleton)
-			mSkeleton->Save(_fileName);
+			mSkeleton->Save(_filePath);
 
-		//컨테이너 갯수만큼 순회를 돌아준다.
-		int contCount = loader.GetContainerCount();
-		for (int i = 0; i < contCount; ++i)
+
+
+		const std::vector<tFBXContainer>& containers = loader.GetContainers();
+		for (size_t i = 0; i < containers.size(); ++i)
 		{
 			tMeshContainer meshCont{};
-
-			//컨테이너를 가져옴
-			const tFBXContainer* cont = loader.GetContainer(i);
-
-			//예외 처리
-			if (nullptr == cont)
-			{
-				mMeshContainers.clear();
-				std::wstring errorMsg = std::to_wstring(i);
-				errorMsg += L" 번째 컨테이너가 nullptr 입니다.";
-				ERROR_MESSAGE_W(errorMsg.c_str());
-				return eResult::Fail_Nullptr;
-			}
 
 			//가져올 메쉬를 생성
 			meshCont.pMesh = std::make_shared<Mesh>();
 
-			result = meshCont.pMesh->CreateFromContainer(cont);
+			result = meshCont.pMesh->CreateFromContainer(&(containers[i]));
 			if (eResultFail(result))
 			{
 				ERROR_MESSAGE_W(L"FBX로부터 메쉬 정보를 읽어오는 데 실패했습니다.");
@@ -338,17 +323,18 @@ namespace mh
 			}
 
 			//스켈레톤 주소를 지정
-			meshCont.pMesh->SetSkeleton(mSkeleton.get());
+			meshCont.pMesh->SetSkeleton(mSkeleton);
+
 
 			if (nullptr != meshCont.pMesh)
 			{
 				//기본적으로는 컨테이너 이름을 사용
-				std::fs::path strKey = cont->strName;
+				std::fs::path strKey = containers[i].Name;
 
 				//비어있을 경우 이름을 만들어준다
 				if (strKey.empty())
 				{
-					strKey = _fileName;
+					strKey = _filePath;
 					strKey.replace_extension("");
 					strKey += "_";
 					strKey += std::to_string(i);
@@ -371,29 +357,31 @@ namespace mh
 
 
 			// 메테리얼 가져오기
-			for (UINT i = 0; i < cont->vecMtrl.size(); ++i)
+			for (UINT j = 0; j < containers[i].vecMtrl.size(); ++j)
 			{
 				//Material의 경우 FBX Loader에서 만들어 놨음
 				// 예외처리 (material 이름이 입력 안되어있을 수도 있다.)
-				std::string strKey = cont->vecMtrl[i].strMtrlName;
+				std::string strKey = containers[i].vecMtrl[j].strMtrlName;
 				std::shared_ptr<Material> pMtrl = ResMgr::Find<Material>(strKey);
 
 				//혹시나 없을 경우 에러
 				MH_ASSERT(pMtrl.get());
-				
+
 				meshCont.pMaterials.push_back(pMtrl);
 			}
 
 
 			mMeshContainers.push_back(meshCont);
-		}//for문 끝
+		}
+
+
 
 
 
 
 		//다른게 다 진행됐으면 자신도 저장
 		//키값 만들고 세팅하고
-		std::fs::path strKeyMeshData = _fileName;
+		std::fs::path strKeyMeshData = _filePath;
 		strKeyMeshData.replace_extension(strKey::Ext_MeshData);
 		std::string strKey = strKeyMeshData.string();
 		SetKey(strKey);

@@ -17,8 +17,8 @@
 #include "Com_Renderer_ParticleSystem.h"
 #include "Com_Renderer_Sprite.h"
 #include "Com_DummyAnimator.h"
+#include "Com_Renderer_UIBase.h"
 #include "Com_BehaviorTree.h"
-
 
 #include "Script_Player.h"
 #include "Script_Camera.h"
@@ -42,6 +42,8 @@ namespace mh
 		ComMgr::AddComConstructor<Com_Renderer_3DAnimMesh>(strKey::Default::com::Com_Renderer_3DAnimMesh);
 		ComMgr::AddComConstructor<Com_Renderer_ParticleSystem>(strKey::Default::com::Com_Renderer_ParticleSystem);
 		ComMgr::AddComConstructor<Com_Renderer_Sprite>(strKey::Default::com::Com_Renderer_Sprite);
+		ComMgr::AddComConstructor<Com_Renderer_UIBase>(strKey::Default::com::Com_Renderer_UIBase);
+		
 
 		ComMgr::AddComConstructor<Com_BehaviorTree>(strKey::Default::com::Com_BehaviorTree);		
 

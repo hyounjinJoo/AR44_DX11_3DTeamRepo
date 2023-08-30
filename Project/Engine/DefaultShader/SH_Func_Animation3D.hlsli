@@ -203,37 +203,32 @@ float4 QuternionLerp(in float4 _vQ1, in float4 _vQ2, float _fRatio)
 
 matrix GetBoneMat(int _iBoneIdx, int _iRowIdx)
 {
-	return g_arrBoneMat[(CB_Animation3D.BoneCount * _iRowIdx) + _iBoneIdx];
+	return g_OffsetArray[(CB_Animation3D.BoneCount * _iRowIdx) + _iBoneIdx];
 }
 
-void Skinning(inout float3 _vPos, inout float3 _vTangent, inout float3 _vBinormal, inout float3 _vNormal
-    , inout float4 _vWeight, inout float4 _vIndices
-    , int _iRowIdx)
+tSkinningInfo Skinning(float3 Pos, float3 Tangent,
+    float3 Binormal, float3 Normal, float4 BlendWeight, float4 BlendIndex)
 {
-	tSkinningInfo info = (tSkinningInfo) 0.f;
+	tSkinningInfo Info = (tSkinningInfo) 0;
 
-	if (_iRowIdx == -1)
-		return;
-
-	//일반적으로 인간 모델링에 한해서는 한 정점이 4개의 본에 영향을 받도록 약속해놓음.
-	//인간형 모델이 아닌 경우에는 더 많을 수 있음.
 	for (int i = 0; i < 4; ++i)
 	{
-		if (0.f == _vWeight[i])
+		if (BlendWeight[i] == 0.f)
 			continue;
 
-		matrix matBone = GetBoneMat((int) _vIndices[i], _iRowIdx);
+		matrix matBone = g_BoneMatrixArray[(int)BlendIndex[i]];
 
-		info.vPos += (mul(float4(_vPos, 1.f), matBone) * _vWeight[i]).xyz;
-		info.vTangent += (mul(float4(_vTangent, 0.f), matBone) * _vWeight[i]).xyz;
-		info.vBinormal += (mul(float4(_vBinormal, 0.f), matBone) * _vWeight[i]).xyz;
-		info.vNormal += (mul(float4(_vNormal, 0.f), matBone) * _vWeight[i]).xyz;
+		Info.Pos += (mul(float4(Pos, 1.f), matBone) * BlendWeight[i]).xyz;
+		Info.Tangent += (mul(float4(Tangent, 0.f), matBone) * BlendWeight[i]).xyz;
+		Info.Binormal += (mul(float4(Binormal, 0.f), matBone) * BlendWeight[i]).xyz;
+		Info.Normal += (mul(float4(Normal, 0.f), matBone) * BlendWeight[i]).xyz;
 	}
 
-	_vPos = info.vPos;
-	_vTangent = normalize(info.vTangent);
-	_vBinormal = normalize(info.vBinormal);
-	_vNormal = normalize(info.vNormal);
+	Info.Tangent = normalize(Info.Tangent);
+	Info.Binormal = normalize(Info.Binormal);
+	Info.Normal = normalize(Info.Normal);
+
+	return Info;
 }
 
 #endif
