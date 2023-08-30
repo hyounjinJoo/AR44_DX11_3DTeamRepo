@@ -17,7 +17,6 @@ namespace mh
 
 		eResult Save(const std::filesystem::path& _fileName);
 		eResult Load(const std::filesystem::path& _fileName);
-
 		eResult CreateFromFBX(FBXLoader* _fbxLoader);
 
 	public:
@@ -44,8 +43,7 @@ namespace mh
 
 
 		std::unordered_map<std::string, Animation3D*>	mMapAnimations;
-		//스켈레톤이 가지고 있는 애니메이션중 가장 많은 프레임수를 저장
-		//Animator에서 구조화버퍼를 만들 떄 사용
+
 		size_t											mAnimationMaxFrameSize;
 	};
 }

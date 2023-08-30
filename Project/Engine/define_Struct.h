@@ -65,54 +65,17 @@ namespace mh::define
 	};
 
 
-
-// ============
-// Animation 3D
-// ============
-	//struct tAnimKeyframeTranslation
-	//{
-	//	float4	vTranslate;
-	//	float4	vScale;
-	//	float4	qRot;
-	//};
-
-	struct tMTKeyFrame
-	{
-		double	dTime;
-		int		iFrame;
-		tAnimKeyframeTranslation  FrameTrans;
-	};
-
 	struct tMTBone
 	{
-		std::string			strBoneName;
+		std::string			strBoneName{};
 
 		struct Value//저장을 위해서 별도의 struct 안에 넣어놓음
 		{
 			int					iDepth;
 			int					iParentIndx;
 			MATRIX				matOffset;	// Offset 행렬(뼈 -> 루트 까지의 행렬)
-			MATRIX				matBone;   // 이거 안씀
-		} Val;
-
-		std::vector<tMTKeyFrame>	vecKeyFrame;
+			MATRIX				matBone;	// 이거 안씀
+		} Values{};
 	};
 
-	struct tMTAnimClip
-	{
-		std::string			strAnimName;
-		struct Value//저장을 위해서 별도의 struct 안에 넣어놓음
-		{
-			int				iStartFrame;
-			int				iEndFrame;
-			int				iFrameLength;
-
-			double			dStartTime;
-			double			dEndTime;
-			double			dTimeLength;
-			float			fUpdateTime; // 이거 안씀
-
-			fbxsdk::FbxTime::EMode	eMode;
-		} Val;
-	};
 }

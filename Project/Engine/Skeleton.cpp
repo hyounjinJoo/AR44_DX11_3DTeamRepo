@@ -49,8 +49,7 @@ namespace mh
 		for (size_t i = 0; i < m_vecBones.size(); ++i)
 		{
 			Binary::SaveStr(ofs, m_vecBones[i].strBoneName);
-			Binary::SaveValue(ofs, m_vecBones[i].Val);
-			Binary::SaveValueVector(ofs, m_vecBones[i].vecKeyFrame);
+			Binary::SaveValue(ofs, m_vecBones[i].Values);
 		}
 
 		return eResult::Success;
@@ -81,8 +80,7 @@ namespace mh
 			for (size_t i = 0; i < size; ++i)
 			{
 				Binary::LoadStr(ifs, m_vecBones[i].strBoneName);
-				Binary::LoadValue(ifs, m_vecBones[i].Val);
-				Binary::LoadValueVector(ifs, m_vecBones[i].vecKeyFrame);
+				Binary::LoadValue(ifs, m_vecBones[i].Values);
 			}
 		}
 
@@ -110,10 +108,10 @@ namespace mh
 			m_vecBones.push_back(tMTBone{});
 			tMTBone& bone = m_vecBones.back();
 
-			bone.Val.iDepth = vecBone[i].Depth;
-			bone.Val.iParentIndx = vecBone[i].ParentIndx;
-			bone.Val.matBone = FBXLoader::GetMatrixFromFbxMatrix(vecBone[i].matBone);
-			bone.Val.matOffset = FBXLoader::GetMatrixFromFbxMatrix(vecBone[i].matOffset);
+			bone.Values.iDepth = vecBone[i].Depth;
+			bone.Values.iParentIndx = vecBone[i].ParentIndx;
+			bone.Values.matBone = FBXLoader::GetMatrixFromFbxMatrix(vecBone[i].matBone);
+			bone.Values.matOffset = FBXLoader::GetMatrixFromFbxMatrix(vecBone[i].matOffset);
 			bone.strBoneName = vecBone[i].strBoneName;
 		}
 		CreateBoneOffsetSBuffer();
@@ -167,7 +165,7 @@ namespace mh
 		vecOffset.reserve(m_vecBones.size());
 		for (size_t i = 0; i < m_vecBones.size(); ++i)
 		{
-			vecOffset.push_back(m_vecBones[i].Val.matOffset);
+			vecOffset.push_back(m_vecBones[i].Values.matOffset);
 		}
 
 		//Create
