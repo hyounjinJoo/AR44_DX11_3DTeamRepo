@@ -447,9 +447,6 @@
     <ClCompile Include="ITransform.cpp">
       <Filter>Component\Transform</Filter>
     </ClCompile>
-    <ClCompile Include="ILight.cpp">
-      <Filter>Component</Filter>
-    </ClCompile>
     <ClCompile Include="Com_Renderer_Mesh.cpp">
       <Filter>Component\Renderer</Filter>
     </ClCompile>
@@ -500,6 +497,9 @@
       <Filter>Component</Filter>
     </ClCompile>
     <ClCompile Include="BTActionExample.cpp" />
+    <ClCompile Include="ILight.cpp">
+      <Filter>Component\Light</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application.h">
@@ -820,9 +820,6 @@
     <ClInclude Include="ITransform.h">
       <Filter>Component\Transform</Filter>
     </ClInclude>
-    <ClInclude Include="ILight.h">
-      <Filter>Component</Filter>
-    </ClInclude>
     <ClInclude Include="Com_Renderer_Mesh.h">
       <Filter>Component\Renderer</Filter>
     </ClInclude>
@@ -876,6 +873,9 @@
       <Filter>Component</Filter>
     </ClInclude>
     <ClInclude Include="BTActionExample.h" />
+    <ClInclude Include="ILight.h">
+      <Filter>Component\Light</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="cpp.hint">

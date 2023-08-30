@@ -52,6 +52,7 @@ namespace mh
 	private:
 		static void Init();
 		static void Release();
+		
 	
 	private:
 		static std::unordered_map<std::string, std::shared_ptr<IRes>, tUmap_StringViewHasher, std::equal_to<>> mArrRes[(int)eResourceType::END];

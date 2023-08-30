@@ -55,10 +55,10 @@ namespace mh
 
 			Com_Camera* cameraComp = cameraObj->AddComponent<Com_Camera>();
 			cameraComp->SetProjectionType(define::eProjectionType::Perspective);
-			//cameraComp->RegisterCameraInRenderer();
-			//cameraComp->TurnLayerMask(eLayerType::UI, false);
+
 			cameraObj->AddComponent(strKey::Script::Script_CameraMove);
-			//cameraObj->AddComponent()
+			cameraObj->AddComponent(strKey::Script::Script_UIBase);
+
 
 			RenderMgr::SetMainCamera(cameraComp);
 		}

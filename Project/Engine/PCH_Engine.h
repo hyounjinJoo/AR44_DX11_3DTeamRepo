@@ -23,6 +23,7 @@
 #include <memory>
 #include <filesystem>
 #include <fstream>
+#include <span>
 
 #include <combaseapi.h>
 #include "EnumFlags.h"

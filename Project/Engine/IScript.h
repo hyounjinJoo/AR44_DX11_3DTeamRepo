@@ -13,6 +13,7 @@ namespace mh
 		IScript(const IScript& _other) = default;
 		virtual ~IScript();
 
+		virtual void OnCreate() {};
 		virtual void Init() override {};
 		virtual void Update() override {};
 		virtual void FixedUpdate() final {};

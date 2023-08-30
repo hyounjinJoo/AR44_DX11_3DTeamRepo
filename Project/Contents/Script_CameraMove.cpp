@@ -32,6 +32,9 @@ namespace mh
 
 	void Script_CameraMove::Update()
 	{
+		const auto scripts= GetOwner()->GetScripts();
+
+
 		define::eProjectionType projType = mCamera->GetProjectionType();
 
 		switch (projType)
