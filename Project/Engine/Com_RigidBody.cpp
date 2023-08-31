@@ -24,7 +24,7 @@ namespace mh
 	{
 		SAFE_DELETE(mPhysicsInfo.pGeometries);
 	}
-	void Com_RigidBody::Initialize()
+	void Com_RigidBody::Init()
 	{
 		if (true == mbAppliedPhysics &&
 			false == mbIsActorInScene &&
@@ -33,9 +33,6 @@ namespace mh
 
 	}
 	void Com_RigidBody::FixedUpdate()
-	{
-	}
-	void Com_RigidBody::FinalUpdate()
 	{
 		if (true == mbAppliedGravity && false == mbAppliedPhysics)
 		{
@@ -48,6 +45,19 @@ namespace mh
 		else
 			GetOwner()->GetComponent<Com_Transform>()->Move(mVelocity);
 	}
+	//void Com_RigidBody::FinalUpdate()
+	//{
+	//	if (true == mbAppliedGravity && false == mbAppliedPhysics)
+	//	{
+	//		AddGravity();
+	//	}
+
+	//	if (true == mbAppliedPhysics && define::eActorType::Static == mPhysicsInfo.eActorType)
+	//		return;
+
+	//	else
+	//		GetOwner()->GetComponent<Com_Transform>()->Move(mVelocity);
+	//}
 	void Com_RigidBody::Destroy()
 	{
 		if (true == mbAppliedPhysics)

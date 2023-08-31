@@ -12,10 +12,11 @@ namespace mh
 		Com_RigidBody();
 		virtual ~Com_RigidBody();
 
-		virtual void Initialize();
-		virtual void FixedUpdate();
-		virtual void FinalUpdate();
+		virtual void Init() override;
+		virtual void FixedUpdate()override;
 		virtual void Destroy();
+		//virtual void Destroy()override;
+
 
 		virtual IComponent* Clone(GameObject* _pGameObject);
 

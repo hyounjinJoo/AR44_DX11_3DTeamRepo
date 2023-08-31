@@ -57,11 +57,12 @@ namespace mh
 		mSceneClient->setScenePvdFlag(PxPvdSceneFlag::eTRANSMIT_CONSTRAINTS, true);
 		mSceneClient->setScenePvdFlag(PxPvdSceneFlag::eTRANSMIT_CONTACTS, true);
 		mSceneClient->setScenePvdFlag(PxPvdSceneFlag::eTRANSMIT_SCENEQUERIES, true);
+
+	
 	}
 	void Physics::Update()
 	{
-		if (mScene->userData == nullptr)
-			return;
+
 		mScene->simulate(TimeMgr::DeltaTime());
 		mScene->fetchResults(true);
 	}

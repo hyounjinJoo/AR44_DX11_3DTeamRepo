@@ -178,7 +178,7 @@ namespace mh
 		//사이즈 수정
 		Com_Transform* tr = GetOwner()->GetComponent<Com_Transform>(); 
 		if(tr)
-			tr->SetSizeXY(animation->GetSpriteSize(0u));
+			tr->SetScaleXY(animation->GetSpriteSize(0u));
 
 		return true;
 	}

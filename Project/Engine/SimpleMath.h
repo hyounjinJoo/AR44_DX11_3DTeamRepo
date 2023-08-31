@@ -305,6 +305,8 @@ namespace mh::math
         // Vector operations
         bool InBounds(const Vector3& Bounds) const noexcept;
 
+        //XMVECTOR Convert() const noexcept;
+        
         float Length() const noexcept;
         float LengthSquared() const noexcept;
 

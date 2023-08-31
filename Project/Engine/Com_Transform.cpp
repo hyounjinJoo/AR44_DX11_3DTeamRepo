@@ -15,14 +15,9 @@
 namespace mh
 {
 	Com_Transform::Com_Transform()
-		: mSize(1.f, 1.f, 1.f)
-		, mScaleRelative(1.f, 1.f, 1.f)
-		, mIsScaleDefault(true)
-		, mbInheritScale(true)
-		, mbInheritRot(true)
-		, mbSizeUpdated(true)
-		, mbLockRotation()
-		, mbNeedMyUpdate(true)
+		: mpParent(nullptr)
+		, mScale(float3(1.f, 1.f, 1.f))
+		, mbUpdateByMat(false)
 		, mCB_Transform()
 	{
 	}
@@ -33,43 +28,62 @@ namespace mh
 
 	void Com_Transform::FixedUpdate()
 	{
-		//bool 값들은 Tick()에서 false로 초기화 된다.
-		//여기선 고유 크기(Size)를 반영하지 않은 월드행렬을 만든다.
-		//게임오브젝트 상속 관계에서 고유 크기까지 상속을 받게 되면 기하급수적으로 크기가 커짐 
-		if (true == mbNeedMyUpdate)
+		if (true == IsPhysicsObject())
 		{
-			//자신의 트랜스폼 업데이트를 진행할 경우 - 두개 다 업데이트 해줘야함.
-			UpdateMyTransform();
+			if (true == mbUpdateByMat)
+			{
+				GetOwner()->GetComponent<Com_RigidBody>()->SetPhysicsTransform(physx::PxTransform(mPosition, EulerToQuaternion(mRotation)));
+
+				if (nullptr != mpParent)
+					mMatWorld *= mpParent->GetWorldMatrix();
+
+				return;
+			}
+
+			physx::PxTransform transform = GetOwner()->GetComponent<Com_RigidBody>()->GetPhysicsTransform();
+			physx::PxQuat relativeX(mRelativeRotation.x * XM_PI / 180.f, float3(1.f, 0.f, 0.f));
+			physx::PxQuat relativeY(mRelativeRotation.y * XM_PI / 180.f, float3(0.f, 1.f, 0.f));
+			physx::PxQuat relativeZ(mRelativeRotation.z * XM_PI / 180.f, float3(0.f, 0.f, 1.f));
+
+			math::Matrix matScale = math::Matrix::CreateScale(mScale);
+			math::Matrix matRotation = math::Matrix::CreateFromQuaternion(relativeZ) *
+			math::Matrix::CreateFromQuaternion(relativeX) *
+			math::Matrix::CreateFromQuaternion(relativeY);
+			//Z*Y*X 하니까 짐벌락 걸렷다.
+
+			matRotation *= math::Matrix::CreateFromQuaternion(transform.q);
+			math::Matrix matTranslation = math::Matrix::CreateTranslation(float3(transform.p) + mRelativePosition);
+
+			mMatWorld = matScale * matRotation * matTranslation;
 		}
 
-		//부모 트랜스폼이 갱신되었는지 확인하고, 갱신되었을 경우 자신의 행렬도 갱신
-		GameObject* parent = GetOwner()->GetParent();
-		if (parent)
+		else
 		{
-			Com_Transform* tf = parent->GetComponent<Com_Transform>();
-			if(tf && tf->IsUpdated())
-				UpdateParentMatrix(tf);
-		}
-		
+			if (true == mbUpdateByMat)
+			{
+				if (nullptr != mpParent)
+					mMatWorld *= mpParent->GetWorldMatrix();
 
-		//둘중에 하나라도 업데이트 되었을 경우 월드행렬을 새로 계산한다.
-		if (mbNeedMyUpdate || mbSizeUpdated)
-		{
-			//부모 행렬이 있을 경우 부모행렬을 곱해줌.
-			if (GetOwner()->GetParent())
-				mMatWorldWithoutSize = mMatRelative * mMatParent;
-			else
-				mMatWorldWithoutSize = mMatRelative;
+				return;
+			}
 
-			//자신의 사이즈가 반영된 최종 월드행렬을 계산
-			mMatWorldFinal = MATRIX::CreateScale(mSize) * mMatWorldWithoutSize;
+			math::Matrix matScale = math::Matrix::CreateScale(mScale);
+			float4 rotateQuat = XMQuaternionRotationRollPitchYaw(
+				mRotation.x * XM_PI / 180.f,
+				mRotation.y * XM_PI / 180.f,
+				mRotation.z * XM_PI / 180.f);
 
+			math::Matrix matRotation = XMMatrixRotationQuaternion(rotateQuat);
+			math::Matrix matTranslation = math::Matrix::CreateTranslation(mPosition);
 
-			mCB_Transform.world = mMatWorldFinal;
-			mCB_Transform.inverseWorld = mMatWorldFinal.Invert();
+			mMatLocal = matScale * matRotation * matTranslation;
+			mMatWorld = mMatLocal;
 		}
 
-		Application::AddEndFrameFunc(std::bind(&Com_Transform::ClearUpdateState, this));
+		if (nullptr != mpParent)
+		{
+			mMatWorld *= mpParent->GetWorldMatrix();
+		}
 	}
 
 	eResult Com_Transform::SaveJson(Json::Value* _pJson)
@@ -220,99 +234,347 @@ namespace mh
 		return eResult::Success;
 	}
 
-
-
-	void Com_Transform::UpdateMyTransform()
+	void Com_Transform::SetRotation(const float3& _rotation)
 	{
-		mMatRelative = MATRIX::Identity;
-
-		//1. 크기행렬
-		if (false == mIsScaleDefault)
+		if (true == IsPhysicsObject())
 		{
-			//크기행렬(CreateScale을 해주면 자동으로 동차좌표를 추가해서 행렬에 삽입해 준다.
-			mMatRelative *= MATRIX::CreateScale(mScaleRelative);
+			Com_RigidBody* rigidBody = GetOwner()->GetComponent<Com_RigidBody>();
+			physx::PxTransform transform = rigidBody->GetPhysicsTransform();
+
+			transform.q = EulerToQuaternion(_rotation);
+			rigidBody->SetPhysicsTransform(transform);
 		}
 
-		//2. 회전행렬
-		MATRIX matRot = MATRIX::CreateFromQuaternion(math::Quaternion::CreateFromYawPitchRoll(mRotRelative.y, mRotRelative.x, mRotRelative.z));
-		//회전행렬으로부터 직관적 방향을 계산한다.
-		mDirRelative[(UINT)eDirectionType::FRONT] = matRot.Forward();
-		mDirRelative[(UINT)eDirectionType::RIGHT] = matRot.Right();
-		mDirRelative[(UINT)eDirectionType::UP] = matRot.Up();
-		//방향은 쿼터니언을 사용해서 계산.
-
-		//회전 잠금 상태가 아닐 경우에만 회전행렬을 곱해준다.
-		if (false == mbLockRotation)
-			mMatRelative *= matRot;
-
-		//3. 이동행렬
-		mMatRelative *= MATRIX::CreateTranslation(mPosRelative);
+		mRotation = _rotation;
 	}
 
-
-	void Com_Transform::UpdateParentMatrix(const Com_Transform* _parentTransform)
+	void Com_Transform::SetRotation(define::eAxis3D _eAxis, float _degree)
 	{
-		mMatParent = MATRIX::Identity;
-
-		if (_parentTransform)
+		if (true == IsPhysicsObject())
 		{
-			mMatParent = _parentTransform->GetWorldMatWithoutSize();
-
-			//부모 오브젝트가 있을 경우 부모의 월드행렬을 받아온다. 
-			//성공 시 true가 반환되므로 이 때는 상속 과정을 시작하면 됨
-			bool bWorldDirInherit = false;
-			if (true == mbInheritRot)
+			Com_RigidBody* rigidBody = GetOwner()->GetComponent<Com_RigidBody>();
+			physx::PxTransform transform = rigidBody->GetPhysicsTransform();
+			float3 rotVec = {};
+			switch (_eAxis)
 			{
-				//회전 상속 + 크기 미상속 -> 크기정보 제거
-				if (false == mbInheritScale)
-				{
-					//정규화해서 크기정보를 제거
-					mMatParent.Right(mMatParent.Right().Normalize());
-					mMatParent.Up(mMatParent.Up().Normalize());
-					mMatParent.Forward(mMatParent.Forward().Normalize());
-				}
-				//else: 둘 다 상속 받는 경우에는 작업할 것이 없음. 그냥 빠져나가면 됨
-
-				bWorldDirInherit = true;	//이때만 월드방향을 상속받아주면 된다.
+			case eAxis3D::X:
+				rotVec.x = 1.f;
+				break;
+			case eAxis3D::Y:
+				rotVec.y = 1.f;
+				break;
+			case eAxis3D::Z:
+				rotVec.z = 1.f;
+				break;
 			}
-			else
-			{
-				constexpr size_t eraseSize = sizeof(float) * 12;
-				//회전 미상속 + 크기 상속 -> 회전정보 제거
-				if (true == mbInheritScale)
-				{
-					//회전정보만 상속받는 경우: 크기정보만 추출
-					float3 Scale(mMatParent.Right().Length(), mMatParent.Up().Length(), mMatParent.Forward().Length());
-					//float(4) * 12 -> 회전 파트를 모두 0으로 밀어버리고 크기만 등록
+			physx::PxQuat q(_degree * XM_PI / 180.f, rotVec);
+			rigidBody->SetPhysicsTransform(physx::PxTransform(transform.p, q));
+		}
 
-					memset(mMatParent.m, 0, eraseSize);
-					mMatParent._11 = Scale.x;
-					mMatParent._22 = Scale.y;
-					mMatParent._33 = Scale.z;
-				}
-				//회전 미상속 + 크기 미상속 -> 전부 밀고 단위행렬로
-				else
-				{
-					memset(mMatParent.m, 0, eraseSize);
-					mMatParent._11 = 1.f;
-					mMatParent._22 = 1.f;
-					mMatParent._33 = 1.f;
-				}
-			}
+		switch (_eAxis)
+		{
+		case eAxis3D::X:
+			mRotation.x = _degree;
+			break;
+		case eAxis3D::Y:
+			mRotation.y = _degree;
+			break;
+		case eAxis3D::Z:
+			mRotation.z = _degree;
+			break;
 		}
 	}
 
-	void Com_Transform::BindData()
+	void Com_Transform::SetPosition(const float3& _position)
 	{
-		mCB_Transform.view = Com_Camera::GetGpuViewMatrix();
-		mCB_Transform.inverseView = Com_Camera::GetGpuViewInvMatrix();
-		mCB_Transform.projection = Com_Camera::GetGpuProjectionMatrix();
-		mCB_Transform.WorldView = mCB_Transform.world * mCB_Transform.view;
-		mCB_Transform.WVP = mCB_Transform.WorldView * mCB_Transform.projection;
+		if (true == IsPhysicsObject())
+		{
+			Com_RigidBody* rigidBody = GetOwner()->GetComponent<Com_RigidBody>();
+			physx::PxTransform transform = rigidBody->GetActor<physx::PxRigidActor>()->getGlobalPose();
+			transform.p = _position;
+			rigidBody->GetActor<physx::PxRigidActor>()->setGlobalPose(transform);
+		}
+		else
+		{
+			mPosition = _position;
+		}
+	}
 
-		ConstBuffer* cb = RenderMgr::GetConstBuffer(eCBType::Transform);
-		cb->SetData(&mCB_Transform);
-		cb->BindData(eShaderStageFlag::ALL);
+	void Com_Transform::SetPosition(define::eAxis3D _eAxis, float _position)
+	{
+		if (true == IsPhysicsObject())
+		{
+			Com_RigidBody* rigidBody = GetOwner()->GetComponent<Com_RigidBody>();
+			physx::PxTransform transform = rigidBody->GetDynamicActor()->getGlobalPose();
+
+			switch (_eAxis)
+			{
+			case eAxis3D::X:
+				transform.p.x = _position;
+				break;
+			case eAxis3D::Y:
+				transform.p.y = _position;
+				break;
+			case eAxis3D::Z:
+				transform.p.z = _position;
+				break;
+			}
+
+			rigidBody->GetDynamicActor()->setGlobalPose(transform);
+		}
+
+		switch (_eAxis)
+		{
+		case eAxis3D::X:
+			mPosition.x = _position;
+			break;
+		case eAxis3D::Y:
+			mPosition.y = _position;
+			break;
+		case eAxis3D::Z:
+			mPosition.z = _position;
+			break;
+		}
+	}
+
+	void Com_Transform::SetScaleFromTool(const float3& _scale)
+	{
+		mMatWorld._11 = _scale.x;
+		mMatWorld._22 = _scale.y;
+		mMatWorld._33 = _scale.z;
+
+		DecomposeWorld();
+
+		mScale = _scale;
+	}
+
+	void Com_Transform::SetRotationFromTool(const float3& _rotation)
+	{
+	}
+
+	void Com_Transform::SetPositionFromTool(const float3& _position)
+	{
+	}
+
+	void Com_Transform::SetRotationExcludingColliders(const float3& _rotation)
+	{
+
+	}
+
+	void Com_Transform::SetRotationExcludingColliders(define::eAxis3D _eAxis, float _degree)
+	{
+	}
+
+	void Com_Transform::SetPositionExcludingColliders(const float3& _position)
+	{
+		mRelativePosition = _position;
+	}
+
+	void Com_Transform::SetPositionExcludingColliders(define::eAxis3D _eAxis, float _position)
+	{
+		switch (_eAxis)
+		{
+		case eAxis3D::X:
+			mRelativePosition.x = _position;
+			break;
+		case eAxis3D::Y:
+			mRelativePosition.y = _position;
+			break;
+		case eAxis3D::Z:
+			mRelativePosition.z = _position;
+			break;
+		}
+	}
+
+	void Com_Transform::SetWorldMatrix(const math::Matrix& _matrix)
+	{
+		mbUpdateByMat = true;
+		mMatWorld = _matrix;
+		DecomposeWorld();
+	}
+
+	void Com_Transform::DecomposeWorld()
+	{
+		XMVECTOR vScale;
+		XMVECTOR vRotQ;
+		XMVECTOR vPos;
+		XMMatrixDecompose(&vScale, &vRotQ, &vPos, mMatWorld);
+
+
+		mScale = vScale;
+		mPosition = vPos;
+
+		// Quaternion to Euler Angle
+		// 출처 http://www.littlecandle.co.kr/bbs/board.php?bo_table=codingnote&wr_id=174&page=2
+		float w, x, y, z;
+		w = vRotQ.m128_f32[3];
+		x = vRotQ.m128_f32[0];
+		y = vRotQ.m128_f32[1];
+		z = vRotQ.m128_f32[2];
+
+		float sqW = w * w;
+		float sqX = x * x;
+		float sqY = y * y;
+		float sqZ = z * z;
+		float unit = sqX + sqY + sqZ + sqW;
+		float test = x * w - y * z;
+		float3 v;
+
+		if (test > 0.4955f * unit)
+		{
+			v.y = 2.f * atan2f(y, x);
+			v.x = XM_PI / 2.f;
+			v.z = 0;
+			v = v * (180.f / XM_PI);
+		}
+		else if (test < -0.4995f * unit)
+		{
+			v.x = -2.f * atan2f(y, x);
+			v.x = -XM_PI / 2.f;
+			v.z = 0;
+			v = v * (180.f / XM_PI);
+		}
+		else
+		{
+			float4 Quat(w, z, x, y);
+			v.x = (float)asinf(2.f * (Quat.x * Quat.z - Quat.w * Quat.y)); // Pitch
+			v.y = (float)atan2(2.f * Quat.x * Quat.w + 2.f * Quat.y * Quat.z, 1.f - 2.f * (Quat.z * Quat.z + Quat.w * Quat.w)); // Yaw
+			v.z = (float)atan2(2.f * Quat.x * Quat.y + 2.f * Quat.z * Quat.w, 1.f - 2.f * (Quat.y * Quat.y + Quat.z * Quat.z)); // Roll
+			v = v * (180.f / XM_PI);
+		}
+
+		mRotation = NormalizeAngles(v);
+	}
+
+	float Com_Transform::NormalizeAngle(float _angle)
+	{
+		while (_angle > 360)
+			_angle -= 360;
+		while (_angle < 0)
+			_angle += 360;
+		return _angle;
+	}
+
+	float3 Com_Transform::NormalizeAngles(float3 _angles)
+	{
+		_angles.x = NormalizeAngle(_angles.x);
+		_angles.y = NormalizeAngle(_angles.y);
+		_angles.z = NormalizeAngle(_angles.z);
+		return _angles;
+	}
+
+	float3 Com_Transform::QuaternionToEuler(float _x, float _y, float _z, float _w)
+	{
+		float w = _w, x = _x, y = _y, z = _z;
+
+		float sqW = w * w;
+		float sqX = x * x;
+		float sqY = y * y;
+		float sqZ = z * z;
+		float unit = sqX + sqY + sqZ + sqW;
+		float test = x * w - y * z;
+		float3 v;
+
+		if (test > 0.4955f * unit)
+		{
+			v.y = 2.f * atan2f(y, x);
+			v.x = XM_PI / 2.f;
+			v.z = 0;
+			v = v * (180.f / XM_PI);
+		}
+		else if (test < -0.4995f * unit)
+		{
+			v.x = -2.f * atan2f(y, x);
+			v.x = -XM_PI / 2.f;
+			v.z = 0;
+			v = v * (180.f / XM_PI);
+		}
+		else
+		{
+			float4 Quat(w, z, x, y);
+			v.x = (float)asinf(2.f * (Quat.x * Quat.z - Quat.w * Quat.y)); // Pitch
+			v.y = (float)atan2(2.f * Quat.x * Quat.w + 2.f * Quat.y * Quat.z, 1.f - 2.f * (Quat.z * Quat.z + Quat.w * Quat.w)); // Yaw
+			v.z = (float)atan2(2.f * Quat.x * Quat.y + 2.f * Quat.z * Quat.w, 1.f - 2.f * (Quat.y * Quat.y + Quat.z * Quat.z)); // Roll
+			v = v * (180.f / XM_PI);
+		}
+
+		NormalizeAngles(v);
+		return v;
+	}
+
+	physx::PxQuat Com_Transform::EulerToQuaternion(float3 _euler)
+	{
+		float4 rotateQuat = XMQuaternionRotationRollPitchYaw(
+			_euler.x * XM_PI / 180.f,
+			_euler.y * XM_PI / 180.f,
+			_euler.z * XM_PI / 180.f);
+
+		return { rotateQuat.x, rotateQuat.y, rotateQuat.z, rotateQuat.w };
+	}
+
+	float3 Com_Transform::GetWorldPosition()
+	{
+		float3 position = mPosition;
+
+		if (nullptr != mpParent)
+			position += mpParent->GetWorldPosition();
+
+		return position;
+	}
+
+	const float3& Com_Transform::GetPosition()
+	{
+		return mPosition;
+	}
+
+	const float3& Com_Transform::GetRotation()
+	{
+		return mRotation;
+	}
+
+	const float3& Com_Transform::GetScale()
+	{
+		return mScale;
+	}
+
+	
+
+	void Com_Transform::AddRotation(define::eAxis3D _eAxis, float _degree)
+	{
+		if (true == IsPhysicsObject())
+		{
+			Com_RigidBody* rigidBody = GetOwner()->GetComponent<Com_RigidBody>();
+			physx::PxTransform transform = rigidBody->GetPhysicsTransform();
+			float3 rotVec = {};
+			switch (_eAxis)
+			{
+			case eAxis3D::X:
+				rotVec.x = 1.f;
+				break;
+			case eAxis3D::Y:
+				rotVec.y = 1.f;
+				break;
+			case eAxis3D::Z:
+				rotVec.z = 1.f;
+				break;
+			}
+			physx::PxQuat q = transform.q;
+			physx::PxQuat rotQ(_degree * XM_PI / 180.f, rotVec);
+			rigidBody->SetPhysicsTransform(physx::PxTransform(transform.p, q * rotQ));
+		}
+
+		switch (_eAxis)
+		{
+		case eAxis3D::X:
+			mRotation.x += _degree;
+			break;
+		case eAxis3D::Y:
+			mRotation.y += _degree;
+			break;
+		case eAxis3D::Z:
+			mRotation.z += _degree;
+			break;
+		}
 	}
 
 	void Com_Transform::Move(const float3& _velocity)
@@ -335,7 +597,21 @@ namespace mh
 
 		else
 		{
-			mPosRelative += _velocity * TimeMgr::DeltaTime();
+			mPosition += _velocity * TimeMgr::DeltaTime();
 		}
+	}
+	void Com_Transform::PushData(Com_Camera* pCamera)
+	{
+		mCB_Transform = {};
+
+		mCB_Transform.view = Com_Camera::GetGpuViewMatrix();
+		mCB_Transform.inverseView = Com_Camera::GetGpuViewInvMatrix();
+		mCB_Transform.projection = Com_Camera::GetGpuProjectionMatrix();
+		mCB_Transform.WorldView = mCB_Transform.world * mCB_Transform.view;
+		mCB_Transform.WVP = mCB_Transform.WorldView * mCB_Transform.projection;
+
+		ConstBuffer* cb = RenderMgr::GetConstBuffer(eCBType::Transform);
+		cb->SetData(&mCB_Transform);
+		cb->BindData(eShaderStageFlag::ALL);
 	}
 }
