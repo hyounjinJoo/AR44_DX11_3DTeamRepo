@@ -26,17 +26,12 @@ namespace mh
 
 	void Script_Player::Update()
 	{
-
-	}
-
-	void Script_Player::FixedUpdate()
-	{
 		Com_Transform* tr = GetOwner()->GetComponent<Com_Transform>();
 		Com_RigidBody* rb = GetOwner()->GetComponent<Com_RigidBody>();
 
 		if (InputMgr::GetKey(eKeyCode::H))
 		{
-			tr->SetRelativePos(float3(0.0f, 0.0f, 0.f));
+			tr->SetPosition(float3(0.0f, 0.0f, 0.f));
 		}
 
 		if (InputMgr::GetKey(eKeyCode::W))
@@ -64,6 +59,11 @@ namespace mh
 		{
 			rb->SetVelocity(define::eAxis3D::Y, mMoveSpeed);
 		}
+	}
+
+	void Script_Player::FixedUpdate()
+	{
+
 	}
 
 	void Script_Player::OnCollisionEnter(ICollider2D* _collider)

@@ -45,19 +45,6 @@ namespace mh
 		else
 			GetOwner()->GetComponent<Com_Transform>()->Move(mVelocity);
 	}
-	//void Com_RigidBody::FinalUpdate()
-	//{
-	//	if (true == mbAppliedGravity && false == mbAppliedPhysics)
-	//	{
-	//		AddGravity();
-	//	}
-
-	//	if (true == mbAppliedPhysics && define::eActorType::Static == mPhysicsInfo.eActorType)
-	//		return;
-
-	//	else
-	//		GetOwner()->GetComponent<Com_Transform>()->Move(mVelocity);
-	//}
 	void Com_RigidBody::Destroy()
 	{
 		if (true == mbAppliedPhysics)
@@ -79,9 +66,9 @@ namespace mh
 			info.massProperties = mPhysicsInfo.massProperties;
 
 			rigidBody->SetPhysical(info);
-			_pGameObject->GetComponent<Com_Transform>()->SetRelativePos(GetOwner()->GetComponent<Com_Transform>()->GetRelativePos());
-			_pGameObject->GetComponent<Com_Transform>()->SetRelativeRotXYZ(GetOwner()->GetComponent<Com_Transform>()->GetRelativeRotXYZ());
-			_pGameObject->GetComponent<Com_Transform>()->SetRelativeScale(GetOwner()->GetComponent<Com_Transform>()->GetRelativeScale());
+			_pGameObject->GetComponent<Com_Transform>()->SetPosition(GetOwner()->GetComponent<Com_Transform>()->GetPosition());
+			_pGameObject->GetComponent<Com_Transform>()->SetRotation(GetOwner()->GetComponent<Com_Transform>()->GetRotation());
+			_pGameObject->GetComponent<Com_Transform>()->SetScale(GetOwner()->GetComponent<Com_Transform>()->GetScale());
 		}
 
 		if (define::eActorType::Static != mPhysicsInfo.eActorType)
@@ -301,7 +288,7 @@ namespace mh
 		PxRigidBodyExt::addForceAtPos(
 			*GetDynamicActor(),
 			_force,
-			GetOwner()->GetComponent<Com_Transform>()->GetRelativePos(),
+			GetOwner()->GetComponent<Com_Transform>()->GetPosition(),
 			physx::PxForceMode::eIMPULSE
 		);
 	}
@@ -370,15 +357,15 @@ namespace mh
 		switch (mPhysicsInfo.eActorType)
 		{
 		case define::eActorType::Dynamic:
-			mActor = PHYSICS->createRigidDynamic(physx::PxTransform(GetOwner()->GetComponent<Com_Transform>()->GetRelativePos()));
+			mActor = PHYSICS->createRigidDynamic(physx::PxTransform(GetOwner()->GetComponent<Com_Transform>()->GetPosition()));
 			break;
 
 		case define::eActorType::Static:
-			mActor = PHYSICS->createRigidStatic(physx::PxTransform(GetOwner()->GetComponent<Com_Transform>()->GetRelativePos()));
+			mActor = PHYSICS->createRigidStatic(physx::PxTransform(GetOwner()->GetComponent<Com_Transform>()->GetPosition()));
 			break;
 
 		case define::eActorType::Kinematic:
-			mActor = PHYSICS->createRigidDynamic(physx::PxTransform(GetOwner()->GetComponent<Com_Transform>()->GetRelativePos()));
+			mActor = PHYSICS->createRigidDynamic(physx::PxTransform(GetOwner()->GetComponent<Com_Transform>()->GetPosition()));
 			mActor->is<physx::PxRigidDynamic>()->setRigidBodyFlag(physx::PxRigidBodyFlag::eKINEMATIC, true);
 			break;
 		}
@@ -407,7 +394,7 @@ namespace mh
 		}
 
 		mShape->setSimulationFilterData(mPhysicsInfo.filterData);
-		physx::PxVec3 myPos = GetOwner()->GetComponent<Com_Transform>()->GetRelativePos();
+		physx::PxVec3 myPos = GetOwner()->GetComponent<Com_Transform>()->GetPosition();
 		pActor->setGlobalPose(physx::PxTransform(myPos));
 
 		switch (mPhysicsInfo.eActorType)

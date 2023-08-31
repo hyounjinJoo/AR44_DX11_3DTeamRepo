@@ -21,9 +21,9 @@ namespace gui
 	{
 		mh::Com_Transform* tr = GetTarget()->GetComponent<mh::Com_Transform>();
 
-		mPosisition = tr->GetRelativePos();
-		mRotation = tr->GetRelativeRotXYZ();
-		mScale = tr->GetRelativeScale();
+		mPosisition = tr->GetPosition();
+		mRotation = tr->GetRotation();
+		mScale = tr->GetScale();
 	}
 
 	void guiCom_Transform::UpdateUI()
@@ -36,9 +36,9 @@ namespace gui
 		{
 			mh::Com_Transform* tr = GetTarget()->GetComponent<mh::Com_Transform>();
 
-			tr->SetRelativePos(mPosisition);
-			tr->SetRelativeRotXYZ(mRotation);
-			tr->SetRelativeScale(mScale);
+			tr->SetPosition(mPosisition);
+			tr->SetRotation(mRotation);
+			tr->SetScale(mScale);
 		}
 	}
 

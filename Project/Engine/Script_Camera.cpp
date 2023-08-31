@@ -23,35 +23,6 @@ namespace mh
 
 	void Script_Camera::Update()
 	{
-		Com_Transform* tr = GetOwner()->GetComponent<Com_Transform>();
 
-		float3 pos = tr->GetRelativePos();
-
-		if (InputMgr::GetKeyState(eKeyCode::D) == eKeyState::PRESSED)
-		{
-			pos += 100.0f * tr->Right() * TimeMgr::DeltaTime();
-		}
-		else if (InputMgr::GetKeyState(eKeyCode::A) == eKeyState::PRESSED)
-		{
-			pos += 100.0f * -tr->Right() * TimeMgr::DeltaTime();
-		}
-		else if (InputMgr::GetKeyState(eKeyCode::W) == eKeyState::PRESSED)
-		{
-			pos += 100.0f * tr->Forward() * TimeMgr::DeltaTime();
-		}
-		else if (InputMgr::GetKeyState(eKeyCode::S) == eKeyState::PRESSED)
-		{
-			pos += 100.0f * -tr->Forward() * TimeMgr::DeltaTime();
-		}
-		else if (InputMgr::GetKeyState(eKeyCode::Q) == eKeyState::PRESSED)
-		{
-			pos += 100.0f * tr->Up() * TimeMgr::DeltaTime();
-		}
-		else if (InputMgr::GetKeyState(eKeyCode::E) == eKeyState::PRESSED)
-		{
-			pos += 100.0f * -tr->Up() * TimeMgr::DeltaTime();
-		}
-
-		tr->SetRelativePos(pos);
 	}
 }

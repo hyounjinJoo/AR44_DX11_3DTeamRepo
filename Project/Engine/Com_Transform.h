@@ -19,7 +19,7 @@ namespace mh
         Com_Transform(const Com_Transform& _other) = default;
         CLONE(Com_Transform);
 
-        virtual ~Com_Transform();
+        virtual ~Com_Transform() override;
 
 	public:
 
@@ -29,11 +29,15 @@ namespace mh
 		/* 월드 행렬을 업데이트한다 */
 		virtual void  FixedUpdate() override;
 
+		virtual void BindData() override;
+
 		void  SetScale(const float3& _scale) { mScale = _scale; }
 		void  SetRotation(const float3& _rotation);
 		void  SetRotation(define::eAxis3D _eAxis, float _degree);
 		void  SetPosition(const float3& _position);
 		void  SetPosition(define::eAxis3D _eAxis, float _position);
+
+		void SetScaleXY(const float2& _scale) { float3(mScale.x = _scale.x, mScale.y = _scale.y, 1.0f); }
 
 		void SetScaleFromTool(const float3& _scale);
 		void SetRotationFromTool(const float3& _rotation);
@@ -77,18 +81,17 @@ namespace mh
 		const math::Matrix& GetWorldMatrix() const { return mMatWorld; }
 
 
-
-	public:
-		void PushData(Com_Camera* pCamera);
+	
 
 	private:
 		Com_Transform* mpParent;
 
-		float3    mScale;
-		float3    mRotation;
-		float3    mRelativeRotation;
-		float3    mPosition;
-		float3    mRelativePosition;
+		float3 mScale;
+		float3 mRotation;
+		float3 mRelativeRotation;
+		float3 mPosition;
+		float3 mRelativePosition;
+
 
 		math::Matrix  mMatLocal;
 		math::Matrix  mMatWorld;

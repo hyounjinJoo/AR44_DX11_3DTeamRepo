@@ -17,7 +17,7 @@ namespace mh
 	Com_Transform::Com_Transform()
 		: mpParent(nullptr)
 		, mScale(float3(1.f, 1.f, 1.f))
-		, mbUpdateByMat(false)
+		, mbUpdateByMat(true)
 		, mCB_Transform()
 	{
 	}
@@ -28,6 +28,7 @@ namespace mh
 
 	void Com_Transform::FixedUpdate()
 	{
+		
 		if (true == IsPhysicsObject())
 		{
 			if (true == mbUpdateByMat)
@@ -600,7 +601,7 @@ namespace mh
 			mPosition += _velocity * TimeMgr::DeltaTime();
 		}
 	}
-	void Com_Transform::PushData(Com_Camera* pCamera)
+	void Com_Transform::BindData()
 	{
 		mCB_Transform = {};
 

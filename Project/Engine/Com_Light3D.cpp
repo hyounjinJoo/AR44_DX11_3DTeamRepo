@@ -94,12 +94,12 @@ namespace mh
 
 		if (eLightType::Point == (eLightType)mAttribute.lightType)
 		{
-			tr->SetRelativeScale(float3(mAttribute.radius * 5.f));
+			tr->SetScale(float3(mAttribute.radius * 5.f));
 		}
 
-		float3 position = tr->GetRelativePos();
+		float3 position = tr->GetPosition();
 		mAttribute.position = float4(position.x, position.y, position.z, 1.0f);
-		mAttribute.direction = float4(tr->Forward().x, tr->Forward().y, tr->Forward().z, 0.0f);
+		mAttribute.direction = float4(tr->GetForward().x, tr->GetForward().y, tr->GetForward().z, 0.0f);
 
 		RenderMgr::PushLightAttribute(mAttribute);
 	}

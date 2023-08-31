@@ -53,7 +53,7 @@ namespace mh
 			cameraObj->SetName("MainCamera");
 
 			Com_Transform* tr = cameraObj->AddComponent<Com_Transform>();
-			tr->SetRelativePos(float3(0.0f, 0.0f, -20.0f));
+			tr->SetPosition(float3(0.0f, 0.0f, -20.0f));
 
 			Com_Camera* cameraComp = cameraObj->AddComponent<Com_Camera>();
 			cameraComp->SetProjectionType(define::eProjectionType::Perspective);
@@ -140,7 +140,7 @@ namespace mh
 		{
 			define::tPhysicsInfo info = {};
 			info.eActorType = define::eActorType::Dynamic;
-			info.size = float3(1.f, 1.f, 1.f);
+			info.size = float3(0.5f, 0.5f, 0.5f);
 
 			std::shared_ptr<MeshData> meshdata = ResMgr::Load<MeshData>("Monster.fbx");
 			GameObject* obj = meshdata->Instantiate();
@@ -148,7 +148,7 @@ namespace mh
 			obj->SetLayerType(define::eLayerType::Player);
 			Com_RigidBody* rigid = obj->AddComponent<Com_RigidBody>();
 			rigid->SetPhysical(info);
-			rigid->AddGravity();
+			
 			obj->AddComponent<ICollider3D>();
 			EventMgr::SpawnGameObject(define::eLayerType::Player, obj);
 			obj->AddComponent<Script_Player>();

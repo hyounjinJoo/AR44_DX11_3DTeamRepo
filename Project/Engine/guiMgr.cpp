@@ -242,14 +242,14 @@ namespace gui
 		DebugObject* debugObj = mDebugObjects[(UINT)mesh.type];
 		
 		mh::Com_Transform* tr = debugObj->GetComponent<mh::Com_Transform>();
-		tr->SetRelativePos(mesh.position);
-		tr->SetRelativeRotXYZ(mesh.rotatation);
+		tr->SetPosition(mesh.position);
+		tr->SetRotation(mesh.rotatation);
 		
 
 		if (mesh.type == eColliderType::Rect)
-			tr->SetRelativeScale(mesh.scale);
+			tr->SetScale(mesh.scale);
 		else
-			tr->SetRelativeScale(Vector3(mesh.radius));
+			tr->SetScale(Vector3(mesh.radius));
 
 
 		mh::IRenderer* renderer = debugObj->GetComponent<mh::IRenderer>();
@@ -473,7 +473,7 @@ namespace gui
 
 		MATRIX view = mainCam->GetViewMatrix();
 		MATRIX projection = mainCam->GetProjectionMatrix();
-		MATRIX worldMatrix = targetgameobject->GetComponent<mh::Com_Transform>()->GetWorldMat();
+		MATRIX worldMatrix = targetgameobject->GetComponent<mh::Com_Transform>()->GetWorldMatrix();
 
 		float matrixTranslation[3], matrixRotation[3], matrixScale[3];
 		ImGuizmo::DecomposeMatrixToComponents(&worldMatrix.m[0][0], matrixTranslation, matrixRotation, matrixScale);
@@ -498,7 +498,7 @@ namespace gui
 
 			if (mCurrentGizmoOperation == ImGuizmo::TRANSLATE)
 			{
-				transformComponent->SetRelativePos(position);
+				transformComponent->SetPosition(position);
 			}
 			else if (mCurrentGizmoOperation == ImGuizmo::ROTATE)
 			{
@@ -527,12 +527,12 @@ namespace gui
 				}
 
 				Vector3 axisRotation(x, y, z);
-				transformComponent->SetRelativeRotXYZ(axisRotation);
+				transformComponent->SetRotation(axisRotation);
 
 			}
 			else if (mCurrentGizmoOperation == ImGuizmo::SCALE)
 			{
-				transformComponent->SetRelativeScale(scale);
+				transformComponent->SetScale(scale);
 			}
 			else
 			{

@@ -17,7 +17,7 @@
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
   </PropertyGroup>
   <PropertyGroup>
-    <ShowAllFiles>false</ShowAllFiles>
+    <ShowAllFiles>true</ShowAllFiles>
     <RESOURCE_FILE>Engine.rc</RESOURCE_FILE>
   </PropertyGroup>
 </Project>

@@ -57,7 +57,7 @@ namespace mh
 		Com_Transform* tf = GetOwner()->GetComponent<Com_Transform>();
 
 		// 키 입력에 따른 카메라 이동
-		float3 vPos = tf->GetRelativePos();
+		float3 vPos = tf->GetPosition();
 
 		float fSpeed = mCamSpeed;
 		if (InputMgr::GetKey(eKeyCode::LSHIFT))
@@ -100,44 +100,44 @@ namespace mh
 			mCamera->SetScale(fScale);
 		}
 
-		tf->SetRelativePos(vPos);
+		tf->SetPosition(vPos);
 	}
 
 	void Script_CameraMove::Camera3DMove()
 	{
 		Com_Transform* tf = GetOwner()->GetComponent<Com_Transform>();
 
-		float3 vPos = tf->GetRelativePos();
-		float3 vRot = tf->GetRelativeRotXYZ();
+		float3 vPos = tf->GetPosition();
+		float3 vRot = tf->GetRotation();
 
-		float3 vFront = tf->Forward();
-		float3 vUp = tf->Up();
-		float3 vRight = tf->Right();
+		float3 vFront = tf->GetForward();
+		float3 vUp = tf->GetUp();
+		float3 vRight = tf->GetRight();
 
 		float fSpeed = mCamSpeed;
 
-		//if (InputMgr::GetKey(eKeyCode::LSHIFT))
-		//	fSpeed *= 5.f;
+		if (InputMgr::GetKey(eKeyCode::LSHIFT))
+			fSpeed *= 5.f;
 
-		//if (InputMgr::GetKey(eKeyCode::W))
-		//{
-		//	vPos += TimeMgr::DeltaTime() * vFront * fSpeed;
-		//}
+		if (InputMgr::GetKey(eKeyCode::W))
+		{
+			vPos += TimeMgr::DeltaTime() * vFront * fSpeed;
+		}
 
-		//if (InputMgr::GetKey(eKeyCode::S))
-		//{
-		//	vPos -= TimeMgr::DeltaTime() * vFront * fSpeed;
-		//}
+		if (InputMgr::GetKey(eKeyCode::S))
+		{
+			vPos -= TimeMgr::DeltaTime() * vFront * fSpeed;
+		}
 
-		//if (InputMgr::GetKey(eKeyCode::A))
-		//{
-		//	vPos -= TimeMgr::DeltaTime() * vRight * fSpeed;
-		//}
+		if (InputMgr::GetKey(eKeyCode::A))
+		{
+			vPos -= TimeMgr::DeltaTime() * vRight * fSpeed;
+		}
 
-		//if (InputMgr::GetKey(eKeyCode::D))
-		//{
-		//	vPos += TimeMgr::DeltaTime() * vRight * fSpeed;
-		//}
+		if (InputMgr::GetKey(eKeyCode::D))
+		{
+			vPos += TimeMgr::DeltaTime() * vRight * fSpeed;
+		}
 
 
 
@@ -148,8 +148,8 @@ namespace mh
 			vRot.x -= TimeMgr::DeltaTime() * vMouseDir.y;
 		}
 
-		tf->SetRelativePos(vPos);
-		tf->SetRelativeRotXYZ(vRot);
+		tf->SetPosition(vPos);
+		tf->SetRotation(vRot);
 	}
 }
 
