@@ -4,6 +4,7 @@
 #include "GameObject.h"
 #include "ContactCallback.h"
 #include "Com_RigidBody.h"
+#include "TimeMgr.h"
 
 namespace mh
 {
@@ -59,6 +60,10 @@ namespace mh
 	}
 	void Physics::Update()
 	{
+		if (mScene->userData == nullptr)
+			return;
+		mScene->simulate(TimeMgr::DeltaTime());
+		mScene->fetchResults(true);
 	}
 	void Physics::Render()
 	{
@@ -72,9 +77,34 @@ namespace mh
 	}
 	void Physics::RemoveActor(GameObject* _gameObject)
 	{
+		AssertEx(_gameObject, L"Physics::RemoveActor() - GameObject is nullptr");
+		AssertEx(_gameObject->GetComponent<Com_RigidBody>(), L"Physics::RemoveActor() - RigidBody is nullptr");
+		AssertEx(_gameObject->GetComponent<Com_RigidBody>()->IsAppliedPhysics(), L"Physics::RemoveActor() - Is not applied physics");
+		mScene->removeActor(*_gameObject->GetComponent<Com_RigidBody>()->GetActor());
 	}
 	PxFilterFlags Physics::PlayerFilterShader(PxFilterObjectAttributes _attributes0, PxFilterData _filterData0, PxFilterObjectAttributes _attributes1, PxFilterData _filterData1, PxPairFlags& _pairFlags, const void* _constantBlock, PxU32 _constantBlockSize)
 	{
-		return PxFilterFlags();
+		// 트리거와 트리거 또는 트리거와 충돌하는 물체를 구분하여 처리합니다.
+		if (PxFilterObjectIsTrigger(_attributes0) || PxFilterObjectIsTrigger(_attributes1))
+		{
+			if ((_filterData1.word1 & _filterData0.word0) || (_filterData0.word1 & _filterData1.word0))
+			{
+				// 트리거와 충돌하는 물체 모두 OnTrigger 이벤트를 처리하도록 합니다.
+				_pairFlags = PxPairFlag::eTRIGGER_DEFAULT | PxPairFlag::eNOTIFY_TOUCH_FOUND | PxPairFlag::eNOTIFY_TOUCH_LOST;
+				return PxFilterFlag::eDEFAULT;
+			}
+		}
+
+		// 충돌하는 물체의 경우 충돌 플래그만 생성합니다.
+		_pairFlags = PxPairFlag::eCONTACT_DEFAULT;
+
+		// 두 필터가 서로 충돌플래그가 세워져 있을 경우
+		if ((_filterData0.word0 & _filterData1.word1) || (_filterData1.word0 & _filterData0.word1))
+		{
+			_pairFlags |= PxPairFlag::eNOTIFY_TOUCH_FOUND | PxPairFlag::eNOTIFY_TOUCH_LOST;
+			return PxFilterFlag::eDEFAULT;
+		}
+
+		return PxFilterFlag::eKILL;
 	}
 }

@@ -1,5 +1,4 @@
 #pragma once
-
 #if __has_include("DirectXMath.h")
 // In this case, DirectXMath is coming from Windows SDK.
 //	It is better to use this on Windows as some Windows libraries could depend on the same 
@@ -9,7 +8,10 @@
 #include <DirectXCollision.h>
 #endif
 
+#ifdef PX_PHYSICS_API_H
 #include <PhysX/PxPhysicsAPI.h>
+#endif
+
 
 using namespace DirectX;
 using namespace DirectX::PackedVector;
@@ -252,12 +254,14 @@ namespace mh::math
         Vector3(const struct PxVec3& V) noexcept;
         explicit Vector3(const XMVECTORF32& F) noexcept { this->x = F.f[0]; this->y = F.f[1]; this->z = F.f[2]; }
         
+#ifdef PX_PHYSICS_API_H
         Vector3(const physx::PxVec3& V)
         {
             x = V.x;
             y = V.y;
             z = V.z;
         }
+#endif
 
         Vector3(const Vector3&) = default;
         Vector3& operator=(const Vector2& _v2) { this->x = _v2.x; this->y = _v2.y; return *this; }
@@ -282,6 +286,7 @@ namespace mh::math
         Vector3& operator*= (float S) noexcept;
         Vector3& operator/= (float S) noexcept;
 
+#ifdef PX_PHYSICS_API_H
         operator physx::PxVec3()
         {
             return physx::PxVec3(x, y, z);
@@ -291,6 +296,7 @@ namespace mh::math
         {
             return physx::PxVec3(x, y, z);
         }
+#endif
 
         // Unary operators
         Vector3 operator+ () const noexcept { return *this; }
@@ -743,6 +749,7 @@ namespace mh::math
         Quaternion(const XMFLOAT4& q) noexcept { this->x = q.x; this->y = q.y; this->z = q.z; this->w = q.w; }
         explicit Quaternion(const XMVECTORF32& F) noexcept { this->x = F.f[0]; this->y = F.f[1]; this->z = F.f[2]; this->w = F.f[3]; }
 
+#ifdef PX_PHYSICS_API_H
         Quaternion(const physx::PxQuat& q)
         {
             x = q.x;
@@ -750,6 +757,7 @@ namespace mh::math
             z = q.z;
             w = q.w;
         }
+#endif
 
         Quaternion(const Quaternion&) = default;
         Quaternion& operator=(const Quaternion&) = default;

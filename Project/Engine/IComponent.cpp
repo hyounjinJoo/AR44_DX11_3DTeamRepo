@@ -1,7 +1,7 @@
 #include "PCH_Engine.h"
 
 #include "IComponent.h"
-
+#include "GameObject.h"
 #include "json-cpp\jsonSaveLoad.h"
 
 namespace mh

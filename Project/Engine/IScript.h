@@ -15,7 +15,7 @@ namespace mh
 
 		virtual void Init() override {};
 		virtual void Update() override {};
-		virtual void FixedUpdate() final {};
+		virtual void FixedUpdate() override {};
 
 		virtual void OnCollisionEnter(ICollider2D* _collider) {};
 		virtual void OnCollisionStay(ICollider2D* _collider) {};

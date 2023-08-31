@@ -1,16 +1,18 @@
 #include "PCH_Engine.h"
-
 #include "Script_Player.h"
-#include "Com_Transform.h"
-#include "GameObject.h"
+
 #include "InputMgr.h"
 #include "TimeMgr.h"
-#include "Com_Animator2D.h"
+
+#include "GameObject.h"
+#include "Com_Transform.h"
+#include "Com_RigidBody.h"
 
 namespace mh
 {
 	Script_Player::Script_Player()
 		: IScript()
+		, mMoveSpeed(10.0f)
 	{
 	}
 
@@ -24,38 +26,43 @@ namespace mh
 
 	void Script_Player::Update()
 	{
+
+	}
+
+	void Script_Player::FixedUpdate()
+	{
 		Com_Transform* tr = GetOwner()->GetComponent<Com_Transform>();
+		Com_RigidBody* rb = GetOwner()->GetComponent<Com_RigidBody>();
 
-		if (InputMgr::GetKey(eKeyCode::RIGHT))
+		if (InputMgr::GetKey(eKeyCode::H))
 		{
-			float3 pos = tr->GetRelativePos();
-			pos.x += 60.0f * TimeMgr::DeltaTime();
-			tr->SetRelativePos(pos);
-		}
-		if (InputMgr::GetKey(eKeyCode::LEFT))
-		{
-			float3 pos = tr->GetRelativePos();
-			pos.x -= 60.0f * TimeMgr::DeltaTime();
-			tr->SetRelativePos(pos);
+			tr->SetRelativePos(float3(0.0f, 0.0f, 0.f));
 		}
 
-		if (InputMgr::GetKey(eKeyCode::DOWN))
+		if (InputMgr::GetKey(eKeyCode::W))
 		{
-			float rotY = tr->GetRelativeRotY();
-			rotY -= 60.0f * TimeMgr::DeltaTime();
-			tr->SetRelativeRotY(rotY);
-		}
-		if (InputMgr::GetKey(eKeyCode::UP))
-		{
-			float rotY = tr->GetRelativeRotY();
-			rotY += 60.0f * TimeMgr::DeltaTime();
-			tr->SetRelativeRotY(rotY);
+			rb->AddForce(float3(mMoveSpeed, 0.0f, 0.0f));
+
 		}
 
-		Com_Animator2D* animator = GetOwner()->GetComponent<Com_Animator2D>();
-		if (InputMgr::GetKey(eKeyCode::N_1))
+		if (InputMgr::GetKey(eKeyCode::S))
 		{
-			animator->Play("MoveDown");
+			rb->SetVelocity(define::eAxis3D::Z, -mMoveSpeed);
+		}
+
+		if (InputMgr::GetKey(eKeyCode::A))
+		{
+			rb->SetVelocity(define::eAxis3D::X, -mMoveSpeed);
+		}
+
+		if (InputMgr::GetKey(eKeyCode::D))
+		{
+			rb->SetVelocity(define::eAxis3D::X, mMoveSpeed);
+		}
+
+		if (InputMgr::GetKey(eKeyCode::SPACE))
+		{
+			rb->SetVelocity(define::eAxis3D::Y, mMoveSpeed);
 		}
 	}
 

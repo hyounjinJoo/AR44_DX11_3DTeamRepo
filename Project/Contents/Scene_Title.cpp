@@ -1,6 +1,7 @@
 #include "PCH_Contents.h"
 #include "Scene_Title.h"
 
+#include <Engine/defines.h>
 #include <Engine/ResMgr.h>
 #include <Engine/Com_Transform.h>
 #include <Engine/Com_Renderer_Mesh.h>
@@ -13,7 +14,7 @@
 #include <Engine/GridScript.h>
 #include <Engine/Object.h>
 #include <Engine/InputMgr.h>
-#include <Engine/ICollider2D.h>
+#include <Engine/ICollider3D.h>
 #include <Engine/Player.h>
 #include <Engine/Monster.h>
 #include <Engine/CollisionMgr.h>
@@ -24,6 +25,7 @@
 #include <Engine/Com_Renderer_ParticleSystem.h>
 #include <Engine/Prefab.h>
 #include <Engine/Com_Renderer_UIBase.h>
+#include <Engine/Com_RigidBody.h>
 #include <Contents/Script_UIBase.h>
 #include <Contents/Script_UIGauge.h>
 
@@ -44,7 +46,7 @@ namespace mh
 	void Scene_Title::Init()
 	{
 		IScene::Init();
-
+		CollisionMgr::SetCollisionGroup(define::eLayerType::Player, define::eLayerType::Ground);
 		{
 			// Main Com_Camera Game Object
 			GameObject* cameraObj = EventMgr::SpawnGameObject(eLayerType::Com_Camera);
@@ -63,87 +65,108 @@ namespace mh
 			RenderMgr::SetMainCamera(cameraComp);
 		}
 
-		{
-			// Main Com_Camera Game Object
-			GameObject* cameraObj = EventMgr::SpawnGameObject(eLayerType::Com_Camera);
-			cameraObj->SetName("UICam");
+		//{
+		//	// Main Com_Camera Game Object
+		//	GameObject* cameraObj = EventMgr::SpawnGameObject(eLayerType::Com_Camera);
+		//	cameraObj->SetName("UICam");
 
-			Com_Transform* tr = cameraObj->AddComponent<Com_Transform>();
-			tr->SetRelativePos(float3(0.0f, 0.0f, -20.0f));
+		//	Com_Transform* tr = cameraObj->AddComponent<Com_Transform>();
+		//	tr->SetRelativePos(float3(0.0f, 0.0f, -20.0f));
 
-			Com_Camera* cameraComp = cameraObj->AddComponent<Com_Camera>();
-			cameraComp->SetProjectionType(define::eProjectionType::Orthographic);
+		//	Com_Camera* cameraComp = cameraObj->AddComponent<Com_Camera>();
+		//	cameraComp->SetProjectionType(define::eProjectionType::Orthographic);
 
-			//다른 레이어는 전부 끈다음
-			cameraComp->DisableLayerMasks();
+		//	//다른 레이어는 전부 끈다음
+		//	cameraComp->DisableLayerMasks();
 
-			//UI 레이어만 촬영하도록 설정한다.
-			cameraComp->TurnLayerMask(eLayerType::UI, true);
-		}
-
-
-		{
-			GameObject* baseUI = EventMgr::SpawnGameObject(eLayerType::UI);
-			baseUI->SetName("BaseUI");
-			Com_Transform* tr = baseUI->AddComponent<Com_Transform>();
-			tr->SetSize(float3(100.f, 100.f, 1.f));
-
-			//UI 스크립트 추가
-			//Base를 추가하게 되면 단순 이미지 한 장을 출력하는 UI가 생성됨
-			Script_UIBase* ui = baseUI->AddComponent<Script_UIBase>();
-
-			std::shared_ptr<Texture> smileTex = ResMgr::Load<Texture>("Smile.png");
-			ui->SetTexture(define::eTextureSlot::Tex_0, smileTex);
-		}
+		//	//UI 레이어만 촬영하도록 설정한다.
+		//	cameraComp->TurnLayerMask(eLayerType::UI, true);
+		//}
 
 
-		{
-			GameObject* GaugeUI = EventMgr::SpawnGameObject(eLayerType::UI);
-			GaugeUI->SetName("GaugeUI");
-			Com_Transform* tr = GaugeUI->AddComponent<Com_Transform>();
-			tr->SetSize(float3(100.f, 10.f, 1.f));
-			tr->SetRelativePosXY(float2(100.f, 100.f));
+		//{
+		//	GameObject* baseUI = EventMgr::SpawnGameObject(eLayerType::UI);
+		//	baseUI->SetName("BaseUI");
+		//	Com_Transform* tr = baseUI->AddComponent<Com_Transform>();
+		//	tr->SetSize(float3(100.f, 100.f, 1.f));
+
+		//	//UI 스크립트 추가
+		//	//Base를 추가하게 되면 단순 이미지 한 장을 출력하는 UI가 생성됨
+		//	Script_UIBase* ui = baseUI->AddComponent<Script_UIBase>();
+
+		//	std::shared_ptr<Texture> smileTex = ResMgr::Load<Texture>("Smile.png");
+		//	ui->SetTexture(define::eTextureSlot::Tex_0, smileTex);
+		//}
 
 
-			//게이지 UI 생성(마찬가지로 스크립트만 추가하면 Gauge UI 모드로 세팅이 됨)
-			Script_UIGauge* gauge = GaugeUI->AddComponent<Script_UIGauge>();
+		//{
+		//	GameObject* GaugeUI = EventMgr::SpawnGameObject(eLayerType::UI);
+		//	GaugeUI->SetName("GaugeUI");
+		//	Com_Transform* tr = GaugeUI->AddComponent<Com_Transform>();
+		//	tr->SetSize(float3(100.f, 10.f, 1.f));
+		//	tr->SetRelativePosXY(float2(100.f, 100.f));
 
 
-			gauge->SetGaugeRemain(0.5f);
-			std::shared_ptr<Texture> magenta = ResMgr::Load<Texture>("Durability_3.png");
-			gauge->SetTexture(define::eTextureSlot::Tex_0, magenta);
-		}
+		//	//게이지 UI 생성(마찬가지로 스크립트만 추가하면 Gauge UI 모드로 세팅이 됨)
+		//	Script_UIGauge* gauge = GaugeUI->AddComponent<Script_UIGauge>();
 
-		//게이지 UI는 단순하게 쉐이더를 교체해주는 것만으로도 설정이 가능하므로 BaseUI 컴포넌트를 쓰고, 쉐이더만 교체
-		{
-			GameObject* customGauge = EventMgr::SpawnGameObject(eLayerType::UI);
-			customGauge->SetName("GaugeUI");
-			Com_Transform* tr = customGauge->AddComponent<Com_Transform>();
 
-			//게이지 UI 생성(마찬가지로 스크립트만 추가하면 Gauge UI 모드로 세팅이 됨)
-			Script_UIGauge* gauge = customGauge->AddComponent<Script_UIGauge>();
-			gauge->SetGaugeRemain(0.5f);
+		//	gauge->SetGaugeRemain(0.5f);
+		//	std::shared_ptr<Texture> magenta = ResMgr::Load<Texture>("Durability_3.png");
+		//	gauge->SetTexture(define::eTextureSlot::Tex_0, magenta);
+		//}
 
-			//커스텀한 게이지 재질을 직접 수동으로 설정해줄수도 있음
-			//커스텀 픽셀 쉐이더 + 알파 블렌딩
-			std::shared_ptr<Material> mtrl = ResMgr::Load<Material>("UI/CustomGauge.json");
-			gauge->SetCustomMaterial(mtrl);
+		////게이지 UI는 단순하게 쉐이더를 교체해주는 것만으로도 설정이 가능하므로 BaseUI 컴포넌트를 쓰고, 쉐이더만 교체
+		//{
+		//	GameObject* customGauge = EventMgr::SpawnGameObject(eLayerType::UI);
+		//	customGauge->SetName("GaugeUI");
+		//	Com_Transform* tr = customGauge->AddComponent<Com_Transform>();
 
-			tr->SetSize(float3(100.f, 30.f, 1.f));
-			tr->SetRelativePosXY(float2(200.f, 200.f));
-		}
+		//	//게이지 UI 생성(마찬가지로 스크립트만 추가하면 Gauge UI 모드로 세팅이 됨)
+		//	Script_UIGauge* gauge = customGauge->AddComponent<Script_UIGauge>();
+		//	gauge->SetGaugeRemain(0.5f);
+
+		//	//커스텀한 게이지 재질을 직접 수동으로 설정해줄수도 있음
+		//	//커스텀 픽셀 쉐이더 + 알파 블렌딩
+		//	std::shared_ptr<Material> mtrl = ResMgr::Load<Material>("UI/CustomGauge.json");
+		//	gauge->SetCustomMaterial(mtrl);
+
+		//	tr->SetSize(float3(100.f, 30.f, 1.f));
+		//	tr->SetRelativePosXY(float2(200.f, 200.f));
+		//}
 
 
 		
 		{
-			std::shared_ptr<MeshData> meshdata = ResMgr::Load<MeshData>("House.fbx");
-			GameObject* house = meshdata->Instantiate();
+			define::tPhysicsInfo info = {};
+			info.eActorType = define::eActorType::Dynamic;
+			info.size = float3(1.f, 1.f, 1.f);
 
-
-			//house->AddComponent<Com_Transform>();
-
-			EventMgr::SpawnGameObject(define::eLayerType::Player, house);
+			std::shared_ptr<MeshData> meshdata = ResMgr::Load<MeshData>("Monster.fbx");
+			GameObject* obj = meshdata->Instantiate();
+			obj->SetName("obj");
+			obj->SetLayerType(define::eLayerType::Player);
+			Com_RigidBody* rigid = obj->AddComponent<Com_RigidBody>();
+			rigid->SetPhysical(info);
+			rigid->AddGravity();
+			obj->AddComponent<ICollider3D>();
+			EventMgr::SpawnGameObject(define::eLayerType::Player, obj);
+			obj->AddComponent<Script_Player>();
 		}
+
+		//{
+		//	define::tPhysicsInfo info = {};
+		//	info.eActorType = define::eActorType::Static;
+		//	info.size = float3(5.f, 5.f, 1.f);
+
+		//	std::shared_ptr<Mesh> mesh = ResMgr::Load<Mesh>(define::strKey::Default::mesh::CubeMesh);
+		//	GameObject* obj = mesh->
+		//	obj->AddComponent<Com_Renderer_Mesh>()->SetMesh(mesh);
+		//	Com_RigidBody* rigid = obj->AddComponent<Com_RigidBody>();
+		//	rigid->SetPhysical(info);
+		//	obj->AddComponent<ICollider3D>();
+		//	EventMgr::SpawnGameObject(define::eLayerType::Ground, obj);
+		//}
 	}
 	void Scene_Title::Update()
 	{

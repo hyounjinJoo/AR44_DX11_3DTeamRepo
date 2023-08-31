@@ -27,7 +27,7 @@ namespace mh
 		template<typename T>
 		inline T* GetActor() const
 		{
-			T* pActor = mpActor->is<T>();
+			T* pActor = mActor->is<T>();
 			assert(pActor);
 			return pActor;
 		}
@@ -41,7 +41,7 @@ namespace mh
 		void			   SetPhysicsTransform(physx::PxTransform _transform);
 
 		define::eActorType GetActorType() { return mPhysicsInfo.eActorType; }
-		define::eGeometryType GetGeometryType() { return mPhysicsInfo.eGeometryType; }
+		define::eGeometryType GetGeometryType() { return mPhysicsInfo.eGeomType; }
 		float3 GetGeometrySize() { return mPhysicsInfo.size * 2.f; }
 		const physx::PxFilterData& GetFilterData() { return mPhysicsInfo.filterData; }
 		void SetOtherLayerInFilterData(define::eLayerType _eOtherLayer) { mPhysicsInfo.filterData.word1 |= 1 << static_cast<int>(_eOtherLayer); }

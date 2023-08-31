@@ -24,7 +24,7 @@
 #define CLONE_DISABLE(_type) virtual _type* Clone() override { ERROR_MESSAGE_W(L"Clone할 수 없거나 Clone함수를 재정의하지 않은 클래스입니다."); return nullptr; }
 
 
-#define SAFE_DELETE(p) { if(p) { delete (p); (p)=NULL; } }
+//#define SAFE_DELETE(p) { if(p) { delete (p); (p)=NULL; } }
 #define GLOBAL_GRAVITY Application::GetPhysics()->GetGravity()
 #define PHYSICS Application::GetPhysics()->GetPhysics()
-#define GET_SINGLE(type) type::GetInstance()
+

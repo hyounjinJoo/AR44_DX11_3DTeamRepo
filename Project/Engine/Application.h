@@ -6,10 +6,11 @@
 #include "SimpleMath.h"
 #include "define_Struct.h"
 
-#include "Physics.h"
+
 
 namespace mh
 {
+	class Physics;
 	class Application
 	{
 	public:

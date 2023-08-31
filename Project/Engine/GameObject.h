@@ -256,6 +256,10 @@ namespace mh
 		{
 			return eComponentType::Collider;
 		}
+		else if constexpr (std::is_base_of_v<Com_RigidBody, T>)
+		{
+			return eComponentType::RigidBody;
+		}
 		else if constexpr (std::is_base_of_v<IAnimator, T>)
 		{
 			return eComponentType::Animator;

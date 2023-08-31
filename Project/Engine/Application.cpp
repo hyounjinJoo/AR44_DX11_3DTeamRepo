@@ -15,12 +15,14 @@
 #include "PathMgr.h"
 #include "EventMgr.h"
 #include "guiMgr.h"
+#include "Physics.h"
 
 namespace mh
 {
 	using namespace mh::define;
 
 	std::vector<std::function<void()>> Application::mEndFrameFuncs;
+	Physics* Application::mPhysics{};
 
 
 	HWND			Application::mHwnd{};
@@ -65,7 +67,7 @@ namespace mh
 		TimeMgr::Init();
 		InputMgr::Init();
 
-		CollisionMgr::Init();
+		//CollisionMgr::Init();
 		
 		SceneMgr::Init();
 
@@ -82,15 +84,17 @@ namespace mh
 	{
 		TimeMgr::Update();
 		InputMgr::Update();
-		CollisionMgr::Update();
+		//CollisionMgr::Update();
 		SceneMgr::Update();
+		
 	}
 
 	// GPU update
 	void Application::FixedUpdate()
 	{
-		CollisionMgr::FixedUpdate();
+		//CollisionMgr::FixedUpdate();
 		SceneMgr::FixedUpdate();
+		mPhysics->Update();
 	}
 
 	void Application::Render()
@@ -139,6 +143,7 @@ namespace mh
 
 	void Application::Release()
 	{
+		delete mPhysics;
 		//EndFrame();
 		ReleaseDC(mHwnd, mHdc);
 		mbInitialized = false;

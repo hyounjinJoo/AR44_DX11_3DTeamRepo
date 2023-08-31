@@ -2,6 +2,7 @@
 
 #include <limits.h>
 
+
 namespace mh
 {
 	enum class eResult
@@ -43,12 +44,16 @@ namespace mh
 			Grid,
 			Monster,
 			Player,
-
+			Ground,
 			tParticle,
 			PostProcess,
 			UI,
 
 			END
+		};
+		enum
+		{
+			LAYER_TYPE_COUNT = static_cast<int>(eLayerType::END),
 		};
 
 		enum class eProjectionType
@@ -103,11 +108,6 @@ namespace mh
 		{
 			StaticModel,
 			DynamicModel,
-		};
-
-		enum
-		{
-			LAYER_TYPE_COUNT = static_cast<int>(eLayerType::END),
 		};
 	}
 }

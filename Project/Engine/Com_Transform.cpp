@@ -4,6 +4,7 @@
 #include "GameObject.h"
 #include "RenderMgr.h"
 #include "Com_Camera.h"
+#include "Com_RigidBody.h"
 
 #include "ConstBuffer.h"
 #include "Application.h"
@@ -312,5 +313,29 @@ namespace mh
 		ConstBuffer* cb = RenderMgr::GetConstBuffer(eCBType::Transform);
 		cb->SetData(&mCB_Transform);
 		cb->BindData(eShaderStageFlag::ALL);
+	}
+
+	void Com_Transform::Move(const float3& _velocity)
+	{
+		if (true == IsPhysicsObject())
+		{
+			Com_RigidBody* rigidBody = GetOwner()->GetComponent<Com_RigidBody>();
+			physx::PxTransform transform = rigidBody->GetPhysicsTransform();
+			transform.p += _velocity * TimeMgr::DeltaTime();
+
+			define::eActorType eActorType = rigidBody->GetActorType();
+
+			if (define::eActorType::Kinematic == eActorType)
+				rigidBody->GetDynamicActor()->setKinematicTarget(transform);
+			else if (define::eActorType::Dynamic == eActorType)
+				rigidBody->GetDynamicActor()->setGlobalPose(transform);
+			else
+				AssertEx(false, L"Transform::Move() - Static Actor에 대한 Move 호출");
+		}
+
+		else
+		{
+			mPosRelative += _velocity * TimeMgr::DeltaTime();
+		}
 	}
 }

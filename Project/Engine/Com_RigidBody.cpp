@@ -4,6 +4,7 @@
 #include "Com_Transform.h"
 #include "GameObject.h"
 #include "CollisionMgr.h"
+#include "Physics.h"
 
 
 namespace mh
@@ -51,7 +52,7 @@ namespace mh
 	{
 		if (true == mbAppliedPhysics)
 		{
-			PxRigidActor* pActor = mActor->is<PxRigidActor>();
+			physx::PxRigidActor* pActor = mActor->is<physx::PxRigidActor>();
 			pActor->userData = nullptr;
 		}
 	}
@@ -64,7 +65,7 @@ namespace mh
 			define::tPhysicsInfo info = {};
 			info.size = GetGeometrySize();
 			info.eActorType = mPhysicsInfo.eActorType;
-			info.eGeometryType = mPhysicsInfo.eGeometryType;
+			info.eGeomType = mPhysicsInfo.eGeomType;
 			info.massProperties = mPhysicsInfo.massProperties;
 
 			rigidBody->SetPhysical(info);
@@ -108,13 +109,13 @@ namespace mh
 	physx::PxTransform Com_RigidBody::GetPhysicsTransform()
 	{
 		AssertEx(mbAppliedPhysics, L"RigidBody::GetPhysicsTransform() - 물리가 들어가지 않은 오브젝트에 대한 GetPhysicsTransform 호출");
-		return GetActor<PxRigidActor>()->getGlobalPose();
+		return GetActor<physx::PxRigidActor>()->getGlobalPose();
 	}
 	void Com_RigidBody::SetPhysicsTransform(physx::PxTransform _transform)
 	{
 		//_transform.p.z = -_transform.p.z;
 		AssertEx(mbAppliedPhysics, L"RigidBody::SetPhysicsTransform() - 물리가 들어가지 않은 오브젝트에 대한 SetPhysicsTransform 호출");
-		GetActor<PxRigidActor>()->setGlobalPose(_transform);
+		GetActor<physx::PxRigidActor>()->setGlobalPose(_transform);
 	}
 	void Com_RigidBody::SetVelocity(const float3& _velocity)
 	{
@@ -248,7 +249,7 @@ namespace mh
 		if (true == mbAppliedPhysics)
 		{
 			AssertEx(define::eActorType::Dynamic == mPhysicsInfo.eActorType, L"RigidBody::ApplyGravity() - Dynamic Actor가 아닌 물체에 대한 ApplyGravity() 호출 시도");
-			GetDynamicActor()->setActorFlag(PxActorFlag::eDISABLE_GRAVITY, false);
+			GetDynamicActor()->setActorFlag(physx::PxActorFlag::eDISABLE_GRAVITY, false);
 		}
 
 		mbAppliedGravity = true;
@@ -258,7 +259,7 @@ namespace mh
 		if (true == mbAppliedPhysics)
 		{
 			AssertEx(define::eActorType::Dynamic == mPhysicsInfo.eActorType, L"RigidBody::RemoveGravity() - Dynamic Actor가 아닌 물체에 대한 RemoveGravity() 호출 시도");
-			GetDynamicActor()->setActorFlag(PxActorFlag::eDISABLE_GRAVITY, true);
+			GetDynamicActor()->setActorFlag(physx::PxActorFlag::eDISABLE_GRAVITY, true);
 		}
 
 		mbAppliedGravity = false;
@@ -266,17 +267,17 @@ namespace mh
 	void Com_RigidBody::SetLinearDamping(float _damping)
 	{
 		AssertEx(define::eActorType::Dynamic == mPhysicsInfo.eActorType, L"RigidBody::SetLinearDamping() - Dynamic Actor가 아닌 물체에 대한 SetLinearDamping() 호출 시도");
-		GetActor<PxRigidDynamic>()->setLinearDamping(_damping);
+		GetActor<physx::PxRigidDynamic>()->setLinearDamping(_damping);
 	}
 	void Com_RigidBody::SetSimulationShapeFlag(bool _bFlag)
 	{
 		AssertEx(mbAppliedPhysics, L"RigidBody::SetSimulationShapeFlag() - 물리가 들어가지 않은 오브젝트에 대한 SetSimulationShapeFlag 호출");
-		mShape->setFlag(PxShapeFlag::eSIMULATION_SHAPE, _bFlag);
+		mShape->setFlag(physx::PxShapeFlag::eSIMULATION_SHAPE, _bFlag);
 	}
 	void Com_RigidBody::SetTriggerShapeFlag(bool _bFlag)
 	{
 		AssertEx(mbAppliedPhysics, L"RigidBody::SetTriggerShapeFlag() - 물리가 들어가지 않은 오브젝트에 대한 SetTriggerShapeFlag 호출");
-		mShape->setFlag(PxShapeFlag::eTRIGGER_SHAPE, _bFlag);
+		mShape->setFlag(physx::PxShapeFlag::eTRIGGER_SHAPE, _bFlag);
 	}
 	void Com_RigidBody::SetActorInSceneFlag(bool _bFlag)
 	{
@@ -291,29 +292,29 @@ namespace mh
 			*GetDynamicActor(),
 			_force,
 			GetOwner()->GetComponent<Com_Transform>()->GetRelativePos(),
-			PxForceMode::eIMPULSE
+			physx::PxForceMode::eIMPULSE
 		);
 	}
 	void Com_RigidBody::CreateBoxGeometry()
 	{
-		mPhysicsInfo.pGeometries = new Geometries(mPhysicsInfo.eGeometryType, mPhysicsInfo.size);
+		mPhysicsInfo.pGeometries = new Geometries(mPhysicsInfo.eGeomType, mPhysicsInfo.size);
 	}
 	void Com_RigidBody::CreateCapsuleGeometry()
 	{
-		mPhysicsInfo.pGeometries = new Geometries(mPhysicsInfo.eGeometryType, mPhysicsInfo.size.x, mPhysicsInfo.size.y);
+		mPhysicsInfo.pGeometries = new Geometries(mPhysicsInfo.eGeomType, mPhysicsInfo.size.x, mPhysicsInfo.size.y);
 	}
 	void Com_RigidBody::CreatePlaneGeometry()
 	{
-		mPhysicsInfo.pGeometries = new Geometries(mPhysicsInfo.eGeometryType);
+		mPhysicsInfo.pGeometries = new Geometries(mPhysicsInfo.eGeomType);
 	}
 	void Com_RigidBody::CreateSphereGeometry()
 	{
-		mPhysicsInfo.pGeometries = new Geometries(mPhysicsInfo.eGeometryType, mPhysicsInfo.size.x);
+		mPhysicsInfo.pGeometries = new Geometries(mPhysicsInfo.eGeomType, mPhysicsInfo.size.x);
 	}
 	void Com_RigidBody::CreateGeometry()
 	{
 		mPhysicsInfo.size /= 2.f;
-		switch (mPhysicsInfo.eGeometryType)
+		switch (mPhysicsInfo.eGeomType)
 		{
 		case define::eGeometryType::Box:
 			CreateBoxGeometry();
@@ -336,19 +337,19 @@ namespace mh
 	}
 	void Com_RigidBody::CreateShape()
 	{
-		switch (mPhysicsInfo.eGeometryType)
+		switch (mPhysicsInfo.eGeomType)
 		{
 		case define::eGeometryType::Box:
-			mShape = PxRigidActorExt::createExclusiveShape(*mActor->is<PxRigidActor>(), mPhysicsInfo.pGeometries->boxGeom, *mpMaterial);
+			mShape = physx::PxRigidActorExt::createExclusiveShape(*mActor->is<physx::PxRigidActor>(), mPhysicsInfo.pGeometries->boxGeom, *mMaterial);
 			break;
 		case define::eGeometryType::Capsule:
-			mShape = PxRigidActorExt::createExclusiveShape(*mActor->is<PxRigidActor>(), mPhysicsInfo.pGeometries->capsuleGeom, *mpMaterial);
+			mShape = physx::PxRigidActorExt::createExclusiveShape(*mActor->is<physx::PxRigidActor>(), mPhysicsInfo.pGeometries->capsuleGeom, *mMaterial);
 			break;
 		case define::eGeometryType::Sphere:
-			mShape = PxRigidActorExt::createExclusiveShape(*mActor->is<PxRigidActor>(), mPhysicsInfo.pGeometries->sphereGeom, *mpMaterial);
+			mShape = physx::PxRigidActorExt::createExclusiveShape(*mActor->is<physx::PxRigidActor>(), mPhysicsInfo.pGeometries->sphereGeom, *mMaterial);
 			break;
 		case define::eGeometryType::Plane:
-			mShape = PxRigidActorExt::createExclusiveShape(*mActor->is<PxRigidActor>(), mPhysicsInfo.pGeometries->planeGeom, *mpMaterial);
+			mShape = physx::PxRigidActorExt::createExclusiveShape(*mActor->is<physx::PxRigidActor>(), mPhysicsInfo.pGeometries->planeGeom, *mMaterial);
 			break;
 		}
 
@@ -359,16 +360,16 @@ namespace mh
 		switch (mPhysicsInfo.eActorType)
 		{
 		case define::eActorType::Dynamic:
-			mActor = PHYSICS->createRigidDynamic(PxTransform(GetOwner()->GetComponent<Com_Transform>()->GetRelativePos()));
+			mActor = PHYSICS->createRigidDynamic(physx::PxTransform(GetOwner()->GetComponent<Com_Transform>()->GetRelativePos()));
 			break;
 
 		case define::eActorType::Static:
-			mActor = PHYSICS->createRigidStatic(PxTransform(GetOwner()->GetComponent<Com_Transform>()->GetRelativePos()));
+			mActor = PHYSICS->createRigidStatic(physx::PxTransform(GetOwner()->GetComponent<Com_Transform>()->GetRelativePos()));
 			break;
 
 		case define::eActorType::Kinematic:
-			mActor = PHYSICS->createRigidDynamic(PxTransform(GetOwner()->GetComponent<Com_Transform>()->GetRelativePos()));
-			mActor->is<PxRigidDynamic>()->setRigidBodyFlag(PxRigidBodyFlag::eKINEMATIC, true);
+			mActor = PHYSICS->createRigidDynamic(physx::PxTransform(GetOwner()->GetComponent<Com_Transform>()->GetRelativePos()));
+			mActor->is<physx::PxRigidDynamic>()->setRigidBodyFlag(physx::PxRigidBodyFlag::eKINEMATIC, true);
 			break;
 		}
 
@@ -382,12 +383,12 @@ namespace mh
 	}
 	void Com_RigidBody::InitializeActor()
 	{
-		PxRigidActor* pActor = mActor->is<PxRigidActor>();
+		physx::PxRigidActor* pActor = mActor->is<physx::PxRigidActor>();
 		pActor->userData = GetOwner();
 
 		mPhysicsInfo.filterData.word0 = 1 << static_cast<int>(GetOwner()->GetLayerType());
-		// 여기부터 시작
-		std::bitset<LAYER_TYPE_COUNT> collisionGroup = GET_SINGLE(CollisionMgr)->GetCollisionGroup(GetOwner()->GetLayerType());
+
+		std::bitset<LAYER_TYPE_COUNT> collisionGroup = CollisionMgr::GetCollisionGroup(GetOwner()->GetLayerType());
 
 		for (int i = 0; i < LAYER_TYPE_COUNT; ++i)
 		{
@@ -396,8 +397,8 @@ namespace mh
 		}
 
 		mShape->setSimulationFilterData(mPhysicsInfo.filterData);
-		PxVec3 myPos = GetOwner()->GetComponent<Com_Transform>()->GetRelativePos();
-		pActor->setGlobalPose(PxTransform(myPos));
+		physx::PxVec3 myPos = GetOwner()->GetComponent<Com_Transform>()->GetRelativePos();
+		pActor->setGlobalPose(physx::PxTransform(myPos));
 
 		switch (mPhysicsInfo.eActorType)
 		{

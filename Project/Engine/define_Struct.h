@@ -5,7 +5,7 @@
 
 #include "DefaultShader/SH_CommonStruct.hlsli"
 #include "SimpleMath.h"
-
+#include "define_Enum.h"
 #include <fbxsdk/core/base/fbxtime.h>
 
 //C++ 전용 '구조체' 모음
@@ -64,26 +64,6 @@ namespace mh::define
 		void SetDataPtr(const T _pData) { pData = (void*)_pData; size = sizeof(T); }
 	};
 
-	struct tPhysicsInfo
-	{
-		tPhysicsInfo()
-			: eActorType(define::eActorType::Static)
-			, eGeometryType(define::eGeometryType::Box)
-			, size(float3(1.f, 1.f, 1.f))
-			, massProperties(tMassProperties())
-			, pGeometries(nullptr)
-			, filterData{}
-		{
-		}
-
-		define::eActorType eActorType;
-		define::eGeometryType eGeometryType;
-		float3 size;
-		tMassProperties massProperties;
-		Geometries* pGeometries;
-		physx::PxFilterData filterData;
-	};
-
 	struct tMassProperties
 	{
 		tMassProperties(float _staticFriction = 0.5f, float _dynamicFriction = 0.2f, float _restitution = 0.603f)
@@ -99,38 +79,38 @@ namespace mh::define
 
 	struct Geometries
 	{
-		Geometries(define::eGeometryType eGeometryType, float3 vBoxHalfSize)
-			: eGeomType(define::eGeometryType::Box)
+		Geometries(eGeometryType _geometryType, float3 vBoxHalfSize)
+			: eGeomType(eGeometryType::Box)
 		{
-			if (define::eGeometryType::Box == eGeometryType)
+			if (eGeometryType::Box == _geometryType)
 			{
 				boxGeom = physx::PxBoxGeometry(vBoxHalfSize);
 			}
 		}
 
-		Geometries(define::eGeometryType eGeometryType, float fRadius, float fHalfHeight)
-			: eGeomType(define::eGeometryType::Capsule)
+		Geometries(eGeometryType _geometryType, float fRadius, float fHalfHeight)
+			: eGeomType(eGeometryType::Capsule)
 		{
-			if (define::eGeometryType::Capsule == eGeometryType)
+			if (eGeometryType::Capsule == _geometryType)
 			{
 				capsuleGeom = physx::PxCapsuleGeometry(fRadius, fHalfHeight);
 			}
 		}
 
-		Geometries(define::eGeometryType eGeometryType, float fRadius)
-			: eGeomType(define::eGeometryType::Sphere)
+		Geometries(eGeometryType _geometryType, float fRadius)
+			: eGeomType(eGeometryType::Sphere)
 		{
-			if (define::eGeometryType::Sphere == eGeometryType)
+			if (eGeometryType::Sphere == _geometryType)
 			{
 				sphereGeom = physx::PxSphereGeometry(fRadius);
 			}
 		}
 
-		Geometries(define::eGeometryType eGeometryType)
-			: eGeomType(define::eGeometryType::Plane)
+		Geometries(eGeometryType _geometryType)
+			: eGeomType(eGeometryType::Plane)
 		{
 			// RigidStatic일 떄,
-			if (define::eGeometryType::Plane == eGeometryType)
+			if (eGeometryType::Plane == _geometryType)
 			{
 				planeGeom = physx::PxPlaneGeometry();
 			}
@@ -141,6 +121,26 @@ namespace mh::define
 		physx::PxPlaneGeometry planeGeom;
 		physx::PxSphereGeometry sphereGeom;
 		define::eGeometryType eGeomType;
+	};
+
+	struct tPhysicsInfo
+	{
+		tPhysicsInfo()
+			: eActorType(eActorType::Static)
+			, eGeomType(eGeometryType::Box)
+			, size(float3(1.f, 1.f, 1.f))
+			, massProperties(tMassProperties())
+			, pGeometries(nullptr)
+			, filterData{}
+		{
+		}
+
+		eActorType eActorType;
+		eGeometryType eGeomType;
+		float3 size;
+		tMassProperties massProperties;
+		Geometries* pGeometries;
+		physx::PxFilterData filterData;
 	};
 
 
@@ -193,4 +193,47 @@ namespace mh::define
 			fbxsdk::FbxTime::EMode	eMode;
 		} Val;
 	};
+
+
+	struct tDebugMesh
+	{
+		define::eColliderType type;
+		float3 position;
+		float3 rotatation;
+		float3 scale;
+
+		float radius;
+		float duration;
+		float time;
+	};
+
+	//struct tLightAttribute
+	//{
+	//	float4 diffuse;
+	//	float4 specular;
+	//	float4 ambient;
+
+	//	float4 position;
+	//	float4 direction;
+
+	//	define::eLightType type;
+	//	float radius;
+	//	float angle;
+	//	int padding;
+	//};
+
+	//struct tParticle
+	//{
+	//	float4 position;
+	//	float4 direction;
+
+	//	float lifeTime;
+	//	float time;
+	//	float speed;
+	//	uint active;
+	//};
+	//struct tParticleShared
+	//{
+	//	uint activeCount;
+	//};
 }
