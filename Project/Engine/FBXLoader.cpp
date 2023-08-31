@@ -20,6 +20,7 @@ namespace mh
 		, mAnimNames{}
 		, mAnimClips{}
 		, mbMixamo{}
+		, mFileName{}
 	{
 	}
 
@@ -98,7 +99,13 @@ namespace mh
 			return eResult::Fail_OpenFile;
 		}
 
-		importer->Import(mScene);
+		if (false == importer->Import(mScene))
+		{
+			ERROR_MESSAGE_W(L"임포트 실패.");
+			return eResult::Fail;
+		}
+
+		mFileName = _strPath.stem().string();
 
 
 		//축 정보 변경
@@ -295,9 +302,19 @@ namespace mh
 	{
 		tFBXMaterial tMtrlInfo{};
 
-		std::string str = _pMtrlSur->GetName();
-		
-		tMtrlInfo.strMtrlName = str;
+		tMtrlInfo.strMtrlName = _pMtrlSur->GetName();
+
+		//무조건 이름을 가지고있게 해준다
+		if (tMtrlInfo.strMtrlName.empty())
+		{
+			size_t contIdx = mContainers.size();
+			size_t mtrlIdx = mContainers.back().vecMtrl.size();
+			tMtrlInfo.strMtrlName = mFileName;
+			tMtrlInfo.strMtrlName = "_";
+			tMtrlInfo.strMtrlName += std::to_string(contIdx);
+			tMtrlInfo.strMtrlName += "_";
+			tMtrlInfo.strMtrlName += std::to_string(mtrlIdx);
+		}
 
 		// Diff
 		tMtrlInfo.DiffuseColor = GetMtrlData(_pMtrlSur

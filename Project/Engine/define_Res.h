@@ -55,6 +55,7 @@ namespace mh::define
 		STRKEY Ext_MeshData = ".json";
 		STRKEY Ext_Material = ".json";
 		STRKEY Ext_Skeleton = ".bone";
+		STRKEY Ext_Anim3D = ".a3d";
 		STRKEY Ext_Tex[] =
 		{
 			

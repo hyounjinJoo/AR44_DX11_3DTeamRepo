@@ -43,21 +43,102 @@ namespace mh
             ERROR_MESSAGE_W(L"3D 데이터는 반드시 폴더 내에 저장해야 합니다.");
             return eResult::Fail_InValid;
         }
-        std::fs::path fullPath = _filePath / _basePath;
-        if (false == std::fs::exists(fullPath))
+        std::fs::path fullPath = _basePath / _filePath;
+
         {
-            
+            std::fs::path checkDir = fullPath.parent_path();
+            if (false == std::fs::exists(checkDir))
+            {
+                std::fs::create_directories(checkDir);
+            }
         }
 
+        fullPath.replace_extension(strKey::Ext_Anim3D);
 
-        return eResult();
+        std::ofstream ofs(fullPath, std::ios::binary);
+        if (false == ofs.is_open())
+        {
+            ERROR_MESSAGE_W(L"파일 오픈 실패");
+            return eResult::Fail_OpenFile;
+        }
+
+        if (nullptr == m_OwnerSkeleton)
+        {
+            ERROR_MESSAGE_W(L"본 정보가 존재하지 않습니다.");
+            return eResult::Fail_Nullptr;
+        }
+        //Binary::SaveStr(ofs, m_OwnerSkeleton->GetKey());
+
+        Binary::SaveValue(ofs, mValues);
+        
+        Binary::SaveValue(ofs, m_KeyFramesPerBone.size());
+        for (size_t i = 0; i < m_KeyFramesPerBone.size(); ++i)
+        {
+            Binary::SaveValue(ofs, m_KeyFramesPerBone[i].BoneIndex);
+            Binary::SaveValueVector(ofs, m_KeyFramesPerBone[i].vecKeyFrame);
+        }
+
+        ofs.close();
+        return eResult::Success;
     }
 
     eResult Animation3D::Load(const std::fs::path& _filePath, const std::fs::path& _basePath)
     {
+        if (_basePath.empty())
+        {
+            ERROR_MESSAGE_W(L"3D Animation 저장에는 Base Path가 반드시 필요합니다.");
+            return eResult::Fail_PathNotExist;
+        }
+        else if (false == _filePath.has_parent_path())
+        {
+            ERROR_MESSAGE_W(L"3D 데이터는 반드시 폴더 내에 저장해야 합니다.");
+            return eResult::Fail_InValid;
+        }
+        std::fs::path fullPath = _basePath / _filePath;
+        fullPath.replace_extension(strKey::Ext_Anim3D);
+        if (false == std::fs::exists(fullPath))
+        {
+            ERROR_MESSAGE_W(L"파일이 존재하지 않습니다.");
+            return eResult::Fail_PathNotExist;
+        }
 
+        std::ifstream ifs(fullPath, std::ios::binary);
+        if (false == ifs.is_open())
+        {
+            ERROR_MESSAGE_W(L"파일 오픈 실패");
+            return eResult::Fail_OpenFile;
+        }
 
-        return eResult();
+        //Binary::LoadStr(ifs, m_OwnerSkeleton->GetKey());
+        Binary::LoadValue(ifs, mValues);
+
+        std::vector<tAnimKeyframeTranslation>	vecFrameTrans;
+        vecFrameTrans.resize(m_OwnerSkeleton->GetBoneCount() * mValues.iFrameLength);
+        {
+            size_t mKeyFramesPerBoneSize{};
+            Binary::LoadValue(ifs, mKeyFramesPerBoneSize);
+            m_KeyFramesPerBone.resize(mKeyFramesPerBoneSize);
+            for (size_t i = 0; i < m_KeyFramesPerBone.size(); ++i)
+            {
+                Binary::LoadValue(ifs, m_KeyFramesPerBone[i].BoneIndex);
+                Binary::LoadValueVector(ifs, m_KeyFramesPerBone[i].vecKeyFrame);
+
+                for (size_t j = 0; j < m_KeyFramesPerBone[i].vecKeyFrame.size(); ++j)
+                {
+                    size_t indexIn1DArray = mValues.iFrameLength * i + j;
+                    vecFrameTrans[indexIn1DArray] = m_KeyFramesPerBone[i].vecKeyFrame[j].Trans;
+                }
+            }
+        }
+        
+        if (false == CreateKeyFrameSBuffer(vecFrameTrans))
+        {
+            ERROR_MESSAGE_W(L"키프레임 구조화 버퍼 생성 실패.");
+            return eResult::Fail_Create;
+        }
+
+        ifs.close();
+        return eResult::Success;
     }
 
 
@@ -168,28 +249,31 @@ namespace mh
                 //포맷을 변환해줘야 한다. double -> float
 
                 const fbxsdk::FbxVector4& fbxPos = fbxKeyFrame.matTransform.GetT();
-                projKeyFrame.Pos.x = (float)fbxPos.mData[0];
-                projKeyFrame.Pos.y = (float)fbxPos.mData[1];
-                projKeyFrame.Pos.z = (float)fbxPos.mData[2];
+                projKeyFrame.Trans.Pos.x = (float)fbxPos.mData[0];
+                projKeyFrame.Trans.Pos.y = (float)fbxPos.mData[1];
+                projKeyFrame.Trans.Pos.z = (float)fbxPos.mData[2];
+                projKeyFrame.Trans.Pos.w = 1.f;
 
                 const fbxsdk::FbxVector4& fbxScale = fbxKeyFrame.matTransform.GetS();
-                projKeyFrame.Scale.x = (float)fbxScale.mData[0];
-                projKeyFrame.Scale.y = (float)fbxScale.mData[1];
-                projKeyFrame.Scale.z = (float)fbxScale.mData[2];
+                projKeyFrame.Trans.Scale.x = (float)fbxScale.mData[0];
+                projKeyFrame.Trans.Scale.y = (float)fbxScale.mData[1];
+                projKeyFrame.Trans.Scale.z = (float)fbxScale.mData[2];
+                projKeyFrame.Trans.Pos.w = 1.f;
 
                 const fbxsdk::FbxQuaternion& fbxQuat = fbxKeyFrame.matTransform.GetQ();
-                projKeyFrame.RotQuat.x = (float)fbxQuat.mData[0];
-                projKeyFrame.RotQuat.y = (float)fbxQuat.mData[1];
-                projKeyFrame.RotQuat.z = (float)fbxQuat.mData[2];
-                projKeyFrame.RotQuat.w = (float)fbxQuat.mData[3];
+                projKeyFrame.Trans.RotQuat.x = (float)fbxQuat.mData[0];
+                projKeyFrame.Trans.RotQuat.y = (float)fbxQuat.mData[1];
+                projKeyFrame.Trans.RotQuat.z = (float)fbxQuat.mData[2];
+                projKeyFrame.Trans.RotQuat.w = (float)fbxQuat.mData[3];
 
                 
 
                 //i번째 본의 j 키프레임 데이터
                 size_t indexIn1DArray = mValues.iFrameLength * i + j;
-                vecFrameTrans[indexIn1DArray].vTranslate =  float4(projKeyFrame.Pos, 1.f);
-                vecFrameTrans[indexIn1DArray].vScale =      float4(projKeyFrame.Scale, 1.f);
-                vecFrameTrans[indexIn1DArray].qRot =        projKeyFrame.RotQuat;
+                vecFrameTrans[indexIn1DArray] = projKeyFrame.Trans;
+                //vecFrameTrans[indexIn1DArray].vTranslate =  float4(projKeyFrame.Pos, 1.f);
+                //vecFrameTrans[indexIn1DArray].Scale =      float4(projKeyFrame.Scale, 1.f);
+                //vecFrameTrans[indexIn1DArray].RotQuat =        projKeyFrame.RotQuat;
             }
         }
 

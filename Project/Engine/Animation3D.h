@@ -8,9 +8,10 @@ namespace mh
     struct tKeyFrame
     {
         double              Time{};
-        float3              Scale{};
-        math::Quaternion    RotQuat{};
-        float3              Pos{};
+        tAnimKeyframeTranslation Trans{};
+        //float3              Scale{};
+        //math::Quaternion    RotQuat{};
+        //float3              Pos{};
     };
 
     struct tKeyFramesPerBone

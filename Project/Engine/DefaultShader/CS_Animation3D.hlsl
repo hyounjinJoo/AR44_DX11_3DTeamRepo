@@ -17,17 +17,17 @@ void main(int3 _threadID : SV_DispatchThreadID)
 	int FrameIndex = _threadID.x * CB_Animation3D.FrameLength + CB_Animation3D.CurrentFrame;
 	int FrameNextIndex = _threadID.x * CB_Animation3D.FrameLength + CB_Animation3D.NextFrame;
 
-	float4 Scale = lerp(g_FrameTransArray[FrameIndex].vScale, g_FrameTransArray[FrameNextIndex].vScale, CB_Animation3D.FrameRatio);
-	float4 Pos = lerp(g_FrameTransArray[FrameIndex].vTranslate, g_FrameTransArray[FrameNextIndex].vTranslate, CB_Animation3D.FrameRatio);
-	float4 Rot = QuternionLerp(g_FrameTransArray[FrameIndex].qRot, g_FrameTransArray[FrameNextIndex].qRot, CB_Animation3D.FrameRatio);
+	float4 Scale = lerp(g_FrameTransArray[FrameIndex].Scale, g_FrameTransArray[FrameNextIndex].Scale, CB_Animation3D.FrameRatio);
+	float4 Pos = lerp(g_FrameTransArray[FrameIndex].Pos, g_FrameTransArray[FrameNextIndex].Pos, CB_Animation3D.FrameRatio);
+	float4 Rot = QuternionLerp(g_FrameTransArray[FrameIndex].RotQuat, g_FrameTransArray[FrameNextIndex].RotQuat, CB_Animation3D.FrameRatio);
 
 	if (CB_Animation3D.bChangingAnim == TRUE)
 	{
 		uint ChangeFrameIndex = _threadID.x * CB_Animation3D.ChangeFrameCount;
 
-		Scale = lerp(Scale, g_ChangeFrameTransArray[ChangeFrameIndex].vScale, CB_Animation3D.ChangeRatio);
-		Pos = lerp(Pos, g_ChangeFrameTransArray[ChangeFrameIndex].vTranslate, CB_Animation3D.ChangeRatio);
-		Rot = QuternionLerp(Rot, g_ChangeFrameTransArray[ChangeFrameIndex].qRot, CB_Animation3D.ChangeRatio);
+		Scale = lerp(Scale, g_ChangeFrameTransArray[ChangeFrameIndex].Scale, CB_Animation3D.ChangeRatio);
+		Pos = lerp(Pos, g_ChangeFrameTransArray[ChangeFrameIndex].Pos, CB_Animation3D.ChangeRatio);
+		Rot = QuternionLerp(Rot, g_ChangeFrameTransArray[ChangeFrameIndex].RotQuat, CB_Animation3D.ChangeRatio);
 	}
 
 	MatrixAffineTransformation(Scale, ZeroRot, Rot, Pos, matBone);

@@ -147,7 +147,7 @@ namespace gui
 
 	void guiFBXConverter::MultiThreadedFBXLoad()
 	{
-		std::shared_ptr<mh::MeshData> meshData{};
+		std::shared_ptr<mh::MeshData> meshData = std::make_shared<mh::MeshData>();
 		mh::eResult result = meshData->LoadAndConvertFBX(mFBXPath, mbStatic, mOutputDirName);
 
 		if (mh::eResultFail(result))

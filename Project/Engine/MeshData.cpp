@@ -42,14 +42,11 @@ namespace mh
 		{
 			std::fs::create_directories(fullPath);
 		}
-		//파일명까지 생성
-		fullPath /= _filePath;
 
 		//이 경로로 MeshContainer, Skeleton 저장
 		if (mSkeleton)
 		{
-			fullPath.replace_extension(strKey::Ext_Skeleton);
-			result = mSkeleton->Save(_filePath, fullPath);
+			result = mSkeleton->Save(mSkeleton->GetKey(), fullPath);
 			if (eResultFail(result))
 				return result;
 		}
@@ -57,7 +54,7 @@ namespace mh
 		for (size_t i = 0; i < mMeshContainers.size(); ++i)
 		{
 			//Mesh 저장
-			result = mMeshContainers[i].pMesh->Save(_filePath, fullPath);
+			result = mMeshContainers[i].pMesh->Save(mMeshContainers[i].pMesh->GetKey(), fullPath);
 			if (eResultFail(result))
 			{
 				return result;
@@ -66,7 +63,7 @@ namespace mh
 			//Material 저장
 			for (size_t j = 0; j < mMeshContainers[i].pMaterials.size(); ++j)
 			{
-				result = mMeshContainers[i].pMaterials[j]->Save(_filePath, fullPath);
+				result = mMeshContainers[i].pMaterials[j]->Save(mMeshContainers[i].pMaterials[j]->GetKey(), fullPath);
 				if (eResultFail(result))
 				{
 					return result;
@@ -75,7 +72,9 @@ namespace mh
 		}
 
 		//마지막으로 자신을 json 확장자로 변경하고 저장
-		fullPath.replace_extension(define::strKey::Ext_MeshData);
+		fullPath.replace_extension();
+		fullPath /= _filePath;
+		fullPath.replace_extension(strKey::Ext_MeshData);
 
 		std::ofstream ofs(fullPath);
 		if (false == ofs.is_open())
@@ -118,7 +117,12 @@ namespace mh
 				return result;
 		}
 
+
+		//마지막으로 자기 자신 저장
 		Json::Value jVal;
+		fullPath.replace_extension();
+		fullPath /= _filePath;
+		fullPath.replace_extension(strKey::Ext_MeshData);
 		std::ifstream ifs(fullPath);
 		if (false == ifs.is_open())
 		{
@@ -446,7 +450,7 @@ namespace mh
 		//모두 문제없이 처리되었을 경우 메쉬와 재질을 ResMgr에 전부 추가한다.
 		for (size_t i = 0; i < mMeshContainers.size(); ++i)
 		{
-			ResMgr::Insert(mMeshContainers[i].pMesh->GetKey(), mMeshContainers[i].pMesh);
+			//ResMgr::Insert(mMeshContainers[i].pMesh->GetKey(), mMeshContainers[i].pMesh);
 
 			//재질은 FBX Loader에서 추가가 되어있는 상태라서 여기서 처리할 필요 없음.
 			//for (size_t j = 0; j < mMeshContainers[j].pMaterials.size(); ++i)
@@ -469,6 +473,11 @@ namespace mh
 		}
 		//material 하나 생성
 		std::shared_ptr<Material> mtrl = std::make_shared<Material>();
+
+		std::fs::path strKey = _fbxMtrl->strMtrlName;
+		strKey.replace_extension(strKey::Ext_Material);
+		mtrl->SetKey(strKey.string());
+
 		mtrl->SetMaterialCoefficient(_fbxMtrl->DiffuseColor, _fbxMtrl->SpecularColor, _fbxMtrl->AmbientColor, _fbxMtrl->EmissiveColor);
 
 		//텍스처 옮기기 위한 람다 함수
@@ -481,11 +490,12 @@ namespace mh
 				//이동 원본 경로와 목표 경로를 만들어준다.
 
 				std::fs::path srcTexPath = _srcTexPath;
+				std::fs::path destTextPath = _texDestDir / srcTexPath.filename();
 				//src에 파일이 있는데 dest에 없을 경우 복사
-				if (std::fs::exists(srcTexPath) && false == std::fs::exists(_texDestDir))
+				if (std::fs::exists(srcTexPath) && false == std::fs::exists(destTextPath))
 				{
 					//폴더 예외 확인
-					std::fs::path destDir = _texDestDir.parent_path();
+					std::fs::path destDir = destTextPath.parent_path();
 					if (false == std::fs::exists(destDir))
 					{
 						std::fs::create_directories(destDir);
