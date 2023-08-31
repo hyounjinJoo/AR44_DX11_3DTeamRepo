@@ -30,19 +30,59 @@ namespace mh
 
 	eResult MeshData::Save(const std::fs::path& _filePath, const std::fs::path& _basePath)
 	{
-		std::fs::path fullPath = PathMgr::GetContentPathRelative(GetResType());
-		if (false == std::fs::exists(fullPath))
-			std::fs::create_directories(fullPath);
+		eResult result = eResult::Fail;
 
+		//MeshData는 다른 클래스와 저장 / 로드 방식이 약간 다름
+		//예를 들어 Player를 저장한다고 하면
+		//Player/Player.json 형태로 저장한다.
+		std::fs::path fullPath = IRes::CreateFullPath(_filePath, _basePath);
+		fullPath.replace_extension();
+		//경로가 없을 시 경로를 생성
+		if (false == std::fs::exists(fullPath))
+		{
+			std::fs::create_directories(fullPath);
+		}
+		//파일명까지 생성
 		fullPath /= _filePath;
-		fullPath.replace_extension(strKey::Ext_MeshData);
+
+		//이 경로로 MeshContainer, Skeleton 저장
+		if (mSkeleton)
+		{
+			fullPath.replace_extension(strKey::Ext_Skeleton);
+			result = mSkeleton->Save(_filePath, fullPath);
+			if (eResultFail(result))
+				return result;
+		}
+		
+		for (size_t i = 0; i < mMeshContainers.size(); ++i)
+		{
+			//Mesh 저장
+			result = mMeshContainers[i].pMesh->Save(_filePath, fullPath);
+			if (eResultFail(result))
+			{
+				return result;
+			}
+			
+			//Material 저장
+			for (size_t j = 0; j < mMeshContainers[i].pMaterials.size(); ++j)
+			{
+				result = mMeshContainers[i].pMaterials[j]->Save(_filePath, fullPath);
+				if (eResultFail(result))
+				{
+					return result;
+				}
+			}
+		}
+
+		//마지막으로 자신을 json 확장자로 변경하고 저장
+		fullPath.replace_extension(define::strKey::Ext_MeshData);
 
 		std::ofstream ofs(fullPath);
 		if (false == ofs.is_open())
 			return eResult::Fail_OpenFile;
 
 		Json::Value jVal{};
-		eResult result = SaveJson(&jVal);
+		result = SaveJson(&jVal);
 		if (eResultFail(result))
 			return result;
 		
@@ -54,10 +94,28 @@ namespace mh
 
 	eResult MeshData::Load(const std::fs::path& _filePath, const std::fs::path& _basePath)
 	{
-		std::fs::path fullPath = CreateFullPath(_filePath, _basePath);
-		if (false == PathMgr::CheckExist(fullPath))
+		eResult result = eResult::Fail;
+
+		//MeshData는 다른 클래스와 저장 / 로드 방식이 약간 다름
+		//예를 들어 Player를 저장한다고 하면
+		//Player/Player.json 형태로 저장한다.
+		std::fs::path fullPath = IRes::CreateFullPath(_filePath, _basePath);
+		fullPath.replace_extension();
+		//경로가 없을 시 경로를 생성
+		if (false == std::fs::exists(fullPath))
 		{
-			return eResult::Fail_OpenFile;
+			std::fs::create_directories(fullPath);
+		}
+		//파일명까지 생성
+		fullPath /= _filePath;
+
+		//이 경로로 MeshContainer, Skeleton 저장
+		if (mSkeleton)
+		{
+			fullPath.replace_extension(strKey::Ext_Skeleton);
+			result = mSkeleton->Load(_filePath, fullPath);
+			if (eResultFail(result))
+				return result;
 		}
 
 		Json::Value jVal;
@@ -69,17 +127,30 @@ namespace mh
 
 		ifs >> jVal;
 		ifs.close();
-		eResult result = LoadJson(&jVal);
+		result = LoadJson(&jVal);
 		if (eResultFail(result))
 			return result;
 
 		return eResult::Success;
 	}
 
-	eResult MeshData::ConvertFBX(const std::fs::path& _fbxAbsPath, bool _bStatic, const std::fs::path& _dirAndFileName)
-	{
-		return eResult();
-	}
+	//eResult MeshData::ConvertFBX(const std::fs::path& _fbxFullPath, bool _bStatic, const std::fs::path& _dirAndFileName)
+	//{
+	//	if (false == std::fs::exists(_fbxFullPath))
+	//	{
+	//		ERROR_MESSAGE_W(L"파일이 없습니다.");
+	//		return eResult::Fail_OpenFile;
+	//	}
+	//	
+	//	std::unique_ptr<MeshData> meshData = std::make_unique<MeshData>();
+	//	eResult result = meshData->LoadFromFBX(_fbxFullPath, _bStatic);
+	//	if (eResultFail(result))
+	//		return result;
+
+	//	meshData->Save(_dirAndFileName);
+
+	//	return eResult::Success;
+	//}
 
 	eResult MeshData::SaveJson(Json::Value* _pJson)
 	{
@@ -247,30 +318,47 @@ namespace mh
 		return uniqObj.release();
 	}
 
-	eResult MeshData::LoadFromFBX(const std::filesystem::path& _filePath, bool _bStatic)
+	eResult MeshData::LoadAndConvertFBX(
+		const std::fs::path& _fbxPath, bool _bStatic,
+		const std::fs::path& _dirAndFileName
+	)
 	{
-		if (false == std::fs::exists(_filePath))
+		if (false == std::fs::exists(_fbxPath))
 		{
 			ERROR_MESSAGE_W(L"파일을 찾지 못했습니다.");
 			return eResult::Fail_PathNotExist;
 		}
+		else if (_dirAndFileName.empty())
+		{
+			ERROR_MESSAGE_W(L"파일명을 설정하지 않았습니다.");
+			return eResult::Fail_PathNotExist;
+		}
 
 		FBXLoader loader{};
-		eResult result = loader.LoadFbx(_filePath, _bStatic);
+		eResult result = loader.LoadFbx(_fbxPath, _bStatic);
 		if (eResultFail(result))
 		{
 			ERROR_MESSAGE_W(L"FBX 불러오기 실패.");
 			return result;
 		}
 
+
+		std::fs::path basePath = PathMgr::GetContentPathRelative(eResourceType::MeshData);
+		basePath /= _dirAndFileName;
+		if (false == std::fs::exists(basePath))
+		{
+			std::fs::create_directories(basePath);
+		}
+
+
 		//Bone 정보 로드
 		mSkeleton = std::make_shared<Skeleton>();
 
 		//Key 설정
 		{
-			std::fs::path strKey = _filePath;
-			strKey.replace_extension(define::strKey::Ext_Skeleton);
-			mSkeleton->SetKey(strKey.string());
+			std::fs::path skeletonKey = _dirAndFileName;
+			skeletonKey.replace_extension(strKey::Ext_Skeleton);
+			mSkeleton->SetKey(skeletonKey.string());
 		}
 		result = mSkeleton->CreateFromFBX(&loader);
 
@@ -285,9 +373,6 @@ namespace mh
 			ERROR_MESSAGE_W(L"Skeleton 로드 실패.");
 			return result;
 		}
-		if(mSkeleton)
-			mSkeleton->Save(_filePath);
-
 
 
 		const std::vector<tFBXContainer>& containers = loader.GetContainers();
@@ -308,7 +393,6 @@ namespace mh
 			//스켈레톤 주소를 지정
 			meshCont.pMesh->SetSkeleton(mSkeleton);
 
-
 			if (nullptr != meshCont.pMesh)
 			{
 				//기본적으로는 컨테이너 이름을 사용
@@ -317,8 +401,8 @@ namespace mh
 				//비어있을 경우 이름을 만들어준다
 				if (strKey.empty())
 				{
-					strKey = _filePath;
-					strKey.replace_extension("");
+					strKey = _dirAndFileName;
+					strKey.replace_extension();
 					strKey += "_";
 					strKey += std::to_string(i);
 				}
@@ -327,61 +411,44 @@ namespace mh
 				strKey.replace_extension(define::strKey::Ext_Mesh);
 				//Key로 Mesh를 저장
 				meshCont.pMesh->SetKey(strKey.string());
-
-				//메쉬를 엔진의 포맷으로 변경해서 저장한다.
-				eResult result = meshCont.pMesh->Save(strKey);
-
-				if (eResultFail(result))
-				{
-					ERROR_MESSAGE_W(L"Mesh 저장 실패.");
-					return result;
-				}
 			}
 
 
 			// 메테리얼 가져오기
 			for (UINT j = 0; j < containers[i].vecMtrl.size(); ++j)
 			{
-				//Material의 경우 FBX Loader에서 만들어 놨음
-				// 예외처리 (material 이름이 입력 안되어있을 수도 있다.)
-				std::string strKey = containers[i].vecMtrl[j].strMtrlName;
-				std::shared_ptr<Material> pMtrl = ResMgr::Find<Material>(strKey);
 
-				//혹시나 없을 경우 에러
-				MH_ASSERT(pMtrl.get());
+				std::shared_ptr<Material> mtrl = ConvertMaterial(&(containers[i].vecMtrl[j]), basePath);
+				if(nullptr == mtrl)
+				{
+					ERROR_MESSAGE_W(L"머티리얼 로드에 실패했습니다.");
+					return eResult::Fail_InValid;
+				}
 
-				meshCont.pMaterials.push_back(pMtrl);
+				meshCont.pMaterials.push_back(mtrl);
 			}
-
-
 			mMeshContainers.push_back(meshCont);
 		}
 
-
-
-
-
-
 		//다른게 다 진행됐으면 자신도 저장
 		//키값 만들고 세팅하고
-		std::fs::path strKeyMeshData = _filePath;
+		std::fs::path strKeyMeshData = _dirAndFileName;
 		strKeyMeshData.replace_extension(strKey::Ext_MeshData);
-		std::string strKey = strKeyMeshData.string();
-		SetKey(strKey);
-
-		//저장함수 호출
-		result = Save(strKey);
+		SetKey(strKeyMeshData.string());
+		result = Save(_dirAndFileName);
 		if (eResultFail(result))
 		{
+			ERROR_MESSAGE_W(L"MeshData 저장에 실패했습니다.");
 			return result;
 		}
+		
 
 		//모두 문제없이 처리되었을 경우 메쉬와 재질을 ResMgr에 전부 추가한다.
 		for (size_t i = 0; i < mMeshContainers.size(); ++i)
 		{
 			ResMgr::Insert(mMeshContainers[i].pMesh->GetKey(), mMeshContainers[i].pMesh);
 
-			//재질은 FBX Loader에서 추가가 되어있는 상태
+			//재질은 FBX Loader에서 추가가 되어있는 상태라서 여기서 처리할 필요 없음.
 			//for (size_t j = 0; j < mMeshContainers[j].pMaterials.size(); ++i)
 			//{
 			//	ResMgr::Insert(mMeshContainers[i].pMaterials[j]->GetKey(), mMeshContainers[i].pMaterials[j]);
@@ -392,6 +459,61 @@ namespace mh
 		//애초에 호출한 클래스가 ResMgr임
 
 		return eResult::Success;
+	}
+
+	std::shared_ptr<Material> MeshData::ConvertMaterial(const tFBXMaterial* _fbxMtrl, const std::fs::path& _texDestDir)
+	{
+		if (nullptr == _fbxMtrl || _texDestDir.empty())
+		{
+			return nullptr;
+		}
+		//material 하나 생성
+		std::shared_ptr<Material> mtrl = std::make_shared<Material>();
+		mtrl->SetMaterialCoefficient(_fbxMtrl->DiffuseColor, _fbxMtrl->SpecularColor, _fbxMtrl->AmbientColor, _fbxMtrl->EmissiveColor);
+
+		//텍스처 옮기기 위한 람다 함수
+		auto CopyAndLoadTex =
+			[&](const std::string& _srcTexPath)->std::shared_ptr<Texture>
+			{
+				//비어있을경우 return
+				if (_srcTexPath.empty())
+					return nullptr;
+				//이동 원본 경로와 목표 경로를 만들어준다.
+
+				std::fs::path srcTexPath = _srcTexPath;
+				//src에 파일이 있는데 dest에 없을 경우 복사
+				if (std::fs::exists(srcTexPath) && false == std::fs::exists(_texDestDir))
+				{
+					//폴더 예외 확인
+					std::fs::path destDir = _texDestDir.parent_path();
+					if (false == std::fs::exists(destDir))
+					{
+						std::fs::create_directories(destDir);
+					}
+
+					//파일을 복사하고 기존 파일은 제거
+					std::fs::copy(srcTexPath, _texDestDir);
+					std::fs::remove(srcTexPath);
+				}
+
+				
+				std::shared_ptr<Texture> newTex = std::make_shared<Texture>();
+				//바로 Texture Load. 로드 실패 시 false 반환
+				
+				if (eResultFail(newTex->Load(srcTexPath.filename(), _texDestDir)))
+				{
+					newTex = nullptr;
+				}
+
+				return newTex;
+			};
+
+		mtrl->SetTexture(eTextureSlot::Albedo, CopyAndLoadTex(_fbxMtrl->strDiffuseTex));
+		mtrl->SetTexture(eTextureSlot::Normal, CopyAndLoadTex(_fbxMtrl->strNormalTex));
+		mtrl->SetTexture(eTextureSlot::Specular, CopyAndLoadTex(_fbxMtrl->strSpecularTex));
+		mtrl->SetTexture(eTextureSlot::Emissive, CopyAndLoadTex(_fbxMtrl->strEmissiveTex));
+
+		return mtrl;
 	}
 
 	bool MeshData::SetRenderer(Com_Renderer_Mesh* _renderer, UINT _idx)

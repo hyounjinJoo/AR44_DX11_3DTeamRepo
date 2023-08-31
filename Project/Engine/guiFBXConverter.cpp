@@ -3,12 +3,17 @@
 #include "Application.h"
 #include "PathMgr.h"
 #include "define_Util.h"
-
+#include "MeshData.h"
+#include "TimeMgr.h"
 
 namespace gui
 {
 	guiFBXConverter::guiFBXConverter()
 		: guiWindow("FBX Converter")
+		, mFBXPath()
+		, mOutputDirName()
+		, mbStatic(true)
+		, mThreadWorking()
 	{
 	}
 
@@ -24,55 +29,142 @@ namespace gui
 	}
 
 
-	void guiFBXConverter::Update()
-	{
-
-
-	}
 
 
 	void guiFBXConverter::UpdateUI()
 	{
-		if (ImGui::Button("Convert FBX", ImVec2(100.f, 40.f)))
+		CheckThread();
+
+
+		ImGui::Text("[FBX File Path]");
+		if (mFBXPath.empty())
 		{
-			std::vector<std::fs::path> files;
-			files.push_back(".fbx");
-			files.push_back(".msh");
-
-			mh::WinAPI::FileDialog(std::fs::current_path(), files);
-
-			//////풀경로를 받아올 주소 변수를 만들어주고
-			//std::basic_string<TCHAR> stringPath;
-
-			////프로그램 주소를 넣어놓는다.
-			//stringPath = std::fs::current_path().string<TCHAR>();
-			//stringPath.reserve(MAX_PATH);
-
-			////파일 열기 창에 전달할 설정 구조체를 설정해준다.
-			//OPENFILENAME OpenFile = {};
-
-			//OpenFile.lStructSize = sizeof(OPENFILENAME);	//구조체 크기
-			//OpenFile.hwndOwner = mh::Application::GetHwnd();	//관리 핸들
-			//OpenFile.lpstrFilter = TEXT("*.fbx File\0*.fbx\0모든 파일\0*.*"); 	//파일 형식
-			//OpenFile.lpstrFile = stringPath.data();	//경로가 저장될 변수 주소
-			//OpenFile.nMaxFile = MAX_PATH;	//최대 경로 자릿수
-
-
-			////만들어진 풀 경로를 FullPath에 보낸다.
-			//if (GetOpenFileName(&OpenFile))
-			//{
-			//	std::fs::path filePath = stringPath;
-			//	std::string upperExt = filePath.extension().string();
-			//	StringConv::UpperCase(upperExt);
-			//	if (".FBX" == upperExt)
-			//	{
-			//		int a = 3;
-			//	}
-			//}
-		
+			ImGui::Text("Empty");
+		}
+		else
+		{
+			ImGui::Text(mFBXPath.c_str());
 		}
 
+		ImGui::Dummy(ImVec2(0.0f, 10.0f));
 
+		ChooseFBXButton();
+
+		ImGui::SameLine();
+		
+		if (ImGui::Button("Clear Path", ImVec2(0.f, 35.f)))
+		{
+			mFBXPath.clear();
+		}
+
+		ImGui::Dummy(ImVec2(0.0f, 10.0f));
+		ImGui::Separator();
+		ImGui::Dummy(ImVec2(0.0f, 10.0f));
+
+		ImGui::InputText("Output Directory Name", &mOutputDirName);
+
+		ImGui::Dummy(ImVec2(0.0f, 10.0f));
+		ImGui::Separator();
+		ImGui::Dummy(ImVec2(0.0f, 10.0f));
+
+		ImGui::Checkbox("Static Mesh?", &mbStatic);
+
+		ImGui::Dummy(ImVec2(0.0f, 10.0f));
+		ImGui::Separator();
+		ImGui::Dummy(ImVec2(0.0f, 10.0f));
+
+		ConvertFBXButton();
 	}
+	void guiFBXConverter::CheckThread()
+	{
+		if (mThreadWorking)
+		{
+			std::condition_variable cv{};
+			std::mutex mtx{};
+			std::unique_lock<std::mutex> lock(mtx);
+
+			std::future_status status = mFutureData.wait_for(std::chrono::milliseconds(10));
+
+			static float waitDot{};
+			static int waitDotCount{};
+			waitDot += mh::TimeMgr::DeltaTime();
+			if (1.f < waitDot)
+			{
+				waitDot = 0.f;
+				++waitDotCount;
+				if (4 <= waitDotCount)
+				{
+					waitDotCount = 0;
+				}
+			}
+			if (std::future_status::timeout == status)
+			{
+				std::string loading = "Loading";
+				for (int i = 0; i < waitDotCount; ++i)
+				{
+					loading += ".";
+				}
+				ImGui::Button(loading.c_str());
+			}
+		}
+	}
+	void guiFBXConverter::ChooseFBXButton()
+	{
+		if (ImGui::Button("Choose FBX File", ImVec2(0.f, 35.f)))
+		{
+			std::vector<std::fs::path> extensions = { ".fbx" };
+
+			std::fs::path filePath = mh::WinAPI::FileDialog(std::fs::current_path(), extensions);
+			mFBXPath = filePath.string();
+
+			mOutputDirName = filePath.stem().string();
+		}
+	}
+
+
+	void guiFBXConverter::ConvertFBXButton()
+	{
+		if (ImGui::Button("Convert FBX File", ImVec2(0.f, 35.f)))
+		{
+			if (mFBXPath.empty())
+			{
+				MessageBoxW(nullptr, L"FBX 경로를 설정하지 않았습니다.", nullptr, MB_OK);
+				return;
+			}
+			else if (mOutputDirName.empty())
+			{
+				MessageBoxW(nullptr, L"출력 폴더를 설정하지 않았습니다.", nullptr, MB_OK);
+				return;
+			}
+			
+			//promise 초기화
+			mPromise = {};
+			mFutureData = mPromise.get_future();
+			mLoaderThread = std::jthread(&guiFBXConverter::MultiThreadedFBXLoad, this);
+			mThreadWorking = true;
+		}
+	}
+
+	void guiFBXConverter::MultiThreadedFBXLoad()
+	{
+		std::shared_ptr<mh::MeshData> meshData{};
+		mh::eResult result = meshData->LoadAndConvertFBX(mFBXPath, mbStatic, mOutputDirName);
+
+		if (mh::eResultFail(result))
+		{
+			MessageBoxW(nullptr, L"FBX 로드 실패.", nullptr, MB_OK);
+			mPromise.set_value(nullptr);
+		}
+		else
+		{
+			mPromise.set_value(meshData);
+		}
+
+		std::mutex mtx{};
+		std::unique_lock<std::mutex> lock(mtx);
+		mThreadWorking = false;
+	}
+
+
 }
 

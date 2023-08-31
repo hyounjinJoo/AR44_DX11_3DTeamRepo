@@ -15,6 +15,7 @@ namespace mh
 	class GameObject;
 	class Com_Renderer_Mesh;
 	class Skeleton;
+	struct tFBXMaterial;
 
 	struct tMeshContainer
 	{
@@ -34,7 +35,7 @@ namespace mh
 		virtual eResult Save(const std::fs::path& _filePath, const std::fs::path& _basePath = "") override;
 		virtual eResult Load(const std::fs::path& _filePath, const std::fs::path& _basePath = "") override;
 
-		static eResult ConvertFBX(const std::fs::path& _fbxAbsPath, bool _bStatic, const std::fs::path& _dirAndFileName);
+		/*static eResult ConvertFBX(const std::fs::path& _fbxFullPath, bool _bStatic, const std::fs::path& _dirAndFileName);*/
 		
 
 		virtual eResult SaveJson(Json::Value* _pJson) override;
@@ -42,7 +43,13 @@ namespace mh
 		GameObject* Instantiate();
 
 	private:
-		eResult LoadFromFBX(const std::fs::path& _fullPath, bool _bStatic);
+		eResult LoadAndConvertFBX(
+			const std::fs::path& _fbxPath, bool _bStatic,
+			const std::fs::path& _dirAndFileName
+			);
+
+		//_defaultMtrlStrKey: FBX 변환된 재질이 이름이 없을수도 있음 -> 만약 없을 경우 사용할 기본 키 이름
+		std::shared_ptr<Material> ConvertMaterial(const tFBXMaterial* _material, const std::fs::path& _texDestDir);
 		bool SetRenderer(Com_Renderer_Mesh* _renderer, UINT _idx);
 
 	private:

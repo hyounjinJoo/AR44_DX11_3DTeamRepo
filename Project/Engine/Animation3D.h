@@ -37,8 +37,8 @@ namespace mh
         void BindData();
         void UnBindData();
 
-        eResult Save(const std::filesystem::path& _filePath);
-        eResult Load(const std::filesystem::path& _filePath);
+        eResult Save(const std::fs::path& _filePath, const std::fs::path& _basePath);
+        eResult Load(const std::fs::path& _filePath, const std::fs::path& _basePath);
 
         eResult LoadFromFBX(Skeleton* _skeleton, const tFBXAnimClip* _clip);
 

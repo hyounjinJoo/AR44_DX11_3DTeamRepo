@@ -15,8 +15,8 @@ namespace mh
 		Skeleton();
 		virtual ~Skeleton();
 
-		eResult Save(const std::filesystem::path& _filePath);
-		eResult Load(const std::filesystem::path& _filePath);
+		eResult Save(const std::fs::path& _filePath, const std::fs::path& _basePath = L"");
+		eResult Load(const std::fs::path& _filePath, const std::fs::path& _basePath = L"");
 		eResult CreateFromFBX(FBXLoader* _fbxLoader);
 
 	public:
@@ -25,14 +25,13 @@ namespace mh
 		UINT GetBoneCount() const { return (UINT)m_vecBones.size(); }
 		StructBuffer* GetBoneOffsetBuffer() { return  m_pBoneOffset.get(); }	   // 각 뼈의 offset 행렬
 
-		const std::unordered_map<std::string, Animation3D*>& GetAnimations() const { return mMapAnimations; }
+		const std::unordered_map<std::string, std::shared_ptr<Animation3D>>& GetAnimations() const { return mMapAnimations; }
 		bool IsAnimMesh() const { return (false == mMapAnimations.empty()); }
 
-		inline const std::unordered_map<std::string, Animation3D*>&
+		inline const std::unordered_map<std::string, std::shared_ptr<Animation3D>>&
 			GetMapAnimations() const { return mMapAnimations; }
 
-		const Animation3D* FindAnimation(const std::string& _strAnimName);
-
+		std::shared_ptr<Animation3D> FindAnimation(const std::string& _strAnimName);
 
 	private:
 		void CreateBoneOffsetSBuffer();
@@ -41,10 +40,7 @@ namespace mh
 		std::vector<define::tMTBone>					m_vecBones;
 		std::unique_ptr<StructBuffer>					m_pBoneOffset;	  // 각 뼈의 offset 행렬(각 뼈의 위치를 되돌리는 행렬) (1행 짜리)
 
-
-		std::unordered_map<std::string, Animation3D*>	mMapAnimations;
-
-		size_t											mAnimationMaxFrameSize;
+		std::unordered_map<std::string, std::shared_ptr<Animation3D>>	mMapAnimations;
 	};
 }
 

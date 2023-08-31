@@ -51,10 +51,10 @@ namespace mh::define
 
 		STRKEY DirName_CompiledShader = "ShaderBin";
 		STRKEY Ext_CompiledShader = ".cso";
-		STRKEY Ext_Mesh = ".msh";
+		STRKEY Ext_Mesh = ".mesh";
 		STRKEY Ext_MeshData = ".json";
 		STRKEY Ext_Material = ".json";
-		STRKEY Ext_Skeleton = ".bne";
+		STRKEY Ext_Skeleton = ".bone";
 		STRKEY Ext_Tex[] =
 		{
 			

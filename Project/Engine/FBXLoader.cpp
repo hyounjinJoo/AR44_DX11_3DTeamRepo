@@ -152,10 +152,10 @@ namespace mh
 		importer = nullptr;
 
 		// 필요한 텍스쳐 로드
-		LoadTexture();
+		//LoadTexture();
 
 		// 필요한 메테리얼 생성
-		CreateMaterial(_strPath);
+		//CreateMaterial(_strPath);
 
 		return eResult::Success;
 	}
@@ -510,11 +510,12 @@ namespace mh
 					//절대 주소가 있을 경우 상대 주소를 만들어서 저장
 					if (std::fs::exists(fullPath))
 					{
-						static std::fs::path resPath = PathMgr::GetContentPathAbsolute(eResourceType::MeshData);
-
-						fullPath = fullPath.lexically_relative(resPath);
-
 						retStr = fullPath.string();
+						//static std::fs::path resPath = PathMgr::GetContentPathAbsolute(eResourceType::MeshData);
+
+						//fullPath = fullPath.lexically_relative(resPath);
+
+						//retStr = fullPath.string();
 					}
 				}
 			}

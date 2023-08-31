@@ -25,6 +25,10 @@
 #include <fstream>
 #include <span>
 
+#include <thread>
+#include <chrono>
+#include <future>
+
 #include <combaseapi.h>
 #include "EnumFlags.h"
 

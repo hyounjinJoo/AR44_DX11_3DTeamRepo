@@ -27,7 +27,7 @@ namespace mh
 		virtual void FixedUpdate() override;
 
 		void SetSkeleton(std::shared_ptr<Skeleton> _pSkeleton);
-		const Skeleton* GetSkeleton() const { return mSkeleton.get(); }
+		std::shared_ptr<const Skeleton> GetSkeleton() const { return mSkeleton; }
 		bool Play(const std::string& _strAnimName);
 
 		//void SetClipTime(int _iClipIdx, float _fTime) { m_vecClipUpdateTime[_iClipIdx] = _fTime; }
@@ -44,8 +44,8 @@ namespace mh
 		bool CheckMesh();
 
     private:
-		std::shared_ptr<Skeleton>		mSkeleton;
-		const Animation3D*				mCurrentAnim;
+		std::shared_ptr<Skeleton>						mSkeleton;
+		std::shared_ptr<Animation3D>					mCurrentAnim;
 
         std::vector<MATRIX>				m_vecFinalBoneMat;		// 텍스쳐에 전달할 최종 행렬정보
         int								m_iFramePerSecond;

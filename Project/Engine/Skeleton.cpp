@@ -15,28 +15,30 @@ namespace mh
 		: m_vecBones{}
 		, m_pBoneOffset{}
 		, mMapAnimations{}
-		, mAnimationMaxFrameSize()
 	{
 	}
 
 	Skeleton::~Skeleton()
 	{
-		for (auto& iter : mMapAnimations)
-		{
-			if (iter.second)
-				delete iter.second;
-		}
 	}
 
-	eResult Skeleton::Save(const std::filesystem::path& _filePath)
+	eResult Skeleton::Save(const std::fs::path& _filePath, const std::fs::path& _basePath)
 	{
-		std::fs::path fullPath = PathMgr::GetContentPathRelative(eResourceType::MeshData);
-		fullPath /= _filePath;
-		if (false == std::fs::exists(fullPath.parent_path()))
+		std::fs::path fullPath = _basePath;
+		if (fullPath.empty())
 		{
-			std::fs::create_directories(fullPath);
+			fullPath = PathMgr::GetContentPathRelative(eResourceType::MeshData);
 		}
-		fullPath.replace_extension(define::strKey::Ext_Skeleton);
+		fullPath /= _filePath;
+
+		{
+			std::fs::path checkDir = fullPath.parent_path();
+			if (false == std::fs::exists(checkDir))
+			{
+				std::fs::create_directories(checkDir);
+			}
+		}
+		fullPath.replace_extension(strKey::Ext_Skeleton);
 
 		std::ofstream ofs(fullPath, std::ios::binary);
 		if (false == ofs.is_open())
@@ -52,17 +54,34 @@ namespace mh
 			Binary::SaveValue(ofs, m_vecBones[i].Values);
 		}
 
+		Binary::SaveValue(ofs, mMapAnimations.size());
+		for (auto& iter : mMapAnimations)
+		{
+			Binary::SaveStr(ofs, iter.first);
+			eResult result = iter.second->Save(iter.first, _basePath);
+			if (eResultFail(result))
+			{
+				ERROR_MESSAGE_W(L"애니메이션 저장 실패.");
+				return result;
+			}
+		}
+
 		return eResult::Success;
 	}
-	eResult Skeleton::Load(const std::filesystem::path& _filePath)
+	eResult Skeleton::Load(const std::fs::path& _filePath, const std::fs::path& _basePath)
 	{
-		std::fs::path fullPath = PathMgr::GetContentPathRelative(eResourceType::MeshData);
-		fullPath /= _filePath;
-		if (false == std::fs::exists(fullPath.parent_path()))
+		std::fs::path fullPath = _basePath;
+		if (fullPath.empty())
 		{
-			std::fs::create_directories(fullPath);
+			fullPath = PathMgr::GetContentPathRelative(eResourceType::MeshData);
 		}
-		fullPath.replace_extension(define::strKey::Ext_Skeleton);
+		fullPath /= _filePath;
+		fullPath.replace_extension(strKey::Ext_Skeleton);
+		if (false == std::fs::exists(fullPath))
+		{
+			ERROR_MESSAGE_W(L"파일이 없습니다.");
+			return eResult::Fail_PathNotExist;
+		}
 
 		std::ifstream ifs(fullPath, std::ios::binary);
 		if (false == ifs.is_open())
@@ -83,13 +102,26 @@ namespace mh
 				Binary::LoadValue(ifs, m_vecBones[i].Values);
 			}
 		}
-
 		CreateBoneOffsetSBuffer();
 
-		//StructBuffer* m_pBoneFrameData;   // 전체 본 프레임 정보(크기, 이동, 회전) (프레임 개수만큼)
-		//StructBuffer* m_pBoneOffset;	  // 각 뼈의 offset 행렬(각 뼈의 위치를 되돌리는 행렬) (1행 짜리)
 
+		size_t mapSize{};
+		Binary::LoadValue(ifs, mapSize);
+		for (size_t i = 0; i < mapSize; ++i)
+		{
+			std::string animName{};
+			Binary::LoadStr(ifs, animName);
+			
+			std::unique_ptr<Animation3D> anim3d = std::make_unique<Animation3D>();
+			eResult result = anim3d->Load(animName, _basePath);
+			if (eResultFail(result))
+			{
+				ERROR_MESSAGE_W(L"애니메이션 로드 실패.");
+				return eResult::Fail_InValid;
+			}
 
+			mMapAnimations.insert(std::make_pair(animName, anim3d.release()));
+		}
 		return eResult::Success;
 	}
 
@@ -154,7 +186,6 @@ namespace mh
 
 			mMapAnimations.insert(std::make_pair(animName, anim.release()));
 		}
-
 		return eResult::Success;
 	}
 
@@ -177,9 +208,9 @@ namespace mh
 		m_pBoneOffset->Create<MATRIX>(vecOffset.size(), vecOffset.data(), vecOffset.size());
 	}
 
-	const Animation3D* Skeleton::FindAnimation(const std::string& _strAnimName)
+	std::shared_ptr<Animation3D> Skeleton::FindAnimation(const std::string& _strAnimName)
 	{
-		Animation3D* retPtr = nullptr;
+		std::shared_ptr<Animation3D> retPtr = nullptr;
 		const auto& iter = mMapAnimations.find(_strAnimName);
 		if (iter != mMapAnimations.end())
 		{

@@ -6,6 +6,8 @@
 #include "PathMgr.h"
 #include "define_Util.h"
 
+
+
 namespace mh
 {
 	Animation3D::Animation3D()
@@ -28,22 +30,37 @@ namespace mh
     {
         m_SBufferKeyFrame->UnBindData();
     }
-    eResult Animation3D::Save(const std::filesystem::path& _filePath)
+
+    eResult Animation3D::Save(const std::fs::path& _filePath, const std::fs::path& _basePath)
     {
-        
-
-        std::fs::path filePath = PathMgr::GetContentPathRelative(eResourceType::MeshData);
-
-        
-
+        if (_basePath.empty())
+        {
+            ERROR_MESSAGE_W(L"3D Animation 저장에는 Base Path가 반드시 필요합니다.");
+            return eResult::Fail_PathNotExist;
+        }
+        else if (false == _filePath.has_parent_path())
+        {
+            ERROR_MESSAGE_W(L"3D 데이터는 반드시 폴더 내에 저장해야 합니다.");
+            return eResult::Fail_InValid;
+        }
+        std::fs::path fullPath = _filePath / _basePath;
+        if (false == std::fs::exists(fullPath))
+        {
+            
+        }
 
 
         return eResult();
     }
-    eResult Animation3D::Load(const std::filesystem::path& _filePath)
+
+    eResult Animation3D::Load(const std::fs::path& _filePath, const std::fs::path& _basePath)
     {
+
+
         return eResult();
     }
+
+
 	eResult Animation3D::LoadFromFBX(Skeleton* _skeleton, const tFBXAnimClip* _clip)
 	{
 		if (nullptr == _skeleton || nullptr == _clip)

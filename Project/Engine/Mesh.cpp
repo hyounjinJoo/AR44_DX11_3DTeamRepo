@@ -38,7 +38,14 @@ namespace mh
 	eResult Mesh::Save(const std::fs::path& _filePath, const std::fs::path& _basePath)
 	{
 		std::fs::path fullPath = CreateFullPath(_filePath, _basePath);
-
+		{
+			std::fs::path checkDir = fullPath.parent_path();
+			if (false == std::fs::exists(checkDir))
+			{
+				std::fs::create_directories(checkDir);
+			}
+		}
+		fullPath.replace_extension(strKey::Ext_Mesh);
 
 		std::ofstream ofs(fullPath, std::ios::binary);
 		if (false == ofs.is_open())
@@ -86,6 +93,9 @@ namespace mh
 	eResult Mesh::Load(const std::fs::path& _filePath, const std::fs::path& _basePath)
 	{
 		std::fs::path fullPath = CreateFullPath(_filePath, _basePath);
+
+		fullPath.replace_extension(strKey::Ext_Mesh);
+
 		if (false == PathMgr::CheckExist(fullPath))
 		{
 			return eResult::Fail_OpenFile;

@@ -39,6 +39,17 @@ namespace mh
     eResult Material::Save(const std::fs::path& _filePath, const std::fs::path& _basePath)
     {
         std::fs::path fullPath = CreateFullPath(_filePath, _basePath);
+        
+        {
+            std::fs::path checkDir = fullPath.parent_path();
+            if (false == std::fs::exists(checkDir))
+            {
+                std::fs::create_directories(checkDir);
+            }
+        }
+        fullPath.replace_extension(strKey::Ext_Material);
+
+
         if (fullPath.empty())
         {
             return eResult::Fail_OpenFile;
@@ -62,6 +73,7 @@ namespace mh
     eResult Material::Load(const std::fs::path& _filePath, const std::fs::path& _basePath)
     {
         std::fs::path fullPath = CreateFullPath(_filePath, _basePath);
+        fullPath.replace_extension(strKey::Ext_Material);
         if (false == PathMgr::CheckExist(fullPath))
         {
             return eResult::Fail_OpenFile;
