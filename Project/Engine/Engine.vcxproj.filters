@@ -178,6 +178,9 @@
     <Filter Include="Component\Transform">
       <UniqueIdentifier>{62546181-5d07-413f-a9e5-329a0986165d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="_DefaultShader\SkyBox">
+      <UniqueIdentifier>{ed87cfb8-b92a-4693-a147-6d202ba467a5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Application.cpp">
@@ -947,6 +950,9 @@
     <None Include="DefaultShader\SH_UserInterFace.hlsli">
       <Filter>_DefaultShader\UI</Filter>
     </None>
+    <None Include="DefaultShader\SH_SkyBox.hlsli">
+      <Filter>_DefaultShader\SkyBox</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="DefaultShader\CS_Paint.hlsl">
@@ -1032,6 +1038,12 @@
     </FxCompile>
     <FxCompile Include="DefaultShader\CS_Animation3D.hlsl">
       <Filter>_DefaultShader\Animation\3D</Filter>
+    </FxCompile>
+    <FxCompile Include="DefaultShader\_0VS_SkyBox.hlsl">
+      <Filter>_DefaultShader\SkyBox</Filter>
+    </FxCompile>
+    <FxCompile Include="DefaultShader\_4PS_SkyBox.hlsl">
+      <Filter>_DefaultShader\SkyBox</Filter>
     </FxCompile>
   </ItemGroup>
   <ItemGroup>
