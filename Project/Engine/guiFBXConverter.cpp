@@ -23,12 +23,8 @@ namespace gui
 
 	void guiFBXConverter::Init()
 	{
-
-
-
+		LoadProjMeshDataCombo();
 	}
-
-
 
 
 	void guiFBXConverter::UpdateUI()
@@ -37,7 +33,7 @@ namespace gui
 			return;
 
 
-		ImGui::Text("[FBX File Path]");
+		HilightText("FBX Source File Path");
 		if (mFBXPath.empty())
 		{
 			ImGui::Text("Empty");
@@ -60,21 +56,18 @@ namespace gui
 
 		ImGui::Dummy(ImVec2(0.0f, 10.0f));
 		ImGui::Separator();
-		ImGui::Dummy(ImVec2(0.0f, 10.0f));
 
+		HilightText("Convert Setting");
 		ImGui::InputText("Output Directory Name", &mOutputDirName);
-
-		ImGui::Dummy(ImVec2(0.0f, 10.0f));
-		ImGui::Separator();
-		ImGui::Dummy(ImVec2(0.0f, 10.0f));
 
 		ImGui::Checkbox("Static Mesh?", &mbStatic);
 
-		ImGui::Dummy(ImVec2(0.0f, 10.0f));
-		ImGui::Separator();
-		ImGui::Dummy(ImVec2(0.0f, 10.0f));
-
 		ConvertFBXButton();
+
+		ImGui::Dummy(ImVec2(0.0f, 30.0f));
+		ImGui::Separator();
+
+		AddAnimationFromSameModeling();
 	}
 	bool guiFBXConverter::CheckThread()
 	{
@@ -106,6 +99,17 @@ namespace gui
 					loading += ".";
 				}
 				ImGui::Button(loading.c_str());
+			}
+			else if (std::future_status::ready == status)
+			{
+				if (mh::eResultSuccess(mFutureData.get()))
+				{
+					NOTIFICATION_W(L"FBX 변환 성공.");
+				}
+				else
+				{
+					NOTIFICATION_W(L"FBX 변환 실패.");
+				}
 			}
 		}
 
@@ -148,24 +152,65 @@ namespace gui
 		}
 	}
 
+	void guiFBXConverter::AddAnimationFromSameModeling()
+	{
+		HilightText("Add Animation to Project MeshData");
+		ImGui::Dummy(ImVec2(0.f, 10.f));
+
+		mProjMeshDataCombo.FixedUpdate();
+		if (ImGui::Button("Refresh List"))
+		{
+			LoadProjMeshDataCombo();
+		}
+
+
+		ImGui::Dummy(ImVec2(0.f, 20.f));
+		if(ImGui::Button("Add Animation", ImVec2(0.f, 35.f)))
+		{
+			if (mFBXPath.empty())
+			{
+				NOTIFICATION_W(L"FBX 경로를 설정하지 않았습니다.");
+			}
+			else if (mProjMeshDataCombo.GetCurrentSelected().strName.empty())
+			{
+				NOTIFICATION_W(L"목표 메쉬 데이터를 설정하지 않았습니다.");
+			}
+			else
+			{
+				mh::MeshData::AddAnimationFromFBX(mFBXPath, mProjMeshDataCombo.GetCurrentSelected().strName);
+			}
+		}
+	}
+
 	void guiFBXConverter::MultiThreadedFBXLoad()
 	{
+		std::mutex mtx{};
+		std::unique_lock<std::mutex> lock(mtx);
+
 		std::shared_ptr<mh::MeshData> meshData = std::make_shared<mh::MeshData>();
 		mh::eResult result = meshData->ConvertFBX(mFBXPath, mbStatic, mOutputDirName);
 
 		if (mh::eResultFail(result))
 		{
 			MessageBoxW(nullptr, L"FBX 로드 실패.", nullptr, MB_OK);
-			mPromise.set_value(nullptr);
-		}
-		else
-		{
-			mPromise.set_value(meshData);
 		}
 
-		std::mutex mtx{};
-		std::unique_lock<std::mutex> lock(mtx);
+		mPromise.set_value(result);
+
 		mThreadWorking = false;
+	}
+
+	void guiFBXConverter::LoadProjMeshDataCombo()
+	{
+		mProjMeshDataCombo.SetKey("MeshData List");
+		const std::fs::path& meshPath = mh::PathMgr::GetContentPathRelative(mh::define::eResourceType::MeshData);
+		for (const auto& entry : std::fs::directory_iterator(meshPath))
+		{
+			if (std::fs::is_directory(entry.path()))
+			{
+				mProjMeshDataCombo.AddItem(entry.path().filename().string());
+			}
+		}
 	}
 }
 

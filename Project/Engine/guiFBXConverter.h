@@ -1,7 +1,9 @@
 #pragma once
 #include "guiWindow.h"
+#include "guiComboBox.h"
 #include <thread>
 #include <future>
+
 
 namespace mh
 {
@@ -26,9 +28,12 @@ namespace gui
 		bool CheckThread();
 		void ChooseFBXButton();
 		void ConvertFBXButton();
-
+		void AddAnimationFromSameModeling();
 
 		void MultiThreadedFBXLoad();
+
+
+		void LoadProjMeshDataCombo();
 
 	private:
 		std::string		mFBXPath;
@@ -36,9 +41,11 @@ namespace gui
 		bool			mbStatic;
 
 		std::jthread	mLoaderThread;
-		std::promise<std::shared_ptr<mh::MeshData>>	mPromise;
-		std::future<std::shared_ptr<mh::MeshData>>	mFutureData;
+		std::promise<mh::eResult>	mPromise;
+		std::future<mh::eResult>	mFutureData;
 		bool			mThreadWorking;
+
+		guiComboBox		mProjMeshDataCombo;
 	};
 }
 

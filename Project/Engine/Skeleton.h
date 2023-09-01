@@ -35,7 +35,7 @@ namespace mh
 
 
 		//애니메이션을 이동가능한지 확인하고, 이동시켜주는 함수
-		bool CopyAnimationFromOther(const Skeleton& _other);
+		bool CopyAnimationFromOther(const Skeleton& _other, const std::fs::path& _savePath);
 		int FindSameBoneIndex(const define::tMTBone& _other) const;
 
 	private:

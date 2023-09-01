@@ -10,7 +10,7 @@ namespace gui
 		: mID(++gIDNext)
 		, mName(_strName)
 		, mStrKey(_strName)
-		, mbSaveEnable()
+		, mbSaveEnable()	
 	{
 	}
 

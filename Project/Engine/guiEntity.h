@@ -1,10 +1,10 @@
 #pragma once
-
 #include "imgui/imgui.h"
 #include "imgui/imgui_stdlib.h"
 #include <string>
 #include "json-cpp/json-forwards.h"
 #include "define_Enum.h"
+
 
 namespace gui
 {
@@ -41,6 +41,19 @@ namespace gui
 		//데이터를 저장할지 말지 결정(기본 Off)
 		bool						mbSaveEnable;
 	};
+
+	inline void HilightText(const char* _label, const ImVec2& _size = ImVec2(0.f, 0.f))
+	{
+		ImGui::PushID(0);
+		static ImColor highLight = { 144, 12, 63 };
+		ImGui::PushStyleColor(ImGuiCol_Button, (ImVec4)highLight);
+		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, (ImVec4)highLight);
+		ImGui::PushStyleColor(ImGuiCol_ButtonActive, (ImVec4)highLight);
+
+		ImGui::Button(_label, _size);
+		ImGui::PopStyleColor(3);
+		ImGui::PopID();
+	}
 }
 
 

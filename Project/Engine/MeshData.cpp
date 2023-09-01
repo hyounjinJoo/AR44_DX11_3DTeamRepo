@@ -470,7 +470,7 @@ namespace mh
 			return result;
 		}
 
-		if (false == skeletonOfProj->CopyAnimationFromOther((*skeletonOfFBX)))
+		if (false == skeletonOfProj->CopyAnimationFromOther((*skeletonOfFBX), projSkltPath))
 		{
 			MessageBoxW(nullptr, L"스켈레톤 구조가 일치하지 않아 애니메이션을 추가할 수 없습니다.", nullptr, MB_OK);
 			return eResult::Fail;

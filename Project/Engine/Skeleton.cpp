@@ -211,7 +211,7 @@ namespace mh
 		return eResult::Success;
 	}
 
-	bool Skeleton::CopyAnimationFromOther(const Skeleton& _other)
+	bool Skeleton::CopyAnimationFromOther(const Skeleton& _other, const std::fs::path& _savePath)
 	{
 		//순회를 돌아주면서 내 스켈레톤 인덱스와 매칭되는 상대 스켈레톤 인덱스를 계산
 		if (m_vecBones.size() != _other.m_vecBones.size())
@@ -239,7 +239,7 @@ namespace mh
 			ourAnim->mValues = otherAnim.second->mValues;
 			ourAnim->m_KeyFramesPerBone = otherAnim.second->m_KeyFramesPerBone;
 
-			for (size_t i = 0; matchingIndices.size(); ++i)
+			for (size_t i = 0; i < matchingIndices.size(); ++i)
 			{
 				//인덱스가 서로 다른 경우에 인덱스 번호를 바꿔준다
 				if ((int)i != matchingIndices[i])
@@ -247,8 +247,13 @@ namespace mh
 					std::swap(ourAnim->m_KeyFramesPerBone[i], ourAnim->m_KeyFramesPerBone[matchingIndices[i]]);
 				}
 			}
+
+			if (eResultFail(ourAnim->Save(otherAnim.first, _savePath)))
+				return false;
+
+			//우리 애니메이션 쪽에 등록
+			mMapAnimations.insert(std::make_pair(otherAnim.first, ourAnim));
 		}
-		
 
 		return true;
 	}
