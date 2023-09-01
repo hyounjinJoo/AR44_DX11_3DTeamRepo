@@ -38,11 +38,7 @@ namespace mh
             ERROR_MESSAGE_W(L"3D Animation 저장에는 Base Path가 반드시 필요합니다.");
             return eResult::Fail_PathNotExist;
         }
-        else if (false == _filePath.has_parent_path())
-        {
-            ERROR_MESSAGE_W(L"3D 데이터는 반드시 폴더 내에 저장해야 합니다.");
-            return eResult::Fail_InValid;
-        }
+
         std::fs::path fullPath = _basePath / _filePath;
 
         {
@@ -88,11 +84,6 @@ namespace mh
         {
             ERROR_MESSAGE_W(L"3D Animation 저장에는 Base Path가 반드시 필요합니다.");
             return eResult::Fail_PathNotExist;
-        }
-        else if (false == _filePath.has_parent_path())
-        {
-            ERROR_MESSAGE_W(L"3D 데이터는 반드시 폴더 내에 저장해야 합니다.");
-            return eResult::Fail_InValid;
         }
         std::fs::path fullPath = _basePath / _filePath;
         fullPath.replace_extension(strKey::Ext_Anim3D);

@@ -113,6 +113,7 @@ namespace mh
 			Binary::LoadStr(ifs, animName);
 			
 			std::unique_ptr<Animation3D> anim3d = std::make_unique<Animation3D>();
+			anim3d->SetSkeleton(this);
 			eResult result = anim3d->Load(animName, _basePath);
 			if (eResultFail(result))
 			{

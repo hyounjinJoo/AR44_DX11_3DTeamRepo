@@ -79,7 +79,7 @@ namespace mh
 
 			GameObject* modeling = meshdata->Instantiate();
 
-			//modeling->GetComponent<Com_Animator3D>()->Play("Take 001");
+			modeling->GetComponent<Com_Animator3D>()->Play("Take 001");
 			
 			//house->AddComponent<Com_Transform>();
 

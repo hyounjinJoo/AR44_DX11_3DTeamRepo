@@ -52,6 +52,7 @@ namespace mh
         float GetUpdateTime() const { return mValues.fUpdateTime; }
         int GetFPS() const { return mValues.iFramePerSec; }
         Skeleton* GetSkeleton() const { return m_OwnerSkeleton; }
+        void SetSkeleton(Skeleton* _skeleton) { m_OwnerSkeleton = _skeleton; }
         StructBuffer* GetKeyFrameSBuffer() const { return m_SBufferKeyFrame.get(); }
 
     private:
