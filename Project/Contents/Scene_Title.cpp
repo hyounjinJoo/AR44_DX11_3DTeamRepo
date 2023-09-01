@@ -64,6 +64,10 @@ namespace mh
 			RenderMgr::SetMainCamera(cameraComp);
 		}
 
+		{
+			//GameObject obj = EventMgr::SpawnGameObject(eLayerType::);
+		}
+
 		//{
 		//	// Main Com_Camera Game Object
 		//	GameObject* cameraObj = EventMgr::SpawnGameObject(eLayerType::Com_Camera);
@@ -139,7 +143,7 @@ namespace mh
 		{
 			define::tPhysicsInfo info = {};
 			info.eActorType = define::eActorType::Dynamic;
-			info.size = float3(0.5f, 0.5f, 0.5f);
+			info.size = float3(1.0f, 1.0f, 1.0f);
 
 			std::shared_ptr<MeshData> meshdata = ResMgr::Load<MeshData>("Monster.fbx");
 			GameObject* obj = meshdata->Instantiate();
@@ -147,19 +151,31 @@ namespace mh
 			obj->SetLayerType(define::eLayerType::Player);
 			Com_RigidBody* rigid = obj->AddComponent<Com_RigidBody>();
 			rigid->SetPhysical(info);
-			
+			rigid->SetFreezeRotation(FreezeRotationFlag::ROTATION_Y, true);
+			rigid->SetFreezeRotation(FreezeRotationFlag::ROTATION_X, true);
+			rigid->SetFreezeRotation(FreezeRotationFlag::ROTATION_Z, true);
+
 			obj->AddComponent<ICollider3D>();
 			EventMgr::SpawnGameObject(define::eLayerType::Player, obj);
 			obj->AddComponent<Script_Player>();
 		}
 
-		//{
+		{
+			define::tPhysicsInfo info = {};
+			info.eActorType = define::eActorType::Static;
+			info.size = float3(20.0f, 2.0f, 20.0f);
+			GameObject* obj = EventMgr::SpawnGameObject(define::eLayerType::Ground);
+			obj->SetName("Ground");
+			obj->SetLayerType(define::eLayerType::Ground);
+			Com_Transform* tr = obj->AddComponent<Com_Transform>();
+			tr->SetPosition(float3(0.0f, 0.0f, 0.0f));
+			tr->SetScale(float3(20.0f, 2.0f, 20.0f));
 
-		//	std::shared_ptr<MeshData> meshdata = ResMgr::Load<MeshData>("house.fbx");
-		//	GameObject* obj = meshdata->Instantiate();
-
-		//	EventMgr::SpawnGameObject(define::eLayerType::Ground, obj);
-		//}
+			Com_RigidBody* rigid = obj->AddComponent<Com_RigidBody>();
+			rigid->SetPhysical(info);
+			std::shared_ptr<Mesh> mesh = ResMgr::Find<Mesh>(define::strKey::Default::mesh::CubeMesh);
+			obj->AddComponent<Com_Renderer_Mesh>()->SetMesh(mesh);
+		}
 	}
 	void Scene_Title::Update()
 	{

@@ -1,17 +1,21 @@
 #include "PCH_Engine.h"
 #include "Com_RigidBody.h"
 #include "Application.h"
-#include "Com_Transform.h"
-#include "GameObject.h"
+
 #include "CollisionMgr.h"
+#include "Com_Transform.h"
+
+#include "GameObject.h"
+
 #include "Physics.h"
 
+#include "EnumFlags.h"
 
 namespace mh
 {
 	Com_RigidBody::Com_RigidBody()
 		: IComponent(define::eComponentType::RigidBody)
-		, mMaxVelocity(100.f)
+		, mMaxVelocity(10.f)
 		, mActor(nullptr)
 		, mShape(nullptr)
 		, mMaterial(nullptr)
@@ -261,6 +265,42 @@ namespace mh
 
 		mbAppliedGravity = false;
 	}
+	void Com_RigidBody::SetFreezeRotation(FreezeRotationFlag flag, bool enable)
+	{
+		physx::PxActor* actor = mShape->getActor();
+		assert(actor);
+
+		physx::PxRigidDynamic* rigidActor = actor->is<physx::PxRigidDynamic>();
+		if (rigidActor == nullptr)
+			return;
+
+		EnumFlags<FreezeRotationFlag, uint16_t> enumFlag{ flag };
+
+		if (enable)
+		{
+			mFreezeRotationFlag |= enumFlag;
+			if (enumFlag & FreezeRotationFlag::ROTATION_X)
+				rigidActor->setRigidDynamicLockFlag(physx::PxRigidDynamicLockFlag::eLOCK_ANGULAR_X, true);
+			if (enumFlag & FreezeRotationFlag::ROTATION_Y)
+				rigidActor->setRigidDynamicLockFlag(physx::PxRigidDynamicLockFlag::eLOCK_ANGULAR_Y, true);
+			if (enumFlag & FreezeRotationFlag::ROTATION_Z)
+				rigidActor->setRigidDynamicLockFlag(physx::PxRigidDynamicLockFlag::eLOCK_ANGULAR_Z, true);
+		}
+		else
+		{
+			mFreezeRotationFlag &= ~enumFlag;
+			if (enumFlag & FreezeRotationFlag::ROTATION_X)
+				rigidActor->setRigidDynamicLockFlag(physx::PxRigidDynamicLockFlag::eLOCK_ANGULAR_X, false);
+			if (enumFlag & FreezeRotationFlag::ROTATION_Y)
+				rigidActor->setRigidDynamicLockFlag(physx::PxRigidDynamicLockFlag::eLOCK_ANGULAR_Y, false);
+			if (enumFlag & FreezeRotationFlag::ROTATION_Z)
+				rigidActor->setRigidDynamicLockFlag(physx::PxRigidDynamicLockFlag::eLOCK_ANGULAR_Z, false);
+		}
+
+		rigidActor->setRigidDynamicLockFlag(physx::PxRigidDynamicLockFlag::eLOCK_LINEAR_X, true);
+		rigidActor->setRigidDynamicLockFlag(physx::PxRigidDynamicLockFlag::eLOCK_LINEAR_Z, true);
+	}
+
 	void Com_RigidBody::SetLinearDamping(float _damping)
 	{
 		AssertEx(define::eActorType::Dynamic == mPhysicsInfo.eActorType, L"RigidBody::SetLinearDamping() - Dynamic Actor가 아닌 물체에 대한 SetLinearDamping() 호출 시도");

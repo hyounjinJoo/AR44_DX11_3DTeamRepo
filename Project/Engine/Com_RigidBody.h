@@ -5,6 +5,15 @@
 
 namespace mh
 {
+	enum class FreezeRotationFlag : uint8_t
+	{
+		ROTATION_X = (1 << 1),
+		ROTATION_Y = (1 << 2),
+		ROTATION_Z = (1 << 4),
+
+		END
+	};
+
 	class Com_RigidBody :
 		public IComponent
 	{
@@ -59,6 +68,8 @@ namespace mh
 		void ApplyGravity();
 		void RemoveGravity();
 
+		void SetFreezeRotation(FreezeRotationFlag flag, bool enable);
+
 		void SetLinearDamping(float _damping);
 		void SetSimulationShapeFlag(bool _bFlag);
 		void SetTriggerShapeFlag(bool _bFlag);
@@ -82,6 +93,7 @@ namespace mh
 		void InitializeActor();
 
 	private:
+		EnumFlags<FreezeRotationFlag, uint16_t> mFreezeRotationFlag;
 		define::tPhysicsInfo mPhysicsInfo;
 
 		physx::PxActor* mActor;
