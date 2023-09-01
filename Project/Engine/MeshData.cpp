@@ -299,10 +299,35 @@ namespace mh
 		return uniqObj.release();
 	}
 
-	eResult MeshData::LoadAndConvertFBX(
+	eResult MeshData::ConvertFBX(
 		const std::fs::path& _fbxPath, bool _bStatic,
 		const std::fs::path& _dirAndFileName
 	)
+	{
+		eResult result = LoadFromFBX(_fbxPath, _bStatic, _dirAndFileName);
+		if (eResultFail(result))
+		{
+			ERROR_MESSAGE_W(L"FBX로부터 로드 실패.");
+			return result;
+		}
+
+
+		//다른게 다 진행됐으면 저장 진행
+		//키값 만들고 세팅하고
+		std::fs::path strKeyMeshData = _dirAndFileName;
+		strKeyMeshData.replace_extension(strKey::Ext_MeshData);
+		SetKey(strKeyMeshData.string());
+		result = Save(_dirAndFileName);
+		if (eResultFail(result))
+		{
+			ERROR_MESSAGE_W(L"MeshData 저장에 실패했습니다.");
+			return result;
+		}
+
+		return eResult::Success;
+	}
+
+	eResult MeshData::LoadFromFBX(const std::fs::path& _fbxPath, bool _bStatic, const std::fs::path& _dirAndFileName)
 	{
 		if (false == std::fs::exists(_fbxPath))
 		{
@@ -323,14 +348,12 @@ namespace mh
 			return result;
 		}
 
-
 		std::fs::path basePath = PathMgr::GetContentPathRelative(eResourceType::MeshData);
 		basePath /= _dirAndFileName;
 		if (false == std::fs::exists(basePath))
 		{
 			std::fs::create_directories(basePath);
 		}
-
 
 		//Bone 정보 로드
 		mSkeleton = std::make_shared<Skeleton>();
@@ -354,7 +377,6 @@ namespace mh
 			ERROR_MESSAGE_W(L"Skeleton 로드 실패.");
 			return result;
 		}
-
 
 		const std::vector<tFBXContainer>& containers = loader.GetContainers();
 		for (size_t i = 0; i < containers.size(); ++i)
@@ -394,13 +416,12 @@ namespace mh
 				meshCont.pMesh->SetKey(strKey.string());
 			}
 
-
 			// 메테리얼 가져오기
 			for (UINT j = 0; j < containers[i].vecMtrl.size(); ++j)
 			{
 
 				std::shared_ptr<Material> mtrl = ConvertMaterial(&(containers[i].vecMtrl[j]), basePath);
-				if(nullptr == mtrl)
+				if (nullptr == mtrl)
 				{
 					ERROR_MESSAGE_W(L"머티리얼 로드에 실패했습니다.");
 					return eResult::Fail_InValid;
@@ -411,33 +432,49 @@ namespace mh
 			mMeshContainers.push_back(meshCont);
 		}
 
-		//다른게 다 진행됐으면 자신도 저장
-		//키값 만들고 세팅하고
-		std::fs::path strKeyMeshData = _dirAndFileName;
-		strKeyMeshData.replace_extension(strKey::Ext_MeshData);
-		SetKey(strKeyMeshData.string());
-		result = Save(_dirAndFileName);
+		return eResult::Success;
+	}
+
+	eResult MeshData::AddAnimationFromFBX(const std::fs::path& _fbxPath, const std::fs::path& _meshDataName)
+	{
+		if (false == std::fs::exists(_fbxPath))
+		{
+			ERROR_MESSAGE_W(L"파일을 찾지 못했습니다.");
+			return eResult::Fail_PathNotExist;
+		}
+
+		FBXLoader loader{};
+		eResult result = loader.LoadFbx(_fbxPath, false);
 		if (eResultFail(result))
 		{
-			ERROR_MESSAGE_W(L"MeshData 저장에 실패했습니다.");
+			ERROR_MESSAGE_W(L"FBX 불러오기 실패.");
 			return result;
 		}
-		
 
-		//모두 문제없이 처리되었을 경우 메쉬와 재질을 ResMgr에 전부 추가한다.
-		//for (size_t i = 0; i < mMeshContainers.size(); ++i)
-		//{
-			//ResMgr::Insert(mMeshContainers[i].pMesh->GetKey(), mMeshContainers[i].pMesh);
+		std::unique_ptr<Skeleton> skeletonOfFBX = std::make_unique<Skeleton>();
+		result = skeletonOfFBX->CreateFromFBX(&loader);
+		if (eResultFail(result))
+		{
+			ERROR_MESSAGE_W(L"FBX로부터 스켈레톤 로딩 실패.");
+			return result;
+		}
 
-			//재질은 FBX Loader에서 추가가 되어있는 상태라서 여기서 처리할 필요 없음.
-			//for (size_t j = 0; j < mMeshContainers[j].pMaterials.size(); ++i)
-			//{
-			//	ResMgr::Insert(mMeshContainers[i].pMaterials[j]->GetKey(), mMeshContainers[i].pMaterials[j]);
-			//}
-		//}
+		//지금 필요한건 FBX에 저장된 Skeleton과 Animation 정보 뿐임
+		std::unique_ptr<Skeleton> skeletonOfProj = std::make_unique<Skeleton>();
 
-		//전부 저장에 성공했을 경우 ResMgr에서 이 주소(MeshData)를 리소스에 추가한다
-		//애초에 호출한 클래스가 ResMgr임
+		std::fs::path projSkltPath = PathMgr::CreateFullPathToContent(_meshDataName, L"", eResourceType::MeshData);
+		result = skeletonOfProj->Load(_meshDataName, projSkltPath);
+		if (eResultFail(result))
+		{
+			ERROR_MESSAGE_W(L"프로젝트 스켈레톤 불러오기 실패.");
+			return result;
+		}
+
+		if (false == skeletonOfProj->CopyAnimationFromOther((*skeletonOfFBX)))
+		{
+			MessageBoxW(nullptr, L"스켈레톤 구조가 일치하지 않아 애니메이션을 추가할 수 없습니다.", nullptr, MB_OK);
+			return eResult::Fail;
+		}
 
 		return eResult::Success;
 	}
@@ -504,6 +541,7 @@ namespace mh
 
 		std::shared_ptr<GraphicsShader> defferedShader = ResMgr::Find<GraphicsShader>(strKey::Default::shader::graphics::DefferedShader);
 		mtrl->SetShader(defferedShader);
+		mtrl->SetRenderingMode(eRenderingMode::DefferdOpaque);
 
 		return mtrl;
 	}

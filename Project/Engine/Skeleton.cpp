@@ -54,10 +54,10 @@ namespace mh
 			Binary::SaveValue(ofs, m_vecBones[i].Values);
 		}
 
-		Binary::SaveValue(ofs, mMapAnimations.size());
+		//Binary::SaveValue(ofs, mMapAnimations.size());
 		for (auto& iter : mMapAnimations)
 		{
-			Binary::SaveStr(ofs, iter.first);
+			//Binary::SaveStr(ofs, iter.first);
 			eResult result = iter.second->Save(iter.first, _basePath);
 			if (eResultFail(result))
 			{
@@ -90,8 +90,7 @@ namespace mh
 			return eResult::Fail_OpenFile;
 		}
 
-		//std::vector<define::tMTBone>			m_vecBones;
-				//std::vector<define::tMTBone>			m_vecBones;
+
 		{
 			size_t size{};
 			Binary::LoadValue(ifs, size);
@@ -105,24 +104,46 @@ namespace mh
 		CreateBoneOffsetSBuffer();
 
 
-		size_t mapSize{};
-		Binary::LoadValue(ifs, mapSize);
-		for (size_t i = 0; i < mapSize; ++i)
+		std::fs::path curPath = fullPath.parent_path();
+		for (const auto& entry : std::fs::directory_iterator(curPath))
 		{
-			std::string animName{};
-			Binary::LoadStr(ifs, animName);
-			
-			std::unique_ptr<Animation3D> anim3d = std::make_unique<Animation3D>();
-			anim3d->SetSkeleton(this);
-			eResult result = anim3d->Load(animName, _basePath);
-			if (eResultFail(result))
-			{
-				ERROR_MESSAGE_W(L"애니메이션 로드 실패.");
-				return eResult::Fail_InValid;
-			}
+			if (entry.is_directory())
+				continue;
 
-			mMapAnimations.insert(std::make_pair(animName, anim3d.release()));
+			//경로 내부의 ".a3d" 파일을 싹 긁어와서 로드한다.
+			if (entry.path().extension() == strKey::Ext_Anim3D)
+			{
+				std::unique_ptr<Animation3D> anim3d = std::make_unique<Animation3D>();
+				anim3d->SetSkeleton(this);
+
+				eResult result = anim3d->Load(entry.path().stem() , _basePath);
+				if (eResultFail(result))
+				{
+					ERROR_MESSAGE_W(L"애니메이션 로드 실패.");
+					return eResult::Fail_InValid;
+				}
+
+				mMapAnimations.insert(std::make_pair(entry.path().stem().string(), anim3d.release()));
+			}
 		}
+		//size_t mapSize{};
+		//Binary::LoadValue(ifs, mapSize);
+		//for (size_t i = 0; i < mapSize; ++i)
+		//{
+		//	std::string animName{};
+		//	Binary::LoadStr(ifs, animName);
+		//	
+		//	std::unique_ptr<Animation3D> anim3d = std::make_unique<Animation3D>();
+		//	anim3d->SetSkeleton(this);
+		//	eResult result = anim3d->Load(animName, _basePath);
+		//	if (eResultFail(result))
+		//	{
+		//		ERROR_MESSAGE_W(L"애니메이션 로드 실패.");
+		//		return eResult::Fail_InValid;
+		//	}
+
+		//	mMapAnimations.insert(std::make_pair(animName, anim3d.release()));
+		//}
 		return eResult::Success;
 	}
 
@@ -190,6 +211,67 @@ namespace mh
 		return eResult::Success;
 	}
 
+	bool Skeleton::CopyAnimationFromOther(const Skeleton& _other)
+	{
+		//순회를 돌아주면서 내 스켈레톤 인덱스와 매칭되는 상대 스켈레톤 인덱스를 계산
+		if (m_vecBones.size() != _other.m_vecBones.size())
+			return false;
+
+		std::vector<int> matchingIndices(m_vecBones.size());
+		for (size_t i = 0; i < m_vecBones.size(); ++i)
+		{
+			//내 본과 일치하는 본의 인덱스를 찾는다.
+			int otherIdx = _other.FindSameBoneIndex(m_vecBones[i]);
+
+			//일치하는 본이 없으면 Return
+			if (0 > otherIdx)
+				return false;
+
+			//내 본의 i번쨰 = 상대 본의 otherIdx 번쨰
+			matchingIndices[i] = otherIdx;
+		}
+
+		for (const auto& otherAnim : _other.mMapAnimations)
+		{
+			//일단 복사
+			std::shared_ptr<Animation3D> ourAnim = std::make_shared<Animation3D>();
+			ourAnim->m_OwnerSkeleton = this;
+			ourAnim->mValues = otherAnim.second->mValues;
+			ourAnim->m_KeyFramesPerBone = otherAnim.second->m_KeyFramesPerBone;
+
+			for (size_t i = 0; matchingIndices.size(); ++i)
+			{
+				//인덱스가 서로 다른 경우에 인덱스 번호를 바꿔준다
+				if ((int)i != matchingIndices[i])
+				{
+					std::swap(ourAnim->m_KeyFramesPerBone[i], ourAnim->m_KeyFramesPerBone[matchingIndices[i]]);
+				}
+			}
+		}
+		
+
+		return true;
+	}
+
+	int Skeleton::FindSameBoneIndex(const define::tMTBone& _other) const
+	{
+		for (size_t i = 0; i < m_vecBones.size(); ++i)
+		{
+			if (
+				m_vecBones[i].strBoneName == _other.strBoneName
+				&&
+				m_vecBones[i].Values.iDepth == _other.Values.iDepth
+				&&
+				m_vecBones[i].Values.iParentIndx == _other.Values.iParentIndx
+				)
+			{
+				return (int)i;
+			}
+		}
+
+		return -1;
+	}
+
 	void Skeleton::CreateBoneOffsetSBuffer()
 	{
 		// BoneOffet 행렬
@@ -219,5 +301,6 @@ namespace mh
 		}
 		return retPtr;
 	}
+
 }
 

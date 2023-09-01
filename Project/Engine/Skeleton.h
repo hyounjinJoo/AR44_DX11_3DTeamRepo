@@ -33,6 +33,11 @@ namespace mh
 
 		std::shared_ptr<Animation3D> FindAnimation(const std::string& _strAnimName);
 
+
+		//애니메이션을 이동가능한지 확인하고, 이동시켜주는 함수
+		bool CopyAnimationFromOther(const Skeleton& _other);
+		int FindSameBoneIndex(const define::tMTBone& _other) const;
+
 	private:
 		void CreateBoneOffsetSBuffer();
 

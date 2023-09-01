@@ -27,6 +27,7 @@ namespace mh
 	class Animation3D :
 		public Entity
 	{
+        friend class Skeleton;
 	public:
 		Animation3D();
 
@@ -42,6 +43,7 @@ namespace mh
         eResult Load(const std::fs::path& _filePath, const std::fs::path& _basePath);
 
         eResult LoadFromFBX(Skeleton* _skeleton, const tFBXAnimClip* _clip);
+        
 
         int GetStartFrame() const { return mValues.iStartFrame; }
         int GetEndFrame() const { return mValues.iEndFrame; }

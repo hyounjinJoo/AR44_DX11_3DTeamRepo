@@ -75,7 +75,7 @@ namespace mh
 
 
 		{
-			std::shared_ptr<MeshData> meshdata = ResMgr::Load<MeshData>("Player_Default");
+			std::shared_ptr<MeshData> meshdata = ResMgr::Load<MeshData>("sqc_Evade");
 
 			GameObject* modeling = meshdata->Instantiate();
 

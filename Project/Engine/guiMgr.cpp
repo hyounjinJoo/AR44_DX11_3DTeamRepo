@@ -463,6 +463,12 @@ namespace gui
 		//ImGuizmo::SetOrthographic(false);
 		//ImGuizmo::SetDrawlist(ImGui::GetForegroundDrawList());
 
+		mh::Com_Transform* tr = targetgameobject->GetComponent<mh::Com_Transform>();
+		if (nullptr == tr)
+		{
+			return;
+		}
+
 		constexpr float kOffsetX = 60.f;
 		constexpr float kOffsetY = 45.f;
 		const float		x = ImGui::GetWindowPos().x - 60;
@@ -473,7 +479,7 @@ namespace gui
 
 		MATRIX view = mainCam->GetViewMatrix();
 		MATRIX projection = mainCam->GetProjectionMatrix();
-		MATRIX worldMatrix = targetgameobject->GetComponent<mh::Com_Transform>()->GetWorldMat();
+		MATRIX worldMatrix = tr->GetWorldMat();
 
 		float matrixTranslation[3], matrixRotation[3], matrixScale[3];
 		ImGuizmo::DecomposeMatrixToComponents(&worldMatrix.m[0][0], matrixTranslation, matrixRotation, matrixScale);
@@ -488,17 +494,15 @@ namespace gui
 
 		if (ImGuizmo::IsUsing())
 		{
-
 			Vector3 position{};
 			Quaternion rotation{};
 			Vector3 scale{};
 			worldMatrix.Decompose(scale, rotation, position);
 
-			mh::Com_Transform* transformComponent = targetgameobject->GetComponent<mh::Com_Transform>();
 
 			if (mCurrentGizmoOperation == ImGuizmo::TRANSLATE)
 			{
-				transformComponent->SetRelativePos(position);
+				tr->SetRelativePos(position);
 			}
 			else if (mCurrentGizmoOperation == ImGuizmo::ROTATE)
 			{
@@ -527,12 +531,12 @@ namespace gui
 				}
 
 				Vector3 axisRotation(x, y, z);
-				transformComponent->SetRelativeRotXYZ(axisRotation);
+				tr->SetRelativeRotXYZ(axisRotation);
 
 			}
 			else if (mCurrentGizmoOperation == ImGuizmo::SCALE)
 			{
-				transformComponent->SetRelativeScale(scale);
+				tr->SetRelativeScale(scale);
 			}
 			else
 			{
