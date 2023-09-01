@@ -53,26 +53,21 @@ SBUFFER_RW(g_BoneSocketMatrixArray, tOutputBoneInfo, u, 1);
 SBUFFER_RW(g_InstancingBoneMatrixArray, Matrix, u, 2);
 
 
-
-
 // Light
 SBUFFER(lightAttributes, tLightAttribute, t, 14);
-
 
 //StructuredBuffer<LightAttribute> lightAttributes : register(t13);
 //StructuredBuffer<LightAttribute> lightAttributes3D : register(t14);
 
-
-
-
 // noise
 TEXTURE2D(NoiseTexture, t, 16);
-
-
 
 // postProcess
 TEXTURE2D(postProcessTexture, t, 60);
 TEXTURE2D(guiGameTexture, t, 61);
+
+// cube
+TEXTURECUBE(skyBoxCube, t, 20);
 
 
 #endif

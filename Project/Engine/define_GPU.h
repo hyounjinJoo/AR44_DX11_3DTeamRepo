@@ -242,10 +242,11 @@ namespace mh::define
 		SpecularTarget = Register_t_SpecularTarget,
 		EmissiveTarget = Register_t_EmissiveTarget,
 		PositionTarget = Register_t_PositionTarget,
-		
+
 		DiffuseLightTarget = Register_t_DiffuseLightTarget,
 		SpecularLightTarget = Register_t_SpecularLightTarget,
 
+		SkyBoxCube = Register_t_skyBoxCube,
 		//CubeT8,
 		//CubeT9,
 
