@@ -12,7 +12,7 @@ namespace mh
 {
 	Script_Player::Script_Player()
 		: IScript()
-		, mMoveSpeed(10.0f)
+		, mMoveSpeed(1.0f)
 	{
 	}
 

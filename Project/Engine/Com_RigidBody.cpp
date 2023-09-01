@@ -329,7 +329,7 @@ namespace mh
 			*GetDynamicActor(),
 			_force,
 			GetOwner()->GetComponent<Com_Transform>()->GetPosition(),
-			physx::PxForceMode::eFORCE
+			physx::PxForceMode::eIMPULSE
 		);
 	}
 	void Com_RigidBody::CreateBoxGeometry()
