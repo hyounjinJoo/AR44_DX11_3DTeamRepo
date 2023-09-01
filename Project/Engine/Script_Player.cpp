@@ -36,8 +36,7 @@ namespace mh
 
 		if (InputMgr::GetKey(eKeyCode::W))
 		{
-			rb->AddForce(float3(mMoveSpeed, 0.0f, 0.0f));
-
+			rb->SetVelocity(define::eAxis3D::Z, -mMoveSpeed);
 		}
 
 		if (InputMgr::GetKey(eKeyCode::S))

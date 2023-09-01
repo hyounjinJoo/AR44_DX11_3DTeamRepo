@@ -11,7 +11,7 @@ namespace mh
 {
 	Com_RigidBody::Com_RigidBody()
 		: IComponent(define::eComponentType::RigidBody)
-		, mMaxVelocity(10.f)
+		, mMaxVelocity(100.f)
 		, mActor(nullptr)
 		, mShape(nullptr)
 		, mMaterial(nullptr)
@@ -289,7 +289,7 @@ namespace mh
 			*GetDynamicActor(),
 			_force,
 			GetOwner()->GetComponent<Com_Transform>()->GetPosition(),
-			physx::PxForceMode::eIMPULSE
+			physx::PxForceMode::eFORCE
 		);
 	}
 	void Com_RigidBody::CreateBoxGeometry()

@@ -60,7 +60,6 @@ namespace mh
 			//cameraComp->RegisterCameraInRenderer();
 			//cameraComp->TurnLayerMask(eLayerType::UI, false);
 			cameraObj->AddComponent(strKey::Script::Script_CameraMove);
-			//cameraObj->AddComponent()
 
 			RenderMgr::SetMainCamera(cameraComp);
 		}
@@ -155,16 +154,10 @@ namespace mh
 		}
 
 		//{
-		//	define::tPhysicsInfo info = {};
-		//	info.eActorType = define::eActorType::Static;
-		//	info.size = float3(5.f, 5.f, 1.f);
 
-		//	std::shared_ptr<Mesh> mesh = ResMgr::Load<Mesh>(define::strKey::Default::mesh::CubeMesh);
-		//	GameObject* obj = mesh->
-		//	obj->AddComponent<Com_Renderer_Mesh>()->SetMesh(mesh);
-		//	Com_RigidBody* rigid = obj->AddComponent<Com_RigidBody>();
-		//	rigid->SetPhysical(info);
-		//	obj->AddComponent<ICollider3D>();
+		//	std::shared_ptr<MeshData> meshdata = ResMgr::Load<MeshData>("house.fbx");
+		//	GameObject* obj = meshdata->Instantiate();
+
 		//	EventMgr::SpawnGameObject(define::eLayerType::Ground, obj);
 		//}
 	}
@@ -187,7 +180,6 @@ namespace mh
 	}
 	void Scene_Title::OnEnter()
 	{
-
 	}
 	void Scene_Title::OnExit()
 	{

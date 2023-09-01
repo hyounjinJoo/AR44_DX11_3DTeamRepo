@@ -149,7 +149,7 @@ namespace mh
 		}
 
 		tf->SetPosition(vPos);
-		tf->SetRotation(vRot);
+		tf->SetRotation(float3(vRot.x, vRot.y,0.0f));
 	}
 }
 

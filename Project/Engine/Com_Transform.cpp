@@ -31,25 +31,28 @@ namespace mh
 		
 		if (true == IsPhysicsObject())
 		{
-			if (true == mbUpdateByMat)
-			{
-				GetOwner()->GetComponent<Com_RigidBody>()->SetPhysicsTransform(physx::PxTransform(mPosition, EulerToQuaternion(mRotation)));
+			//if (true == mbUpdateByMat)
+			//{
+			//	GetOwner()->GetComponent<Com_RigidBody>()->SetPhysicsTransform(physx::PxTransform(mPosition, EulerToQuaternion(mRotation)));
 
-				if (nullptr != mpParent)
-					mMatWorld *= mpParent->GetWorldMatrix();
+			//	if (nullptr != mpParent)
+			//		mMatWorld *= mpParent->GetWorldMatrix();
 
-				return;
-			}
+			//	return;
+			//}
 
 			physx::PxTransform transform = GetOwner()->GetComponent<Com_RigidBody>()->GetPhysicsTransform();
-			physx::PxQuat relativeX(mRelativeRotation.x * XM_PI / 180.f, float3(1.f, 0.f, 0.f));
-			physx::PxQuat relativeY(mRelativeRotation.y * XM_PI / 180.f, float3(0.f, 1.f, 0.f));
-			physx::PxQuat relativeZ(mRelativeRotation.z * XM_PI / 180.f, float3(0.f, 0.f, 1.f));
+			//physx::PxQuat relativeX(mRelativeRotation.x * XM_PI / 180.f, float3(1.f, 0.f, 0.f));
+			//physx::PxQuat relativeY(mRelativeRotation.y * XM_PI / 180.f, float3(0.f, 1.f, 0.f));
+			//physx::PxQuat relativeZ(mRelativeRotation.z * XM_PI / 180.f, float3(0.f, 0.f, 1.f));
 
+			auto quat = math::Quaternion::CreateFromYawPitchRoll({ XMConvertToRadians(mRelativeRotation.y),XMConvertToRadians(mRelativeRotation.x) ,XMConvertToRadians(mRelativeRotation.z) });
+			math::Matrix matRotation = math::Matrix::CreateFromQuaternion(quat);
 			math::Matrix matScale = math::Matrix::CreateScale(mScale);
-			math::Matrix matRotation = math::Matrix::CreateFromQuaternion(relativeZ) *
-			math::Matrix::CreateFromQuaternion(relativeX) *
-			math::Matrix::CreateFromQuaternion(relativeY);
+
+			//math::Matrix matRotation = math::Matrix::CreateFromQuaternion(relativeZ) *
+			//math::Matrix::CreateFromQuaternion(relativeX) *
+			//math::Matrix::CreateFromQuaternion(relativeY);
 			//Z*Y*X 하니까 짐벌락 걸렷다.
 
 			matRotation *= math::Matrix::CreateFromQuaternion(transform.q);
@@ -585,7 +588,6 @@ namespace mh
 			Com_RigidBody* rigidBody = GetOwner()->GetComponent<Com_RigidBody>();
 			physx::PxTransform transform = rigidBody->GetPhysicsTransform();
 			transform.p += _velocity * TimeMgr::DeltaTime();
-
 			define::eActorType eActorType = rigidBody->GetActorType();
 
 			if (define::eActorType::Kinematic == eActorType)
@@ -603,8 +605,10 @@ namespace mh
 	}
 	void Com_Transform::BindData()
 	{
-		mCB_Transform = {};
+		//mCB_Transform = {};
 
+		mCB_Transform.world = mMatWorld;
+		
 		mCB_Transform.view = Com_Camera::GetGpuViewMatrix();
 		mCB_Transform.inverseView = Com_Camera::GetGpuViewInvMatrix();
 		mCB_Transform.projection = Com_Camera::GetGpuProjectionMatrix();

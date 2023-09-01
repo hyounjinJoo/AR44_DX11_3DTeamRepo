@@ -62,9 +62,10 @@ namespace mh
 	}
 	void Physics::Update()
 	{
-
 		mScene->simulate(TimeMgr::DeltaTime());
 		mScene->fetchResults(true);
+
+
 	}
 	void Physics::Render()
 	{
