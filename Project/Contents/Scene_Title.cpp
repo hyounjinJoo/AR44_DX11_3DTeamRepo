@@ -75,7 +75,7 @@ namespace mh
 
 
 		{
-			std::shared_ptr<MeshData> meshdata = ResMgr::Load<MeshData>("House");
+			std::shared_ptr<MeshData> meshdata = ResMgr::Load<MeshData>("Player_Default");
 
 			GameObject* modeling = meshdata->Instantiate();
 

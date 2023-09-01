@@ -23,7 +23,7 @@ namespace gui
 		virtual void UpdateUI() override;
 
 	private:
-		void CheckThread();
+		bool CheckThread();
 		void ChooseFBXButton();
 		void ConvertFBXButton();
 

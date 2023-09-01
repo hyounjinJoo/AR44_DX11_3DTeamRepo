@@ -33,7 +33,8 @@ namespace gui
 
 	void guiFBXConverter::UpdateUI()
 	{
-		CheckThread();
+		if (CheckThread())
+			return;
 
 
 		ImGui::Text("[FBX File Path]");
@@ -75,7 +76,7 @@ namespace gui
 
 		ConvertFBXButton();
 	}
-	void guiFBXConverter::CheckThread()
+	bool guiFBXConverter::CheckThread()
 	{
 		if (mThreadWorking)
 		{
@@ -107,6 +108,8 @@ namespace gui
 				ImGui::Button(loading.c_str());
 			}
 		}
+
+		return mThreadWorking;
 	}
 	void guiFBXConverter::ChooseFBXButton()
 	{
