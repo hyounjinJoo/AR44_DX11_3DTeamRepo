@@ -31,7 +31,6 @@ namespace mh
 		virtual eResult SaveJson(Json::Value* _pJVal) override;
 		virtual eResult LoadJson(const Json::Value* _pJVal) override;
 
-		void SetData(eGPUParam _param, void* _data);
 		void BindData();
 		void UnBindData();
 

@@ -37,14 +37,7 @@ namespace mh
 
 	eResult Mesh::Save(const std::fs::path& _filePath, const std::fs::path& _basePath)
 	{
-		std::fs::path fullPath = CreateFullPath(_filePath, _basePath);
-		{
-			std::fs::path checkDir = fullPath.parent_path();
-			if (false == std::fs::exists(checkDir))
-			{
-				std::fs::create_directories(checkDir);
-			}
-		}
+		std::fs::path fullPath =PathMgr::CreateFullPathToContent(_filePath, _basePath, GetResType());
 		fullPath.replace_extension(strKey::Ext_Mesh);
 
 		std::ofstream ofs(fullPath, std::ios::binary);
@@ -92,14 +85,15 @@ namespace mh
 
 	eResult Mesh::Load(const std::fs::path& _filePath, const std::fs::path& _basePath)
 	{
-		std::fs::path fullPath = CreateFullPath(_filePath, _basePath);
-
+		std::fs::path fullPath =PathMgr::CreateFullPathToContent(_filePath, _basePath, GetResType());
 		fullPath.replace_extension(strKey::Ext_Mesh);
 
-		if (false == PathMgr::CheckExist(fullPath))
+		if (false == std::fs::exists(fullPath))
 		{
+			ERROR_MESSAGE_W(L"파일을 찾지 못했습니다.");
 			return eResult::Fail_OpenFile;
 		}
+
 
 		std::ifstream ifs(fullPath, std::ios::binary);
 		if (false == ifs.is_open())

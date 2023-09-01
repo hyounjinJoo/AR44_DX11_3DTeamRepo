@@ -33,12 +33,7 @@ namespace mh
 
 	eResult ComputeShader::Load(const std::filesystem::path& _filePath, const std::filesystem::path& _basePath)
 	{
-		std::fs::path fullPath = CreateFullPath(_filePath, _basePath);
-		if (false == PathMgr::CheckExist(fullPath))
-		{
-			return eResult::Fail_OpenFile;
-		}
-
+		std::fs::path fullPath = PathMgr::CreateFullPathToContent(_filePath, _basePath, GetResType());
 		return CreateByCSO(fullPath);
 	}
 	eResult ComputeShader::CreateByCompile(const std::filesystem::path& _FullPath, const std::string_view _funcName)

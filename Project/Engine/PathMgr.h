@@ -27,7 +27,7 @@ namespace mh
 
 		static const std::filesystem::path& GetShaderCSOPath() { return mRelativePath_ShaderCSO; }
 
-		static inline bool CheckExist(const std::filesystem::path& _fullPath);
+		static inline std::fs::path CreateFullPathToContent(const std::fs::path& _filePath, const std::fs::path& _basePath, define::eResourceType _resType);
 
 	private:
 		static void Release();
@@ -45,16 +45,32 @@ namespace mh
 		return mAbsoluteResPath / define::strKey::ArrResName[(int)_eResType];
 	}
 
-	inline bool PathMgr::CheckExist(const std::filesystem::path& _fullPath)
+	inline std::filesystem::path PathMgr::CreateFullPathToContent(const std::filesystem::path& _filePath, const std::filesystem::path& _basePath, define::eResourceType _resType)
 	{
-		bool bRet = std::fs::exists(_fullPath);
-		if (false == bRet)
+		std::filesystem::path fullPath;
+		if (_basePath.empty())
 		{
-			std::wstring errorMsg = _fullPath.wstring();
-			errorMsg += L"\n파일을 찾지 못했습니다.";
-			ERROR_MESSAGE_W(errorMsg.c_str());
+			fullPath = PathMgr::GetContentPathRelative(_resType);
 		}
-		return bRet;
+		else
+		{
+			fullPath = _basePath;
+		}
+		fullPath /= _filePath;
+
+
+		std::fs::path checkDir = fullPath.parent_path();
+		if (false == std::fs::exists(checkDir))
+		{
+			if (false == std::fs::create_directories(checkDir))
+			{
+				ERROR_MESSAGE_W(L"폴더 생성 실패.");
+				fullPath.clear();
+			}
+		}
+
+
+		return fullPath;
 	}
 }
 

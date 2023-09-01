@@ -162,11 +162,14 @@ namespace mh
 
 	eResult Texture::Load(const std::filesystem::path& _filePath, const std::filesystem::path& _basePath)
 	{
-		std::fs::path fullPath = CreateFullPath(_filePath, _basePath);
-		if (false == PathMgr::CheckExist(fullPath))
+		std::fs::path fullPath = PathMgr::CreateFullPathToContent(_filePath, _basePath, GetResType());
+
+		if (false == std::fs::exists(fullPath))
 		{
+			ERROR_MESSAGE_W(L"파일이 없습니다.");
 			return eResult::Fail_OpenFile;
 		}
+
 
 		eResult result = LoadFile(fullPath);
 

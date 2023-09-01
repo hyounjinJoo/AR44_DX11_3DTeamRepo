@@ -30,9 +30,12 @@ namespace mh
 
 	eResult AudioClip::Load(const std::fs::path& _filePath, const std::fs::path& _basePath)
 	{
-		std::fs::path fullPath = CreateFullPath(_filePath, _basePath);
-		if (false == PathMgr::CheckExist(fullPath))
+		IRes::Save(_filePath, _basePath);
+
+		std::fs::path fullPath = PathMgr::CreateFullPathToContent(_filePath, _basePath, GetResType());
+		if (false == std::fs::exists(fullPath))
 		{
+			ERROR_MESSAGE_W(L"파일이 없습니다.");
 			return eResult::Fail_OpenFile;
 		}
 

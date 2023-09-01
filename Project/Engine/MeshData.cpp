@@ -30,49 +30,19 @@ namespace mh
 
 	eResult MeshData::Save(const std::fs::path& _filePath, const std::fs::path& _basePath)
 	{
-		eResult result = eResult::Fail;
+		IRes::Save(_filePath, _basePath);
 
+		eResult result = eResult::Fail;
 		//MeshData는 다른 클래스와 저장 / 로드 방식이 약간 다름
 		//예를 들어 Player를 저장한다고 하면
 		//Player/Player.json 형태로 저장한다.
-		std::fs::path fullPath = IRes::CreateFullPath(_filePath, _basePath);
+		std::fs::path fullPath = PathMgr::CreateFullPathToContent(_filePath, _basePath, GetResType());
 		fullPath.replace_extension();
-		//경로가 없을 시 경로를 생성
-		if (false == std::fs::exists(fullPath))
-		{
-			std::fs::create_directories(fullPath);
-		}
 
-		//이 경로로 MeshContainer, Skeleton 저장
-		if (mSkeleton)
-		{
-			result = mSkeleton->Save(mSkeleton->GetKey(), fullPath);
-			if (eResultFail(result))
-				return result;
-		}
-		
-		for (size_t i = 0; i < mMeshContainers.size(); ++i)
-		{
-			//Mesh 저장
-			result = mMeshContainers[i].pMesh->Save(mMeshContainers[i].pMesh->GetKey(), fullPath);
-			if (eResultFail(result))
-			{
-				return result;
-			}
-			
-			//Material 저장
-			for (size_t j = 0; j < mMeshContainers[i].pMaterials.size(); ++j)
-			{
-				result = mMeshContainers[i].pMaterials[j]->Save(mMeshContainers[i].pMaterials[j]->GetKey(), fullPath);
-				if (eResultFail(result))
-				{
-					return result;
-				}
-			}
-		}
+		//Base Path를 변경
+		SetBasePath(fullPath);
 
-		//마지막으로 자신을 json 확장자로 변경하고 저장
-		fullPath.replace_extension();
+		//자신을 json 확장자로 변경하고 저장
 		fullPath /= _filePath;
 		fullPath.replace_extension(strKey::Ext_MeshData);
 
@@ -93,35 +63,23 @@ namespace mh
 
 	eResult MeshData::Load(const std::fs::path& _filePath, const std::fs::path& _basePath)
 	{
+		IRes::Load(_filePath, _basePath);
+
 		eResult result = eResult::Fail;
 
 		//MeshData는 다른 클래스와 저장 / 로드 방식이 약간 다름
 		//예를 들어 Player를 저장한다고 하면
 		//Player/Player.json 형태로 저장한다.
-		std::fs::path fullPath = IRes::CreateFullPath(_filePath, _basePath);
+		std::fs::path fullPath = PathMgr::CreateFullPathToContent(_filePath, _basePath, GetResType());
 		fullPath.replace_extension();
-		//경로가 없을 시 경로를 생성
-		if (false == std::fs::exists(fullPath))
-		{
-			std::fs::create_directories(fullPath);
-		}
+
+		//Base Path를 변경
+		SetBasePath(fullPath);
+
 		//파일명까지 생성
 		fullPath /= _filePath;
 
-		//이 경로로 MeshContainer, Skeleton 저장
-		if (mSkeleton)
-		{
-			fullPath.replace_extension(strKey::Ext_Skeleton);
-			result = mSkeleton->Load(_filePath, fullPath);
-			if (eResultFail(result))
-				return result;
-		}
-
-
-		//마지막으로 자기 자신 저장
 		Json::Value jVal;
-		fullPath.replace_extension();
-		fullPath /= _filePath;
 		fullPath.replace_extension(strKey::Ext_MeshData);
 		std::ifstream ifs(fullPath);
 		if (false == ifs.is_open())
@@ -138,23 +96,6 @@ namespace mh
 		return eResult::Success;
 	}
 
-	//eResult MeshData::ConvertFBX(const std::fs::path& _fbxFullPath, bool _bStatic, const std::fs::path& _dirAndFileName)
-	//{
-	//	if (false == std::fs::exists(_fbxFullPath))
-	//	{
-	//		ERROR_MESSAGE_W(L"파일이 없습니다.");
-	//		return eResult::Fail_OpenFile;
-	//	}
-	//	
-	//	std::unique_ptr<MeshData> meshData = std::make_unique<MeshData>();
-	//	eResult result = meshData->LoadFromFBX(_fbxFullPath, _bStatic);
-	//	if (eResultFail(result))
-	//		return result;
-
-	//	meshData->Save(_dirAndFileName);
-
-	//	return eResult::Success;
-	//}
 
 	eResult MeshData::SaveJson(Json::Value* _pJson)
 	{
@@ -170,23 +111,58 @@ namespace mh
 			return eResult::Fail_InValid;
 		}
 
+
+		//Skeleton
+		if (mSkeleton)
+		{
+			result = mSkeleton->Save(mSkeleton->GetKey(), GetBasePath());
+			if (eResultFail(result))
+				return result;
+		}
+		Json::MH::SavePtrStrKey(_pJson, JSON_KEY_PAIR(mSkeleton));
+
+
+
 		//순회 돌아주면서 array 형태의 json에 append 해준다
-		Json::Value& jsonMeshCont = (*_pJson)[JSON_KEY(mMeshContainers)];
+		Json::Value& arrMeshCont = (*_pJson)[JSON_KEY(mMeshContainers)];
 		for (size_t i = 0; i < mMeshContainers.size(); ++i)
 		{
-			Json::Value arrElement;
+			Json::Value meshCont{};
 			if (nullptr == mMeshContainers[i].pMesh || mMeshContainers[i].pMaterials.empty())
 			{
 				return eResult::Fail_InValid;
 			}
+			//Mesh
+			result = mMeshContainers[i].pMesh->Save(mMeshContainers[i].pMesh->GetKey(), GetBasePath());
+			if (eResultFail(result))
+			{
+				return result;
+			}
+			Json::MH::SavePtrStrKey(&meshCont, JSON_KEY(pMesh), mMeshContainers[i].pMesh);
 
-			Json::MH::SavePtrStrKey(&arrElement, JSON_KEY(pMesh), mMeshContainers[i].pMesh);
-			Json::MH::SavePtrStrKeyVector(&arrElement, JSON_KEY(pMaterials), mMeshContainers[i].pMaterials);
+			Json::Value& arrMtrl = meshCont[JSON_KEY(pMaterials)];
+			//Material 저장
+			for (size_t j = 0; j < mMeshContainers[i].pMaterials.size(); ++j)
+			{
+				result = mMeshContainers[i].pMaterials[j]->Save(mMeshContainers[i].pMaterials[j]->GetKey(), GetBasePath());
+				if (eResultFail(result))
+				{
+					return result;
+				}
 
-			jsonMeshCont.append(arrElement);
+				if (nullptr == mMeshContainers[i].pMaterials[j])
+				{
+					return eResult::Fail_Nullptr;
+				}
+				else
+				{
+					arrMtrl.append(mMeshContainers[i].pMaterials[j]->GetKey());
+				}
+
+			}
+
+			arrMeshCont.append(meshCont);
 		}
-
-		Json::MH::SavePtrStrKey(_pJson, JSON_KEY_PAIR(mSkeleton));
 
 		return eResult::Success;
 	}
@@ -210,19 +186,20 @@ namespace mh
 		{
 			tMeshContainer cont{};
 
-			//Mesh Load
+			//Mesh
 			std::string meshStrKey = Json::MH::LoadPtrStrKey(&(*iter), JSON_KEY(pMesh), cont.pMesh);
-			cont.pMesh = ResMgr::Load<Mesh>(meshStrKey);
+			cont.pMesh = ResMgr::Load<Mesh>(meshStrKey, GetBasePath());
 			if (nullptr == cont.pMesh)
 				return eResult::Fail_Empty;
 
-			//Materials Load
+			//Materials
 			const auto& materialsStrKey = Json::MH::LoadPtrStrKeyVector(&(*iter), JSON_KEY(pMaterials), cont.pMaterials);
 			for (size_t i = 0; i < materialsStrKey.size(); ++i)
 			{
-				std::shared_ptr<Material> mtrl = ResMgr::Load<Material>(materialsStrKey[i]);
+				std::shared_ptr<Material> mtrl = ResMgr::Load<Material>(materialsStrKey[i], GetBasePath());
 				cont.pMaterials.push_back(mtrl);
 			}
+
 
 			mMeshContainers.push_back(cont);
 		}
@@ -231,7 +208,7 @@ namespace mh
 		if (false == skeletonKey.empty())
 		{
 			mSkeleton = std::make_shared<Skeleton>();
-			result = mSkeleton->Load(skeletonKey);
+			result = mSkeleton->Load(skeletonKey, GetBasePath());
 			if (eResultFail(result))
 				return result;
 		}
@@ -448,8 +425,8 @@ namespace mh
 		
 
 		//모두 문제없이 처리되었을 경우 메쉬와 재질을 ResMgr에 전부 추가한다.
-		for (size_t i = 0; i < mMeshContainers.size(); ++i)
-		{
+		//for (size_t i = 0; i < mMeshContainers.size(); ++i)
+		//{
 			//ResMgr::Insert(mMeshContainers[i].pMesh->GetKey(), mMeshContainers[i].pMesh);
 
 			//재질은 FBX Loader에서 추가가 되어있는 상태라서 여기서 처리할 필요 없음.
@@ -457,7 +434,7 @@ namespace mh
 			//{
 			//	ResMgr::Insert(mMeshContainers[i].pMaterials[j]->GetKey(), mMeshContainers[i].pMaterials[j]);
 			//}
-		}
+		//}
 
 		//전부 저장에 성공했을 경우 ResMgr에서 이 주소(MeshData)를 리소스에 추가한다
 		//애초에 호출한 클래스가 ResMgr임
@@ -487,8 +464,8 @@ namespace mh
 				//비어있을경우 return
 				if (_srcTexPath.empty())
 					return nullptr;
-				//이동 원본 경로와 목표 경로를 만들어준다.
 
+				//이동 원본 경로와 목표 경로를 만들어준다.
 				std::fs::path srcTexPath = _srcTexPath;
 				std::fs::path destTextPath = _texDestDir / srcTexPath.filename();
 				//src에 파일이 있는데 dest에 없을 경우 복사
@@ -508,8 +485,10 @@ namespace mh
 
 				
 				std::shared_ptr<Texture> newTex = std::make_shared<Texture>();
+
+				newTex->SetKey(srcTexPath.filename().string());
+
 				//바로 Texture Load. 로드 실패 시 false 반환
-				
 				if (eResultFail(newTex->Load(srcTexPath.filename(), _texDestDir)))
 				{
 					newTex = nullptr;
@@ -522,6 +501,9 @@ namespace mh
 		mtrl->SetTexture(eTextureSlot::Normal, CopyAndLoadTex(_fbxMtrl->strNormalTex));
 		mtrl->SetTexture(eTextureSlot::Specular, CopyAndLoadTex(_fbxMtrl->strSpecularTex));
 		mtrl->SetTexture(eTextureSlot::Emissive, CopyAndLoadTex(_fbxMtrl->strEmissiveTex));
+
+		std::shared_ptr<GraphicsShader> defferedShader = ResMgr::Find<GraphicsShader>(strKey::Default::shader::graphics::DefferedShader);
+		mtrl->SetShader(defferedShader);
 
 		return mtrl;
 	}

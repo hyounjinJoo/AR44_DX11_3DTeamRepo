@@ -38,26 +38,18 @@ namespace mh
 
     eResult Material::Save(const std::fs::path& _filePath, const std::fs::path& _basePath)
     {
-        std::fs::path fullPath = CreateFullPath(_filePath, _basePath);
-        
-        {
-            std::fs::path checkDir = fullPath.parent_path();
-            if (false == std::fs::exists(checkDir))
-            {
-                std::fs::create_directories(checkDir);
-            }
-        }
+        IRes::Save(_filePath, _basePath);
+        std::fs::path fullPath = PathMgr::CreateFullPathToContent(_filePath, _basePath, GetResType());
         fullPath.replace_extension(strKey::Ext_Material);
 
 
-        if (fullPath.empty())
-        {
-            return eResult::Fail_OpenFile;
-        }
-
         std::ofstream ofs(fullPath);
         if (false == ofs.is_open())
+        {
+            ERROR_MESSAGE_W(L"파일 열기에 실패했습니다.");
             return eResult::Fail_OpenFile;
+        }
+            
 
         Json::Value jVal{};
         eResult result = SaveJson(&jVal);
@@ -72,9 +64,10 @@ namespace mh
 
     eResult Material::Load(const std::fs::path& _filePath, const std::fs::path& _basePath)
     {
-        std::fs::path fullPath = CreateFullPath(_filePath, _basePath);
+        IRes::Load(_filePath, _basePath);
+        std::fs::path fullPath = PathMgr::CreateFullPathToContent(_filePath, _basePath, GetResType());
         fullPath.replace_extension(strKey::Ext_Material);
-        if (false == PathMgr::CheckExist(fullPath))
+        if (false == std::fs::exists(fullPath))
         {
             return eResult::Fail_OpenFile;
         }
@@ -155,6 +148,7 @@ namespace mh
         std::string shaderStrKey = Json::MH::LoadPtrStrKey(_pJVal, JSON_KEY_PAIR(mShader));
         if (false == shaderStrKey.empty())
         {
+            //쉐이더는 Base Path를 사용하지 않는다
             SetShader(ResMgr::Load<GraphicsShader>(shaderStrKey));
         }
         
@@ -164,39 +158,12 @@ namespace mh
         {
             if (false == vecLoad[i].empty())
             {
-                SetTexture((eTextureSlot)i, ResMgr::Load<Texture>(vecLoad[i]));
+                SetTexture((eTextureSlot)i, ResMgr::Load<Texture>(vecLoad[i], GetBasePath()));
             }
         }
         return eResult::Success;
     }
 
-    void Material::SetData(eGPUParam _param, void* _data)
-    {
-        /*switch (_param)
-        {
-        case mh::eGPUParam::Int:
-            mCB.iData = *static_cast<int*>(_data);
-            break;
-        case mh::eGPUParam::Float:
-            mCB.fData = *static_cast<float*>(_data);
-            break;
-        case mh::eGPUParam::float2:
-            mCB.XY = *static_cast<float2*>(_data);
-            break;
-        case mh::eGPUParam::float3:
-            mCB.XYZ = *static_cast<float3*>(_data);
-            break;
-        case mh::eGPUParam::float4:
-            mCB.XYZW = *static_cast<float4*>(_data);
-            break;
-        case mh::eGPUParam::MATRIX:
-            mCB.MATRIX = *static_cast<MATRIX*>(_data);
-            break;
-        default:
-            break;
-        }*/
-
-    }
 
     void Material::BindData()
     {

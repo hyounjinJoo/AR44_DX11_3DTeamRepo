@@ -17,7 +17,6 @@ namespace mh
 		virtual eResult Load(const std::filesystem::path& _filePath, const std::filesystem::path& _basePath = L"") override;
 
 		
-
 		void Play();
 		void Stop();
 		void Set3DAttributes(const float3 _pos, const float3 _vel);

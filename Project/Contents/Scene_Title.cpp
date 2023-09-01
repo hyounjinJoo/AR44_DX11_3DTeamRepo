@@ -75,24 +75,16 @@ namespace mh
 
 
 		{
-			//std::shared_ptr<MeshData> meshdata = std::make_shared<MeshData>();
-			//std::fs::path fbxPath = PathMgr::GetContentPathRelative(eResourceType::MeshData);
-			//fbxPath /= "Player_Default.FBX";
-			//meshdata->LoadFromFBX(fbxPath, false);
-			//GameObject* modeling = meshdata->Instantiate();
+			std::shared_ptr<MeshData> meshdata = ResMgr::Load<MeshData>("House");
+
+			GameObject* modeling = meshdata->Instantiate();
 
 			//modeling->GetComponent<Com_Animator3D>()->Play("Take 001");
-			//
-			////house->AddComponent<Com_Transform>();
+			
+			//house->AddComponent<Com_Transform>();
 
-			//EventMgr::SpawnGameObject(define::eLayerType::Player, modeling);
+			EventMgr::SpawnGameObject(define::eLayerType::Player, modeling);
 		}
-
-
-
-
-
-
 
 
 

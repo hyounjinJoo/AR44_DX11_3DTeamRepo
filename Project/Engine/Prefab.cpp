@@ -43,11 +43,8 @@ namespace mh
 			mPrefab->SetKey(strKey.string());
 		}
 
-		//혹시나 경로에 해당하는 폴더 경로가 없을 시에 throw error가 돼서 프로그램이 강제 종료되므로
-		//폴더 경로를 직접 만들어준다.
-		std::fs::path fullPath = CreateFullPath(_filePath, _basePath);
-		if (fullPath.empty())
-			return eResult::Fail_OpenFile;
+
+		std::fs::path fullPath = PathMgr::CreateFullPathToContent(_filePath, _basePath, GetResType());
 
 		std::ofstream saveFile(fullPath);
 		if (false == saveFile.is_open())
@@ -84,9 +81,10 @@ namespace mh
 			return eResult::Fail;
 		}
 
-		std::fs::path fullPath = CreateFullPath(_filePath, _basePath);
-		if (false == PathMgr::CheckExist(fullPath))
+		std::fs::path fullPath = PathMgr::CreateFullPathToContent(_filePath, _basePath, GetResType());
+		if (false == std::fs::exists(fullPath))
 		{
+			ERROR_MESSAGE_W(L"파일이 없습니다.");
 			return eResult::Fail_OpenFile;
 		}
 
