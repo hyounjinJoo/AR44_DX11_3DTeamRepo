@@ -7,6 +7,7 @@
 #include "FBXLoader.h"
 #include "PathMgr.h"
 #include "Animation3D.h"
+#include <cctype>
 
 namespace mh
 {
@@ -248,11 +249,20 @@ namespace mh
 				}
 			}
 
-			if (eResultFail(ourAnim->Save(otherAnim.first, _savePath)))
+			std::string strKey = otherAnim.first;
+			auto iter = mMapAnimations.find(strKey);
+			while (iter != mMapAnimations.end())
+			{
+				strKey += "+";
+				iter = mMapAnimations.find(strKey);
+			}
+
+			//ourAnim->SetKey(strKey);
+			if (eResultFail(ourAnim->Save(strKey, _savePath)))
 				return false;
 
 			//우리 애니메이션 쪽에 등록
-			mMapAnimations.insert(std::make_pair(otherAnim.first, ourAnim));
+			mMapAnimations.insert(std::make_pair(strKey, ourAnim));
 		}
 
 		return true;
