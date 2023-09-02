@@ -37,6 +37,7 @@ namespace mh
 		void SetShader(std::shared_ptr<GraphicsShader> _shader) { mShader = _shader; }
 		std::shared_ptr<GraphicsShader> GetShader() const { return mShader; }
 
+
 		inline void SetTexture(eTextureSlot slot, std::shared_ptr<Texture> _texture);
 		std::shared_ptr<Texture> GetTexture(eTextureSlot _slot) const { return mTextures[(uint)_slot]; }
 

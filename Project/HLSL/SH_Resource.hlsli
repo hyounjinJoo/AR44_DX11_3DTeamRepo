@@ -21,10 +21,12 @@ TEXTURE2D(AlbedoTexture, t, 0);
 TEXTURE2D(NormalTexture, t, 1);
 TEXTURE2D(SpecularTexture, t, 2);
 TEXTURE2D(EmissiveTexture, t, 3);
+TEXTURE2D(RoughnessMetalicTexture, t, 4);
 #define IsAlbedoTex bTex_0
 #define IsNormalTex bTex_1
 #define IsSpecularTex bTex_2
 #define IsEmissiveTex bTex_3
+#define IsRMTTex bTex_4
 
 
 //Deffered + Light MRT
@@ -32,11 +34,10 @@ TEXTURE2D(AlbedoTarget, t, 0);
 TEXTURE2D(NormalTarget, t, 1);
 TEXTURE2D(SpecularTarget, t, 2);
 TEXTURE2D(EmissiveTarget, t, 3);
-TEXTURE2D(PositionTarget, t, 4);
-TEXTURE2D(DiffuseLightTarget, t, 5);
-TEXTURE2D(SpecularLightTarget, t, 6);
-
-
+TEXTURE2D(RoughnessMetalicTarget, t, 4);
+TEXTURE2D(PositionTarget, t, 5);
+TEXTURE2D(DiffuseLightTarget, t, 6);
+TEXTURE2D(SpecularLightTarget, t, 7);
 
 
 //Bone Matrices(Animation 3D)

@@ -17,6 +17,8 @@
 #include "Skeleton.h"
 #include "object.h"
 
+#include <regex>
+
 namespace mh
 {
 	MeshData::MeshData()
@@ -494,6 +496,9 @@ namespace mh
 
 		mtrl->SetMaterialCoefficient(_fbxMtrl->DiffuseColor, _fbxMtrl->SpecularColor, _fbxMtrl->AmbientColor, _fbxMtrl->EmissiveColor);
 
+		//media directory(텍스처같은 파일들) 옮겨졌는지 여부 저장 변수
+		bool bMediaDirMoved = false;
+
 		//텍스처 옮기기 위한 람다 함수
 		auto CopyAndLoadTex =
 			[&](const std::string& _srcTexPath)->std::shared_ptr<Texture>
@@ -502,31 +507,31 @@ namespace mh
 				if (_srcTexPath.empty())
 					return nullptr;
 
-				//이동 원본 경로와 목표 경로를 만들어준다.
-				std::fs::path srcTexPath = _srcTexPath;
-				std::fs::path destTextPath = _texDestDir / srcTexPath.filename();
-				//src에 파일이 있는데 dest에 없을 경우 복사
-				if (std::fs::exists(srcTexPath) && false == std::fs::exists(destTextPath))
+				std::fs::path texFileName = _srcTexPath;
+				texFileName = texFileName.filename();
+				if (false == bMediaDirMoved)
 				{
-					//폴더 예외 확인
-					std::fs::path destDir = destTextPath.parent_path();
-					if (false == std::fs::exists(destDir))
+					std::fs::path srcTexPath = _srcTexPath;
+					srcTexPath = srcTexPath.parent_path();
+					if (std::fs::exists(srcTexPath) && std::fs::exists(_texDestDir))
 					{
-						std::fs::create_directories(destDir);
-					}
+						const auto copyOption =
+							std::fs::copy_options::overwrite_existing
+							| std::fs::copy_options::recursive;
 
-					//파일을 복사하고 기존 파일은 제거
-					std::fs::copy(srcTexPath, _texDestDir);
-					std::fs::remove(srcTexPath);
+						std::fs::copy(srcTexPath, _texDestDir, copyOption);
+						std::fs::remove_all(srcTexPath);
+
+						bMediaDirMoved = true;
+					}
 				}
 
-				
 				std::shared_ptr<Texture> newTex = std::make_shared<Texture>();
 
-				newTex->SetKey(srcTexPath.filename().string());
+				newTex->SetKey(texFileName.string());
 
 				//바로 Texture Load. 로드 실패 시 false 반환
-				if (eResultFail(newTex->Load(srcTexPath.filename(), _texDestDir)))
+				if (eResultFail(newTex->Load(texFileName, _texDestDir)))
 				{
 					newTex = nullptr;
 				}
@@ -541,9 +546,114 @@ namespace mh
 
 		std::shared_ptr<GraphicsShader> defferedShader = ResMgr::Find<GraphicsShader>(strKey::Default::shader::graphics::DefferedShader);
 		mtrl->SetShader(defferedShader);
+
 		mtrl->SetRenderingMode(eRenderingMode::DefferdOpaque);
 
+		CheckMHMaterial(mtrl, _texDestDir);
+
 		return mtrl;
+	}
+
+	void MeshData::CheckMHMaterial(std::shared_ptr<Material> _mtrl, const std::fs::path& _texDestDir)
+	{
+		if (nullptr == _mtrl)
+			return;
+
+		constexpr const char* texSuffix[] =
+		{
+			"_BML",
+			"_NM",
+			"_XM",
+			"_EM",
+			"_RMT"
+		};
+		constexpr size_t texSuffixSize = sizeof(texSuffix) / sizeof(const char*);
+
+		std::string strSuffix = "(";
+		for (size_t i = 0; i < texSuffixSize; ++i)
+		{
+			strSuffix += texSuffix[i];
+
+			if (i + 1 < texSuffixSize)
+			{
+				strSuffix += "|";
+			}
+		}
+		strSuffix += ")(\\..+)$";
+		const std::regex regexPrefix("^(DXT\\d_|BC\\d_)");
+		const std::regex regexSuffix(strSuffix);
+
+
+		//텍스처 기본 생성 파일명을 통해서 몬스터헌터 텍스처 파일인지 확인
+		bool isMHTex = false;
+		for (size_t i = 0; i < texSuffixSize; ++i)
+		{
+			std::shared_ptr<Texture> tex = _mtrl->GetTexture((eTextureSlot)i);
+			if (tex)
+			{
+				std::string texKey = tex->GetKey();
+				size_t pos = texKey.find(texSuffix[i]);
+				if (std::string::npos != pos)
+				{
+					isMHTex = true;
+				}
+				else
+				{
+					//하나라도 이름이 일치하지 않으면 몬스터헌터 포맷이 아닌것으로 간주
+					isMHTex = false;
+					break;
+				}
+			}
+		}
+		
+
+		//몬스터헌터 재질이 맞는것이 확인될 경우 못 가져온 텍스처 가져오는 작업 진행
+		if (isMHTex)
+		{
+			for (size_t i = 0; i < texSuffixSize; ++i)
+			{
+				//i번째 텍스처가 있고
+				std::shared_ptr<Texture> tex = _mtrl->GetTexture((eTextureSlot)i);
+				if (tex)
+				{
+					for (size_t j = 0; j < texSuffixSize; ++j)
+					{
+						//j번째 텍스처는 없다면
+						std::shared_ptr<Texture> newTex = _mtrl->GetTexture((eTextureSlot)j);
+						if (nullptr == newTex)
+						{
+							//i번째 텍스처의 이름을 가져와서
+							std::string texKey = tex->GetKey();
+
+							//regex 돌려서 prefix suffix 제거하고
+							texKey = std::regex_replace(texKey, regexPrefix, "");
+							texKey = std::regex_replace(texKey, regexSuffix, "");
+
+							//파일 순회를 돌아주면서
+							for (const auto& dirIter : std::fs::directory_iterator(_texDestDir))
+							{
+								std::string fileName = dirIter.path().filename().string();
+								
+								//이름이 일치하는 파일명이 아니면 continue
+								if (std::string::npos == fileName.find(texKey))
+									continue;
+
+								//이름이 일치할 경우 j번째 suffix와 일치하는지 확인
+								if (std::string::npos != fileName.find(texSuffix[j]))
+								{
+									//일치할 경우 이 텍스처를 material에 추가
+									newTex = std::make_shared<Texture>();
+									newTex->SetKey(fileName);
+									newTex->Load(dirIter.path().filename(), dirIter.path().parent_path());
+
+									_mtrl->SetTexture((eTextureSlot)j, newTex);
+								}
+							}
+						}
+					}
+				}
+			}
+		}
 	}
 
 	bool MeshData::SetRenderer(Com_Renderer_Mesh* _renderer, UINT _idx)

@@ -197,10 +197,10 @@ namespace mh
 		}
 
 		// 해당 노드의 재질정보 읽기
-		UINT iMtrlCnt = _pNode->GetMaterialCount();
-		if (iMtrlCnt > 0)
+		int iMtrlCnt = _pNode->GetMaterialCount();
+		if (0 < iMtrlCnt)
 		{
-			for (UINT i = 0; i < iMtrlCnt; ++i)
+			for (int i = 0; i < iMtrlCnt; ++i)
 			{
 				fbxsdk::FbxSurfaceMaterial* pMtrlSur = _pNode->GetMaterial(i);
 				LoadMaterial(pMtrlSur);
@@ -341,7 +341,6 @@ namespace mh
 		tMtrlInfo.strNormalTex = GetMtrlTextureName(_pMtrlSur, fbxsdk::FbxSurfaceMaterial::sNormalMap);
 		tMtrlInfo.strSpecularTex = GetMtrlTextureName(_pMtrlSur, fbxsdk::FbxSurfaceMaterial::sSpecular);
 		tMtrlInfo.strEmissiveTex = GetMtrlTextureName(_pMtrlSur, fbxsdk::FbxSurfaceMaterial::sEmissive);
-
 
 		mContainers.back().vecMtrl.push_back(tMtrlInfo);
 	}

@@ -33,7 +33,6 @@ namespace gui
 		, mTargetMaterial()
 		, mShaderCombo{}
 		, mbNewMaterial()
-		, mCurContext()
 	{
 		mTargetMaterial = std::make_shared<mh::Material>();
 	}
@@ -199,9 +198,7 @@ namespace gui
 				std::fs::path receivedPath = mh::WinAPI::FileDialog(texPath, vecExt);
 				if (false == receivedPath.empty())
 				{
-					receivedPath = receivedPath.lexically_relative(texPath);
-
-					std::shared_ptr<mh::Texture> tex = mh::ResMgr::Load<mh::Texture>(receivedPath);
+					std::shared_ptr<mh::Texture> tex = mh::ResMgr::Load<mh::Texture>(receivedPath.filename(), receivedPath.parent_path());
 					if (tex)
 					{
 						mTargetMaterial->SetTexture((mh::define::eTextureSlot)i, tex);
@@ -258,11 +255,11 @@ namespace gui
 		{
 			if (CheckSavePossible())
 			{
-				mCurContext = eContext::SaveToFile;
-				mSaveLoadFileName = mTargetMaterial->GetKey();
+				SaveToFile();
 			}
+			
 		}
-		SaveToFile();
+		
 		
 		ImGui::SameLine();
 
@@ -302,42 +299,23 @@ namespace gui
 	}
 	void guiMaterialEditor::SaveToFile()
 	{
-		//저장 컨텍스트일 경우
-		if (eContext::SaveToFile == mCurContext)
+		std::fs::path outputPath = mh::PathMgr::GetContentPathAbsolute(mh::eResourceType::Material);
+		outputPath /= mSaveLoadFileName;
+		outputPath = mh::WinAPI::FileDialog(outputPath, mh::strKey::Ext_Material);
+
+		if (outputPath.empty())
 		{
-			//모달 창 팝업
-			ImGui::SetNextWindowSize(ImVec2{ 400.f, 500.f });
-			ImGui::OpenPopup("Material Save");
-			if (ImGui::BeginPopupModal("Material Save"))
-			{
-				ImGui::InputText("File Name", &mSaveLoadFileName);
-
-				if (ImGui::Button("Save##Material", ImVec2(100.f, 35.f)))
-				{
-					if (mSaveLoadFileName.empty())
-					{
-						MessageBoxW(nullptr, L"파일명을 지정하세요.", nullptr, MB_OK);
-					}
-					else
-					{
-						//저장할 때는 Key값을 바꿔야 하기 때문에 Clone 해서 저장해야 한다.
-						//기존 리소스를 그대로 Save하게 되면 Key 값이 변경되어 에러가 발생할 수 있음.
-						mTargetMaterial = std::shared_ptr<mh::Material>(mTargetMaterial->Clone());
-						mTargetMaterial->SetKey(mSaveLoadFileName);
-						mTargetMaterial->Save(mSaveLoadFileName);
-						mCurContext = eContext::None;
-					}
-				}
-
-				ImGui::SameLine();
-
-				if (ImGui::Button("Cancel##Material", ImVec2(100.f, 35.f)))
-				{
-					mCurContext = eContext::None;
-				}
-				ImGui::EndPopup();
-			}
+			NOTIFICATION_W(L"경로를 설정하지 않았습니다.");
 		}
+
+		//저장할 때는 Key값을 바꿔야 하기 때문에 Clone 해서 저장해야 한다.
+		//기존 리소스를 그대로 Save하게 되면 Key 값이 변경되어 에러가 발생할 수 있음.
+		mTargetMaterial = std::shared_ptr<mh::Material>(mTargetMaterial->Clone());
+
+		std::string strKey = outputPath.filename().string();
+		mTargetMaterial->SetKey(strKey);
+		mTargetMaterial->Save(strKey, outputPath.parent_path());
+
 	}
 	void guiMaterialEditor::LoadFromFile()
 	{
@@ -348,6 +326,7 @@ namespace gui
 			ImGui::OpenPopup("Material Load");
 			if (ImGui::BeginPopupModal("Material Load"))
 			{
+				HilightText("Res/Material");
 				mCurrentLoadedMtrl.FixedUpdate();
 
 				if (ImGui::Button("Load##Material", ImVec2(100.f, 35.f)))
@@ -388,10 +367,16 @@ namespace gui
 				}
 
 				ImGui::Separator();
-
-				if (ImGui::Button("Load From File", ImVec2(0.f, 35.f)))
+				
+				//파일 선택해서 로드
+				if (ImGui::Button("Load From Other Directory", ImVec2(0.f, 35.f)))
 				{
+					//Res/Material 폴더
 					const std::fs::path& mtrlDir = mh::PathMgr::GetContentPathAbsolute(mh::define::eResourceType::Material);
+
+					//Res 폴더
+					const std::fs::path& resDir = mh::PathMgr::GetResPathAbsolute();
+
 					std::fs::path filePath = mh::WinAPI::FileDialog(mtrlDir, ".json");
 					if (false == std::fs::exists(filePath))
 					{
@@ -399,9 +384,8 @@ namespace gui
 					}
 					else
 					{
-						filePath = filePath.lexically_relative(mtrlDir);
 						mTargetMaterial = std::make_shared<mh::Material>();
-						if (mh::eResultFail(mTargetMaterial->Load(filePath)))
+						if (mh::eResultFail(mTargetMaterial->Load(filePath.filename(), filePath.parent_path())))
 						{
 							std::wstring errMsg = filePath.wstring();
 							errMsg += L"\n불러오기에 실패했습니다.";
