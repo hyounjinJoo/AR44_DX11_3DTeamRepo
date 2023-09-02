@@ -162,6 +162,8 @@ namespace mh
 
 	eResult Texture::Load(const std::filesystem::path& _filePath, const std::filesystem::path& _basePath)
 	{
+		IRes::Load(_filePath, _basePath);
+
 		std::fs::path fullPath = PathMgr::CreateFullPathToContent(_filePath, _basePath, GetResType());
 
 		if (false == std::fs::exists(fullPath))

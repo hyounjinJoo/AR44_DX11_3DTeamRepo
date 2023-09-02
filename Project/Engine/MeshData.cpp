@@ -32,21 +32,22 @@ namespace mh
 
 	eResult MeshData::Save(const std::fs::path& _filePath, const std::fs::path& _basePath)
 	{
-		IRes::Save(_filePath, _basePath);
-
 		eResult result = eResult::Fail;
+
 		//MeshData는 다른 클래스와 저장 / 로드 방식이 약간 다름
 		//예를 들어 Player를 저장한다고 하면
 		//Player/Player.json 형태로 저장한다.
-		std::fs::path fullPath = PathMgr::CreateFullPathToContent(_filePath, _basePath, GetResType());
-		fullPath.replace_extension();
+		std::fs::path fileName = _filePath;
+		fileName.replace_extension();
+		fileName /= fileName;		
+		fileName.replace_extension(strKey::Ext_MeshData);
 
-		//Base Path를 변경
-		SetBasePath(fullPath);
+		const std::fs::path& basePath = PathMgr::GetContentPathRelative(eResourceType::MeshData);
+		IRes::Save(fileName, basePath);
 
-		//자신을 json 확장자로 변경하고 저장
-		fullPath /= _filePath;
-		fullPath.replace_extension(strKey::Ext_MeshData);
+		std::fs::path fullPath = PathMgr::CreateFullPathToContent(fileName, basePath, GetResType());
+		
+		
 
 		std::ofstream ofs(fullPath);
 		if (false == ofs.is_open())
@@ -65,21 +66,20 @@ namespace mh
 
 	eResult MeshData::Load(const std::fs::path& _filePath, const std::fs::path& _basePath)
 	{
-		IRes::Load(_filePath, _basePath);
-
 		eResult result = eResult::Fail;
 
 		//MeshData는 다른 클래스와 저장 / 로드 방식이 약간 다름
 		//예를 들어 Player를 저장한다고 하면
 		//Player/Player.json 형태로 저장한다.
-		std::fs::path fullPath = PathMgr::CreateFullPathToContent(_filePath, _basePath, GetResType());
-		fullPath.replace_extension();
+		std::fs::path fileName = _filePath;
+		fileName.replace_extension();
+		fileName /= fileName;
+		fileName.replace_extension(strKey::Ext_MeshData);
 
-		//Base Path를 변경
-		SetBasePath(fullPath);
+		const std::fs::path& basePath = PathMgr::GetContentPathRelative(eResourceType::MeshData);
+		IRes::Load(fileName, basePath);
 
-		//파일명까지 생성
-		fullPath /= _filePath;
+		std::fs::path fullPath = PathMgr::CreateFullPathToContent(fileName, basePath, GetResType());
 
 		Json::Value jVal;
 		fullPath.replace_extension(strKey::Ext_MeshData);
@@ -314,11 +314,9 @@ namespace mh
 		}
 
 
+
 		//다른게 다 진행됐으면 저장 진행
 		//키값 만들고 세팅하고
-		std::fs::path strKeyMeshData = _dirAndFileName;
-		strKeyMeshData.replace_extension(strKey::Ext_MeshData);
-		SetKey(strKeyMeshData.string());
 		result = Save(_dirAndFileName);
 		if (eResultFail(result))
 		{
@@ -350,21 +348,22 @@ namespace mh
 			return result;
 		}
 
-		std::fs::path basePath = PathMgr::GetContentPathRelative(eResourceType::MeshData);
-		basePath /= _dirAndFileName;
-		if (false == std::fs::exists(basePath))
-		{
-			std::fs::create_directories(basePath);
-		}
+		//Res/MeshData/Player
+		std::fs::path filePath = _dirAndFileName;
+		filePath.replace_extension();
+		//Res/MeshData/Player/Player
+		filePath /= filePath;
+
+		SetBasePath(PathMgr::GetContentPathRelative(GetResType()));
 
 		//Bone 정보 로드
 		mSkeleton = std::make_shared<Skeleton>();
 
 		//Key 설정
 		{
-			std::fs::path skeletonKey = _dirAndFileName;
-			skeletonKey.replace_extension(strKey::Ext_Skeleton);
-			mSkeleton->SetKey(skeletonKey.string());
+			std::fs::path skltStrKey = filePath;
+			skltStrKey.replace_extension(strKey::Ext_Skeleton);
+			mSkeleton->SetKey(skltStrKey.string());
 		}
 		result = mSkeleton->CreateFromFBX(&loader);
 
@@ -406,7 +405,7 @@ namespace mh
 				//비어있을 경우 이름을 만들어준다
 				if (strKey.empty())
 				{
-					strKey = _dirAndFileName;
+					strKey = filePath;
 					strKey.replace_extension();
 					strKey += "_";
 					strKey += std::to_string(i);
@@ -422,7 +421,8 @@ namespace mh
 			for (UINT j = 0; j < containers[i].vecMtrl.size(); ++j)
 			{
 
-				std::shared_ptr<Material> mtrl = ConvertMaterial(&(containers[i].vecMtrl[j]), basePath);
+				std::shared_ptr<Material> mtrl = 
+					ConvertMaterial(&(containers[i].vecMtrl[j]), GetBasePath() / _dirAndFileName);
 				if (nullptr == mtrl)
 				{
 					ERROR_MESSAGE_W(L"머티리얼 로드에 실패했습니다.");
@@ -490,7 +490,8 @@ namespace mh
 		//material 하나 생성
 		std::shared_ptr<Material> mtrl = std::make_shared<Material>();
 
-		std::fs::path strKey = _fbxMtrl->strMtrlName;
+		std::fs::path strKey = _texDestDir.filename();
+		strKey /= _fbxMtrl->strMtrlName;
 		strKey.replace_extension(strKey::Ext_Material);
 		mtrl->SetKey(strKey.string());
 
@@ -507,8 +508,6 @@ namespace mh
 				if (_srcTexPath.empty())
 					return nullptr;
 
-				std::fs::path texFileName = _srcTexPath;
-				texFileName = texFileName.filename();
 				if (false == bMediaDirMoved)
 				{
 					std::fs::path srcTexPath = _srcTexPath;
@@ -528,10 +527,11 @@ namespace mh
 
 				std::shared_ptr<Texture> newTex = std::make_shared<Texture>();
 
-				newTex->SetKey(texFileName.string());
+				std::fs::path texKey = _texDestDir.filename();
+				texKey /= std::fs::path(_srcTexPath).filename();
 
 				//바로 Texture Load. 로드 실패 시 false 반환
-				if (eResultFail(newTex->Load(texFileName, _texDestDir)))
+				if (eResultFail(newTex->Load(texKey, _texDestDir.parent_path())))
 				{
 					newTex = nullptr;
 				}
@@ -580,7 +580,7 @@ namespace mh
 			}
 		}
 		strSuffix += ")(\\..+)$";
-		const std::regex regexPrefix("^(DXT\\d_|BC\\d_)");
+		const std::regex regexPrefix("(.+)(DXT\\d_|BC\\d_)");
 		const std::regex regexSuffix(strSuffix);
 
 
@@ -644,7 +644,11 @@ namespace mh
 									//일치할 경우 이 텍스처를 material에 추가
 									newTex = std::make_shared<Texture>();
 									newTex->SetKey(fileName);
-									newTex->Load(dirIter.path().filename(), dirIter.path().parent_path());
+
+									std::fs::path texKey = _texDestDir.filename();
+									texKey /= dirIter.path().filename();
+
+									newTex->Load(texKey, _texDestDir.parent_path());
 
 									_mtrl->SetTexture((eTextureSlot)j, newTex);
 								}

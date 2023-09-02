@@ -3,6 +3,7 @@
 #include "define_Macro.h"
 #include "json-cpp/json-forwards.h"
 #include <string>
+#include <filesystem>
 namespace std
 {
 	namespace fs = filesystem;

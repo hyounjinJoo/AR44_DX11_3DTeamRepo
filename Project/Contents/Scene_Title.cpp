@@ -75,15 +75,13 @@ namespace mh
 
 
 		{
-			//std::shared_ptr<MeshData> meshdata = ResMgr::Load<MeshData>("Player_Default");
+			std::shared_ptr<MeshData> meshdata = ResMgr::Load<MeshData>("Player_Default");
 
-			//GameObject* modeling = meshdata->Instantiate();
+			GameObject* modeling = meshdata->Instantiate();
 
-			//modeling->GetComponent<Com_Animator3D>()->Play("Take 001");
-			//
-			////house->AddComponent<Com_Transform>();
-
-			//EventMgr::SpawnGameObject(define::eLayerType::Player, modeling);
+			modeling->GetComponent<Com_Animator3D>()->Play("Take 001");
+			
+			EventMgr::SpawnGameObject(define::eLayerType::Player, modeling);
 		}
 
 

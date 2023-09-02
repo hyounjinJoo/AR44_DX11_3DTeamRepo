@@ -25,6 +25,12 @@ namespace mh
 
 	eResult Skeleton::Save(const std::fs::path& _filePath, const std::fs::path& _basePath)
 	{
+		if (false == _filePath.has_parent_path())
+		{
+			ERROR_MESSAGE_W(L"스켈레톤 데이터는 반드시 부모 경로가 필요합니다.\nEx)Parent/Skeleton.sklt");
+			return eResult::Fail_InValid;
+		}
+
 		std::fs::path fullPath = _basePath;
 		if (fullPath.empty())
 		{
@@ -58,8 +64,10 @@ namespace mh
 		//Binary::SaveValue(ofs, mMapAnimations.size());
 		for (auto& iter : mMapAnimations)
 		{
-			//Binary::SaveStr(ofs, iter.first);
-			eResult result = iter.second->Save(iter.first, _basePath);
+			std::fs::path animName = _filePath.filename();
+			animName.replace_extension();
+			animName /= iter.first;
+			eResult result = iter.second->Save(animName, _basePath);
 			if (eResultFail(result))
 			{
 				ERROR_MESSAGE_W(L"애니메이션 저장 실패.");
@@ -117,7 +125,7 @@ namespace mh
 				std::unique_ptr<Animation3D> anim3d = std::make_unique<Animation3D>();
 				anim3d->SetSkeleton(this);
 
-				eResult result = anim3d->Load(entry.path().stem() , _basePath);
+				eResult result = anim3d->Load(entry.path().lexically_relative(_basePath), _basePath);
 				if (eResultFail(result))
 				{
 					ERROR_MESSAGE_W(L"애니메이션 로드 실패.");
@@ -127,24 +135,6 @@ namespace mh
 				mMapAnimations.insert(std::make_pair(entry.path().stem().string(), anim3d.release()));
 			}
 		}
-		//size_t mapSize{};
-		//Binary::LoadValue(ifs, mapSize);
-		//for (size_t i = 0; i < mapSize; ++i)
-		//{
-		//	std::string animName{};
-		//	Binary::LoadStr(ifs, animName);
-		//	
-		//	std::unique_ptr<Animation3D> anim3d = std::make_unique<Animation3D>();
-		//	anim3d->SetSkeleton(this);
-		//	eResult result = anim3d->Load(animName, _basePath);
-		//	if (eResultFail(result))
-		//	{
-		//		ERROR_MESSAGE_W(L"애니메이션 로드 실패.");
-		//		return eResult::Fail_InValid;
-		//	}
-
-		//	mMapAnimations.insert(std::make_pair(animName, anim3d.release()));
-		//}
 		return eResult::Success;
 	}
 
