@@ -15,8 +15,8 @@ namespace mh
 		Skeleton();
 		virtual ~Skeleton();
 
-		eResult Save(const std::fs::path& _filePath, const std::fs::path& _basePath);
-		eResult Load(const std::fs::path& _filePath, const std::fs::path& _basePath);
+		eResult Save(const std::fs::path& _filePath);
+		eResult Load(const std::fs::path& _filePath);
 		eResult CreateFromFBX(FBXLoader* _fbxLoader);
 
 	public:
@@ -35,7 +35,7 @@ namespace mh
 
 
 		//애니메이션을 이동가능한지 확인하고, 이동시켜주는 함수
-		bool CopyAnimationFromOther(const Skeleton& _other, const std::fs::path& _savePath);
+		bool CopyAnimationFromOther(const Skeleton& _other, const std::fs::path& _saveDir);
 		int FindSameBoneIndex(const define::tMTBone& _other) const;
 
 	private:

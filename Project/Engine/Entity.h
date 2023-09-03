@@ -9,8 +9,10 @@ namespace std
 	namespace fs = filesystem;
 }
 
+
 namespace mh
 {
+	using namespace define;
 	namespace define::strKey::Json::Entity
 	{
 		STRKEY_DECLARE(mStrKey);

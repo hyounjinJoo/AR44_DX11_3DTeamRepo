@@ -28,7 +28,7 @@ namespace mh
 			SAFE_DELETE(mPrefab);
 		}
 	}
-	eResult Prefab::Save(const std::fs::path& _filePath, const std::fs::path& _basePath)
+	eResult Prefab::Save(const std::fs::path& _filePath)
 	{
 		if (nullptr == mPrefab)
 		{
@@ -43,8 +43,7 @@ namespace mh
 			mPrefab->SetKey(strKey.string());
 		}
 
-
-		std::fs::path fullPath = PathMgr::CreateFullPathToContent(_filePath, _basePath, GetResType());
+		std::fs::path fullPath = PathMgr::CreateFullPathToContent(_filePath, GetResType());
 
 		std::ofstream saveFile(fullPath);
 		if (false == saveFile.is_open())
@@ -68,7 +67,7 @@ namespace mh
 
 		return eResult::Success;
 	}
-	eResult Prefab::Load(const std::fs::path& _filePath, const std::fs::path& _basePath)
+	eResult Prefab::Load(const std::fs::path& _filePath)
 	{
 		if (nullptr == mPrefab)
 		{
@@ -81,7 +80,7 @@ namespace mh
 			return eResult::Fail;
 		}
 
-		std::fs::path fullPath = PathMgr::CreateFullPathToContent(_filePath, _basePath, GetResType());
+		std::fs::path fullPath = PathMgr::CreateFullPathToContent(_filePath, GetResType());
 		if (false == std::fs::exists(fullPath))
 		{
 			ERROR_MESSAGE_W(L"파일이 없습니다.");

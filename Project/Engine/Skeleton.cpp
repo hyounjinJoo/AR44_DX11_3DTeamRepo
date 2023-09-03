@@ -23,7 +23,7 @@ namespace mh
 	{
 	}
 
-	eResult Skeleton::Save(const std::fs::path& _filePath, const std::fs::path& _basePath)
+	eResult Skeleton::Save(const std::fs::path& _filePath)
 	{
 		if (false == _filePath.has_parent_path())
 		{
@@ -31,20 +31,12 @@ namespace mh
 			return eResult::Fail_InValid;
 		}
 
-		std::fs::path fullPath = _basePath;
+		std::fs::path fullPath = PathMgr::CreateFullPathToContent(_filePath, eResourceType::MeshData);
 		if (fullPath.empty())
 		{
 			fullPath = PathMgr::GetContentPathRelative(eResourceType::MeshData);
 		}
-		fullPath /= _filePath;
 
-		{
-			std::fs::path checkDir = fullPath.parent_path();
-			if (false == std::fs::exists(checkDir))
-			{
-				std::fs::create_directories(checkDir);
-			}
-		}
 		fullPath.replace_extension(strKey::Ext_Skeleton);
 
 		std::ofstream ofs(fullPath, std::ios::binary);
@@ -67,7 +59,8 @@ namespace mh
 			std::fs::path animName = _filePath.filename();
 			animName.replace_extension();
 			animName /= iter.first;
-			eResult result = iter.second->Save(animName, _basePath);
+
+			eResult result = iter.second->Save(animName);
 			if (eResultFail(result))
 			{
 				ERROR_MESSAGE_W(L"애니메이션 저장 실패.");
@@ -77,14 +70,15 @@ namespace mh
 
 		return eResult::Success;
 	}
-	eResult Skeleton::Load(const std::fs::path& _filePath, const std::fs::path& _basePath)
+	eResult Skeleton::Load(const std::fs::path& _filePath)
 	{
-		std::fs::path fullPath = _basePath;
-		if (fullPath.empty())
+		if (false == _filePath.has_parent_path())
 		{
-			fullPath = PathMgr::GetContentPathRelative(eResourceType::MeshData);
+			ERROR_MESSAGE_W(L"스켈레톤 데이터는 반드시 부모 경로가 필요합니다.\nEx)Parent/Skeleton.sklt");
+			return eResult::Fail_InValid;
 		}
-		fullPath /= _filePath;
+
+		std::fs::path fullPath = PathMgr::CreateFullPathToContent(_filePath, eResourceType::MeshData);
 		fullPath.replace_extension(strKey::Ext_Skeleton);
 		if (false == std::fs::exists(fullPath))
 		{
@@ -125,7 +119,8 @@ namespace mh
 				std::unique_ptr<Animation3D> anim3d = std::make_unique<Animation3D>();
 				anim3d->SetSkeleton(this);
 
-				eResult result = anim3d->Load(entry.path().lexically_relative(_basePath), _basePath);
+				const std::fs::path& basePath = PathMgr::GetContentPathRelative(eResourceType::MeshData);
+				eResult result = anim3d->Load(entry.path().lexically_relative(basePath));
 				if (eResultFail(result))
 				{
 					ERROR_MESSAGE_W(L"애니메이션 로드 실패.");
@@ -202,7 +197,7 @@ namespace mh
 		return eResult::Success;
 	}
 
-	bool Skeleton::CopyAnimationFromOther(const Skeleton& _other, const std::fs::path& _savePath)
+	bool Skeleton::CopyAnimationFromOther(const Skeleton& _other, const std::fs::path& _saveDir)
 	{
 		//순회를 돌아주면서 내 스켈레톤 인덱스와 매칭되는 상대 스켈레톤 인덱스를 계산
 		if (m_vecBones.size() != _other.m_vecBones.size())
@@ -247,8 +242,10 @@ namespace mh
 				iter = mMapAnimations.find(strKey);
 			}
 
-			//ourAnim->SetKey(strKey);
-			if (eResultFail(ourAnim->Save(strKey, _savePath)))
+			std::fs::path filePath = _saveDir.filename();
+			filePath /= strKey;
+			
+			if (eResultFail(ourAnim->Save(filePath)))
 				return false;
 
 			//우리 애니메이션 쪽에 등록

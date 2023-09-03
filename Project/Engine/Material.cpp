@@ -36,10 +36,10 @@ namespace mh
     {
     }
 
-    eResult Material::Save(const std::fs::path& _filePath, const std::fs::path& _basePath)
+    eResult Material::Save(const std::fs::path& _filePath)
     {
-        IRes::Save(_filePath, _basePath);
-        std::fs::path fullPath = PathMgr::CreateFullPathToContent(_filePath, _basePath, GetResType());
+        IRes::Save(_filePath);
+        std::fs::path fullPath = PathMgr::CreateFullPathToContent(_filePath, GetResType());
         fullPath.replace_extension(strKey::Ext_Material);
 
 
@@ -62,10 +62,10 @@ namespace mh
         return eResult::Success;
     }
 
-    eResult Material::Load(const std::fs::path& _filePath, const std::fs::path& _basePath)
+    eResult Material::Load(const std::fs::path& _filePath)
     {
-        IRes::Load(_filePath, _basePath);
-        std::fs::path fullPath = PathMgr::CreateFullPathToContent(_filePath, _basePath, GetResType());
+        IRes::Load(_filePath);
+        std::fs::path fullPath = PathMgr::CreateFullPathToContent(_filePath, GetResType());
         fullPath.replace_extension(strKey::Ext_Material);
         if (false == std::fs::exists(fullPath))
         {
@@ -158,7 +158,7 @@ namespace mh
         {
             if (false == vecLoad[i].empty())
             {
-                SetTexture((eTextureSlot)i, ResMgr::Load<Texture>(vecLoad[i], GetBasePath()));
+                SetTexture((eTextureSlot)i, ResMgr::Load<Texture>(vecLoad[i]));
             }
         }
         return eResult::Success;

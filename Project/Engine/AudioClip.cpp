@@ -28,11 +28,12 @@ namespace mh
 		mSound = nullptr;
 	}
 
-	eResult AudioClip::Load(const std::fs::path& _filePath, const std::fs::path& _basePath)
-	{
-		IRes::Save(_filePath, _basePath);
 
-		std::fs::path fullPath = PathMgr::CreateFullPathToContent(_filePath, _basePath, GetResType());
+	eResult AudioClip::Load(const std::fs::path& _filePath)
+	{
+		IRes::Save(_filePath);
+
+		std::fs::path fullPath = PathMgr::CreateFullPathToContent(_filePath, GetResType());
 		if (false == std::fs::exists(fullPath))
 		{
 			ERROR_MESSAGE_W(L"파일이 없습니다.");

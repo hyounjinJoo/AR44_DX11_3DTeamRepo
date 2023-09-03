@@ -30,7 +30,7 @@ namespace mh
 	{
 	}
 
-	eResult MeshData::Save(const std::fs::path& _filePath, const std::fs::path& _basePath)
+	eResult MeshData::Save(const std::fs::path& _filePath)
 	{
 		eResult result = eResult::Fail;
 
@@ -43,11 +43,9 @@ namespace mh
 		fileName.replace_extension(strKey::Ext_MeshData);
 
 		const std::fs::path& basePath = PathMgr::GetContentPathRelative(eResourceType::MeshData);
-		IRes::Save(fileName, basePath);
+		IRes::Save(fileName);
 
-		std::fs::path fullPath = PathMgr::CreateFullPathToContent(fileName, basePath, GetResType());
-		
-		
+		std::fs::path fullPath = PathMgr::CreateFullPathToContent(fileName, GetResType());
 
 		std::ofstream ofs(fullPath);
 		if (false == ofs.is_open())
@@ -64,7 +62,7 @@ namespace mh
 		return eResult::Success;
 	}
 
-	eResult MeshData::Load(const std::fs::path& _filePath, const std::fs::path& _basePath)
+	eResult MeshData::Load(const std::fs::path& _filePath)
 	{
 		eResult result = eResult::Fail;
 
@@ -77,9 +75,9 @@ namespace mh
 		fileName.replace_extension(strKey::Ext_MeshData);
 
 		const std::fs::path& basePath = PathMgr::GetContentPathRelative(eResourceType::MeshData);
-		IRes::Load(fileName, basePath);
+		IRes::Load(fileName);
 
-		std::fs::path fullPath = PathMgr::CreateFullPathToContent(fileName, basePath, GetResType());
+		std::fs::path fullPath = PathMgr::CreateFullPathToContent(fileName, GetResType());
 
 		Json::Value jVal;
 		fullPath.replace_extension(strKey::Ext_MeshData);
@@ -117,7 +115,7 @@ namespace mh
 		//Skeleton
 		if (mSkeleton)
 		{
-			result = mSkeleton->Save(mSkeleton->GetKey(), GetBasePath());
+			result = mSkeleton->Save(mSkeleton->GetKey());
 			if (eResultFail(result))
 				return result;
 		}
@@ -135,7 +133,7 @@ namespace mh
 				return eResult::Fail_InValid;
 			}
 			//Mesh
-			result = mMeshContainers[i].pMesh->Save(mMeshContainers[i].pMesh->GetKey(), GetBasePath());
+			result = mMeshContainers[i].pMesh->Save(mMeshContainers[i].pMesh->GetKey());
 			if (eResultFail(result))
 			{
 				return result;
@@ -146,7 +144,7 @@ namespace mh
 			//Material 저장
 			for (size_t j = 0; j < mMeshContainers[i].pMaterials.size(); ++j)
 			{
-				result = mMeshContainers[i].pMaterials[j]->Save(mMeshContainers[i].pMaterials[j]->GetKey(), GetBasePath());
+				result = mMeshContainers[i].pMaterials[j]->Save(mMeshContainers[i].pMaterials[j]->GetKey());
 				if (eResultFail(result))
 				{
 					return result;
@@ -190,7 +188,7 @@ namespace mh
 
 			//Mesh
 			std::string meshStrKey = Json::MH::LoadPtrStrKey(&(*iter), JSON_KEY(pMesh), cont.pMesh);
-			cont.pMesh = ResMgr::Load<Mesh>(meshStrKey, GetBasePath());
+			cont.pMesh = ResMgr::Load<Mesh>(meshStrKey);
 			if (nullptr == cont.pMesh)
 				return eResult::Fail_Empty;
 
@@ -198,7 +196,7 @@ namespace mh
 			const auto& materialsStrKey = Json::MH::LoadPtrStrKeyVector(&(*iter), JSON_KEY(pMaterials), cont.pMaterials);
 			for (size_t i = 0; i < materialsStrKey.size(); ++i)
 			{
-				std::shared_ptr<Material> mtrl = ResMgr::Load<Material>(materialsStrKey[i], GetBasePath());
+				std::shared_ptr<Material> mtrl = ResMgr::Load<Material>(materialsStrKey[i]);
 				cont.pMaterials.push_back(mtrl);
 			}
 
@@ -210,7 +208,7 @@ namespace mh
 		if (false == skeletonKey.empty())
 		{
 			mSkeleton = std::make_shared<Skeleton>();
-			result = mSkeleton->Load(skeletonKey, GetBasePath());
+			result = mSkeleton->Load(skeletonKey);
 			if (eResultFail(result))
 				return result;
 		}
@@ -354,8 +352,6 @@ namespace mh
 		//Res/MeshData/Player/Player
 		filePath /= filePath;
 
-		SetBasePath(PathMgr::GetContentPathRelative(GetResType()));
-
 		//Bone 정보 로드
 		mSkeleton = std::make_shared<Skeleton>();
 
@@ -422,7 +418,7 @@ namespace mh
 			{
 
 				std::shared_ptr<Material> mtrl = 
-					ConvertMaterial(&(containers[i].vecMtrl[j]), GetBasePath() / _dirAndFileName);
+					ConvertMaterial(&(containers[i].vecMtrl[j]), _dirAndFileName);
 				if (nullptr == mtrl)
 				{
 					ERROR_MESSAGE_W(L"머티리얼 로드에 실패했습니다.");
@@ -464,15 +460,15 @@ namespace mh
 		//지금 필요한건 FBX에 저장된 Skeleton과 Animation 정보 뿐임
 		std::unique_ptr<Skeleton> skeletonOfProj = std::make_unique<Skeleton>();
 
-		std::fs::path projSkltPath = PathMgr::CreateFullPathToContent(_meshDataName, L"", eResourceType::MeshData);
-		result = skeletonOfProj->Load(_meshDataName, projSkltPath);
+		//Skeleton의 실제 경로: Player/Player
+		result = skeletonOfProj->Load(_meshDataName / _meshDataName);
 		if (eResultFail(result))
 		{
 			ERROR_MESSAGE_W(L"프로젝트 스켈레톤 불러오기 실패.");
 			return result;
 		}
 
-		if (false == skeletonOfProj->CopyAnimationFromOther((*skeletonOfFBX), projSkltPath))
+		if (false == skeletonOfProj->CopyAnimationFromOther((*skeletonOfFBX), _meshDataName))
 		{
 			MessageBoxW(nullptr, L"스켈레톤 구조가 일치하지 않아 애니메이션을 추가할 수 없습니다.", nullptr, MB_OK);
 			return eResult::Fail;
@@ -497,6 +493,8 @@ namespace mh
 
 		mtrl->SetMaterialCoefficient(_fbxMtrl->DiffuseColor, _fbxMtrl->SpecularColor, _fbxMtrl->AmbientColor, _fbxMtrl->EmissiveColor);
 
+		std::fs::path texDir = PathMgr::CreateFullPathToContent(_texDestDir, eResourceType::Texture);
+
 		//media directory(텍스처같은 파일들) 옮겨졌는지 여부 저장 변수
 		bool bMediaDirMoved = false;
 
@@ -512,13 +510,13 @@ namespace mh
 				{
 					std::fs::path srcTexPath = _srcTexPath;
 					srcTexPath = srcTexPath.parent_path();
-					if (std::fs::exists(srcTexPath) && std::fs::exists(_texDestDir))
+					if (std::fs::exists(srcTexPath) && std::fs::exists(texDir))
 					{
 						const auto copyOption =
 							std::fs::copy_options::overwrite_existing
 							| std::fs::copy_options::recursive;
 
-						std::fs::copy(srcTexPath, _texDestDir, copyOption);
+						std::fs::copy(srcTexPath, texDir, copyOption);
 						std::fs::remove_all(srcTexPath);
 
 						bMediaDirMoved = true;
@@ -531,7 +529,7 @@ namespace mh
 				texKey /= std::fs::path(_srcTexPath).filename();
 
 				//바로 Texture Load. 로드 실패 시 false 반환
-				if (eResultFail(newTex->Load(texKey, _texDestDir.parent_path())))
+				if (eResultFail(newTex->Load(texKey)))
 				{
 					newTex = nullptr;
 				}
@@ -549,7 +547,7 @@ namespace mh
 
 		mtrl->SetRenderingMode(eRenderingMode::DefferdOpaque);
 
-		CheckMHMaterial(mtrl, _texDestDir);
+		CheckMHMaterial(mtrl, texDir);
 
 		return mtrl;
 	}
@@ -643,12 +641,12 @@ namespace mh
 								{
 									//일치할 경우 이 텍스처를 material에 추가
 									newTex = std::make_shared<Texture>();
-									newTex->SetKey(fileName);
 
 									std::fs::path texKey = _texDestDir.filename();
 									texKey /= dirIter.path().filename();
+									newTex->SetKey(texKey.string());
 
-									newTex->Load(texKey, _texDestDir.parent_path());
+									newTex->Load(texKey);
 
 									_mtrl->SetTexture((eTextureSlot)j, newTex);
 								}

@@ -24,7 +24,7 @@ namespace mh
 		bool Create(const D3D11_TEXTURE2D_DESC& _TexDesc);
 
 		//Save / Load
-		virtual eResult Load(const std::filesystem::path& _filePath, const std::filesystem::path& _basePath = "") override;
+		virtual eResult Load(const std::filesystem::path& _filePath) override;
 		void InitializeResource();
 
 

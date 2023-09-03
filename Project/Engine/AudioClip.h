@@ -14,8 +14,7 @@ namespace mh
 		AudioClip();
 		virtual ~AudioClip();
 
-		virtual eResult Load(const std::filesystem::path& _filePath, const std::filesystem::path& _basePath = L"") override;
-
+		virtual eResult Load(const std::fs::path& _filePath) override;
 		
 		void Play();
 		void Stop();

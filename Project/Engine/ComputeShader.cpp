@@ -31,9 +31,9 @@ namespace mh
 	{
 	}
 
-	eResult ComputeShader::Load(const std::filesystem::path& _filePath, const std::filesystem::path& _basePath)
+	eResult ComputeShader::Load(const std::filesystem::path& _filePath)
 	{
-		std::fs::path fullPath = PathMgr::CreateFullPathToContent(_filePath, _basePath, GetResType());
+		std::fs::path fullPath = PathMgr::CreateFullPathToContent(_filePath, eResourceType::ComputeShader);
 		return CreateByCSO(fullPath);
 	}
 	eResult ComputeShader::CreateByCompile(const std::filesystem::path& _FullPath, const std::string_view _funcName)

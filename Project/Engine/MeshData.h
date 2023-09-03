@@ -32,8 +32,8 @@ namespace mh
 		MeshData();
 		virtual ~MeshData();
 
-		virtual eResult Save(const std::fs::path& _filePath, const std::fs::path& _basePath = "") override;
-		virtual eResult Load(const std::fs::path& _filePath, const std::fs::path& _basePath = "") override;
+		virtual eResult Save(const std::fs::path& _filePath) override;
+		virtual eResult Load(const std::fs::path& _filePath) override;
 		
 
 		virtual eResult SaveJson(Json::Value* _pJson) override;

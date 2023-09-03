@@ -199,12 +199,11 @@ namespace mh
 		return eResult::Success;
 	}
 
-	eResult GraphicsShader::Save(const std::fs::path& _filePath, const std::fs::path& _basePath)
+	eResult GraphicsShader::Save(const std::fs::path& _filePath)
 	{
-		//쉐이더는 Base Path를 사용하지 않음.
 		IRes::Save(_filePath);
 
-		std::fs::path fullPath = PathMgr::CreateFullPathToContent(_filePath, _basePath, GetResType());
+		std::fs::path fullPath = PathMgr::CreateFullPathToContent(_filePath, eResourceType::GraphicsShader);
 		fullPath.replace_extension(define::strKey::Ext_ShaderSetting);
 
 		//파일 열고
@@ -230,12 +229,11 @@ namespace mh
 		return eResult::Success;
 	}
 
-	eResult GraphicsShader::Load(const std::fs::path& _filePath, const std::fs::path& _basePath)
+	eResult GraphicsShader::Load(const std::fs::path& _filePath)
 	{
-		//쉐이더는 Base Path를 사용하지 않음.
 		IRes::Load(_filePath);
 
-		std::fs::path fullPath = PathMgr::CreateFullPathToContent(_filePath, L"", GetResType());
+		std::fs::path fullPath = PathMgr::CreateFullPathToContent(_filePath, eResourceType::GraphicsShader);
 		fullPath.replace_extension(define::strKey::Ext_ShaderSetting);
 		if (false == std::fs::exists(fullPath))
 		{

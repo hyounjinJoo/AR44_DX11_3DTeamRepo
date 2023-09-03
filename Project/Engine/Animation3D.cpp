@@ -31,15 +31,17 @@ namespace mh
         m_SBufferKeyFrame->UnBindData();
     }
 
-    eResult Animation3D::Save(const std::fs::path& _filePath, const std::fs::path& _basePath)
+    eResult Animation3D::Save(const std::fs::path& _filePath)
     {
-        if (_basePath.empty())
+        SetKey(_filePath.string());
+
+        if (false == _filePath.has_parent_path())
         {
-            ERROR_MESSAGE_W(L"3D Animation 저장에는 Base Path가 반드시 필요합니다.");
-            return eResult::Fail_PathNotExist;
+            ERROR_MESSAGE_W(L"Animation은 반드시 상위 폴더가 있어야 합니다.");
+            return eResult::Fail_InValid;
         }
 
-        std::fs::path fullPath = _basePath / _filePath;
+        std::fs::path fullPath = PathMgr::CreateFullPathToContent(_filePath, eResourceType::MeshData);
 
         {
             std::fs::path checkDir = fullPath.parent_path();
@@ -78,21 +80,25 @@ namespace mh
         return eResult::Success;
     }
 
-    eResult Animation3D::Load(const std::fs::path& _filePath, const std::fs::path& _basePath)
+    eResult Animation3D::Load(const std::fs::path& _filePath)
     {
-        if (_basePath.empty())
+        SetKey(_filePath.string());
+
+        if (false == _filePath.has_parent_path())
         {
-            ERROR_MESSAGE_W(L"3D Animation 저장에는 Base Path가 반드시 필요합니다.");
-            return eResult::Fail_PathNotExist;
+            ERROR_MESSAGE_W(L"Animation은 반드시 상위 폴더가 있어야 합니다.");
+            return eResult::Fail_InValid;
         }
-        std::fs::path fullPath = _basePath / _filePath;
+        std::fs::path fullPath = PathMgr::CreateFullPathToContent(_filePath, eResourceType::MeshData);
         fullPath.replace_extension(strKey::Ext_Anim3D);
+
         if (false == std::fs::exists(fullPath))
         {
             ERROR_MESSAGE_W(L"파일이 존재하지 않습니다.");
             return eResult::Fail_PathNotExist;
         }
 
+       
         std::ifstream ifs(fullPath, std::ios::binary);
         if (false == ifs.is_open())
         {
@@ -100,7 +106,6 @@ namespace mh
             return eResult::Fail_OpenFile;
         }
 
-        //Binary::LoadStr(ifs, m_OwnerSkeleton->GetKey());
         Binary::LoadValue(ifs, mValues);
 
         std::vector<tAnimKeyframeTranslation>	vecFrameTrans;
@@ -129,6 +134,8 @@ namespace mh
         }
 
         ifs.close();
+
+       
         return eResult::Success;
     }
 

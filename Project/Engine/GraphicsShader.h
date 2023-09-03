@@ -27,8 +27,8 @@ namespace mh
 		virtual eResult SaveJson(Json::Value* _pJVal) override;
 		virtual eResult LoadJson(const Json::Value* _pJVal) override;
 
-		virtual eResult Save(const std::fs::path& _filePath, const std::fs::path& _basePath = L"") override;
-		virtual eResult Load(const std::fs::path& _filePath, const std::fs::path& _basePath = L"") override;
+		virtual eResult Save(const std::fs::path& _filePath) override;																					
+		virtual eResult Load(const std::fs::path& _filePath) override;
 
 		eResult CreateByCompile(define::eGSStage _stage, const std::filesystem::path& _FullPath, const std::string_view _funcName);
 		eResult CreateByHeader(define::eGSStage _stage, const unsigned char* _pByteCode, size_t _ByteCodeSize);

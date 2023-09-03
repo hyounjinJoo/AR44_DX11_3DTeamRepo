@@ -23,17 +23,15 @@ namespace mh
 	{
 	}
 
-	eResult IRes::Save(const std::fs::path& _filePath, const std::fs::path& _basePath)
+	eResult IRes::Save(const std::fs::path& _filePath)
 	{
 		SetKey(_filePath.string());
-		mBasePath = _basePath;
 		return eResult::Success;
 	}
 
-	eResult IRes::Load(const std::fs::path& _filePath, const std::fs::path& _basePath)
+	eResult IRes::Load(const std::fs::path& _filePath)
 	{
 		SetKey(_filePath.string());
-		mBasePath = _basePath;
 		return eResult::Success;
 	}
 
@@ -90,5 +88,7 @@ namespace mh
 
 		return eResult::Success;
 	}
+
+
 
 }

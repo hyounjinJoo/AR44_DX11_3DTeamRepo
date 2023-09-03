@@ -35,9 +35,9 @@ namespace mh
 		}
 	}
 
-	eResult Mesh::Save(const std::fs::path& _filePath, const std::fs::path& _basePath)
+	eResult Mesh::Save(const std::fs::path& _filePath)
 	{
-		std::fs::path fullPath =PathMgr::CreateFullPathToContent(_filePath, _basePath, GetResType());
+		std::fs::path fullPath =PathMgr::CreateFullPathToContent(_filePath, GetResType());
 		fullPath.replace_extension(strKey::Ext_Mesh);
 
 		std::ofstream ofs(fullPath, std::ios::binary);
@@ -83,9 +83,9 @@ namespace mh
 		return eResult::Success;
 	}
 
-	eResult Mesh::Load(const std::fs::path& _filePath, const std::fs::path& _basePath)
+	eResult Mesh::Load(const std::fs::path& _filePath)
 	{
-		std::fs::path fullPath =PathMgr::CreateFullPathToContent(_filePath, _basePath, GetResType());
+		std::fs::path fullPath =PathMgr::CreateFullPathToContent(_filePath, GetResType());
 		fullPath.replace_extension(strKey::Ext_Mesh);
 
 		if (false == std::fs::exists(fullPath))
@@ -103,15 +103,6 @@ namespace mh
 		std::string strKey;
 		Binary::LoadStr(ifs, strKey);
 		SetKey(strKey);
-
-		////D3D11_BUFFER_DESC mVBDesc;
-		//Binary::SaveValue(ofs, mVBDesc);
-
-		////UINT mVertexByteStride;
-		//ofs << mVertexByteStride;
-
-		////UINT mVertexCount;
-		//ofs << mVertexCount;
 
 		//D3D11_BUFFER_DESC mVBDesc;
 		Binary::LoadValue(ifs, mVBDesc);

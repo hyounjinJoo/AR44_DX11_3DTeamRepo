@@ -18,16 +18,20 @@ namespace mh
 		static void Init();
 		
 	public:
-		static const std::filesystem::path& GetResPathAbsolute() { return mAbsoluteResPath; }
-		static const std::filesystem::path& GetResPathRelative() { return mRelativeResPath; }
+		static const std::fs::path& GetResPathAbsolute() { return mAbsoluteResPath; }
+		static const std::fs::path& GetResPathRelative() { return mRelativeResPath; }
 
-		static inline std::filesystem::path GetContentPathAbsolute(eResourceType _eResType);
+		static inline std::fs::path GetContentPathAbsolute(eResourceType _eResType);
 
-		static const std::filesystem::path& GetContentPathRelative(eResourceType _eResType) { return mRelativePathContent[(int)_eResType]; }
+		static const std::fs::path& GetContentPathRelative(eResourceType _eResType) { return mRelativePathContent[(int)_eResType]; }
 
-		static const std::filesystem::path& GetShaderCSOPath() { return mRelativePath_ShaderCSO; }
+		static const std::fs::path& GetShaderCSOPath() { return mRelativePath_ShaderCSO; }
 
-		static inline std::fs::path CreateFullPathToContent(const std::fs::path& _filePath, const std::fs::path& _basePath, define::eResourceType _resType);
+		static inline std::fs::path CreateFullPathToContent(const std::fs::path& _filePath, define::eResourceType _resType);
+
+		//Res/Texture/FBX/MyTex -> FBX/MyTex
+		static inline std::fs::path MakePathStrKey(const std::fs::path& _fullPath);
+
 
 	private:
 		static void Release();
@@ -45,20 +49,14 @@ namespace mh
 		return mAbsoluteResPath / define::strKey::ArrResName[(int)_eResType];
 	}
 
-	inline std::filesystem::path PathMgr::CreateFullPathToContent(const std::filesystem::path& _filePath, const std::filesystem::path& _basePath, define::eResourceType _resType)
+	inline std::filesystem::path PathMgr::CreateFullPathToContent(const std::filesystem::path& _filePath, define::eResourceType _resType)
 	{
-		std::filesystem::path fullPath;
-		if (_basePath.empty())
-		{
-			fullPath = PathMgr::GetContentPathRelative(_resType);
-		}
-		else
-		{
-			fullPath = _basePath;
-		}
+		MH_ASSERT(define::eResourceType::UNKNOWN != _resType);
+
+		std::filesystem::path fullPath = GetContentPathRelative(_resType);
 		fullPath /= _filePath;
 
-
+		//에러 방지를 위한 코드
 		std::fs::path checkDir = fullPath.parent_path();
 		if (false == std::fs::exists(checkDir))
 		{
@@ -69,8 +67,26 @@ namespace mh
 			}
 		}
 
-
 		return fullPath;
+	}
+	inline std::fs::path PathMgr::MakePathStrKey(const std::fs::path& _fullPath)
+	{
+		std::fs::path strKeyPath{};
+		std::fs::path newPath = _fullPath.lexically_relative(mAbsoluteResPath);
+
+		//비어있거나, Res 바깥의 폴더(../)이면 안됨
+		if (newPath.empty() || (*newPath.begin()) == "..")
+		{
+			ERROR_MESSAGE_W(L"리소스 파일은 반드시 Res 폴더의 안쪽에 있어야 합니다.");
+		}
+		else
+		{
+			for (auto iter = ++newPath.begin(); iter != newPath.end(); ++iter)
+			{
+				strKeyPath /= *iter;
+			}
+		}
+		return strKeyPath;
 	}
 }
 

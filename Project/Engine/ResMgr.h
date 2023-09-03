@@ -36,7 +36,7 @@ namespace mh
 		static eResourceType GetResType();
 
 		template <typename T>
-		static std::shared_ptr<T> Load(const std::filesystem::path& _filePath, const std::filesystem::path& _basePath = "");
+		static std::shared_ptr<T> Load(const std::filesystem::path& _filePath);
 
 		template <typename T>
 		static std::shared_ptr<T> Find(const std::string_view _strKey);
@@ -101,7 +101,7 @@ namespace mh
 	}
 
 	template<typename T>
-	inline std::shared_ptr<T> ResMgr::Load(const std::filesystem::path& _filePath, const std::filesystem::path& _basePath)
+	inline std::shared_ptr<T> ResMgr::Load(const std::filesystem::path& _filePath)
 	{
 		//IRes를 상속받는 클래스가 아닐 경우 컴파일 중지
 		static_assert(std::is_base_of<IRes, T>::value);
@@ -122,7 +122,7 @@ namespace mh
 		std::shared_ptr<T> NewRes = std::make_shared<T>();
 
 		//Load 실패 시 nullptr 반환
-		if (FAILED(NewRes->Load(_filePath, _basePath)))
+		if (FAILED(NewRes->Load(_filePath)))
 			return nullptr;
 
 		Insert(strKey, NewRes);

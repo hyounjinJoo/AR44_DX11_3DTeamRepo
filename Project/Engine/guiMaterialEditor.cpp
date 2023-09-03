@@ -198,7 +198,9 @@ namespace gui
 				std::fs::path receivedPath = mh::WinAPI::FileDialog(texPath, vecExt);
 				if (false == receivedPath.empty())
 				{
-					std::shared_ptr<mh::Texture> tex = mh::ResMgr::Load<mh::Texture>(receivedPath.filename(), receivedPath.parent_path());
+					std::fs::path PathstrKey =  mh::PathMgr::MakePathStrKey(receivedPath);
+
+					std::shared_ptr<mh::Texture> tex = mh::ResMgr::Load<mh::Texture>(PathstrKey);
 					if (tex)
 					{
 						mTargetMaterial->SetTexture((mh::define::eTextureSlot)i, tex);
@@ -314,7 +316,7 @@ namespace gui
 
 		std::string strKey = outputPath.filename().string();
 		mTargetMaterial->SetKey(strKey);
-		mTargetMaterial->Save(strKey, outputPath.parent_path());
+		mTargetMaterial->Save(strKey);
 
 	}
 	void guiMaterialEditor::LoadFromFile()
@@ -385,7 +387,7 @@ namespace gui
 					else
 					{
 						mTargetMaterial = std::make_shared<mh::Material>();
-						if (mh::eResultFail(mTargetMaterial->Load(filePath.filename(), filePath.parent_path())))
+						if (mh::eResultFail(mTargetMaterial->Load(filePath.filename())))
 						{
 							std::wstring errMsg = filePath.wstring();
 							errMsg += L"\n불러오기에 실패했습니다.";
