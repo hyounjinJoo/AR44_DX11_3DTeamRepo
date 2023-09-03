@@ -74,6 +74,8 @@ namespace mh
 		}
 
 
+
+
 		{
 			std::shared_ptr<MeshData> meshdata = ResMgr::Load<MeshData>("Player_Default");
 
