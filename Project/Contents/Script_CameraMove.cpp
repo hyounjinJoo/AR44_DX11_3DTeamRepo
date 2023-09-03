@@ -16,6 +16,7 @@ namespace mh
 	{
 	}
 
+
 	Script_CameraMove::Script_CameraMove(const Script_CameraMove& _other)
 	{
 	}

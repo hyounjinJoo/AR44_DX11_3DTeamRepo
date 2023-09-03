@@ -396,15 +396,19 @@ namespace mh
 			if (nullptr != meshCont.pMesh)
 			{
 				//기본적으로는 컨테이너 이름을 사용
-				std::fs::path strKey = containers[i].Name;
-
 				//비어있을 경우 이름을 만들어준다
-				if (strKey.empty())
+				std::fs::path strKey{}; 
+				if (containers[i].Name.empty())
 				{
 					strKey = filePath;
 					strKey.replace_extension();
 					strKey += "_";
 					strKey += std::to_string(i);
+				}
+				else
+				{
+					strKey = _dirAndFileName;
+					strKey /= containers[i].Name;
 				}
 
 				//.msh로 확장자를 변경
@@ -493,7 +497,8 @@ namespace mh
 
 		mtrl->SetMaterialCoefficient(_fbxMtrl->DiffuseColor, _fbxMtrl->SpecularColor, _fbxMtrl->AmbientColor, _fbxMtrl->EmissiveColor);
 
-		std::fs::path texDir = PathMgr::CreateFullPathToContent(_texDestDir, eResourceType::Texture);
+		std::fs::path texDir = PathMgr::GetContentPathRelative(eResourceType::Texture);
+		texDir /= _texDestDir;
 
 		//media directory(텍스처같은 파일들) 옮겨졌는지 여부 저장 변수
 		bool bMediaDirMoved = false;
@@ -510,7 +515,13 @@ namespace mh
 				{
 					std::fs::path srcTexPath = _srcTexPath;
 					srcTexPath = srcTexPath.parent_path();
-					if (std::fs::exists(srcTexPath) && std::fs::exists(texDir))
+
+					if (false == std::fs::exists(texDir))
+					{
+						std::fs::create_directories(texDir);
+					}
+
+					if (std::fs::exists(srcTexPath))
 					{
 						const auto copyOption =
 							std::fs::copy_options::overwrite_existing

@@ -37,6 +37,8 @@ namespace mh
 
 	eResult Mesh::Save(const std::fs::path& _filePath)
 	{
+		IRes::Save(_filePath);
+
 		std::fs::path fullPath =PathMgr::CreateFullPathToContent(_filePath, GetResType());
 		fullPath.replace_extension(strKey::Ext_Mesh);
 
@@ -85,6 +87,8 @@ namespace mh
 
 	eResult Mesh::Load(const std::fs::path& _filePath)
 	{
+		IRes::Load(_filePath);
+
 		std::fs::path fullPath =PathMgr::CreateFullPathToContent(_filePath, GetResType());
 		fullPath.replace_extension(strKey::Ext_Mesh);
 
