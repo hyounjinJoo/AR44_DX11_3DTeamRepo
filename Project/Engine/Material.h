@@ -49,7 +49,7 @@ namespace mh
 		void SetAnim3D(bool _bAnim3D) { mCB.bAnim = (BOOL)_bAnim3D; }
 		void SetBoneCount(int _iBoneCount) { mCB.BoneCount = _iBoneCount; }
 
-
+			
 	private:
 		eRenderingMode mMode;
 		tCB_MaterialData mCB;

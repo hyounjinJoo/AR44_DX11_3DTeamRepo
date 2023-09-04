@@ -131,16 +131,21 @@ struct alignas(16) tCB_SBufferCount
 
 struct alignas(16)  tCB_Animation3D
 {
-	int			BoneCount;
-	int			CurrentFrame;
-	int			NextFrame;
-	float		FrameRatio;
-	int			FrameLength;
+	int			BoneCount;		//본 갯수
+	int			CurrentFrame;	//현재 프레임
+	int			NextFrame;		//다음 프레임
+	float		FrameRatio;		//프레임 진행 비율
+	int			FrameLength;	//프레임 장수
+	
+	//Instancing 관련
 	int			RowIndex;
+	
+	//Animation Blending 관련
 	BOOL		bChangingAnim;
 	float		ChangeRatio;
-	int			ChangeFrameCount;
-	float3		Padding_Animation3D;
+	int			ChangeFrameLength;
+	int			ChangeFrameIdx;
+	float2		Padding_Animation3D;
 };
 
 struct alignas(16)  tCB_UniformData

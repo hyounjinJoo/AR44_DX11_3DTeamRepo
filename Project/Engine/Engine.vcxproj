@@ -319,7 +319,6 @@ call Copy_HLSL.bat $(Configuration)</Command>
     <ClInclude Include="MultiRenderTarget.h" />
     <ClInclude Include="RenderMgr.h" />
     <ClInclude Include="resource.h" />
-    <ClInclude Include="Script_Camera.h" />
     <ClInclude Include="ICollider.h" />
     <ClInclude Include="DefaultShaders.h" />
     <ClInclude Include="defines.h" />
@@ -360,7 +359,6 @@ call Copy_HLSL.bat $(Configuration)</Command>
     <ClInclude Include="ParticleShader.h" />
     <ClInclude Include="Com_Renderer_ParticleSystem.h" />
     <ClInclude Include="Player.h" />
-    <ClInclude Include="Script_Player.h" />
     <ClInclude Include="Prefab.h" />
     <ClInclude Include="IRes.h" />
     <ClInclude Include="ResMgr.h" />
@@ -491,7 +489,6 @@ call Copy_HLSL.bat $(Configuration)</Command>
     <ClCompile Include="ITransform.cpp" />
     <ClCompile Include="MultiRenderTarget.cpp" />
     <ClCompile Include="RenderMgr.cpp" />
-    <ClCompile Include="Script_Camera.cpp" />
     <ClCompile Include="ICollider.cpp" />
     <ClCompile Include="PCH_Engine.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
@@ -530,7 +527,6 @@ call Copy_HLSL.bat $(Configuration)</Command>
     <ClCompile Include="ParticleShader.cpp" />
     <ClCompile Include="Com_Renderer_ParticleSystem.cpp" />
     <ClCompile Include="Player.cpp" />
-    <ClCompile Include="Script_Player.cpp" />
     <ClCompile Include="Prefab.cpp" />
     <ClCompile Include="IRes.cpp" />
     <ClCompile Include="ResMgr.cpp" />

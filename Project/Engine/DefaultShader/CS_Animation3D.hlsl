@@ -23,7 +23,7 @@ void main(int3 _threadID : SV_DispatchThreadID)
 
 	if (CB_Animation3D.bChangingAnim == TRUE)
 	{
-		uint ChangeFrameIndex = _threadID.x * CB_Animation3D.ChangeFrameCount;
+		uint ChangeFrameIndex = _threadID.x * CB_Animation3D.ChangeFrameLength * CB_Animation3D.ChangeFrameIdx;
 
 		Scale = lerp(Scale, g_ChangeFrameTransArray[ChangeFrameIndex].Scale, CB_Animation3D.ChangeRatio);
 		Pos = lerp(Pos, g_ChangeFrameTransArray[ChangeFrameIndex].Pos, CB_Animation3D.ChangeRatio);
@@ -32,9 +32,9 @@ void main(int3 _threadID : SV_DispatchThreadID)
 
 	MatrixAffineTransformation(Scale, ZeroRot, Rot, Pos, matBone);
 
-	matrix matOffset = transpose(g_OffsetArray[_threadID.x]);
+	matrix matOffset = transpose(g_BoneOffsetArray[_threadID.x]);
 
-	g_FinalBoneMatrixArray[_threadID.x] = mul(matOffset, matBone);
+	g_FinalBoneMatrixArrayRW[_threadID.x] = mul(matOffset, matBone);
 	//g_BoneSocketMatrixArray[_threadID.x].matBone = transpose(matBone);
 
 	//g_BoneSocketMatrixArray[_threadID.x].Scale = Scale.xyz;
