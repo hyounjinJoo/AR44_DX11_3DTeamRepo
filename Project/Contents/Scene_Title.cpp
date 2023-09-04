@@ -81,7 +81,7 @@ namespace mh
 			GameObject* modeling = meshdata->Instantiate();
 			modeling->AddComponent<Script_Player>();
 
-			modeling->GetComponent<Com_Animator3D>()->Play("Idle");
+			modeling->GetComponent<Com_Animator3D>()->Play("OverheadSlash");
 			
 			EventMgr::SpawnGameObject(define::eLayerType::Player, modeling);
 		}

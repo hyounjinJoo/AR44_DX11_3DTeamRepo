@@ -23,7 +23,7 @@ void main(int3 _threadID : SV_DispatchThreadID)
 
 	if (CB_Animation3D.bChangingAnim == TRUE)
 	{
-		uint ChangeFrameIndex = _threadID.x * CB_Animation3D.ChangeFrameCount;
+		uint ChangeFrameIndex = _threadID.x * CB_Animation3D.ChangeFrameLength * CB_Animation3D.ChangeFrameIdx;
 
 		Scale = lerp(Scale, g_ChangeFrameTransArray[ChangeFrameIndex].Scale, CB_Animation3D.ChangeRatio);
 		Pos = lerp(Pos, g_ChangeFrameTransArray[ChangeFrameIndex].Pos, CB_Animation3D.ChangeRatio);

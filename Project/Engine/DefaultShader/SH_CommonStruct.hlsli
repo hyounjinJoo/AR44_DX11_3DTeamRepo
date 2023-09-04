@@ -142,8 +142,9 @@ struct alignas(16)  tCB_Animation3D
 	//Animation Blending 관련
 	BOOL		bChangingAnim;
 	float		ChangeRatio;
-	int			ChangeFrameCount;
-	float3		Padding_Animation3D;
+	int			ChangeFrameLength;
+	int			ChangeFrameIdx;
+	float2		Padding_Animation3D;
 };
 
 struct alignas(16)  tCB_UniformData

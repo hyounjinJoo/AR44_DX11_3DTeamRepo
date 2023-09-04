@@ -42,7 +42,7 @@ namespace mh
 	
 
 	private:
-		bool Play(std::shared_ptr<Animation3D> _anim);
+		bool Play(std::shared_ptr<Animation3D> _anim, bool _bBlend);
 
 		bool CheckMesh();
 
@@ -60,9 +60,6 @@ namespace mh
         double							m_dCurTime;
 		float							m_fClipUpdateTime;
 		
-
-		//다음 애니메이션 전환 여부
-		bool							m_bChangeAnim;
 
 		//전체 시간 길이
 		float							m_fChangeTimeLength;
