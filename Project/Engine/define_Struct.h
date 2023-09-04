@@ -66,7 +66,7 @@ namespace mh::define
 
 	struct tMassProperties
 	{
-		tMassProperties(float _staticFriction = 0.5f, float _dynamicFriction = 0.2f, float _restitution = 0.603f)
+		tMassProperties(float _staticFriction = 0.f, float _dynamicFriction = 0.f, float _restitution = 0.603f)
 			: staticFriction(_staticFriction)
 			, dynamicFriction(_dynamicFriction)
 			, restitution(_restitution)

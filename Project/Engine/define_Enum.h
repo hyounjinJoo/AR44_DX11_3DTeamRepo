@@ -42,6 +42,7 @@ namespace mh
 			None = -1,
 			Com_Camera,
 			Grid,
+			Light,
 			Monster,
 			Player,
 			Ground,

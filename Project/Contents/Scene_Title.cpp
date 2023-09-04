@@ -53,8 +53,8 @@ namespace mh
 			cameraObj->SetName("MainCamera");
 
 			Com_Transform* tr = cameraObj->AddComponent<Com_Transform>();
-			tr->SetPosition(float3(0.0f, 0.0f, -20.0f));
-
+			tr->SetPosition(float3(0.0f, 20.0f, 0.0f));
+	
 			Com_Camera* cameraComp = cameraObj->AddComponent<Com_Camera>();
 			cameraComp->SetProjectionType(define::eProjectionType::Perspective);
 			//cameraComp->RegisterCameraInRenderer();
@@ -65,7 +65,11 @@ namespace mh
 		}
 
 		{
-			//GameObject obj = EventMgr::SpawnGameObject(eLayerType::);
+			GameObject* obj = EventMgr::SpawnGameObject(define::eLayerType::Light);
+			obj->AddComponent<Com_Transform>()->SetPosition(float3(0.0f,0.0f,-50.0f));
+			obj->AddComponent<Com_Light3D>()->SetType(define::eLightType::Directional);
+			float4 diff = float4(100.0f, 100.0f, 100.0f, 1.0f);
+			obj->GetComponent<Com_Light3D>()->SetDiffuse(diff);
 		}
 
 		//{
@@ -143,7 +147,7 @@ namespace mh
 		{
 			define::tPhysicsInfo info = {};
 			info.eActorType = define::eActorType::Dynamic;
-			info.size = float3(1.0f, 1.0f, 1.0f);
+			info.eGeomType = define::eGeometryType::Sphere;
 
 			std::shared_ptr<MeshData> meshdata = ResMgr::Load<MeshData>("Monster.fbx");
 			GameObject* obj = meshdata->Instantiate();
@@ -154,7 +158,7 @@ namespace mh
 			rigid->SetFreezeRotation(FreezeRotationFlag::ROTATION_Y, true);
 			rigid->SetFreezeRotation(FreezeRotationFlag::ROTATION_X, true);
 			rigid->SetFreezeRotation(FreezeRotationFlag::ROTATION_Z, true);
-
+		
 			obj->AddComponent<ICollider3D>();
 			EventMgr::SpawnGameObject(define::eLayerType::Player, obj);
 			obj->AddComponent<Script_Player>();

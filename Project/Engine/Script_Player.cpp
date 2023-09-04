@@ -7,6 +7,8 @@
 #include "GameObject.h"
 #include "Com_Transform.h"
 #include "Com_RigidBody.h"
+#include "Com_Camera.h"
+#include "RenderMgr.h"
 
 namespace mh
 {
@@ -29,6 +31,12 @@ namespace mh
 		Com_Transform* tr = GetOwner()->GetComponent<Com_Transform>();
 		Com_RigidBody* rb = GetOwner()->GetComponent<Com_RigidBody>();
 
+		Com_Transform* camTr = RenderMgr::GetMainCam()->GetOwner()->GetComponent<Com_Transform>();
+		float3 forward = camTr->GetForward();
+		float3 right = camTr->GetRight();
+		right.y = 0.f;
+
+
 		if (InputMgr::GetKey(eKeyCode::H))
 		{
 			tr->SetPosition(float3(0.0f, 0.0f, 0.f));
@@ -36,7 +44,8 @@ namespace mh
 
 		if (InputMgr::GetKey(eKeyCode::W))
 		{
-			rb->SetVelocity(define::eAxis3D::Z, -mMoveSpeed);
+			mMoveSpeed += 2.0f * TimeMgr::DeltaTime();
+			rb->SetVelocity(define::eAxis3D::Z, mMoveSpeed);
 		}
 
 		if (InputMgr::GetKey(eKeyCode::S))
@@ -46,7 +55,8 @@ namespace mh
 
 		if (InputMgr::GetKey(eKeyCode::A))
 		{
-			rb->SetVelocity(define::eAxis3D::X, -mMoveSpeed);
+			rb->AddForce((right * -100000.0f * 30.f));
+			//rb->SetVelocity(define::eAxis3D::X, -mMoveSpeed);
 		}
 
 		if (InputMgr::GetKey(eKeyCode::D))

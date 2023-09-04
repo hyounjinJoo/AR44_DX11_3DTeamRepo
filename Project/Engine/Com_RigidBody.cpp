@@ -328,8 +328,8 @@ namespace mh
 		PxRigidBodyExt::addForceAtPos(
 			*GetDynamicActor(),
 			_force,
-			GetOwner()->GetComponent<Com_Transform>()->GetPosition(),
-			physx::PxForceMode::eIMPULSE
+			GetOwner()->GetComponent<Com_Transform>()->GetPhysicalPosition(),
+			physx::PxForceMode::eFORCE
 		);
 	}
 	void Com_RigidBody::CreateBoxGeometry()

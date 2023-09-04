@@ -67,11 +67,14 @@ namespace mh
 		const float3& GetPosition();
 		const float3& GetRotation();
 		const float3& GetScale();
+		
 
 		float3 GetRight() { return mMatWorld.Right(); }
 		float3 GetUp() { return mMatWorld.Up(); }
 		float3 GetForward() { return mMatWorld.Forward(); } 
 		float3 GetLook() { return mMatWorld.Backward(); }
+
+		float3 GetPhysicalPosition();
 
 		void AddRotation(define::eAxis3D _eAxis, float _degree);
 

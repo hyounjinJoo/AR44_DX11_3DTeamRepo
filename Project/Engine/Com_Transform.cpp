@@ -535,6 +535,14 @@ namespace mh
 
 	
 
+	float3 Com_Transform::GetPhysicalPosition()
+	{
+		Com_RigidBody* rigidBody = GetOwner()->GetComponent<Com_RigidBody>();
+		physx::PxTransform transform = rigidBody->GetPhysicsTransform();
+		float3 physxPos = transform.p;
+		return physxPos;
+	}
+
 	void Com_Transform::AddRotation(define::eAxis3D _eAxis, float _degree)
 	{
 		if (true == IsPhysicsObject())
@@ -598,7 +606,6 @@ namespace mh
 	void Com_Transform::BindData()
 	{
 		//mCB_Transform = {};
-
 		mCB_Transform.world = mMatWorld;
 		
 		mCB_Transform.view = Com_Camera::GetGpuViewMatrix();

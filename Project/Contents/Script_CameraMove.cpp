@@ -119,26 +119,25 @@ namespace mh
 		if (InputMgr::GetKey(eKeyCode::LSHIFT))
 			fSpeed *= 5.f;
 
-		if (InputMgr::GetKey(eKeyCode::W))
+		if (InputMgr::GetKey(eKeyCode::UP))
 		{
 			vPos += TimeMgr::DeltaTime() * vFront * fSpeed;
 		}
 
-		if (InputMgr::GetKey(eKeyCode::S))
+		if (InputMgr::GetKey(eKeyCode::DOWN))
 		{
 			vPos -= TimeMgr::DeltaTime() * vFront * fSpeed;
 		}
 
-		if (InputMgr::GetKey(eKeyCode::A))
+		if (InputMgr::GetKey(eKeyCode::LEFT))
 		{
 			vPos -= TimeMgr::DeltaTime() * vRight * fSpeed;
 		}
 
-		if (InputMgr::GetKey(eKeyCode::D))
+		if (InputMgr::GetKey(eKeyCode::RIGHT))
 		{
 			vPos += TimeMgr::DeltaTime() * vRight * fSpeed;
 		}
-
 
 
 		if (InputMgr::GetKey(eKeyCode::RBTN))
