@@ -479,7 +479,7 @@ namespace gui
 
 		MATRIX view = mainCam->GetViewMatrix();
 		MATRIX projection = mainCam->GetProjectionMatrix();
-		MATRIX worldMatrix = tr->GetWorldMat();
+		MATRIX worldMatrix = tr->GetWorldMatrix();
 
 		float matrixTranslation[3], matrixRotation[3], matrixScale[3];
 		ImGuizmo::DecomposeMatrixToComponents(&worldMatrix.m[0][0], matrixTranslation, matrixRotation, matrixScale);
@@ -502,7 +502,7 @@ namespace gui
 
 			if (mCurrentGizmoOperation == ImGuizmo::TRANSLATE)
 			{
-				tr->SetRelativePos(position);
+				tr->SetPosition(position);
 			}
 			else if (mCurrentGizmoOperation == ImGuizmo::ROTATE)
 			{
@@ -531,12 +531,12 @@ namespace gui
 				}
 
 				Vector3 axisRotation(x, y, z);
-				tr->SetRelativeRotXYZ(axisRotation);
+				tr->SetRotation(axisRotation);
 
 			}
 			else if (mCurrentGizmoOperation == ImGuizmo::SCALE)
 			{
-				tr->SetRelativeScale(scale);
+				tr->SetScale(scale);
 			}
 			else
 			{
