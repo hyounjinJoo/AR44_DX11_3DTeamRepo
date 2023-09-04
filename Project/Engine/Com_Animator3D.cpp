@@ -213,6 +213,9 @@ namespace mh
 
 	void Com_Animator3D::BindData()
 	{
+		if (nullptr == mCurrentAnim)
+			return;
+
 		if (false == m_bFinalMatUpdate)
 		{
 			// Animation3D Update Compute Shader
@@ -275,7 +278,7 @@ namespace mh
 				m_Anim3DCBuffer.ChangeFrameLength = mNextAnim->GetFrameLength();
 				
 				m_Anim3DCBuffer.ChangeRatio = 0.f;
-				m_fChangeTimeLength = 3.f;
+				m_fChangeTimeLength = 1.f;
 				m_fChangeTimeAccumulate = 0.f;
 
 				bPlayed = true;
