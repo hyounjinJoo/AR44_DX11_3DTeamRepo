@@ -2,8 +2,10 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <ClCompile Include="Scene_TestBehaviourTree.cpp" />
+    <ClCompile Include="Scene_TestSkyBox.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Scene_TestBehaviourTree.h" />
+    <ClInclude Include="Scene_TestSkyBox.h" />
   </ItemGroup>
 </Project>
