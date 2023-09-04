@@ -27,6 +27,7 @@ namespace mh
 		float4 AmbientColor{};
 		float4 EmissiveColor{};
 
+
 		float	SpecularPower{};
 		float	TransparencyFactor{};
 		float	Shininess{};
@@ -162,8 +163,8 @@ namespace mh
 		int GetAllNodesCountRecursive(fbxsdk::FbxNode* _pNode);
 
 	private:
-		fbxsdk::FbxManager*		mManager;
-		fbxsdk::FbxScene*			mScene;
+		fbxsdk::FbxManager*						mManager;
+		fbxsdk::FbxScene*						mScene;
 
 		std::vector<tFBXContainer>				mContainers;
 
@@ -172,6 +173,8 @@ namespace mh
 		fbxsdk::FbxArray<fbxsdk::FbxString*>	mAnimNames;
 		std::vector<tFBXAnimClip>				mAnimClips;
 		bool									mbMixamo;
+
+		std::string								mFileName;
 	};
 }
 

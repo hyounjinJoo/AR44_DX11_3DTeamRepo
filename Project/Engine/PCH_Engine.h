@@ -23,6 +23,11 @@
 #include <memory>
 #include <filesystem>
 #include <fstream>
+#include <span>
+
+#include <thread>
+#include <chrono>
+#include <future>
 
 #include <combaseapi.h>
 #include "EnumFlags.h"
@@ -63,14 +68,6 @@
 #pragma comment(lib, "PhysX/Release/PhysXFoundation_64.lib")
 
 #endif
-
-
-
-
-namespace std
-{
-	namespace fs = filesystem;
-}
 
 #endif
 

@@ -58,7 +58,7 @@ namespace mh
 		inline eComponentType GetComponentType();
 
 		const std::vector<IComponent*>& GetComponents() { return mComponents; }
-		const std::vector<IScript*>& GetScripts() { return mScripts; }
+		inline const std::span<IScript*> GetScripts();
 
 		void SetName(const std::string_view _Name) { mName = _Name; }
 		const std::string& GetName() const { return mName; }
@@ -99,7 +99,6 @@ namespace mh
 		define::eLayerType mLayerType;
 
 		std::vector<IComponent*>	mComponents;
-		std::vector<IScript*>		mScripts;
 
 		GameObject* mParent;
 		std::vector<GameObject*> mChilds;
@@ -201,11 +200,11 @@ namespace mh
 		if constexpr (std::is_base_of_v<IScript, T>)
 		{
 			const std::string_view name = ComMgr::GetComName<T>();
-			for (size_t i = 0; i < mScripts.size(); ++i)
+			for (size_t i = (size_t)eComponentType::Scripts; i < mComponents.size(); ++i)
 			{
-				if (name == mScripts[i]->GetKey())
+				if (name == mComponents[i]->GetKey())
 				{
-					pCom = static_cast<T*>(mScripts[i]);
+					pCom = static_cast<T*>(mComponents[i]);
 					break;
 				}
 			}
@@ -277,6 +276,21 @@ namespace mh
 		}
 
 		return eComponentType::UNKNOWN;
+	}
+
+
+	inline const std::span<IScript*> GameObject::GetScripts()
+	{
+		std::span<IScript*> scriptSpan{};
+
+		int ScriptSize = (int)mComponents.size() - (int)eComponentType::Scripts;
+		if (0 < ScriptSize)
+		{
+			scriptSpan =
+				std::span<IScript*>((IScript**)mComponents.data() + (size_t)eComponentType::Scripts, (size_t)ScriptSize);
+		}
+
+		return scriptSpan;
 	}
 }
 

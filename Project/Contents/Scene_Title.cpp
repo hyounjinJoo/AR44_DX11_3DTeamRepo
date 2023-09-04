@@ -55,13 +55,39 @@ namespace mh
 
 			Com_Camera* cameraComp = cameraObj->AddComponent<Com_Camera>();
 			cameraComp->SetProjectionType(define::eProjectionType::Perspective);
-			//cameraComp->RegisterCameraInRenderer();
-			//cameraComp->TurnLayerMask(eLayerType::UI, false);
+
 			cameraObj->AddComponent(strKey::Script::Script_CameraMove);
-			//cameraObj->AddComponent()
+			cameraObj->AddComponent(strKey::Script::Script_UIBase);
+
 
 			RenderMgr::SetMainCamera(cameraComp);
 		}
+
+		{
+			GameObject* dirLight = EventMgr::SpawnGameObject(eLayerType::Player);
+			dirLight->AddComponent<Com_Transform>();
+
+			Com_Light3D* light3d = dirLight->AddComponent<Com_Light3D>();
+			light3d->SetLightType(eLightType::Directional);
+			light3d->SetDiffuse(float4(0.3f, 0.3f, 0.3f, 1.f));
+			light3d->SetAmbient(float4(0.3f, 0.3f, 0.3f, 1.f));
+		}
+
+
+
+
+		{
+			std::shared_ptr<MeshData> meshdata = ResMgr::Load<MeshData>("nergigante");
+
+			GameObject* modeling = meshdata->Instantiate();
+
+			modeling->GetComponent<Com_Animator3D>()->Play("NlaTrack");
+			
+			EventMgr::SpawnGameObject(define::eLayerType::Player, modeling);
+		}
+
+
+
 
 		{
 			// Main Com_Camera Game Object
@@ -135,15 +161,7 @@ namespace mh
 
 
 		
-		{
-			std::shared_ptr<MeshData> meshdata = ResMgr::Load<MeshData>("House.fbx");
-			GameObject* house = meshdata->Instantiate();
 
-
-			//house->AddComponent<Com_Transform>();
-
-			EventMgr::SpawnGameObject(define::eLayerType::Player, house);
-		}
 	}
 	void Scene_Title::Update()
 	{

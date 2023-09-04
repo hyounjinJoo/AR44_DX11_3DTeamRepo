@@ -348,7 +348,6 @@ AddComponent<T> 또는 ComMgr::GetNewComponent()를 통해서 생성하세요.
 		if (eComponentType::Scripts == ComType)
 		{
 			mComponents.push_back(_pCom);
-			mScripts.push_back(static_cast<IScript*>(_pCom));
 		}
 		else
 		{
@@ -366,8 +365,15 @@ AddComponent<T> 또는 ComMgr::GetNewComponent()를 통해서 생성하세요.
 		
 		_pCom->SetOwner(this);
 
+		//초기화되기 이전일 경우에만 RequireComponent를 실행
+		if (false == mbInitalized)
+		{
+			_pCom->RequireComponent();
+		}
 		return _pCom;
 	}
+
+
 
 	void GameObject::Destroy()
 	{

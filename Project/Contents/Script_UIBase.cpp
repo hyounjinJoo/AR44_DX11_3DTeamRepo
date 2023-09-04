@@ -35,6 +35,9 @@ namespace mh
 
 	void Script_UIBase::CreateUI()
 	{
+
+
+
 		switch (mUIMode)
 		{
 		case eUIType::Basic:

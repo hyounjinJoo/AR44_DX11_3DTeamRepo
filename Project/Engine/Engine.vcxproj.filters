@@ -28,9 +28,6 @@
     <Filter Include="Resource\Texture">
       <UniqueIdentifier>{2e19c4b5-25ef-434b-bb7c-23ab21873a44}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Resource\Script">
-      <UniqueIdentifier>{bd5eb4ff-9f54-4ada-b23b-dd4130c98faf}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Scene\Base">
       <UniqueIdentifier>{2bf45b05-0f71-4108-ade3-0f445677916d}</UniqueIdentifier>
     </Filter>
@@ -215,9 +212,6 @@
     </ClCompile>
     <ClCompile Include="Com_Renderer_Sprite.cpp">
       <Filter>Component\Renderer</Filter>
-    </ClCompile>
-    <ClCompile Include="GridScript.cpp">
-      <Filter>Resource\Script</Filter>
     </ClCompile>
     <ClCompile Include="Layer.cpp">
       <Filter>Scene\Layer</Filter>
@@ -447,9 +441,6 @@
     <ClCompile Include="ITransform.cpp">
       <Filter>Component\Transform</Filter>
     </ClCompile>
-    <ClCompile Include="ILight.cpp">
-      <Filter>Component</Filter>
-    </ClCompile>
     <ClCompile Include="Com_Renderer_Mesh.cpp">
       <Filter>Component\Renderer</Filter>
     </ClCompile>
@@ -500,6 +491,10 @@
       <Filter>Component</Filter>
     </ClCompile>
     <ClCompile Include="BTActionExample.cpp" />
+    <ClCompile Include="ILight.cpp">
+      <Filter>Component\Light</Filter>
+    </ClCompile>
+    <ClCompile Include="GridScript.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application.h">
@@ -543,9 +538,6 @@
     </ClInclude>
     <ClInclude Include="Com_Renderer_Sprite.h">
       <Filter>Component\Renderer</Filter>
-    </ClInclude>
-    <ClInclude Include="GridScript.h">
-      <Filter>Resource\Script</Filter>
     </ClInclude>
     <ClInclude Include="Layer.h">
       <Filter>Scene\Layer</Filter>
@@ -820,9 +812,6 @@
     <ClInclude Include="ITransform.h">
       <Filter>Component\Transform</Filter>
     </ClInclude>
-    <ClInclude Include="ILight.h">
-      <Filter>Component</Filter>
-    </ClInclude>
     <ClInclude Include="Com_Renderer_Mesh.h">
       <Filter>Component\Renderer</Filter>
     </ClInclude>
@@ -876,6 +865,10 @@
       <Filter>Component</Filter>
     </ClInclude>
     <ClInclude Include="BTActionExample.h" />
+    <ClInclude Include="ILight.h">
+      <Filter>Component\Light</Filter>
+    </ClInclude>
+    <ClInclude Include="GridScript.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="cpp.hint">

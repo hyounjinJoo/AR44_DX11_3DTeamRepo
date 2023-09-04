@@ -15,5 +15,4 @@ namespace mh
 	IScript::~IScript()
 	{
 	}
-
 }
