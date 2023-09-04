@@ -32,7 +32,7 @@ void main(int3 _threadID : SV_DispatchThreadID)
 
 	MatrixAffineTransformation(Scale, ZeroRot, Rot, Pos, matBone);
 
-	matrix matOffset = transpose(g_OffsetArray[_threadID.x]);
+	matrix matOffset = transpose(g_BoneOffsetArray[_threadID.x]);
 
 	g_FinalBoneMatrixArrayRW[_threadID.x] = mul(matOffset, matBone);
 	//g_BoneSocketMatrixArray[_threadID.x].matBone = transpose(matBone);

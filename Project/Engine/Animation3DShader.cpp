@@ -39,7 +39,7 @@ namespace mh
 		}
 
 		//본의 오프셋 행렬 버퍼 바인드
-		mDesc.BoneOffsetMatrixBuffer->BindDataSRV(Register_t_g_OffsetArray, eShaderStageFlag::CS);// t18
+		mDesc.BoneOffsetMatrixBuffer->BindDataSRV(Register_t_g_BoneOffsetArray, eShaderStageFlag::CS);// t18
 
 		//본의 최종 행렬정보를 저장할 UAV 바인드
 		mDesc.FinalBoneTranslationMatrixBuffer->BindDataUAV(Register_u_g_FinalBoneMatrixArrayRW); // u0

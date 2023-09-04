@@ -45,14 +45,13 @@ TEXTURE2D(SpecularLightTarget, t, 7);
 SBUFFER(g_FrameTransArray, tAnimKeyframeTranslation, t, 16);
 //(애니메이션 변경중일 경우) 다음 애니메이션의 키프레임 데이터
 SBUFFER(g_ChangeFrameTransArray, tAnimKeyframeTranslation, t, 17);
-
-SBUFFER(g_OffsetArray, Matrix, t, 18);
+SBUFFER(g_BoneOffsetArray, Matrix, t, 18);
 
 //최종 행렬이 저장되는 구조화버퍼
 SBUFFER(g_FinalBoneMatrixArray, Matrix, t, 19);
+SBUFFER_RW(g_FinalBoneMatrixArrayRW, Matrix, u, 0);
 
 //SBUFFER(g_InstancingBoneMatrixArray, Matrix, t, 18);
-SBUFFER_RW(g_FinalBoneMatrixArrayRW, Matrix, u, 0);
 
 SBUFFER_RW(g_BoneSocketMatrixArray, tOutputBoneInfo, u, 1);
 SBUFFER_RW(g_InstancingBoneMatrixArray, Matrix, u, 2);

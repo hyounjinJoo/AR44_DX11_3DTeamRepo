@@ -133,6 +133,9 @@ namespace mh
 
 			m_Anim3DCBuffer.BoneCount = mSkeleton->GetBoneCount();
 		}
+
+
+
 	}
 
 	bool Com_Animator3D::Play(const std::string& _strAnimName)
@@ -250,6 +253,7 @@ namespace mh
 			m_Anim3DCBuffer.CurrentFrame = 0;
 			m_Anim3DCBuffer.NextFrame = 1;
 			m_Anim3DCBuffer.FrameRatio = 0.f;
+			m_Anim3DCBuffer.FrameLength = mCurrentAnim->GetFrameLength();
 			m_bFinalMatUpdate = false;
 			bPlayed = true;
 		}

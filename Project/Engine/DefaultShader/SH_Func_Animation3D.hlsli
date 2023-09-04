@@ -203,7 +203,7 @@ float4 QuternionLerp(in float4 _vQ1, in float4 _vQ2, float _fRatio)
 
 matrix GetBoneMat(int _iBoneIdx, int _iRowIdx)
 {
-	return g_OffsetArray[(CB_Animation3D.BoneCount * _iRowIdx) + _iBoneIdx];
+	return g_BoneOffsetArray[(CB_Animation3D.BoneCount * _iRowIdx) + _iBoneIdx];
 }
 
 tSkinningInfo Skinning(float3 Pos, float3 Tangent,
