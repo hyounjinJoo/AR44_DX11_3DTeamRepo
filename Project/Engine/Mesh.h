@@ -48,8 +48,8 @@ namespace mh
 
 		eResult CreateFromContainer(const tFBXContainer* _fbxContainer);
 
-		virtual eResult Save(const std::filesystem::path& _path) override;
-		virtual eResult Load(const std::filesystem::path& _path) override;
+		virtual eResult Save(const std::fs::path& _filePath) override;										
+		virtual eResult Load(const std::fs::path& _filePath) override;
 
 		template <typename Vertex>
 		inline bool Create(const std::vector<Vertex>& _vecVtx, const std::vector<uint>& _vecIdx);

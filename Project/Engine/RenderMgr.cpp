@@ -1192,9 +1192,6 @@ namespace mh
 		pTex = ResMgr::Load<Texture>(texture::DefaultSprite);
 		assert(nullptr != pTex);
 
-		pTex = ResMgr::Load<Texture>(texture::HPBarTexture);
-		assert(nullptr != pTex);
-
 		pTex = ResMgr::Load<Texture>(texture::CartoonSmoke);
 		assert(nullptr != pTex);
 

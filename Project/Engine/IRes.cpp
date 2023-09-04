@@ -23,40 +23,17 @@ namespace mh
 	{
 	}
 
-	//eResult IRes::Save(const std::filesystem::path& _path)
-	//{
-	//	std::fs::path FullPath = PathMgr::GetContentPathRelative(mType);
-	//	if (false == std::fs::exists(FullPath))
-	//	{
-	//		if (false == std::fs::create_directories(FullPath))
-	//		{
-	//			ERROR_MESSAGE_W(L"저장을 위한 디렉토리 생성에 실패했습니다.");
-	//			return eResult::Fail_OpenFile;
-	//		}
-	//	}
+	eResult IRes::Save(const std::fs::path& _filePath)
+	{
+		SetKey(_filePath.string());
+		return eResult::Success;
+	}
 
-	//	FullPath /= _path;
-	//	std::ofstream OutFile(FullPath);
-	//	if (false == OutFile.is_open())
-	//	{
-	//		ERROR_MESSAGE_W(L"파일 열기에 실패했습니다.");
-	//		return eResult::Fail_OpenFile;
-	//	}
-	//	
-	//	Json::Value JVal{};
-
-	//	eResult Result = SaveJson(&JVal);
-	//	if (eResult::Success != SaveJson(&JVal))
-	//	{
-	//		ERROR_MESSAGE_W(L"Json 파일 저장에 실패했습니다.");
-	//		return eResult::Fail_Json;
-	//	}
-
-	//	//"<<" 연산자를 통해 메모리에 저장된 Json 데이터를 파일로 옮길 수 있다.
-	//	OutFile << JVal;
-
-	//	//다 옮겼으면 파일을 닫하준다.
-	//	OutFile.close();
+	eResult IRes::Load(const std::fs::path& _filePath)
+	{
+		SetKey(_filePath.string());
+		return eResult::Success;
+	}
 
 	//	return eResult::Success;
 	//}
@@ -111,4 +88,7 @@ namespace mh
 
 		return eResult::Success;
 	}
+
+
+
 }

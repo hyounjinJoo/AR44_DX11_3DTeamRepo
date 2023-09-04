@@ -135,7 +135,7 @@ struct alignas(16)  tCB_Animation3D
 	int			CurrentFrame;
 	int			NextFrame;
 	float		FrameRatio;
-	int			FrameCount;
+	int			FrameLength;
 	int			RowIndex;
 	BOOL		bChangingAnim;
 	float		ChangeRatio;
@@ -195,9 +195,9 @@ struct alignas(16)  tLightAttribute
 
 struct alignas(16) tAnimKeyframeTranslation
 {
-	float4 vTranslate;
-	float4 vScale;
-	float4 qRot;
+	float4 Pos;
+	float4 Scale;
+	float4 RotQuat;
 };
 
 struct alignas(16)  tSkinningInfo
@@ -215,7 +215,7 @@ struct tOutputBoneInfo
 	float Empty1;
 	float3 Scale;
 	float Empty2;
-	float4 Rot;
+	float4 RotQuat;
 };
 
 

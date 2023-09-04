@@ -28,7 +28,7 @@ namespace mh
 			SAFE_DELETE(mPrefab);
 		}
 	}
-	eResult Prefab::Save(const std::filesystem::path& _fileName)
+	eResult Prefab::Save(const std::fs::path& _filePath)
 	{
 		if (nullptr == mPrefab)
 		{
@@ -38,29 +38,16 @@ namespace mh
 
 		//키 값을 json을 제외한 파일명으로 설정
 		{
-			std::fs::path strKey = _fileName;
+			std::fs::path strKey = _filePath;
 			strKey.replace_extension("");
 			mPrefab->SetKey(strKey.string());
 		}
 
-		//혹시나 경로에 해당하는 폴더 경로가 없을 시에 throw error가 돼서 프로그램이 강제 종료되므로
-		//폴더 경로를 직접 만들어준다.
-		std::fs::path SavePath = PathMgr::GetContentPathRelative(GetResType());
-		if (false == std::fs::exists(SavePath))
+		std::fs::path fullPath = PathMgr::CreateFullPathToContent(_filePath, GetResType());
+
+		std::ofstream saveFile(fullPath);
+		if (false == saveFile.is_open())
 		{
-			if (false == std::fs::create_directories(SavePath))
-			{
-				ERROR_MESSAGE_W(L"파일 저장을 위한 디렉토리 생성에 실패했습니다.");
-				return eResult::Fail_OpenFile;
-			}
-		}
-		
-		SavePath /= _fileName;
-		SavePath.replace_extension(".json");
-		std::ofstream SaveFile(SavePath);
-		if (false == SaveFile.is_open())
-		{
-			ERROR_MESSAGE_W(L"저장 파일 생성에 실패했습니다.");
 			return eResult::Fail_OpenFile;
 		}
 
@@ -70,17 +57,17 @@ namespace mh
 		if(eResultFail(result))
 		{
 			//json 저장에 실패 시 파일을 작성하지 않는다.
-			SaveFile.close();
+			saveFile.close();
 			return eResult::Fail_Json;
 		}
 		
 		//저장
-		SaveFile << PrefabJVal;
-		SaveFile.close();
+		saveFile << PrefabJVal;
+		saveFile.close();
 
 		return eResult::Success;
 	}
-	eResult Prefab::Load(const std::filesystem::path& _FilePath)
+	eResult Prefab::Load(const std::fs::path& _filePath)
 	{
 		if (nullptr == mPrefab)
 		{
@@ -93,17 +80,14 @@ namespace mh
 			return eResult::Fail;
 		}
 
-		std::fs::path LoadPath = PathMgr::GetContentPathRelative(GetResType());
-		LoadPath /= _FilePath;
-		LoadPath.replace_extension(".json");
-
-		if (false == std::fs::exists(LoadPath))
+		std::fs::path fullPath = PathMgr::CreateFullPathToContent(_filePath, GetResType());
+		if (false == std::fs::exists(fullPath))
 		{
-			ERROR_MESSAGE_W(L"로드할 파일을 찾지 못했습니다.");
+			ERROR_MESSAGE_W(L"파일이 없습니다.");
 			return eResult::Fail_OpenFile;
 		}
 
-		std::ifstream LoadFile(LoadPath);
+		std::ifstream LoadFile(fullPath);
 		if (false == LoadFile.is_open())
 		{
 			ERROR_MESSAGE_W(L"파일을 여는 데 실패했습니다.");

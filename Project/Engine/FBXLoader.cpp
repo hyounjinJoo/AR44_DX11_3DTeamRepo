@@ -20,6 +20,7 @@ namespace mh
 		, mAnimNames{}
 		, mAnimClips{}
 		, mbMixamo{}
+		, mFileName{}
 	{
 	}
 
@@ -98,7 +99,13 @@ namespace mh
 			return eResult::Fail_OpenFile;
 		}
 
-		importer->Import(mScene);
+		if (false == importer->Import(mScene))
+		{
+			ERROR_MESSAGE_W(L"임포트 실패.");
+			return eResult::Fail;
+		}
+
+		mFileName = _strPath.stem().string();
 
 
 		//축 정보 변경
@@ -152,10 +159,10 @@ namespace mh
 		importer = nullptr;
 
 		// 필요한 텍스쳐 로드
-		LoadTexture();
+		//LoadTexture();
 
 		// 필요한 메테리얼 생성
-		CreateMaterial(_strPath);
+		//CreateMaterial(_strPath);
 
 		return eResult::Success;
 	}
@@ -190,10 +197,10 @@ namespace mh
 		}
 
 		// 해당 노드의 재질정보 읽기
-		UINT iMtrlCnt = _pNode->GetMaterialCount();
-		if (iMtrlCnt > 0)
+		int iMtrlCnt = _pNode->GetMaterialCount();
+		if (0 < iMtrlCnt)
 		{
-			for (UINT i = 0; i < iMtrlCnt; ++i)
+			for (int i = 0; i < iMtrlCnt; ++i)
 			{
 				fbxsdk::FbxSurfaceMaterial* pMtrlSur = _pNode->GetMaterial(i);
 				LoadMaterial(pMtrlSur);
@@ -295,9 +302,19 @@ namespace mh
 	{
 		tFBXMaterial tMtrlInfo{};
 
-		std::string str = _pMtrlSur->GetName();
-		
-		tMtrlInfo.strMtrlName = str;
+		tMtrlInfo.strMtrlName = _pMtrlSur->GetName();
+
+		//무조건 이름을 가지고있게 해준다
+		if (tMtrlInfo.strMtrlName.empty())
+		{
+			size_t contIdx = mContainers.size();
+			size_t mtrlIdx = mContainers.back().vecMtrl.size();
+			tMtrlInfo.strMtrlName = mFileName;
+			tMtrlInfo.strMtrlName = "_";
+			tMtrlInfo.strMtrlName += std::to_string(contIdx);
+			tMtrlInfo.strMtrlName += "_";
+			tMtrlInfo.strMtrlName += std::to_string(mtrlIdx);
+		}
 
 		// Diff
 		tMtrlInfo.DiffuseColor = GetMtrlData(_pMtrlSur
@@ -324,7 +341,6 @@ namespace mh
 		tMtrlInfo.strNormalTex = GetMtrlTextureName(_pMtrlSur, fbxsdk::FbxSurfaceMaterial::sNormalMap);
 		tMtrlInfo.strSpecularTex = GetMtrlTextureName(_pMtrlSur, fbxsdk::FbxSurfaceMaterial::sSpecular);
 		tMtrlInfo.strEmissiveTex = GetMtrlTextureName(_pMtrlSur, fbxsdk::FbxSurfaceMaterial::sEmissive);
-
 
 		mContainers.back().vecMtrl.push_back(tMtrlInfo);
 	}
@@ -510,11 +526,12 @@ namespace mh
 					//절대 주소가 있을 경우 상대 주소를 만들어서 저장
 					if (std::fs::exists(fullPath))
 					{
-						static std::fs::path resPath = PathMgr::GetContentPathAbsolute(eResourceType::MeshData);
-
-						fullPath = fullPath.lexically_relative(resPath);
-
 						retStr = fullPath.string();
+						//static std::fs::path resPath = PathMgr::GetContentPathAbsolute(eResourceType::MeshData);
+
+						//fullPath = fullPath.lexically_relative(resPath);
+
+						//retStr = fullPath.string();
 					}
 				}
 			}
@@ -718,14 +735,16 @@ namespace mh
 				bone.strBoneName.erase(0, 10);
 			}
 
-			bone.Depth = _iDepth;
+			bone.Depth = _iDepth++;
 			bone.ParentIndx = _iParentIdx;
+
+			//Bone Matrix는 애니메이션에서 로드함
 		}
 
 		int iChildCount = _pNode->GetChildCount();
 		for (int i = 0; i < iChildCount; ++i)
 		{
-			LoadBoneRecursive(_pNode->GetChild(i), _iDepth + 1, (int)mBones.size(), _iIdx);
+			LoadBoneRecursive(_pNode->GetChild(i), _iDepth, (int)mBones.size(), _iIdx);
 		}
 	}
 
@@ -825,7 +844,7 @@ namespace mh
 				for (int j = 0; j < clusterCount; ++j)
 				{
 					fbxsdk::FbxCluster* cluster = skin->GetCluster(j);
-					if (cluster->GetLink())
+					if (nullptr == cluster->GetLink())
 						continue;
 
 					std::string boneName = cluster->GetLink()->GetName();
