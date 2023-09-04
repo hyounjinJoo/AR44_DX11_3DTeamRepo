@@ -1,3 +1,5 @@
+#include "PCH_Contents.h"
+
 #include "Scene_TestSkyBox.h"
 #include <Engine\EventMgr.h>
 #include <Engine\Com_Renderer_Mesh.h>
@@ -8,8 +10,6 @@ namespace mh
 	Scene_TestSkyBox::Scene_TestSkyBox()
 	{
 
-		{
-		}
 	}
 
 	Scene_TestSkyBox::~Scene_TestSkyBox()
