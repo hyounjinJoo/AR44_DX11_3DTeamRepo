@@ -43,6 +43,7 @@ namespace mh
 			Grid,
 			Monster,
 			Player,
+			Stage,
 
 			tParticle,
 			PostProcess,
