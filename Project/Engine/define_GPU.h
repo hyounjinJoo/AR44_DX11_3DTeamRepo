@@ -253,7 +253,7 @@ namespace mh::define
 		//Array2DT10,
 		//Array2DT11,
 
-		END = 8,
+		END = 16,
 	};
 
 	enum class eMRT_Defferd

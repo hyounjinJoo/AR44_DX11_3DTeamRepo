@@ -67,7 +67,7 @@ TEXTURE2D(postProcessTexture, t, 60);
 TEXTURE2D(guiGameTexture, t, 61);
 
 // cube
-TEXTURECUBE(skyBoxCube, t, 20);
+TEXTURECUBE(skyBoxCube, t, 8);
 
 
 #endif
