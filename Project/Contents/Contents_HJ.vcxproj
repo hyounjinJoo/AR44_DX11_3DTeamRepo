@@ -20,17 +20,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Scene_TestBehaviourTree.cpp" />
-    <ClCompile Include="Scene_TestSkyBox.cpp">
-      <SubType>
-      </SubType>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Scene_TestBehaviourTree.h" />
-    <ClInclude Include="Scene_TestSkyBox.h">
-      <SubType>
-      </SubType>
-    </ClInclude>
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
