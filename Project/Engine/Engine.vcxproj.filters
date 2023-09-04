@@ -201,14 +201,8 @@
     <ClCompile Include="IRenderer.cpp">
       <Filter>Component\Renderer</Filter>
     </ClCompile>
-    <ClCompile Include="Script_Player.cpp">
-      <Filter>Component\Script\Contents</Filter>
-    </ClCompile>
     <ClCompile Include="Com_Camera.cpp">
       <Filter>Component\Camera</Filter>
-    </ClCompile>
-    <ClCompile Include="Script_Camera.cpp">
-      <Filter>Component\Script</Filter>
     </ClCompile>
     <ClCompile Include="Com_Renderer_Sprite.cpp">
       <Filter>Component\Renderer</Filter>
@@ -527,14 +521,8 @@
     <ClInclude Include="IRenderer.h">
       <Filter>Component\Renderer</Filter>
     </ClInclude>
-    <ClInclude Include="Script_Player.h">
-      <Filter>Component\Script\Contents</Filter>
-    </ClInclude>
     <ClInclude Include="Com_Camera.h">
       <Filter>Component\Camera</Filter>
-    </ClInclude>
-    <ClInclude Include="Script_Camera.h">
-      <Filter>Component\Script</Filter>
     </ClInclude>
     <ClInclude Include="Com_Renderer_Sprite.h">
       <Filter>Component\Renderer</Filter>

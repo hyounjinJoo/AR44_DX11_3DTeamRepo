@@ -29,6 +29,8 @@ namespace mh
 			static_cast<ITransform*>(GetOwner()->GetComponent(eComponentType::Transform));
 		tr->BindData();
 
+		
+		
 		animator->BindData();
 
 		//Render
