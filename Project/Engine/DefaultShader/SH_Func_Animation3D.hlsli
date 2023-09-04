@@ -216,7 +216,7 @@ tSkinningInfo Skinning(float3 Pos, float3 Tangent,
 		if (BlendWeight[i] == 0.f)
 			continue;
 
-		matrix matBone = g_BoneMatrixArray[(int)BlendIndex[i]];
+		matrix matBone = g_FinalBoneMatrixArray[(int)BlendIndex[i]];
 
 		Info.Pos += (mul(float4(Pos, 1.f), matBone) * BlendWeight[i]).xyz;
 		Info.Tangent += (mul(float4(Tangent, 0.f), matBone) * BlendWeight[i]).xyz;

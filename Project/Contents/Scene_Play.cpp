@@ -6,9 +6,7 @@
 #include <Engine/RenderMgr.h>
 #include <Engine/ResMgr.h>
 #include <Engine/Texture.h>
-#include <Engine/Script_Player.h>
 #include <Engine/Com_Camera.h>
-#include <Engine/Script_Camera.h>
 #include <Engine/Com_Renderer_Sprite.h>
 #include <Engine/GridScript.h>
 #include <Engine/Object.h>
@@ -33,7 +31,6 @@ namespace mh
 		//GameObject* cameraObj = object::Instantiate(eLayerType::Com_Camera, new GameObject);
 		Com_Camera* cameraComp = cameraObj->AddComponent<Com_Camera>();
 		cameraComp->TurnLayerMask(eLayerType::UI, false);
-		cameraObj->AddComponent<Script_Camera>();
 
 		IScene::Init();
 	}

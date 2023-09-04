@@ -34,7 +34,7 @@ void main(int3 _threadID : SV_DispatchThreadID)
 
 	matrix matOffset = transpose(g_OffsetArray[_threadID.x]);
 
-	g_FinalBoneMatrixArray[_threadID.x] = mul(matOffset, matBone);
+	g_FinalBoneMatrixArrayRW[_threadID.x] = mul(matOffset, matBone);
 	//g_BoneSocketMatrixArray[_threadID.x].matBone = transpose(matBone);
 
 	//g_BoneSocketMatrixArray[_threadID.x].Scale = Scale.xyz;

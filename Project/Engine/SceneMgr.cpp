@@ -2,13 +2,10 @@
 #include "SceneMgr.h"
 
 #include "Com_Camera.h"
-#include "Script_Camera.h"
 
 #include "GridScript.h"
 
 #include "Com_Renderer_Mesh.h"
-
-#include "Script_Player.h"
 
 #include "RenderMgr.h"
 #include "ResMgr.h"

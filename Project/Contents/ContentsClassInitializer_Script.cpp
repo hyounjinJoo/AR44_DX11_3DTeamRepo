@@ -13,6 +13,7 @@
 
 
 #include "Script_CameraMove.h"
+#include "Script_Player.h"
 #include "Script_UIBase.h"
 #include "Script_UIButton.h"
 #include "Script_UIGauge.h"
@@ -25,6 +26,7 @@ namespace mh
 	void ContentsClassInitializer::InitScript()
 	{
 		CONSTRUCTOR_T(Script_CameraMove);
+		CONSTRUCTOR_T(Script_Player);
 		CONSTRUCTOR_T(Script_UIBase);
 		CONSTRUCTOR_T(Script_UIButton);
 		CONSTRUCTOR_T(Script_UIGauge);
