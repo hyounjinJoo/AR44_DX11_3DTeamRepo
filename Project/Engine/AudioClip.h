@@ -14,10 +14,8 @@ namespace mh
 		AudioClip();
 		virtual ~AudioClip();
 
-		virtual eResult Load(const std::filesystem::path& _path) override;
-
+		virtual eResult Load(const std::fs::path& _filePath) override;
 		
-
 		void Play();
 		void Stop();
 		void Set3DAttributes(const float3 _pos, const float3 _vel);

@@ -35,21 +35,14 @@ namespace mh
 		}
 	}
 
-	eResult Mesh::Save(const std::filesystem::path& _path)
+	eResult Mesh::Save(const std::fs::path& _filePath)
 	{
-		std::fs::path filePath = PathMgr::GetContentPathRelative(GetResType());
-		filePath /= _path;
+		IRes::Save(_filePath);
 
-		const std::fs::path& parentPath = filePath.parent_path();
-		//폴더 없으면 폴더 생성
-		if (false == std::fs::exists(parentPath))
-		{
-			std::fs::create_directories(parentPath);
-		}
+		std::fs::path fullPath =PathMgr::CreateFullPathToContent(_filePath, GetResType());
+		fullPath.replace_extension(strKey::Ext_Mesh);
 
-		filePath.replace_extension(define::strKey::Ext_Mesh);
-
-		std::ofstream ofs(filePath, std::ios::binary);
+		std::ofstream ofs(fullPath, std::ios::binary);
 		if (false == ofs.is_open())
 		{
 			return eResult::Fail_OpenFile;
@@ -92,21 +85,21 @@ namespace mh
 		return eResult::Success;
 	}
 
-	eResult Mesh::Load(const std::filesystem::path& _path)
+	eResult Mesh::Load(const std::fs::path& _filePath)
 	{
-		std::fs::path filePath = PathMgr::GetContentPathRelative(GetResType());
+		IRes::Load(_filePath);
 
-		//폴더 없으면 폴더 생성
-		if (false == std::fs::exists(filePath))
+		std::fs::path fullPath =PathMgr::CreateFullPathToContent(_filePath, GetResType());
+		fullPath.replace_extension(strKey::Ext_Mesh);
+
+		if (false == std::fs::exists(fullPath))
 		{
-			std::fs::create_directories(filePath);
-			ERROR_MESSAGE_W(L"파일이 없습니다.");
-			return eResult::Fail_PathNotExist;
+			ERROR_MESSAGE_W(L"파일을 찾지 못했습니다.");
+			return eResult::Fail_OpenFile;
 		}
-		// 파일 경로 만들기
-		filePath /= _path;
 
-		std::ifstream ifs(filePath, std::ios::binary);
+
+		std::ifstream ifs(fullPath, std::ios::binary);
 		if (false == ifs.is_open())
 			return eResult::Fail_OpenFile;
 
@@ -114,15 +107,6 @@ namespace mh
 		std::string strKey;
 		Binary::LoadStr(ifs, strKey);
 		SetKey(strKey);
-
-		////D3D11_BUFFER_DESC mVBDesc;
-		//Binary::SaveValue(ofs, mVBDesc);
-
-		////UINT mVertexByteStride;
-		//ofs << mVertexByteStride;
-
-		////UINT mVertexCount;
-		//ofs << mVertexCount;
 
 		//D3D11_BUFFER_DESC mVBDesc;
 		Binary::LoadValue(ifs, mVBDesc);

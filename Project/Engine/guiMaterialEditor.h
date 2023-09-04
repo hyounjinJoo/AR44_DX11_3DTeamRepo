@@ -38,7 +38,6 @@ namespace gui
 		enum class eContext
 		{
 			None,
-			SaveToFile,
 			LoadFromFile
 		};
 		

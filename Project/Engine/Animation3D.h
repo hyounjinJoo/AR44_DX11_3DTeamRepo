@@ -8,9 +8,10 @@ namespace mh
     struct tKeyFrame
     {
         double              Time{};
-        float3              Scale{};
-        math::Quaternion    RotQuat{};
-        float3              Pos{};
+        tAnimKeyframeTranslation Trans{};
+        //float3              Scale{};
+        //math::Quaternion    RotQuat{};
+        //float3              Pos{};
     };
 
     struct tKeyFramesPerBone
@@ -26,11 +27,11 @@ namespace mh
 	class Animation3D :
 		public Entity
 	{
+        friend class Skeleton;
 	public:
 		Animation3D();
 
         Animation3D(const Animation3D& _other) = delete;
-        Animation3D(Animation3D&& _move);
 
         virtual ~Animation3D();
 
@@ -38,7 +39,11 @@ namespace mh
         void BindData();
         void UnBindData();
 
+        eResult Save(const std::fs::path& _filePath);
+        eResult Load(const std::fs::path& _filePath);
+
         eResult LoadFromFBX(Skeleton* _skeleton, const tFBXAnimClip* _clip);
+        
 
         int GetStartFrame() const { return mValues.iStartFrame; }
         int GetEndFrame() const { return mValues.iEndFrame; }
@@ -48,12 +53,16 @@ namespace mh
         double GetTimeLength() const { return mValues.dTimeLength; }
         float GetUpdateTime() const { return mValues.fUpdateTime; }
         int GetFPS() const { return mValues.iFramePerSec; }
-        std::weak_ptr<Skeleton> GetSkeleton() const { return m_OwnerSkeleton; }
+        Skeleton* GetSkeleton() const { return m_OwnerSkeleton; }
+        void SetSkeleton(Skeleton* _skeleton) { m_OwnerSkeleton = _skeleton; }
+        StructBuffer* GetKeyFrameSBuffer() const { return m_SBufferKeyFrame.get(); }
 
     private:
         bool CreateKeyFrameSBuffer(const std::vector<tAnimKeyframeTranslation>& _vecAnimFrameTranslations);
 
     private:
+        Skeleton* m_OwnerSkeleton;
+
         struct Value//저장을 위해서 별도의 struct 안에 넣어놓음
         {
             int				iStartFrame;
@@ -68,10 +77,9 @@ namespace mh
             int         	iFramePerSec;
         } mValues;
 
-        std::weak_ptr<Skeleton>                 m_OwnerSkeleton;
 
         //이중 배열 형태임
-        std::vector<tKeyFramesPerBone>          m_KeyFrames;
+        std::vector<tKeyFramesPerBone>          m_KeyFramesPerBone;
         std::unique_ptr<StructBuffer>			m_SBufferKeyFrame;
 	};
 }

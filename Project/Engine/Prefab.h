@@ -12,8 +12,8 @@ namespace mh
         Prefab();
         virtual ~Prefab();
         
-        virtual eResult Save(const std::filesystem::path& _fileName) override;
-        virtual eResult Load(const std::filesystem::path& _fileName) override;
+        virtual eResult Save(const std::fs::path& _filePath) override;                                                                                   
+        virtual eResult Load(const std::fs::path& _filePath) override;
 
         //virtual eResult SaveJson(Json::Value* _pJVal) override;
         //virtual eResult LoadJson(const Json::Value* _pJVal) override;

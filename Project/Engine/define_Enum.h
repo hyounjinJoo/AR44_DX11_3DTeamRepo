@@ -45,6 +45,8 @@ namespace mh
 			Light,
 			Monster,
 			Player,
+			Stage,
+
 			Ground,
 			tParticle,
 			PostProcess,

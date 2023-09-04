@@ -35,6 +35,7 @@ struct alignas(16) tCB_MaterialData
 	BOOL bTex_5;
 	BOOL bTex_6;
 	BOOL bTex_7;
+	BOOL bTexCube_0;
 	
 	float4 Diff;
 	float4 Spec;
@@ -44,7 +45,7 @@ struct alignas(16) tCB_MaterialData
 	// 3D Animation 정보
 	BOOL bAnim;
 	int BoneCount;
-	int2 Padding_Material;
+	int Padding_Material;
 };
 
 struct alignas(16)   tCB_ComputeShader
@@ -134,7 +135,7 @@ struct alignas(16)  tCB_Animation3D
 	int			CurrentFrame;
 	int			NextFrame;
 	float		FrameRatio;
-	int			FrameCount;
+	int			FrameLength;
 	int			RowIndex;
 	BOOL		bChangingAnim;
 	float		ChangeRatio;
@@ -194,9 +195,9 @@ struct alignas(16)  tLightAttribute
 
 struct alignas(16) tAnimKeyframeTranslation
 {
-	float4 vTranslate;
-	float4 vScale;
-	float4 qRot;
+	float4 Pos;
+	float4 Scale;
+	float4 RotQuat;
 };
 
 struct alignas(16)  tSkinningInfo
@@ -214,7 +215,7 @@ struct tOutputBoneInfo
 	float Empty1;
 	float3 Scale;
 	float Empty2;
-	float4 Rot;
+	float4 RotQuat;
 };
 
 

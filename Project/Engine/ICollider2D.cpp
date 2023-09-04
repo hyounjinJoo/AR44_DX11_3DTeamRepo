@@ -144,7 +144,7 @@ namespace mh
 
 	void ICollider2D::OnCollisionEnter(ICollider2D* _collider)
 	{
-		const std::vector<IScript*>& scripts = GetOwner()->GetScripts();
+		const std::span<IScript*> scripts = GetOwner()->GetScripts();
 		for (IScript* script : scripts)
 		{
 			script->OnCollisionEnter(_collider);
@@ -153,7 +153,7 @@ namespace mh
 
 	void ICollider2D::OnCollisionStay(ICollider2D* _collider)
 	{
-		const std::vector<IScript*>& scripts = GetOwner()->GetScripts();
+		const std::span<IScript*> scripts = GetOwner()->GetScripts();
 		for (IScript* script : scripts)
 		{
 			script->OnCollisionStay(_collider);
@@ -162,7 +162,7 @@ namespace mh
 
 	void ICollider2D::OnCollisionExit(ICollider2D* _collider)
 	{
-		const std::vector<IScript*>& scripts = GetOwner()->GetScripts();
+		const std::span<IScript*> scripts = GetOwner()->GetScripts();
 		for (IScript* script : scripts)
 		{
 			script->OnCollisionExit(_collider);
@@ -171,7 +171,7 @@ namespace mh
 
 	void ICollider2D::OnTriggerEnter(ICollider2D* _collider)
 	{
-		const std::vector<IScript*>& scripts = GetOwner()->GetScripts();
+		const std::span<IScript*> scripts = GetOwner()->GetScripts();
 		for (IScript* script : scripts)
 		{
 			script->OnTriggerEnter(_collider);
@@ -180,7 +180,7 @@ namespace mh
 
 	void ICollider2D::OnTriggerStay(ICollider2D* _collider)
 	{
-		const std::vector<IScript*>& scripts = GetOwner()->GetScripts();
+		const std::span<IScript*> scripts = GetOwner()->GetScripts();
 		for (IScript* script : scripts)
 		{
 			script->OnTriggerStay(_collider);
@@ -189,7 +189,7 @@ namespace mh
 
 	void ICollider2D::OnTriggerExit(ICollider2D* _collider)
 	{
-		const std::vector<IScript*>& scripts = GetOwner()->GetScripts();
+		const std::span<IScript*> scripts = GetOwner()->GetScripts();
 		for (IScript* script : scripts)
 		{
 			script->OnTriggerExit(_collider);

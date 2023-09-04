@@ -29,9 +29,7 @@ namespace mh
 		virtual ~Script_UIBase();
 
 		virtual void Init() override;
-
 		void SetCustomMaterial(std::shared_ptr<Material> _material);
-
 		void SetTexture(define::eTextureSlot _slot, std::shared_ptr<Texture> _tex);
 
 	protected:

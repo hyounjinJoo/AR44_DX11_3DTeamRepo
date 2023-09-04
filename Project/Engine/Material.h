@@ -25,18 +25,18 @@ namespace mh
 
 		virtual ~Material();
 
-		virtual eResult Save(const std::filesystem::path& _path) override;
-		virtual eResult Load(const std::filesystem::path& _path) override;
+		virtual eResult Save(const std::fs::path& _filePath) override;
+		virtual eResult Load(const std::fs::path& _filePath) override;
 
 		virtual eResult SaveJson(Json::Value* _pJVal) override;
 		virtual eResult LoadJson(const Json::Value* _pJVal) override;
 
-		void SetData(eGPUParam _param, void* _data);
 		void BindData();
 		void UnBindData();
 
 		void SetShader(std::shared_ptr<GraphicsShader> _shader) { mShader = _shader; }
 		std::shared_ptr<GraphicsShader> GetShader() const { return mShader; }
+
 
 		inline void SetTexture(eTextureSlot slot, std::shared_ptr<Texture> _texture);
 		std::shared_ptr<Texture> GetTexture(eTextureSlot _slot) const { return mTextures[(uint)_slot]; }
@@ -95,6 +95,9 @@ namespace mh
 			break;
 		case 7u:
 			mCB.bTex_7 = bTex;
+			break;
+		case 8u:
+			mCB.bTexCube_0 = bTex;
 			break;
 		default:
 			MH_ASSERT(false);

@@ -57,12 +57,39 @@ namespace mh
 	
 			Com_Camera* cameraComp = cameraObj->AddComponent<Com_Camera>();
 			cameraComp->SetProjectionType(define::eProjectionType::Perspective);
-			//cameraComp->RegisterCameraInRenderer();
-			//cameraComp->TurnLayerMask(eLayerType::UI, false);
+
 			cameraObj->AddComponent(strKey::Script::Script_CameraMove);
+			cameraObj->AddComponent(strKey::Script::Script_UIBase);
+
 
 			RenderMgr::SetMainCamera(cameraComp);
 		}
+
+		{
+			GameObject* dirLight = EventMgr::SpawnGameObject(eLayerType::Player);
+			dirLight->AddComponent<Com_Transform>();
+
+			Com_Light3D* light3d = dirLight->AddComponent<Com_Light3D>();
+			light3d->SetLightType(eLightType::Directional);
+			light3d->SetDiffuse(float4(0.3f, 0.3f, 0.3f, 1.f));
+			light3d->SetAmbient(float4(0.3f, 0.3f, 0.3f, 1.f));
+		}
+
+
+
+
+		{
+			std::shared_ptr<MeshData> meshdata = ResMgr::Load<MeshData>("nergigante");
+
+			GameObject* modeling = meshdata->Instantiate();
+
+			modeling->GetComponent<Com_Animator3D>()->Play("NlaTrack");
+			
+			EventMgr::SpawnGameObject(define::eLayerType::Player, modeling);
+		}
+
+
+
 
 		{
 			GameObject* obj = EventMgr::SpawnGameObject(define::eLayerType::Light);
@@ -142,9 +169,18 @@ namespace mh
 		//	tr->SetRelativePosXY(float2(200.f, 200.f));
 		//}
 
-
-		
 		{
+			GameObject* skyBox = EventMgr::SpawnGameObject(eLayerType::Stage);
+			Com_Transform* tr = skyBox->AddComponent<Com_Transform>();
+
+			tr->SetRelativePos(float3(0.0f, 0.0f, 0.0f));
+			tr->SetRelativeScale(float3(500.0f, 500.0f, 500.0f));
+			skyBox->SetName("SkyBox");
+			Com_Renderer_Mesh* mr = skyBox->AddComponent<Com_Renderer_Mesh>();
+			mr->SetMesh(ResMgr::Find<Mesh>(strKey::Default::mesh::CubeMesh));
+			mr->SetMaterial(ResMgr::Find<Material>(strKey::Default::material::SkyBoxMaterial), 0);
+		}
+		
 			define::tPhysicsInfo info = {};
 			info.eActorType = define::eActorType::Dynamic;
 			info.eGeomType = define::eGeometryType::Sphere;

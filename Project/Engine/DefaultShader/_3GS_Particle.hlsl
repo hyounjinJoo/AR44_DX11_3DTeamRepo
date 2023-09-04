@@ -19,15 +19,15 @@ void main( point VSOut input[1], inout TriangleStream<GSOutput> output)
     }
 	float3 vViewPos = mul(float4(vWorldPos, 1.0f), CB_Transform.view).xyz;
 	
-    float3 vScale = CB_ParticleSystem.startSize.xyz;
-    //vScale = lerp(20.0f, 50.0f, elapsedTime);
+    float3 Scale = CB_ParticleSystem.startSize.xyz;
+    //Scale = lerp(20.0f, 50.0f, elapsedTime);
 	
     float3 NewPos[4] =
     {
-        vViewPos + float3(-0.5f, 0.5f, 0.0f) *  vScale,
-        vViewPos + float3(0.5f, 0.5f, 0.0f)  *   vScale,
-        vViewPos + float3(0.5f, -0.5f, 0.0f) *  vScale,
-        vViewPos + float3(-0.5f, -0.5f, 0.0f) * vScale
+        vViewPos + float3(-0.5f, 0.5f, 0.0f) *  Scale,
+        vViewPos + float3(0.5f, 0.5f, 0.0f)  *   Scale,
+        vViewPos + float3(0.5f, -0.5f, 0.0f) *  Scale,
+        vViewPos + float3(-0.5f, -0.5f, 0.0f) * Scale
     };
 	
     for (int i = 0; i < 4; i++)

@@ -575,6 +575,7 @@ call Copy_HLSL.bat $(Configuration)</Command>
     <None Include="DefaultShader\SH_PostProcess.hlsli" />
     <None Include="DefaultShader\SH_Resource.hlsli" />
     <None Include="DefaultShader\SH_Sampler.hlsli" />
+    <None Include="DefaultShader\SH_SkyBox.hlsli" />
     <None Include="DefaultShader\SH_UserInterFace.hlsli" />
     <None Include="SimpleMath.inl" />
   </ItemGroup>
@@ -655,6 +656,10 @@ call Copy_HLSL.bat $(Configuration)</Command>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
     </FxCompile>
+    <FxCompile Include="DefaultShader\_0VS_SkyBox.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
+    </FxCompile>
     <FxCompile Include="DefaultShader\_0VS_Sprite.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
@@ -730,6 +735,10 @@ call Copy_HLSL.bat $(Configuration)</Command>
     <FxCompile Include="DefaultShader\_4PS_PostProcess.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
+    </FxCompile>
+    <FxCompile Include="DefaultShader\_4PS_SkyBox.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
     </FxCompile>

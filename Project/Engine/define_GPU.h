@@ -229,23 +229,26 @@ namespace mh::define
 		Normal = Register_t_NormalTexture,
 		Specular = Register_t_SpecularTexture,
 		Emissive = Register_t_EmissiveTexture,
+		RoughnessAndMetalic = Register_t_RoughnessMetalicTexture,
 
 		AlbedoTarget = Register_t_AlbedoTarget,
 		NormalTarget = Register_t_NormalTarget,
 		SpecularTarget = Register_t_SpecularTarget,
 		EmissiveTarget = Register_t_EmissiveTarget,
+		RoughnessAndMetalicTarget = Register_t_RoughnessMetalicTarget,
 		PositionTarget = Register_t_PositionTarget,
-		
+
 		DiffuseLightTarget = Register_t_DiffuseLightTarget,
 		SpecularLightTarget = Register_t_SpecularLightTarget,
 
+		SkyBoxCube = Register_t_skyBoxCube,
 		//CubeT8,
 		//CubeT9,
 
 		//Array2DT10,
 		//Array2DT11,
 
-		END = 8,
+		END = 16,
 	};
 
 	enum class eMRT_Defferd
