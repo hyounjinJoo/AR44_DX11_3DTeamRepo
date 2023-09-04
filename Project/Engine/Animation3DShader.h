@@ -15,12 +15,14 @@ namespace mh
 		virtual ~Animation3DShader();
 
 		virtual bool BindData();
-		virtual void Clear();
+		virtual void UnBindData();
 
 		void SetBoneCount(int _iBoneCount) { mAnim3DData.BoneCount = _iBoneCount; }
-		void SetFrameIndex(int _iFrameIdx) { mAnim3DData.CurrentFrame = _iFrameIdx; }
+		void SetCurFrameIdx(int _iFrameIdx) { mAnim3DData.CurrentFrame = _iFrameIdx; }
 		void SetNextFrameIdx(int _iFrameIdx) { mAnim3DData.NextFrame = _iFrameIdx; }
 		void SetFrameRatio(float _fFrameRatio) { mAnim3DData.FrameRatio = _fFrameRatio; }
+		void SetFrameLength(int _frameLength) { mAnim3DData.FrameLength = _frameLength; }
+
 		void SetFrameDataBuffer(StructBuffer* _buffer) { m_pFrameDataBuffer = _buffer; }
 		void SetOffsetMatBuffer(StructBuffer* _buffer) { m_pOffsetMatBuffer = _buffer; }
 		void SetOutputBuffer(StructBuffer* _buffer) { m_pOutputBuffer = _buffer; }
@@ -28,9 +30,9 @@ namespace mh
 	private:
 		tCB_Animation3D mAnim3DData;
 
-		StructBuffer* m_pFrameDataBuffer;			// t13
-		StructBuffer* m_pOffsetMatBuffer;			// t14 
-		StructBuffer* m_pOutputBuffer;				// u0
+		StructBuffer* m_pFrameDataBuffer;
+		StructBuffer* m_pOffsetMatBuffer;
+		StructBuffer* m_pOutputBuffer;
     };
 }
 

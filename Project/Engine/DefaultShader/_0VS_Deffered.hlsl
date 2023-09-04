@@ -18,8 +18,8 @@ VSOut main(VSIn _in)
 		info.Normal = _in.Normal;
 	}
     
-	_out.Position = mul(_in.Position, CB_Transform.WVP);
-	_out.ViewPos = mul(_in.Position, CB_Transform.WorldView).xyz;
+	_out.Position = mul(float4(info.Pos, 1.f), CB_Transform.WVP);
+	_out.ViewPos = mul(float4(info.Pos, 1.f), CB_Transform.WorldView).xyz;
 	
 	_out.ViewTangent =	normalize(mul(float4(info.Tangent.xyz, 0.0f), CB_Transform.WorldView).xyz);
 	_out.ViewBiNormal =	normalize(mul(float4(info.Binormal.xyz, 0.0f), CB_Transform.WorldView).xyz);

@@ -3,7 +3,7 @@
 
 #include "GameObject.h"
 #include "Skeleton.h"
-#
+
 
 namespace mh
 {
@@ -19,6 +19,17 @@ namespace mh
 	{
 		if (false == IsRenderReady())
 			return;
+
+		IAnimator* animator = 
+			static_cast<IAnimator*>(GetOwner()->GetComponent(eComponentType::Animator));
+		if (nullptr == animator || animator->GetDimensionType() != eDimensionType::_3D)
+			return;
+
+		ITransform* tr = 
+			static_cast<ITransform*>(GetOwner()->GetComponent(eComponentType::Transform));
+		tr->BindData();
+
+		animator->BindData();
 
 		//Render
 		UINT iSubsetCount = GetMesh()->GetSubsetCount();
@@ -41,6 +52,8 @@ namespace mh
 				mtrl->UnBindData();
 			}
 		}
+
+		animator->UnBindData();
 	}
 }
 

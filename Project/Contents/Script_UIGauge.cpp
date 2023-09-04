@@ -7,6 +7,7 @@ namespace mh
 {
 	Script_UIGauge::Script_UIGauge()
 		: Script_UIBase(eUIType::Gauge)
+		, mGaugeRemain()
 	{
 	}
 
