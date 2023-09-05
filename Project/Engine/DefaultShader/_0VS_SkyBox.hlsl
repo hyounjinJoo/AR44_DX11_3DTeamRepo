@@ -16,7 +16,7 @@ VSOut main(VSIn _in)
     _out.Position = projPos;
     _out.UV = _in.UV;
     // 큐브 맵에 사용될 uv를 보간처리하여 넘겨서 자연스럽게 Cube texture를 샘플링 할 수 있도록 한다.
-    _out.CUBEUV = normalize(_in.Position).xyz;
+    //_out.CUBEUV = normalize(_in.Position).xyz;
     
     return _out;
 }

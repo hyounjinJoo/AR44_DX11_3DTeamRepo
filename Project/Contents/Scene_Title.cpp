@@ -166,7 +166,6 @@ namespace mh
 		//	mr->SetMesh(ResMgr::Find<Mesh>(strKey::Default::mesh::CubeMesh));
 		//	mr->SetMaterial(ResMgr::Find<Material>(strKey::Default::material::SkyBoxMaterial), 0);
 		//}
-
 		{
 			define::tPhysicsInfo info = {};
 			info.eActorType = define::eActorType::Dynamic;

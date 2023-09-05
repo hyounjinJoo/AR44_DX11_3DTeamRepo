@@ -35,7 +35,6 @@ struct alignas(16) tCB_MaterialData
 	BOOL bTex_5;
 	BOOL bTex_6;
 	BOOL bTex_7;
-	BOOL bTexCube_0;
 	
 	float4 Diff;
 	float4 Spec;
@@ -45,7 +44,8 @@ struct alignas(16) tCB_MaterialData
 	// 3D Animation 정보
 	BOOL bAnim;
 	int BoneCount;
-	int Padding_Material;
+	//BOOL bTexCube_0;
+	int2 Padding_Material;
 };
 
 struct alignas(16)   tCB_ComputeShader

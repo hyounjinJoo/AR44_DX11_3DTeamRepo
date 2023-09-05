@@ -241,14 +241,15 @@ namespace mh::define
 		DiffuseLightTarget = Register_t_DiffuseLightTarget,
 		SpecularLightTarget = Register_t_SpecularLightTarget,
 
-		SkyBoxCube = Register_t_skyBoxCube,
+		//SkyBoxCube = Register_t_skyBoxCube,
 		//CubeT8,
 		//CubeT9,
 
 		//Array2DT10,
 		//Array2DT11,
 
-		END = 16,
+		//END = 16
+		END = 8,
 	};
 
 	enum class eMRT_Defferd
