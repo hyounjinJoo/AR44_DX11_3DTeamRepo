@@ -40,11 +40,11 @@ namespace mh
 		{
 			None = -1,
 			Com_Camera,
+			//Stage,
 			Grid,
 			Stage,
 			Monster,
 			Player,
-			Stage,
 
 			tParticle,
 			PostProcess,

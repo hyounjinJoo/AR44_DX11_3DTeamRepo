@@ -87,8 +87,8 @@ constexpr int CBUFFER_##_bufferName = _registerNumber
 #define TEXTURE2D(_bufferName, _registerType, _registerNumber)\
 REGISTER_DECLARE(_bufferName, _registerType, _registerNumber)
 
-#define TEXTURECUBE(_bufferName, _registerType, _registerNumber)\
-REGISTER_DECLARE(_bufferName, _registerType, _registerNumber)
+//#define TEXTURECUBE(_bufferName, _registerType, _registerNumber)\
+//REGISTER_DECLARE(_bufferName, _registerType, _registerNumber)
 
 #define SBUFFER(_bufferName, _structName, _registerType, _registerNumber)\
 REGISTER_DECLARE(_bufferName, _registerType, _registerNumber)
@@ -112,8 +112,8 @@ cbuffer _bufferName : register(_registerType##_registerNumber)\
 #define TEXTURE2D(_bufferName, _registerType, _registerNumber)\
 Texture2D _bufferName : register(_registerType##_registerNumber)
 
-#define TEXTURECUBE(_bufferName, _registerType, _registerNumber)\
-TextureCube _bufferName : register(_registerType##_registerNumber)
+//#define TEXTURECUBE(_bufferName, _registerType, _registerNumber)\
+//TextureCube _bufferName : register(_registerType##_registerNumber)
 
 #define SBUFFER(_bufferName, _structName, _registerType, _registerNumber)\
 StructuredBuffer<_structName> _bufferName : register(_registerType##_registerNumber)

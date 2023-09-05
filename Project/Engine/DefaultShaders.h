@@ -48,8 +48,8 @@
 
 #include "CompiledShaderHeader/CS_Animation3D_Debug.h"
 
-#include "CompiledShaderHeader/_0VS_SkyBox_Debug.h"
-#include "CompiledShaderHeader/_4PS_SkyBox_Debug.h"
+//#include "CompiledShaderHeader/_0VS_SkyBox_Debug.h"
+//#include "CompiledShaderHeader/_4PS_SkyBox_Debug.h"
 
 #else
 
@@ -97,7 +97,7 @@
 
 #include "CompiledShaderHeader/CS_Animation3D_Release.h"
 
-#include "CompiledShaderHeader/_0VS_SkyBox_Release.h"
-#include "CompiledShaderHeader/_4PS_SkyBox_Release.h"
+//#include "CompiledShaderHeader/_0VS_SkyBox_Release.h"
+//#include "CompiledShaderHeader/_4PS_SkyBox_Release.h"
 
 #endif

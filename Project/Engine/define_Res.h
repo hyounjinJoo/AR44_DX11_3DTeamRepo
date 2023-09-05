@@ -93,7 +93,7 @@ namespace mh::define
 				STRKEY_DECLARE(MergeMaterial);
 				STRKEY_DECLARE(LightDirMaterial);
 				STRKEY_DECLARE(LightPointMaterial);
-				STRKEY_DECLARE(SkyBoxMaterial);
+				//STRKEY_DECLARE(SkyBoxMaterial);
 			}
 
 			namespace texture
@@ -110,7 +110,7 @@ namespace mh::define
 				STRKEY Brick_N = "Cube\\Brick_N.jpg";
 				STRKEY PaintTexture = "PaintTexture";
 				STRKEY RenderTarget = "RenderTarget";
-				STRKEY SkyBox_Water = "SkyWater.dds";
+				//STRKEY SkyBox_Water = "SkyWater.dds";
 			}
 
 			namespace shader
@@ -131,7 +131,7 @@ namespace mh::define
 					STRKEY_DECLARE(LightDirShader);
 					STRKEY_DECLARE(LightPointShader);
 					STRKEY_DECLARE(MergeShader);
-					STRKEY_DECLARE(SkyBoxShader);
+					//STRKEY_DECLARE(SkyBoxShader);
 				}
 				namespace compute
 				{
