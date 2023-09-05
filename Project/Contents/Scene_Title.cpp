@@ -78,7 +78,7 @@ namespace mh
 			std::shared_ptr<MeshData> meshdata = ResMgr::Load<MeshData>("Player_Default");
 
 			GameObject* modeling = meshdata->Instantiate();
-			modeling->AddComponent<Script_Player>();
+			//modeling->AddComponent<Script_Player>();
 
 			modeling->GetComponent<Com_Animator3D>()->Play("OverheadSlash");
 			
