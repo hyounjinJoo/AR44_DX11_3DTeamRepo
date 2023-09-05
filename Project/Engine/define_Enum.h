@@ -41,6 +41,7 @@ namespace mh
 			None = -1,
 			Com_Camera,
 			Grid,
+			Stage,
 			Monster,
 			Player,
 			Stage,

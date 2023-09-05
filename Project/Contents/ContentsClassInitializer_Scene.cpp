@@ -13,6 +13,7 @@
 
 
 #include "Scene_Play.h"
+#include "Scene_Stage01.h"
 #include "Scene_TestBehaviourTree.h"
 #include "Scene_Title.h"
 
@@ -24,6 +25,7 @@ namespace mh
 	void ContentsClassInitializer::InitScene()
 	{
 		CONSTRUCTOR_T(Scene_Play);
+		CONSTRUCTOR_T(Scene_Stage01);
 		CONSTRUCTOR_T(Scene_TestBehaviourTree);
 		CONSTRUCTOR_T(Scene_Title);
 	}
