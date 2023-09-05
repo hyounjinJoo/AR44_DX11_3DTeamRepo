@@ -9,13 +9,6 @@ namespace Microsoft::WRL
 	template <class T> inline constexpr bool is_ComPtr_v = is_ComPtr<T>::value;
 }
 
-#include <d3d11.h>
-#include <d3dcompiler.h>
-
-#pragma comment (lib, "d3d11.lib")
-#pragma comment (lib, "d3dcompiler.lib")
-
-#include "SimpleMath.h"
 
 #include "define_Enum.h"
 #include "define_Macro.h"
@@ -284,47 +277,7 @@ namespace mh::define
 		DSV,
 	};
 
-	struct tDebugMesh
-	{
-		define::eColliderType type;
-		float3 position;
-		float3 rotatation;
-		float3 scale;
 
-		float radius;
-		float duration;
-		float time;
-	};
-
-	//struct tLightAttribute
-	//{
-	//	float4 diffuse;
-	//	float4 specular;
-	//	float4 ambient;
-
-	//	float4 position;
-	//	float4 direction;
-
-	//	define::eLightType type;
-	//	float radius;
-	//	float angle;
-	//	int padding;
-	//};
-
-	//struct tParticle
-	//{
-	//	float4 position;
-	//	float4 direction;
-
-	//	float lifeTime;
-	//	float time;
-	//	float speed;
-	//	uint active;
-	//};
-	//struct tParticleShared
-	//{
-	//	uint activeCount;
-	//};
 
 
 }

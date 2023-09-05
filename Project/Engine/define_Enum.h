@@ -2,6 +2,7 @@
 
 #include <limits.h>
 
+
 namespace mh
 {
 	enum class eResult
@@ -41,15 +42,21 @@ namespace mh
 			None = -1,
 			Com_Camera,
 			Grid,
+			Light,
 			Monster,
 			Player,
 			Stage,
 
+			Ground,
 			tParticle,
 			PostProcess,
 			UI,
 
 			END
+		};
+		enum
+		{
+			LAYER_TYPE_COUNT = static_cast<int>(eLayerType::END),
 		};
 
 		enum class eProjectionType
@@ -82,6 +89,28 @@ namespace mh
 			NOT_SET,
 			_2D,
 			_3D
+		};
+
+		enum class eActorType
+		{
+			Static,
+			Dynamic,
+			Kinematic,
+			Character,
+		};
+
+		enum class eGeometryType
+		{
+			Sphere,
+			Box,
+			Capsule,
+			Plane
+		};
+
+		enum class eModelType
+		{
+			StaticModel,
+			DynamicModel,
 		};
 	}
 }

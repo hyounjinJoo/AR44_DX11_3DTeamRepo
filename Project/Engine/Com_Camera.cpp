@@ -111,10 +111,10 @@ namespace mh
 	{
 		//트랜스폼이 업데이트 되지 않았을 경우 자신도 업데이트 할 필요 없음
 		Com_Transform* tr = static_cast<Com_Transform*>(GetOwner()->GetComponent(eComponentType::Transform));
-		if (nullptr == tr || false == tr->IsUpdated())
+		if (nullptr == tr || false == tr->GetUpdateByMat())
 			return;
 
-		float3 vCamPos = tr->GetWorldPos();
+		float3 vCamPos = tr->GetWorldPosition();
 
 		//뷰행렬 = 카메라 앞으로 월드행렬의 물체들을 끌어오는 작업.
 		//도로 끌어오는 작업이므로 월드행렬에 배치했던 순서의 역순으로 작업을 해주면 된다.
@@ -155,7 +155,7 @@ namespace mh
 		//const XMVECTOR& vecQut = XMQuaternionRotationRollPitchYawFromVector(vecRot);
 		//Matrix tempmat = Matrix::CreateFromQuaternion(vecQut);
 		//m_matView *= tempmat.Transpose();
-		const MATRIX& matRot = tr->GetWorldRotMat();
+		const MATRIX& matRot = tr->GetWorldMatrix();
 		mView *= matRot.Transpose();
 
 		//3. transform 상수버퍼 구조체에 업데이트 -> 안함. 나중에 render때 일괄적으로 view 행렬과 proj 행렬을 곱할 예정.

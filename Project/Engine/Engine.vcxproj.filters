@@ -492,6 +492,9 @@
       <Filter>Component\Light</Filter>
     </ClCompile>
     <ClCompile Include="GridScript.cpp" />
+    <ClCompile Include="Physics.cpp" />
+    <ClCompile Include="ContactCallback.cpp" />
+    <ClCompile Include="Com_RigidBody.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application.h">
@@ -860,6 +863,9 @@
       <Filter>Component\Light</Filter>
     </ClInclude>
     <ClInclude Include="GridScript.h" />
+    <ClInclude Include="Physics.h" />
+    <ClInclude Include="ContactCallback.h" />
+    <ClInclude Include="Com_RigidBody.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="cpp.hint">

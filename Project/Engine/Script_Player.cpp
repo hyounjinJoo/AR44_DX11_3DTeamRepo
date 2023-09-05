@@ -1,15 +1,20 @@
-#include "PCH_Contents.h"
+#include "PCH_Engine.h"
 #include "Script_Player.h"
 
-#include <Engine/Animation3D.h>
-#include <Engine/Com_Animator3D.h>
-#include <Engine/GameObject.h>
-#include <Engine/InputMgr.h>
+#include "InputMgr.h"
+#include "TimeMgr.h"
+
+#include "GameObject.h"
+#include "Com_Transform.h"
+#include "Com_RigidBody.h"
+#include "Com_Camera.h"
+#include "RenderMgr.h"
 
 namespace mh
 {
 	Script_Player::Script_Player()
-		: mMoveSpeed(1.0f)
+		: IScript()
+		, mMoveSpeed(1.0f)
 	{
 	}
 
@@ -17,17 +22,12 @@ namespace mh
 	{
 	}
 
+	void Script_Player::Init()
+	{
+	}
+
 	void Script_Player::Update()
 	{
-		if (InputMgr::GetKeyDown(eKeyCode::P))
-		{
-			Com_Animator3D* animator = GetOwner()->GetComponent<Com_Animator3D>();
-			if (animator)
-			{
-				animator->PlayNext();
-			}
-		}
-
 		Com_Transform* tr = GetOwner()->GetComponent<Com_Transform>();
 		Com_RigidBody* rb = GetOwner()->GetComponent<Com_RigidBody>();
 
@@ -69,5 +69,34 @@ namespace mh
 			rb->SetVelocity(define::eAxis3D::Y, mMoveSpeed);
 		}
 	}
-}
 
+	void Script_Player::FixedUpdate()
+	{
+
+	}
+
+	void Script_Player::OnCollisionEnter(ICollider2D* _collider)
+	{
+	}
+
+	void Script_Player::OnCollisionStay(ICollider2D* _collider)
+	{
+	}
+
+	void Script_Player::OnCollisionExit(ICollider2D* _collider)
+	{
+	}
+
+	void Script_Player::Start()
+	{
+	}
+
+	void Script_Player::Action()
+	{
+	}
+
+	void Script_Player::End()
+	{
+	}
+
+}
