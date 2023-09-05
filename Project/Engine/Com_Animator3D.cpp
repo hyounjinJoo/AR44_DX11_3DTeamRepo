@@ -16,6 +16,7 @@ namespace mh
 {
 	using namespace mh::define;
 
+
 	Com_Animator3D::Com_Animator3D()
 		: IAnimator(define::eDimensionType::_3D)
 		//, m_pVecBones(nullptr)
@@ -25,9 +26,12 @@ namespace mh
 		, m_iFramePerSecond(30)
 		, m_pBoneFinalMatBuffer(nullptr)
 		, m_bFinalMatUpdate(false)
-		, m_iFrameIdx(0)
-		, m_iNextFrameIdx(0)
-		, m_fRatio(0.f)
+
+		, m_Anim3DCBuffer()
+
+		, m_fChangeTimeLength()
+		, m_fChangeTimeAccumulate()
+
 		, mCurrentAnim()
 		, m_fClipUpdateTime()
 	{
@@ -43,9 +47,12 @@ namespace mh
 		, m_iFramePerSecond(_other.m_iFramePerSecond)
 		, m_pBoneFinalMatBuffer(nullptr)
 		, m_bFinalMatUpdate(false)
-		, m_iFrameIdx(_other.m_iFrameIdx)
-		, m_iNextFrameIdx(_other.m_iNextFrameIdx)
-		, m_fRatio(_other.m_fRatio)
+
+		, m_Anim3DCBuffer(_other.m_Anim3DCBuffer)
+
+		, m_fChangeTimeLength(_other.m_fChangeTimeLength)
+		, m_fChangeTimeAccumulate(_other.m_fChangeTimeAccumulate)
+
 		, mCurrentAnim(_other.mCurrentAnim)
 		, m_fClipUpdateTime()
 	{
@@ -62,9 +69,9 @@ namespace mh
 	void Com_Animator3D::Init()
 	{
 		tSBufferDesc desc{};
-		desc.REGISLOT_t_SRV = Register_t_g_BoneMatrixArray;
+		desc.REGISLOT_t_SRV = Register_t_g_FinalBoneMatrixArray;
 		desc.TargetStageSRV = eShaderStageFlag::VS;
-		desc.REGISLOT_u_UAV = Register_u_g_FinalBoneMatrixArray;
+		desc.REGISLOT_u_UAV = Register_u_g_FinalBoneMatrixArrayRW;
 		desc.eSBufferType = eStructBufferType::READ_WRITE;
 
 		m_pBoneFinalMatBuffer->SetDesc(desc);
@@ -77,34 +84,65 @@ namespace mh
 		if (nullptr == mSkeleton || nullptr == mCurrentAnim)
 			return;
 
-		//const auto& animClips = mSkeleton->GetAnimations();
-
-		m_dCurTime = 0.f;
-		// 현재 재생중인 Clip 의 시간을 진행한다.
-		m_fClipUpdateTime += TimeMgr::DeltaTime();
-
-		//한 프레임 시간이 지나갔으면 다음 프레임으로
-		float frameTime = (float)mCurrentAnim->GetTimeLength();
-		if (m_fClipUpdateTime >= frameTime)
+		bool bChangeEnd = false;
+		if (m_Anim3DCBuffer.bChangingAnim)
 		{
-			m_fClipUpdateTime = 0.f;
+			m_fChangeTimeAccumulate += TimeMgr::DeltaTime();
+
+			if (m_fChangeTimeLength < m_fChangeTimeAccumulate)
+			{
+				m_fChangeTimeAccumulate = m_fChangeTimeLength;
+				bChangeEnd = true;
+			}
+
+			m_Anim3DCBuffer.ChangeRatio = m_fChangeTimeAccumulate / m_fChangeTimeLength;
+		}
+		else
+		{
+			m_dCurTime = 0.f;
+			// 현재 재생중인 Clip 의 시간을 진행한다.
+			m_fClipUpdateTime += TimeMgr::DeltaTime();
+
+			//애니메이션 재생이 끝났으면 -> 첫 프레임으로
+			//m_fClipUpdateTime = 애니메이션 시작 이후 누적 시간
+			float frameTime = (float)mCurrentAnim->GetTimeLength();
+			if (m_fClipUpdateTime >= frameTime)
+			{
+				m_fClipUpdateTime = 0.f;
+			}
+
+			//애니메이션의 Start Time에 애니메이션 재생 시작 후 지나간 시간을 더해줌
+			m_dCurTime = mCurrentAnim->GetStartTime() + (double)m_fClipUpdateTime;
+
+			// 현재 프레임 인덱스 구하기
+			// 현재 애니메이션 시간 * 초당 프레임 수
+			double dFrameIdx = m_dCurTime * (double)m_iFramePerSecond;
+
+			m_Anim3DCBuffer.CurrentFrame = (int)dFrameIdx;
+
+			//만약 이미 마지막 프레임에 도달했을 경우 현재 프레임 유지
+			int maxFrameCount = mCurrentAnim->GetFrameLength();
+			if (m_Anim3DCBuffer.CurrentFrame >= maxFrameCount - 1)
+				m_Anim3DCBuffer.NextFrame = maxFrameCount - 1;	// 끝이면 현재 인덱스를 유지
+			else
+				m_Anim3DCBuffer.NextFrame = m_Anim3DCBuffer.CurrentFrame + 1;
+
+			// 프레임간의 시간에 따른 비율을 구해준다.
+			m_Anim3DCBuffer.FrameRatio = (float)(dFrameIdx - (double)m_Anim3DCBuffer.CurrentFrame);
 		}
 
-		m_dCurTime = mCurrentAnim->GetStartTime() + (double)m_fClipUpdateTime;
+		if (bChangeEnd)
+		{
+			Play(mNextAnim, false);
+			mNextAnim = nullptr;
+			m_Anim3DCBuffer.bChangingAnim = FALSE;
+			m_Anim3DCBuffer.ChangeFrameLength = 0;
+			m_Anim3DCBuffer.ChangeFrameIdx = 0;
+			m_Anim3DCBuffer.ChangeRatio = 0.f;
+			m_fChangeTimeLength = 0.f;
+			m_fChangeTimeAccumulate = 0.f;
+		}
 
-		// 현재 프레임 인덱스 구하기
-		double dFrameIdx = m_dCurTime * (double)m_iFramePerSecond;
-		m_iFrameIdx = (int)dFrameIdx;
-
-		//만약 이미 마지막 프레임에 도달했을 경우 현재 프레임 유지
-		int maxFrameCount = mCurrentAnim->GetFrameLength();
-		if (m_iFrameIdx >= maxFrameCount - 1)
-			m_iNextFrameIdx = maxFrameCount - 1;	// 끝이면 현재 인덱스를 유지
-		else
-			m_iNextFrameIdx = m_iFrameIdx + 1;
-
-		// 프레임간의 시간에 따른 비율을 구해준다.
-		m_fRatio = (float)(dFrameIdx - (double)m_iFrameIdx);
 
 		// 컴퓨트 쉐이더 연산여부
 		m_bFinalMatUpdate = false;
@@ -119,28 +157,65 @@ namespace mh
 		{
 			//최종 Bone별 행렬이 저장될 Vector 크기를 재조정
 			m_vecFinalBoneMat.resize(mSkeleton->GetBoneCount());
+
+			m_Anim3DCBuffer.BoneCount = mSkeleton->GetBoneCount();
 		}
 	}
 
 	bool Com_Animator3D::Play(const std::string& _strAnimName)
 	{
-		bool isPlayed = false;
 		if (mSkeleton)
 		{
-			mCurrentAnim = mSkeleton->FindAnimation(_strAnimName);
-			if (mCurrentAnim)
-			{
-				m_iFramePerSecond = mCurrentAnim->GetFPS();
-				isPlayed = true;
-			}
+			std::shared_ptr<Animation3D> anim = mSkeleton->FindAnimation(_strAnimName);
+			return Play(anim, true);
 		}
 
-		return isPlayed;
+		return false;
+	}
+
+	void Com_Animator3D::PlayNext()
+	{
+		if (mSkeleton)
+		{
+			const auto& anims = mSkeleton->GetAnimations();
+
+			if (anims.empty())
+				return;
+			else if (nullptr == mCurrentAnim || (size_t)1 == anims.size())
+			{
+				Play(anims.begin()->second, true);
+			}
+			else
+			{
+				for (auto iter = anims.begin();
+					iter != anims.end();
+					)
+				{
+					if (iter->second == mCurrentAnim)
+					{
+						++iter;
+						if (iter == anims.end())
+						{
+							Play(anims.begin()->second, true);
+						}
+						else
+						{
+							Play(iter->second, true);
+						}
+						break;
+					}
+					++iter;
+				}
+			}
+		}
 	}
 
 
 	void Com_Animator3D::BindData()
 	{
+		if (nullptr == mCurrentAnim)
+			return;
+
 		if (false == m_bFinalMatUpdate)
 		{
 			// Animation3D Update Compute Shader
@@ -151,17 +226,21 @@ namespace mh
 			if (false == CheckMesh())
 				return;
 			
-			pUpdateShader->SetFrameDataBuffer(mCurrentAnim->GetKeyFrameSBuffer());
-			pUpdateShader->SetOffsetMatBuffer(mSkeleton->GetBoneOffsetBuffer());
-			pUpdateShader->SetOutputBuffer(m_pBoneFinalMatBuffer.get());
+			Animation3DShader::Desc desc{};
+			desc.CurrentAnimKeyFrameBuffer = mCurrentAnim->GetKeyFrameSBuffer();
+			
+			if (mNextAnim)
+			{
+				desc.NextAnimKeyFrameBuffer = mNextAnim->GetKeyFrameSBuffer();
+			}
 
-			UINT iBoneCount = (UINT)mSkeleton->GetBoneCount();
-			pUpdateShader->SetBoneCount(iBoneCount);
-			pUpdateShader->SetCurFrameIdx(m_iFrameIdx);
-			pUpdateShader->SetNextFrameIdx(m_iNextFrameIdx);
-			pUpdateShader->SetFrameRatio(m_fRatio);
-			pUpdateShader->SetFrameLength(mCurrentAnim->GetFrameLength());
+			desc.BoneOffsetMatrixBuffer = mSkeleton->GetBoneOffsetBuffer();
 
+			desc.FinalBoneTranslationMatrixBuffer = m_pBoneFinalMatBuffer.get();
+
+			desc.Anim3DData = &m_Anim3DCBuffer;
+
+			pUpdateShader->SetDesc(desc);
 
 			// 업데이트 쉐이더 실행
 			pUpdateShader->OnExcute();
@@ -181,6 +260,52 @@ namespace mh
 
 
 
+
+	bool Com_Animator3D::Play(std::shared_ptr<Animation3D> _anim, bool _bBlend)
+	{
+		bool bPlayed = false;
+
+		//기존의 애니메이션이 있고 Blend 켰을 경우 Animation Blend 모드 On
+		if (_bBlend && mCurrentAnim)
+		{
+			mNextAnim = _anim;
+			if (mNextAnim)
+			{
+				m_Anim3DCBuffer.bChangingAnim = TRUE;
+
+				double dFrameIdx = mNextAnim->GetStartTime() * (double)m_iFramePerSecond;
+				m_Anim3DCBuffer.ChangeFrameIdx = (int)dFrameIdx;
+				m_Anim3DCBuffer.ChangeFrameLength = mNextAnim->GetFrameLength();
+				
+				m_Anim3DCBuffer.ChangeRatio = 0.f;
+				m_fChangeTimeLength = 1.f;
+				m_fChangeTimeAccumulate = 0.f;
+
+				bPlayed = true;
+			}
+		}
+
+		else
+		{
+			mCurrentAnim = _anim;
+			
+			if (mCurrentAnim)
+			{
+				m_fClipUpdateTime = 0.f;
+				m_dCurTime = 0.0;
+				m_iFramePerSecond = mCurrentAnim->GetFPS();
+
+				m_Anim3DCBuffer.CurrentFrame = 0;
+				m_Anim3DCBuffer.NextFrame = 1;
+				m_Anim3DCBuffer.FrameRatio = 0.f;
+				m_Anim3DCBuffer.FrameLength = mCurrentAnim->GetFrameLength();
+				m_bFinalMatUpdate = false;
+				bPlayed = true;
+			}
+
+		}
+		return bPlayed;
+	}
 
 	bool Com_Animator3D::CheckMesh()
 	{

@@ -7,9 +7,7 @@
 #include <Engine/Com_Renderer_Mesh.h>
 #include <Engine/RenderMgr.h>
 #include <Engine/Texture.h>
-#include <Engine/Script_Player.h>
 #include <Engine/Com_Camera.h>
-#include <Engine/Script_Camera.h>
 #include <Engine/Com_Renderer_Sprite.h>
 #include <Engine/GridScript.h>
 #include <Engine/Object.h>
@@ -28,6 +26,7 @@
 #include <Engine/Com_RigidBody.h>
 #include <Contents/Script_UIBase.h>
 #include <Contents/Script_UIGauge.h>
+#include <Contents/Script_Player.h>
 
 #include "strKey_Script.h"
 #include "strKey_Component.h"
@@ -76,11 +75,12 @@ namespace mh
 		}
 
 		{
-			std::shared_ptr<MeshData> meshdata = ResMgr::Load<MeshData>("nergigante");
+			std::shared_ptr<MeshData> meshdata = ResMgr::Load<MeshData>("Player_Default");
 
 			GameObject* modeling = meshdata->Instantiate();
+			modeling->AddComponent<Script_Player>();
 
-			modeling->GetComponent<Com_Animator3D>()->Play("NlaTrack");
+			modeling->GetComponent<Com_Animator3D>()->Play("OverheadSlash");
 			
 			EventMgr::SpawnGameObject(define::eLayerType::Player, modeling);
 		}

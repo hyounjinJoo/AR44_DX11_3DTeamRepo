@@ -71,10 +71,6 @@ namespace mh::define
 
 				STRKEY_DECLARE(Com_BehaviorTree);				
 				STRKEY_DECLARE(Com_Renderer_UIBase);
-				
-
-				STRKEY_DECLARE(Script_Player);
-				STRKEY_DECLARE(Script_Camera);
 			}
 		}
 	}
