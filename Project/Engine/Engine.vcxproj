@@ -322,7 +322,6 @@ call Copy_HLSL.bat $(Configuration)</Command>
     <ClInclude Include="RenderMgr.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="Com_RigidBody.h" />
-    <ClInclude Include="Script_Camera.h" />
     <ClInclude Include="ICollider.h" />
     <ClInclude Include="DefaultShaders.h" />
     <ClInclude Include="defines.h" />
@@ -496,7 +495,6 @@ call Copy_HLSL.bat $(Configuration)</Command>
     <ClCompile Include="Physics.cpp" />
     <ClCompile Include="RenderMgr.cpp" />
     <ClCompile Include="Com_RigidBody.cpp" />
-    <ClCompile Include="Script_Camera.cpp" />
     <ClCompile Include="ICollider.cpp" />
     <ClCompile Include="PCH_Engine.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
