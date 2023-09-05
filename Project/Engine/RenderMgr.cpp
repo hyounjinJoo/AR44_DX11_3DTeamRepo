@@ -961,21 +961,21 @@ namespace mh
 			ResMgr::Insert(strKey::Default::shader::graphics::PostProcessShader, postProcessShader);
 		}
 #pragma endregion
-#pragma region SKY BOX SHADER
-		{
-			std::shared_ptr<GraphicsShader> skyBoxShader = std::make_shared<GraphicsShader>();
-			skyBoxShader->SetEngineDefaultRes(true);
-			skyBoxShader->CreateByHeader(eGSStage::VS, _0VS_SkyBox, sizeof(_0VS_SkyBox));
-			skyBoxShader->CreateByHeader(eGSStage::PS, _4PS_SkyBox, sizeof(_4PS_SkyBox));
-			skyBoxShader->SetInputLayoutDesc(vecLayoutDesc2D);
-			skyBoxShader->CreateInputLayout();
-
-			skyBoxShader->SetRSState(eRSType::SolidFront);
-			skyBoxShader->SetDSState(eDSType::Less);
-			skyBoxShader->SetBSState(eBSType::Default);
-			ResMgr::Insert(strKey::Default::shader::graphics::SkyBoxShader, skyBoxShader);
-		}
-#pragma endregion
+//#pragma region SKY BOX SHADER
+//		{
+//			std::shared_ptr<GraphicsShader> skyBoxShader = std::make_shared<GraphicsShader>();
+//			skyBoxShader->SetEngineDefaultRes(true);
+//			skyBoxShader->CreateByHeader(eGSStage::VS, _0VS_SkyBox, sizeof(_0VS_SkyBox));
+//			skyBoxShader->CreateByHeader(eGSStage::PS, _4PS_SkyBox, sizeof(_4PS_SkyBox));
+//			skyBoxShader->SetInputLayoutDesc(vecLayoutDesc2D);
+//			skyBoxShader->CreateInputLayout();
+//
+//			skyBoxShader->SetRSState(eRSType::SolidFront);
+//			skyBoxShader->SetDSState(eDSType::Less);
+//			skyBoxShader->SetBSState(eBSType::Default);
+//			ResMgr::Insert(strKey::Default::shader::graphics::SkyBoxShader, skyBoxShader);
+//		}
+//#pragma endregion
 
 #pragma region 3D 기본 입력 레이아웃
 		std::vector<D3D11_INPUT_ELEMENT_DESC> vecLayoutDesc3D = vecLayoutDesc2D;
@@ -1216,8 +1216,8 @@ namespace mh
 		pTex = ResMgr::Load<Texture>(texture::Brick_N);
 		assert(nullptr != pTex);
 
-		pTex = ResMgr::Load<Texture>(texture::SkyBox_Water);
-		assert(nullptr != pTex);
+		//pTex = ResMgr::Load<Texture>(texture::SkyBox_Water);
+		//assert(nullptr != pTex);
 
 #pragma endregion
 #pragma region DYNAMIC TEXTURE
@@ -1555,17 +1555,17 @@ namespace mh
 
 		ResMgr::Insert(strKey::Default::material::MergeMaterial, mergeMaterial);
 #pragma endregion
-#pragma region SkyBox
-		std::shared_ptr<GraphicsShader> skyBoxShader = ResMgr::Find<GraphicsShader>(strKey::Default::shader::graphics::SkyBoxShader);
-		std::shared_ptr<Material> skyBoxMaterial = std::make_shared<Material>();
-		skyBoxMaterial->SetRenderingMode(eRenderingMode::Opaque);
-		skyBoxMaterial->SetShader(skyBoxShader);
-		
-		std::shared_ptr<Texture> skyBoxTexture = ResMgr::Find<Texture>(strKey::Default::texture::SkyBox_Water);
-		skyBoxMaterial->SetTexture(eTextureSlot::SkyBoxCube, skyBoxTexture);
-		
-		ResMgr::Insert(strKey::Default::material::SkyBoxMaterial, skyBoxMaterial);
-#pragma endregion
+//#pragma region SkyBox
+//		std::shared_ptr<GraphicsShader> skyBoxShader = ResMgr::Find<GraphicsShader>(strKey::Default::shader::graphics::SkyBoxShader);
+//		std::shared_ptr<Material> skyBoxMaterial = std::make_shared<Material>();
+//		skyBoxMaterial->SetRenderingMode(eRenderingMode::Opaque);
+//		skyBoxMaterial->SetShader(skyBoxShader);
+//		
+//		std::shared_ptr<Texture> skyBoxTexture = ResMgr::Find<Texture>(strKey::Default::texture::SkyBox_Water);
+//		skyBoxMaterial->SetTexture(eTextureSlot::SkyBoxCube, skyBoxTexture);
+//		
+//		ResMgr::Insert(strKey::Default::material::SkyBoxMaterial, skyBoxMaterial);
+//#pragma endregion
 	}
 
 

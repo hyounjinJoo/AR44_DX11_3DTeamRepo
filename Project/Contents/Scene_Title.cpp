@@ -159,17 +159,17 @@ namespace mh
 		//	tr->SetRelativePosXY(float2(200.f, 200.f));
 		//}
 
-		{
-			GameObject* skyBox = EventMgr::SpawnGameObject(eLayerType::Stage);
-			Com_Transform* tr = skyBox->AddComponent<Com_Transform>();
+		//{
+		//	GameObject* skyBox = EventMgr::SpawnGameObject(eLayerType::Stage);
+		//	Com_Transform* tr = skyBox->AddComponent<Com_Transform>();
 
-			tr->SetRelativePos(float3(0.0f, 0.0f, 0.0f));
-			tr->SetRelativeScale(float3(500.0f, 500.0f, 500.0f));
-			skyBox->SetName("SkyBox");
-			Com_Renderer_Mesh* mr = skyBox->AddComponent<Com_Renderer_Mesh>();
-			mr->SetMesh(ResMgr::Find<Mesh>(strKey::Default::mesh::CubeMesh));
-			mr->SetMaterial(ResMgr::Find<Material>(strKey::Default::material::SkyBoxMaterial), 0);
-		}
+		//	tr->SetRelativePos(float3(0.0f, 0.0f, 0.0f));
+		//	tr->SetRelativeScale(float3(500.0f, 500.0f, 500.0f));
+		//	skyBox->SetName("SkyBox");
+		//	Com_Renderer_Mesh* mr = skyBox->AddComponent<Com_Renderer_Mesh>();
+		//	mr->SetMesh(ResMgr::Find<Mesh>(strKey::Default::mesh::CubeMesh));
+		//	mr->SetMaterial(ResMgr::Find<Material>(strKey::Default::material::SkyBoxMaterial), 0);
+		//}
 		
 
 	}

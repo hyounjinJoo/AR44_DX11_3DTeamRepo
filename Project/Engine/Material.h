@@ -96,9 +96,9 @@ namespace mh
 		case 7u:
 			mCB.bTex_7 = bTex;
 			break;
-		case 8u:
-			mCB.bTexCube_0 = bTex;
-			break;
+		//case 8u:
+		//	mCB.bTexCube_0 = bTex;
+		//	break;
 		default:
 			MH_ASSERT(false);
 			break;
