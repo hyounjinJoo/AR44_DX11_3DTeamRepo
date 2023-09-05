@@ -51,10 +51,11 @@ namespace mh::define
 
 		STRKEY DirName_CompiledShader = "ShaderBin";
 		STRKEY Ext_CompiledShader = ".cso";
-		STRKEY Ext_Mesh = ".msh";
+		STRKEY Ext_Mesh = ".mesh";
 		STRKEY Ext_MeshData = ".json";
 		STRKEY Ext_Material = ".json";
-		STRKEY Ext_Skeleton = ".bne";
+		STRKEY Ext_Skeleton = ".bone";
+		STRKEY Ext_Anim3D = ".a3d";
 		STRKEY Ext_Tex[] =
 		{
 			
@@ -92,13 +93,13 @@ namespace mh::define
 				STRKEY_DECLARE(MergeMaterial);
 				STRKEY_DECLARE(LightDirMaterial);
 				STRKEY_DECLARE(LightPointMaterial);
+				STRKEY_DECLARE(SkyBoxMaterial);
 			}
 
 			namespace texture
 			{
 				STRKEY SmileTexture = "Smile.png";
 				STRKEY DefaultSprite = "Light.png";
-				STRKEY HPBarTexture = "HPBar.png";
 				STRKEY CartoonSmoke = "particle\\CartoonSmoke.png";
 				STRKEY noise_01 = "noise\\noise_01.png";
 				STRKEY noise_02 = "noise\\noise_02.png";
@@ -109,6 +110,7 @@ namespace mh::define
 				STRKEY Brick_N = "Cube\\Brick_N.jpg";
 				STRKEY PaintTexture = "PaintTexture";
 				STRKEY RenderTarget = "RenderTarget";
+				STRKEY SkyBox_Water = "SkyWater.dds";
 			}
 
 			namespace shader
@@ -129,6 +131,7 @@ namespace mh::define
 					STRKEY_DECLARE(LightDirShader);
 					STRKEY_DECLARE(LightPointShader);
 					STRKEY_DECLARE(MergeShader);
+					STRKEY_DECLARE(SkyBoxShader);
 				}
 				namespace compute
 				{

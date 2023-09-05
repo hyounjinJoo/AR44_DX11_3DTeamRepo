@@ -462,14 +462,14 @@ namespace BrainTree
 
             if (useSuccessFailPolicy) {
                 if (successOnAll) {
-                    minimumSuccess = children.size();
+                    minimumSuccess = (int)children.size();
                 }
                 else {
                     minimumSuccess = 1;
                 }
 
                 if (failOnAll) {
-                    minimumFail = children.size();
+                    minimumFail = (int)children.size();
                 }
                 else {
                     minimumFail = 1;

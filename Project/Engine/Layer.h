@@ -15,7 +15,7 @@ namespace mh
 		virtual void Render();
 		virtual void Destroy();
 
-		void AddGameObject(GameObject* gameObject, bool _bNeedInit = false);
+		void AddGameObject(GameObject* gameObject);
 		void RemoveGameObject(const GameObject* gameObject);
 		const std::vector<GameObject*>& GetGameObjects() { return mGameObjects; }
 		std::vector<GameObject*> GetDontDestroyGameObjects();

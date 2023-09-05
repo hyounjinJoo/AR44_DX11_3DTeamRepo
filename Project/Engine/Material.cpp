@@ -36,18 +36,20 @@ namespace mh
     {
     }
 
-    eResult Material::Save(const std::filesystem::path& _path)
+    eResult Material::Save(const std::fs::path& _filePath)
     {
-        std::fs::path fullPath = PathMgr::GetContentPathRelative(GetResType());
-        if (false == std::fs::exists(fullPath))
-        {
-            std::fs::create_directories(fullPath);
-        }
-        fullPath /= _path;
+        IRes::Save(_filePath);
+        std::fs::path fullPath = PathMgr::CreateFullPathToContent(_filePath, GetResType());
+        fullPath.replace_extension(strKey::Ext_Material);
+
 
         std::ofstream ofs(fullPath);
         if (false == ofs.is_open())
+        {
+            ERROR_MESSAGE_W(L"파일 열기에 실패했습니다.");
             return eResult::Fail_OpenFile;
+        }
+            
 
         Json::Value jVal{};
         eResult result = SaveJson(&jVal);
@@ -60,16 +62,15 @@ namespace mh
         return eResult::Success;
     }
 
-    eResult Material::Load(const std::filesystem::path& _path)
+    eResult Material::Load(const std::fs::path& _filePath)
     {
-        std::fs::path fullPath = PathMgr::GetContentPathRelative(GetResType());
+        IRes::Load(_filePath);
+        std::fs::path fullPath = PathMgr::CreateFullPathToContent(_filePath, GetResType());
+        fullPath.replace_extension(strKey::Ext_Material);
         if (false == std::fs::exists(fullPath))
         {
-            std::fs::create_directories(fullPath);
-            ERROR_MESSAGE_W(L"Material 폴더가 없습니다.");
-            return eResult::Fail_PathNotExist;
+            return eResult::Fail_OpenFile;
         }
-        fullPath /= _path;
 
         std::ifstream ifs(fullPath);
         if (false == ifs.is_open())
@@ -118,10 +119,7 @@ namespace mh
         {
             jVal[JSON_KEY(mShader)] = mShader->GetKey();
         }
-        
         Json::MH::SavePtrStrKeyVector(_pJVal, JSON_KEY_PAIR(mTextures));
-
-
 
         return eResult::Success;
     }
@@ -150,6 +148,7 @@ namespace mh
         std::string shaderStrKey = Json::MH::LoadPtrStrKey(_pJVal, JSON_KEY_PAIR(mShader));
         if (false == shaderStrKey.empty())
         {
+            //쉐이더는 Base Path를 사용하지 않는다
             SetShader(ResMgr::Load<GraphicsShader>(shaderStrKey));
         }
         
@@ -162,39 +161,9 @@ namespace mh
                 SetTexture((eTextureSlot)i, ResMgr::Load<Texture>(vecLoad[i]));
             }
         }
-
-
-
         return eResult::Success;
     }
 
-    void Material::SetData(eGPUParam _param, void* _data)
-    {
-        /*switch (_param)
-        {
-        case mh::eGPUParam::Int:
-            mCB.iData = *static_cast<int*>(_data);
-            break;
-        case mh::eGPUParam::Float:
-            mCB.fData = *static_cast<float*>(_data);
-            break;
-        case mh::eGPUParam::float2:
-            mCB.XY = *static_cast<float2*>(_data);
-            break;
-        case mh::eGPUParam::float3:
-            mCB.XYZ = *static_cast<float3*>(_data);
-            break;
-        case mh::eGPUParam::float4:
-            mCB.XYZW = *static_cast<float4*>(_data);
-            break;
-        case mh::eGPUParam::MATRIX:
-            mCB.MATRIX = *static_cast<MATRIX*>(_data);
-            break;
-        default:
-            break;
-        }*/
-
-    }
 
     void Material::BindData()
     {

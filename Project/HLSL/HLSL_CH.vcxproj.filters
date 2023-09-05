@@ -1,52 +1,51 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <FxCompile Include="_0VS_CH.hlsl" />
-  </ItemGroup>
-  <ItemGroup>
-    <Filter Include="Engine">
-      <UniqueIdentifier>{39bf2ce7-5d51-4ae0-b227-1422390e1b79}</UniqueIdentifier>
-    </Filter>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="SH_Blur.hlsli">
-      <Filter>Engine</Filter>
-    </None>
-    <None Include="SH_ConstBuffer.hlsli">
-      <Filter>Engine</Filter>
-    </None>
-    <None Include="SH_Func.hlsli">
-      <Filter>Engine</Filter>
-    </None>
-    <None Include="SH_Globals.hlsli">
-      <Filter>Engine</Filter>
-    </None>
-    <None Include="SH_Light.hlsli">
-      <Filter>Engine</Filter>
-    </None>
-    <None Include="SH_Resource.hlsli">
-      <Filter>Engine</Filter>
-    </None>
-    <None Include="SH_Sampler.hlsli">
-      <Filter>Engine</Filter>
-    </None>
+    <None Include="UIBasic.hlsli" />
     <None Include="SH_Common.hlsli">
-      <Filter>Engine</Filter>
+      <Filter>Default Headers</Filter>
     </None>
     <None Include="SH_CommonStruct.hlsli">
-      <Filter>Engine</Filter>
+      <Filter>Default Headers</Filter>
+    </None>
+    <None Include="SH_ConstBuffer.hlsli">
+      <Filter>Default Headers</Filter>
     </None>
     <None Include="SH_Func_Blur.hlsli">
-      <Filter>Engine</Filter>
+      <Filter>Default Headers</Filter>
     </None>
     <None Include="SH_Func_DecodeColor.hlsli">
-      <Filter>Engine</Filter>
+      <Filter>Default Headers</Filter>
     </None>
     <None Include="SH_Func_Light.hlsli">
-      <Filter>Engine</Filter>
+      <Filter>Default Headers</Filter>
     </None>
     <None Include="SH_Functions.hlsli">
-      <Filter>Engine</Filter>
+      <Filter>Default Headers</Filter>
     </None>
+    <None Include="SH_Globals.hlsli">
+      <Filter>Default Headers</Filter>
+    </None>
+    <None Include="SH_Resource.hlsli">
+      <Filter>Default Headers</Filter>
+    </None>
+    <None Include="SH_Sampler.hlsli">
+      <Filter>Default Headers</Filter>
+    </None>
+    <None Include="SH_UserInterFace.hlsli">
+      <Filter>Default Headers</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="_4PS_UIGauge.hlsl" />
+    <FxCompile Include="_0VS_UIBasic.hlsl" />
+    <FxCompile Include="_4PS_UIBasic.hlsl" />
+    <FxCompile Include="_4PS_UIButton.hlsl" />
+    <FxCompile Include="_4PS_UICustomGauge.hlsl" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Default Headers">
+      <UniqueIdentifier>{c1f02bae-a64d-42f0-990b-de86e8b1621b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
 </Project>

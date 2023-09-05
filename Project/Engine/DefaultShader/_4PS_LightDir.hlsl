@@ -19,10 +19,10 @@ PS_OUT main(VSOut _in)
 	CalculateLight3D(vViewPos.xyz, vViewNormal.xyz, CB_NumberOfLight.indexOfLight, lightcolor);
     
 	float SpecCoef = SpecularTarget.Sample(anisotropicSampler, vUV).x;
-	float4 vSpec = DecodeColor(SpecCoef);
+	float4 SpecularColor = DecodeColor(SpecCoef);
 
 	output.vDiffuse = lightcolor.diffuse + lightcolor.ambient;
-	output.vSpecular = lightcolor.specular; // * vSpec.xyz;
+	output.vSpecular = lightcolor.specular; // * SpecularColor.xyz;
        
 	output.vDiffuse.a = 1.f;
 	output.vSpecular.a = 1.f;

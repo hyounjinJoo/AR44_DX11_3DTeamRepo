@@ -22,17 +22,11 @@
     <Filter Include="Resource\Mesh">
       <UniqueIdentifier>{5ddde7d6-5dbf-4474-8ff2-f014eaefe47e}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Resource\Manager">
-      <UniqueIdentifier>{566c056d-bc1c-4a66-9874-1eb8b38721ee}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Resource\Material">
       <UniqueIdentifier>{b120460a-4944-428f-b9a0-e7253c288eab}</UniqueIdentifier>
     </Filter>
     <Filter Include="Resource\Texture">
       <UniqueIdentifier>{2e19c4b5-25ef-434b-bb7c-23ab21873a44}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Resource\Script">
-      <UniqueIdentifier>{bd5eb4ff-9f54-4ada-b23b-dd4130c98faf}</UniqueIdentifier>
     </Filter>
     <Filter Include="Scene\Base">
       <UniqueIdentifier>{2bf45b05-0f71-4108-ade3-0f445677916d}</UniqueIdentifier>
@@ -160,9 +154,6 @@
     <Filter Include="Component\Audio">
       <UniqueIdentifier>{326cbbf6-1cb8-4ba7-bc32-aa2759b923f9}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Component\0. Transform">
-      <UniqueIdentifier>{62546181-5d07-413f-a9e5-329a0986165d}</UniqueIdentifier>
-    </Filter>
     <Filter Include="GuiEditor\Instances">
       <UniqueIdentifier>{ded79648-f1d7-43d2-957c-11c1b95a2e71}</UniqueIdentifier>
     </Filter>
@@ -178,17 +169,14 @@
     <Filter Include="GuiEditor\_Widget">
       <UniqueIdentifier>{bee12466-3d3c-47b5-bb11-8b335dcb2882}</UniqueIdentifier>
     </Filter>
-    <Filter Include="BrainTree">
-      <UniqueIdentifier>{9f929c3a-2797-410f-ba34-0afdda3b44c2}</UniqueIdentifier>
+    <Filter Include="Resource\Animation">
+      <UniqueIdentifier>{fa962df9-8edc-4f9e-8aad-0262d0039dc4}</UniqueIdentifier>
     </Filter>
-    <Filter Include="BrainTree\example">
-      <UniqueIdentifier>{0779c46a-601a-434f-a7bd-493e0dc8231c}</UniqueIdentifier>
+    <Filter Include="Component\Transform">
+      <UniqueIdentifier>{62546181-5d07-413f-a9e5-329a0986165d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Component\BehaviorTree">
-      <UniqueIdentifier>{9f2824fc-8560-461f-bea1-12574c1a86ed}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Component\BehaviorTree\BaseNode">
-      <UniqueIdentifier>{7b0e1310-896b-4a53-ad81-2637d639de31}</UniqueIdentifier>
+    <Filter Include="_DefaultShader\SkyBox">
+      <UniqueIdentifier>{ed87cfb8-b92a-4693-a147-6d202ba467a5}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -216,20 +204,11 @@
     <ClCompile Include="IRenderer.cpp">
       <Filter>Component\Renderer</Filter>
     </ClCompile>
-    <ClCompile Include="Script_Player.cpp">
-      <Filter>Component\Script\Contents</Filter>
-    </ClCompile>
     <ClCompile Include="Com_Camera.cpp">
       <Filter>Component\Camera</Filter>
     </ClCompile>
-    <ClCompile Include="Script_Camera.cpp">
-      <Filter>Component\Script</Filter>
-    </ClCompile>
     <ClCompile Include="Com_Renderer_Sprite.cpp">
       <Filter>Component\Renderer</Filter>
-    </ClCompile>
-    <ClCompile Include="GridScript.cpp">
-      <Filter>Resource\Script</Filter>
     </ClCompile>
     <ClCompile Include="Layer.cpp">
       <Filter>Scene\Layer</Filter>
@@ -254,9 +233,6 @@
     </ClCompile>
     <ClCompile Include="Monster.cpp">
       <Filter>Component\Script\Contents</Filter>
-    </ClCompile>
-    <ClCompile Include="Animation2D.cpp">
-      <Filter>Component\Animator</Filter>
     </ClCompile>
     <ClCompile Include="Com_Animator2D.cpp">
       <Filter>Component\Animator</Filter>
@@ -326,7 +302,7 @@
       <Filter>Component</Filter>
     </ClCompile>
     <ClCompile Include="Com_Transform.cpp">
-      <Filter>Component\0. Transform</Filter>
+      <Filter>Component\Transform</Filter>
     </ClCompile>
     <ClCompile Include="Com_AudioSource.cpp">
       <Filter>Component\Audio</Filter>
@@ -460,16 +436,13 @@
     </ClCompile>
     <ClCompile Include="Skeleton.cpp" />
     <ClCompile Include="ITransform.cpp">
-      <Filter>Component\0. Transform</Filter>
-    </ClCompile>
-    <ClCompile Include="ILight.cpp">
-      <Filter>Component</Filter>
+      <Filter>Component\Transform</Filter>
     </ClCompile>
     <ClCompile Include="Com_Renderer_Mesh.cpp">
       <Filter>Component\Renderer</Filter>
     </ClCompile>
     <ClCompile Include="Com_DummyTransform.cpp">
-      <Filter>Component\0. Transform</Filter>
+      <Filter>Component\Transform</Filter>
     </ClCompile>
     <ClCompile Include="Com_Renderer_3DAnimMesh.cpp">
       <Filter>Component\Renderer</Filter>
@@ -499,18 +472,26 @@
       <Filter>GuiEditor\Instances</Filter>
     </ClCompile>
     <ClCompile Include="guiFBXConverter.cpp" />
+    <ClCompile Include="Animation2D.cpp">
+      <Filter>Resource\Animation</Filter>
+    </ClCompile>
+    <ClCompile Include="Animation3D.cpp">
+      <Filter>Resource\Animation</Filter>
+    </ClCompile>
+    <ClCompile Include="Com_Renderer_UIBase.cpp">
+      <Filter>Component\Renderer</Filter>
+    </ClCompile>
     <ClCompile Include="ImGuizmo.cpp">
       <Filter>ImGui</Filter>
     </ClCompile>
-    <ClCompile Include="BrainTree\example\Example01_Simple.cpp">
-      <Filter>BrainTree\example</Filter>
-    </ClCompile>
     <ClCompile Include="Com_BehaviorTree.cpp">
-      <Filter>Component\BehaviorTree</Filter>
+      <Filter>Component</Filter>
     </ClCompile>
-    <ClCompile Include="BTActionExample.cpp">
-      <Filter>Component\BehaviorTree\BaseNode</Filter>
+    <ClCompile Include="BTActionExample.cpp" />
+    <ClCompile Include="ILight.cpp">
+      <Filter>Component\Light</Filter>
     </ClCompile>
+    <ClCompile Include="GridScript.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application.h">
@@ -543,20 +524,11 @@
     <ClInclude Include="IRenderer.h">
       <Filter>Component\Renderer</Filter>
     </ClInclude>
-    <ClInclude Include="Script_Player.h">
-      <Filter>Component\Script\Contents</Filter>
-    </ClInclude>
     <ClInclude Include="Com_Camera.h">
       <Filter>Component\Camera</Filter>
     </ClInclude>
-    <ClInclude Include="Script_Camera.h">
-      <Filter>Component\Script</Filter>
-    </ClInclude>
     <ClInclude Include="Com_Renderer_Sprite.h">
       <Filter>Component\Renderer</Filter>
-    </ClInclude>
-    <ClInclude Include="GridScript.h">
-      <Filter>Resource\Script</Filter>
     </ClInclude>
     <ClInclude Include="Layer.h">
       <Filter>Scene\Layer</Filter>
@@ -583,9 +555,6 @@
       <Filter>Component\Script\Contents</Filter>
     </ClInclude>
     <ClInclude Include="Com_Animator2D.h">
-      <Filter>Component\Animator</Filter>
-    </ClInclude>
-    <ClInclude Include="Animation2D.h">
       <Filter>Component\Animator</Filter>
     </ClInclude>
     <ClInclude Include="PaintShader.h">
@@ -680,7 +649,7 @@
       <Filter>Component</Filter>
     </ClInclude>
     <ClInclude Include="Com_Transform.h">
-      <Filter>Component\0. Transform</Filter>
+      <Filter>Component\Transform</Filter>
     </ClInclude>
     <ClInclude Include="Com_AudioSource.h">
       <Filter>Component\Audio</Filter>
@@ -832,16 +801,13 @@
     </ClInclude>
     <ClInclude Include="Skeleton.h" />
     <ClInclude Include="ITransform.h">
-      <Filter>Component\0. Transform</Filter>
-    </ClInclude>
-    <ClInclude Include="ILight.h">
-      <Filter>Component</Filter>
+      <Filter>Component\Transform</Filter>
     </ClInclude>
     <ClInclude Include="Com_Renderer_Mesh.h">
       <Filter>Component\Renderer</Filter>
     </ClInclude>
     <ClInclude Include="Com_DummyTransform.h">
-      <Filter>Component\0. Transform</Filter>
+      <Filter>Component\Transform</Filter>
     </ClInclude>
     <ClInclude Include="Com_Renderer_3DAnimMesh.h">
       <Filter>Component\Renderer</Filter>
@@ -874,18 +840,26 @@
     <ClInclude Include="Shader_Common.h">
       <Filter>Common\define</Filter>
     </ClInclude>
+    <ClInclude Include="Animation2D.h">
+      <Filter>Resource\Animation</Filter>
+    </ClInclude>
+    <ClInclude Include="Animation3D.h">
+      <Filter>Resource\Animation</Filter>
+    </ClInclude>
+    <ClInclude Include="Com_Renderer_UIBase.h">
+      <Filter>Component\Renderer</Filter>
+    </ClInclude>
     <ClInclude Include="ImGuizmo.h">
       <Filter>ImGui</Filter>
     </ClInclude>
-    <ClInclude Include="BrainTree\BrainTree.h">
-      <Filter>BrainTree</Filter>
-    </ClInclude>
     <ClInclude Include="Com_BehaviorTree.h">
-      <Filter>Component\BehaviorTree</Filter>
+      <Filter>Component</Filter>
     </ClInclude>
-    <ClInclude Include="BTActionExample.h">
-      <Filter>Component\BehaviorTree\BaseNode</Filter>
+    <ClInclude Include="BTActionExample.h" />
+    <ClInclude Include="ILight.h">
+      <Filter>Component\Light</Filter>
     </ClInclude>
+    <ClInclude Include="GridScript.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="cpp.hint">
@@ -936,9 +910,6 @@
     <None Include="DefaultShader\SH_Merge.hlsli">
       <Filter>_DefaultShader\Deffered</Filter>
     </None>
-    <None Include="DefaultShader\SH_Basic3D.hlsli">
-      <Filter>_DefaultShader\Basic3D</Filter>
-    </None>
     <None Include="SimpleMath.inl">
       <Filter>Common\Math</Filter>
     </None>
@@ -953,6 +924,15 @@
     </None>
     <None Include="DefaultShader\SH_Animation2D.hlsli">
       <Filter>_DefaultShader\Animation\2D</Filter>
+    </None>
+    <None Include="DefaultShader\SH_Basic3D.hlsli">
+      <Filter>_DefaultShader\Basic3D</Filter>
+    </None>
+    <None Include="DefaultShader\SH_UserInterFace.hlsli">
+      <Filter>_DefaultShader\UI</Filter>
+    </None>
+    <None Include="DefaultShader\SH_SkyBox.hlsli">
+      <Filter>_DefaultShader\SkyBox</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
@@ -1039,6 +1019,12 @@
     </FxCompile>
     <FxCompile Include="DefaultShader\CS_Animation3D.hlsl">
       <Filter>_DefaultShader\Animation\3D</Filter>
+    </FxCompile>
+    <FxCompile Include="DefaultShader\_0VS_SkyBox.hlsl">
+      <Filter>_DefaultShader\SkyBox</Filter>
+    </FxCompile>
+    <FxCompile Include="DefaultShader\_4PS_SkyBox.hlsl">
+      <Filter>_DefaultShader\SkyBox</Filter>
     </FxCompile>
   </ItemGroup>
   <ItemGroup>

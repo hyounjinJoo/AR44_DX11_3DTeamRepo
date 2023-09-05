@@ -35,8 +35,8 @@ namespace mh
         StructBuffer();
         StructBuffer(const tSBufferDesc& _tDesc);
 
-        //StructBuffer(const StructBuffer& _other);
-        //CLONE(StructBuffer);
+        StructBuffer(const StructBuffer& _other);
+        CLONE(StructBuffer);
 
         virtual ~StructBuffer();
 
@@ -55,9 +55,9 @@ namespace mh
         uint GetStride() const { return mElementStride; }
 
         template <typename T>
-        HRESULT Create(size_t _ElementCapacity, void* _pInitialData, size_t _ElemCount);
+        HRESULT Create(size_t _ElementCapacity, const void* _pInitialData, size_t _ElemCount);
         //처음 생성할 때 반드시 목표 파이프라인 타겟과 레지스터 번호를 설정해줄 것
-        HRESULT Create(size_t _ElementStride, size_t _ElementCapacity, void* _pInitialData, size_t _ElemCount);
+        HRESULT Create(size_t _ElementStride, size_t _ElementCapacity, const void* _pInitialData, size_t _ElemCount);
 
         //데이터를 버퍼로 전송
         void SetData(void* _pData, size_t _uCount);
@@ -110,7 +110,7 @@ namespace mh
     }
 
     template<typename T>
-    inline HRESULT StructBuffer::Create(size_t _ElementCapacity, void* _pInitialData, size_t _ElemCount)
+    inline HRESULT StructBuffer::Create(size_t _ElementCapacity, const void* _pInitialData, size_t _ElemCount)
     {
         return Create(sizeof(T), _ElementCapacity, _pInitialData, _ElemCount);
     }

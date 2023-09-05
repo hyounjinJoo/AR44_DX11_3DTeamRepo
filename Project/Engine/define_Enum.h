@@ -44,6 +44,7 @@ namespace mh
 			Stage,
 			Monster,
 			Player,
+			Stage,
 
 			tParticle,
 			PostProcess,

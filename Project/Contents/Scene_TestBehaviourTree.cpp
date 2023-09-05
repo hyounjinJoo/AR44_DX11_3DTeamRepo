@@ -22,7 +22,7 @@ namespace mh
 
 	void Scene_TestBehaviourTree::Init()
 	{
-		GameObject* testObj = EventMgr::SpawnGameObject(new GameObject, eLayerType::Player);
+		GameObject* testObj = EventMgr::SpawnGameObject(eLayerType::Player);
 		Com_BehaviorTree* testBT = testObj->AddComponent<Com_BehaviorTree>();
 
 		auto repeater = std::make_shared<BrainTree::Repeater>(5);

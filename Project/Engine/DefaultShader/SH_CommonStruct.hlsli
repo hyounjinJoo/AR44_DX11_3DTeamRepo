@@ -2,9 +2,6 @@
 #define SH_COMMON_STRUCT
 #include "SH_Common.hlsli"
 
-
-
-
 //C++와 공동으로 사용하는 구조체 모음
 
 struct alignas(16)  tCB_Global
@@ -38,6 +35,7 @@ struct alignas(16) tCB_MaterialData
 	BOOL bTex_5;
 	BOOL bTex_6;
 	BOOL bTex_7;
+	BOOL bTexCube_0;
 	
 	float4 Diff;
 	float4 Spec;
@@ -47,7 +45,7 @@ struct alignas(16) tCB_MaterialData
 	// 3D Animation 정보
 	BOOL bAnim;
 	int BoneCount;
-	int2 Padding_Material;
+	int Padding_Material;
 };
 
 struct alignas(16)   tCB_ComputeShader
@@ -133,10 +131,21 @@ struct alignas(16) tCB_SBufferCount
 
 struct alignas(16)  tCB_Animation3D
 {
-	int BoneCount;
-	int CurFrameIdx;
-	int NextFrameIdx;
-	float FrameRatio;
+	int			BoneCount;		//본 갯수
+	int			CurrentFrame;	//현재 프레임
+	int			NextFrame;		//다음 프레임
+	float		FrameRatio;		//프레임 진행 비율
+	int			FrameLength;	//프레임 장수
+	
+	//Instancing 관련
+	int			RowIndex;
+	
+	//Animation Blending 관련
+	BOOL		bChangingAnim;
+	float		ChangeRatio;
+	int			ChangeFrameLength;
+	int			ChangeFrameIdx;
+	float2		Padding_Animation3D;
 };
 
 struct alignas(16)  tCB_UniformData
@@ -189,22 +198,30 @@ struct alignas(16)  tLightAttribute
 
 
 
-struct alignas(16) tFrameTranslation
+struct alignas(16) tAnimKeyframeTranslation
 {
-	float4 vTranslate;
-	float4 vScale;
-	float4 qRot;
+	float4 Pos;
+	float4 Scale;
+	float4 RotQuat;
 };
 
 struct alignas(16)  tSkinningInfo
 {
-	float3 vPos;
-	float3 vTangent;
-	float3 vBinormal;
-	float3 vNormal;
+	float3 Pos;
+	float3 Tangent;
+	float3 Binormal;
+	float3 Normal;
 };
 
-
+struct tOutputBoneInfo
+{
+	MATRIX matBone;
+	float3 Pos;
+	float Empty1;
+	float3 Scale;
+	float Empty2;
+	float4 RotQuat;
+};
 
 
 #endif//SH_COMMON_STRUCT

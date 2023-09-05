@@ -387,8 +387,10 @@ Res/
 
 # Exclude Shader header
 CompiledShaderHeader/
+
 *.zip
 *.fbx
 *.json
 *.blend
 *.bne
+

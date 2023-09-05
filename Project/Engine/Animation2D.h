@@ -35,7 +35,7 @@ namespace mh
 
 		virtual ~Animation2D();
 
-		virtual eResult Load(const std::filesystem::path& _fileName) override;
+		virtual eResult Load(const std::filesystem::path& _filePath) override { return eResult::Fail_NotImplemented; }
 		virtual eResult SaveJson(Json::Value* _pJVal) override;
 		virtual eResult LoadJson(const Json::Value* _pJVal) override;
 

@@ -19,8 +19,8 @@ namespace mh
 		, mSRV()
 		, mUAV()
 		, mStagingBuffer()
-		, mCurBoundView()
 		, mCurBoundRegister(-1)
+		, mCurBoundView()
 	{
 	}
 
@@ -41,27 +41,25 @@ namespace mh
 	}
 
 
-	//StructBuffer::StructBuffer(const StructBuffer& _other)
-	//	: IEntity(_other)
-	//	, mBufferDesc(_other.mBufferDesc)
-	//	, mSBufferDesc(_other.mSBufferDesc)
-	//	, mbSBufferDescSet(_other.mbSBufferDescSet)
-	//	, mElementStride()
-	//	, mElementCount()
-	//	, mElementCapacity()
-	//	, mBuffer()
-	//	, mSRV()
-	//	, mUAV()
-	//	, mStagingBuffer()
-	//	, mCurBoundView()
-	//{
-	//	SetDesc(_other.mSBufferDesc);
-
-	//	if (mbSBufferDescSet)
-	//	{
-	//		Create(_other.mElementStride, _other.mElementCapacity, nullptr, 0u);
-	//	}
-	//}
+	StructBuffer::StructBuffer(const StructBuffer& _other)
+		: GPUBuffer(_other)
+		, mSBufferDesc()
+		, mbSBufferDescSet()
+		, mElementStride()
+		, mElementCount()
+		, mElementCapacity()
+		, mSRV()
+		, mUAV()
+		, mStagingBuffer()
+		, mCurBoundView()
+		, mCurBoundRegister(-1)
+	{
+		SetDesc(_other.mSBufferDesc);
+		if (mbSBufferDescSet)
+		{
+			Create(_other.mElementStride, _other.mElementCapacity, nullptr, 0u);
+		}
+	}
 
 	StructBuffer::~StructBuffer()
 	{
@@ -71,7 +69,7 @@ namespace mh
 
 
 
-	HRESULT StructBuffer::Create(size_t _uElemStride, size_t _uElemCapacity, void* _pInitialData, size_t _uElemCount)
+	HRESULT StructBuffer::Create(size_t _uElemStride, size_t _uElemCapacity, const void* _pInitialData, size_t _uElemCount)
 	{
 		if (false == mbSBufferDescSet)
 		{

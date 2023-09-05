@@ -1,16 +1,4 @@
-#include "SH_Globals.hlsli"
-struct VSIn
-{
-    float4 Pos : POSITION;
-    float2 UV : TEXCOORD;
-};
-
-struct VSOut
-{
-    float4 Pos : SV_Position;
-    float2 UV : TEXCOORD;
-};
-
+#include "SH_UserInterFace.hlsli"
 VSOut main(VSIn In)
 {
     VSOut Out = (VSOut) 0.f;

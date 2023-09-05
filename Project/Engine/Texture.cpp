@@ -160,38 +160,30 @@ namespace mh
 		return Result;
 	}
 
-	eResult Texture::Load(const std::filesystem::path& _FileName)
+	eResult Texture::Load(const std::filesystem::path& _filePath)
 	{
-		eResult result = eResult::Fail;
-		std::fs::path resPath = PathMgr::GetContentPathRelative(GetResType());
-		if (false == std::fs::exists(resPath))
+		IRes::Load(_filePath);
+
+		std::fs::path fullPath = PathMgr::CreateFullPathToContent(_filePath, GetResType());
+
+		if (false == std::fs::exists(fullPath))
 		{
-			std::fs::create_directories(resPath);
 			ERROR_MESSAGE_W(L"파일이 없습니다.");
-			return eResult::Fail_PathNotExist;
+			return eResult::Fail_OpenFile;
 		}
-		
-		result = LoadFile(resPath / _FileName);
+
+
+		eResult result = LoadFile(fullPath);
 
 		if (eResult::Success == result)
 		{
 			InitializeResource();
 		}
-
 		return result;
 	}
 
 	eResult Texture::LoadFile(const std::filesystem::path& _fullPath)
 	{
-		if (false == std::fs::exists(_fullPath))
-		{
-
-			std::fs::path curpath = std::fs::current_path();
-
-			ERROR_MESSAGE_W(L"파일이 존재하지 않습니다.");
-			return eResult::Fail_PathNotExist;
-		}
-
 		std::wstring Extension = _fullPath.extension().wstring();
 		StringConv::UpperCase(Extension);
 

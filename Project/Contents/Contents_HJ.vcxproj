@@ -19,16 +19,10 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Scene_TestBehaviourTree.h">
-      <SubType>
-      </SubType>
-    </ClInclude>
+    <ClCompile Include="Scene_TestBehaviourTree.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Scene_TestBehaviourTree.cpp">
-      <SubType>
-      </SubType>
-    </ClCompile>
+    <ClInclude Include="Scene_TestBehaviourTree.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>

@@ -2,12 +2,17 @@
 #include "define_Enum.h"
 #include "define_Macro.h"
 #include "json-cpp/json-forwards.h"
-
-#include <filesystem>
 #include <string>
+#include <filesystem>
+namespace std
+{
+	namespace fs = filesystem;
+}
+
 
 namespace mh
 {
+	using namespace define;
 	namespace define::strKey::Json::Entity
 	{
 		STRKEY_DECLARE(mStrKey);
@@ -20,6 +25,8 @@ namespace mh
 
 		Entity(const Entity& _other);
 		virtual Entity* Clone() { ERROR_MESSAGE_W(L"이 클래스는 Clone할수 없습니다."); return nullptr; }
+
+		Entity(Entity&& _move);
 
 		virtual ~Entity();
 

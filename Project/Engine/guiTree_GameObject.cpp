@@ -19,12 +19,11 @@ namespace gui
 		: guiWindow(strKey::GameObjects)
 		, mTreeWidget(nullptr)
 	{
-
 		int2 winSize = mh::Application::GetWindowSize();
 		//SetSize(ImVec2((float)(winSize.x / 2), (float)(winSize.y / 2)));
 
 		mTreeWidget = AddChild<TreeWidget>();
-		//AddChild(mTreeWidget);
+		
 
 		mTreeWidget->SetEvent(this
 			, std::bind(&guiTree_GameObject::GameobjectSelectCallback, this, std::placeholders::_1));
@@ -41,7 +40,9 @@ namespace gui
 
 	void guiTree_GameObject::Update()
 	{
+		
 	}
+
 
 
 	void guiTree_GameObject::GameobjectSelectCallback(mh::define::tDataPtr _data)
@@ -71,6 +72,8 @@ namespace gui
 				AddGameObject(root, obj);
 			}
 		}
+
+		mTreeWidget->SetEnable(true);
 	}
 
 	void guiTree_GameObject::AddGameObject(TreeWidget::tNode* parent, mh::GameObject* gameObject)

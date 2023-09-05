@@ -1,6 +1,6 @@
 #pragma once
 #include "ITransform.h"
-#include "SimpleMath.h"
+#include "DefaultShader/SH_CommonStruct.hlsli"
 
 namespace mh
 {
@@ -24,8 +24,6 @@ namespace mh
         //virtual void Init() override;
         //virtual void Update() override;
         virtual void FixedUpdate() override;
-        virtual void Render() override;
-
         virtual void BindData() override; 
 
     public:
@@ -155,7 +153,6 @@ namespace mh
         bool    mbInheritRot;
         bool    mbLockRotation; //자신의 회전 방지
 
-
         //상속 형태로 업데이트가 필요한지 여부를 저장.
         //위치가 변하지 않았는데 굳이 월드행렬을 업데이트 할 필요가 없음.
         //mMatRelative를 업데이트 해야하는지 여부가 저장되어있음.
@@ -164,6 +161,8 @@ namespace mh
 
         //Size는 자신에게만 적용되는 고유값이므로 재귀형으로 전달할 필요 없음.
         bool    mbSizeUpdated;
+
+        tCB_Transform mCB_Transform;
     };
 
 

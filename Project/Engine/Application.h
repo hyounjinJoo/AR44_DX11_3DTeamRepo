@@ -42,7 +42,7 @@ namespace mh
 
 		static HWND GetHwnd() { return mHwnd; }
 
-		static void AddDestroyFunc(const std::function<void()>& _Func) { mEndFrameFuncs.push_back(_Func); }
+		static void AddEndFrameFunc(const std::function<void()>& _Func) { mEndFrameFuncs.push_back(_Func); }
 
 		static void ShutDown() { mbInitialized = false; }
 

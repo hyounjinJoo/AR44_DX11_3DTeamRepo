@@ -8,13 +8,11 @@ namespace mh
 	struct Vertex2D
 	{
 		float4 Pos;
-		float4 Color;
 		float2 UV;
 	};
 	struct Vertex3D
 	{
 		float4 Pos;
-		float4 Color;
 		float2 UV;
 		float3 Tangent;	//접선 벡터
 		float3 Normal;	//법선 벡터
@@ -50,8 +48,8 @@ namespace mh
 
 		eResult CreateFromContainer(const tFBXContainer* _fbxContainer);
 
-		virtual eResult Save(const std::filesystem::path& _path) override;
-		virtual eResult Load(const std::filesystem::path& _path) override;
+		virtual eResult Save(const std::fs::path& _filePath) override;										
+		virtual eResult Load(const std::fs::path& _filePath) override;
 
 		template <typename Vertex>
 		inline bool Create(const std::vector<Vertex>& _vecVtx, const std::vector<uint>& _vecIdx);
@@ -72,8 +70,8 @@ namespace mh
 		//const std::vector<Vertex3D> GetVertices() { return mVertices; }
 		UINT GetSubsetCount() const { return (UINT)mIndexInfos.size(); }
 
-		void SetSkeleton(Skeleton* _pSkeleton) { mSkeleton = _pSkeleton; }
-		Skeleton* GetSkeleton() const { return mSkeleton; }
+		void SetSkeleton(std::shared_ptr<Skeleton> _pSkeleton) { mSkeleton = _pSkeleton; }
+		std::shared_ptr<Skeleton> GetSkeleton() const { return mSkeleton; }
 
 
 	private:
@@ -96,7 +94,7 @@ namespace mh
 		std::vector<tIndexInfo>		mIndexInfos;
 
 		//주소는 MeshData에서 관리
-		Skeleton* mSkeleton;
+		std::shared_ptr<Skeleton> mSkeleton;
 	};
 
 

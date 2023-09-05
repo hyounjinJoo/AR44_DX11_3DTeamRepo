@@ -2,13 +2,10 @@
 #include "SceneMgr.h"
 
 #include "Com_Camera.h"
-#include "Script_Camera.h"
 
 #include "GridScript.h"
 
 #include "Com_Renderer_Mesh.h"
-
-#include "Script_Player.h"
 
 #include "RenderMgr.h"
 #include "ResMgr.h"
@@ -99,8 +96,7 @@ namespace mh
 		//dontdestroy 오브젝트 추가
 		for (GameObject* obj : gameObjs)
 		{
-			eLayerType type = obj->GetLayerType();
-			mActiveScene->AddGameObject(obj, type);
+			mActiveScene->AddGameObject(obj->GetLayerType(), obj);
 		}
 
 		//OnEnter 호출

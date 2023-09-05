@@ -12,7 +12,6 @@
 #include "strKey_Scene.h"
 
 
-#include "Scene_Example.h"
 #include "Scene_Play.h"
 #include "Scene_Stage01.h"
 #include "Scene_TestBehaviourTree.h"
@@ -25,7 +24,6 @@ namespace mh
 	using namespace mh::define;
 	void ContentsClassInitializer::InitScene()
 	{
-		CONSTRUCTOR_T(Scene_Example);
 		CONSTRUCTOR_T(Scene_Play);
 		CONSTRUCTOR_T(Scene_Stage01);
 		CONSTRUCTOR_T(Scene_TestBehaviourTree);

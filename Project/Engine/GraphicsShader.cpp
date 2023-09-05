@@ -186,38 +186,64 @@ namespace mh
 		Json::MH::LoadValue(_pJVal, JSON_KEY_PAIR(mDSType));
 		Json::MH::LoadValue(_pJVal, JSON_KEY_PAIR(mBSType));
 
+		if (false == mbEditMode)
+		{
+			result = CreateInputLayout();
+			if (eResultFail(result))
+			{
+				return result;
+			}
+		}
+
+
 		return eResult::Success;
 	}
 
-	eResult GraphicsShader::Save(const std::filesystem::path& _path)
+	eResult GraphicsShader::Save(const std::fs::path& _filePath)
 	{
-		std::fs::path FilePath = PathMgr::GetContentPathRelative(eResourceType::GraphicsShader);
-		FilePath /= _path;
-		FilePath.replace_extension(define::strKey::Ext_ShaderSetting);
+		IRes::Save(_filePath);
 
+		std::fs::path fullPath = PathMgr::CreateFullPathToContent(_filePath, eResourceType::GraphicsShader);
+		fullPath.replace_extension(define::strKey::Ext_ShaderSetting);
+
+		//파일 열고
+		std::ofstream ofs(fullPath);
+		if (false == ofs.is_open())
+		{
+			ERROR_MESSAGE_W(L"파일을 열지 못했습니다.");
+			return eResult::Fail_OpenFile;
+		}
+
+		//json 저장하고
 		Json::Value jVal;
 		eResult result = SaveJson(&jVal);
 		if (eResultFail(result))
 			return result;
 
-		std::ofstream ofs(FilePath);
-		if (false == ofs.is_open())
-			return eResult::Fail_OpenFile;
-
+		//파일로 저장
 		ofs << jVal;
 
+		//닫아주기
 		ofs.close();
 
 		return eResult::Success;
 	}
 
-	eResult GraphicsShader::Load(const std::filesystem::path& _path)
+	eResult GraphicsShader::Load(const std::fs::path& _filePath)
 	{
-		std::fs::path FilePath = PathMgr::GetContentPathRelative(eResourceType::GraphicsShader);
-		FilePath /= _path;
-		FilePath.replace_extension(define::strKey::Ext_ShaderSetting);
+		IRes::Load(_filePath);
 
-		std::ifstream ifs(FilePath);
+		std::fs::path fullPath = PathMgr::CreateFullPathToContent(_filePath, eResourceType::GraphicsShader);
+		fullPath.replace_extension(define::strKey::Ext_ShaderSetting);
+		if (false == std::fs::exists(fullPath))
+		{
+			ERROR_MESSAGE_W(L"파일이 없습니다.");
+			return eResult::Fail_OpenFile;
+		}
+
+
+
+		std::ifstream ifs(fullPath);
 		if (false == ifs.is_open())
 			return eResult::Fail_OpenFile;
 
@@ -292,8 +318,7 @@ namespace mh
 	eResult GraphicsShader::CreateByCSO(eGSStage _stage, const std::fs::path& _FileName)
 	{
 		//CSO 파일이 있는 폴더에 접근
-		std::filesystem::path shaderBinPath = std::fs::current_path();
-		shaderBinPath /= strKey::DirName_CompiledShader;
+		std::filesystem::path shaderBinPath = PathMgr::GetShaderCSOPath();
 		shaderBinPath /= _FileName;
 
 		if (false == std::fs::exists(shaderBinPath))
@@ -336,6 +361,8 @@ namespace mh
 			ERROR_MESSAGE_W(L"쉐이더 생성 실패.");
 			return Result;
 		}
+
+		mArrShaderCode[(int)_stage] = sCode;
 
 		return Result;
 	}
