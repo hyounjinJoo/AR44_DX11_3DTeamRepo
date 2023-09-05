@@ -214,7 +214,7 @@ namespace mh
 		}
 
 		mMaxParticles = mBuffer->GetStride();
-		float3 pos = GetOwner()->GetComponent<Com_Transform>()->GetRelativePos();
+		float3 pos = GetOwner()->GetComponent<Com_Transform>()->GetPosition();
 		mCBData.worldPosition = float4(pos.x, pos.y, pos.z, 1.0f);
 		mCBData.maxParticles = mMaxParticles;
 		mCBData.radius = mRadius;

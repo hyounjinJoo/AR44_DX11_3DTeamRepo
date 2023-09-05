@@ -1,7 +1,7 @@
 #include "PCH_Engine.h"
 
 #include "IComponent.h"
-
+#include "GameObject.h"
 #include "json-cpp\jsonSaveLoad.h"
 
 namespace mh
@@ -56,5 +56,9 @@ namespace mh
 		//MH_SAVE_VALUE(_pJson, mType);
 
 		return eResult::Success;
+	}
+	bool IComponent::IsPhysicsObject()
+	{
+		return GetOwner()->IsPhysicsObject();
 	}
 }

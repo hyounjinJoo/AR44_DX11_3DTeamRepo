@@ -32,7 +32,14 @@
 #include <combaseapi.h>
 #include "EnumFlags.h"
 
+#include <d3d11.h>
+#include <d3dcompiler.h>
+
+#pragma comment (lib, "d3d11.lib")
+#pragma comment (lib, "d3dcompiler.lib")
+
 #include <PhysX/PxPhysicsAPI.h>
+#include "SimpleMath.h"
 
 #ifdef _DEBUG
 #pragma comment(lib, "FBXLoader/Debug/libfbxsdk-md.lib")
@@ -72,3 +79,11 @@
 #endif
 
 
+static void AssertEx(bool _expression, const std::wstring& _message)
+{
+	if (_expression)
+		return;
+
+	MessageBoxW(NULL, _message.c_str(), L"Assert", MB_OK);
+	assert(_expression);
+}

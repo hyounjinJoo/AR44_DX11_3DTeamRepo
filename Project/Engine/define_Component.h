@@ -15,6 +15,7 @@ namespace mh::define
 		Animator,
 		Light,	
 		Camera,
+		RigidBody,
 		Renderer,
 
 		AudioSource,
@@ -32,6 +33,7 @@ namespace mh::define
 		{
 			"Transform",
 			"Collider",
+			"RigidBody",
 			"Animator",
 			"Light",
 			"Camera",
@@ -50,6 +52,9 @@ namespace mh::define
 			{
 				STRKEY_DECLARE(Com_DummyTransform);
 				STRKEY_DECLARE(Com_Transform);
+				STRKEY_DECLARE(Com_RigidBody);
+
+				STRKEY_DECLARE(ICollider3D);
 
 				STRKEY_DECLARE(Com_Animator2D);
 				STRKEY_DECLARE(Com_Animator3D);

@@ -3,6 +3,9 @@
 
 namespace mh
 {
+	class Mesh;
+	class Material;
+
 	class ICollider3D : public ICollider
 	{
 	public:
@@ -15,14 +18,31 @@ namespace mh
 		virtual eResult SaveJson(Json::Value* _pJVal) override;
 		virtual eResult LoadJson(const Json::Value* _pJVal) override;
 
-		//virtual void Init() override;
-		//virtual void Update() override;
-		virtual void FixedUpdate() override { MH_ASSERT(false); }; // 구현 안함
+		virtual void Init() override;
+		virtual void Update() override;
+		virtual void FixedUpdate() override; 
+
+		void OnCollisionEnter(ICollider3D* _otherCollider);
+		void OnCollisionStay(ICollider3D* _otherCollider);
+		void OnCollisionExit(ICollider3D* _otherCollider);
+
+		void OnTriggerEnter(ICollider3D* _otherCollider);
+		void OnTriggerStay(ICollider3D* _otherCollider);
+		void OnTriggerExit(ICollider3D* _otherCollider);
+
+		bool IsCollision() { return mCollisionCount; }
+		void ClearCollisionCount() { mCollisionCount = 0; }
 
 		void SetType(define::eColliderType _type) { mType = _type; }
 
 	private:
 		define::eColliderType mType;
+
+		std::shared_ptr<Mesh> mMesh;
+		std::shared_ptr<Material> mMaterial;
+
+
+		int mCollisionCount;
 	};
 }
 

@@ -1,5 +1,4 @@
 #pragma once
-
 #if __has_include("DirectXMath.h")
 // In this case, DirectXMath is coming from Windows SDK.
 //	It is better to use this on Windows as some Windows libraries could depend on the same 
@@ -8,6 +7,11 @@
 #include <DirectXPackedVector.h>
 #include <DirectXCollision.h>
 #endif
+
+#ifdef PX_PHYSICS_API_H
+#include <PhysX/PxPhysicsAPI.h>
+#endif
+
 
 using namespace DirectX;
 using namespace DirectX::PackedVector;
@@ -247,8 +251,17 @@ namespace mh::math
         explicit Vector3(_In_reads_(3) const float* pArray) noexcept : XMFLOAT3(pArray) {}
         Vector3(FXMVECTOR V) noexcept { XMStoreFloat3(this, V); }
         Vector3(const XMFLOAT3& V) noexcept { this->x = V.x; this->y = V.y; this->z = V.z; }
+        Vector3(const struct PxVec3& V) noexcept;
         explicit Vector3(const XMVECTORF32& F) noexcept { this->x = F.f[0]; this->y = F.f[1]; this->z = F.f[2]; }
         
+#ifdef PX_PHYSICS_API_H
+        Vector3(const physx::PxVec3& V)
+        {
+            x = V.x;
+            y = V.y;
+            z = V.z;
+        }
+#endif
 
         Vector3(const Vector3&) = default;
         Vector3& operator=(const Vector2& _v2) { this->x = _v2.x; this->y = _v2.y; return *this; }
@@ -273,6 +286,18 @@ namespace mh::math
         Vector3& operator*= (float S) noexcept;
         Vector3& operator/= (float S) noexcept;
 
+#ifdef PX_PHYSICS_API_H
+        operator physx::PxVec3()
+        {
+            return physx::PxVec3(x, y, z);
+        }
+
+        operator physx::PxVec3() const
+        {
+            return physx::PxVec3(x, y, z);
+        }
+#endif
+
         // Unary operators
         Vector3 operator+ () const noexcept { return *this; }
         Vector3 operator- () const noexcept;
@@ -280,6 +305,8 @@ namespace mh::math
         // Vector operations
         bool InBounds(const Vector3& Bounds) const noexcept;
 
+        //XMVECTOR Convert() const noexcept;
+        
         float Length() const noexcept;
         float LengthSquared() const noexcept;
 
@@ -723,6 +750,16 @@ namespace mh::math
         Quaternion(FXMVECTOR V) noexcept { XMStoreFloat4(this, V); }
         Quaternion(const XMFLOAT4& q) noexcept { this->x = q.x; this->y = q.y; this->z = q.z; this->w = q.w; }
         explicit Quaternion(const XMVECTORF32& F) noexcept { this->x = F.f[0]; this->y = F.f[1]; this->z = F.f[2]; this->w = F.f[3]; }
+
+#ifdef PX_PHYSICS_API_H
+        Quaternion(const physx::PxQuat& q)
+        {
+            x = q.x;
+            y = q.y;
+            z = q.z;
+            w = q.w;
+        }
+#endif
 
         Quaternion(const Quaternion&) = default;
         Quaternion& operator=(const Quaternion&) = default;
