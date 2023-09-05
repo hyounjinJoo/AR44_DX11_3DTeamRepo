@@ -268,6 +268,7 @@ call Copy_HLSL.bat $(Configuration)</Command>
     <ClInclude Include="Com_DummyAnimator.h" />
     <ClInclude Include="Com_Renderer_Mesh.h" />
     <ClInclude Include="Com_Renderer_UIBase.h" />
+    <ClInclude Include="ContactCallback.h" />
     <ClInclude Include="DefaultComInitializer.h" />
     <ClInclude Include="EventMgr.h" />
     <ClInclude Include="FBXLoader.h" />
@@ -317,8 +318,10 @@ call Copy_HLSL.bat $(Configuration)</Command>
     <ClInclude Include="ITransform.h" />
     <ClInclude Include="json-cpp\jsonSaveLoad.h" />
     <ClInclude Include="MultiRenderTarget.h" />
+    <ClInclude Include="Physics.h" />
     <ClInclude Include="RenderMgr.h" />
     <ClInclude Include="resource.h" />
+    <ClInclude Include="Com_RigidBody.h" />
     <ClInclude Include="ICollider.h" />
     <ClInclude Include="DefaultShaders.h" />
     <ClInclude Include="defines.h" />
@@ -399,6 +402,7 @@ call Copy_HLSL.bat $(Configuration)</Command>
     <ClCompile Include="Com_DummyAnimator.cpp" />
     <ClCompile Include="Com_Renderer_Mesh.cpp" />
     <ClCompile Include="Com_Renderer_UIBase.cpp" />
+    <ClCompile Include="ContactCallback.cpp" />
     <ClCompile Include="DefaultComInitializer.cpp" />
     <ClCompile Include="EventMgr.cpp" />
     <ClCompile Include="FBXLoader.cpp" />
@@ -488,7 +492,9 @@ call Copy_HLSL.bat $(Configuration)</Command>
     <ClCompile Include="Com_Camera.cpp" />
     <ClCompile Include="ITransform.cpp" />
     <ClCompile Include="MultiRenderTarget.cpp" />
+    <ClCompile Include="Physics.cpp" />
     <ClCompile Include="RenderMgr.cpp" />
+    <ClCompile Include="Com_RigidBody.cpp" />
     <ClCompile Include="ICollider.cpp" />
     <ClCompile Include="PCH_Engine.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>

@@ -24,7 +24,7 @@ namespace mh
 		virtual void Init() {};
 		virtual void Start() {};
 		virtual void Update() {};
-		virtual void FixedUpdate() = 0;
+		virtual void FixedUpdate() {};
 
 		define::eComponentType GetComType() const { return mType; };
 
@@ -33,6 +33,8 @@ namespace mh
 
 		GameObject* GetOwner() const { return mOwner; }
 		void SetOwner(GameObject* _owner) { mOwner = _owner; }
+
+		bool IsPhysicsObject();
 
 	private:
 		const define::eComponentType mType;

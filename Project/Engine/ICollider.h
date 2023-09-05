@@ -13,6 +13,8 @@ namespace mh
 		ICollider(const ICollider& _collider) = default;
 		virtual ~ICollider();
 
+
+
 	private:
 		define::eColliderType mType;
 	};

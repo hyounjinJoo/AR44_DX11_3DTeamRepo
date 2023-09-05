@@ -1,6 +1,7 @@
 #include "PCH_Contents.h"
 #include "Scene_Title.h"
 
+#include <Engine/defines.h>
 #include <Engine/ResMgr.h>
 #include <Engine/Com_Transform.h>
 #include <Engine/Com_Renderer_Mesh.h>
@@ -11,7 +12,7 @@
 #include <Engine/GridScript.h>
 #include <Engine/Object.h>
 #include <Engine/InputMgr.h>
-#include <Engine/ICollider2D.h>
+#include <Engine/ICollider3D.h>
 #include <Engine/Player.h>
 #include <Engine/Monster.h>
 #include <Engine/CollisionMgr.h>
@@ -22,6 +23,7 @@
 #include <Engine/Com_Renderer_ParticleSystem.h>
 #include <Engine/Prefab.h>
 #include <Engine/Com_Renderer_UIBase.h>
+#include <Engine/Com_RigidBody.h>
 #include <Contents/Script_UIBase.h>
 #include <Contents/Script_UIGauge.h>
 #include <Contents/Script_Player.h>
@@ -43,69 +45,63 @@ namespace mh
 	void Scene_Title::Init()
 	{
 		IScene::Init();
-
+		CollisionMgr::SetCollisionGroup(define::eLayerType::Player, define::eLayerType::Ground);
+		
 		{
 			// Main Com_Camera Game Object
 			GameObject* cameraObj = EventMgr::SpawnGameObject(eLayerType::Com_Camera);
 			cameraObj->SetName("MainCamera");
 
 			Com_Transform* tr = cameraObj->AddComponent<Com_Transform>();
-			tr->SetRelativePos(float3(0.0f, 0.0f, -20.0f));
-
+			tr->SetPosition(float3(0.0f, 20.0f, 0.0f));
+	
 			Com_Camera* cameraComp = cameraObj->AddComponent<Com_Camera>();
 			cameraComp->SetProjectionType(define::eProjectionType::Perspective);
 
 			cameraObj->AddComponent(strKey::Script::Script_CameraMove);
 			cameraObj->AddComponent(strKey::Script::Script_UIBase);
 
-
 			RenderMgr::SetMainCamera(cameraComp);
 		}
 
 		{
-			GameObject* dirLight = EventMgr::SpawnGameObject(eLayerType::Player);
+			GameObject* dirLight = EventMgr::SpawnGameObject(eLayerType::Light);
 			dirLight->AddComponent<Com_Transform>();
 
 			Com_Light3D* light3d = dirLight->AddComponent<Com_Light3D>();
 			light3d->SetLightType(eLightType::Directional);
-			light3d->SetDiffuse(float4(0.3f, 0.3f, 0.3f, 1.f));
+			light3d->SetDiffuse(float4(1.f, 1.f, 1.f, 1.f));
 			light3d->SetAmbient(float4(0.3f, 0.3f, 0.3f, 1.f));
 		}
-
-
-
 
 		{
 			std::shared_ptr<MeshData> meshdata = ResMgr::Load<MeshData>("Player_Default");
 
 			GameObject* modeling = meshdata->Instantiate();
-			modeling->AddComponent<Script_Player>();
+			//modeling->AddComponent<Script_Player>();
 
 			modeling->GetComponent<Com_Animator3D>()->Play("OverheadSlash");
 
 			EventMgr::SpawnGameObject(define::eLayerType::Player, modeling);
 		}
 
+		//{
+		//	// Main Com_Camera Game Object
+		//	GameObject* cameraObj = EventMgr::SpawnGameObject(eLayerType::Com_Camera);
+		//	cameraObj->SetName("UICam");
 
+		//	Com_Transform* tr = cameraObj->AddComponent<Com_Transform>();
+		//	tr->SetRelativePos(float3(0.0f, 0.0f, -20.0f));
 
+		//	Com_Camera* cameraComp = cameraObj->AddComponent<Com_Camera>();
+		//	cameraComp->SetProjectionType(define::eProjectionType::Orthographic);
 
-		{
-			// Main Com_Camera Game Object
-			GameObject* cameraObj = EventMgr::SpawnGameObject(eLayerType::Com_Camera);
-			cameraObj->SetName("UICam");
+		//	//다른 레이어는 전부 끈다음
+		//	cameraComp->DisableLayerMasks();
 
-			Com_Transform* tr = cameraObj->AddComponent<Com_Transform>();
-			tr->SetRelativePos(float3(0.0f, 0.0f, -20.0f));
-
-			Com_Camera* cameraComp = cameraObj->AddComponent<Com_Camera>();
-			cameraComp->SetProjectionType(define::eProjectionType::Orthographic);
-
-			//다른 레이어는 전부 끈다음
-			cameraComp->DisableLayerMasks();
-
-			//UI 레이어만 촬영하도록 설정한다.
-			cameraComp->TurnLayerMask(eLayerType::UI, true);
-		}
+		//	//UI 레이어만 촬영하도록 설정한다.
+		//	cameraComp->TurnLayerMask(eLayerType::UI, true);
+		//}
 
 
 		{
@@ -160,17 +156,53 @@ namespace mh
 		}
 
 		{
-			GameObject* skyBox = EventMgr::SpawnGameObject(eLayerType::Stage);
-			Com_Transform* tr = skyBox->AddComponent<Com_Transform>();
+		//GameObject* skyBox = EventMgr::SpawnGameObject(eLayerType::Stage);
+		//Com_Transform* tr = skyBox->AddComponent<Com_Transform>();
+		//	tr->SetPosition(float3(0.0f, 0.0f, 0.0f));
+		//	tr->SetScale(float3(500.0f, 500.0f, 500.0f));
+		//	skyBox->SetName("SkyBox");
+		//	Com_Renderer_Mesh* mr = skyBox->AddComponent<Com_Renderer_Mesh>();
+		//	mr->SetMesh(ResMgr::Find<Mesh>(strKey::Default::mesh::CubeMesh));
+		//	mr->SetMaterial(ResMgr::Find<Material>(strKey::Default::material::SkyBoxMaterial), 0);
+		//}
+		{
+			define::tPhysicsInfo info = {};
+			info.eActorType = define::eActorType::Dynamic;
+			info.eGeomType = define::eGeometryType::Sphere;
 
-			tr->SetRelativePos(float3(0.0f, 0.0f, 0.0f));
-			tr->SetRelativeScale(float3(500.0f, 500.0f, 500.0f));
-			skyBox->SetName("SkyBox");
-			Com_Renderer_Mesh* mr = skyBox->AddComponent<Com_Renderer_Mesh>();
-			mr->SetMesh(ResMgr::Find<Mesh>(strKey::Default::mesh::CubeMesh));
-			mr->SetMaterial(ResMgr::Find<Material>(strKey::Default::material::SkyBoxMaterial), 0);
+			std::shared_ptr<MeshData> meshdata = ResMgr::Load<MeshData>("Player_Default");
+			GameObject* obj = meshdata->Instantiate();
+			obj->GetComponent<Com_Animator3D>()->Play("Take 001");
+			obj->SetName("obj");
+			obj->SetLayerType(define::eLayerType::Player);
+			Com_RigidBody* rigid = obj->AddComponent<Com_RigidBody>();
+			rigid->SetPhysical(info);
+			rigid->SetFreezeRotation(FreezeRotationFlag::ROTATION_Y, true);
+			rigid->SetFreezeRotation(FreezeRotationFlag::ROTATION_X, true);
+			rigid->SetFreezeRotation(FreezeRotationFlag::ROTATION_Z, true);
+		
+			obj->AddComponent<ICollider3D>();
+			EventMgr::SpawnGameObject(define::eLayerType::Player, obj);
+			obj->AddComponent<Script_Player>();
 		}
 
+		{
+			define::tPhysicsInfo info = {};
+			info.eActorType = define::eActorType::Static;
+			info.size = float3(20.0f, 2.0f, 20.0f);
+
+			GameObject* obj = EventMgr::SpawnGameObject(define::eLayerType::Ground);
+			obj->SetName("Ground");
+			obj->SetLayerType(define::eLayerType::Ground);
+			Com_Transform* tr = obj->AddComponent<Com_Transform>();
+			tr->SetPosition(float3(0.0f, 0.0f, 0.0f));
+			tr->SetScale(float3(20.0f, 2.0f, 20.0f));
+
+			Com_RigidBody* rigid = obj->AddComponent<Com_RigidBody>();
+			rigid->SetPhysical(info);
+			std::shared_ptr<Mesh> mesh = ResMgr::Find<Mesh>(define::strKey::Default::mesh::CubeMesh);
+			obj->AddComponent<Com_Renderer_Mesh>()->SetMesh(mesh);
+		}
 	}
 	void Scene_Title::Update()
 	{
@@ -191,7 +223,6 @@ namespace mh
 	}
 	void Scene_Title::OnEnter()
 	{
-
 	}
 	void Scene_Title::OnExit()
 	{
