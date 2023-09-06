@@ -63,7 +63,7 @@ namespace mh
 		float fSpeed = mCamSpeed;
 		if (InputMgr::GetKey(eKeyCode::LSHIFT))
 		{
-			fSpeed *= 5.f;
+			fSpeed *= 50000.f;
 		}
 
 		if (InputMgr::GetKey(eKeyCode::W))

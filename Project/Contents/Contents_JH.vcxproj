@@ -19,9 +19,11 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Scene_Stage01.h" />
     <ClInclude Include="Script_JH.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Scene_Stage01.cpp" />
     <ClCompile Include="Script_JH.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

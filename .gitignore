@@ -388,7 +388,9 @@ Res/
 # Exclude Shader header
 CompiledShaderHeader/
 
-# 3D Modeling
+*.zip
 *.fbx
+*.json
 *.blend
-FBX/
+*.bne
+

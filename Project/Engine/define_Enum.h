@@ -41,13 +41,12 @@ namespace mh
 		{
 			None = -1,
 			Com_Camera,
-			//Stage,
 			Grid,
+			Stage,
 			Light,
 			Monster,
 			Player,
 
-			Ground,
 			tParticle,
 			PostProcess,
 			UI,
